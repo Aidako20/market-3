@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class GamificationBadge(models.Model):
-    _name = 'gamification.badge'
-    _inherit = ['gamification.badge', 'website.published.mixin']
+classGamificationBadge(models.Model):
+    _name='gamification.badge'
+    _inherit=['gamification.badge','website.published.mixin']

@@ -1,27 +1,27 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.he = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.he=factory()));
+}(this,function(){'usestrict';
 
-    var he = {
-        code: "he",
-        dir: 'rtl',
-        buttonText: {
-            prev: "הקודם",
-            next: "הבא",
-            today: "היום",
-            month: "חודש",
-            week: "שבוע",
-            day: "יום",
-            list: "סדר יום"
+    varhe={
+        code:"he",
+        dir:'rtl',
+        buttonText:{
+            prev:"הקודם",
+            next:"הבא",
+            today:"היום",
+            month:"חודש",
+            week:"שבוע",
+            day:"יום",
+            list:"סדריום"
         },
-        allDayText: "כל היום",
-        eventLimitText: "אחר",
-        noEventsMessage: "אין אירועים להצגה",
-        weekLabel: "שבוע"
+        allDayText:"כלהיום",
+        eventLimitText:"אחר",
+        noEventsMessage:"איןאירועיםלהצגה",
+        weekLabel:"שבוע"
     };
 
-    return he;
+    returnhe;
 
 }));

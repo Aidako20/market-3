@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class StockValuationLayer(models.Model):
-    """Stock Valuation Layer"""
+classStockValuationLayer(models.Model):
+    """StockValuationLayer"""
 
-    _inherit = 'stock.valuation.layer'
+    _inherit='stock.valuation.layer'
 
-    stock_landed_cost_id = fields.Many2one('stock.landed.cost', 'Landed Cost')
+    stock_landed_cost_id=fields.Many2one('stock.landed.cost','LandedCost')
 

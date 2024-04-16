@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="mail.model_mail_mail" model="ir.model">
-      <field name="website_form_key">send_mail</field>
-      <field name="website_form_default_field_id" ref="mail.field_mail_mail__body_html" />
-      <field name="website_form_access">True</field>
-      <field name="website_form_label">Send an E-mail</field>
+    <recordid="mail.model_mail_mail"model="ir.model">
+      <fieldname="website_form_key">send_mail</field>
+      <fieldname="website_form_default_field_id"ref="mail.field_mail_mail__body_html"/>
+      <fieldname="website_form_access">True</field>
+      <fieldname="website_form_label">SendanE-mail</field>
     </record>
-    <function model="ir.model.fields" name="formbuilder_whitelist">
+    <functionmodel="ir.model.fields"name="formbuilder_whitelist">
       <value>mail.mail</value>
-      <value eval="[
+      <valueeval="[
         'subject',
         'body_html',
         'email_to',

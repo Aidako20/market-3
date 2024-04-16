@@ -1,60 +1,60 @@
-flectra.define('google_recaptcha.ReCaptchaV3', function (require) {
-"use strict";
+flectra.define('google_recaptcha.ReCaptchaV3',function(require){
+"usestrict";
 
-const ajax = require('web.ajax');
-const Class = require('web.Class');
-const core = require('web.core');
+constajax=require('web.ajax');
+constClass=require('web.Class');
+constcore=require('web.core');
 
-const _t = core._t;
+const_t=core._t;
 
-const ReCaptcha = Class.extend({
+constReCaptcha=Class.extend({
     /**
-     * @override
+     *@override
      */
-    init: function () {
-        this._publicKey = flectra.reCaptchaPublicKey;
+    init:function(){
+        this._publicKey=flectra.reCaptchaPublicKey;
     },
     /**
-     * Loads the recaptcha libraries.
+     *Loadstherecaptchalibraries.
      *
-     * @returns {Promise|boolean} promise if libs are loading else false if the reCaptcha key is empty.
+     *@returns{Promise|boolean}promiseiflibsareloadingelsefalseifthereCaptchakeyisempty.
      */
-    loadLibs: function () {
-        if (this._publicKey) {
-            this._recaptchaReady = ajax.loadJS(`https://www.recaptcha.net/recaptcha/api.js?render=${encodeURIComponent(this._publicKey)}`)
-                .then(() => new Promise(resolve => window.grecaptcha.ready(() => resolve())));
-            return this._recaptchaReady.then(() => !!document.querySelector('.grecaptcha-badge'));
+    loadLibs:function(){
+        if(this._publicKey){
+            this._recaptchaReady=ajax.loadJS(`https://www.recaptcha.net/recaptcha/api.js?render=${encodeURIComponent(this._publicKey)}`)
+                .then(()=>newPromise(resolve=>window.grecaptcha.ready(()=>resolve())));
+            returnthis._recaptchaReady.then(()=>!!document.querySelector('.grecaptcha-badge'));
         }
-        return false;
+        returnfalse;
     },
     /**
-     * Returns an object with the token if reCaptcha call succeeds
-     * If no key is set an object with a message is returned
-     * If an error occured an object with the error message is returned
+     *ReturnsanobjectwiththetokenifreCaptchacallsucceeds
+     *Ifnokeyissetanobjectwithamessageisreturned
+     *Ifanerroroccuredanobjectwiththeerrormessageisreturned
      *
-     * @param {string} action
-     * @returns {Promise|Object}
+     *@param{string}action
+     *@returns{Promise|Object}
      */
-    getToken: async function (action) {
-        if (!this._publicKey) {
-            return {
-                message: _t("No recaptcha site key set."),
+    getToken:asyncfunction(action){
+        if(!this._publicKey){
+            return{
+                message:_t("Norecaptchasitekeyset."),
             };
         }
-        await this._recaptchaReady;
-        try {
-            return {
-                token: await window.grecaptcha.execute(this._publicKey, {action: action})
+        awaitthis._recaptchaReady;
+        try{
+            return{
+                token:awaitwindow.grecaptcha.execute(this._publicKey,{action:action})
             };
-        } catch (e) {
-            return {
-                error: _t("The recaptcha site key is invalid."),
+        }catch(e){
+            return{
+                error:_t("Therecaptchasitekeyisinvalid."),
             };
         }
     },
 });
 
-return {
-    ReCaptcha: ReCaptcha,
+return{
+    ReCaptcha:ReCaptcha,
 };
 });

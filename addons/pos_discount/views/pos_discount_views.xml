@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="pos_config_view_form_inherit_pos_discount" model="ir.ui.view">
-            <field name="name">pos.config.form.inherit.pos.discount</field>
-            <field name="model">pos.config</field>
-            <field name="inherit_id" ref="point_of_sale.pos_config_view_form" />
-            <field name="arch" type="xml">
-                <div id="btn_use_pos_discount" position="replace">
-                    <div class="row mt16">
-                        <label string="Discount Product" for="discount_product_id" class="col-lg-3 o_light_label"/>
-                        <field name="discount_product_id" attrs="{'required':[('module_pos_discount','=',True)]}"/>
+        <recordid="pos_config_view_form_inherit_pos_discount"model="ir.ui.view">
+            <fieldname="name">pos.config.form.inherit.pos.discount</field>
+            <fieldname="model">pos.config</field>
+            <fieldname="inherit_id"ref="point_of_sale.pos_config_view_form"/>
+            <fieldname="arch"type="xml">
+                <divid="btn_use_pos_discount"position="replace">
+                    <divclass="rowmt16">
+                        <labelstring="DiscountProduct"for="discount_product_id"class="col-lg-3o_light_label"/>
+                        <fieldname="discount_product_id"attrs="{'required':[('module_pos_discount','=',True)]}"/>
                     </div>
-                    <div class="row">
-                        <label string="Discount %" for="discount_pc" class="col-lg-3 o_light_label"/>
-                        <field name="discount_pc"/>
+                    <divclass="row">
+                        <labelstring="Discount%"for="discount_pc"class="col-lg-3o_light_label"/>
+                        <fieldname="discount_pc"/>
                     </div>
                 </div>
             </field>
         </record>
 
-        <data noupdate="1">
-            <function model="pos.config" name="_default_discount_value_on_module_install"/>
+        <datanoupdate="1">
+            <functionmodel="pos.config"name="_default_discount_value_on_module_install"/>
         </data>
 </flectra>

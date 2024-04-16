@@ -1,27 +1,27 @@
-from flectra import models, fields, api, _
-from flectra.tools import format_date
+fromflectraimportmodels,fields,api,_
+fromflectra.toolsimportformat_date
 
 
-class RepairOrder(models.Model):
-    _inherit = 'repair.order'
+classRepairOrder(models.Model):
+    _inherit='repair.order'
 
-    l10n_de_template_data = fields.Binary(compute='_compute_l10n_de_template_data')
-    l10n_de_document_title = fields.Char(compute='_compute_l10n_de_document_title')
+    l10n_de_template_data=fields.Binary(compute='_compute_l10n_de_template_data')
+    l10n_de_document_title=fields.Char(compute='_compute_l10n_de_document_title')
 
-    def _compute_l10n_de_template_data(self):
-        for record in self:
-            record.l10n_de_template_data = data = []
-            if record.product_id:
-                data.append((_("Product to Repair"), record.product_id.name))
-            if record.lot_id:
-                data.append((_("Lot/Serial Number"), record.lot_id.name))
-            if record.guarantee_limit:
-                data.append((_("Warranty"), format_date(self.env, record.guarantee_limit)))
-            data.append((_("Printing Date"), format_date(self.env, fields.Date.today())))
+    def_compute_l10n_de_template_data(self):
+        forrecordinself:
+            record.l10n_de_template_data=data=[]
+            ifrecord.product_id:
+                data.append((_("ProducttoRepair"),record.product_id.name))
+            ifrecord.lot_id:
+                data.append((_("Lot/SerialNumber"),record.lot_id.name))
+            ifrecord.guarantee_limit:
+                data.append((_("Warranty"),format_date(self.env,record.guarantee_limit)))
+            data.append((_("PrintingDate"),format_date(self.env,fields.Date.today())))
 
-    def _compute_l10n_de_document_title(self):
-        for record in self:
-            if record.state == 'draft':
-                record.l10n_de_document_title = _("Repair Quotation")
+    def_compute_l10n_de_document_title(self):
+        forrecordinself:
+            ifrecord.state=='draft':
+                record.l10n_de_document_title=_("RepairQuotation")
             else:
-                record.l10n_de_document_title = _("Repair Order")
+                record.l10n_de_document_title=_("RepairOrder")

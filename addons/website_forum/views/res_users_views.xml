@@ -1,15 +1,15 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
     <data>
 
-        <!-- Update user form !-->
-        <record id="view_users_form_forum" model="ir.ui.view">
-            <field name="name">res.users.form.forum</field>
-            <field name="model">res.users</field>
-            <field name="inherit_id" ref="base.view_users_form"/>
-            <field name="arch" type="xml">
-                <div name="button_box" position="inside">
-                    <field name="is_published" widget="website_redirect_button"/>
+        <!--Updateuserform!-->
+        <recordid="view_users_form_forum"model="ir.ui.view">
+            <fieldname="name">res.users.form.forum</field>
+            <fieldname="model">res.users</field>
+            <fieldname="inherit_id"ref="base.view_users_form"/>
+            <fieldname="arch"type="xml">
+                <divname="button_box"position="inside">
+                    <fieldname="is_published"widget="website_redirect_button"/>
                 </div>
             </field>
         </record>

@@ -1,31 +1,31 @@
-# -*- coding: utf-8 -*-
-from flectra import api, fields, models, _
-from flectra.exceptions import ValidationError
+#-*-coding:utf-8-*-
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportValidationError
 
 
-class AccountAccountTag(models.Model):
-    _name = 'account.account.tag'
-    _description = 'Account Tag'
+classAccountAccountTag(models.Model):
+    _name='account.account.tag'
+    _description='AccountTag'
 
-    name = fields.Char('Tag Name', required=True)
-    applicability = fields.Selection([('accounts', 'Accounts'), ('taxes', 'Taxes')], required=True, default='accounts')
-    color = fields.Integer('Color Index')
-    active = fields.Boolean(default=True, help="Set active to false to hide the Account Tag without removing it.")
-    tax_report_line_ids = fields.Many2many(string="Tax Report Lines", comodel_name='account.tax.report.line', relation='account_tax_report_line_tags_rel', help="The tax report lines using this tag")
-    tax_negate = fields.Boolean(string="Negate Tax Balance", help="Check this box to negate the absolute value of the balance of the lines associated with this tag in tax report computation.")
-    country_id = fields.Many2one(string="Country", comodel_name='res.country', help="Country for which this tag is available, when applied on taxes.")
+    name=fields.Char('TagName',required=True)
+    applicability=fields.Selection([('accounts','Accounts'),('taxes','Taxes')],required=True,default='accounts')
+    color=fields.Integer('ColorIndex')
+    active=fields.Boolean(default=True,help="SetactivetofalsetohidetheAccountTagwithoutremovingit.")
+    tax_report_line_ids=fields.Many2many(string="TaxReportLines",comodel_name='account.tax.report.line',relation='account_tax_report_line_tags_rel',help="Thetaxreportlinesusingthistag")
+    tax_negate=fields.Boolean(string="NegateTaxBalance",help="Checkthisboxtonegatetheabsolutevalueofthebalanceofthelinesassociatedwiththistagintaxreportcomputation.")
+    country_id=fields.Many2one(string="Country",comodel_name='res.country',help="Countryforwhichthistagisavailable,whenappliedontaxes.")
 
     @api.model
-    def _get_tax_tags(self, tag_name, country_id):
-        """ Returns all the tax tags corresponding to the tag name given in parameter
-        in the specified country.
+    def_get_tax_tags(self,tag_name,country_id):
+        """Returnsallthetaxtagscorrespondingtothetagnamegiveninparameter
+        inthespecifiedcountry.
         """
-        escaped_tag_name = tag_name.replace('\\', '\\\\').replace('%', '\%').replace('_', '\_')
-        domain = [('name', '=like', '_' + escaped_tag_name), ('country_id', '=', country_id), ('applicability', '=', 'taxes')]
-        return self.env['account.account.tag'].with_context(active_test=False).search(domain)
+        escaped_tag_name=tag_name.replace('\\','\\\\').replace('%','\%').replace('_','\_')
+        domain=[('name','=like','_'+escaped_tag_name),('country_id','=',country_id),('applicability','=','taxes')]
+        returnself.env['account.account.tag'].with_context(active_test=False).search(domain)
 
-    @api.constrains('country_id', 'applicability')
-    def _validate_tag_country(self):
-        for record in self:
-            if record.applicability == 'taxes' and not record.country_id:
-                raise ValidationError(_("A tag defined to be used on taxes must always have a country set."))
+    @api.constrains('country_id','applicability')
+    def_validate_tag_country(self):
+        forrecordinself:
+            ifrecord.applicability=='taxes'andnotrecord.country_id:
+                raiseValidationError(_("Atagdefinedtobeusedontaxesmustalwayshaveacountryset."))

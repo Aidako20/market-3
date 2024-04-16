@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="sale_coupon_view_tree" model="ir.ui.view">
-        <field name="name">coupon.coupon.tree</field>
-        <field name="model">coupon.coupon</field>
-        <field name="inherit_id" ref="coupon.coupon_view_tree"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="order_id"/>
+    <recordid="sale_coupon_view_tree"model="ir.ui.view">
+        <fieldname="name">coupon.coupon.tree</field>
+        <fieldname="model">coupon.coupon</field>
+        <fieldname="inherit_id"ref="coupon.coupon_view_tree"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='partner_id']"position="after">
+                <fieldname="order_id"/>
             </xpath>
         </field>
     </record>
 
-    <record id="sale_coupon_view_form" model="ir.ui.view">
-        <field name="name">coupon.coupon.form</field>
-        <field name="model">coupon.coupon</field>
-        <field name="inherit_id" ref="coupon.coupon_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="order_id"/>
-                <field name="sales_order_id"/>
+    <recordid="sale_coupon_view_form"model="ir.ui.view">
+        <fieldname="name">coupon.coupon.form</field>
+        <fieldname="model">coupon.coupon</field>
+        <fieldname="inherit_id"ref="coupon.coupon_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='partner_id']"position="after">
+                <fieldname="order_id"/>
+                <fieldname="sales_order_id"/>
             </xpath>
         </field>
     </record>

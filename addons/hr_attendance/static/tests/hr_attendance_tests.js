@@ -1,187 +1,187 @@
-flectra.define('hr_attendance.tests', function (require) {
-"use strict";
+flectra.define('hr_attendance.tests',function(require){
+"usestrict";
 
-var testUtils = require('web.test_utils');
-var core = require('web.core');
+vartestUtils=require('web.test_utils');
+varcore=require('web.core');
 
-var MyAttendances = require('hr_attendance.my_attendances');
-var KioskMode = require('hr_attendance.kiosk_mode');
-var GreetingMessage = require('hr_attendance.greeting_message');
+varMyAttendances=require('hr_attendance.my_attendances');
+varKioskMode=require('hr_attendance.kiosk_mode');
+varGreetingMessage=require('hr_attendance.greeting_message');
 
 
-QUnit.module('HR Attendance', {
-    beforeEach: function () {
-        this.data = {
-            'hr.employee': {
-                fields: {
-                    name: {string: 'Name', type: 'char'},
-                    attendance_state: {
-                        string: 'State',
-                        type: 'selection',
-                        selection: [['checked_in', "In"], ['checked_out', "Out"]],
-                        default: 1,
+QUnit.module('HRAttendance',{
+    beforeEach:function(){
+        this.data={
+            'hr.employee':{
+                fields:{
+                    name:{string:'Name',type:'char'},
+                    attendance_state:{
+                        string:'State',
+                        type:'selection',
+                        selection:[['checked_in',"In"],['checked_out',"Out"]],
+                        default:1,
                     },
-                    user_id: {string: 'user ID', type: 'integer'},
-                    barcode: {string:'barcode', type: 'integer'},
-                    hours_today: {string:'Hours today', type: 'float'},
+                    user_id:{string:'userID',type:'integer'},
+                    barcode:{string:'barcode',type:'integer'},
+                    hours_today:{string:'Hourstoday',type:'float'},
                 },
-                records: [{
-                    id: 1,
-                    name: "Employee A",
-                    attendance_state: 'checked_out',
-                    user_id: 1,
-                    barcode: 1,
+                records:[{
+                    id:1,
+                    name:"EmployeeA",
+                    attendance_state:'checked_out',
+                    user_id:1,
+                    barcode:1,
                 },
                 {
-                    id: 2,
-                    name: "Employee B",
-                    attendance_state: 'checked_out',
-                    user_id: 2,
-                    barcode: 2,
+                    id:2,
+                    name:"EmployeeB",
+                    attendance_state:'checked_out',
+                    user_id:2,
+                    barcode:2,
                 }],
             },
-            'res.company': {
-                fields: {
-                    name: {string: 'Name', type: 'char'},
+            'res.company':{
+                fields:{
+                    name:{string:'Name',type:'char'},
                 },
-                records: [{
-                    id: 1,
-                    name: "Company A",
+                records:[{
+                    id:1,
+                    name:"CompanyA",
                 }],
             },
         };
     },
-}, function () {
-    QUnit.module('My attendances (client action)');
+},function(){
+    QUnit.module('Myattendances(clientaction)');
 
-    QUnit.test('simple rendering', async function (assert) {
+    QUnit.test('simplerendering',asyncfunction(assert){
         assert.expect(1);
 
-        var $target = $('#qunit-fixture');
-        var clientAction = new MyAttendances(null, {});
-        await testUtils.mock.addMockEnvironment(clientAction, {
-            data: this.data,
-            session: {
-                uid: 1,
+        var$target=$('#qunit-fixture');
+        varclientAction=newMyAttendances(null,{});
+        awaittestUtils.mock.addMockEnvironment(clientAction,{
+            data:this.data,
+            session:{
+                uid:1,
             },
         });
-        await clientAction.appendTo($target);
+        awaitclientAction.appendTo($target);
 
-        assert.strictEqual(clientAction.$('.o_hr_attendance_kiosk_mode h1').text(), 'Employee A',
-            "should have rendered the client action without crashing");
+        assert.strictEqual(clientAction.$('.o_hr_attendance_kiosk_modeh1').text(),'EmployeeA',
+            "shouldhaverenderedtheclientactionwithoutcrashing");
 
         clientAction.destroy();
     });
 
-    QUnit.test('Attendance Kiosk Mode Test', async function (assert) {
+    QUnit.test('AttendanceKioskModeTest',asyncfunction(assert){
         assert.expect(2);
 
-        var $target = $('#qunit-fixture');
-        var self = this;
-        var rpcCount = 0;
-        var clientAction = new KioskMode(null, {});
-        await testUtils.mock.addMockEnvironment(clientAction, {
-            data: this.data,
-            session: {
-                uid: 1,
-                user_context: {
-                    allowed_company_ids: [1],
+        var$target=$('#qunit-fixture');
+        varself=this;
+        varrpcCount=0;
+        varclientAction=newKioskMode(null,{});
+        awaittestUtils.mock.addMockEnvironment(clientAction,{
+            data:this.data,
+            session:{
+                uid:1,
+                user_context:{
+                    allowed_company_ids:[1],
                 }
             },
-            mockRPC: function(route, args) {
-                if (args.method === 'attendance_scan' && args.model === 'hr.employee') {
+            mockRPC:function(route,args){
+                if(args.method==='attendance_scan'&&args.model==='hr.employee'){
 
                     rpcCount++;
-                    return Promise.resolve(self.data['hr.employee'].records[0]);
+                    returnPromise.resolve(self.data['hr.employee'].records[0]);
                 }
-                return this._super(route, args);
+                returnthis._super(route,args);
             },
         });
-        await clientAction.appendTo($target);
-        core.bus.trigger('barcode_scanned', 1);
-        core.bus.trigger('barcode_scanned', 1);
-        assert.strictEqual(rpcCount, 1, 'RPC call should have been done only once.');
+        awaitclientAction.appendTo($target);
+        core.bus.trigger('barcode_scanned',1);
+        core.bus.trigger('barcode_scanned',1);
+        assert.strictEqual(rpcCount,1,'RPCcallshouldhavebeendoneonlyonce.');
 
-        core.bus.trigger('barcode_scanned', 2);
-        assert.strictEqual(rpcCount, 1, 'RPC call should have been done only once.');
+        core.bus.trigger('barcode_scanned',2);
+        assert.strictEqual(rpcCount,1,'RPCcallshouldhavebeendoneonlyonce.');
 
         clientAction.destroy();
     });
 
-    QUnit.test('Attendance Greeting Message Test', async function (assert) {
+    QUnit.test('AttendanceGreetingMessageTest',asyncfunction(assert){
         assert.expect(10);
 
-        var $target = $('#qunit-fixture');
-        var self = this;
-        var rpcCount = 0;
+        var$target=$('#qunit-fixture');
+        varself=this;
+        varrpcCount=0;
 
-        var clientActions = [];
-        async function createGreetingMessage (target, barcode){
-            var action = {
-                attendance: {
-                    check_in: "2018-09-20 13:41:13",
-                    employee_id: [barcode],
+        varclientActions=[];
+        asyncfunctioncreateGreetingMessage(target,barcode){
+            varaction={
+                attendance:{
+                    check_in:"2018-09-2013:41:13",
+                    employee_id:[barcode],
                 },
-                next_action: "hr_attendance.hr_attendance_action_kiosk_mode",
-                barcode: barcode,
+                next_action:"hr_attendance.hr_attendance_action_kiosk_mode",
+                barcode:barcode,
             };
-            var clientAction = new GreetingMessage(null, action);
-            await testUtils.mock.addMockEnvironment(clientAction, {
-                data: self.data,
-                session: {
-                    uid: 1,
-                    company_id: 1,
+            varclientAction=newGreetingMessage(null,action);
+            awaittestUtils.mock.addMockEnvironment(clientAction,{
+                data:self.data,
+                session:{
+                    uid:1,
+                    company_id:1,
                 },
-                mockRPC: function(route, args) {
-                    if (args.method === 'attendance_scan' && args.model === 'hr.employee') {
+                mockRPC:function(route,args){
+                    if(args.method==='attendance_scan'&&args.model==='hr.employee'){
                         rpcCount++;
-                        action.attendance.employee_id = [args.args[0], 'Employee'];
+                        action.attendance.employee_id=[args.args[0],'Employee'];
                         /*
-                            if rpc have been made, a new instance is created to simulate the same behaviour
-                            as functional flow.
+                            ifrpchavebeenmade,anewinstanceiscreatedtosimulatethesamebehaviour
+                            asfunctionalflow.
                         */
-                        createGreetingMessage (target, args.args[0]);
-                        return Promise.resolve({action: action});
+                        createGreetingMessage(target,args.args[0]);
+                        returnPromise.resolve({action:action});
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
-            await clientAction.appendTo(target);
+            awaitclientAction.appendTo(target);
 
             clientActions.push(clientAction);
         }
 
-        // init - mock coming from kiosk
-        await createGreetingMessage ($target, 1);
-        await testUtils.nextMicrotaskTick();
-        assert.strictEqual(clientActions.length, 1, 'Number of clientAction must = 1.');
+        //init-mockcomingfromkiosk
+        awaitcreateGreetingMessage($target,1);
+        awaittestUtils.nextMicrotaskTick();
+        assert.strictEqual(clientActions.length,1,'NumberofclientActionmust=1.');
 
-        core.bus.trigger('barcode_scanned', 1);
+        core.bus.trigger('barcode_scanned',1);
         /*
-            As action is given when instantiate GreetingMessage, we simulate that we come from the KioskMode
-            So rescanning the same barcode won't lead to another RPC.
+            AsactionisgivenwheninstantiateGreetingMessage,wesimulatethatwecomefromtheKioskMode
+            Sorescanningthesamebarcodewon'tleadtoanotherRPC.
         */
-        assert.strictEqual(clientActions.length, 1, 'Number of clientActions must = 1.');
-        assert.strictEqual(rpcCount, 0, 'RPC call should not have been done.');
+        assert.strictEqual(clientActions.length,1,'NumberofclientActionsmust=1.');
+        assert.strictEqual(rpcCount,0,'RPCcallshouldnothavebeendone.');
 
-        core.bus.trigger('barcode_scanned', 2);
-        await testUtils.nextTick();
-        assert.strictEqual(clientActions.length, 2, 'Number of clientActions must = 2.');
-        assert.strictEqual(rpcCount, 1, 'RPC call should have been done only once.');
-        core.bus.trigger('barcode_scanned', 2);
-        await testUtils.nextMicrotaskTick();
-        assert.strictEqual(clientActions.length, 2, 'Number of clientActions must = 2.');
-        assert.strictEqual(rpcCount, 1, 'RPC call should have been done only once.');
+        core.bus.trigger('barcode_scanned',2);
+        awaittestUtils.nextTick();
+        assert.strictEqual(clientActions.length,2,'NumberofclientActionsmust=2.');
+        assert.strictEqual(rpcCount,1,'RPCcallshouldhavebeendoneonlyonce.');
+        core.bus.trigger('barcode_scanned',2);
+        awaittestUtils.nextMicrotaskTick();
+        assert.strictEqual(clientActions.length,2,'NumberofclientActionsmust=2.');
+        assert.strictEqual(rpcCount,1,'RPCcallshouldhavebeendoneonlyonce.');
 
-        core.bus.trigger('barcode_scanned', 1);
-        await testUtils.nextTick();
-        assert.strictEqual(clientActions.length, 3, 'Number of clientActions must = 3.');
-        core.bus.trigger('barcode_scanned', 1);
-        await testUtils.nextMicrotaskTick();
-        assert.strictEqual(clientActions.length, 3, 'Number of clientActions must = 3.');
-        assert.strictEqual(rpcCount, 2, 'RPC call should have been done only twice.');
+        core.bus.trigger('barcode_scanned',1);
+        awaittestUtils.nextTick();
+        assert.strictEqual(clientActions.length,3,'NumberofclientActionsmust=3.');
+        core.bus.trigger('barcode_scanned',1);
+        awaittestUtils.nextMicrotaskTick();
+        assert.strictEqual(clientActions.length,3,'NumberofclientActionsmust=3.');
+        assert.strictEqual(rpcCount,2,'RPCcallshouldhavebeendoneonlytwice.');
 
-        _.each(clientActions.reverse(), function(clientAction) {
+        _.each(clientActions.reverse(),function(clientAction){
             clientAction.destroy();
         });
     });

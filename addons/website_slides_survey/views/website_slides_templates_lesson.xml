@@ -1,20 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <template id="slide_content_detailed" inherit_id="website_slides.slide_content_detailed">
-            <xpath expr="//div[hasclass('o_wslides_lesson_content_type')]" position="inside">
-                <div t-if="slide.slide_type == 'certification' and not channel_progress[slide.id].get('completed')" class="col mt32 mb8 d-flex justify-content-center">
-                    <a role="button"
-                        class="btn btn-primary btn-lg"
-                        t-att-href="'/slides_survey/slide/get_certification_url?slide_id=%s' %(slide.id)">
-                        <i class="fa fa-fw fa-graduation-cap" role="img"/>
-                        <t t-if="slide.channel_id.is_member and slide.channel_id.active">Begin Certification</t>
-                        <t t-else="">Test Certification</t>
+        <templateid="slide_content_detailed"inherit_id="website_slides.slide_content_detailed">
+            <xpathexpr="//div[hasclass('o_wslides_lesson_content_type')]"position="inside">
+                <divt-if="slide.slide_type=='certification'andnotchannel_progress[slide.id].get('completed')"class="colmt32mb8d-flexjustify-content-center">
+                    <arole="button"
+                        class="btnbtn-primarybtn-lg"
+                        t-att-href="'/slides_survey/slide/get_certification_url?slide_id=%s'%(slide.id)">
+                        <iclass="fafa-fwfa-graduation-cap"role="img"/>
+                        <tt-if="slide.channel_id.is_memberandslide.channel_id.active">BeginCertification</t>
+                        <tt-else="">TestCertification</t>
                     </a>
                 </div>
-                <div t-if="slide.slide_type == 'certification' and channel_progress[slide.id].get('completed')" class="col mt32 mb8 d-flex justify-content-center">
-                    <a role="button" class="btn btn-primary btn-lg" t-att-href="'/survey/%s/get_certification' % slide.survey_id.id">
-                        <i class="fa fa-fw fa-trophy" role="img" aria-label="Download certification" title="Download certification"/> Download certification
+                <divt-if="slide.slide_type=='certification'andchannel_progress[slide.id].get('completed')"class="colmt32mb8d-flexjustify-content-center">
+                    <arole="button"class="btnbtn-primarybtn-lg"t-att-href="'/survey/%s/get_certification'%slide.survey_id.id">
+                        <iclass="fafa-fwfa-trophy"role="img"aria-label="Downloadcertification"title="Downloadcertification"/>Downloadcertification
                     </a>
                 </div>
             </xpath>

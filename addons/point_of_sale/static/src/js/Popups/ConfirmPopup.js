@@ -1,20 +1,20 @@
-flectra.define('point_of_sale.ConfirmPopup', function(require) {
-    'use strict';
+flectra.define('point_of_sale.ConfirmPopup',function(require){
+    'usestrict';
 
-    const AbstractAwaitablePopup = require('point_of_sale.AbstractAwaitablePopup');
-    const Registries = require('point_of_sale.Registries');
+    constAbstractAwaitablePopup=require('point_of_sale.AbstractAwaitablePopup');
+    constRegistries=require('point_of_sale.Registries');
 
-    // formerly ConfirmPopupWidget
-    class ConfirmPopup extends AbstractAwaitablePopup {}
-    ConfirmPopup.template = 'ConfirmPopup';
-    ConfirmPopup.defaultProps = {
-        confirmText: 'Ok',
-        cancelText: 'Cancel',
-        title: 'Confirm ?',
-        body: '',
+    //formerlyConfirmPopupWidget
+    classConfirmPopupextendsAbstractAwaitablePopup{}
+    ConfirmPopup.template='ConfirmPopup';
+    ConfirmPopup.defaultProps={
+        confirmText:'Ok',
+        cancelText:'Cancel',
+        title:'Confirm?',
+        body:'',
     };
 
     Registries.Component.add(ConfirmPopup);
 
-    return ConfirmPopup;
+    returnConfirmPopup;
 });

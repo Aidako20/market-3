@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class AccountMove(models.Model):
-    _inherit = 'account.move'
+classAccountMove(models.Model):
+    _inherit='account.move'
 
-    def action_invoice_paid(self):
-        """ When an invoice linked to a sales order selling registrations is
-        paid confirm attendees. Attendees should indeed not be confirmed before
-        full payment. """
-        res = super(AccountMove, self).action_invoice_paid()
-        self.mapped('line_ids.sale_line_ids')._update_registrations(confirm=True, mark_as_paid=True)
-        return res
+    defaction_invoice_paid(self):
+        """Whenaninvoicelinkedtoasalesordersellingregistrationsis
+        paidconfirmattendees.Attendeesshouldindeednotbeconfirmedbefore
+        fullpayment."""
+        res=super(AccountMove,self).action_invoice_paid()
+        self.mapped('line_ids.sale_line_ids')._update_registrations(confirm=True,mark_as_paid=True)
+        returnres

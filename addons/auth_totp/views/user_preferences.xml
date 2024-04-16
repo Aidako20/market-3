@@ -1,34 +1,34 @@
 <flectra>
-    <record model="ir.ui.view" id="view_totp_list">
-        <field name="name">users list: add totp status</field>
-        <field name="model">res.users</field>
-        <field name="inherit_id" ref="base.view_users_tree"/>
-        <field name="arch" type="xml">
+    <recordmodel="ir.ui.view"id="view_totp_list">
+        <fieldname="name">userslist:addtotpstatus</field>
+        <fieldname="model">res.users</field>
+        <fieldname="inherit_id"ref="base.view_users_tree"/>
+        <fieldname="arch"type="xml">
             <tree>
-                <field name="totp_enabled"/>
+                <fieldname="totp_enabled"/>
             </tree>
         </field>
     </record>
-    <record model="ir.ui.view" id="view_totp_form">
-        <field name="name">user form: add totp status</field>
-        <field name="model">res.users</field>
-        <field name="inherit_id" ref="base.view_users_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//page[@name='references']/group[1]" position="before">
-                <field name="totp_enabled" invisible="1"/>
-                <group attrs="{'invisible': [('totp_enabled', '!=', False)]}">
+    <recordmodel="ir.ui.view"id="view_totp_form">
+        <fieldname="name">userform:addtotpstatus</field>
+        <fieldname="model">res.users</field>
+        <fieldname="inherit_id"ref="base.view_users_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//page[@name='references']/group[1]"position="before">
+                <fieldname="totp_enabled"invisible="1"/>
+                <groupattrs="{'invisible':[('totp_enabled','!=',False)]}">
                     <div>
-                        <span class="alert alert-info" role="status">
-                            <i class="fa fa-warning"/>
-                            Two-factor authentication not enabled
+                        <spanclass="alertalert-info"role="status">
+                            <iclass="fafa-warning"/>
+                            Two-factorauthenticationnotenabled
                         </span>
                     </div>
                 </group>
-                <group attrs="{'invisible': [('totp_enabled', '=', False)]}">
+                <groupattrs="{'invisible':[('totp_enabled','=',False)]}">
                     <div>
-                        <span class="text-success">
-                            <i class="fa fa-check-circle"/>
-                            Two-factor authentication enabled
+                        <spanclass="text-success">
+                            <iclass="fafa-check-circle"/>
+                            Two-factorauthenticationenabled
                         </span>
                     </div>
                 </group>
@@ -36,128 +36,128 @@
         </field>
     </record>
 
-    <record model="ir.actions.server" id="action_disable_totp">
-        <field name="name">Disable TOTP on users</field>
-        <field name="model_id" ref="base.model_res_users"/>
-        <field name="binding_model_id" ref="base.model_res_users"/>
-        <field name="state">code</field>
-        <field name="code">
-            action = records.totp_disable()
+    <recordmodel="ir.actions.server"id="action_disable_totp">
+        <fieldname="name">DisableTOTPonusers</field>
+        <fieldname="model_id"ref="base.model_res_users"/>
+        <fieldname="binding_model_id"ref="base.model_res_users"/>
+        <fieldname="state">code</field>
+        <fieldname="code">
+            action=records.totp_disable()
         </field>
-        <field name="groups_id" eval="[(4, ref('base.group_erp_manager'), 0)]"/>
+        <fieldname="groups_id"eval="[(4,ref('base.group_erp_manager'),0)]"/>
     </record>
 
-    <record model="ir.ui.view" id="view_totp_wizard">
-        <field name="name">auth_totp wizard</field>
-        <field name="model">auth_totp.wizard</field>
-        <field name="arch" type="xml">
+    <recordmodel="ir.ui.view"id="view_totp_wizard">
+        <fieldname="name">auth_totpwizard</field>
+        <fieldname="model">auth_totp.wizard</field>
+        <fieldname="arch"type="xml">
             <form>
                 <sheet>
-                    <div class="row container">
-                        <div class="mb-3">
-                            <h3 class="font-weight-bold">Scan this barcode with your app</h3>
+                    <divclass="rowcontainer">
+                        <divclass="mb-3">
+                            <h3class="font-weight-bold">Scanthisbarcodewithyourapp</h3>
                             <div>
-                                Scan the image below with the authenticator app on your phone.<br/>
-                                If you cannot scan the barcode, here are some alternative options:
+                                Scantheimagebelowwiththeauthenticatorapponyourphone.<br/>
+                                Ifyoucannotscanthebarcode,herearesomealternativeoptions:
                                 <ul>
-                                    <li><field class="text-wrap" name="url" widget="url"
-                                               options="{'website_path': True}"
-                                               text="Click on this link to open your authenticator app"/></li>
+                                    <li><fieldclass="text-wrap"name="url"widget="url"
+                                               options="{'website_path':True}"
+                                               text="Clickonthislinktoopenyourauthenticatorapp"/></li>
 
-                                    <li>Or enter the secret code manually:
-                                        <a data-toggle="collapse"
-                                           href="#collapseTotpSecret" role="button" aria-expanded="false"
-                                           aria-controls="collapseTotpSecret">show the code</a>
+                                    <li>Orenterthesecretcodemanually:
+                                        <adata-toggle="collapse"
+                                           href="#collapseTotpSecret"role="button"aria-expanded="false"
+                                           aria-controls="collapseTotpSecret">showthecode</a>
                                     </li>
                                 </ul>
-                                <!-- code outside list to have more horiz space on mobile -->
-                                <div class="collapse col-12 col-md-6" id="collapseTotpSecret">
-                                  <div class="card card-body">
-                                    <h3>Your two-factor secret:</h3>
-                                    <code class="text-center"><field name="secret"/></code>
+                                <!--codeoutsidelisttohavemorehorizspaceonmobile-->
+                                <divclass="collapsecol-12col-md-6"id="collapseTotpSecret">
+                                  <divclass="cardcard-body">
+                                    <h3>Yourtwo-factorsecret:</h3>
+                                    <codeclass="text-center"><fieldname="secret"/></code>
                                   </div>
                                 </div>
                             </div>
 
-                            <field class="offset-1" name="qrcode" readonly="True" widget="image"/>
+                            <fieldclass="offset-1"name="qrcode"readonly="True"widget="image"/>
 
-                            <h3 class="font-weight-bold">Enter the 6-digit code from your app</h3>
-                            <div class="text-justify col-10 col-lg-6 px-0">
-                                After scanning the barcode, the app will display a 6-digit code that you
-                                should enter below. Don't worry if the code changes in the app,
-                                it stays valid a bit longer.
+                            <h3class="font-weight-bold">Enterthe6-digitcodefromyourapp</h3>
+                            <divclass="text-justifycol-10col-lg-6px-0">
+                                Afterscanningthebarcode,theappwilldisplaya6-digitcodethatyou
+                                shouldenterbelow.Don'tworryifthecodechangesintheapp,
+                                itstaysvalidabitlonger.
                             </div>
-                            <div class="mt-2">
-                                <label for="code" class="col-4 col-md-12 px-0">Verification Code</label>
-                                <field required="True" name="code" class="col-10 col-md-6 px-0"/>
+                            <divclass="mt-2">
+                                <labelfor="code"class="col-4col-md-12px-0">VerificationCode</label>
+                                <fieldrequired="True"name="code"class="col-10col-md-6px-0"/>
                             </div>
 
                         </div>
                     </div>
                 </sheet>
                 <footer>
-                    <button type="object" name="enable" class="btn btn-primary"
-                            string="Enable two-factor authentication"/>
-                    <button string="Cancel" special="cancel"/>
+                    <buttontype="object"name="enable"class="btnbtn-primary"
+                            string="Enabletwo-factorauthentication"/>
+                    <buttonstring="Cancel"special="cancel"/>
                 </footer>
             </form>
         </field>
     </record>
 
-    <record model="ir.ui.view" id="view_totp_field">
-        <field name="name">users preference: totp</field>
-        <field name="model">res.users</field>
-        <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
-        <field name="arch" type="xml">
-            <button name="preference_change_password" position="after">
-                    <field name="totp_enabled" invisible="1"/>
-                    <group attrs="{'invisible': [('totp_enabled', '!=', False)]}">
+    <recordmodel="ir.ui.view"id="view_totp_field">
+        <fieldname="name">userspreference:totp</field>
+        <fieldname="model">res.users</field>
+        <fieldname="inherit_id"ref="base.view_users_form_simple_modif"/>
+        <fieldname="arch"type="xml">
+            <buttonname="preference_change_password"position="after">
+                    <fieldname="totp_enabled"invisible="1"/>
+                    <groupattrs="{'invisible':[('totp_enabled','!=',False)]}">
                         <div>
-                            <span class="alert alert-info" role="status">
-                                <i class="fa fa-warning"/>
-                                Two-factor authentication not enabled
-                                <a href="https://doc.flectrahq.com/2.0/applications/general/auth/2fa.html"
-                                   title="What is this?" class="o_doc_link" target="_blank"></a>
+                            <spanclass="alertalert-info"role="status">
+                                <iclass="fafa-warning"/>
+                                Two-factorauthenticationnotenabled
+                                <ahref="https://doc.flectrahq.com/2.0/applications/general/auth/2fa.html"
+                                   title="Whatisthis?"class="o_doc_link"target="_blank"></a>
                             </span>
-                            <button name="totp_enable_wizard" type="object" string="Enable two-factor authentication"
-                                    class="btn btn-info mx-3"/>
+                            <buttonname="totp_enable_wizard"type="object"string="Enabletwo-factorauthentication"
+                                    class="btnbtn-infomx-3"/>
                         </div>
                     </group>
-                    <group attrs="{'invisible': [('totp_enabled', '=', False)]}">
+                    <groupattrs="{'invisible':[('totp_enabled','=',False)]}">
                         <div>
-                            <span class="text-success">
-                                <i class="fa fa-check-circle"/>
-                                Two-factor authentication enabled
-                                <a href="https://doc.flectrahq.com/2.0/applications/general/auth/2fa.html"
-                                   title="What is this?" class="o_doc_link" target="_blank"></a>
+                            <spanclass="text-success">
+                                <iclass="fafa-check-circle"/>
+                                Two-factorauthenticationenabled
+                                <ahref="https://doc.flectrahq.com/2.0/applications/general/auth/2fa.html"
+                                   title="Whatisthis?"class="o_doc_link"target="_blank"></a>
                             </span>
-                            <button name="totp_disable" type="object" string="(Disable two-factor authentication)"
-                                    class="btn btn-link text-muted"/>
+                            <buttonname="totp_disable"type="object"string="(Disabletwo-factorauthentication)"
+                                    class="btnbtn-linktext-muted"/>
                         </div>
-                        <div colspan="2" attrs="{'invisible': [('totp_trusted_device_ids', '=', [])]}">
-                            <field name="totp_trusted_device_ids" nolabel="1" colspan="4" readonly="1">
+                        <divcolspan="2"attrs="{'invisible':[('totp_trusted_device_ids','=',[])]}">
+                            <fieldname="totp_trusted_device_ids"nolabel="1"colspan="4"readonly="1">
 
-                                <tree create="false" delete="false">
-                                    <field name="name" string="Trusted Devices"/>
-                                    <field name="create_date" string="Added On"/>
-                                    <button type="object" name="remove" icon="fa-trash"/>
+                                <treecreate="false"delete="false">
+                                    <fieldname="name"string="TrustedDevices"/>
+                                    <fieldname="create_date"string="AddedOn"/>
+                                    <buttontype="object"name="remove"icon="fa-trash"/>
                                 </tree>
-                                <form string="Trusted Device">
+                                <formstring="TrustedDevice">
                                     <group>
                                         <group>
-                                            <field name="name" string="Device Name"/>
-                                            <field name="create_date" string="Added On"/>
+                                            <fieldname="name"string="DeviceName"/>
+                                            <fieldname="create_date"string="AddedOn"/>
                                         </group>
                                     </group>
                                     <footer>
-                                        <button name="remove" string="Revoke" type="object" icon="fa-trash"/>
-                                        <button name="preference_cancel" string="Cancel" special="cancel" class="btn-secondary"/>
+                                        <buttonname="remove"string="Revoke"type="object"icon="fa-trash"/>
+                                        <buttonname="preference_cancel"string="Cancel"special="cancel"class="btn-secondary"/>
                                     </footer>
                                 </form>
 
                             </field>
-                            <button name="revoke_all_devices" string="Revoke All" type="object" class="btn btn-secondary"
-                                    confirm="Are you sure? Two-factor authentication will be required again on all your devices"/>
+                            <buttonname="revoke_all_devices"string="RevokeAll"type="object"class="btnbtn-secondary"
+                                    confirm="Areyousure?Two-factorauthenticationwillberequiredagainonallyourdevices"/>
                         </div>
                     </group>
             </button>

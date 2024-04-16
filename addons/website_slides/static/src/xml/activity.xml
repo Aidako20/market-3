@@ -1,38 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<templates xml:space="preserve">
-    <t t-extend="mail.activity_items">
-        <t t-jquery=".o_thread_message .o_thread_message_core .o_thread_message_tools" t-operation="replace">
-            <t t-if="activity.activity_type_id[1] == 'Access Request'">
-                <t t-if="activity.user_id[0] === uid">
-                    <a role="button" class="btn btn-link btn-success text-muted text-success o_activity_link o_activity_action_grant_access" t-att-data-partner-id="activity.request_partner_id[0]">
-                        <i class="fa fa-check"/> Grant Access
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
+    <tt-extend="mail.activity_items">
+        <tt-jquery=".o_thread_message.o_thread_message_core.o_thread_message_tools"t-operation="replace">
+            <tt-if="activity.activity_type_id[1]=='AccessRequest'">
+                <tt-if="activity.user_id[0]===uid">
+                    <arole="button"class="btnbtn-linkbtn-successtext-mutedtext-successo_activity_linko_activity_action_grant_access"t-att-data-partner-id="activity.request_partner_id[0]">
+                        <iclass="fafa-check"/>GrantAccess
                     </a>
-                    <a role="button" class="btn btn-link btn-danger text-muted text-danger o_activity_link o_activity_action_refuse_access" t-att-data-partner-id="activity.request_partner_id[0]">
-                        <i class="fa fa-times"/> Refuse Access
+                    <arole="button"class="btnbtn-linkbtn-dangertext-mutedtext-dangero_activity_linko_activity_action_refuse_access"t-att-data-partner-id="activity.request_partner_id[0]">
+                        <iclass="fafa-times"/>RefuseAccess
                     </a>
                 </t>
             </t>
-            <t t-else="">
-                <div class="o_thread_message_tools btn-group">
-                    <t t-call="mail.activity_thread_message_tools"/>
+            <tt-else="">
+                <divclass="o_thread_message_toolsbtn-group">
+                    <tt-call="mail.activity_thread_message_tools"/>
                 </div>
             </t>
         </t>
     </t>
 
-    <t t-inherit="mail.Activity" t-inherit-mode="extension">
-        <xpath expr="//*[@name='tools']" position="replace">
-            <t t-if="activity.requestingPartner and activity.thread.model === 'slide.channel'">
-                <div class="o_Activity_tools">
-                    <button class="o_Activity_toolButton o_Activity_grantAccessButton btn btn-link" t-on-click="_onGrantAccess">
-                        <i class="fa fa-check"/> Grant Access
+    <tt-inherit="mail.Activity"t-inherit-mode="extension">
+        <xpathexpr="//*[@name='tools']"position="replace">
+            <tt-if="activity.requestingPartnerandactivity.thread.model==='slide.channel'">
+                <divclass="o_Activity_tools">
+                    <buttonclass="o_Activity_toolButtono_Activity_grantAccessButtonbtnbtn-link"t-on-click="_onGrantAccess">
+                        <iclass="fafa-check"/>GrantAccess
                     </button>
-                    <button class="o_Activity_toolButton o_Activity_refuseAccessButton btn btn-link" t-on-click="_onRefuseAccess">
-                        <i class="fa fa-times"/> Refuse Access
+                    <buttonclass="o_Activity_toolButtono_Activity_refuseAccessButtonbtnbtn-link"t-on-click="_onRefuseAccess">
+                        <iclass="fafa-times"/>RefuseAccess
                     </button>
                 </div>
             </t>
-            <t t-else="">$0</t>
+            <tt-else="">$0</t>
         </xpath>
     </t>
 </templates>

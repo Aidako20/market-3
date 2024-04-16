@@ -1,82 +1,82 @@
-flectra.define('web.RamStorage', function (require) {
-'use strict';
+flectra.define('web.RamStorage',function(require){
+'usestrict';
 
 /**
- * This module defines an alternative of the Storage objects (localStorage,
- * sessionStorage), stored in RAM. It is used when those native Storage objects
- * are unavailable (e.g. in private browsing on Safari).
+ *ThismoduledefinesanalternativeoftheStorageobjects(localStorage,
+ *sessionStorage),storedinRAM.ItisusedwhenthosenativeStorageobjects
+ *areunavailable(e.g.inprivatebrowsingonSafari).
  */
 
-var Class = require('web.Class');
-var mixins = require('web.mixins');
+varClass=require('web.Class');
+varmixins=require('web.mixins');
 
 
-var RamStorage = Class.extend(mixins.EventDispatcherMixin, {
+varRamStorage=Class.extend(mixins.EventDispatcherMixin,{
     /**
-     * @constructor
+     *@constructor
      */
-    init: function () {
+    init:function(){
         mixins.EventDispatcherMixin.init.call(this);
-        if (!this.storage) {
+        if(!this.storage){
             this.clear();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Removes all data from the storage
+     *Removesalldatafromthestorage
      */
-    clear: function () {
-        this.storage = Object.create(null);
-        this.length = 0;
+    clear:function(){
+        this.storage=Object.create(null);
+        this.length=0;
     },
     /**
-     * Returns the value associated with a given key in the storage
+     *Returnsthevalueassociatedwithagivenkeyinthestorage
      *
-     * @param {string} key
-     * @returns {string}
+     *@param{string}key
+     *@returns{string}
      */
-    getItem: function (key) {
-        return this.storage[key];
+    getItem:function(key){
+        returnthis.storage[key];
     },
     /**
-     * @param {integer} index
-     * @return {string}
+     *@param{integer}index
+     *@return{string}
      */
-    key: function (index) {
-        return _.keys(this.storage)[index];
+    key:function(index){
+        return_.keys(this.storage)[index];
     },
     /**
-     * Removes the given key from the storage
+     *Removesthegivenkeyfromthestorage
      *
-     * @param {string} key
+     *@param{string}key
      */
-    removeItem: function (key) {
-        if (key in this.storage) {
+    removeItem:function(key){
+        if(keyinthis.storage){
             this.length--;
         }
-        delete this.storage[key];
-        this.trigger('storage', {key: key, newValue: null});
+        deletethis.storage[key];
+        this.trigger('storage',{key:key,newValue:null});
     },
     /**
-     * Adds a given key-value pair to the storage, or update the value of the
-     * given key if it already exists
+     *Addsagivenkey-valuepairtothestorage,orupdatethevalueofthe
+     *givenkeyifitalreadyexists
      *
-     * @param {string} key
-     * @param {string} value
+     *@param{string}key
+     *@param{string}value
      */
-    setItem: function (key, value) {
-        if (!(key in this.storage)) {
+    setItem:function(key,value){
+        if(!(keyinthis.storage)){
             this.length++;
         }
-        this.storage[key] = value;
-        this.trigger('storage', {key: key, newValue: value});
+        this.storage[key]=value;
+        this.trigger('storage',{key:key,newValue:value});
     },
 });
 
-return RamStorage;
+returnRamStorage;
 
 });

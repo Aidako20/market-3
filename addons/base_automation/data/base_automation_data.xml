@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="ir_cron_data_base_automation_check" model="ir.cron">
-            <field name="name">Base Action Rule: check and execute</field>
-            <field name="model_id" ref="model_base_automation"/>
-            <field name="state">code</field>
-            <field name="code">model._check(True)</field>
-            <field name="interval_number">4</field>
-            <field name="interval_type">hours</field>
-            <field name="numbercall">-1</field>
-            <field name="doall" eval="False"/>
-            <field name="active" eval="False" />
+    <datanoupdate="1">
+        <recordid="ir_cron_data_base_automation_check"model="ir.cron">
+            <fieldname="name">BaseActionRule:checkandexecute</field>
+            <fieldname="model_id"ref="model_base_automation"/>
+            <fieldname="state">code</field>
+            <fieldname="code">model._check(True)</field>
+            <fieldname="interval_number">4</field>
+            <fieldname="interval_type">hours</field>
+            <fieldname="numbercall">-1</field>
+            <fieldname="doall"eval="False"/>
+            <fieldname="active"eval="False"/>
         </record>
     </data>
 </flectra>

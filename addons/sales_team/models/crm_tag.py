@@ -1,21 +1,21 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from random import randint
+fromrandomimportrandint
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class Tag(models.Model):
-    _name = "crm.tag"
-    _description = "CRM Tag"
+classTag(models.Model):
+    _name="crm.tag"
+    _description="CRMTag"
 
-    def _get_default_color(self):
-        return randint(1, 11)
+    def_get_default_color(self):
+        returnrandint(1,11)
 
-    name = fields.Char('Tag Name', required=True, translate=True)
-    color = fields.Integer('Color', default=_get_default_color)
+    name=fields.Char('TagName',required=True,translate=True)
+    color=fields.Integer('Color',default=_get_default_color)
 
-    _sql_constraints = [
-        ('name_uniq', 'unique (name)', "Tag name already exists !"),
+    _sql_constraints=[
+        ('name_uniq','unique(name)',"Tagnamealreadyexists!"),
     ]

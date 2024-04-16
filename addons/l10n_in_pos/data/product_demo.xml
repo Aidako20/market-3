@@ -1,56 +1,56 @@
 <flectra>
-    <data noupdate="1">
-        <record id="point_of_sale.desk_organizer" model="product.product">
-            <field name="l10n_in_hsn_code">9403</field>
-            <field name="l10n_in_hsn_description">Other furniture and parts thereof.</field>
+    <datanoupdate="1">
+        <recordid="point_of_sale.desk_organizer"model="product.product">
+            <fieldname="l10n_in_hsn_code">9403</field>
+            <fieldname="l10n_in_hsn_description">Otherfurnitureandpartsthereof.</field>
         </record>
-        <record id="point_of_sale.desk_pad" model="product.product">
-            <field name="l10n_in_hsn_code">9403</field>
-            <field name="l10n_in_hsn_description">Other furniture and parts thereof.</field>
+        <recordid="point_of_sale.desk_pad"model="product.product">
+            <fieldname="l10n_in_hsn_code">9403</field>
+            <fieldname="l10n_in_hsn_description">Otherfurnitureandpartsthereof.</field>
         </record>
-        <record id="point_of_sale.led_lamp" model="product.product">
-            <field name="l10n_in_hsn_code">8539.50.00</field>
-            <field name="l10n_in_hsn_description">Light-emitting diode (LED) lamps</field>
+        <recordid="point_of_sale.led_lamp"model="product.product">
+            <fieldname="l10n_in_hsn_code">8539.50.00</field>
+            <fieldname="l10n_in_hsn_description">Light-emittingdiode(LED)lamps</field>
         </record>
-        <record id="point_of_sale.letter_tray" model="product.product">
-            <field name="l10n_in_hsn_code">4819.60.00</field>
-            <field name="l10n_in_hsn_description">Box files, letter trays, storage boxes and similar articles, of a kind used in offices, shops or the like</field>
+        <recordid="point_of_sale.letter_tray"model="product.product">
+            <fieldname="l10n_in_hsn_code">4819.60.00</field>
+            <fieldname="l10n_in_hsn_description">Boxfiles,lettertrays,storageboxesandsimilararticles,ofakindusedinoffices,shopsorthelike</field>
         </record>
-        <record id="point_of_sale.magnetic_board" model="product.product">
-            <field name="l10n_in_hsn_code">3921.90.99</field>
-            <field name="l10n_in_hsn_description">Other plates, sheets film , foil and strip, of plastics</field>
+        <recordid="point_of_sale.magnetic_board"model="product.product">
+            <fieldname="l10n_in_hsn_code">3921.90.99</field>
+            <fieldname="l10n_in_hsn_description">Otherplates,sheetsfilm,foilandstrip,ofplastics</field>
         </record>
-        <record id="point_of_sale.product_product_consumable" model="product.product">
-            <field name="l10n_in_hsn_code">8443.32.90</field>
-            <field name="l10n_in_hsn_description">Other, capable of connecting to an automatic data processing machine or to a network</field>
+        <recordid="point_of_sale.product_product_consumable"model="product.product">
+            <fieldname="l10n_in_hsn_code">8443.32.90</field>
+            <fieldname="l10n_in_hsn_description">Other,capableofconnectingtoanautomaticdataprocessingmachineortoanetwork</field>
         </record>
-        <record id="point_of_sale.monitor_stand" model="product.product">
-            <field name="l10n_in_hsn_code">9403</field>
-            <field name="l10n_in_hsn_description">Other furniture and parts thereof.</field>
+        <recordid="point_of_sale.monitor_stand"model="product.product">
+            <fieldname="l10n_in_hsn_code">9403</field>
+            <fieldname="l10n_in_hsn_description">Otherfurnitureandpartsthereof.</field>
         </record>
-        <record id="point_of_sale.newspaper_rack" model="product.product">
-            <field name="l10n_in_hsn_code">9403.10.90</field>
-            <field name="l10n_in_hsn_description">Metal furniture of a kind used in offices</field>
+        <recordid="point_of_sale.newspaper_rack"model="product.product">
+            <fieldname="l10n_in_hsn_code">9403.10.90</field>
+            <fieldname="l10n_in_hsn_description">Metalfurnitureofakindusedinoffices</field>
         </record>
-        <record id="point_of_sale.small_shelf" model="product.product">
-            <field name="l10n_in_hsn_code">9403.10.90</field>
-            <field name="l10n_in_hsn_description">Metal furniture of a kind used in offices</field>
+        <recordid="point_of_sale.small_shelf"model="product.product">
+            <fieldname="l10n_in_hsn_code">9403.10.90</field>
+            <fieldname="l10n_in_hsn_description">Metalfurnitureofakindusedinoffices</field>
         </record>
-        <record id="point_of_sale.product_product_tip" model="product.product">
-            <field name="l10n_in_hsn_code">8209.00.90</field>
-            <field name="l10n_in_hsn_description">Plates, sticks, tips and the like for tools, unmounted, of cermets.</field>
+        <recordid="point_of_sale.product_product_tip"model="product.product">
+            <fieldname="l10n_in_hsn_code">8209.00.90</field>
+            <fieldname="l10n_in_hsn_description">Plates,sticks,tipsandthelikefortools,unmounted,ofcermets.</field>
         </record>
-        <record id="point_of_sale.wall_shelf" model="product.product">
-            <field name="l10n_in_hsn_code">9403.10.90</field>
-            <field name="l10n_in_hsn_description">Metal furniture of a kind used in offices</field>
+        <recordid="point_of_sale.wall_shelf"model="product.product">
+            <fieldname="l10n_in_hsn_code">9403.10.90</field>
+            <fieldname="l10n_in_hsn_description">Metalfurnitureofakindusedinoffices</field>
         </record>
-        <record id="point_of_sale.whiteboard" model="product.product">
-            <field name="l10n_in_hsn_code">3926.10.99</field>
-            <field name="l10n_in_hsn_description">Office supplies of a kind classified as stationary other than pins,clips, and writing instruments</field>
+        <recordid="point_of_sale.whiteboard"model="product.product">
+            <fieldname="l10n_in_hsn_code">3926.10.99</field>
+            <fieldname="l10n_in_hsn_description">Officesuppliesofakindclassifiedasstationaryotherthanpins,clips,andwritinginstruments</field>
         </record>
-        <record id="point_of_sale.whiteboard_pen" model="product.product">
-            <field name="l10n_in_hsn_code">9608</field>
-            <field name="l10n_in_hsn_description">Ball point pens; felt tipped and other porous-tipped pens and markers; fountain pens, stylograph pens and other pens; duplicating stylos; propelling or sliding pencils; pen-holders, pencilholders and similar holders; parts (including caps and clips) of the foregoing articles, othe than those of heading 9609
+        <recordid="point_of_sale.whiteboard_pen"model="product.product">
+            <fieldname="l10n_in_hsn_code">9608</field>
+            <fieldname="l10n_in_hsn_description">Ballpointpens;felttippedandotherporous-tippedpensandmarkers;fountainpens,stylographpensandotherpens;duplicatingstylos;propellingorslidingpencils;pen-holders,pencilholdersandsimilarholders;parts(includingcapsandclips)oftheforegoingarticles,othethanthoseofheading9609
             </field>
         </record>
     </data>

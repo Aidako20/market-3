@@ -1,71 +1,71 @@
-flectra.define('mail/static/src/components/follower_subtype/follower_subtype.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/follower_subtype/follower_subtype.js',function(require){
+'usestrict';
 
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-const { Component } = owl;
+const{Component}=owl;
 
-class FollowerSubtype extends Component {
+classFollowerSubtypeextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps();
-        useStore(props => {
-            const followerSubtype = this.env.models['mail.follower_subtype'].get(props.followerSubtypeLocalId);
-            return [followerSubtype ? followerSubtype.__state : undefined];
+        useStore(props=>{
+            constfollowerSubtype=this.env.models['mail.follower_subtype'].get(props.followerSubtypeLocalId);
+            return[followerSubtype?followerSubtype.__state:undefined];
         });
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {mail.follower|undefined}
+     *@returns{mail.follower|undefined}
      */
-    get follower() {
-        return this.env.models['mail.follower'].get(this.props.followerLocalId);
+    getfollower(){
+        returnthis.env.models['mail.follower'].get(this.props.followerLocalId);
     }
 
     /**
-     * @returns {mail.follower_subtype}
+     *@returns{mail.follower_subtype}
      */
-    get followerSubtype() {
-        return this.env.models['mail.follower_subtype'].get(this.props.followerSubtypeLocalId);
+    getfollowerSubtype(){
+        returnthis.env.models['mail.follower_subtype'].get(this.props.followerSubtypeLocalId);
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when clicking on cancel button.
+     *Calledwhenclickingoncancelbutton.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onChangeCheckbox(ev) {
-        if (ev.target.checked) {
+    _onChangeCheckbox(ev){
+        if(ev.target.checked){
             this.follower.selectSubtype(this.followerSubtype);
-        } else {
+        }else{
             this.follower.unselectSubtype(this.followerSubtype);
         }
     }
 
 }
 
-Object.assign(FollowerSubtype, {
-    props: {
-        followerLocalId: String,
-        followerSubtypeLocalId: String,
+Object.assign(FollowerSubtype,{
+    props:{
+        followerLocalId:String,
+        followerSubtypeLocalId:String,
     },
-    template: 'mail.FollowerSubtype',
+    template:'mail.FollowerSubtype',
 });
 
-return FollowerSubtype;
+returnFollowerSubtype;
 
 });

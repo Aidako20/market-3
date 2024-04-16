@@ -1,34 +1,34 @@
-flectra.define('point_of_sale.TextInputPopup', function(require) {
-    'use strict';
+flectra.define('point_of_sale.TextInputPopup',function(require){
+    'usestrict';
 
-    const { useState, useRef } = owl.hooks;
-    const AbstractAwaitablePopup = require('point_of_sale.AbstractAwaitablePopup');
-    const Registries = require('point_of_sale.Registries');
+    const{useState,useRef}=owl.hooks;
+    constAbstractAwaitablePopup=require('point_of_sale.AbstractAwaitablePopup');
+    constRegistries=require('point_of_sale.Registries');
 
-    // formerly TextInputPopupWidget
-    class TextInputPopup extends AbstractAwaitablePopup {
-        constructor() {
+    //formerlyTextInputPopupWidget
+    classTextInputPopupextendsAbstractAwaitablePopup{
+        constructor(){
             super(...arguments);
-            this.state = useState({ inputValue: this.props.startingValue });
-            this.inputRef = useRef('input');
+            this.state=useState({inputValue:this.props.startingValue});
+            this.inputRef=useRef('input');
         }
-        mounted() {
+        mounted(){
             this.inputRef.el.focus();
         }
-        getPayload() {
-            return this.state.inputValue;
+        getPayload(){
+            returnthis.state.inputValue;
         }
     }
-    TextInputPopup.template = 'TextInputPopup';
-    TextInputPopup.defaultProps = {
-        confirmText: 'Ok',
-        cancelText: 'Cancel',
-        title: '',
-        body: '',
-        startingValue: '',
+    TextInputPopup.template='TextInputPopup';
+    TextInputPopup.defaultProps={
+        confirmText:'Ok',
+        cancelText:'Cancel',
+        title:'',
+        body:'',
+        startingValue:'',
     };
 
     Registries.Component.add(TextInputPopup);
 
-    return TextInputPopup;
+    returnTextInputPopup;
 });

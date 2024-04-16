@@ -1,20 +1,20 @@
-module.exports = function(grunt) {
+module.exports=function(grunt){
 
     grunt.initConfig({
-        jshint: {
-            src: ['static/src/**/*.js', 'static/tests/**/*.js'],
-            options: {
-                sub: true, //[] instead of .
-                evil: true, //eval
-                laxbreak: true, //unsafe line breaks
+        jshint:{
+            src:['static/src/**/*.js','static/tests/**/*.js'],
+            options:{
+                sub:true,//[]insteadof.
+                evil:true,//eval
+                laxbreak:true,//unsafelinebreaks
             },
         },
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
-    grunt.registerTask('test', []);
+    grunt.registerTask('test',[]);
 
-    grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('default',['jshint']);
 
-}; 
+};

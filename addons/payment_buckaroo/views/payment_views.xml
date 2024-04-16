@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-        <record id="acquirer_form_buckaroo" model="ir.ui.view">
-            <field name="name">acquirer.form.buckaroo</field>
-            <field name="model">payment.acquirer</field>
-            <field name="inherit_id" ref="payment.acquirer_form"/>
-            <field name="arch" type="xml">
-                <xpath expr='//group[@name="acquirer"]' position='inside'>
-                    <group attrs="{'invisible': [('provider', '!=', 'buckaroo')]}">
-                        <field name="brq_websitekey" attrs="{'required':[ ('provider', '=', 'buckaroo'), ('state', '!=', 'disabled')]}"/>
-                        <field name="brq_secretkey" attrs="{'required':[ ('provider', '=', 'buckaroo'), ('state', '!=', 'disabled')]}"/>
+        <recordid="acquirer_form_buckaroo"model="ir.ui.view">
+            <fieldname="name">acquirer.form.buckaroo</field>
+            <fieldname="model">payment.acquirer</field>
+            <fieldname="inherit_id"ref="payment.acquirer_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr='//group[@name="acquirer"]'position='inside'>
+                    <groupattrs="{'invisible':[('provider','!=','buckaroo')]}">
+                        <fieldname="brq_websitekey"attrs="{'required':[('provider','=','buckaroo'),('state','!=','disabled')]}"/>
+                        <fieldname="brq_secretkey"attrs="{'required':[('provider','=','buckaroo'),('state','!=','disabled')]}"/>
                     </group>
                 </xpath>
             </field>

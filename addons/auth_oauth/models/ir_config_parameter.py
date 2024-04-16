@@ -1,17 +1,17 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class IrConfigParameter(models.Model):
-    _inherit = 'ir.config_parameter'
+classIrConfigParameter(models.Model):
+    _inherit='ir.config_parameter'
 
-    def init(self, force=False):
-        super(IrConfigParameter, self).init(force=force)
-        if force:
-            oauth_oe = self.env.ref('auth_oauth.provider_openerp')
-            if not oauth_oe:
+    definit(self,force=False):
+        super(IrConfigParameter,self).init(force=force)
+        ifforce:
+            oauth_oe=self.env.ref('auth_oauth.provider_openerp')
+            ifnotoauth_oe:
                 return
-            dbuuid = self.sudo().get_param('database.uuid')
-            oauth_oe.write({'client_id': dbuuid})
+            dbuuid=self.sudo().get_param('database.uuid')
+            oauth_oe.write({'client_id':dbuuid})

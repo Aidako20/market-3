@@ -1,44 +1,44 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
-    lock_confirmed_po = fields.Boolean("Lock Confirmed Orders", default=lambda self: self.env.company.po_lock == 'lock')
-    po_lock = fields.Selection(related='company_id.po_lock', string="Purchase Order Modification *", readonly=False)
-    po_order_approval = fields.Boolean("Purchase Order Approval", default=lambda self: self.env.company.po_double_validation == 'two_step')
-    po_double_validation = fields.Selection(related='company_id.po_double_validation', string="Levels of Approvals *", readonly=False)
-    po_double_validation_amount = fields.Monetary(related='company_id.po_double_validation_amount', string="Minimum Amount", currency_field='company_currency_id', readonly=False)
-    company_currency_id = fields.Many2one('res.currency', related='company_id.currency_id', string="Company Currency", readonly=True,
-        help='Utility field to express amount currency')
-    default_purchase_method = fields.Selection([
-        ('purchase', 'Ordered quantities'),
-        ('receive', 'Received quantities'),
-        ], string="Bill Control", default_model="product.template",
-        help="This default value is applied to any new product created. "
-        "This can be changed in the product detail form.", default="receive")
-    group_warning_purchase = fields.Boolean("Purchase Warnings", implied_group='purchase.group_warning_purchase')
-    module_account_3way_match = fields.Boolean("3-way matching: purchases, receptions and bills")
-    module_purchase_requisition = fields.Boolean("Purchase Agreements")
-    module_purchase_product_matrix = fields.Boolean("Purchase Grid Entry")
-    po_lead = fields.Float(related='company_id.po_lead', readonly=False)
-    use_po_lead = fields.Boolean(
-        string="Security Lead Time for Purchase",
+    lock_confirmed_po=fields.Boolean("LockConfirmedOrders",default=lambdaself:self.env.company.po_lock=='lock')
+    po_lock=fields.Selection(related='company_id.po_lock',string="PurchaseOrderModification*",readonly=False)
+    po_order_approval=fields.Boolean("PurchaseOrderApproval",default=lambdaself:self.env.company.po_double_validation=='two_step')
+    po_double_validation=fields.Selection(related='company_id.po_double_validation',string="LevelsofApprovals*",readonly=False)
+    po_double_validation_amount=fields.Monetary(related='company_id.po_double_validation_amount',string="MinimumAmount",currency_field='company_currency_id',readonly=False)
+    company_currency_id=fields.Many2one('res.currency',related='company_id.currency_id',string="CompanyCurrency",readonly=True,
+        help='Utilityfieldtoexpressamountcurrency')
+    default_purchase_method=fields.Selection([
+        ('purchase','Orderedquantities'),
+        ('receive','Receivedquantities'),
+        ],string="BillControl",default_model="product.template",
+        help="Thisdefaultvalueisappliedtoanynewproductcreated."
+        "Thiscanbechangedintheproductdetailform.",default="receive")
+    group_warning_purchase=fields.Boolean("PurchaseWarnings",implied_group='purchase.group_warning_purchase')
+    module_account_3way_match=fields.Boolean("3-waymatching:purchases,receptionsandbills")
+    module_purchase_requisition=fields.Boolean("PurchaseAgreements")
+    module_purchase_product_matrix=fields.Boolean("PurchaseGridEntry")
+    po_lead=fields.Float(related='company_id.po_lead',readonly=False)
+    use_po_lead=fields.Boolean(
+        string="SecurityLeadTimeforPurchase",
         config_parameter='purchase.use_po_lead',
-        help="Margin of error for vendor lead times. When the system generates Purchase Orders for reordering products,they will be scheduled that many days earlier to cope with unexpected vendor delays.")
+        help="Marginoferrorforvendorleadtimes.WhenthesystemgeneratesPurchaseOrdersforreorderingproducts,theywillbescheduledthatmanydaysearliertocopewithunexpectedvendordelays.")
 
-    group_send_reminder = fields.Boolean("Receipt Reminder", implied_group='purchase.group_send_reminder', default=True,
-        help="Allow automatically send email to remind your vendor the receipt date")
+    group_send_reminder=fields.Boolean("ReceiptReminder",implied_group='purchase.group_send_reminder',default=True,
+        help="Allowautomaticallysendemailtoremindyourvendorthereceiptdate")
 
     @api.onchange('use_po_lead')
-    def _onchange_use_po_lead(self):
-        if not self.use_po_lead:
-            self.po_lead = 0.0
+    def_onchange_use_po_lead(self):
+        ifnotself.use_po_lead:
+            self.po_lead=0.0
 
-    def set_values(self):
-        super(ResConfigSettings, self).set_values()
-        self.po_lock = 'lock' if self.lock_confirmed_po else 'edit'
-        self.po_double_validation = 'two_step' if self.po_order_approval else 'one_step'
+    defset_values(self):
+        super(ResConfigSettings,self).set_values()
+        self.po_lock='lock'ifself.lock_confirmed_poelse'edit'
+        self.po_double_validation='two_step'ifself.po_order_approvalelse'one_step'

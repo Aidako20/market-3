@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="view_crm_partner_geo_form" model="ir.ui.view">
-            <field name="name">res.partner.geolocation.inherit</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//notebook[last()]" position="inside">
-                    <page string="Partner Assignment" name="geo_location">
-                        <!-- something to do here -->
-                        <group colspan="2" col="2">
-                            <separator string="Geolocation" colspan="2"/>
+        <recordid="view_crm_partner_geo_form"model="ir.ui.view">
+            <fieldname="name">res.partner.geolocation.inherit</field>
+            <fieldname="model">res.partner</field>
+            <fieldname="inherit_id"ref="base.view_partner_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//notebook[last()]"position="inside">
+                    <pagestring="PartnerAssignment"name="geo_location">
+                        <!--somethingtodohere-->
+                        <groupcolspan="2"col="2">
+                            <separatorstring="Geolocation"colspan="2"/>
                             <button
                                 string="Geolocate"
                                 name="geo_localize"
@@ -17,13 +17,13 @@
                                 icon="fa-check"
                                 type="object"/>
                             <div>
-                                <span class="oe_inline"> ( On  </span>
-                                <field name="date_localization" nolabel="1" class="oe_inline"/>
-                                <span> : Lat : </span>
-                                <field name="partner_latitude" nolabel="1" class="oe_inline"/>
-                                <span> ;  Long:  </span>
-                                <field name="partner_longitude" nolabel="1" class="oe_inline"/>
-                                <span>) </span>
+                                <spanclass="oe_inline">(On </span>
+                                <fieldname="date_localization"nolabel="1"class="oe_inline"/>
+                                <span>:Lat:</span>
+                                <fieldname="partner_latitude"nolabel="1"class="oe_inline"/>
+                                <span>; Long: </span>
+                                <fieldname="partner_longitude"nolabel="1"class="oe_inline"/>
+                                <span>)</span>
                             </div>
                         </group>
                     </page>

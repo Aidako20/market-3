@@ -1,757 +1,757 @@
-flectra.define('web.dom_ready', function (require) {
-'use strict';
+flectra.define('web.dom_ready',function(require){
+'usestrict';
 
-    return new Promise(function (resolve, reject) {
+    returnnewPromise(function(resolve,reject){
         $(resolve);
     });
 });
 //==============================================================================
 
-flectra.define('web.dom', function (require) {
-"use strict";
+flectra.define('web.dom',function(require){
+"usestrict";
 
 /**
- * DOM Utility helpers
+ *DOMUtilityhelpers
  *
- * We collect in this file some helpers to help integrate various DOM
- * functionalities with the flectra framework.  A common theme in these functions
- * is the use of the main core.bus, which helps the framework react when
- * something happens in the DOM.
+ *WecollectinthisfilesomehelperstohelpintegratevariousDOM
+ *functionalitieswiththeflectraframework. Acommonthemeinthesefunctions
+ *istheuseofthemaincore.bus,whichhelpstheframeworkreactwhen
+ *somethinghappensintheDOM.
  */
 
-var concurrency = require('web.concurrency');
-var config = require('web.config');
-var core = require('web.core');
-var _t = core._t;
+varconcurrency=require('web.concurrency');
+varconfig=require('web.config');
+varcore=require('web.core');
+var_t=core._t;
 
 /**
- * Private function to notify that something has been attached in the DOM
- * @param {htmlString or Element or Array or jQuery} [content] the content that
- * has been attached in the DOM
- * @params {Array} [callbacks] array of {widget: w, callback_args: args} such
- * that on_attach_callback() will be called on each w with arguments args
+ *PrivatefunctiontonotifythatsomethinghasbeenattachedintheDOM
+ *@param{htmlStringorElementorArrayorjQuery}[content]thecontentthat
+ *hasbeenattachedintheDOM
+ *@params{Array}[callbacks]arrayof{widget:w,callback_args:args}such
+ *thaton_attach_callback()willbecalledoneachwwithargumentsargs
  */
-function _notify(content, callbacks) {
-    callbacks.forEach(function (c) {
-        if (c.widget && c.widget.on_attach_callback) {
+function_notify(content,callbacks){
+    callbacks.forEach(function(c){
+        if(c.widget&&c.widget.on_attach_callback){
             c.widget.on_attach_callback(c.callback_args);
         }
     });
-    core.bus.trigger('DOM_updated', content);
+    core.bus.trigger('DOM_updated',content);
 }
 
-var dom = {
-    DEBOUNCE: 400,
+vardom={
+    DEBOUNCE:400,
 
     /**
-     * Appends content in a jQuery object and optionnally triggers an event
+     *AppendscontentinajQueryobjectandoptionnallytriggersanevent
      *
-     * @param {jQuery} [$target] the node where content will be appended
-     * @param {htmlString or Element or Array or jQuery} [content] DOM element,
-     *   array of elements, HTML string or jQuery object to append to $target
-     * @param {Boolean} [options.in_DOM] true if $target is in the DOM
-     * @param {Array} [options.callbacks] array of objects describing the
-     *   callbacks to perform (see _notify for a complete description)
+     *@param{jQuery}[$target]thenodewherecontentwillbeappended
+     *@param{htmlStringorElementorArrayorjQuery}[content]DOMelement,
+     *  arrayofelements,HTMLstringorjQueryobjecttoappendto$target
+     *@param{Boolean}[options.in_DOM]trueif$targetisintheDOM
+     *@param{Array}[options.callbacks]arrayofobjectsdescribingthe
+     *  callbackstoperform(see_notifyforacompletedescription)
      */
-    append: function ($target, content, options) {
+    append:function($target,content,options){
         $target.append(content);
-        if (options && options.in_DOM) {
-            _notify(content, options.callbacks);
+        if(options&&options.in_DOM){
+            _notify(content,options.callbacks);
         }
     },
     /**
-     * Detects if 2 elements are colliding.
+     *Detectsif2elementsarecolliding.
      *
-     * @param {Element} el1
-     * @param {Element} el2
-     * @returns {boolean}
+     *@param{Element}el1
+     *@param{Element}el2
+     *@returns{boolean}
      */
-     areColliding(el1, el2) {
-        const el1Rect = el1.getBoundingClientRect();
-        const el2Rect = el2.getBoundingClientRect();
-        return el1Rect.bottom > el2Rect.top
-            && el1Rect.top < el2Rect.bottom
-            && el1Rect.right > el2Rect.left
-            && el1Rect.left < el2Rect.right;
+     areColliding(el1,el2){
+        constel1Rect=el1.getBoundingClientRect();
+        constel2Rect=el2.getBoundingClientRect();
+        returnel1Rect.bottom>el2Rect.top
+            &&el1Rect.top<el2Rect.bottom
+            &&el1Rect.right>el2Rect.left
+            &&el1Rect.left<el2Rect.right;
     },
     /**
-     * Autoresize a $textarea node, by recomputing its height when necessary
-     * @param {number} [options.min_height] by default, 50.
-     * @param {Widget} [options.parent] if set, autoresize will listen to some
-     *   extra events to decide when to resize itself.  This is useful for
-     *   widgets that are not in the dom when the autoresize is declared.
+     *Autoresizea$textareanode,byrecomputingitsheightwhennecessary
+     *@param{number}[options.min_height]bydefault,50.
+     *@param{Widget}[options.parent]ifset,autoresizewilllistentosome
+     *  extraeventstodecidewhentoresizeitself. Thisisusefulfor
+     *  widgetsthatarenotinthedomwhentheautoresizeisdeclared.
      */
-    autoresize: function ($textarea, options) {
-        if ($textarea.data("auto_resize")) {
+    autoresize:function($textarea,options){
+        if($textarea.data("auto_resize")){
             return;
         }
 
-        var $fixedTextarea;
-        var minHeight;
+        var$fixedTextarea;
+        varminHeight;
 
-        function resize() {
+        functionresize(){
             $fixedTextarea.insertAfter($textarea);
-            var heightOffset = 0;
-            var style = window.getComputedStyle($textarea[0], null);
-            if (style.boxSizing === 'border-box') {
-                var paddingHeight = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
-                var borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
-                heightOffset = borderHeight + paddingHeight;
+            varheightOffset=0;
+            varstyle=window.getComputedStyle($textarea[0],null);
+            if(style.boxSizing==='border-box'){
+                varpaddingHeight=parseFloat(style.paddingTop)+parseFloat(style.paddingBottom);
+                varborderHeight=parseFloat(style.borderTopWidth)+parseFloat(style.borderBottomWidth);
+                heightOffset=borderHeight+paddingHeight;
             }
             $fixedTextarea.width($textarea.width());
             $fixedTextarea.val($textarea.val());
-            var height = $fixedTextarea[0].scrollHeight;
-            $textarea.css({height: Math.max(height + heightOffset, minHeight)});
+            varheight=$fixedTextarea[0].scrollHeight;
+            $textarea.css({height:Math.max(height+heightOffset,minHeight)});
         }
 
-        function removeVerticalResize() {
-            // We already compute the correct height:
-            // we don't want the user to resize it vertically.
-            // On Chrome this needs to be called after the DOM is ready.
-            var style = window.getComputedStyle($textarea[0], null);
-            if (style.resize === 'vertical') {
-                $textarea[0].style.resize = 'none';
-            } else if (style.resize === 'both') {
-                $textarea[0].style.resize = 'horizontal';
+        functionremoveVerticalResize(){
+            //Wealreadycomputethecorrectheight:
+            //wedon'twanttheusertoresizeitvertically.
+            //OnChromethisneedstobecalledaftertheDOMisready.
+            varstyle=window.getComputedStyle($textarea[0],null);
+            if(style.resize==='vertical'){
+                $textarea[0].style.resize='none';
+            }elseif(style.resize==='both'){
+                $textarea[0].style.resize='horizontal';
             }
         }
 
-        options = options || {};
-        minHeight = 'min_height' in options ? options.min_height : 50;
+        options=options||{};
+        minHeight='min_height'inoptions?options.min_height:50;
 
-        $fixedTextarea = $('<textarea disabled>', {
-            class: $textarea[0].className,
+        $fixedTextarea=$('<textareadisabled>',{
+            class:$textarea[0].className,
         });
 
-        var direction = _t.database.parameters.direction === 'rtl' ? 'right' : 'left';
+        vardirection=_t.database.parameters.direction==='rtl'?'right':'left';
         $fixedTextarea.css({
-            position: 'absolute',
-            opacity: 0,
-            height: 10,
-            borderTopWidth: 0,
-            borderBottomWidth: 0,
-            padding: 0,
-            overflow: 'hidden',
-            top: -10000,
-        }).css(direction, -10000);
-        $fixedTextarea.data("auto_resize", true);
+            position:'absolute',
+            opacity:0,
+            height:10,
+            borderTopWidth:0,
+            borderBottomWidth:0,
+            padding:0,
+            overflow:'hidden',
+            top:-10000,
+        }).css(direction,-10000);
+        $fixedTextarea.data("auto_resize",true);
 
-        // The following line is necessary to prevent the scrollbar to appear
-        // on the textarea on Firefox when adding a new line if the current line
-        // has just enough characters to completely fill the line.
-        // This fix should be fine since we compute the height depending on the
-        // content, there should never be an overflow.
-        // TODO ideally understand why and fix this another way if possible.
-        $textarea.css({'overflow-y': 'hidden'});
+        //Thefollowinglineisnecessarytopreventthescrollbartoappear
+        //onthetextareaonFirefoxwhenaddinganewlineifthecurrentline
+        //hasjustenoughcharacterstocompletelyfilltheline.
+        //Thisfixshouldbefinesincewecomputetheheightdependingonthe
+        //content,thereshouldneverbeanoverflow.
+        //TODOideallyunderstandwhyandfixthisanotherwayifpossible.
+        $textarea.css({'overflow-y':'hidden'});
 
         resize();
         removeVerticalResize();
-        $textarea.data("auto_resize", true);
+        $textarea.data("auto_resize",true);
 
-        $textarea.on('input focus change', resize);
-        if (options.parent) {
-            core.bus.on('DOM_updated', options.parent, function () {
+        $textarea.on('inputfocuschange',resize);
+        if(options.parent){
+            core.bus.on('DOM_updated',options.parent,function(){
                 resize();
                 removeVerticalResize();
             });
         }
     },
     /**
-     * @return {HTMLElement}
+     *@return{HTMLElement}
      */
-    closestScrollable(el) {
-        return $(el).closestScrollable()[0];
+    closestScrollable(el){
+        return$(el).closestScrollable()[0];
     },
     /**
-     * @param {HTMLElement} el
-     * @see $.compensateScrollbar
+     *@param{HTMLElement}el
+     *@see$.compensateScrollbar
      */
-    compensateScrollbar(el, ...rest) {
+    compensateScrollbar(el,...rest){
         $(el).compensateScrollbar(...rest);
     },
     /**
-     * jQuery find function behavior is::
+     *jQueryfindfunctionbehavioris::
      *
-     *      $('A').find('A B') <=> $('A A B')
+     *     $('A').find('AB')<=>$('AAB')
      *
-     * The searches behavior to find options' DOM needs to be::
+     *Thesearchesbehaviortofindoptions'DOMneedstobe::
      *
-     *      $('A').find('A B') <=> $('A B')
+     *     $('A').find('AB')<=>$('AB')
      *
-     * This is what this function does.
+     *Thisiswhatthisfunctiondoes.
      *
-     * @param {jQuery} $from - the jQuery element(s) from which to search
-     * @param {string} selector - the CSS selector to match
-     * @param {boolean} [addBack=false] - whether or not the $from element
-     *                                  should be considered in the results
-     * @returns {jQuery}
+     *@param{jQuery}$from-thejQueryelement(s)fromwhichtosearch
+     *@param{string}selector-theCSSselectortomatch
+     *@param{boolean}[addBack=false]-whetherornotthe$fromelement
+     *                                 shouldbeconsideredintheresults
+     *@returns{jQuery}
      */
-    cssFind: function ($from, selector, addBack) {
-        var $results;
+    cssFind:function($from,selector,addBack){
+        var$results;
 
-        // No way to correctly parse a complex jQuery selector but having no
-        // spaces should be a good-enough condition to use a simple find
-        var multiParts = selector.indexOf(' ') >= 0;
-        if (multiParts) {
-            $results = $from.find('*').filter(selector);
-        } else {
-            $results = $from.find(selector);
+        //NowaytocorrectlyparseacomplexjQueryselectorbuthavingno
+        //spacesshouldbeagood-enoughconditiontouseasimplefind
+        varmultiParts=selector.indexOf('')>=0;
+        if(multiParts){
+            $results=$from.find('*').filter(selector);
+        }else{
+            $results=$from.find(selector);
         }
 
-        if (addBack && $from.is(selector)) {
-            $results = $results.add($from);
+        if(addBack&&$from.is(selector)){
+            $results=$results.add($from);
         }
 
-        return $results;
+        return$results;
     },
     /**
-     * Detaches widgets from the DOM and performs their on_detach_callback()
+     *DetacheswidgetsfromtheDOMandperformstheiron_detach_callback()
      *
-     * @param {Array} [to_detach] array of {widget: w, callback_args: args} such
-     *   that w.$el will be detached and w.on_detach_callback(args) will be
-     *   called
-     * @param {jQuery} [options.$to_detach] if given, detached instead of
-     *   widgets' $el
-     * @return {jQuery} the detached elements
+     *@param{Array}[to_detach]arrayof{widget:w,callback_args:args}such
+     *  thatw.$elwillbedetachedandw.on_detach_callback(args)willbe
+     *  called
+     *@param{jQuery}[options.$to_detach]ifgiven,detachedinsteadof
+     *  widgets'$el
+     *@return{jQuery}thedetachedelements
      */
-    detach: function (to_detach, options) {
-        to_detach.forEach( function (d) {
-            if (d.widget.on_detach_callback) {
+    detach:function(to_detach,options){
+        to_detach.forEach(function(d){
+            if(d.widget.on_detach_callback){
                 d.widget.on_detach_callback(d.callback_args);
             }
         });
-        var $to_detach = options && options.$to_detach;
-        if (!$to_detach) {
-            $to_detach = $(to_detach.map(function (d) {
-                return d.widget.el;
+        var$to_detach=options&&options.$to_detach;
+        if(!$to_detach){
+            $to_detach=$(to_detach.map(function(d){
+                returnd.widget.el;
             }));
         }
-        return $to_detach.detach();
+        return$to_detach.detach();
     },
     /**
-     * Returns the selection range of an input or textarea
+     *Returnstheselectionrangeofaninputortextarea
      *
-     * @param {Object} node DOM item input or texteara
-     * @returns {Object} range
+     *@param{Object}nodeDOMiteminputortexteara
+     *@returns{Object}range
      */
-    getSelectionRange: function (node) {
-        return {
-            start: node.selectionStart,
-            end: node.selectionEnd,
+    getSelectionRange:function(node){
+        return{
+            start:node.selectionStart,
+            end:node.selectionEnd,
         };
     },
     /**
-     * Returns the distance between a DOM element and the top-left corner of the
-     * window
+     *ReturnsthedistancebetweenaDOMelementandthetop-leftcornerofthe
+     *window
      *
-     * @param {Object} e DOM element (input or texteara)
-     * @return {Object} the left and top distances in pixels
+     *@param{Object}eDOMelement(inputortexteara)
+     *@return{Object}theleftandtopdistancesinpixels
      */
-    getPosition: function (e) {
-        var position = {left: 0, top: 0};
-        while (e) {
-            position.left += e.offsetLeft;
-            position.top += e.offsetTop;
-            e = e.offsetParent;
+    getPosition:function(e){
+        varposition={left:0,top:0};
+        while(e){
+            position.left+=e.offsetLeft;
+            position.top+=e.offsetTop;
+            e=e.offsetParent;
         }
-        return position;
+        returnposition;
     },
     /**
-     * @returns {HTMLElement}
+     *@returns{HTMLElement}
      */
-    getScrollingElement() {
-        return $().getScrollingElement()[0];
+    getScrollingElement(){
+        return$().getScrollingElement()[0];
     },
     /**
-     * @param {HTMLElement} el
-     * @returns {boolean}
+     *@param{HTMLElement}el
+     *@returns{boolean}
      */
-    hasScrollableContent(el) {
-        return $(el).hasScrollableContent();
+    hasScrollableContent(el){
+        return$(el).hasScrollableContent();
     },
     /**
-     * @param {HTMLElement} el
-     * @returns {boolean}
+     *@param{HTMLElement}el
+     *@returns{boolean}
      */
-    isScrollable(el) {
-        return $(el).isScrollable();
+    isScrollable(el){
+        return$(el).isScrollable();
     },
     /**
-     * Protects a function which is to be used as a handler by preventing its
-     * execution for the duration of a previous call to it (including async
-     * parts of that call).
+     *Protectsafunctionwhichistobeusedasahandlerbypreventingits
+     *executionforthedurationofapreviouscalltoit(includingasync
+     *partsofthatcall).
      *
-     * Limitation: as the handler is ignored during async actions,
-     * the 'preventDefault' or 'stopPropagation' calls it may want to do
-     * will be ignored too. Using the 'preventDefault' and 'stopPropagation'
-     * arguments solves that problem.
+     *Limitation:asthehandlerisignoredduringasyncactions,
+     *the'preventDefault'or'stopPropagation'callsitmaywanttodo
+     *willbeignoredtoo.Usingthe'preventDefault'and'stopPropagation'
+     *argumentssolvesthatproblem.
      *
-     * @param {function} fct
-     *      The function which is to be used as a handler. If a promise
-     *      is returned, it is used to determine when the handler's action is
-     *      finished. Otherwise, the return is used as jQuery uses it.
-     * @param {function|boolean} preventDefault
-     * @param {function|boolean} stopPropagation
+     *@param{function}fct
+     *     Thefunctionwhichistobeusedasahandler.Ifapromise
+     *     isreturned,itisusedtodeterminewhenthehandler'sactionis
+     *     finished.Otherwise,thereturnisusedasjQueryusesit.
+     *@param{function|boolean}preventDefault
+     *@param{function|boolean}stopPropagation
      */
-    makeAsyncHandler: function (fct, preventDefault, stopPropagation) {
-        var pending = false;
-        function _isLocked() {
-            return pending;
+    makeAsyncHandler:function(fct,preventDefault,stopPropagation){
+        varpending=false;
+        function_isLocked(){
+            returnpending;
         }
-        function _lock() {
-            pending = true;
+        function_lock(){
+            pending=true;
         }
-        function _unlock() {
-            pending = false;
+        function_unlock(){
+            pending=false;
         }
-        return function (ev) {
-            if (preventDefault === true || preventDefault && preventDefault()) {
+        returnfunction(ev){
+            if(preventDefault===true||preventDefault&&preventDefault()){
                 ev.preventDefault();
             }
-            if (stopPropagation === true || stopPropagation && stopPropagation()) {
+            if(stopPropagation===true||stopPropagation&&stopPropagation()){
                 ev.stopPropagation();
             }
 
-            if (_isLocked()) {
-                // If a previous call to this handler is still pending, ignore
-                // the new call.
+            if(_isLocked()){
+                //Ifapreviouscalltothishandlerisstillpending,ignore
+                //thenewcall.
                 return;
             }
 
             _lock();
-            var result = fct.apply(this, arguments);
+            varresult=fct.apply(this,arguments);
             Promise.resolve(result).then(_unlock).guardedCatch(_unlock);
-            return result;
+            returnresult;
         };
     },
     /**
-     * Creates a debounced version of a function to be used as a button click
-     * handler. Also improves the handler to disable the button for the time of
-     * the debounce and/or the time of the async actions it performs.
+     *Createsadebouncedversionofafunctiontobeusedasabuttonclick
+     *handler.Alsoimprovesthehandlertodisablethebuttonforthetimeof
+     *thedebounceand/orthetimeoftheasyncactionsitperforms.
      *
-     * Limitation: if two handlers are put on the same button, the button will
-     * become enabled again once any handler's action finishes (multiple click
-     * handlers should however not be binded to the same button).
+     *Limitation:iftwohandlersareputonthesamebutton,thebuttonwill
+     *becomeenabledagainonceanyhandler'sactionfinishes(multipleclick
+     *handlersshouldhowevernotbebindedtothesamebutton).
      *
-     * @param {function} fct
-     *      The function which is to be used as a button click handler. If a
-     *      promise is returned, it is used to determine when the button can be
-     *      re-enabled. Otherwise, the return is used as jQuery uses it.
+     *@param{function}fct
+     *     Thefunctionwhichistobeusedasabuttonclickhandler.Ifa
+     *     promiseisreturned,itisusedtodeterminewhenthebuttoncanbe
+     *     re-enabled.Otherwise,thereturnisusedasjQueryusesit.
      */
-    makeButtonHandler: function (fct) {
-        // Fallback: if the final handler is not binded to a button, at least
-        // make it an async handler (also handles the case where some events
-        // might ignore the disabled state of the button).
-        fct = dom.makeAsyncHandler(fct);
+    makeButtonHandler:function(fct){
+        //Fallback:ifthefinalhandlerisnotbindedtoabutton,atleast
+        //makeitanasynchandler(alsohandlesthecasewheresomeevents
+        //mightignorethedisabledstateofthebutton).
+        fct=dom.makeAsyncHandler(fct);
 
-        return function (ev) {
-            var result = fct.apply(this, arguments);
+        returnfunction(ev){
+            varresult=fct.apply(this,arguments);
 
-            var $button = $(ev.target).closest('.btn');
-            if (!$button.length) {
-                return result;
+            var$button=$(ev.target).closest('.btn');
+            if(!$button.length){
+                returnresult;
             }
 
-            // Disable the button for the duration of the handler's action
-            // or at least for the duration of the click debounce. This makes
-            // a 'real' debounce creation useless. Also, during the debouncing
-            // part, the button is disabled without any visual effect.
+            //Disablethebuttonforthedurationofthehandler'saction
+            //oratleastforthedurationoftheclickdebounce.Thismakes
+            //a'real'debouncecreationuseless.Also,duringthedebouncing
+            //part,thebuttonisdisabledwithoutanyvisualeffect.
             $button.addClass('o_debounce_disabled');
-            Promise.resolve(dom.DEBOUNCE && concurrency.delay(dom.DEBOUNCE)).then(function () {
+            Promise.resolve(dom.DEBOUNCE&&concurrency.delay(dom.DEBOUNCE)).then(function(){
                 $button.removeClass('o_debounce_disabled');
-                const restore = dom.addButtonLoadingEffect($button[0]);
-                return Promise.resolve(result).then(restore).guardedCatch(restore);
+                constrestore=dom.addButtonLoadingEffect($button[0]);
+                returnPromise.resolve(result).then(restore).guardedCatch(restore);
             });
 
-            return result;
+            returnresult;
         };
     },
     /**
-     * Gives the button a loading effect by disabling it and adding a `fa`
-     * spinner icon.
-     * The existing button `fa` icons will be hidden through css.
+     *Givesthebuttonaloadingeffectbydisablingitandaddinga`fa`
+     *spinnericon.
+     *Theexistingbutton`fa`iconswillbehiddenthroughcss.
      *
-     * @param {HTMLElement} btn - the button to disable/load
-     * @return {function} a callback function that will restore the button
-     *         initial state
+     *@param{HTMLElement}btn-thebuttontodisable/load
+     *@return{function}acallbackfunctionthatwillrestorethebutton
+     *        initialstate
      */
-    addButtonLoadingEffect: function (btn) {
-        const $btn = $(btn);
-        $btn.addClass('o_website_btn_loading disabled');
-        $btn.prop('disabled', true);
-        const $loader = $('<span/>', {
-            class: 'fa fa-refresh fa-spin mr-2',
+    addButtonLoadingEffect:function(btn){
+        const$btn=$(btn);
+        $btn.addClass('o_website_btn_loadingdisabled');
+        $btn.prop('disabled',true);
+        const$loader=$('<span/>',{
+            class:'fafa-refreshfa-spinmr-2',
         });
         $btn.prepend($loader);
-        return () => {
-             $btn.removeClass('o_website_btn_loading disabled');
-             $btn.prop('disabled', false);
+        return()=>{
+             $btn.removeClass('o_website_btn_loadingdisabled');
+             $btn.prop('disabled',false);
              $loader.remove();
         };
     },
     /**
-     * Prepends content in a jQuery object and optionnally triggers an event
+     *PrependscontentinajQueryobjectandoptionnallytriggersanevent
      *
-     * @param {jQuery} [$target] the node where content will be prepended
-     * @param {htmlString or Element or Array or jQuery} [content] DOM element,
-     *   array of elements, HTML string or jQuery object to prepend to $target
-     * @param {Boolean} [options.in_DOM] true if $target is in the DOM
-     * @param {Array} [options.callbacks] array of objects describing the
-     *   callbacks to perform (see _notify for a complete description)
+     *@param{jQuery}[$target]thenodewherecontentwillbeprepended
+     *@param{htmlStringorElementorArrayorjQuery}[content]DOMelement,
+     *  arrayofelements,HTMLstringorjQueryobjecttoprependto$target
+     *@param{Boolean}[options.in_DOM]trueif$targetisintheDOM
+     *@param{Array}[options.callbacks]arrayofobjectsdescribingthe
+     *  callbackstoperform(see_notifyforacompletedescription)
      */
-    prepend: function ($target, content, options) {
+    prepend:function($target,content,options){
         $target.prepend(content);
-        if (options && options.in_DOM) {
-            _notify(content, options.callbacks);
+        if(options&&options.in_DOM){
+            _notify(content,options.callbacks);
         }
     },
     /**
-     * Renders a button with standard flectra template. This does not use any xml
-     * template to avoid forcing the frontend part to lazy load a xml file for
-     * each widget which might want to create a simple button.
+     *Rendersabuttonwithstandardflectratemplate.Thisdoesnotuseanyxml
+     *templatetoavoidforcingthefrontendparttolazyloadaxmlfilefor
+     *eachwidgetwhichmightwanttocreateasimplebutton.
      *
-     * @param {Object} options
-     * @param {Object} [options.attrs] - Attributes to put on the button element
-     * @param {string} [options.attrs.type='button']
-     * @param {string} [options.attrs.class='btn-secondary']
-     *        Note: automatically completed with "btn btn-X"
-     *        (@see options.size for the value of X)
-     * @param {string} [options.size] - @see options.attrs.class
-     * @param {string} [options.icon]
-     *        The specific fa icon class (for example "fa-home") or an URL for
-     *        an image to use as icon.
-     * @param {string} [options.text] - the button's text
-     * @returns {jQuery}
+     *@param{Object}options
+     *@param{Object}[options.attrs]-Attributestoputonthebuttonelement
+     *@param{string}[options.attrs.type='button']
+     *@param{string}[options.attrs.class='btn-secondary']
+     *       Note:automaticallycompletedwith"btnbtn-X"
+     *       (@seeoptions.sizeforthevalueofX)
+     *@param{string}[options.size]-@seeoptions.attrs.class
+     *@param{string}[options.icon]
+     *       Thespecificfaiconclass(forexample"fa-home")oranURLfor
+     *       animagetouseasicon.
+     *@param{string}[options.text]-thebutton'stext
+     *@returns{jQuery}
      */
-    renderButton: function (options) {
-        var jQueryParams = _.extend({
-            type: 'button',
-        }, options.attrs || {});
+    renderButton:function(options){
+        varjQueryParams=_.extend({
+            type:'button',
+        },options.attrs||{});
 
-        var extraClasses = jQueryParams.class;
-        if (extraClasses) {
-            // If we got extra classes, check if old oe_highlight/oe_link
-            // classes are given and switch them to the right classes (those
-            // classes have no style associated to them anymore).
-            // TODO ideally this should be dropped at some point.
-            extraClasses = extraClasses.replace(/\boe_highlight\b/g, 'btn-primary')
-                                       .replace(/\boe_link\b/g, 'btn-link');
+        varextraClasses=jQueryParams.class;
+        if(extraClasses){
+            //Ifwegotextraclasses,checkifoldoe_highlight/oe_link
+            //classesaregivenandswitchthemtotherightclasses(those
+            //classeshavenostyleassociatedtothemanymore).
+            //TODOideallythisshouldbedroppedatsomepoint.
+            extraClasses=extraClasses.replace(/\boe_highlight\b/g,'btn-primary')
+                                       .replace(/\boe_link\b/g,'btn-link');
         }
 
-        jQueryParams.class = 'btn';
-        if (options.size) {
-            jQueryParams.class += (' btn-' + options.size);
+        jQueryParams.class='btn';
+        if(options.size){
+            jQueryParams.class+=('btn-'+options.size);
         }
-        jQueryParams.class += (' ' + (extraClasses || 'btn-secondary'));
+        jQueryParams.class+=(''+(extraClasses||'btn-secondary'));
 
-        var $button = $('<button/>', jQueryParams);
+        var$button=$('<button/>',jQueryParams);
 
-        if (options.icon) {
-            if (options.icon.substr(0, 3) === 'fa-') {
-                $button.append($('<i/>', {
-                    class: 'fa fa-fw o_button_icon ' + options.icon,
+        if(options.icon){
+            if(options.icon.substr(0,3)==='fa-'){
+                $button.append($('<i/>',{
+                    class:'fafa-fwo_button_icon'+options.icon,
                 }));
-            } else {
-                $button.append($('<img/>', {
-                    src: options.icon,
+            }else{
+                $button.append($('<img/>',{
+                    src:options.icon,
                 }));
             }
         }
-        if (options.text) {
-            $button.append($('<span/>', {
-                text: options.text,
+        if(options.text){
+            $button.append($('<span/>',{
+                text:options.text,
             }));
         }
 
-        return $button;
+        return$button;
     },
     /**
-     * Renders a checkbox with standard flectra/BS template. This does not use any
-     * xml template to avoid forcing the frontend part to lazy load a xml file
-     * for each widget which might want to create a simple checkbox.
+     *Rendersacheckboxwithstandardflectra/BStemplate.Thisdoesnotuseany
+     *xmltemplatetoavoidforcingthefrontendparttolazyloadaxmlfile
+     *foreachwidgetwhichmightwanttocreateasimplecheckbox.
      *
-     * @param {Object} [options]
-     * @param {Object} [options.prop]
-     *        Allows to set the input properties (disabled and checked states).
-     * @param {string} [options.text]
-     *        The checkbox's associated text. If none is given then a simple
-     *        checkbox is rendered.
-     * @returns {jQuery}
+     *@param{Object}[options]
+     *@param{Object}[options.prop]
+     *       Allowstosettheinputproperties(disabledandcheckedstates).
+     *@param{string}[options.text]
+     *       Thecheckbox'sassociatedtext.Ifnoneisgiventhenasimple
+     *       checkboxisrendered.
+     *@returns{jQuery}
      */
-    renderCheckbox: function (options) {
-        var id = _.uniqueId('checkbox-');
-        var $container = $('<div/>', {
-            class: 'custom-control custom-checkbox',
+    renderCheckbox:function(options){
+        varid=_.uniqueId('checkbox-');
+        var$container=$('<div/>',{
+            class:'custom-controlcustom-checkbox',
         });
-        var $input = $('<input/>', {
-            type: 'checkbox',
-            id: id,
-            class: 'custom-control-input',
+        var$input=$('<input/>',{
+            type:'checkbox',
+            id:id,
+            class:'custom-control-input',
         });
-        var $label = $('<label/>', {
-            for: id,
-            class: 'custom-control-label',
-            text: options && options.text || '',
+        var$label=$('<label/>',{
+            for:id,
+            class:'custom-control-label',
+            text:options&&options.text||'',
         });
-        if (!options || !options.text) {
-            $label.html('&#8203;'); // BS checkboxes need some label content (so
-                                // add a zero-width space when there is no text)
+        if(!options||!options.text){
+            $label.html('&#8203;');//BScheckboxesneedsomelabelcontent(so
+                                //addazero-widthspacewhenthereisnotext)
         }
-        if (options && options.prop) {
+        if(options&&options.prop){
             $input.prop(options.prop);
         }
-        if (options && options.role) {
-            $input.attr('role', options.role);
+        if(options&&options.role){
+            $input.attr('role',options.role);
         }
-        return $container.append($input, $label);
+        return$container.append($input,$label);
     },
     /**
-     * Sets the selection range of a given input or textarea
+     *Setstheselectionrangeofagiveninputortextarea
      *
-     * @param {Object} node DOM element (input or textarea)
-     * @param {integer} range.start
-     * @param {integer} range.end
+     *@param{Object}nodeDOMelement(inputortextarea)
+     *@param{integer}range.start
+     *@param{integer}range.end
      */
-    setSelectionRange: function (node, range) {
-        if (node.setSelectionRange){
-            node.setSelectionRange(range.start, range.end);
-        } else if (node.createTextRange){
+    setSelectionRange:function(node,range){
+        if(node.setSelectionRange){
+            node.setSelectionRange(range.start,range.end);
+        }elseif(node.createTextRange){
             node.createTextRange()
                 .collapse(true)
-                .moveEnd('character', range.start)
-                .moveStart('character', range.end)
+                .moveEnd('character',range.start)
+                .moveStart('character',range.end)
                 .select();
         }
     },
     /**
-     * Computes the size by which a scrolling point should be decreased so that
-     * the top fixed elements of the page appear above that scrolling point.
+     *Computesthesizebywhichascrollingpointshouldbedecreasedsothat
+     *thetopfixedelementsofthepageappearabovethatscrollingpoint.
      *
-     * @returns {number}
+     *@returns{number}
      */
-    scrollFixedOffset() {
-        let size = 0;
-        for (const el of $('.o_top_fixed_element')) {
-            size += $(el).outerHeight();
+    scrollFixedOffset(){
+        letsize=0;
+        for(constelof$('.o_top_fixed_element')){
+            size+=$(el).outerHeight();
         }
-        return size;
+        returnsize;
     },
     /**
-     * @param {HTMLElement|string} el - the element to scroll to. If "el" is a
-     *      string, it must be a valid selector of an element in the DOM or
-     *      '#top' or '#bottom'. If it is an HTML element, it must be present
-     *      in the DOM.
-     *      Limitation: if the element is using a fixed position, this
-     *      function cannot work except if is the header (el is then either a
-     *      string set to '#top' or an HTML element with the "top" id) or the
-     *      footer (el is then a string set to '#bottom' or an HTML element
-     *      with the "bottom" id) for which exceptions have been made.
-     * @param {number} [options] - same as animate of jQuery
-     * @param {number} [options.extraOffset=0]
-     *      extra offset to add on top of the automatic one (the automatic one
-     *      being computed based on fixed header sizes)
-     * @param {number} [options.forcedOffset]
-     *      offset used instead of the automatic one (extraOffset will be
-     *      ignored too)
-     * @return {Promise}
+     *@param{HTMLElement|string}el-theelementtoscrollto.If"el"isa
+     *     string,itmustbeavalidselectorofanelementintheDOMor
+     *     '#top'or'#bottom'.IfitisanHTMLelement,itmustbepresent
+     *     intheDOM.
+     *     Limitation:iftheelementisusingafixedposition,this
+     *     functioncannotworkexceptifistheheader(elistheneithera
+     *     stringsetto'#top'oranHTMLelementwiththe"top"id)orthe
+     *     footer(elisthenastringsetto'#bottom'oranHTMLelement
+     *     withthe"bottom"id)forwhichexceptionshavebeenmade.
+     *@param{number}[options]-sameasanimateofjQuery
+     *@param{number}[options.extraOffset=0]
+     *     extraoffsettoaddontopoftheautomaticone(theautomaticone
+     *     beingcomputedbasedonfixedheadersizes)
+     *@param{number}[options.forcedOffset]
+     *     offsetusedinsteadoftheautomaticone(extraOffsetwillbe
+     *     ignoredtoo)
+     *@return{Promise}
      */
-    scrollTo(el, options = {}) {
-        const $el = $(el);
-        if (typeof(el) === 'string' && $el[0]) {
-            el = $el[0];
+    scrollTo(el,options={}){
+        const$el=$(el);
+        if(typeof(el)==='string'&&$el[0]){
+            el=$el[0];
         }
-        const isTopOrBottomHidden = (el === '#top' || el === '#bottom');
-        const $topLevelScrollable = $().getScrollingElement();
-        const $scrollable = isTopOrBottomHidden ? $topLevelScrollable : $el.parent().closestScrollable();
-        const isTopScroll = $scrollable.is($topLevelScrollable);
+        constisTopOrBottomHidden=(el==='#top'||el==='#bottom');
+        const$topLevelScrollable=$().getScrollingElement();
+        const$scrollable=isTopOrBottomHidden?$topLevelScrollable:$el.parent().closestScrollable();
+        constisTopScroll=$scrollable.is($topLevelScrollable);
 
-        function _computeScrollTop() {
-            if (el === '#top' || el.id === 'top') {
-                return 0;
+        function_computeScrollTop(){
+            if(el==='#top'||el.id==='top'){
+                return0;
             }
-            if (el === '#bottom' || el.id === 'bottom') {
-                return $scrollable[0].scrollHeight - $scrollable[0].clientHeight;
+            if(el==='#bottom'||el.id==='bottom'){
+                return$scrollable[0].scrollHeight-$scrollable[0].clientHeight;
             }
 
-            let offsetTop = $el.offset().top;
-            if (el.classList.contains('d-none')) {
+            letoffsetTop=$el.offset().top;
+            if(el.classList.contains('d-none')){
                 el.classList.remove('d-none');
-                offsetTop = $el.offset().top;
+                offsetTop=$el.offset().top;
                 el.classList.add('d-none');
             }
-            const isDocScrollingEl = $scrollable.is(el.ownerDocument.scrollingElement);
-            const elPosition = offsetTop
-                - ($scrollable.offset().top - (isDocScrollingEl ? 0 : $scrollable[0].scrollTop));
-            let offset = options.forcedOffset;
-            if (offset === undefined) {
-                offset = (isTopScroll ? dom.scrollFixedOffset() : 0) + (options.extraOffset || 0);
+            constisDocScrollingEl=$scrollable.is(el.ownerDocument.scrollingElement);
+            constelPosition=offsetTop
+                -($scrollable.offset().top-(isDocScrollingEl?0:$scrollable[0].scrollTop));
+            letoffset=options.forcedOffset;
+            if(offset===undefined){
+                offset=(isTopScroll?dom.scrollFixedOffset():0)+(options.extraOffset||0);
             }
-            return Math.max(0, elPosition - offset);
+            returnMath.max(0,elPosition-offset);
         }
 
-        const originalScrollTop = _computeScrollTop();
+        constoriginalScrollTop=_computeScrollTop();
 
-        return new Promise(resolve => {
-            const clonedOptions = Object.assign({}, options);
+        returnnewPromise(resolve=>{
+            constclonedOptions=Object.assign({},options);
 
-            // During the animation, detect any change needed for the scroll
-            // offset. If any occurs, stop the animation and continuing it to
-            // the new scroll point for the remaining time.
-            // Note: limitation, the animation won't be as fluid as possible if
-            // the easing mode is different of 'linear'.
-            clonedOptions.progress = function (a, b, remainingMs) {
-                if (options.progress) {
-                    options.progress.apply(this, ...arguments);
+            //Duringtheanimation,detectanychangeneededforthescroll
+            //offset.Ifanyoccurs,stoptheanimationandcontinuingitto
+            //thenewscrollpointfortheremainingtime.
+            //Note:limitation,theanimationwon'tbeasfluidaspossibleif
+            //theeasingmodeisdifferentof'linear'.
+            clonedOptions.progress=function(a,b,remainingMs){
+                if(options.progress){
+                    options.progress.apply(this,...arguments);
                 }
-                const newScrollTop = _computeScrollTop();
-                if (Math.abs(newScrollTop - originalScrollTop) <= 1.0
-                        && (isTopOrBottomHidden || !(el.classList.contains('o_transitioning')))) {
+                constnewScrollTop=_computeScrollTop();
+                if(Math.abs(newScrollTop-originalScrollTop)<=1.0
+                        &&(isTopOrBottomHidden||!(el.classList.contains('o_transitioning')))){
                     return;
                 }
                 $scrollable.stop();
-                dom.scrollTo(el, Object.assign({}, options, {
-                    duration: remainingMs,
-                    easing: 'linear',
-                })).then(() => resolve());
+                dom.scrollTo(el,Object.assign({},options,{
+                    duration:remainingMs,
+                    easing:'linear',
+                })).then(()=>resolve());
             };
 
-            // Detect the end of the animation to be able to indicate it to
-            // the caller via the returned Promise.
-            clonedOptions.complete = function () {
-                if (options.complete) {
-                    options.complete.apply(this, ...arguments);
+            //Detecttheendoftheanimationtobeabletoindicateitto
+            //thecallerviathereturnedPromise.
+            clonedOptions.complete=function(){
+                if(options.complete){
+                    options.complete.apply(this,...arguments);
                 }
                 resolve();
             };
 
-            $scrollable.animate({scrollTop: originalScrollTop}, clonedOptions);
+            $scrollable.animate({scrollTop:originalScrollTop},clonedOptions);
         });
     },
     /**
-     * Creates an automatic 'more' dropdown-menu for a set of navbar items.
+     *Createsanautomatic'more'dropdown-menuforasetofnavbaritems.
      *
-     * @param {jQuery} $el
-     * @param {Object} [options]
-     * @param {string} [options.unfoldable='none']
-     * @param {function} [options.maxWidth]
-     * @param {string} [options.sizeClass='SM']
+     *@param{jQuery}$el
+     *@param{Object}[options]
+     *@param{string}[options.unfoldable='none']
+     *@param{function}[options.maxWidth]
+     *@param{string}[options.sizeClass='SM']
      */
-    initAutoMoreMenu: function ($el, options) {
-        options = _.extend({
-            unfoldable: 'none',
-            maxWidth: false,
-            sizeClass: 'SM',
-        }, options || {});
+    initAutoMoreMenu:function($el,options){
+        options=_.extend({
+            unfoldable:'none',
+            maxWidth:false,
+            sizeClass:'SM',
+        },options||{});
 
-        var autoMarginLeftRegex = /\bm[lx]?(?:-(?:sm|md|lg|xl))?-auto\b/;
-        var autoMarginRightRegex = /\bm[rx]?(?:-(?:sm|md|lg|xl))?-auto\b/;
+        varautoMarginLeftRegex=/\bm[lx]?(?:-(?:sm|md|lg|xl))?-auto\b/;
+        varautoMarginRightRegex=/\bm[rx]?(?:-(?:sm|md|lg|xl))?-auto\b/;
 
-        var $extraItemsToggle = null;
+        var$extraItemsToggle=null;
 
-        var debouncedAdapt = _.debounce(_adapt, 250);
-        core.bus.on('resize', null, debouncedAdapt);
+        vardebouncedAdapt=_.debounce(_adapt,250);
+        core.bus.on('resize',null,debouncedAdapt);
         _adapt();
 
-        $el.data('dom:autoMoreMenu:adapt', _adapt);
-        $el.data('dom:autoMoreMenu:destroy', function () {
+        $el.data('dom:autoMoreMenu:adapt',_adapt);
+        $el.data('dom:autoMoreMenu:destroy',function(){
             _restore();
-            core.bus.off('resize', null, debouncedAdapt);
-            $el.removeData(['dom:autoMoreMenu:destroy', 'dom:autoMoreMenu:adapt']);
+            core.bus.off('resize',null,debouncedAdapt);
+            $el.removeData(['dom:autoMoreMenu:destroy','dom:autoMoreMenu:adapt']);
         });
 
-        function _restore() {
-            if ($extraItemsToggle === null) {
+        function_restore(){
+            if($extraItemsToggle===null){
                 return;
             }
-            var $items = $extraItemsToggle.children('.dropdown-menu').children();
+            var$items=$extraItemsToggle.children('.dropdown-menu').children();
             $items.addClass('nav-item');
-            $items.children('.dropdown-item, a').removeClass('dropdown-item').addClass('nav-link');
+            $items.children('.dropdown-item,a').removeClass('dropdown-item').addClass('nav-link');
             $items.insertBefore($extraItemsToggle);
             $extraItemsToggle.remove();
-            $extraItemsToggle = null;
+            $extraItemsToggle=null;
         }
 
-        function _adapt() {
+        function_adapt(){
             _restore();
 
-            if (!$el.is(':visible') || $el.closest('.show').length) {
-                // Never transform the menu when it is not visible yet or if
-                // it is a toggleable one.
+            if(!$el.is(':visible')||$el.closest('.show').length){
+                //Nevertransformthemenuwhenitisnotvisibleyetorif
+                //itisatoggleableone.
                 return;
             }
-            if (config.device.size_class <= config.device.SIZES[options.sizeClass]) {
-                return;
-            }
-
-            var $allItems = $el.children();
-            var $unfoldableItems = $allItems.filter(options.unfoldable);
-            var $items = $allItems.not($unfoldableItems);
-
-            var maxWidth = 0;
-            if (options.maxWidth) {
-                maxWidth = options.maxWidth();
-            } else {
-                maxWidth = computeFloatOuterWidthWithMargins($el[0], true, true, true);
-                var style = window.getComputedStyle($el[0]);
-                maxWidth -= (parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth));
-                maxWidth -= _.reduce($unfoldableItems, function (sum, el) {
-                    return sum + computeFloatOuterWidthWithMargins(el, true, true, false);
-                }, 0);
-            }
-
-            var nbItems = $items.length;
-            var menuItemsWidth = _.reduce($items, function (sum, el) {
-                return sum + computeFloatOuterWidthWithMargins(el, true, true, false);
-            }, 0);
-
-            if (maxWidth - menuItemsWidth >= -0.001) {
+            if(config.device.size_class<=config.device.SIZES[options.sizeClass]){
                 return;
             }
 
-            var $dropdownMenu = $('<ul/>', {class: 'dropdown-menu'});
-            $extraItemsToggle = $('<li/>', {class: 'nav-item dropdown o_extra_menu_items'})
-                .append($('<a/>', {role: 'button', href: '#', class: 'nav-link dropdown-toggle o-no-caret', 'data-toggle': 'dropdown', 'aria-expanded': false})
-                    .append($('<i/>', {class: 'fa fa-plus'})))
+            var$allItems=$el.children();
+            var$unfoldableItems=$allItems.filter(options.unfoldable);
+            var$items=$allItems.not($unfoldableItems);
+
+            varmaxWidth=0;
+            if(options.maxWidth){
+                maxWidth=options.maxWidth();
+            }else{
+                maxWidth=computeFloatOuterWidthWithMargins($el[0],true,true,true);
+                varstyle=window.getComputedStyle($el[0]);
+                maxWidth-=(parseFloat(style.paddingLeft)+parseFloat(style.paddingRight)+parseFloat(style.borderLeftWidth)+parseFloat(style.borderRightWidth));
+                maxWidth-=_.reduce($unfoldableItems,function(sum,el){
+                    returnsum+computeFloatOuterWidthWithMargins(el,true,true,false);
+                },0);
+            }
+
+            varnbItems=$items.length;
+            varmenuItemsWidth=_.reduce($items,function(sum,el){
+                returnsum+computeFloatOuterWidthWithMargins(el,true,true,false);
+            },0);
+
+            if(maxWidth-menuItemsWidth>=-0.001){
+                return;
+            }
+
+            var$dropdownMenu=$('<ul/>',{class:'dropdown-menu'});
+            $extraItemsToggle=$('<li/>',{class:'nav-itemdropdowno_extra_menu_items'})
+                .append($('<a/>',{role:'button',href:'#',class:'nav-linkdropdown-toggleo-no-caret','data-toggle':'dropdown','aria-expanded':false})
+                    .append($('<i/>',{class:'fafa-plus'})))
                 .append($dropdownMenu);
             $extraItemsToggle.insertAfter($items.last());
 
-            menuItemsWidth += computeFloatOuterWidthWithMargins($extraItemsToggle[0], true, true, false);
-            do {
-                menuItemsWidth -= computeFloatOuterWidthWithMargins($items.eq(--nbItems)[0], true, true, false);
-            } while (!(maxWidth - menuItemsWidth >= -0.001) && (nbItems > 0));
+            menuItemsWidth+=computeFloatOuterWidthWithMargins($extraItemsToggle[0],true,true,false);
+            do{
+                menuItemsWidth-=computeFloatOuterWidthWithMargins($items.eq(--nbItems)[0],true,true,false);
+            }while(!(maxWidth-menuItemsWidth>=-0.001)&&(nbItems>0));
 
-            var $extraItems = $items.slice(nbItems).detach();
+            var$extraItems=$items.slice(nbItems).detach();
             $extraItems.removeClass('nav-item');
-            $extraItems.children('.nav-link, a').removeClass('nav-link').addClass('dropdown-item');
+            $extraItems.children('.nav-link,a').removeClass('nav-link').addClass('dropdown-item');
             $dropdownMenu.append($extraItems);
-            $extraItemsToggle.find('.nav-link').toggleClass('active', $extraItems.children().hasClass('active'));
+            $extraItemsToggle.find('.nav-link').toggleClass('active',$extraItems.children().hasClass('active'));
         }
 
-        function computeFloatOuterWidthWithMargins(el, mLeft, mRight, considerAutoMargins) {
-            var rect = el.getBoundingClientRect();
-            var style = window.getComputedStyle(el);
-            var outerWidth = rect.right - rect.left;
-            if (mLeft !== false && (considerAutoMargins || !autoMarginLeftRegex.test(el.getAttribute('class')))) {
-                outerWidth += parseFloat(style.marginLeft);
+        functioncomputeFloatOuterWidthWithMargins(el,mLeft,mRight,considerAutoMargins){
+            varrect=el.getBoundingClientRect();
+            varstyle=window.getComputedStyle(el);
+            varouterWidth=rect.right-rect.left;
+            if(mLeft!==false&&(considerAutoMargins||!autoMarginLeftRegex.test(el.getAttribute('class')))){
+                outerWidth+=parseFloat(style.marginLeft);
             }
-            if (mRight !== false && (considerAutoMargins || !autoMarginRightRegex.test(el.getAttribute('class')))) {
-                outerWidth += parseFloat(style.marginRight);
+            if(mRight!==false&&(considerAutoMargins||!autoMarginRightRegex.test(el.getAttribute('class')))){
+                outerWidth+=parseFloat(style.marginRight);
             }
-            // Would be NaN for invisible elements for example
-            return isNaN(outerWidth) ? 0 : outerWidth;
+            //WouldbeNaNforinvisibleelementsforexample
+            returnisNaN(outerWidth)?0:outerWidth;
         }
     },
     /**
-     * Cleans what has been done by ``initAutoMoreMenu``.
+     *Cleanswhathasbeendoneby``initAutoMoreMenu``.
      *
-     * @param {jQuery} $el
+     *@param{jQuery}$el
      */
-    destroyAutoMoreMenu: function ($el) {
-        var destroyFunc = $el.data('dom:autoMoreMenu:destroy');
-        if (destroyFunc) {
+    destroyAutoMoreMenu:function($el){
+        vardestroyFunc=$el.data('dom:autoMoreMenu:destroy');
+        if(destroyFunc){
             destroyFunc.call(null);
         }
     },
 };
-return dom;
+returndom;
 });

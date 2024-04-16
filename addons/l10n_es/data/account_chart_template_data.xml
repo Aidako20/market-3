@@ -1,43 +1,43 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="account_chart_template_common" model="account.chart.template">
-            <field name="name">PGCE común</field>
-            <field name="visible" eval="0"/>
-            <field name="currency_id" ref="base.EUR"/>
-            <field name="cash_account_code_prefix">570</field>
-            <field name="bank_account_code_prefix">572</field>
-            <field name="transfer_account_code_prefix">572999</field>
+        <recordid="account_chart_template_common"model="account.chart.template">
+            <fieldname="name">PGCEcomún</field>
+            <fieldname="visible"eval="0"/>
+            <fieldname="currency_id"ref="base.EUR"/>
+            <fieldname="cash_account_code_prefix">570</field>
+            <fieldname="bank_account_code_prefix">572</field>
+            <fieldname="transfer_account_code_prefix">572999</field>
         </record>
 
-        <record id="account_chart_template_pymes" model="account.chart.template">
-            <field name="name">PGCE PYMEs 2008</field>
-            <field name="complete_tax_set" eval="True"/>
-            <field name="currency_id" ref="base.EUR"/>
-            <field name="cash_account_code_prefix">570</field>
-            <field name="bank_account_code_prefix">572</field>
-            <field name="transfer_account_code_prefix">572999</field>
-            <field name="parent_id" ref="account_chart_template_common"/>
+        <recordid="account_chart_template_pymes"model="account.chart.template">
+            <fieldname="name">PGCEPYMEs2008</field>
+            <fieldname="complete_tax_set"eval="True"/>
+            <fieldname="currency_id"ref="base.EUR"/>
+            <fieldname="cash_account_code_prefix">570</field>
+            <fieldname="bank_account_code_prefix">572</field>
+            <fieldname="transfer_account_code_prefix">572999</field>
+            <fieldname="parent_id"ref="account_chart_template_common"/>
         </record>
 
-        <record id="account_chart_template_assoc" model="account.chart.template">
-        <field name="name">PGCE entidades sin ánimo de lucro 2008</field>
-        <field name="complete_tax_set" eval="True"/>
-        <field name="currency_id" ref="base.EUR"/>
-        <field name="cash_account_code_prefix">570</field>
-        <field name="bank_account_code_prefix">572</field>
-        <field name="transfer_account_code_prefix">572999</field>
-        <field name="parent_id" ref="account_chart_template_common"/>
+        <recordid="account_chart_template_assoc"model="account.chart.template">
+        <fieldname="name">PGCEentidadessinánimodelucro2008</field>
+        <fieldname="complete_tax_set"eval="True"/>
+        <fieldname="currency_id"ref="base.EUR"/>
+        <fieldname="cash_account_code_prefix">570</field>
+        <fieldname="bank_account_code_prefix">572</field>
+        <fieldname="transfer_account_code_prefix">572999</field>
+        <fieldname="parent_id"ref="account_chart_template_common"/>
     </record>
 
-    <record id="account_chart_template_full" model="account.chart.template">
-        <field name="name">PGCE completo 2008</field>
-        <field name="complete_tax_set" eval="True"/>
-        <field name="currency_id" ref="base.EUR"/>
-        <field name="cash_account_code_prefix">570</field>
-        <field name="bank_account_code_prefix">572</field>
-        <field name="transfer_account_code_prefix">572999</field>
-        <field name="parent_id" ref="account_chart_template_common"/>
+    <recordid="account_chart_template_full"model="account.chart.template">
+        <fieldname="name">PGCEcompleto2008</field>
+        <fieldname="complete_tax_set"eval="True"/>
+        <fieldname="currency_id"ref="base.EUR"/>
+        <fieldname="cash_account_code_prefix">570</field>
+        <fieldname="bank_account_code_prefix">572</field>
+        <fieldname="transfer_account_code_prefix">572999</field>
+        <fieldname="parent_id"ref="account_chart_template_common"/>
     </record>
     </data>
 </flectra>

@@ -1,289 +1,289 @@
-flectra.define('web_editor.editor', function (require) {
-'use strict';
+flectra.define('web_editor.editor',function(require){
+'usestrict';
 
-var Dialog = require('web.Dialog');
-var Widget = require('web.Widget');
-var core = require('web.core');
-var rte = require('web_editor.rte');
-var snippetsEditor = require('web_editor.snippet.editor');
-var summernoteCustomColors = require('web_editor.rte.summernote_custom_colors');
+varDialog=require('web.Dialog');
+varWidget=require('web.Widget');
+varcore=require('web.core');
+varrte=require('web_editor.rte');
+varsnippetsEditor=require('web_editor.snippet.editor');
+varsummernoteCustomColors=require('web_editor.rte.summernote_custom_colors');
 
-var _t = core._t;
+var_t=core._t;
 
-var EditorMenuBar = Widget.extend({
-    template: 'web_editor.editorbar',
-    xmlDependencies: ['/web_editor/static/src/xml/editor.xml'],
-    events: {
-        'click button[data-action=save]': '_onSaveClick',
-        'click button[data-action=cancel]': '_onCancelClick',
+varEditorMenuBar=Widget.extend({
+    template:'web_editor.editorbar',
+    xmlDependencies:['/web_editor/static/src/xml/editor.xml'],
+    events:{
+        'clickbutton[data-action=save]':'_onSaveClick',
+        'clickbutton[data-action=cancel]':'_onCancelClick',
     },
-    custom_events: {
-        request_editable: '_onRequestEditable',
-        request_history_undo_record: '_onHistoryUndoRecordRequest',
-        request_save: '_onSaveRequest',
+    custom_events:{
+        request_editable:'_onRequestEditable',
+        request_history_undo_record:'_onHistoryUndoRecordRequest',
+        request_save:'_onSaveRequest',
     },
 
     /**
-     * Initializes RTE and snippets menu.
+     *InitializesRTEandsnippetsmenu.
      *
-     * @constructor
+     *@constructor
      */
-    init: function (parent, options) {
-        var self = this;
-        var res = this._super.apply(this, arguments);
-        var Editor = options.Editor || rte.Class;
-        this.rte = new Editor(this, {
-            getConfig: function ($editable) {
-                var param = self._getDefaultConfig($editable);
-                if (options.generateOptions) {
-                    param = options.generateOptions(param);
+    init:function(parent,options){
+        varself=this;
+        varres=this._super.apply(this,arguments);
+        varEditor=options.Editor||rte.Class;
+        this.rte=newEditor(this,{
+            getConfig:function($editable){
+                varparam=self._getDefaultConfig($editable);
+                if(options.generateOptions){
+                    param=options.generateOptions(param);
                 }
-                return param;
+                returnparam;
             },
-            saveElement: options.saveElement,
+            saveElement:options.saveElement,
         });
-        this.rte.on('rte:start', this, function () {
+        this.rte.on('rte:start',this,function(){
             self.trigger('rte:start');
         });
 
-        // Snippets edition
-        var $editable = this.rte.editable();
-        window.__EditorMenuBar_$editable = $editable; // TODO remove this hack asap
+        //Snippetsedition
+        var$editable=this.rte.editable();
+        window.__EditorMenuBar_$editable=$editable;//TODOremovethishackasap
 
-        if (options.snippets) {
-            this.snippetsMenu = new snippetsEditor.Class(this, Object.assign({
-                $el: $editable,
-                selectorEditableArea: '.o_editable',
-            }, options));
+        if(options.snippets){
+            this.snippetsMenu=newsnippetsEditor.Class(this,Object.assign({
+                $el:$editable,
+                selectorEditableArea:'.o_editable',
+            },options));
         }
 
-        return res;
+        returnres;
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        var defs = [this._super.apply(this, arguments)];
+    start:function(){
+        varself=this;
+        vardefs=[this._super.apply(this,arguments)];
 
-        core.bus.on('editor_save_request', this, this.save);
-        core.bus.on('editor_discard_request', this, this.cancel);
+        core.bus.on('editor_save_request',this,this.save);
+        core.bus.on('editor_discard_request',this,this.cancel);
 
         $('.dropdown-toggle').dropdown();
 
-        $(document).on('keyup', function (event) {
-            if ((event.keyCode === 8 || event.keyCode === 46)) {
-                var $target = $(event.target).closest('.o_editable');
-                if (!$target.is(':has(*:not(p):not(br))') && !$target.text().match(/\S/)) {
+        $(document).on('keyup',function(event){
+            if((event.keyCode===8||event.keyCode===46)){
+                var$target=$(event.target).closest('.o_editable');
+                if(!$target.is(':has(*:not(p):not(br))')&&!$target.text().match(/\S/)){
                     $target.empty();
                 }
             }
         });
-        $(document).on('click', '.note-editable', function (ev) {
+        $(document).on('click','.note-editable',function(ev){
             ev.preventDefault();
         });
-        $(document).on('submit', '.note-editable form .btn', function (ev) {
-            ev.preventDefault(); // Disable form submition in editable mode
+        $(document).on('submit','.note-editableform.btn',function(ev){
+            ev.preventDefault();//Disableformsubmitionineditablemode
         });
-        $(document).on('hide.bs.dropdown', '.dropdown', function (ev) {
-            // Prevent dropdown closing when a contenteditable children is focused
-            if (ev.originalEvent
-                    && $(ev.target).has(ev.originalEvent.target).length
-                    && $(ev.originalEvent.target).is('[contenteditable]')) {
+        $(document).on('hide.bs.dropdown','.dropdown',function(ev){
+            //Preventdropdownclosingwhenacontenteditablechildrenisfocused
+            if(ev.originalEvent
+                    &&$(ev.target).has(ev.originalEvent.target).length
+                    &&$(ev.originalEvent.target).is('[contenteditable]')){
                 ev.preventDefault();
             }
         });
 
         this.rte.start();
 
-        var flag = false;
-        window.onbeforeunload = function (event) {
-            if (rte.history.getEditableHasUndo().length && !flag) {
-                flag = true;
-                _.defer(function () { flag=false; });
-                return _t('This document is not saved!');
+        varflag=false;
+        window.onbeforeunload=function(event){
+            if(rte.history.getEditableHasUndo().length&&!flag){
+                flag=true;
+                _.defer(function(){flag=false;});
+                return_t('Thisdocumentisnotsaved!');
             }
         };
 
-        // Snippets menu
-        if (self.snippetsMenu) {
+        //Snippetsmenu
+        if(self.snippetsMenu){
             defs.push(this.snippetsMenu.insertAfter(this.$el));
         }
-        this.rte.editable().find('*').off('mousedown mouseup click');
+        this.rte.editable().find('*').off('mousedownmouseupclick');
 
-        return Promise.all(defs).then(function () {
+        returnPromise.all(defs).then(function(){
             self.trigger_up('edit_mode');
         });
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
-        this._super.apply(this, arguments);
-        core.bus.off('editor_save_request', this, this._onSaveRequest);
-        core.bus.off('editor_discard_request', this, this._onDiscardRequest);
+    destroy:function(){
+        this._super.apply(this,arguments);
+        core.bus.off('editor_save_request',this,this._onSaveRequest);
+        core.bus.off('editor_discard_request',this,this._onDiscardRequest);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Asks the user if he really wants to discard its changes (if there are
-     * some of them), then simply reload the page if he wants to.
+     *Askstheuserifhereallywantstodiscarditschanges(ifthereare
+     *someofthem),thensimplyreloadthepageifhewantsto.
      *
-     * @param {boolean} [reload=true]
-     *        true if the page has to be reloaded when the user answers yes
-     *        (do nothing otherwise but add this to allow class extension)
-     * @returns {Promise}
+     *@param{boolean}[reload=true]
+     *       trueifthepagehastobereloadedwhentheuseranswersyes
+     *       (donothingotherwisebutaddthistoallowclassextension)
+     *@returns{Promise}
      */
-    cancel: function (reload) {
-        var self = this;
-        return new Promise(function(resolve, reject) {
-            if (!rte.history.getEditableHasUndo().length) {
+    cancel:function(reload){
+        varself=this;
+        returnnewPromise(function(resolve,reject){
+            if(!rte.history.getEditableHasUndo().length){
                 resolve();
-            } else {
-                var confirm = Dialog.confirm(this, _t("If you discard the current edits, all unsaved changes will be lost. You can cancel to return to edit mode."), {
-                    confirm_callback: resolve,
+            }else{
+                varconfirm=Dialog.confirm(this,_t("Ifyoudiscardthecurrentedits,allunsavedchangeswillbelost.Youcancanceltoreturntoeditmode."),{
+                    confirm_callback:resolve,
                 });
-                confirm.on('closed', self, reject);
+                confirm.on('closed',self,reject);
             }
-        }).then(function () {
-            if (reload !== false) {
-                window.onbeforeunload = null;
-                return self._reload();
+        }).then(function(){
+            if(reload!==false){
+                window.onbeforeunload=null;
+                returnself._reload();
             }
         });
     },
     /**
-     * Asks the snippets to clean themself, then saves the page, then reloads it
-     * if asked to.
+     *Asksthesnippetstocleanthemself,thensavesthepage,thenreloadsit
+     *ifaskedto.
      *
-     * @param {boolean} [reload=true]
-     *        true if the page has to be reloaded after the save
-     * @returns {Promise}
+     *@param{boolean}[reload=true]
+     *       trueifthepagehastobereloadedafterthesave
+     *@returns{Promise}
      */
-    save: async function (reload) {
-        var defs = [];
-        this.trigger_up('ready_to_save', {defs: defs});
-        await Promise.all(defs);
+    save:asyncfunction(reload){
+        vardefs=[];
+        this.trigger_up('ready_to_save',{defs:defs});
+        awaitPromise.all(defs);
 
-        if (this.snippetsMenu) {
-            await this.snippetsMenu.cleanForSave();
+        if(this.snippetsMenu){
+            awaitthis.snippetsMenu.cleanForSave();
         }
-        await this.getParent().saveModifiedImages(this.rte.editable());
-        await this.rte.save();
+        awaitthis.getParent().saveModifiedImages(this.rte.editable());
+        awaitthis.rte.save();
 
-        if (reload !== false) {
-            return this._reload();
+        if(reload!==false){
+            returnthis._reload();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _getDefaultConfig: function ($editable) {
-        return {
-            'airMode' : true,
-            'focus': false,
-            'airPopover': [
-                ['style', ['style']],
-                ['font', ['bold', 'italic', 'underline', 'clear']],
-                ['fontsize', ['fontsize']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture']],
-                ['history', ['undo', 'redo']],
+    _getDefaultConfig:function($editable){
+        return{
+            'airMode':true,
+            'focus':false,
+            'airPopover':[
+                ['style',['style']],
+                ['font',['bold','italic','underline','clear']],
+                ['fontsize',['fontsize']],
+                ['color',['color']],
+                ['para',['ul','ol','paragraph']],
+                ['table',['table']],
+                ['insert',['link','picture']],
+                ['history',['undo','redo']],
             ],
-            'styleWithSpan': false,
-            'inlinemedia' : ['p'],
-            'lang': 'flectra',
-            'onChange': function (html, $editable) {
+            'styleWithSpan':false,
+            'inlinemedia':['p'],
+            'lang':'flectra',
+            'onChange':function(html,$editable){
                 $editable.trigger('content_changed');
             },
-            'colors': summernoteCustomColors,
+            'colors':summernoteCustomColors,
         };
     },
     /**
-     * Reloads the page in non-editable mode, with the right scrolling.
+     *Reloadsthepageinnon-editablemode,withtherightscrolling.
      *
-     * @private
-     * @returns {Promise} (never resolved, the page is reloading anyway)
+     *@private
+     *@returns{Promise}(neverresolved,thepageisreloadinganyway)
      */
-    _reload: function () {
-        window.location.hash = 'scrollTop=' + window.document.body.scrollTop;
-        if (window.location.search.indexOf('enable_editor') >= 0) {
-            window.location.href = window.location.href.replace(/&?enable_editor(=[^&]*)?/g, '');
-        } else {
+    _reload:function(){
+        window.location.hash='scrollTop='+window.document.body.scrollTop;
+        if(window.location.search.indexOf('enable_editor')>=0){
+            window.location.href=window.location.href.replace(/&?enable_editor(=[^&]*)?/g,'');
+        }else{
             window.location.reload(true);
         }
-        return new Promise(function(){});
+        returnnewPromise(function(){});
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the "Discard" button is clicked -> discards the changes.
+     *Calledwhenthe"Discard"buttonisclicked->discardsthechanges.
      *
-     * @private
+     *@private
      */
-    _onCancelClick: function () {
+    _onCancelClick:function(){
         this.cancel();
     },
     /**
-     * Called when an element askes to record an history undo -> records it.
+     *Calledwhenanelementaskestorecordanhistoryundo->recordsit.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onHistoryUndoRecordRequest: function (ev) {
-        this.rte.historyRecordUndo(ev.data.$target, ev.data.event);
+    _onHistoryUndoRecordRequest:function(ev){
+        this.rte.historyRecordUndo(ev.data.$target,ev.data.event);
     },
     /**
-     * Called when the "Save" button is clicked -> saves the changes.
+     *Calledwhenthe"Save"buttonisclicked->savesthechanges.
      *
-     * @private
+     *@private
      */
-    _onSaveClick: function () {
+    _onSaveClick:function(){
         this.save();
     },
     /**
-     * Called when a discard request is received -> discard the page content
-     * changes.
+     *Calledwhenadiscardrequestisreceived->discardthepagecontent
+     *changes.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onDiscardRequest: function (ev) {
-        this.cancel(ev.data.reload).then(ev.data.onSuccess, ev.data.onFailure);
+    _onDiscardRequest:function(ev){
+        this.cancel(ev.data.reload).then(ev.data.onSuccess,ev.data.onFailure);
     },
     /**
-     * Called when a save request is received -> saves the page content.
+     *Calledwhenasaverequestisreceived->savesthepagecontent.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onSaveRequest: function (ev) {
+    _onSaveRequest:function(ev){
         ev.stopPropagation();
-        this.save(ev.data.reload).then(ev.data.onSuccess, ev.data.onFailure);
+        this.save(ev.data.reload).then(ev.data.onSuccess,ev.data.onFailure);
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onRequestEditable: function (ev) {
+    _onRequestEditable:function(ev){
         ev.data.callback(this.rte.editable());
     },
 });
 
-return {
-    Class: EditorMenuBar,
+return{
+    Class:EditorMenuBar,
 };
 });

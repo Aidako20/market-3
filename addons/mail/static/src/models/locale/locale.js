@@ -1,52 +1,52 @@
-flectra.define('mail/static/src/models/locale/locale.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/locale/locale.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr } = require('mail/static/src/model/model_field.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{attr}=require('mail/static/src/model/model_field.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class Locale extends dependencies['mail.model'] {
+    classLocaleextendsdependencies['mail.model']{
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @private
-         * @returns {string}
+         *@private
+         *@returns{string}
          */
-        _computeLanguage() {
-            return this.env._t.database.parameters.code;
+        _computeLanguage(){
+            returnthis.env._t.database.parameters.code;
         }
 
         /**
-         * @private
-         * @returns {string}
+         *@private
+         *@returns{string}
          */
-        _computeTextDirection() {
-            return this.env._t.database.parameters.direction;
+        _computeTextDirection(){
+            returnthis.env._t.database.parameters.direction;
         }
 
     }
 
-    Locale.fields = {
+    Locale.fields={
         /**
-         * Language used by interface, formatted like {language ISO 2}_{country ISO 2} (eg: fr_FR).
+         *Languageusedbyinterface,formattedlike{languageISO2}_{countryISO2}(eg:fr_FR).
          */
-        language: attr({
-            compute: '_computeLanguage',
+        language:attr({
+            compute:'_computeLanguage',
         }),
-        textDirection: attr({
-            compute: '_computeTextDirection',
+        textDirection:attr({
+            compute:'_computeTextDirection',
         }),
     };
 
-    Locale.modelName = 'mail.locale';
+    Locale.modelName='mail.locale';
 
-    return Locale;
+    returnLocale;
 }
 
-registerNewModel('mail.locale', factory);
+registerNewModel('mail.locale',factory);
 
 });

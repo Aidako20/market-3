@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.NotificationAlert" owl="1">
-        <div class="o_NotificationAlert">
-            <t t-if="env.isMessagingInitialized()">
-                <center t-if="isNotificationBlocked" class="o_notification_alert alert alert-primary">
-                    Flectra Push notifications have been blocked. Go to your browser settings to allow them.
+    <tt-name="mail.NotificationAlert"owl="1">
+        <divclass="o_NotificationAlert">
+            <tt-if="env.isMessagingInitialized()">
+                <centert-if="isNotificationBlocked"class="o_notification_alertalertalert-primary">
+                    FlectraPushnotificationshavebeenblocked.Gotoyourbrowsersettingstoallowthem.
                 </center>
             </t>
         </div>

@@ -1,110 +1,110 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <!-- Email templates -->
-        <record id="mail_template_data_track_confirmation" model="mail.template">
-            <field name="name">Track: Confirmation</field>
-            <field name="model_id" ref="website_event_track.model_event_track"/>
-            <field name="subject">Confirmation of ${object.name}</field>
-            <field name="use_default_to" eval="True"/>
-            <field name="body_html" type="xml">
+    <datanoupdate="1">
+        <!--Emailtemplates-->
+        <recordid="mail_template_data_track_confirmation"model="mail.template">
+            <fieldname="name">Track:Confirmation</field>
+            <fieldname="model_id"ref="website_event_track.model_event_track"/>
+            <fieldname="subject">Confirmationof${object.name}</field>
+            <fieldname="use_default_to"eval="True"/>
+            <fieldname="body_html"type="xml">
 <div>
-    Dear ${object.partner_name or ''}<br/>
-    We are pleased to inform you that your proposal ${object.name} has been accepted and confirmed for the event ${object.event_id.name}.
+    Dear${object.partner_nameor''}<br/>
+    Wearepleasedtoinformyouthatyourproposal${object.name}hasbeenacceptedandconfirmedfortheevent${object.event_id.name}.
     <br/>
-    You will find more details here:
-    <div style="margin: 16px 0px 16px 0px;">
-        <a href="/event/${object.event_id.id}/track/${object.id}"
-                style="padding: 8px 16px 8px 16px; font-size: 14px; color: #FFFFFF; text-decoration: none !important; background-color: #009EFB; border: 0px solid #009EFB; border-radius:3px">
-            View Talk
+    Youwillfindmoredetailshere:
+    <divstyle="margin:16px0px16px0px;">
+        <ahref="/event/${object.event_id.id}/track/${object.id}"
+                style="padding:8px16px8px16px;font-size:14px;color:#FFFFFF;text-decoration:none!important;background-color:#009EFB;border:0pxsolid#009EFB;border-radius:3px">
+            ViewTalk
         </a>
     </div>
     <br/><br/>
-    Thank you,
-    % if user.signature
-        <br />
-        ${user.signature | safe}
-    % endif
+    Thankyou,
+    %ifuser.signature
+        <br/>
+        ${user.signature|safe}
+    %endif
 </div></field>
-            <field name="lang">${object.partner_id.lang}</field>
-            <field name="auto_delete" eval="True"/>
+            <fieldname="lang">${object.partner_id.lang}</field>
+            <fieldname="auto_delete"eval="True"/>
         </record>
 
-        <record id="event_sponsor_type1" model="event.sponsor.type">
-            <field name="name">Bronze</field>
-            <field name="sequence">3</field>
-            <field name="display_ribbon_style">Bronze</field>
+        <recordid="event_sponsor_type1"model="event.sponsor.type">
+            <fieldname="name">Bronze</field>
+            <fieldname="sequence">3</field>
+            <fieldname="display_ribbon_style">Bronze</field>
         </record>
-        <record id="event_sponsor_type2" model="event.sponsor.type">
-            <field name="name">Silver</field>
-            <field name="sequence">2</field>
-            <field name="display_ribbon_style">Silver</field>
+        <recordid="event_sponsor_type2"model="event.sponsor.type">
+            <fieldname="name">Silver</field>
+            <fieldname="sequence">2</field>
+            <fieldname="display_ribbon_style">Silver</field>
         </record>
-        <record id="event_sponsor_type3" model="event.sponsor.type">
-            <field name="name">Gold</field>
-            <field name="sequence">1</field>
-            <field name="display_ribbon_style">Gold</field>
-        </record>
-
-        <record id="event_track_stage0" model="event.track.stage">
-            <field name="name">Proposal</field>
-            <field name="sequence">1</field>
-            <field name="color">1</field>
-        </record>
-        <record id="event_track_stage1" model="event.track.stage">
-            <field name="name">Confirmed</field>
-            <field name="sequence">2</field>
-            <field name="mail_template_id" ref="mail_template_data_track_confirmation"/>
-            <field name="color">2</field>
-        </record>
-        <record id="event_track_stage2" model="event.track.stage">
-            <field name="name">Announced</field>
-            <field name="sequence">3</field>
-            <field name="color">3</field>
-            <field name="is_accepted" eval="True"/>
-        </record>
-        <record id="event_track_stage3" model="event.track.stage">
-            <field name="name">Published</field>
-            <field name="sequence">4</field>
-            <field name="color">4</field>
-            <field name="is_accepted" eval="True"/>
-            <field name="is_done" eval="True"/>
-        </record>
-        <record id="event_track_stage4" model="event.track.stage">
-            <field name="name">Refused</field>
-            <field name="sequence">5</field>
-            <field name="color">5</field>
-            <field name="fold" eval="True"/>
-        </record>
-        <record id="event_track_stage5" model="event.track.stage">
-            <field name="name">Cancelled</field>
-            <field name="sequence">6</field>
-            <field name="fold" eval="True"/>
-            <field name="is_cancel" eval="True"/>
+        <recordid="event_sponsor_type3"model="event.sponsor.type">
+            <fieldname="name">Gold</field>
+            <fieldname="sequence">1</field>
+            <fieldname="display_ribbon_style">Gold</field>
         </record>
 
-        <!-- Event-related subtypes for new track / Chatter -->
-        <record id="mt_event_track" model="mail.message.subtype">
-            <field name="name">New Track</field>
-            <field name="res_model">event.event</field>
-            <field name="description">New Track Created</field>
-            <field name="default" eval="False"/>
+        <recordid="event_track_stage0"model="event.track.stage">
+            <fieldname="name">Proposal</field>
+            <fieldname="sequence">1</field>
+            <fieldname="color">1</field>
+        </record>
+        <recordid="event_track_stage1"model="event.track.stage">
+            <fieldname="name">Confirmed</field>
+            <fieldname="sequence">2</field>
+            <fieldname="mail_template_id"ref="mail_template_data_track_confirmation"/>
+            <fieldname="color">2</field>
+        </record>
+        <recordid="event_track_stage2"model="event.track.stage">
+            <fieldname="name">Announced</field>
+            <fieldname="sequence">3</field>
+            <fieldname="color">3</field>
+            <fieldname="is_accepted"eval="True"/>
+        </record>
+        <recordid="event_track_stage3"model="event.track.stage">
+            <fieldname="name">Published</field>
+            <fieldname="sequence">4</field>
+            <fieldname="color">4</field>
+            <fieldname="is_accepted"eval="True"/>
+            <fieldname="is_done"eval="True"/>
+        </record>
+        <recordid="event_track_stage4"model="event.track.stage">
+            <fieldname="name">Refused</field>
+            <fieldname="sequence">5</field>
+            <fieldname="color">5</field>
+            <fieldname="fold"eval="True"/>
+        </record>
+        <recordid="event_track_stage5"model="event.track.stage">
+            <fieldname="name">Cancelled</field>
+            <fieldname="sequence">6</field>
+            <fieldname="fold"eval="True"/>
+            <fieldname="is_cancel"eval="True"/>
         </record>
 
-        <!-- Track subtypes -->
-        <record id="mt_track_blocked" model="mail.message.subtype">
-            <field name="name">Track Blocked</field>
-            <field name="res_model">event.track</field>
-            <field name="default" eval="False"/>
-            <field name="internal" eval="True"/>
-            <field name="description">Track blocked</field>
+        <!--Event-relatedsubtypesfornewtrack/Chatter-->
+        <recordid="mt_event_track"model="mail.message.subtype">
+            <fieldname="name">NewTrack</field>
+            <fieldname="res_model">event.event</field>
+            <fieldname="description">NewTrackCreated</field>
+            <fieldname="default"eval="False"/>
         </record>
-        <record id="mt_track_ready" model="mail.message.subtype">
-            <field name="name">Track Ready</field>
-            <field name="res_model">event.track</field>
-            <field name="default" eval="True"/>
-            <field name="internal" eval="True"/>
-            <field name="description">Track Ready for Next Stage</field>
+
+        <!--Tracksubtypes-->
+        <recordid="mt_track_blocked"model="mail.message.subtype">
+            <fieldname="name">TrackBlocked</field>
+            <fieldname="res_model">event.track</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="internal"eval="True"/>
+            <fieldname="description">Trackblocked</field>
+        </record>
+        <recordid="mt_track_ready"model="mail.message.subtype">
+            <fieldname="name">TrackReady</field>
+            <fieldname="res_model">event.track</field>
+            <fieldname="default"eval="True"/>
+            <fieldname="internal"eval="True"/>
+            <fieldname="description">TrackReadyforNextStage</field>
         </record>
     </data>
 </flectra>

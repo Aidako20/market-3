@@ -1,48 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="view_task_form2_inherit_pad_project" model="ir.ui.view">
-        <field name="name">project.task.form.inherit</field>
-        <field name="model">project.task</field>
-        <field name="inherit_id" ref="project.view_task_form2"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='description']" position="attributes">
-                <attribute name="attrs">{'invisible': [('use_pad', '=', True)], 'readonly': [('use_pad', '=', True)]}</attribute>
+    <recordid="view_task_form2_inherit_pad_project"model="ir.ui.view">
+        <fieldname="name">project.task.form.inherit</field>
+        <fieldname="model">project.task</field>
+        <fieldname="inherit_id"ref="project.view_task_form2"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='description']"position="attributes">
+                <attributename="attrs">{'invisible':[('use_pad','=',True)],'readonly':[('use_pad','=',True)]}</attribute>
             </xpath>
-            <field name="description" position="after">
-                <field name="use_pad" invisible="1"/>
-                <field name="description_pad" widget="pad" attrs="{'invisible': [('use_pad', '=', False)], 'readonly': [('use_pad', '=', False)]}"/>
+            <fieldname="description"position="after">
+                <fieldname="use_pad"invisible="1"/>
+                <fieldname="description_pad"widget="pad"attrs="{'invisible':[('use_pad','=',False)],'readonly':[('use_pad','=',False)]}"/>
             </field>
         </field>
     </record>
 
-    <record id="project_project_view_form" model="ir.ui.view">
-        <field name="name">project.project.view.form</field>
-        <field name="model">project.project</field>
-        <field name="inherit_id" ref="project.edit_project"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='description']" position="attributes">
-                <attribute name="attrs">{'invisible': [('use_pads', '=', True)], 'readonly': [('use_pads', '=', True)]}</attribute>
+    <recordid="project_project_view_form"model="ir.ui.view">
+        <fieldname="name">project.project.view.form</field>
+        <fieldname="model">project.project</field>
+        <fieldname="inherit_id"ref="project.edit_project"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='description']"position="attributes">
+                <attributename="attrs">{'invisible':[('use_pads','=',True)],'readonly':[('use_pads','=',True)]}</attribute>
             </xpath>
-            <field name="description" position="after">
-                <field name="use_pads" invisible="1"/>
-                <field name="description_pad" widget="pad" nolabel="1"
-                       attrs="{'invisible': [('use_pads', '=', False)], 'readonly': [('use_pads', '=', False)]}"/>
+            <fieldname="description"position="after">
+                <fieldname="use_pads"invisible="1"/>
+                <fieldname="description_pad"widget="pad"nolabel="1"
+                       attrs="{'invisible':[('use_pads','=',False)],'readonly':[('use_pads','=',False)]}"/>
             </field>
-            <xpath expr="//div[@id='rating_settings']" position="after">
-                <div class="col-lg-6 o_setting_box" id="pad_settings">
-                    <div class="o_setting_left_pane">
-                        <field name="use_pads"/>
+            <xpathexpr="//div[@id='rating_settings']"position="after">
+                <divclass="col-lg-6o_setting_box"id="pad_settings">
+                    <divclass="o_setting_left_pane">
+                        <fieldname="use_pads"/>
                     </div>
-                    <div class="o_setting_right_pane">
-                        <label for="use_pads" string="Collaborative Pads"/>
-                        <div class="text-muted">
-                            Edit tasks' description collaboratively in real time.<br/>
-                            See each author's text in a distinct color.
+                    <divclass="o_setting_right_pane">
+                        <labelfor="use_pads"string="CollaborativePads"/>
+                        <divclass="text-muted">
+                            Edittasks'descriptioncollaborativelyinrealtime.<br/>
+                            Seeeachauthor'stextinadistinctcolor.
                         </div>
-                        <div class="content-group" attrs="{'invisible': ['|', ('use_pads', '=', False), ('privacy_visibility', '!=', 'portal')]}">
-                            <div class="mt16 row">
-                                <label for="pad_availability" string="Available to:" class="col-3 col-lg-3 o_light_label"/>
-                                <field name="pad_availability" widget="radio"/>
+                        <divclass="content-group"attrs="{'invisible':['|',('use_pads','=',False),('privacy_visibility','!=','portal')]}">
+                            <divclass="mt16row">
+                                <labelfor="pad_availability"string="Availableto:"class="col-3col-lg-3o_light_label"/>
+                                <fieldname="pad_availability"widget="radio"/>
                             </div>
                         </div>
                     </div>

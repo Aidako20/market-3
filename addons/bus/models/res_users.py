@@ -1,28 +1,28 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import api, fields, models
-from flectra.addons.bus.models.bus_presence import AWAY_TIMER
-from flectra.addons.bus.models.bus_presence import DISCONNECTION_TIMER
+fromflectraimportapi,fields,models
+fromflectra.addons.bus.models.bus_presenceimportAWAY_TIMER
+fromflectra.addons.bus.models.bus_presenceimportDISCONNECTION_TIMER
 
 
-class ResUsers(models.Model):
+classResUsers(models.Model):
 
-    _inherit = "res.users"
+    _inherit="res.users"
 
-    im_status = fields.Char('IM Status', compute='_compute_im_status')
+    im_status=fields.Char('IMStatus',compute='_compute_im_status')
 
-    def _compute_im_status(self):
-        """ Compute the im_status of the users """
+    def_compute_im_status(self):
+        """Computetheim_statusoftheusers"""
         self.env.cr.execute("""
             SELECT
-                user_id as id,
-                CASE WHEN age(now() AT TIME ZONE 'UTC', last_poll) > interval %s THEN 'offline'
-                     WHEN age(now() AT TIME ZONE 'UTC', last_presence) > interval %s THEN 'away'
-                     ELSE 'online'
-                END as status
-            FROM bus_presence
-            WHERE user_id IN %s
-        """, ("%s seconds" % DISCONNECTION_TIMER, "%s seconds" % AWAY_TIMER, tuple(self.ids)))
-        res = dict(((status['id'], status['status']) for status in self.env.cr.dictfetchall()))
-        for user in self:
-            user.im_status = res.get(user.id, 'offline')
+                user_idasid,
+                CASEWHENage(now()ATTIMEZONE'UTC',last_poll)>interval%sTHEN'offline'
+                     WHENage(now()ATTIMEZONE'UTC',last_presence)>interval%sTHEN'away'
+                     ELSE'online'
+                ENDasstatus
+            FROMbus_presence
+            WHEREuser_idIN%s
+        """,("%sseconds"%DISCONNECTION_TIMER,"%sseconds"%AWAY_TIMER,tuple(self.ids)))
+        res=dict(((status['id'],status['status'])forstatusinself.env.cr.dictfetchall()))
+        foruserinself:
+            user.im_status=res.get(user.id,'offline')

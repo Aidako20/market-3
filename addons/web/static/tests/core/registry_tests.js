@@ -1,88 +1,88 @@
-flectra.define('web.registry_tests', function (require) {
-"use strict";
+flectra.define('web.registry_tests',function(require){
+"usestrict";
 
-var Registry = require('web.Registry');
+varRegistry=require('web.Registry');
 
-QUnit.module('core', {}, function () {
+QUnit.module('core',{},function(){
 
     QUnit.module('Registry');
 
-    QUnit.test('key set', function (assert) {
+    QUnit.test('keyset',function(assert){
         assert.expect(1);
 
-        var registry = new Registry();
-        var foo = {};
+        varregistry=newRegistry();
+        varfoo={};
 
         registry
-            .add('foo', foo);
+            .add('foo',foo);
 
-        assert.strictEqual(registry.get('foo'), foo);
+        assert.strictEqual(registry.get('foo'),foo);
     });
 
-    QUnit.test('get initial keys', function (assert) {
+    QUnit.test('getinitialkeys',function(assert){
         assert.expect(1);
 
-        var registry = new Registry({ a: 1, });
+        varregistry=newRegistry({a:1,});
         assert.deepEqual(
             registry.keys(),
             ['a'],
-            "keys on prototype should be returned"
+            "keysonprototypeshouldbereturned"
         );
     });
 
-    QUnit.test('get initial entries', function (assert) {
+    QUnit.test('getinitialentries',function(assert){
         assert.expect(1);
 
-        var registry = new Registry({ a: 1, });
+        varregistry=newRegistry({a:1,});
         assert.deepEqual(
             registry.entries(),
-            { a: 1, },
-            "entries on prototype should be returned"
+            {a:1,},
+            "entriesonprototypeshouldbereturned"
         );
     });
 
-    QUnit.test('multiget', function (assert) {
+    QUnit.test('multiget',function(assert){
         assert.expect(1);
 
-        var foo = {};
-        var bar = {};
-        var registry = new Registry({
-            foo: foo,
-            bar: bar,
+        varfoo={};
+        varbar={};
+        varregistry=newRegistry({
+            foo:foo,
+            bar:bar,
         });
         assert.strictEqual(
-            registry.getAny(['qux', 'grault', 'bar', 'foo']),
+            registry.getAny(['qux','grault','bar','foo']),
             bar,
-            "Registry getAny should find first defined key");
+            "RegistrygetAnyshouldfindfirstdefinedkey");
     });
 
-    QUnit.test('keys and values are properly ordered', function (assert) {
+    QUnit.test('keysandvaluesareproperlyordered',function(assert){
         assert.expect(2);
 
-        var registry = new Registry();
+        varregistry=newRegistry();
 
         registry
-            .add('fred', 'foo', 3)
-            .add('george', 'bar', 2)
-            .add('ronald', 'qux', 4);
+            .add('fred','foo',3)
+            .add('george','bar',2)
+            .add('ronald','qux',4);
 
-        assert.deepEqual(registry.keys(), ['george', 'fred', 'ronald']);
-        assert.deepEqual(registry.values(), ['bar', 'foo', 'qux']);
+        assert.deepEqual(registry.keys(),['george','fred','ronald']);
+        assert.deepEqual(registry.values(),['bar','foo','qux']);
     });
 
-    QUnit.test("predicate prevents invalid values", function (assert) {
+    QUnit.test("predicatepreventsinvalidvalues",function(assert){
         assert.expect(5);
 
-        const predicate = value => typeof value === "number";
-        const registry = new Registry(null, predicate);
-        registry.onAdd((key) => assert.step(key));
+        constpredicate=value=>typeofvalue==="number";
+        constregistry=newRegistry(null,predicate);
+        registry.onAdd((key)=>assert.step(key));
 
-        assert.ok(registry.add("age", 23));
+        assert.ok(registry.add("age",23));
         assert.throws(
-            () => registry.add("name", "Fred"),
-            new Error(`Value of key "name" does not pass the addition predicate.`)
+            ()=>registry.add("name","Fred"),
+            newError(`Valueofkey"name"doesnotpasstheadditionpredicate.`)
         );
-        assert.deepEqual(registry.entries(), { age: 23 });
+        assert.deepEqual(registry.entries(),{age:23});
         assert.verifySteps(["age"]);
     });
 });

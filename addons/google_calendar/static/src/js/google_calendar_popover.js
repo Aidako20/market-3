@@ -1,26 +1,26 @@
-flectra.define('google_calendar.GoogleCalendarPopover', function(require) {
-    "use strict";
+flectra.define('google_calendar.GoogleCalendarPopover',function(require){
+    "usestrict";
 
-    const CalendarPopover = require('web.CalendarPopover');
+    constCalendarPopover=require('web.CalendarPopover');
 
-    const GoogleCalendarPopover = CalendarPopover.include({
-        events: _.extend({}, CalendarPopover.prototype.events, {
-            'click .o_cw_popover_archive_g': '_onClickPopoverGArchive',
+    constGoogleCalendarPopover=CalendarPopover.include({
+        events:_.extend({},CalendarPopover.prototype.events,{
+            'click.o_cw_popover_archive_g':'_onClickPopoverGArchive',
         }),
 
-        isGEventSyncedAndArchivable() {
-            return this.event.extendedProps.record.google_id;
+        isGEventSyncedAndArchivable(){
+            returnthis.event.extendedProps.record.google_id;
         },
 
-        isEventDeletable() {
-            return !this.isGEventSyncedAndArchivable() && this._super();
+        isEventDeletable(){
+            return!this.isGEventSyncedAndArchivable()&&this._super();
         },
 
-        _onClickPopoverGArchive: function (ev) {
+        _onClickPopoverGArchive:function(ev){
             ev.preventDefault();
-            this.trigger_up('archive_event', {id: this.event.id});
+            this.trigger_up('archive_event',{id:this.event.id});
         },
     })
 
-    return GoogleCalendarPopover;
+    returnGoogleCalendarPopover;
 });

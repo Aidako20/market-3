@@ -1,349 +1,349 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
+importlogging
 
-from flectra import api, models, fields
-from flectra.addons.phone_validation.tools import phone_validation
-from flectra.tools import html2plaintext, plaintext2html
+fromflectraimportapi,models,fields
+fromflectra.addons.phone_validation.toolsimportphone_validation
+fromflectra.toolsimporthtml2plaintext,plaintext2html
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class MailThread(models.AbstractModel):
-    _inherit = 'mail.thread'
+classMailThread(models.AbstractModel):
+    _inherit='mail.thread'
 
-    message_has_sms_error = fields.Boolean(
-        'SMS Delivery error', compute='_compute_message_has_sms_error', search='_search_message_has_sms_error',
-        help="If checked, some messages have a delivery error.")
+    message_has_sms_error=fields.Boolean(
+        'SMSDeliveryerror',compute='_compute_message_has_sms_error',search='_search_message_has_sms_error',
+        help="Ifchecked,somemessageshaveadeliveryerror.")
 
-    def _compute_message_has_sms_error(self):
-        res = {}
-        if self.ids:
-            self._cr.execute(""" SELECT msg.res_id, COUNT(msg.res_id) FROM mail_message msg
-                                 RIGHT JOIN mail_message_res_partner_needaction_rel rel
-                                 ON rel.mail_message_id = msg.id AND rel.notification_type = 'sms' AND rel.notification_status in ('exception')
-                                 WHERE msg.author_id = %s AND msg.model = %s AND msg.res_id in %s AND msg.message_type != 'user_notification'
-                                 GROUP BY msg.res_id""",
-                             (self.env.user.partner_id.id, self._name, tuple(self.ids),))
+    def_compute_message_has_sms_error(self):
+        res={}
+        ifself.ids:
+            self._cr.execute("""SELECTmsg.res_id,COUNT(msg.res_id)FROMmail_messagemsg
+                                 RIGHTJOINmail_message_res_partner_needaction_relrel
+                                 ONrel.mail_message_id=msg.idANDrel.notification_type='sms'ANDrel.notification_statusin('exception')
+                                 WHEREmsg.author_id=%sANDmsg.model=%sANDmsg.res_idin%sANDmsg.message_type!='user_notification'
+                                 GROUPBYmsg.res_id""",
+                             (self.env.user.partner_id.id,self._name,tuple(self.ids),))
             res.update(self._cr.fetchall())
 
-        for record in self:
-            record.message_has_sms_error = bool(res.get(record._origin.id, 0))
+        forrecordinself:
+            record.message_has_sms_error=bool(res.get(record._origin.id,0))
 
     @api.model
-    def _search_message_has_sms_error(self, operator, operand):
-        return ['&', ('message_ids.has_sms_error', operator, operand), ('message_ids.author_id', '=', self.env.user.partner_id.id)]
+    def_search_message_has_sms_error(self,operator,operand):
+        return['&',('message_ids.has_sms_error',operator,operand),('message_ids.author_id','=',self.env.user.partner_id.id)]
 
-    def _sms_get_partner_fields(self):
-        """ This method returns the fields to use to find the contact to link
-        whensending an SMS. Having partner is not necessary, having only phone
-        number fields is possible. However it gives more flexibility to
-        notifications management when having partners. """
-        fields = []
-        if hasattr(self, 'partner_id'):
+    def_sms_get_partner_fields(self):
+        """Thismethodreturnsthefieldstousetofindthecontacttolink
+        whensendinganSMS.Havingpartnerisnotnecessary,havingonlyphone
+        numberfieldsispossible.Howeveritgivesmoreflexibilityto
+        notificationsmanagementwhenhavingpartners."""
+        fields=[]
+        ifhasattr(self,'partner_id'):
             fields.append('partner_id')
-        if hasattr(self, 'partner_ids'):
+        ifhasattr(self,'partner_ids'):
             fields.append('partner_ids')
-        return fields
+        returnfields
 
-    def _sms_get_default_partners(self):
-        """ This method will likely need to be overridden by inherited models.
-               :returns partners: recordset of res.partner
+    def_sms_get_default_partners(self):
+        """Thismethodwilllikelyneedtobeoverriddenbyinheritedmodels.
+               :returnspartners:recordsetofres.partner
         """
-        partners = self.env['res.partner']
-        for fname in self._sms_get_partner_fields():
-            partners = partners.union(*self.mapped(fname))  # ensure ordering
-        return partners
+        partners=self.env['res.partner']
+        forfnameinself._sms_get_partner_fields():
+            partners=partners.union(*self.mapped(fname)) #ensureordering
+        returnpartners
 
-    def _sms_get_number_fields(self):
-        """ This method returns the fields to use to find the number to use to
-        send an SMS on a record. """
-        if 'mobile' in self:
-            return ['mobile']
-        return []
+    def_sms_get_number_fields(self):
+        """Thismethodreturnsthefieldstousetofindthenumbertouseto
+        sendanSMSonarecord."""
+        if'mobile'inself:
+            return['mobile']
+        return[]
 
-    def _sms_get_recipients_info(self, force_field=False, partner_fallback=True):
-        """" Get SMS recipient information on current record set. This method
-        checks for numbers and sanitation in order to centralize computation.
+    def_sms_get_recipients_info(self,force_field=False,partner_fallback=True):
+        """"GetSMSrecipientinformationoncurrentrecordset.Thismethod
+        checksfornumbersandsanitationinordertocentralizecomputation.
 
-        Example of use cases
+        Exampleofusecases
 
-          * click on a field -> number is actually forced from field, find customer
-            linked to record, force its number to field or fallback on customer fields;
-          * contact -> find numbers from all possible phone fields on record, find
-            customer, force its number to found field number or fallback on customer fields;
+          *clickonafield->numberisactuallyforcedfromfield,findcustomer
+            linkedtorecord,forceitsnumbertofieldorfallbackoncustomerfields;
+          *contact->findnumbersfromallpossiblephonefieldsonrecord,find
+            customer,forceitsnumbertofoundfieldnumberorfallbackoncustomerfields;
 
-        :param force_field: either give a specific field to find phone number, either
-            generic heuristic is used to find one based on ``_sms_get_number_fields``;
-        :param partner_fallback: if no value found in the record, check its customer
-            values based on ``_sms_get_default_partners``;
+        :paramforce_field:eithergiveaspecificfieldtofindphonenumber,either
+            genericheuristicisusedtofindonebasedon``_sms_get_number_fields``;
+        :parampartner_fallback:ifnovaluefoundintherecord,checkitscustomer
+            valuesbasedon``_sms_get_default_partners``;
 
-        :return dict: record.id: {
-            'partner': a res.partner recordset that is the customer (void or singleton)
-                linked to the recipient. See ``_sms_get_default_partners``;
-            'sanitized': sanitized number to use (coming from record's field or partner's
-                phone fields). Set to False is number impossible to parse and format;
-            'number': original number before sanitation;
-            'partner_store': whether the number comes from the customer phone fields. If
-                False it means number comes from the record itself, even if linked to a
+        :returndict:record.id:{
+            'partner':ares.partnerrecordsetthatisthecustomer(voidorsingleton)
+                linkedtotherecipient.See``_sms_get_default_partners``;
+            'sanitized':sanitizednumbertouse(comingfromrecord'sfieldorpartner's
+                phonefields).SettoFalseisnumberimpossibletoparseandformat;
+            'number':originalnumberbeforesanitation;
+            'partner_store':whetherthenumbercomesfromthecustomerphonefields.If
+                Falseitmeansnumbercomesfromtherecorditself,eveniflinkedtoa
                 customer;
-            'field_store': field in which the number has been found (generally mobile or
-                phone, see ``_sms_get_number_fields``);
-        } for each record in self
+            'field_store':fieldinwhichthenumberhasbeenfound(generallymobileor
+                phone,see``_sms_get_number_fields``);
+        }foreachrecordinself
         """
-        result = dict.fromkeys(self.ids, False)
-        tocheck_fields = [force_field] if force_field else self._sms_get_number_fields()
-        for record in self:
-            all_numbers = [record[fname] for fname in tocheck_fields if fname in record]
-            all_partners = record._sms_get_default_partners()
+        result=dict.fromkeys(self.ids,False)
+        tocheck_fields=[force_field]ifforce_fieldelseself._sms_get_number_fields()
+        forrecordinself:
+            all_numbers=[record[fname]forfnameintocheck_fieldsiffnameinrecord]
+            all_partners=record._sms_get_default_partners()
 
-            valid_number = False
-            for fname in [f for f in tocheck_fields if f in record]:
-                valid_number = phone_validation.phone_sanitize_numbers_w_record([record[fname]], record)[record[fname]]['sanitized']
-                if valid_number:
+            valid_number=False
+            forfnamein[fforfintocheck_fieldsiffinrecord]:
+                valid_number=phone_validation.phone_sanitize_numbers_w_record([record[fname]],record)[record[fname]]['sanitized']
+                ifvalid_number:
                     break
 
-            if valid_number:
-                result[record.id] = {
-                    'partner': all_partners[0] if all_partners else self.env['res.partner'],
-                    'sanitized': valid_number,
-                    'number': record[fname],
-                    'partner_store': False,
-                    'field_store': fname,
+            ifvalid_number:
+                result[record.id]={
+                    'partner':all_partners[0]ifall_partnerselseself.env['res.partner'],
+                    'sanitized':valid_number,
+                    'number':record[fname],
+                    'partner_store':False,
+                    'field_store':fname,
                 }
-            elif all_partners and partner_fallback:
-                partner = self.env['res.partner']
-                for partner in all_partners:
-                    for fname in self.env['res.partner']._sms_get_number_fields():
-                        valid_number = phone_validation.phone_sanitize_numbers_w_record([partner[fname]], record)[partner[fname]]['sanitized']
-                        if valid_number:
+            elifall_partnersandpartner_fallback:
+                partner=self.env['res.partner']
+                forpartnerinall_partners:
+                    forfnameinself.env['res.partner']._sms_get_number_fields():
+                        valid_number=phone_validation.phone_sanitize_numbers_w_record([partner[fname]],record)[partner[fname]]['sanitized']
+                        ifvalid_number:
                             break
 
-                if not valid_number:
-                    fname = 'mobile' if partner.mobile else ('phone' if partner.phone else 'mobile')
+                ifnotvalid_number:
+                    fname='mobile'ifpartner.mobileelse('phone'ifpartner.phoneelse'mobile')
 
-                result[record.id] = {
-                    'partner': partner,
-                    'sanitized': valid_number if valid_number else False,
-                    'number': partner[fname],
-                    'partner_store': True,
-                    'field_store': fname,
+                result[record.id]={
+                    'partner':partner,
+                    'sanitized':valid_numberifvalid_numberelseFalse,
+                    'number':partner[fname],
+                    'partner_store':True,
+                    'field_store':fname,
                 }
             else:
-                # did not find any sanitized number -> take first set value as fallback;
-                # if none, just assign False to the first available number field
-                value, fname = next(
-                    ((value, fname) for value, fname in zip(all_numbers, tocheck_fields) if value),
-                    (False, tocheck_fields[0] if tocheck_fields else False)
+                #didnotfindanysanitizednumber->takefirstsetvalueasfallback;
+                #ifnone,justassignFalsetothefirstavailablenumberfield
+                value,fname=next(
+                    ((value,fname)forvalue,fnameinzip(all_numbers,tocheck_fields)ifvalue),
+                    (False,tocheck_fields[0]iftocheck_fieldselseFalse)
                 )
-                result[record.id] = {
-                    'partner': self.env['res.partner'],
-                    'sanitized': False,
-                    'number': value,
-                    'partner_store': False,
-                    'field_store': fname
+                result[record.id]={
+                    'partner':self.env['res.partner'],
+                    'sanitized':False,
+                    'number':value,
+                    'partner_store':False,
+                    'field_store':fname
                 }
-        return result
+        returnresult
 
-    def _message_sms_schedule_mass(self, body='', template=False, active_domain=None, **composer_values):
-        """ Shortcut method to schedule a mass sms sending on a recordset.
+    def_message_sms_schedule_mass(self,body='',template=False,active_domain=None,**composer_values):
+        """Shortcutmethodtoscheduleamasssmssendingonarecordset.
 
-        :param template: an optional sms.template record;
-        :param active_domain: bypass self.ids and apply composer on active_domain
+        :paramtemplate:anoptionalsms.templaterecord;
+        :paramactive_domain:bypassself.idsandapplycomposeronactive_domain
           instead;
         """
-        composer_context = {
-            'default_res_model': self._name,
-            'default_composition_mode': 'mass',
-            'default_template_id': template.id if template else False,
-            'default_body': body if body and not template else False,
+        composer_context={
+            'default_res_model':self._name,
+            'default_composition_mode':'mass',
+            'default_template_id':template.idiftemplateelseFalse,
+            'default_body':bodyifbodyandnottemplateelseFalse,
         }
-        if active_domain is not None:
-            composer_context['default_use_active_domain'] = True
-            composer_context['default_active_domain'] = repr(active_domain)
+        ifactive_domainisnotNone:
+            composer_context['default_use_active_domain']=True
+            composer_context['default_active_domain']=repr(active_domain)
         else:
-            composer_context['default_res_ids'] = self.ids
+            composer_context['default_res_ids']=self.ids
 
-        create_vals = {
-            'mass_force_send': False,
-            'mass_keep_log': True,
+        create_vals={
+            'mass_force_send':False,
+            'mass_keep_log':True,
         }
-        if composer_values:
+        ifcomposer_values:
             create_vals.update(composer_values)
 
-        composer = self.env['sms.composer'].with_context(**composer_context).create(create_vals)
-        return composer._action_send_sms()
+        composer=self.env['sms.composer'].with_context(**composer_context).create(create_vals)
+        returncomposer._action_send_sms()
 
-    def _message_sms_with_template(self, template=False, template_xmlid=False, template_fallback='', partner_ids=False, **kwargs):
-        """ Shortcut method to perform a _message_sms with an sms.template.
+    def_message_sms_with_template(self,template=False,template_xmlid=False,template_fallback='',partner_ids=False,**kwargs):
+        """Shortcutmethodtoperforma_message_smswithansms.template.
 
-        :param template: a valid sms.template record;
-        :param template_xmlid: XML ID of an sms.template (if no template given);
-        :param template_fallback: plaintext (jinja-enabled) in case template
-          and template xml id are falsy (for example due to deleted data);
+        :paramtemplate:avalidsms.templaterecord;
+        :paramtemplate_xmlid:XMLIDofansms.template(ifnotemplategiven);
+        :paramtemplate_fallback:plaintext(jinja-enabled)incasetemplate
+          andtemplatexmlidarefalsy(forexampleduetodeleteddata);
         """
         self.ensure_one()
-        if not template and template_xmlid:
-            template = self.env.ref(template_xmlid, raise_if_not_found=False)
-        if template:
-            body = template._render_field('body', self.ids, compute_lang=True)[self.id]
+        ifnottemplateandtemplate_xmlid:
+            template=self.env.ref(template_xmlid,raise_if_not_found=False)
+        iftemplate:
+            body=template._render_field('body',self.ids,compute_lang=True)[self.id]
         else:
-            body = self.env['sms.template']._render_template(template_fallback, self._name, self.ids)[self.id]
-        return self._message_sms(body, partner_ids=partner_ids, **kwargs)
+            body=self.env['sms.template']._render_template(template_fallback,self._name,self.ids)[self.id]
+        returnself._message_sms(body,partner_ids=partner_ids,**kwargs)
 
-    def _message_sms(self, body, subtype_id=False, partner_ids=False, number_field=False,
-                     sms_numbers=None, sms_pid_to_number=None, **kwargs):
-        """ Main method to post a message on a record using SMS-based notification
+    def_message_sms(self,body,subtype_id=False,partner_ids=False,number_field=False,
+                     sms_numbers=None,sms_pid_to_number=None,**kwargs):
+        """MainmethodtopostamessageonarecordusingSMS-basednotification
         method.
 
-        :param body: content of SMS;
-        :param subtype_id: mail.message.subtype used in mail.message associated
-          to the sms notification process;
-        :param partner_ids: if set is a record set of partners to notify;
-        :param number_field: if set is a name of field to use on current record
-          to compute a number to notify;
-        :param sms_numbers: see ``_notify_record_by_sms``;
-        :param sms_pid_to_number: see ``_notify_record_by_sms``;
+        :parambody:contentofSMS;
+        :paramsubtype_id:mail.message.subtypeusedinmail.messageassociated
+          tothesmsnotificationprocess;
+        :parampartner_ids:ifsetisarecordsetofpartnerstonotify;
+        :paramnumber_field:ifsetisanameoffieldtouseoncurrentrecord
+          tocomputeanumbertonotify;
+        :paramsms_numbers:see``_notify_record_by_sms``;
+        :paramsms_pid_to_number:see``_notify_record_by_sms``;
         """
         self.ensure_one()
-        sms_pid_to_number = sms_pid_to_number if sms_pid_to_number is not None else {}
+        sms_pid_to_number=sms_pid_to_numberifsms_pid_to_numberisnotNoneelse{}
 
-        if number_field or (partner_ids is False and sms_numbers is None):
-            info = self._sms_get_recipients_info(force_field=number_field)[self.id]
-            info_partner_ids = info['partner'].ids if info['partner'] else False
-            info_number = info['sanitized'] if info['sanitized'] else info['number']
-            if info_partner_ids and info_number:
-                sms_pid_to_number[info_partner_ids[0]] = info_number
-            if info_partner_ids:
-                partner_ids = info_partner_ids + (partner_ids or [])
-            if not info_partner_ids:
-                if info_number:
-                    sms_numbers = [info_number] + (sms_numbers or [])
-                    # will send a falsy notification allowing to fix it through SMS wizards
-                elif not sms_numbers:
-                    sms_numbers = [False]
+        ifnumber_fieldor(partner_idsisFalseandsms_numbersisNone):
+            info=self._sms_get_recipients_info(force_field=number_field)[self.id]
+            info_partner_ids=info['partner'].idsifinfo['partner']elseFalse
+            info_number=info['sanitized']ifinfo['sanitized']elseinfo['number']
+            ifinfo_partner_idsandinfo_number:
+                sms_pid_to_number[info_partner_ids[0]]=info_number
+            ifinfo_partner_ids:
+                partner_ids=info_partner_ids+(partner_idsor[])
+            ifnotinfo_partner_ids:
+                ifinfo_number:
+                    sms_numbers=[info_number]+(sms_numbersor[])
+                    #willsendafalsynotificationallowingtofixitthroughSMSwizards
+                elifnotsms_numbers:
+                    sms_numbers=[False]
 
-        if subtype_id is False:
-            subtype_id = self.env['ir.model.data'].xmlid_to_res_id('mail.mt_note')
+        ifsubtype_idisFalse:
+            subtype_id=self.env['ir.model.data'].xmlid_to_res_id('mail.mt_note')
 
-        return self.message_post(
-            body=plaintext2html(html2plaintext(body)), partner_ids=partner_ids or [],  # TDE FIXME: temp fix otherwise crash mail_thread.py
-            message_type='sms', subtype_id=subtype_id,
-            sms_numbers=sms_numbers, sms_pid_to_number=sms_pid_to_number,
+        returnself.message_post(
+            body=plaintext2html(html2plaintext(body)),partner_ids=partner_idsor[], #TDEFIXME:tempfixotherwisecrashmail_thread.py
+            message_type='sms',subtype_id=subtype_id,
+            sms_numbers=sms_numbers,sms_pid_to_number=sms_pid_to_number,
             **kwargs
         )
 
-    def _notify_thread(self, message, msg_vals=False, **kwargs):
-        recipients_data = super(MailThread, self)._notify_thread(message, msg_vals=msg_vals, **kwargs)
-        self._notify_record_by_sms(message, recipients_data, msg_vals=msg_vals, **kwargs)
-        return recipients_data
+    def_notify_thread(self,message,msg_vals=False,**kwargs):
+        recipients_data=super(MailThread,self)._notify_thread(message,msg_vals=msg_vals,**kwargs)
+        self._notify_record_by_sms(message,recipients_data,msg_vals=msg_vals,**kwargs)
+        returnrecipients_data
 
-    def _notify_record_by_sms(self, message, recipients_data, msg_vals=False,
-                              sms_numbers=None, sms_pid_to_number=None,
-                              check_existing=False, put_in_queue=False, **kwargs):
-        """ Notification method: by SMS.
+    def_notify_record_by_sms(self,message,recipients_data,msg_vals=False,
+                              sms_numbers=None,sms_pid_to_number=None,
+                              check_existing=False,put_in_queue=False,**kwargs):
+        """Notificationmethod:bySMS.
 
-        :param message: mail.message record to notify;
-        :param recipients_data: see ``_notify_thread``;
-        :param msg_vals: see ``_notify_thread``;
+        :parammessage:mail.messagerecordtonotify;
+        :paramrecipients_data:see``_notify_thread``;
+        :parammsg_vals:see``_notify_thread``;
 
-        :param sms_numbers: additional numbers to notify in addition to partners
-          and classic recipients;
-        :param pid_to_number: force a number to notify for a given partner ID
-              instead of taking its mobile / phone number;
-        :param check_existing: check for existing notifications to update based on
-          mailed recipient, otherwise create new notifications;
-        :param put_in_queue: use cron to send queued SMS instead of sending them
+        :paramsms_numbers:additionalnumberstonotifyinadditiontopartners
+          andclassicrecipients;
+        :parampid_to_number:forceanumbertonotifyforagivenpartnerID
+              insteadoftakingitsmobile/phonenumber;
+        :paramcheck_existing:checkforexistingnotificationstoupdatebasedon
+          mailedrecipient,otherwisecreatenewnotifications;
+        :paramput_in_queue:usecrontosendqueuedSMSinsteadofsendingthem
           directly;
         """
-        sms_pid_to_number = sms_pid_to_number if sms_pid_to_number is not None else {}
-        sms_numbers = sms_numbers if sms_numbers is not None else []
-        sms_create_vals = []
-        sms_all = self.env['sms.sms'].sudo()
+        sms_pid_to_number=sms_pid_to_numberifsms_pid_to_numberisnotNoneelse{}
+        sms_numbers=sms_numbersifsms_numbersisnotNoneelse[]
+        sms_create_vals=[]
+        sms_all=self.env['sms.sms'].sudo()
 
-        # pre-compute SMS data
-        body = msg_vals['body'] if msg_vals and msg_vals.get('body') else message.body
-        sms_base_vals = {
-            'body': html2plaintext(body),
-            'mail_message_id': message.id,
-            'state': 'outgoing',
+        #pre-computeSMSdata
+        body=msg_vals['body']ifmsg_valsandmsg_vals.get('body')elsemessage.body
+        sms_base_vals={
+            'body':html2plaintext(body),
+            'mail_message_id':message.id,
+            'state':'outgoing',
         }
 
-        # notify from computed recipients_data (followers, specific recipients)
-        partners_data = [r for r in recipients_data['partners'] if r['notif'] == 'sms']
-        partner_ids = [r['id'] for r in partners_data]
-        if partner_ids:
-            for partner in self.env['res.partner'].sudo().browse(partner_ids):
-                number = sms_pid_to_number.get(partner.id) or partner.mobile or partner.phone
-                sanitize_res = phone_validation.phone_sanitize_numbers_w_record([number], partner)[number]
-                number = sanitize_res['sanitized'] or number
+        #notifyfromcomputedrecipients_data(followers,specificrecipients)
+        partners_data=[rforrinrecipients_data['partners']ifr['notif']=='sms']
+        partner_ids=[r['id']forrinpartners_data]
+        ifpartner_ids:
+            forpartnerinself.env['res.partner'].sudo().browse(partner_ids):
+                number=sms_pid_to_number.get(partner.id)orpartner.mobileorpartner.phone
+                sanitize_res=phone_validation.phone_sanitize_numbers_w_record([number],partner)[number]
+                number=sanitize_res['sanitized']ornumber
                 sms_create_vals.append(dict(
                     sms_base_vals,
                     partner_id=partner.id,
                     number=number
                 ))
 
-        # notify from additional numbers
-        if sms_numbers:
-            sanitized = phone_validation.phone_sanitize_numbers_w_record(sms_numbers, self)
-            tocreate_numbers = [
-                value['sanitized'] or original
-                for original, value in sanitized.items()
+        #notifyfromadditionalnumbers
+        ifsms_numbers:
+            sanitized=phone_validation.phone_sanitize_numbers_w_record(sms_numbers,self)
+            tocreate_numbers=[
+                value['sanitized']ororiginal
+                fororiginal,valueinsanitized.items()
             ]
-            sms_create_vals += [dict(
+            sms_create_vals+=[dict(
                 sms_base_vals,
                 partner_id=False,
                 number=n,
-                state='outgoing' if n else 'error',
-                error_code='' if n else 'sms_number_missing',
-            ) for n in tocreate_numbers]
+                state='outgoing'ifnelse'error',
+                error_code=''ifnelse'sms_number_missing',
+            )fornintocreate_numbers]
 
-        # create sms and notification
-        existing_pids, existing_numbers = [], []
-        if sms_create_vals:
-            sms_all |= self.env['sms.sms'].sudo().create(sms_create_vals)
+        #createsmsandnotification
+        existing_pids,existing_numbers=[],[]
+        ifsms_create_vals:
+            sms_all|=self.env['sms.sms'].sudo().create(sms_create_vals)
 
-            if check_existing:
-                existing = self.env['mail.notification'].sudo().search([
-                    '|', ('res_partner_id', 'in', partner_ids),
-                    '&', ('res_partner_id', '=', False), ('sms_number', 'in', sms_numbers),
-                    ('notification_type', '=', 'sms'),
-                    ('mail_message_id', '=', message.id)
+            ifcheck_existing:
+                existing=self.env['mail.notification'].sudo().search([
+                    '|',('res_partner_id','in',partner_ids),
+                    '&',('res_partner_id','=',False),('sms_number','in',sms_numbers),
+                    ('notification_type','=','sms'),
+                    ('mail_message_id','=',message.id)
                 ])
-                for n in existing:
-                    if n.res_partner_id.id in partner_ids and n.mail_message_id == message:
+                forninexisting:
+                    ifn.res_partner_id.idinpartner_idsandn.mail_message_id==message:
                         existing_pids.append(n.res_partner_id.id)
-                    if not n.res_partner_id and n.sms_number in sms_numbers and n.mail_message_id == message:
+                    ifnotn.res_partner_idandn.sms_numberinsms_numbersandn.mail_message_id==message:
                         existing_numbers.append(n.sms_number)
 
-            notif_create_values = [{
-                'mail_message_id': message.id,
-                'res_partner_id': sms.partner_id.id,
-                'sms_number': sms.number,
-                'notification_type': 'sms',
-                'sms_id': sms.id,
-                'is_read': True,  # discard Inbox notification
-                'notification_status': 'ready' if sms.state == 'outgoing' else 'exception',
-                'failure_type': '' if sms.state == 'outgoing' else sms.error_code,
-            } for sms in sms_all if (sms.partner_id and sms.partner_id.id not in existing_pids) or (not sms.partner_id and sms.number not in existing_numbers)]
-            if notif_create_values:
+            notif_create_values=[{
+                'mail_message_id':message.id,
+                'res_partner_id':sms.partner_id.id,
+                'sms_number':sms.number,
+                'notification_type':'sms',
+                'sms_id':sms.id,
+                'is_read':True, #discardInboxnotification
+                'notification_status':'ready'ifsms.state=='outgoing'else'exception',
+                'failure_type':''ifsms.state=='outgoing'elsesms.error_code,
+            }forsmsinsms_allif(sms.partner_idandsms.partner_id.idnotinexisting_pids)or(notsms.partner_idandsms.numbernotinexisting_numbers)]
+            ifnotif_create_values:
                 self.env['mail.notification'].sudo().create(notif_create_values)
 
-            if existing_pids or existing_numbers:
-                for sms in sms_all:
-                    notif = next((n for n in existing if
-                                 (n.res_partner_id.id in existing_pids and n.res_partner_id.id == sms.partner_id.id) or
-                                 (not n.res_partner_id and n.sms_number in existing_numbers and n.sms_number == sms.number)), False)
-                    if notif:
+            ifexisting_pidsorexisting_numbers:
+                forsmsinsms_all:
+                    notif=next((nforninexistingif
+                                 (n.res_partner_id.idinexisting_pidsandn.res_partner_id.id==sms.partner_id.id)or
+                                 (notn.res_partner_idandn.sms_numberinexisting_numbersandn.sms_number==sms.number)),False)
+                    ifnotif:
                         notif.write({
-                            'notification_type': 'sms',
-                            'notification_status': 'ready',
-                            'sms_id': sms.id,
-                            'sms_number': sms.number,
+                            'notification_type':'sms',
+                            'notification_status':'ready',
+                            'sms_id':sms.id,
+                            'sms_number':sms.number,
                         })
 
-        if sms_all and not put_in_queue:
-            sms_all.filtered(lambda sms: sms.state == 'outgoing').send(auto_commit=False, raise_exception=False)
+        ifsms_allandnotput_in_queue:
+            sms_all.filtered(lambdasms:sms.state=='outgoing').send(auto_commit=False,raise_exception=False)
 
-        return True
+        returnTrue

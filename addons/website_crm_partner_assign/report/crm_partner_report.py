@@ -1,58 +1,58 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class CrmPartnerReportAssign(models.Model):
-    """ CRM Lead Report """
-    _name = "crm.partner.report.assign"
-    _auto = False
-    _description = "CRM Partnership Analysis"
+classCrmPartnerReportAssign(models.Model):
+    """CRMLeadReport"""
+    _name="crm.partner.report.assign"
+    _auto=False
+    _description="CRMPartnershipAnalysis"
 
-    partner_id = fields.Many2one('res.partner', 'Partner', required=False, readonly=True)
-    grade_id = fields.Many2one('res.partner.grade', 'Grade', readonly=True)
-    activation = fields.Many2one('res.partner.activation', 'Activation', index=True)
-    user_id = fields.Many2one('res.users', 'User', readonly=True)
-    date_review = fields.Date('Latest Partner Review')
-    date_partnership = fields.Date('Partnership Date')
-    country_id = fields.Many2one('res.country', 'Country', readonly=True)
-    team_id = fields.Many2one('crm.team', 'Sales Team', readonly=True)
-    nbr_opportunities = fields.Integer('# of Opportunity', readonly=True)
-    turnover = fields.Float('Turnover', readonly=True)
-    date = fields.Date('Invoice Account Date', readonly=True)
+    partner_id=fields.Many2one('res.partner','Partner',required=False,readonly=True)
+    grade_id=fields.Many2one('res.partner.grade','Grade',readonly=True)
+    activation=fields.Many2one('res.partner.activation','Activation',index=True)
+    user_id=fields.Many2one('res.users','User',readonly=True)
+    date_review=fields.Date('LatestPartnerReview')
+    date_partnership=fields.Date('PartnershipDate')
+    country_id=fields.Many2one('res.country','Country',readonly=True)
+    team_id=fields.Many2one('crm.team','SalesTeam',readonly=True)
+    nbr_opportunities=fields.Integer('#ofOpportunity',readonly=True)
+    turnover=fields.Float('Turnover',readonly=True)
+    date=fields.Date('InvoiceAccountDate',readonly=True)
 
-    _depends = {
-        'account.invoice.report': ['invoice_date', 'partner_id', 'price_subtotal', 'state', 'move_type'],
-        'crm.lead': ['partner_assigned_id'],
-        'res.partner': ['activation', 'country_id', 'date_partnership', 'date_review',
-                        'grade_id', 'parent_id', 'team_id', 'user_id'],
+    _depends={
+        'account.invoice.report':['invoice_date','partner_id','price_subtotal','state','move_type'],
+        'crm.lead':['partner_assigned_id'],
+        'res.partner':['activation','country_id','date_partnership','date_review',
+                        'grade_id','parent_id','team_id','user_id'],
     }
 
     @property
-    def _table_query(self):
+    def_table_query(self):
         """
-            CRM Lead Report
-            @param cr: the current row, from the database cursor
+            CRMLeadReport
+            @paramcr:thecurrentrow,fromthedatabasecursor
         """
-        return """
+        return"""
                 SELECT
-                    COALESCE(2 * i.id, 2 * p.id + 1) AS id,
-                    p.id as partner_id,
-                    (SELECT country_id FROM res_partner a WHERE a.parent_id=p.id AND country_id is not null limit 1) as country_id,
+                    COALESCE(2*i.id,2*p.id+1)ASid,
+                    p.idaspartner_id,
+                    (SELECTcountry_idFROMres_partneraWHEREa.parent_id=p.idANDcountry_idisnotnulllimit1)ascountry_id,
                     p.grade_id,
                     p.activation,
                     p.date_review,
                     p.date_partnership,
                     p.user_id,
                     p.team_id,
-                    (SELECT count(id) FROM crm_lead WHERE partner_assigned_id=p.id) AS nbr_opportunities,
-                    i.price_subtotal as turnover,
-                    i.invoice_date as date
+                    (SELECTcount(id)FROMcrm_leadWHEREpartner_assigned_id=p.id)ASnbr_opportunities,
+                    i.price_subtotalasturnover,
+                    i.invoice_dateasdate
                 FROM
-                    res_partner p
-                    left join ({account_invoice_report}) i
-                        on (i.partner_id=p.id and i.move_type in ('out_invoice','out_refund') and i.state='posted')
+                    res_partnerp
+                    leftjoin({account_invoice_report})i
+                        on(i.partner_id=p.idandi.move_typein('out_invoice','out_refund')andi.state='posted')
             """.format(
                 account_invoice_report=self.env['account.invoice.report']._table_query
             )

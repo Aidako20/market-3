@@ -1,21 +1,21 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import re
+importre
 
-from flectra.addons.website_event_track.controllers.event_track import EventTrackController
-from flectra.http import request
+fromflectra.addons.website_event_track.controllers.event_trackimportEventTrackController
+fromflectra.httpimportrequest
 
 
-class WebsiteEventSessionLiveController(EventTrackController):
+classWebsiteEventSessionLiveController(EventTrackController):
 
-    def _event_track_page_get_values(self, event, track, **options):
-        if 'widescreen' not in options:
-            options['widescreen'] = track.youtube_video_url and (track.is_youtube_replay or track.is_track_soon or track.is_track_live or track.is_track_done)
-        values = super(WebsiteEventSessionLiveController, self)._event_track_page_get_values(event, track, **options)
-        # Youtube disables the chat embed on all mobile devices
-        # This regex is a naive attempt at matching their behavior (should work for most cases)
-        values['is_mobile_chat_disabled'] = bool(re.match(
+    def_event_track_page_get_values(self,event,track,**options):
+        if'widescreen'notinoptions:
+            options['widescreen']=track.youtube_video_urland(track.is_youtube_replayortrack.is_track_soonortrack.is_track_liveortrack.is_track_done)
+        values=super(WebsiteEventSessionLiveController,self)._event_track_page_get_values(event,track,**options)
+        #Youtubedisablesthechatembedonallmobiledevices
+        #Thisregexisanaiveattemptatmatchingtheirbehavior(shouldworkformostcases)
+        values['is_mobile_chat_disabled']=bool(re.match(
             r'^.*(Android|iPad|iPhone).*',
-            request.httprequest.headers.get('User-Agent', request.httprequest.headers.get('user-agent', ''))))
-        return values
+            request.httprequest.headers.get('User-Agent',request.httprequest.headers.get('user-agent',''))))
+        returnvalues

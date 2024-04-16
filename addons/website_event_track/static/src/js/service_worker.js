@@ -1,130 +1,130 @@
 importScripts("/website_event_track/static/lib/idb-keyval/idb-keyval.js");
 
-const PREFIX = "flectra-event";
-const SYNCABLE_ROUTES = ["/event/track/toggle_reminder"];
-const CACHABLE_ROUTES = ["/web/webclient/version_info"];
-const MAX_CACHE_SIZE = 512 * 1024 * 1024; // 500 MB
-const MAX_CACHE_QUOTA = 0.5;
-const CDN_URL = __FLECTRA_CDN_URL__; // {string|undefined} the cdn_url configured for the website if activated
+constPREFIX="flectra-event";
+constSYNCABLE_ROUTES=["/event/track/toggle_reminder"];
+constCACHABLE_ROUTES=["/web/webclient/version_info"];
+constMAX_CACHE_SIZE=512*1024*1024;//500MB
+constMAX_CACHE_QUOTA=0.5;
+constCDN_URL=__FLECTRA_CDN_URL__;//{string|undefined}thecdn_urlconfiguredforthewebsiteifactivated
 
-const { Store, set, get, del } = idbKeyval;
-const pendingRequestsQueueName = `${PREFIX}-pending-requests`;
-const cacheName = `${PREFIX}-cache`;
-const syncStore = new Store(`${PREFIX}-sync-db`, `${PREFIX}-sync-store`);
-const cacheStore = new Store(`${PREFIX}-cache-db`, `${PREFIX}-cache-store`);
-const offlineRoute = `${self.registration.scope}/offline`;
-const scopeURL = new URL(self.registration.scope);
-const cdnURL = CDN_URL ? (CDN_URL.startsWith("http") ? new URL(CDN_URL) : new URL(`http:${CDN_URL}`)) : undefined;
-
-/**
- *
- * @param {string} url
- * @returns {string}
- */
-const urlPathname = (url) => new URL(url).pathname;
+const{Store,set,get,del}=idbKeyval;
+constpendingRequestsQueueName=`${PREFIX}-pending-requests`;
+constcacheName=`${PREFIX}-cache`;
+constsyncStore=newStore(`${PREFIX}-sync-db`,`${PREFIX}-sync-store`);
+constcacheStore=newStore(`${PREFIX}-cache-db`,`${PREFIX}-cache-store`);
+constofflineRoute=`${self.registration.scope}/offline`;
+constscopeURL=newURL(self.registration.scope);
+constcdnURL=CDN_URL?(CDN_URL.startsWith("http")?newURL(CDN_URL):newURL(`http:${CDN_URL}`)):undefined;
 
 /**
  *
- * @param {Array} whitelist
- * @returns {Function}
+ *@param{string}url
+ *@returns{string}
  */
-const canHandleRoutes = (whitelist) => (url) => whitelist.includes(urlPathname(url));
+consturlPathname=(url)=>newURL(url).pathname;
 
 /**
  *
- * @param {Request} request
- * @returns {boolean}
+ *@param{Array}whitelist
+ *@returns{Function}
  */
-const isGET = (request) => request.method === "GET";
+constcanHandleRoutes=(whitelist)=>(url)=>whitelist.includes(urlPathname(url));
 
 /**
  *
- * @returns {Function}
+ *@param{Request}request
+ *@returns{boolean}
  */
-const isSyncableURL = canHandleRoutes(SYNCABLE_ROUTES);
+constisGET=(request)=>request.method==="GET";
 
 /**
  *
- * @returns {Function}
+ *@returns{Function}
  */
-const isCachableURL = canHandleRoutes(CACHABLE_ROUTES);
+constisSyncableURL=canHandleRoutes(SYNCABLE_ROUTES);
 
 /**
  *
- * @returns {boolean} true if navigator has a quota we can read and we reached it
+ *@returns{Function}
  */
-const isCacheFull = async () => {
-    if (!("storage" in navigator && "estimate" in navigator.storage)) {
-        return false;
+constisCachableURL=canHandleRoutes(CACHABLE_ROUTES);
+
+/**
+ *
+ *@returns{boolean}trueifnavigatorhasaquotawecanreadandwereachedit
+ */
+constisCacheFull=async()=>{
+    if(!("storage"innavigator&&"estimate"innavigator.storage)){
+        returnfalse;
     }
-    const { usage, quota } = await navigator.storage.estimate();
-    return usage / quota > MAX_CACHE_QUOTA || usage > MAX_CACHE_SIZE;
+    const{usage,quota}=awaitnavigator.storage.estimate();
+    returnusage/quota>MAX_CACHE_QUOTA||usage>MAX_CACHE_SIZE;
 };
 
 /**
  *
- * @return {Promise}
+ *@return{Promise}
  */
-const fetchToCacheOfflinePage = () => caches.open(cacheName).then((cache) => cache.add(offlineRoute));
+constfetchToCacheOfflinePage=()=>caches.open(cacheName).then((cache)=>cache.add(offlineRoute));
 
 /**
  *
- * @param {Request} req
- * @returns {Promise<Object>}
+ *@param{Request}req
+ *@returns{Promise<Object>}
  */
-const serializeRequest = async (req) => ({
-    url: req.url,
-    method: req.method,
-    headers: Object.fromEntries(req.headers.entries()),
-    body: await req.text(),
-    mode: req.mode,
-    credentials: req.credentials,
-    cache: req.cache,
-    redirect: req.redirect,
-    referrer: req.referrer,
-    integrity: req.integrity,
+constserializeRequest=async(req)=>({
+    url:req.url,
+    method:req.method,
+    headers:Object.fromEntries(req.headers.entries()),
+    body:awaitreq.text(),
+    mode:req.mode,
+    credentials:req.credentials,
+    cache:req.cache,
+    redirect:req.redirect,
+    referrer:req.referrer,
+    integrity:req.integrity,
 });
 
 /**
  *
- * @param {Object} requestData
- * @returns {Request}
+ *@param{Object}requestData
+ *@returns{Request}
  */
-const deserializeRequest = (requestData) => {
-    const { url } = requestData;
-    delete requestData.url;
-    return new Request(url, requestData);
+constdeserializeRequest=(requestData)=>{
+    const{url}=requestData;
+    deleterequestData.url;
+    returnnewRequest(url,requestData);
 };
 
 /**
  *
- * @param {Response} res
- * @returns {Promise<Object>}
+ *@param{Response}res
+ *@returns{Promise<Object>}
  */
-const serializeResponse = async (res) => ({
-    body: await res.text(),
-    status: res.status,
-    statusText: res.statusText,
-    headers: Object.fromEntries(res.headers.entries()),
+constserializeResponse=async(res)=>({
+    body:awaitres.text(),
+    status:res.status,
+    statusText:res.statusText,
+    headers:Object.fromEntries(res.headers.entries()),
 });
 
 /**
  *
- * @param {Object} responseData
- * @returns {Response}
+ *@param{Object}responseData
+ *@returns{Response}
  */
-const deserializeResponse = (responseData) => {
-    const { body } = responseData;
-    delete responseData.body;
-    return new Response(body, responseData);
+constdeserializeResponse=(responseData)=>{
+    const{body}=responseData;
+    deleteresponseData.body;
+    returnnewResponse(body,responseData);
 };
 
 /**
  *
- * @param {Object} serializedRequest
- * @returns {string}
+ *@param{Object}serializedRequest
+ *@returns{string}
  */
-const buildCacheKey = ({ url, body: { method, params } }) =>
+constbuildCacheKey=({url,body:{method,params}})=>
     JSON.stringify({
         url,
         method,
@@ -133,231 +133,231 @@ const buildCacheKey = ({ url, body: { method, params } }) =>
 
 /**
  *
- * @returns {int}
+ *@returns{int}
  */
-const uniqueRequestId = () => Math.floor(Math.random() * 1000 * 1000 * 1000);
+constuniqueRequestId=()=>Math.floor(Math.random()*1000*1000*1000);
 
 /**
  *
- * @returns {Response}
+ *@returns{Response}
  */
-const buildEmptyResponse = () => new Response(JSON.stringify({ jsonrpc: "2.0", id: uniqueRequestId(), result: {} }));
+constbuildEmptyResponse=()=>newResponse(JSON.stringify({jsonrpc:"2.0",id:uniqueRequestId(),result:{}}));
 
 /**
  *
- * @param {Request} request
- * @param {Response} response
- * @returns {Promise}
+ *@param{Request}request
+ *@param{Response}response
+ *@returns{Promise}
  */
-const cacheRequest = async (request, response) => {
-    // only attempts to cache local or cdn delivered urls
-    const url = new URL(request.url);
-    if (url.hostname !== scopeURL.hostname && (!cdnURL || url.hostname !== cdnURL.hostname)) {
-        console.error(`ignoring cache for ${request.url} => ${url.hostname}, local: ${scopeURL.hostname}, cdn: ${cdnURL ? cdnURL.hostname : cdnURL}`);
+constcacheRequest=async(request,response)=>{
+    //onlyattemptstocachelocalorcdndeliveredurls
+    consturl=newURL(request.url);
+    if(url.hostname!==scopeURL.hostname&&(!cdnURL||url.hostname!==cdnURL.hostname)){
+        console.error(`ignoringcachefor${request.url}=>${url.hostname},local:${scopeURL.hostname},cdn:${cdnURL?cdnURL.hostname:cdnURL}`);
         return;
     }
 
-    // don't even attempt to cache:
-    //  - error pages (why cache that?)
-    //  - non-"basic" response types, which include tracker 1-time opaque requests
-    //    that are consuming cache space for no reason (namely due to padding MBs accounted for
-    //    each opaque request)
-    if (!response || !response.ok || response.type !== "basic") {
-        console.error(`ignoring cache for ${request.url} => ${response.type}, mode: ${request.mode}, cache: ${request.cache}`);
+    //don'tevenattempttocache:
+    // -errorpages(whycachethat?)
+    // -non-"basic"responsetypes,whichincludetracker1-timeopaquerequests
+    //   thatareconsumingcachespacefornoreason(namelyduetopaddingMBsaccountedfor
+    //   eachopaquerequest)
+    if(!response||!response.ok||response.type!=="basic"){
+        console.error(`ignoringcachefor${request.url}=>${response.type},mode:${request.mode},cache:${request.cache}`);
         return;
     }
 
-    // never blow up cache quota, as it will break things, and the space
-    // is shared with cookies and localStorage
-    if (await isCacheFull()) {
-        // TODO: clear some part of the cache to free older/less-relevant content
-        console.log("Cache full, not caching!");
+    //neverblowupcachequota,asitwillbreakthings,andthespace
+    //issharedwithcookiesandlocalStorage
+    if(awaitisCacheFull()){
+        //TODO:clearsomepartofthecachetofreeolder/less-relevantcontent
+        console.log("Cachefull,notcaching!");
         return;
     }
 
-    console.log(`grant cache for ${request.url} => ${response.type}, mode: ${request.mode}, cache: ${request.cache},
-                    isGet: ${isGET(request)}, isCachable: ${isCachableURL(request.url)}`);
-    if (isGET(request)) {
-        const cache = await caches.open(cacheName);
-        await cache.put(request, response.clone());
-    } else if (isCachableURL(request.url)) {
-        const serializedRequest = await serializeRequest(request);
-        const serializedResponse = await serializeResponse(response.clone());
-        await set(buildCacheKey(serializedRequest), serializedResponse, cacheStore);
+    console.log(`grantcachefor${request.url}=>${response.type},mode:${request.mode},cache:${request.cache},
+                    isGet:${isGET(request)},isCachable:${isCachableURL(request.url)}`);
+    if(isGET(request)){
+        constcache=awaitcaches.open(cacheName);
+        awaitcache.put(request,response.clone());
+    }elseif(isCachableURL(request.url)){
+        constserializedRequest=awaitserializeRequest(request);
+        constserializedResponse=awaitserializeResponse(response.clone());
+        awaitset(buildCacheKey(serializedRequest),serializedResponse,cacheStore);
     }
 };
 
 /**
  *
- * @param {Request} request
- * @returns {boolean}
+ *@param{Request}request
+ *@returns{boolean}
  */
-const isCachableRequest = (request) => isGET(request) || isCachableURL(request.url);
+constisCachableRequest=(request)=>isGET(request)||isCachableURL(request.url);
 
 /**
  *
- * @param request
- * @param requestError
- * @return {boolean}
+ *@paramrequest
+ *@paramrequestError
+ *@return{boolean}
  */
-const isOfflineDocumentRequest = (request, requestError) =>
-    request && requestError && requestError.message === 'Failed to fetch' && (
-        (isGET(request) && request.mode === 'navigate' && request.destination === 'document') ||
-        // request.mode = navigate isn't supported in all browsers => check for http header accept:text/html
-        (request.method === 'GET' && request.headers.get('accept').includes('text/html'))
+constisOfflineDocumentRequest=(request,requestError)=>
+    request&&requestError&&requestError.message==='Failedtofetch'&&(
+        (isGET(request)&&request.mode==='navigate'&&request.destination==='document')||
+        //request.mode=navigateisn'tsupportedinallbrowsers=>checkforhttpheaderaccept:text/html
+        (request.method==='GET'&&request.headers.get('accept').includes('text/html'))
     );
 
 /**
  *
- * @param {Request} request
- * @returns {Promise<Response|null>}
+ *@param{Request}request
+ *@returns{Promise<Response|null>}
  */
-const matchCache = async (request) => {
-    if (isGET(request)) {
-        const cache = await caches.open(cacheName);
-        const response = await cache.match(request.url);
-        if (response) {
-            return deserializeResponse(await serializeResponse(response.clone()));
+constmatchCache=async(request)=>{
+    if(isGET(request)){
+        constcache=awaitcaches.open(cacheName);
+        constresponse=awaitcache.match(request.url);
+        if(response){
+            returndeserializeResponse(awaitserializeResponse(response.clone()));
         }
     }
-    if (isCachableURL(request.url)) {
-        const serializedRequest = await serializeRequest(request);
-        const cachedResponse = await get(buildCacheKey(serializedRequest), cacheStore);
-        if (cachedResponse) {
-            return deserializeResponse(cachedResponse);
+    if(isCachableURL(request.url)){
+        constserializedRequest=awaitserializeRequest(request);
+        constcachedResponse=awaitget(buildCacheKey(serializedRequest),cacheStore);
+        if(cachedResponse){
+            returndeserializeResponse(cachedResponse);
         }
     }
-    return null;
+    returnnull;
 };
 
 /**
  *
- * @param {FetchEvent} param0
- * @returns {Promise<Response>}
+ *@param{FetchEvent}param0
+ *@returns{Promise<Response>}
  */
-const processFetchRequest = async ({ request }) => {
-    const requestCopy = request.clone();
-    let response;
-    try {
-        response = await fetch(request);
-        await cacheRequest(request, response);
-    } catch (requestError) {
-        if (isCachableRequest(requestCopy)) {
-            try {
-                response = await matchCache(requestCopy);
-            } catch (err) {
-                console.warn("An error occurs when reading the cache request", err);
+constprocessFetchRequest=async({request})=>{
+    constrequestCopy=request.clone();
+    letresponse;
+    try{
+        response=awaitfetch(request);
+        awaitcacheRequest(request,response);
+    }catch(requestError){
+        if(isCachableRequest(requestCopy)){
+            try{
+                response=awaitmatchCache(requestCopy);
+            }catch(err){
+                console.warn("Anerroroccurswhenreadingthecacherequest",err);
             }
-        } else if (isSyncableURL(requestCopy.url)) {
-            const pendingRequests = (await get(pendingRequestsQueueName, syncStore)) || [];
-            const serializedRequest = await serializeRequest(requestCopy);
-            await set(pendingRequestsQueueName, [...pendingRequests, serializedRequest], syncStore);
-            if (self.registration.sync) {
-                await self.registration.sync.register(pendingRequestsQueueName).catch((err) => {
-                    console.warn("Cannot use BackgroundSync", err);
-                    throw requestError;
+        }elseif(isSyncableURL(requestCopy.url)){
+            constpendingRequests=(awaitget(pendingRequestsQueueName,syncStore))||[];
+            constserializedRequest=awaitserializeRequest(requestCopy);
+            awaitset(pendingRequestsQueueName,[...pendingRequests,serializedRequest],syncStore);
+            if(self.registration.sync){
+                awaitself.registration.sync.register(pendingRequestsQueueName).catch((err)=>{
+                    console.warn("CannotuseBackgroundSync",err);
+                    throwrequestError;
                 });
             }
-            return buildEmptyResponse();
-        } else {
-            console.warn(`Offline ${requestCopy.method} request currently not supported`, requestCopy);
+            returnbuildEmptyResponse();
+        }else{
+            console.warn(`Offline${requestCopy.method}requestcurrentlynotsupported`,requestCopy);
         }
 
-        if (!response) {
-            if (isOfflineDocumentRequest(request, requestError)) {
-                const cache = await caches.open(cacheName);
-                return await cache.match(offlineRoute);
+        if(!response){
+            if(isOfflineDocumentRequest(request,requestError)){
+                constcache=awaitcaches.open(cacheName);
+                returnawaitcache.match(offlineRoute);
             }
-            throw requestError;
+            throwrequestError;
         }
     }
-    return response;
+    returnresponse;
 };
 
 /**
  *
- * @returns {Promise}
+ *@returns{Promise}
  */
-const processPendingRequests = async () => {
-    const pendingRequests = (await get(pendingRequestsQueueName, syncStore)) || [];
-    if (!pendingRequests.length) {
-        console.info("Nothing to sync!");
+constprocessPendingRequests=async()=>{
+    constpendingRequests=(awaitget(pendingRequestsQueueName,syncStore))||[];
+    if(!pendingRequests.length){
+        console.info("Nothingtosync!");
         return;
     }
-    let pendingRequest;
-    while ((pendingRequest = pendingRequests.shift())) {
-        const request = deserializeRequest(pendingRequest);
-        await fetch(request);
-        await set(pendingRequestsQueueName, pendingRequests, syncStore);
+    letpendingRequest;
+    while((pendingRequest=pendingRequests.shift())){
+        constrequest=deserializeRequest(pendingRequest);
+        awaitfetch(request);
+        awaitset(pendingRequestsQueueName,pendingRequests,syncStore);
     }
 };
 
 /**
- * Add given urls to the Cache, skipping the ones already present
- * @param {Array<string>} urls
+ *AddgivenurlstotheCache,skippingtheonesalreadypresent
+ *@param{Array<string>}urls
  */
-const prefetchUrls = async (urls = []) => {
-    const cache = await caches.open(cacheName);
-    const uniqUrls = new Set(urls);
-    for (let url of uniqUrls) {
-        if (await cache.match(url)) {
+constprefetchUrls=async(urls=[])=>{
+    constcache=awaitcaches.open(cacheName);
+    constuniqUrls=newSet(urls);
+    for(leturlofuniqUrls){
+        if(awaitcache.match(url)){
             continue;
         }
-        try {
-            await processFetchRequest({ request: new Request(url) });
-        } catch (error) {
-            console.error(`fail to prefetch ${url} : ${error}`);
+        try{
+            awaitprocessFetchRequest({request:newRequest(url)});
+        }catch(error){
+            console.error(`failtoprefetch${url}:${error}`);
         }
     }
 };
 
 /**
- * Handle the message sent to the Worker (using the postMessage() method).
- * The message is defined by the name of the action to perform and its associated parameters (optional).
+ *HandlethemessagesenttotheWorker(usingthepostMessage()method).
+ *Themessageisdefinedbythenameoftheactiontoperformanditsassociatedparameters(optional).
  *
- * Actions:
- * - prefetch-pages: add {Array} urls with their "alternative url" to the Cache (if not already present).
- * - prefetch-assets: add {Array} urls to the Cache (if not already present).
+ *Actions:
+ *-prefetch-pages:add{Array}urlswiththeir"alternativeurl"totheCache(ifnotalreadypresent).
+ *-prefetch-assets:add{Array}urlstotheCache(ifnotalreadypresent).
  *
- * @param {Object} data
- * @param {string} data.action action's name
- * @param {*} data.* action's parameter(s)
- * @returns {Promise}
+ *@param{Object}data
+ *@param{string}data.actionaction'sname
+ *@param{*}data.*action'sparameter(s)
+ *@returns{Promise}
  */
-const processMessage = (data) => {
-    const { action } = data;
-    switch (action) {
-        case "prefetch-pages":
-            const { urls: pagesUrls } = data;
-            // To prevent redirection cached by the browser (cf. 301 Permanently Moved) from breaking the offline cache
-            // we also add alternative urls with the following rule:
-            // * if original url has a trailing "/", adds url with striped trailing "/"
-            // * if original url doesn't end with "/", adds url without the trailing "/"
-            const maybeRedirectedUrl = pagesUrls.map((url) => (url.endsWith("/") ? url.slice(0, -1) : url));
-            return prefetchUrls([...pagesUrls, ...maybeRedirectedUrl]);
-        case "prefetch-assets":
-            const { urls: assetsUrls } = data;
-            return prefetchUrls(assetsUrls);
+constprocessMessage=(data)=>{
+    const{action}=data;
+    switch(action){
+        case"prefetch-pages":
+            const{urls:pagesUrls}=data;
+            //Topreventredirectioncachedbythebrowser(cf.301PermanentlyMoved)frombreakingtheofflinecache
+            //wealsoaddalternativeurlswiththefollowingrule:
+            //*iforiginalurlhasatrailing"/",addsurlwithstripedtrailing"/"
+            //*iforiginalurldoesn'tendwith"/",addsurlwithoutthetrailing"/"
+            constmaybeRedirectedUrl=pagesUrls.map((url)=>(url.endsWith("/")?url.slice(0,-1):url));
+            returnprefetchUrls([...pagesUrls,...maybeRedirectedUrl]);
+        case"prefetch-assets":
+            const{urls:assetsUrls}=data;
+            returnprefetchUrls(assetsUrls);
     }
-    throw new Error(`Action '${action}' not found.`);
+    thrownewError(`Action'${action}'notfound.`);
 };
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener("fetch",(event)=>{
     event.respondWith(processFetchRequest(event));
 });
 
-self.addEventListener("sync", (event) => {
-    console.info(`Syncing pending requests...`);
-    if (event.tag === pendingRequestsQueueName) {
+self.addEventListener("sync",(event)=>{
+    console.info(`Syncingpendingrequests...`);
+    if(event.tag===pendingRequestsQueueName){
         event.waitUntil(processPendingRequests());
     }
 });
 
-self.addEventListener("message", (event) => {
+self.addEventListener("message",(event)=>{
     event.waitUntil(processMessage(event.data));
 });
 
-// Precache static resources here. Like offline page
-self.addEventListener('install', (event) => {
+//Precachestaticresourceshere.Likeofflinepage
+self.addEventListener('install',(event)=>{
     event.waitUntil(fetchToCacheOfflinePage());
 });

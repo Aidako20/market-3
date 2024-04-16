@@ -1,210 +1,210 @@
-# -*- coding: utf-8 -*-
-import datetime
-import json
-import logging
-import os
-import random
-import select
-import threading
-import time
+#-*-coding:utf-8-*-
+importdatetime
+importjson
+importlogging
+importos
+importrandom
+importselect
+importthreading
+importtime
 
-import flectra
-from flectra import api, fields, models, SUPERUSER_ID
-from flectra.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT
-from flectra.tools import date_utils
+importflectra
+fromflectraimportapi,fields,models,SUPERUSER_ID
+fromflectra.tools.miscimportDEFAULT_SERVER_DATETIME_FORMAT
+fromflectra.toolsimportdate_utils
 
-from psycopg2 import sql
+frompsycopg2importsql
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
-# longpolling timeout connection
-TIMEOUT = 50
+#longpollingtimeoutconnection
+TIMEOUT=50
 
-# custom function to call instead of NOTIFY postgresql command (opt-in)
-FLECTRA_NOTIFY_FUNCTION = os.environ.get('FLECTRA_NOTIFY_FUNCTION')
+#customfunctiontocallinsteadofNOTIFYpostgresqlcommand(opt-in)
+FLECTRA_NOTIFY_FUNCTION=os.environ.get('FLECTRA_NOTIFY_FUNCTION')
 
 #----------------------------------------------------------
-# Bus
+#Bus
 #----------------------------------------------------------
-def json_dump(v):
-    return json.dumps(v, separators=(',', ':'), default=date_utils.json_default)
+defjson_dump(v):
+    returnjson.dumps(v,separators=(',',':'),default=date_utils.json_default)
 
-def hashable(key):
-    if isinstance(key, list):
-        key = tuple(key)
-    return key
+defhashable(key):
+    ifisinstance(key,list):
+        key=tuple(key)
+    returnkey
 
 
-class ImBus(models.Model):
+classImBus(models.Model):
 
-    _name = 'bus.bus'
-    _description = 'Communication Bus'
+    _name='bus.bus'
+    _description='CommunicationBus'
 
-    channel = fields.Char('Channel')
-    message = fields.Char('Message')
+    channel=fields.Char('Channel')
+    message=fields.Char('Message')
 
     @api.autovacuum
-    def _gc_messages(self):
-        timeout_ago = datetime.datetime.utcnow()-datetime.timedelta(seconds=TIMEOUT*2)
-        domain = [('create_date', '<', timeout_ago.strftime(DEFAULT_SERVER_DATETIME_FORMAT))]
-        return self.sudo().search(domain).unlink()
+    def_gc_messages(self):
+        timeout_ago=datetime.datetime.utcnow()-datetime.timedelta(seconds=TIMEOUT*2)
+        domain=[('create_date','<',timeout_ago.strftime(DEFAULT_SERVER_DATETIME_FORMAT))]
+        returnself.sudo().search(domain).unlink()
 
     @api.model
-    def sendmany(self, notifications):
-        channels = set()
-        for channel, message in notifications:
+    defsendmany(self,notifications):
+        channels=set()
+        forchannel,messageinnotifications:
             channels.add(channel)
-            values = {
-                "channel": json_dump(channel),
-                "message": json_dump(message)
+            values={
+                "channel":json_dump(channel),
+                "message":json_dump(message)
             }
             self.sudo().create(values)
-        if channels:
-            # We have to wait until the notifications are commited in database.
-            # When calling `NOTIFY imbus`, some concurrent threads will be
-            # awakened and will fetch the notification in the bus table. If the
-            # transaction is not commited yet, there will be nothing to fetch,
-            # and the longpolling will return no notification.
+        ifchannels:
+            #Wehavetowaituntilthenotificationsarecommitedindatabase.
+            #Whencalling`NOTIFYimbus`,someconcurrentthreadswillbe
+            #awakenedandwillfetchthenotificationinthebustable.Ifthe
+            #transactionisnotcommitedyet,therewillbenothingtofetch,
+            #andthelongpollingwillreturnnonotification.
             @self.env.cr.postcommit.add
-            def notify():
-                with flectra.sql_db.db_connect('postgres').cursor() as cr:
-                    if FLECTRA_NOTIFY_FUNCTION:
-                        query = sql.SQL("SELECT {}('imbus', %s)").format(sql.Identifier(FLECTRA_NOTIFY_FUNCTION))
+            defnotify():
+                withflectra.sql_db.db_connect('postgres').cursor()ascr:
+                    ifFLECTRA_NOTIFY_FUNCTION:
+                        query=sql.SQL("SELECT{}('imbus',%s)").format(sql.Identifier(FLECTRA_NOTIFY_FUNCTION))
                     else:
-                        query = "NOTIFY imbus, %s"
-                    cr.execute(query, (json_dump(list(channels)), ))
+                        query="NOTIFYimbus,%s"
+                    cr.execute(query,(json_dump(list(channels)),))
 
     @api.model
-    def sendone(self, channel, message):
-        self.sendmany([[channel, message]])
+    defsendone(self,channel,message):
+        self.sendmany([[channel,message]])
 
     @api.model
-    def poll(self, channels, last=0, options=None):
-        if options is None:
-            options = {}
-        # first poll return the notification in the 'buffer'
-        if last == 0:
-            timeout_ago = datetime.datetime.utcnow()-datetime.timedelta(seconds=TIMEOUT)
-            domain = [('create_date', '>', timeout_ago.strftime(DEFAULT_SERVER_DATETIME_FORMAT))]
-        else:  # else returns the unread notifications
-            domain = [('id', '>', last)]
-        channels = [json_dump(c) for c in channels]
-        domain.append(('channel', 'in', channels))
-        notifications = self.sudo().search_read(domain)
-        # list of notification to return
-        result = []
-        for notif in notifications:
+    defpoll(self,channels,last=0,options=None):
+        ifoptionsisNone:
+            options={}
+        #firstpollreturnthenotificationinthe'buffer'
+        iflast==0:
+            timeout_ago=datetime.datetime.utcnow()-datetime.timedelta(seconds=TIMEOUT)
+            domain=[('create_date','>',timeout_ago.strftime(DEFAULT_SERVER_DATETIME_FORMAT))]
+        else: #elsereturnstheunreadnotifications
+            domain=[('id','>',last)]
+        channels=[json_dump(c)forcinchannels]
+        domain.append(('channel','in',channels))
+        notifications=self.sudo().search_read(domain)
+        #listofnotificationtoreturn
+        result=[]
+        fornotifinnotifications:
             result.append({
-                'id': notif['id'],
-                'channel': json.loads(notif['channel']),
-                'message': json.loads(notif['message']),
+                'id':notif['id'],
+                'channel':json.loads(notif['channel']),
+                'message':json.loads(notif['message']),
             })
-        return result
+        returnresult
 
 
 #----------------------------------------------------------
-# Dispatcher
+#Dispatcher
 #----------------------------------------------------------
-class ImDispatch(object):
-    def __init__(self):
-        self.channels = {}
-        self.started = False
-        self.Event = None
+classImDispatch(object):
+    def__init__(self):
+        self.channels={}
+        self.started=False
+        self.Event=None
 
-    def poll(self, dbname, channels, last, options=None, timeout=TIMEOUT):
-        if options is None:
-            options = {}
-        # Dont hang ctrl-c for a poll request, we need to bypass private
-        # attribute access because we dont know before starting the thread that
-        # it will handle a longpolling request
-        if not flectra.evented:
-            current = threading.current_thread()
-            current._daemonic = True
-            # rename the thread to avoid tests waiting for a longpolling
-            current.setName("openerp.longpolling.request.%s" % current.ident)
+    defpoll(self,dbname,channels,last,options=None,timeout=TIMEOUT):
+        ifoptionsisNone:
+            options={}
+        #Donthangctrl-cforapollrequest,weneedtobypassprivate
+        #attributeaccessbecausewedontknowbeforestartingthethreadthat
+        #itwillhandlealongpollingrequest
+        ifnotflectra.evented:
+            current=threading.current_thread()
+            current._daemonic=True
+            #renamethethreadtoavoidtestswaitingforalongpolling
+            current.setName("openerp.longpolling.request.%s"%current.ident)
 
-        registry = flectra.registry(dbname)
+        registry=flectra.registry(dbname)
 
-        # immediatly returns if past notifications exist
-        with registry.cursor() as cr:
-            env = api.Environment(cr, SUPERUSER_ID, {})
-            notifications = env['bus.bus'].poll(channels, last, options)
+        #immediatlyreturnsifpastnotificationsexist
+        withregistry.cursor()ascr:
+            env=api.Environment(cr,SUPERUSER_ID,{})
+            notifications=env['bus.bus'].poll(channels,last,options)
 
-        # immediatly returns in peek mode
-        if options.get('peek'):
-            return dict(notifications=notifications, channels=channels)
+        #immediatlyreturnsinpeekmode
+        ifoptions.get('peek'):
+            returndict(notifications=notifications,channels=channels)
 
-        # or wait for future ones
-        if not notifications:
-            if not self.started:
-                # Lazy start of events listener
+        #orwaitforfutureones
+        ifnotnotifications:
+            ifnotself.started:
+                #Lazystartofeventslistener
                 self.start()
 
-            event = self.Event()
-            for channel in channels:
-                self.channels.setdefault(hashable(channel), set()).add(event)
+            event=self.Event()
+            forchannelinchannels:
+                self.channels.setdefault(hashable(channel),set()).add(event)
             try:
                 event.wait(timeout=timeout)
-                with registry.cursor() as cr:
-                    env = api.Environment(cr, SUPERUSER_ID, {})
-                    notifications = env['bus.bus'].poll(channels, last, options)
-            except Exception:
-                # timeout
+                withregistry.cursor()ascr:
+                    env=api.Environment(cr,SUPERUSER_ID,{})
+                    notifications=env['bus.bus'].poll(channels,last,options)
+            exceptException:
+                #timeout
                 pass
             finally:
-                # gc pointers to event
-                for channel in channels:
-                    channel_events = self.channels.get(hashable(channel))
-                    if channel_events and event in channel_events:
+                #gcpointerstoevent
+                forchannelinchannels:
+                    channel_events=self.channels.get(hashable(channel))
+                    ifchannel_eventsandeventinchannel_events:
                         channel_events.remove(event)
-        return notifications
+        returnnotifications
 
-    def loop(self):
-        """ Dispatch postgres notifications to the relevant polling threads/greenlets """
-        _logger.info("Bus.loop listen imbus on db postgres")
-        with flectra.sql_db.db_connect('postgres').cursor() as cr:
-            conn = cr._cnx
-            cr.execute("listen imbus")
+    defloop(self):
+        """Dispatchpostgresnotificationstotherelevantpollingthreads/greenlets"""
+        _logger.info("Bus.looplistenimbusondbpostgres")
+        withflectra.sql_db.db_connect('postgres').cursor()ascr:
+            conn=cr._cnx
+            cr.execute("listenimbus")
             cr.commit();
-            while True:
-                if select.select([conn], [], [], TIMEOUT) == ([], [], []):
+            whileTrue:
+                ifselect.select([conn],[],[],TIMEOUT)==([],[],[]):
                     pass
                 else:
                     conn.poll()
-                    channels = []
-                    while conn.notifies:
+                    channels=[]
+                    whileconn.notifies:
                         channels.extend(json.loads(conn.notifies.pop().payload))
-                    # dispatch to local threads/greenlets
-                    events = set()
-                    for channel in channels:
-                        events.update(self.channels.pop(hashable(channel), set()))
-                    for event in events:
+                    #dispatchtolocalthreads/greenlets
+                    events=set()
+                    forchannelinchannels:
+                        events.update(self.channels.pop(hashable(channel),set()))
+                    foreventinevents:
                         event.set()
 
-    def run(self):
-        while True:
+    defrun(self):
+        whileTrue:
             try:
                 self.loop()
-            except Exception as e:
-                _logger.exception("Bus.loop error, sleep and retry")
+            exceptExceptionase:
+                _logger.exception("Bus.looperror,sleepandretry")
                 time.sleep(TIMEOUT)
 
-    def start(self):
-        if flectra.evented:
-            # gevent mode
-            import gevent.event  # pylint: disable=import-outside-toplevel
-            self.Event = gevent.event.Event
+    defstart(self):
+        ifflectra.evented:
+            #geventmode
+            importgevent.event #pylint:disable=import-outside-toplevel
+            self.Event=gevent.event.Event
             gevent.spawn(self.run)
         else:
-            # threaded mode
-            self.Event = threading.Event
-            t = threading.Thread(name="%s.Bus" % __name__, target=self.run)
-            t.daemon = True
+            #threadedmode
+            self.Event=threading.Event
+            t=threading.Thread(name="%s.Bus"%__name__,target=self.run)
+            t.daemon=True
             t.start()
-        self.started = True
-        return self
+        self.started=True
+        returnself
 
-# Partially undo a2ed3d3d5bdb6025a1ba14ad557a115a86413e65
-# IMDispatch has a lazy start, so we could initialize it anyway
-# And this avoids the Bus unavailable error messages
-dispatch = ImDispatch()
+#Partiallyundoa2ed3d3d5bdb6025a1ba14ad557a115a86413e65
+#IMDispatchhasalazystart,sowecouldinitializeitanyway
+#AndthisavoidstheBusunavailableerrormessages
+dispatch=ImDispatch()

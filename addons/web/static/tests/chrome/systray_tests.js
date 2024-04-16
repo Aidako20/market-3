@@ -1,41 +1,41 @@
-flectra.define('web.systray_tests', function (require) {
-    "use strict";
+flectra.define('web.systray_tests',function(require){
+    "usestrict";
 
-    var testUtils = require('web.test_utils');
-    var SystrayMenu = require('web.SystrayMenu');
-    var Widget = require('web.Widget');
+    vartestUtils=require('web.test_utils');
+    varSystrayMenu=require('web.SystrayMenu');
+    varWidget=require('web.Widget');
 
-    QUnit.test('Adding async components to the registry respects the sequence', async function (assert) {
+    QUnit.test('Addingasynccomponentstotheregistryrespectsthesequence',asyncfunction(assert){
         assert.expect(2);
-        var parent = await testUtils.createParent({});
-        var prom = testUtils.makeTestPromise();
+        varparent=awaittestUtils.createParent({});
+        varprom=testUtils.makeTestPromise();
 
-        var synchronousFirstWidget = Widget.extend({
-            sequence: 3, // bigger sequence means more to the left
-            start: function () {
+        varsynchronousFirstWidget=Widget.extend({
+            sequence:3,//biggersequencemeansmoretotheleft
+            start:function(){
                 this.$el.addClass('first');
             }
         });
-        var asynchronousSecondWidget = Widget.extend({
-            sequence: 1, // smaller sequence means more to the right
-            willStart: function () {
-                return prom;
+        varasynchronousSecondWidget=Widget.extend({
+            sequence:1,//smallersequencemeansmoretotheright
+            willStart:function(){
+                returnprom;
             },
-            start: function () {
+            start:function(){
                 this.$el.addClass('second');
             }
         });
 
-        SystrayMenu.Items = [synchronousFirstWidget, asynchronousSecondWidget];
-        var menu = new SystrayMenu(parent);
+        SystrayMenu.Items=[synchronousFirstWidget,asynchronousSecondWidget];
+        varmenu=newSystrayMenu(parent);
 
         menu.appendTo($('#qunit-fixture'));
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
         prom.resolve();
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
-        assert.hasClass(menu.$('div:eq(0)'), 'first');
-        assert.hasClass(menu.$('div:eq(1)'), 'second');
+        assert.hasClass(menu.$('div:eq(0)'),'first');
+        assert.hasClass(menu.$('div:eq(1)'),'second');
 
         parent.destroy();
     })

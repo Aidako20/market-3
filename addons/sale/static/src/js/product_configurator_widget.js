@@ -1,78 +1,78 @@
-flectra.define('sale.product_configurator', function (require) {
-var relationalFields = require('web.relational_fields');
-var FieldsRegistry = require('web.field_registry');
-var core = require('web.core');
-var _t = core._t;
+flectra.define('sale.product_configurator',function(require){
+varrelationalFields=require('web.relational_fields');
+varFieldsRegistry=require('web.field_registry');
+varcore=require('web.core');
+var_t=core._t;
 
 /**
- * The sale.product_configurator widget is a simple widget extending FieldMany2One
- * It allows the development of configuration strategies in other modules through
- * widget extensions.
+ *Thesale.product_configuratorwidgetisasimplewidgetextendingFieldMany2One
+ *Itallowsthedevelopmentofconfigurationstrategiesinothermodulesthrough
+ *widgetextensions.
  *
  *
- * !!! WARNING !!!
+ *!!!WARNING!!!
  *
- * This widget is only designed for sale_order_line creation/updates.
- * !!! It should only be used on a product_product or product_template field !!!
+ *Thiswidgetisonlydesignedforsale_order_linecreation/updates.
+ *!!!Itshouldonlybeusedonaproduct_productorproduct_templatefield!!!
  */
-var ProductConfiguratorWidget = relationalFields.FieldMany2One.extend({
-    events: _.extend({}, relationalFields.FieldMany2One.prototype.events, {
-        'click .o_edit_product_configuration': '_onEditConfiguration'
+varProductConfiguratorWidget=relationalFields.FieldMany2One.extend({
+    events:_.extend({},relationalFields.FieldMany2One.prototype.events,{
+        'click.o_edit_product_configuration':'_onEditConfiguration'
     }),
 
      /**
-      * @override
+      *@override
       */
-    _render: function () {
-        this._super.apply(this, arguments);
-        if (this.mode === 'edit' && this.value &&
-        (this._isConfigurableProduct() || this._isConfigurableLine())) {
+    _render:function(){
+        this._super.apply(this,arguments);
+        if(this.mode==='edit'&&this.value&&
+        (this._isConfigurableProduct()||this._isConfigurableLine())){
             this._addProductLinkButton();
             this._addConfigurationEditButton();
-        } else if (this.mode === 'edit' && this.value) {
+        }elseif(this.mode==='edit'&&this.value){
             this._addProductLinkButton();
             this.$('.o_edit_product_configuration').hide();
-        } else {
+        }else{
             this.$('.o_external_button').hide();
             this.$('.o_edit_product_configuration').hide();
         }
     },
 
     /**
-     * Add button linking to product_id/product_template_id form.
+     *Addbuttonlinkingtoproduct_id/product_template_idform.
      */
-    _addProductLinkButton: function () {
-        if (this.$('.o_external_button').length === 0) {
-            var $productLinkButton = $('<button>', {
-                type: 'button',
-                class: 'fa fa-external-link btn btn-secondary o_external_button',
-                tabindex: '-1',
-                draggable: false,
-                'aria-label': _t('External Link'),
-                title: _t('External Link')
+    _addProductLinkButton:function(){
+        if(this.$('.o_external_button').length===0){
+            var$productLinkButton=$('<button>',{
+                type:'button',
+                class:'fafa-external-linkbtnbtn-secondaryo_external_button',
+                tabindex:'-1',
+                draggable:false,
+                'aria-label':_t('ExternalLink'),
+                title:_t('ExternalLink')
             });
 
-            var $inputDropdown = this.$('.o_input_dropdown');
+            var$inputDropdown=this.$('.o_input_dropdown');
             $inputDropdown.after($productLinkButton);
         }
     },
 
     /**
-     * If current product is configurable,
-     * Show edit button (in Edit Mode) after the product/product_template
+     *Ifcurrentproductisconfigurable,
+     *Showeditbutton(inEditMode)aftertheproduct/product_template
      */
-    _addConfigurationEditButton: function () {
-        var $inputDropdown = this.$('.o_input_dropdown');
+    _addConfigurationEditButton:function(){
+        var$inputDropdown=this.$('.o_input_dropdown');
 
-        if ($inputDropdown.length !== 0 &&
-            this.$('.o_edit_product_configuration').length === 0) {
-            var $editConfigurationButton = $('<button>', {
-                type: 'button',
-                class: 'fa fa-pencil btn btn-secondary o_edit_product_configuration',
-                tabindex: '-1',
-                draggable: false,
-                'aria-label': _t('Edit Configuration'),
-                title: _t('Edit Configuration')
+        if($inputDropdown.length!==0&&
+            this.$('.o_edit_product_configuration').length===0){
+            var$editConfigurationButton=$('<button>',{
+                type:'button',
+                class:'fafa-pencilbtnbtn-secondaryo_edit_product_configuration',
+                tabindex:'-1',
+                draggable:false,
+                'aria-label':_t('EditConfiguration'),
+                title:_t('EditConfiguration')
             });
 
             $inputDropdown.after($editConfigurationButton);
@@ -80,48 +80,48 @@ var ProductConfiguratorWidget = relationalFields.FieldMany2One.extend({
     },
 
     /**
-     * Hook to override with _onEditProductConfiguration
-     * to know if edit pencil button has to be put next to the field
+     *Hooktooverridewith_onEditProductConfiguration
+     *toknowifeditpencilbuttonhastobeputnexttothefield
      *
-     * @private
+     *@private
      */
-    _isConfigurableProduct: function () {
-        return false;
+    _isConfigurableProduct:function(){
+        returnfalse;
     },
 
     /**
-     * Hook to override with _onEditProductConfiguration
-     * to know if edit pencil button has to be put next to the field
+     *Hooktooverridewith_onEditProductConfiguration
+     *toknowifeditpencilbuttonhastobeputnexttothefield
      *
-     * @private
+     *@private
      */
-    _isConfigurableLine: function () {
-        return false;
+    _isConfigurableLine:function(){
+        returnfalse;
     },
 
     /**
-     * Override catching changes on product_id or product_template_id.
-     * Calls _onTemplateChange in case of product_template change.
-     * Calls _onProductChange in case of product change.
-     * Shouldn't be overridden by product configurators
-     * or only to setup some data for further computation
-     * before calling super.
+     *Overridecatchingchangesonproduct_idorproduct_template_id.
+     *Calls_onTemplateChangeincaseofproduct_templatechange.
+     *Calls_onProductChangeincaseofproductchange.
+     *Shouldn'tbeoverriddenbyproductconfigurators
+     *oronlytosetupsomedataforfurthercomputation
+     *beforecallingsuper.
      *
-     * @override
-     * @param {FlectraEvent} ev
-     * @param {boolean} ev.data.preventProductIdCheck prevent the product configurator widget
-     *     from looping forever when it needs to change the 'product_template_id'
+     *@override
+     *@param{FlectraEvent}ev
+     *@param{boolean}ev.data.preventProductIdCheckpreventtheproductconfiguratorwidget
+     *    fromloopingforeverwhenitneedstochangethe'product_template_id'
      *
-     * @private
+     *@private
      */
-    reset: async function (record, ev) {
-        await this._super(...arguments);
-        if (ev && ev.target === this) {
-            if (ev.data.changes && !ev.data.preventProductIdCheck && ev.data.changes.product_template_id) {
-                this._onTemplateChange(record.data.product_template_id.data.id, ev.data.dataPointID);
-            } else if (ev.data.changes && ev.data.changes.product_id) {
-                this._onProductChange(record.data.product_id.data && record.data.product_id.data.id, ev.data.dataPointID).then(wizardOpened => {
-                    if (!wizardOpened) {
+    reset:asyncfunction(record,ev){
+        awaitthis._super(...arguments);
+        if(ev&&ev.target===this){
+            if(ev.data.changes&&!ev.data.preventProductIdCheck&&ev.data.changes.product_template_id){
+                this._onTemplateChange(record.data.product_template_id.data.id,ev.data.dataPointID);
+            }elseif(ev.data.changes&&ev.data.changes.product_id){
+                this._onProductChange(record.data.product_id.data&&record.data.product_id.data.id,ev.data.dataPointID).then(wizardOpened=>{
+                    if(!wizardOpened){
                         this._onLineConfigured();
                     }
                 });
@@ -130,147 +130,147 @@ var ProductConfiguratorWidget = relationalFields.FieldMany2One.extend({
     },
 
     /**
-     * Hook for product_template based configurators
-     * (product configurator, matrix, ...).
+     *Hookforproduct_templatebasedconfigurators
+     *(productconfigurator,matrix,...).
      *
-     * @param {integer} productTemplateId
-     * @param {String} dataPointID
+     *@param{integer}productTemplateId
+     *@param{String}dataPointID
      *
-     * @private
+     *@private
      */
-    _onTemplateChange: function (productTemplateId, dataPointId) {
-        return Promise.resolve(false);
+    _onTemplateChange:function(productTemplateId,dataPointId){
+        returnPromise.resolve(false);
     },
 
     /**
-     * Hook for product_product based configurators
-     * (event, rental, ...).
-     * Should return
-     *    true if product has been configured through wizard or
-     *        the result of the super call for other wizard extensions
-     *    false if the product wasn't configurable through the wizard
+     *Hookforproduct_productbasedconfigurators
+     *(event,rental,...).
+     *Shouldreturn
+     *   trueifproducthasbeenconfiguredthroughwizardor
+     *       theresultofthesupercallforotherwizardextensions
+     *   falseiftheproductwasn'tconfigurablethroughthewizard
      *
-     * @param {integer} productId
-     * @param {String} dataPointID
-     * @returns {Promise<Boolean>} stopPropagation true if a suitable configurator has been found.
+     *@param{integer}productId
+     *@param{String}dataPointID
+     *@returns{Promise<Boolean>}stopPropagationtrueifasuitableconfiguratorhasbeenfound.
      *
-     * @private
+     *@private
      */
-    _onProductChange: function (productId, dataPointId) {
-        return Promise.resolve(false);
+    _onProductChange:function(productId,dataPointId){
+        returnPromise.resolve(false);
     },
 
     /**
-     * Hook for configurator happening after line has been set
-     * (options, ...).
-     * Allows sale_product_configurator module to apply its options
-     * after line configuration has been done.
+     *Hookforconfiguratorhappeningafterlinehasbeenset
+     *(options,...).
+     *Allowssale_product_configuratormoduletoapplyitsoptions
+     *afterlineconfigurationhasbeendone.
      *
-     * @private
+     *@private
      */
-    _onLineConfigured: function () {
+    _onLineConfigured:function(){
 
     },
 
     /**
-     * Triggered on click of the configuration button.
-     * It is only shown in Edit mode,
-     * when _isConfigurableProduct or _isConfigurableLine is True.
+     *Triggeredonclickoftheconfigurationbutton.
+     *ItisonlyshowninEditmode,
+     *when_isConfigurableProductor_isConfigurableLineisTrue.
      *
-     * After reflexion, when a line was configured through two wizards,
-     * only the line configuration will open.
+     *Afterreflexion,whenalinewasconfiguredthroughtwowizards,
+     *onlythelineconfigurationwillopen.
      *
-     * Two hooks are available depending on configurator category:
-     * _onEditLineConfiguration : line configurators
-     * _onEditProductConfiguration : product configurators
+     *Twohooksareavailabledependingonconfiguratorcategory:
+     *_onEditLineConfiguration:lineconfigurators
+     *_onEditProductConfiguration:productconfigurators
      *
-     * @private
+     *@private
      */
-    _onEditConfiguration: function () {
-        if (this._isConfigurableLine()) {
+    _onEditConfiguration:function(){
+        if(this._isConfigurableLine()){
             this._onEditLineConfiguration();
-        } else if (this._isConfigurableProduct()) {
+        }elseif(this._isConfigurableProduct()){
             this._onEditProductConfiguration();
         }
     },
 
     /**
-     * Hook for line configurators (rental, event)
-     * on line edition (pencil icon inside product field)
+     *Hookforlineconfigurators(rental,event)
+     *onlineedition(penciliconinsideproductfield)
      */
-    _onEditLineConfiguration: function () {
+    _onEditLineConfiguration:function(){
 
     },
 
     /**
-     * Hook for product configurators (matrix, product)
-     * on line edition (pencil icon inside product field)
+     *Hookforproductconfigurators(matrix,product)
+     *onlineedition(penciliconinsideproductfield)
      */
-    _onEditProductConfiguration: function () {
+    _onEditProductConfiguration:function(){
 
     },
 
     /**
-     * Utilities for recordData conversion
+     *UtilitiesforrecordDataconversion
      */
 
     /**
-     * Will convert the values contained in the recordData parameter to
-     * a list of '4' operations that can be passed as a 'default_' parameter.
+     *WillconvertthevaluescontainedintherecordDataparameterto
+     *alistof'4'operationsthatcanbepassedasa'default_'parameter.
      *
-     * @param {Object} recordData
+     *@param{Object}recordData
      *
-     * @private
+     *@private
      */
-    _convertFromMany2Many: function (recordData) {
-        if (recordData) {
-            var convertedValues = [];
-            _.each(recordData.res_ids, function (resId) {
-                convertedValues.push([4, parseInt(resId)]);
+    _convertFromMany2Many:function(recordData){
+        if(recordData){
+            varconvertedValues=[];
+            _.each(recordData.res_ids,function(resId){
+                convertedValues.push([4,parseInt(resId)]);
             });
 
-            return convertedValues;
+            returnconvertedValues;
         }
 
-        return null;
+        returnnull;
     },
 
     /**
-     * Will convert the values contained in the recordData parameter to
-     * a list of '0' or '4' operations (based on wether the record is already persisted or not)
-     * that can be passed as a 'default_' parameter.
+     *WillconvertthevaluescontainedintherecordDataparameterto
+     *alistof'0'or'4'operations(basedonwethertherecordisalreadypersistedornot)
+     *thatcanbepassedasa'default_'parameter.
      *
-     * @param {Object} recordData
+     *@param{Object}recordData
      *
-     * @private
+     *@private
      */
-    _convertFromOne2Many: function (recordData) {
-        if (recordData) {
-            var convertedValues = [];
-            _.each(recordData.res_ids, function (resId) {
-                if (isNaN(resId)) {
-                    _.each(recordData.data, function (record) {
-                        if (record.ref === resId) {
-                            convertedValues.push([0, 0, {
-                                custom_product_template_attribute_value_id: record.data.custom_product_template_attribute_value_id.data.id,
-                                custom_value: record.data.custom_value
+    _convertFromOne2Many:function(recordData){
+        if(recordData){
+            varconvertedValues=[];
+            _.each(recordData.res_ids,function(resId){
+                if(isNaN(resId)){
+                    _.each(recordData.data,function(record){
+                        if(record.ref===resId){
+                            convertedValues.push([0,0,{
+                                custom_product_template_attribute_value_id:record.data.custom_product_template_attribute_value_id.data.id,
+                                custom_value:record.data.custom_value
                             }]);
                         }
                     });
-                } else {
-                    convertedValues.push([4, resId]);
+                }else{
+                    convertedValues.push([4,resId]);
                 }
             });
 
-            return convertedValues;
+            returnconvertedValues;
         }
 
-        return null;
+        returnnull;
     }
 });
 
-FieldsRegistry.add('product_configurator', ProductConfiguratorWidget);
+FieldsRegistry.add('product_configurator',ProductConfiguratorWidget);
 
-return ProductConfiguratorWidget;
+returnProductConfiguratorWidget;
 
 });

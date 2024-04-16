@@ -1,9 +1,9 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models
 
 
-class ResCurrency(models.Model):
+classResCurrency(models.Model):
 
-    _inherit = "res.currency"
+    _inherit="res.currency"
 
-    l10n_ar_afip_code = fields.Char('AFIP Code', size=4, help='This code will be used on electronic invoice')
+    l10n_ar_afip_code=fields.Char('AFIPCode',size=4,help='Thiscodewillbeusedonelectronicinvoice')

@@ -1,42 +1,42 @@
-flectra.define('point_of_sale.OrderRow', function (require) {
-    'use strict';
+flectra.define('point_of_sale.OrderRow',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
     /**
-     * @props {models.Order} order
-     * @props columns
-     * @emits click-order
+     *@props{models.Order}order
+     *@propscolumns
+     *@emitsclick-order
      */
-    class OrderRow extends PosComponent {
-        get order() {
-            return this.props.order;
+    classOrderRowextendsPosComponent{
+        getorder(){
+            returnthis.props.order;
         }
-        get highlighted() {
-            const highlightedOrder = this.props.highlightedOrder;
-            return !highlightedOrder ? false : highlightedOrder.backendId === this.props.order.backendId;
+        gethighlighted(){
+            consthighlightedOrder=this.props.highlightedOrder;
+            return!highlightedOrder?false:highlightedOrder.backendId===this.props.order.backendId;
         }
 
-        // Column getters //
+        //Columngetters//
 
-        get name() {
-            return this.order.get_name();
+        getname(){
+            returnthis.order.get_name();
         }
-        get date() {
-            return moment(this.order.validation_date).format('YYYY-MM-DD hh:mm A');
+        getdate(){
+            returnmoment(this.order.validation_date).format('YYYY-MM-DDhh:mmA');
         }
-        get customer() {
-            const customer = this.order.get('client');
-            return customer ? customer.name : null;
+        getcustomer(){
+            constcustomer=this.order.get('client');
+            returncustomer?customer.name:null;
         }
-        get total() {
-            return this.env.pos.format_currency(this.order.get_total_with_tax());
+        gettotal(){
+            returnthis.env.pos.format_currency(this.order.get_total_with_tax());
         }
     }
-    OrderRow.template = 'OrderRow';
+    OrderRow.template='OrderRow';
 
     Registries.Component.add(OrderRow);
 
-    return OrderRow;
+    returnOrderRow;
 });

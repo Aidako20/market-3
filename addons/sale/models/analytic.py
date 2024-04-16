@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class AccountAnalyticLine(models.Model):
-    _inherit = "account.analytic.line"
+classAccountAnalyticLine(models.Model):
+    _inherit="account.analytic.line"
 
-    def _default_sale_line_domain(self):
-        """ This is only used for delivered quantity of SO line based on analytic line, and timesheet
-            (see sale_timesheet). This can be override to allow further customization.
+    def_default_sale_line_domain(self):
+        """ThisisonlyusedfordeliveredquantityofSOlinebasedonanalyticline,andtimesheet
+            (seesale_timesheet).Thiscanbeoverridetoallowfurthercustomization.
         """
-        return [('qty_delivered_method', '=', 'analytic')]
+        return[('qty_delivered_method','=','analytic')]
 
-    so_line = fields.Many2one('sale.order.line', string='Sales Order Item', domain=lambda self: self._default_sale_line_domain())
+    so_line=fields.Many2one('sale.order.line',string='SalesOrderItem',domain=lambdaself:self._default_sale_line_domain())

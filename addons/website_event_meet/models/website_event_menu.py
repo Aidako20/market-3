@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class EventMenu(models.Model):
-    _inherit = "website.event.menu"
+classEventMenu(models.Model):
+    _inherit="website.event.menu"
 
-    menu_type = fields.Selection(
-        selection_add=[("meeting_room", "Event Meeting Room Menus")],
-        ondelete={'meeting_room': 'cascade'})
+    menu_type=fields.Selection(
+        selection_add=[("meeting_room","EventMeetingRoomMenus")],
+        ondelete={'meeting_room':'cascade'})

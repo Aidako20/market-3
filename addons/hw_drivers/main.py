@@ -1,112 +1,112 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from traceback import format_exc
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromtracebackimportformat_exc
 
-from dbus.mainloop.glib import DBusGMainLoop
-import json
-import logging
-import socket
-from threading import Thread
-import time
-import urllib3
+fromdbus.mainloop.glibimportDBusGMainLoop
+importjson
+importlogging
+importsocket
+fromthreadingimportThread
+importtime
+importurllib3
 
-from flectra.addons.hw_drivers.tools import helpers
+fromflectra.addons.hw_drivers.toolsimporthelpers
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
-drivers = []
-interfaces = {}
-iot_devices = {}
+drivers=[]
+interfaces={}
+iot_devices={}
 
 
-class Manager(Thread):
-    def send_alldevices(self):
+classManager(Thread):
+    defsend_alldevices(self):
         """
-        This method send IoT Box and devices informations to Flectra database
+        ThismethodsendIoTBoxanddevicesinformationstoFlectradatabase
         """
-        server = helpers.get_flectra_server_url()
-        if server:
-            subject = helpers.read_file_first_line('flectra-subject.conf')
-            if subject:
-                domain = helpers.get_ip().replace('.', '-') + subject.strip('*')
+        server=helpers.get_flectra_server_url()
+        ifserver:
+            subject=helpers.read_file_first_line('flectra-subject.conf')
+            ifsubject:
+                domain=helpers.get_ip().replace('.','-')+subject.strip('*')
             else:
-                domain = helpers.get_ip()
-            iot_box = {
-                'name': socket.gethostname(),
-                'identifier': helpers.get_mac_address(),
-                'ip': domain,
-                'token': helpers.get_token(),
-                'version': helpers.get_version(),
+                domain=helpers.get_ip()
+            iot_box={
+                'name':socket.gethostname(),
+                'identifier':helpers.get_mac_address(),
+                'ip':domain,
+                'token':helpers.get_token(),
+                'version':helpers.get_version(),
             }
-            devices_list = {}
-            for device in iot_devices:
-                identifier = iot_devices[device].device_identifier
-                devices_list[identifier] = {
-                    'name': iot_devices[device].device_name,
-                    'type': iot_devices[device].device_type,
-                    'manufacturer': iot_devices[device].device_manufacturer,
-                    'connection': iot_devices[device].device_connection,
+            devices_list={}
+            fordeviceiniot_devices:
+                identifier=iot_devices[device].device_identifier
+                devices_list[identifier]={
+                    'name':iot_devices[device].device_name,
+                    'type':iot_devices[device].device_type,
+                    'manufacturer':iot_devices[device].device_manufacturer,
+                    'connection':iot_devices[device].device_connection,
                 }
-            data = {'params': {'iot_box': iot_box, 'devices': devices_list,}}
-            # disable certifiacte verification
+            data={'params':{'iot_box':iot_box,'devices':devices_list,}}
+            #disablecertifiacteverification
             urllib3.disable_warnings()
-            http = urllib3.PoolManager(cert_reqs='CERT_NONE')
+            http=urllib3.PoolManager(cert_reqs='CERT_NONE')
             try:
                 http.request(
                     'POST',
-                    server + "/iot/setup",
+                    server+"/iot/setup",
                     body=json.dumps(data).encode('utf8'),
                     headers={
-                        'Content-type': 'application/json',
-                        'Accept': 'text/plain',
+                        'Content-type':'application/json',
+                        'Accept':'text/plain',
                     },
                 )
-            except Exception as e:
-                _logger.error('Could not reach configured server')
-                _logger.error('A error encountered : %s ' % e)
+            exceptExceptionase:
+                _logger.error('Couldnotreachconfiguredserver')
+                _logger.error('Aerrorencountered:%s'%e)
         else:
-            _logger.warning('Flectra server not set')
+            _logger.warning('Flectraservernotset')
 
-    def run(self):
+    defrun(self):
         """
-        Thread that will load interfaces and drivers and contact the flectra server with the updates
+        Threadthatwillloadinterfacesanddriversandcontacttheflectraserverwiththeupdates
         """
 
         helpers.check_git_branch()
-        is_certificate_ok, certificate_details = helpers.get_certificate_status()
-        if not is_certificate_ok:
-            _logger.warning("An error happened when trying to get the HTTPS certificate: %s",
+        is_certificate_ok,certificate_details=helpers.get_certificate_status()
+        ifnotis_certificate_ok:
+            _logger.warning("AnerrorhappenedwhentryingtogettheHTTPScertificate:%s",
                             certificate_details)
 
-        # We first add the IoT Box to the connected DB because IoT handlers cannot be downloaded if
-        # the identifier of the Box is not found in the DB. So add the Box to the DB.
+        #WefirstaddtheIoTBoxtotheconnectedDBbecauseIoThandlerscannotbedownloadedif
+        #theidentifieroftheBoxisnotfoundintheDB.SoaddtheBoxtotheDB.
         self.send_alldevices()
         helpers.download_iot_handlers()
         helpers.load_iot_handlers()
 
-        # Start the interfaces
-        for interface in interfaces.values():
-            i = interface()
-            i.daemon = True
+        #Starttheinterfaces
+        forinterfaceininterfaces.values():
+            i=interface()
+            i.daemon=True
             i.start()
 
-        # Check every 3 secondes if the list of connected devices has changed and send the updated
-        # list to the connected DB.
-        self.previous_iot_devices = []
-        while 1:
+        #Checkevery3secondesifthelistofconnecteddeviceshaschangedandsendtheupdated
+        #listtotheconnectedDB.
+        self.previous_iot_devices=[]
+        while1:
             try:
-                if iot_devices != self.previous_iot_devices:
+                ifiot_devices!=self.previous_iot_devices:
                     self.send_alldevices()
-                    self.previous_iot_devices = iot_devices.copy()
+                    self.previous_iot_devices=iot_devices.copy()
                 time.sleep(3)
             except:
-                # No matter what goes wrong, the Manager loop needs to keep running
+                #Nomatterwhatgoeswrong,theManagerloopneedstokeeprunning
                 _logger.error(format_exc())
 
 
-# Must be started from main thread
+#Mustbestartedfrommainthread
 DBusGMainLoop(set_as_default=True)
 
-manager = Manager()
-manager.daemon = True
+manager=Manager()
+manager.daemon=True
 manager.start()

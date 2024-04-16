@@ -1,18 +1,18 @@
-flectra.define('mass_mailing.ListKanbanRecord', function (require) {
-"use strict";
+flectra.define('mass_mailing.ListKanbanRecord',function(require){
+"usestrict";
 
-var KanbanRecord = require('web.KanbanRecord');
+varKanbanRecord=require('web.KanbanRecord');
 
-var MassMailingListKanbanRecord = KanbanRecord.extend({
+varMassMailingListKanbanRecord=KanbanRecord.extend({
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _openRecord: function () {
-        this.$('.o_mailing_list_kanban_boxes a').first().click();
+    _openRecord:function(){
+        this.$('.o_mailing_list_kanban_boxesa').first().click();
     }
 });
 
-return MassMailingListKanbanRecord;
+returnMassMailingListKanbanRecord;
 
 });

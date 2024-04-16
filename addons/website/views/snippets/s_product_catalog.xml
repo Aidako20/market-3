@@ -1,45 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="s_product_catalog" name="Pricelist">
-    <section class="s_product_catalog oe_img_bg oe_custom_bg pt48 pb32"
-             style="background-image: url('/web/image/website.s_product_catalog_default_image');"
+<templateid="s_product_catalog"name="Pricelist">
+    <sectionclass="s_product_catalogoe_img_bgoe_custom_bgpt48pb32"
+             style="background-image:url('/web/image/website.s_product_catalog_default_image');"
              data-vcss="001">
-        <div class="container">
+        <divclass="container">
             <h2>Menu</h2>
-            <p>Add a menu description.</p>
-            <div class="row">
-                <div class="col-lg-6 pt16 pb16">
+            <p>Addamenudescription.</p>
+            <divclass="row">
+                <divclass="col-lg-6pt16pb16">
                     <h3>Starter</h3>
-                    <ul class="list-unstyled my-3">
-                        <t t-call="website.s_product_catalog_dish">
-                            <t t-set="name">Cheese Onion Rings</t>
-                            <t t-set="price">$9.00</t>
+                    <ulclass="list-unstyledmy-3">
+                        <tt-call="website.s_product_catalog_dish">
+                            <tt-set="name">CheeseOnionRings</t>
+                            <tt-set="price">$9.00</t>
                         </t>
-                        <t t-call="website.s_product_catalog_dish">
-                            <t t-set="name">Chefs Fresh Soup of the Day</t>
-                            <t t-set="price">$7.50</t>
+                        <tt-call="website.s_product_catalog_dish">
+                            <tt-set="name">ChefsFreshSoupoftheDay</t>
+                            <tt-set="price">$7.50</t>
                         </t>
-                        <t t-call="website.s_product_catalog_dish">
-                            <t t-set="name">Beef Carpaccio</t>
-                            <t t-set="price">$10.50</t>
+                        <tt-call="website.s_product_catalog_dish">
+                            <tt-set="name">BeefCarpaccio</t>
+                            <tt-set="price">$10.50</t>
                         </t>
                     </ul>
                 </div>
-                <div class="col-lg-6 pt16 pb16">
-                    <h3>Main Course</h3>
-                    <ul class="list-unstyled my-3">
-                        <t t-call="website.s_product_catalog_dish">
-                            <t t-set="name">Filet Mignon 8oz</t>
-                            <t t-set="price">$15.50</t>
+                <divclass="col-lg-6pt16pb16">
+                    <h3>MainCourse</h3>
+                    <ulclass="list-unstyledmy-3">
+                        <tt-call="website.s_product_catalog_dish">
+                            <tt-set="name">FiletMignon8oz</t>
+                            <tt-set="price">$15.50</t>
                         </t>
-                        <t t-call="website.s_product_catalog_dish">
-                            <t t-set="name">Farm Friendly Chicken Supreme</t>
-                            <t t-set="price">$15.50</t>
+                        <tt-call="website.s_product_catalog_dish">
+                            <tt-set="name">FarmFriendlyChickenSupreme</t>
+                            <tt-set="price">$15.50</t>
                         </t>
-                        <t t-call="website.s_product_catalog_dish">
-                            <t t-set="name">Tuna and Salmon Burger</t>
-                            <t t-set="price">$12.00</t>
+                        <tt-call="website.s_product_catalog_dish">
+                            <tt-set="name">TunaandSalmonBurger</t>
+                            <tt-set="price">$12.00</t>
                         </t>
                     </ul>
                 </div>
@@ -48,38 +48,38 @@
     </section>
 </template>
 
-<template id="s_product_catalog_dish">
-    <li class="s_product_catalog_dish" data-name="Product">
-        <p class="s_product_catalog_dish_title d-flex align-items-baseline pb-2">
-            <span t-esc="name" class="s_product_catalog_dish_name"/>
-            <span t-esc="price" class="s_product_catalog_dish_price ml-auto pl-2"/>
+<templateid="s_product_catalog_dish">
+    <liclass="s_product_catalog_dish"data-name="Product">
+        <pclass="s_product_catalog_dish_titled-flexalign-items-baselinepb-2">
+            <spant-esc="name"class="s_product_catalog_dish_name"/>
+            <spant-esc="price"class="s_product_catalog_dish_priceml-autopl-2"/>
         </p>
-        <p class="s_product_catalog_dish_description border-top text-muted pt-1"><i>Add a description here</i></p>
+        <pclass="s_product_catalog_dish_descriptionborder-toptext-mutedpt-1"><i>Addadescriptionhere</i></p>
     </li>
 </template>
 
-<template id="s_product_catalog_options" inherit_id="website.snippet_options">
-    <xpath expr="." position="inside">
-        <div data-js="ProductCatalog" data-selector=".s_product_catalog">
-            <we-checkbox string="Descriptions" data-toggle-description="true"
+<templateid="s_product_catalog_options"inherit_id="website.snippet_options">
+    <xpathexpr="."position="inside">
+        <divdata-js="ProductCatalog"data-selector=".s_product_catalog">
+            <we-checkboxstring="Descriptions"data-toggle-description="true"
                          data-no-preview="true"/>
-            <t t-call="website.snippet_options_border_line_widgets">
-                <t t-set="label">⌙ Separator</t>
-                <t t-set="direction" t-value="'top'"/>
-                <t t-set="apply_to" t-value="'.s_product_catalog_dish_description'"/>
-                <!-- Note: no need of extra dependency thanks to the apply-to -->
+            <tt-call="website.snippet_options_border_line_widgets">
+                <tt-set="label">⌙Separator</t>
+                <tt-set="direction"t-value="'top'"/>
+                <tt-set="apply_to"t-value="'.s_product_catalog_dish_description'"/>
+                <!--Note:noneedofextradependencythankstotheapply-to-->
             </t>
         </div>
-        <div data-selector=".s_product_catalog_dish" data-drop-near=".s_product_catalog_dish"/>
+        <divdata-selector=".s_product_catalog_dish"data-drop-near=".s_product_catalog_dish"/>
     </xpath>
-    <xpath expr="//div[@data-js='SnippetMove']" position="attributes">
-        <attribute name="data-selector" add=".s_product_catalog_dish" separator=","/>
+    <xpathexpr="//div[@data-js='SnippetMove']"position="attributes">
+        <attributename="data-selector"add=".s_product_catalog_dish"separator=","/>
     </xpath>
 </template>
 
-<template id="assets_snippet_s_product_catalog_css_001" inherit_id="website.assets_frontend">
-    <xpath expr="//link[last()]" position="after">
-        <link rel="stylesheet" type="text/scss" href="/website/static/src/snippets/s_product_catalog/001.scss"/>
+<templateid="assets_snippet_s_product_catalog_css_001"inherit_id="website.assets_frontend">
+    <xpathexpr="//link[last()]"position="after">
+        <linkrel="stylesheet"type="text/scss"href="/website/static/src/snippets/s_product_catalog/001.scss"/>
     </xpath>
 </template>
 

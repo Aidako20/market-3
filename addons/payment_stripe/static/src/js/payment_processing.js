@@ -1,53 +1,53 @@
-flectra.define('payment_stripe.processing', function (require) {
-'use strict';
+flectra.define('payment_stripe.processing',function(require){
+'usestrict';
 
-var ajax = require('web.ajax');
-var rpc = require('web.rpc')
-var publicWidget = require('web.public.widget');
+varajax=require('web.ajax');
+varrpc=require('web.rpc')
+varpublicWidget=require('web.public.widget');
 
-var PaymentProcessing = publicWidget.registry.PaymentProcessing;
+varPaymentProcessing=publicWidget.registry.PaymentProcessing;
 
-return PaymentProcessing.include({
-    init: function () {
-        this._super.apply(this, arguments);
-        this._authInProgress = false;
+returnPaymentProcessing.include({
+    init:function(){
+        this._super.apply(this,arguments);
+        this._authInProgress=false;
     },
-    willStart: function () {
-        return this._super.apply(this, arguments).then(function () {
-            return ajax.loadJS("https://js.stripe.com/v3/");
+    willStart:function(){
+        returnthis._super.apply(this,arguments).then(function(){
+            returnajax.loadJS("https://js.stripe.com/v3/");
         })
     },
-    _stripeAuthenticate: function (tx) {
-        var stripe = Stripe(tx.stripe_publishable_key);
-        return stripe.handleCardPayment(tx.stripe_payment_intent_secret)
-        .then(function(result) {
-            if (result.error) {
-                return rpc.query({
-                    route: '/payment/stripe/s2s/process_payment_error',
-                    params: _.extend({}, {reference: tx.reference,
-                        stripe_payment_intent_secret: tx.stripe_payment_intent_secret,
-                        error: result.error.message})
-                }).then(()=> Promise.reject({"message": {"data": { "message": result.error.message}}}));
+    _stripeAuthenticate:function(tx){
+        varstripe=Stripe(tx.stripe_publishable_key);
+        returnstripe.handleCardPayment(tx.stripe_payment_intent_secret)
+        .then(function(result){
+            if(result.error){
+                returnrpc.query({
+                    route:'/payment/stripe/s2s/process_payment_error',
+                    params:_.extend({},{reference:tx.reference,
+                        stripe_payment_intent_secret:tx.stripe_payment_intent_secret,
+                        error:result.error.message})
+                }).then(()=>Promise.reject({"message":{"data":{"message":result.error.message}}}));
             }
-            return rpc.query({
-                route: '/payment/stripe/s2s/process_payment_intent',
-                params: _.extend({}, result.paymentIntent, {reference: tx.reference}),
+            returnrpc.query({
+                route:'/payment/stripe/s2s/process_payment_intent',
+                params:_.extend({},result.paymentIntent,{reference:tx.reference}),
             });
-        }).then(function() {
-            window.location = '/payment/process';
-        }).guardedCatch(function () {
-            this._authInProgress = false;
+        }).then(function(){
+            window.location='/payment/process';
+        }).guardedCatch(function(){
+            this._authInProgress=false;
         });
     },
-    processPolledData: function(transactions) {
-        this._super.apply(this, arguments);
-        for (var itx=0; itx < transactions.length; itx++) {
-            var tx = transactions[itx];
-            if (tx.acquirer_provider === 'stripe' && tx.state === 'pending' && tx.stripe_payment_intent_secret && !this._authInProgress) {
-                this._authInProgress = true;
+    processPolledData:function(transactions){
+        this._super.apply(this,arguments);
+        for(varitx=0;itx<transactions.length;itx++){
+            vartx=transactions[itx];
+            if(tx.acquirer_provider==='stripe'&&tx.state==='pending'&&tx.stripe_payment_intent_secret&&!this._authInProgress){
+                this._authInProgress=true;
                 this._stripeAuthenticate(tx);
             }
         }
     },
 });
-}); 
+});

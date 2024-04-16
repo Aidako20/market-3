@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <!-- Account Tax Group -->
-        <record id="tax_group_iva_19" model="account.tax.group">
-            <field name="name">IVA 19%</field>
+        <!--AccountTaxGroup-->
+        <recordid="tax_group_iva_19"model="account.tax.group">
+            <fieldname="name">IVA19%</field>
         </record>
 
     </data>

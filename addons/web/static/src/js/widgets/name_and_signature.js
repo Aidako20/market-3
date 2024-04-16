@@ -1,546 +1,546 @@
-flectra.define('web.name_and_signature', function (require) {
-'use strict';
+flectra.define('web.name_and_signature',function(require){
+'usestrict';
 
-var core = require('web.core');
-var config = require('web.config');
-var utils = require('web.utils');
-var Widget = require('web.Widget');
+varcore=require('web.core');
+varconfig=require('web.config');
+varutils=require('web.utils');
+varWidget=require('web.Widget');
 
-var _t = core._t;
+var_t=core._t;
 
 /**
- * This widget allows the user to input his name and to draw his signature.
- * Alternatively the signature can also be generated automatically based on
- * the given name and a selected font, or loaded from an image file.
+ *Thiswidgetallowstheusertoinputhisnameandtodrawhissignature.
+ *Alternativelythesignaturecanalsobegeneratedautomaticallybasedon
+ *thegivennameandaselectedfont,orloadedfromanimagefile.
  */
-var NameAndSignature = Widget.extend({
-    template: 'web.sign_name_and_signature',
-    xmlDependencies: ['/web/static/src/xml/name_and_signature.xml'],
-    events: {
-        // name
-        'input .o_web_sign_name_input': '_onInputSignName',
-        // signature
-        'click .o_web_sign_signature': '_onClickSignature',
-        'change .o_web_sign_signature': '_onChangeSignature',
-        // draw
-        'click .o_web_sign_draw_button': '_onClickSignDrawButton',
-        'click .o_web_sign_draw_clear a': '_onClickSignDrawClear',
-        // auto
-        'click .o_web_sign_auto_button': '_onClickSignAutoButton',
-        'click .o_web_sign_auto_select_style a': '_onClickSignAutoSelectStyle',
-        'click .o_web_sign_auto_font_selection a': '_onClickSignAutoFontSelection',
-        'mouseover .o_web_sign_auto_font_selection a': '_onMouseOverSignAutoFontSelection',
-        'touchmove .o_web_sign_auto_font_selection a': '_onTouchStartSignAutoFontSelection',
-        // load
-        'click .o_web_sign_load_button': '_onClickSignLoadButton',
-        'change .o_web_sign_load_file input': '_onChangeSignLoadInput',
+varNameAndSignature=Widget.extend({
+    template:'web.sign_name_and_signature',
+    xmlDependencies:['/web/static/src/xml/name_and_signature.xml'],
+    events:{
+        //name
+        'input.o_web_sign_name_input':'_onInputSignName',
+        //signature
+        'click.o_web_sign_signature':'_onClickSignature',
+        'change.o_web_sign_signature':'_onChangeSignature',
+        //draw
+        'click.o_web_sign_draw_button':'_onClickSignDrawButton',
+        'click.o_web_sign_draw_cleara':'_onClickSignDrawClear',
+        //auto
+        'click.o_web_sign_auto_button':'_onClickSignAutoButton',
+        'click.o_web_sign_auto_select_stylea':'_onClickSignAutoSelectStyle',
+        'click.o_web_sign_auto_font_selectiona':'_onClickSignAutoFontSelection',
+        'mouseover.o_web_sign_auto_font_selectiona':'_onMouseOverSignAutoFontSelection',
+        'touchmove.o_web_sign_auto_font_selectiona':'_onTouchStartSignAutoFontSelection',
+        //load
+        'click.o_web_sign_load_button':'_onClickSignLoadButton',
+        'change.o_web_sign_load_fileinput':'_onChangeSignLoadInput',
     },
 
     /**
-     * Allows options.
+     *Allowsoptions.
      *
-     * @constructor
-     * @param {Widget} parent
-     * @param {Object} [options={}]
-     * @param {number} [options.displaySignatureRatio=3.0] - The ratio used when
-     *  (re)computing the size of the signature (width = height * ratio)
-     * @param {string} [options.defaultName=''] - The default name of
-     *  the signer.
-     * @param {string} [options.defaultFont=''] - The unique and default
-     *  font for auto mode. If empty, all fonts are visible.
-     * * @param {string} [options.fontColor='DarkBlue'] - Color of signature
-     * (must be a string color)
-     * @param {string} [options.noInputName=false] - If set to true,
-     *  the user can not enter his name. If there aren't defaultName,
-     *  auto mode is hidden.
-     * @param {string} [options.mode='draw'] - @see this.setMode
-     * @param {string} [options.signatureType='signature'] - The type of
-     *  signature used in 'auto' mode. Can be one of the following values:
+     *@constructor
+     *@param{Widget}parent
+     *@param{Object}[options={}]
+     *@param{number}[options.displaySignatureRatio=3.0]-Theratiousedwhen
+     * (re)computingthesizeofthesignature(width=height*ratio)
+     *@param{string}[options.defaultName='']-Thedefaultnameof
+     * thesigner.
+     *@param{string}[options.defaultFont='']-Theuniqueanddefault
+     * fontforautomode.Ifempty,allfontsarevisible.
+     **@param{string}[options.fontColor='DarkBlue']-Colorofsignature
+     *(mustbeastringcolor)
+     *@param{string}[options.noInputName=false]-Ifsettotrue,
+     * theusercannotenterhisname.Iftherearen'tdefaultName,
+     * automodeishidden.
+     *@param{string}[options.mode='draw']-@seethis.setMode
+     *@param{string}[options.signatureType='signature']-Thetypeof
+     * signatureusedin'auto'mode.Canbeoneofthefollowingvalues:
      *
-     *  - 'signature': it will adapt the characters width to fit the whole
-     *    text in the image.
-     *  - 'initial': it will adapt the space between characters to fill
-     *      the image with the text. The text will be the first letter of
-     *      every word in the name, separated by dots.
+     * -'signature':itwilladaptthecharacterswidthtofitthewhole
+     *   textintheimage.
+     * -'initial':itwilladaptthespacebetweencharacterstofill
+     *     theimagewiththetext.Thetextwillbethefirstletterof
+     *     everywordinthename,separatedbydots.
      */
-    init: function (parent, options) {
-        this._super.apply(this, arguments);
-        options = options || {};
-        this.htmlId = _.uniqueId();
-        this.defaultName = options.defaultName || '';
-        this.defaultFont = options.defaultFont || '';
-        this.fontColor = options.fontColor || 'DarkBlue';
-        this.displaySignatureRatio = options.displaySignatureRatio || 3.0;
-        this.signatureType = options.signatureType || 'signature';
-        this.signMode = options.mode || 'draw';
-        this.noInputName = options.noInputName || false;
-        this.currentFont = 0;
-        this.drawTimeout = null;
-        this.drawPreviewTimeout = null;
+    init:function(parent,options){
+        this._super.apply(this,arguments);
+        options=options||{};
+        this.htmlId=_.uniqueId();
+        this.defaultName=options.defaultName||'';
+        this.defaultFont=options.defaultFont||'';
+        this.fontColor=options.fontColor||'DarkBlue';
+        this.displaySignatureRatio=options.displaySignatureRatio||3.0;
+        this.signatureType=options.signatureType||'signature';
+        this.signMode=options.mode||'draw';
+        this.noInputName=options.noInputName||false;
+        this.currentFont=0;
+        this.drawTimeout=null;
+        this.drawPreviewTimeout=null;
     },
     /**
-     * Loads the fonts.
+     *Loadsthefonts.
      *
-     * @override
+     *@override
      */
-    willStart: function () {
-        var self = this;
-        return Promise.all([
-            this._super.apply(this, arguments),
-            this._rpc({route: '/web/sign/get_fonts/' + self.defaultFont}).then(function (data) {
-                self.fonts = data;
+    willStart:function(){
+        varself=this;
+        returnPromise.all([
+            this._super.apply(this,arguments),
+            this._rpc({route:'/web/sign/get_fonts/'+self.defaultFont}).then(function(data){
+                self.fonts=data;
             })
         ]);
     },
     /**
-     * Finds the DOM elements, initializes the signature area,
-     * and focus the name field.
+     *FindstheDOMelements,initializesthesignaturearea,
+     *andfocusthenamefield.
      *
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        // signature and name input
-        this.$signatureGroup = this.$('.o_web_sign_signature_group');
-        this.$signatureField = this.$('.o_web_sign_signature');
-        this.$nameInput = this.$('.o_web_sign_name_input');
-        this.$nameInputGroup = this.$('.o_web_sign_name_group');
+    start:function(){
+        varself=this;
+        //signatureandnameinput
+        this.$signatureGroup=this.$('.o_web_sign_signature_group');
+        this.$signatureField=this.$('.o_web_sign_signature');
+        this.$nameInput=this.$('.o_web_sign_name_input');
+        this.$nameInputGroup=this.$('.o_web_sign_name_group');
 
-        // mode selection buttons
-        this.$drawButton = this.$('a.o_web_sign_draw_button');
-        this.$autoButton = this.$('a.o_web_sign_auto_button');
-        this.$loadButton = this.$('a.o_web_sign_load_button');
+        //modeselectionbuttons
+        this.$drawButton=this.$('a.o_web_sign_draw_button');
+        this.$autoButton=this.$('a.o_web_sign_auto_button');
+        this.$loadButton=this.$('a.o_web_sign_load_button');
 
-        // mode: draw
-        this.$drawClear = this.$('.o_web_sign_draw_clear');
+        //mode:draw
+        this.$drawClear=this.$('.o_web_sign_draw_clear');
 
-        // mode: auto
-        this.$autoSelectStyle = this.$('.o_web_sign_auto_select_style');
-        this.$autoFontSelection = this.$('.o_web_sign_auto_font_selection');
-        this.$autoFontList = this.$('.o_web_sign_auto_font_list');
-        for (var i in this.fonts) {
-            var $img = $('<img/>').addClass('img-fluid');
-            var $a = $('<a/>').addClass('btn p-0').append($img).data('fontNb', i);
+        //mode:auto
+        this.$autoSelectStyle=this.$('.o_web_sign_auto_select_style');
+        this.$autoFontSelection=this.$('.o_web_sign_auto_font_selection');
+        this.$autoFontList=this.$('.o_web_sign_auto_font_list');
+        for(variinthis.fonts){
+            var$img=$('<img/>').addClass('img-fluid');
+            var$a=$('<a/>').addClass('btnp-0').append($img).data('fontNb',i);
             this.$autoFontList.append($a);
         }
 
-        // mode: load
-        this.$loadFile = this.$('.o_web_sign_load_file');
-        this.$loadInvalid = this.$('.o_web_sign_load_invalid');
+        //mode:load
+        this.$loadFile=this.$('.o_web_sign_load_file');
+        this.$loadInvalid=this.$('.o_web_sign_load_invalid');
 
-        if (this.fonts && this.fonts.length < 2) {
+        if(this.fonts&&this.fonts.length<2){
             this.$autoSelectStyle.hide();
         }
 
-        if (this.noInputName) {
-            if (this.defaultName === "") {
+        if(this.noInputName){
+            if(this.defaultName===""){
                 this.$autoButton.hide();
             }
             this.$nameInputGroup.hide();
         }
 
-        // Resize the signature area if it is resized
-        $(window).on('resize.o_web_sign_name_and_signature', _.debounce(function () {
-            if (self.isDestroyed()) {
-                // May happen since this is debounced
+        //Resizethesignatureareaifitisresized
+        $(window).on('resize.o_web_sign_name_and_signature',_.debounce(function(){
+            if(self.isDestroyed()){
+                //Mayhappensincethisisdebounced
                 return;
             }
             self.resizeSignature();
-        }, 250));
+        },250));
 
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
-        this._super.apply(this, arguments);
+    destroy:function(){
+        this._super.apply(this,arguments);
         $(window).off('resize.o_web_sign_name_and_signature');
     },
 
     //----------------------------------------------------------------------
-    // Public
+    //Public
     //----------------------------------------------------------------------
 
     /**
-     * Focuses the name.
+     *Focusesthename.
      */
-    focusName: function () {
-        // Don't focus on mobile
-        if (!config.device.isMobile) {
+    focusName:function(){
+        //Don'tfocusonmobile
+        if(!config.device.isMobile){
             this.$nameInput.focus();
         }
     },
     /**
-     * Gets the name currently given by the user.
+     *Getsthenamecurrentlygivenbytheuser.
      *
-     * @returns {string} name
+     *@returns{string}name
      */
-    getName: function () {
-        return this.$nameInput.val();
+    getName:function(){
+        returnthis.$nameInput.val();
     },
     /**
-     * Gets the signature currently drawn. The data format is that produced
-     * natively by Canvas - base64 encoded (likely PNG) bitmap data.
+     *Getsthesignaturecurrentlydrawn.Thedataformatisthatproduced
+     *nativelybyCanvas-base64encoded(likelyPNG)bitmapdata.
      *
-     * @returns {string[]} Array that contains the signature as a bitmap.
-     *  The first element is the mimetype, the second element is the data.
+     *@returns{string[]}Arraythatcontainsthesignatureasabitmap.
+     * Thefirstelementisthemimetype,thesecondelementisthedata.
      */
-    getSignatureImage: function () {
-        return this.$signatureField.jSignature('getData', 'image');
+    getSignatureImage:function(){
+        returnthis.$signatureField.jSignature('getData','image');
     },
     /**
-     * Gets the signature currently drawn, in a format ready to be used in
-     * an <img/> src attribute.
+     *Getsthesignaturecurrentlydrawn,inaformatreadytobeusedin
+     *an<img/>srcattribute.
      *
-     * @returns {string} the signature currently drawn, src ready
+     *@returns{string}thesignaturecurrentlydrawn,srcready
      */
-    getSignatureImageSrc: function () {
-        return this.$signatureField.jSignature('getData');
+    getSignatureImageSrc:function(){
+        returnthis.$signatureField.jSignature('getData');
     },
     /**
-     * Returns whether the drawing area is currently empty.
+     *Returnswhetherthedrawingareaiscurrentlyempty.
      *
-     * @returns {boolean} Whether the drawing area is currently empty.
+     *@returns{boolean}Whetherthedrawingareaiscurrentlyempty.
      */
-    isSignatureEmpty: function () {
-        var signature = this.$signatureField.jSignature('getData');
-        return signature && this.emptySignature ? this.emptySignature === signature : true;
+    isSignatureEmpty:function(){
+        varsignature=this.$signatureField.jSignature('getData');
+        returnsignature&&this.emptySignature?this.emptySignature===signature:true;
     },
-    resizeSignature: function() {
-        if (!this.$signatureField) {
+    resizeSignature:function(){
+        if(!this.$signatureField){
             return;
         }
-        // recompute size based on the current width
-        this.$signatureField.css({width: 'unset'});
-        const width = this.$signatureField.width();
-        const height = parseInt(width / this.displaySignatureRatio);
+        //recomputesizebasedonthecurrentwidth
+        this.$signatureField.css({width:'unset'});
+        constwidth=this.$signatureField.width();
+        constheight=parseInt(width/this.displaySignatureRatio);
 
-        // necessary because the lib is adding invisible div with margin
-        // signature field too tall without this code
+        //necessarybecausethelibisaddinginvisibledivwithmargin
+        //signaturefieldtootallwithoutthiscode
         this.$signatureField.css({
-            width: width,
-            height: height,
+            width:width,
+            height:height,
         });
         this.$signatureField.find('canvas').css({
-            width: width,
-            height: height,
+            width:width,
+            height:height,
         });
-        return {width, height};
+        return{width,height};
     },
     /**
-     * (Re)initializes the signature area:
-     *  - set the correct width and height of the drawing based on the width
-     *      of the container and the ratio option
-     *  - empty any previous content
-     *  - correctly reset the empty state
-     *  - call @see setMode with reset
+     *(Re)initializesthesignaturearea:
+     * -setthecorrectwidthandheightofthedrawingbasedonthewidth
+     *     ofthecontainerandtheratiooption
+     * -emptyanypreviouscontent
+     * -correctlyresettheemptystate
+     * -call@seesetModewithreset
      *
-     * @returns {Deferred}
+     *@returns{Deferred}
      */
-    resetSignature: function () {
-        if (!this.$signatureField) {
-            // no action if called before start
-            return Promise.reject();
+    resetSignature:function(){
+        if(!this.$signatureField){
+            //noactionifcalledbeforestart
+            returnPromise.reject();
         }
 
-        const {width, height} = this.resizeSignature();
+        const{width,height}=this.resizeSignature();
 
         this.$signatureField
             .empty()
             .jSignature({
-                'decor-color': '#D1D0CE',
-                'background-color': 'rgba(255,255,255,0)',
-                'show-stroke': false,
-                'color': this.fontColor,
-                'lineWidth': 2,
-                'width': width,
-                'height': height,
+                'decor-color':'#D1D0CE',
+                'background-color':'rgba(255,255,255,0)',
+                'show-stroke':false,
+                'color':this.fontColor,
+                'lineWidth':2,
+                'width':width,
+                'height':height,
             });
-        this.emptySignature = this.$signatureField.jSignature('getData');
+        this.emptySignature=this.$signatureField.jSignature('getData');
 
-        this.setMode(this.signMode, true);
+        this.setMode(this.signMode,true);
 
         this.focusName();
 
-        return Promise.resolve();
+        returnPromise.resolve();
     },
     /**
-     * Changes the signature mode. Toggles the display of the relevant
-     * controls and resets the drawing.
+     *Changesthesignaturemode.Togglesthedisplayoftherelevant
+     *controlsandresetsthedrawing.
      *
-     * @param {string} mode - the mode to use. Can be one of the following:
-     *  - 'draw': the user draws the signature manually with the mouse
-     *  - 'auto': the signature is drawn automatically using a selected font
-     *  - 'load': the signature is loaded from an image file
-     * @param {boolean} [reset=false] - Set to true to reset the elements
-     *  even if the @see mode has not changed. By default nothing happens
-     *  if the @see mode is already selected.
+     *@param{string}mode-themodetouse.Canbeoneofthefollowing:
+     * -'draw':theuserdrawsthesignaturemanuallywiththemouse
+     * -'auto':thesignatureisdrawnautomaticallyusingaselectedfont
+     * -'load':thesignatureisloadedfromanimagefile
+     *@param{boolean}[reset=false]-Settotruetoresettheelements
+     * evenifthe@seemodehasnotchanged.Bydefaultnothinghappens
+     * ifthe@seemodeisalreadyselected.
      */
-    setMode: function (mode, reset) {
-        if (reset !== true && mode === this.signMode) {
-            // prevent flickering and unnecessary compute
+    setMode:function(mode,reset){
+        if(reset!==true&&mode===this.signMode){
+            //preventflickeringandunnecessarycompute
             return;
         }
 
-        this.signMode = mode;
+        this.signMode=mode;
 
-        this.$drawClear.toggleClass('d-none', this.signMode !== 'draw');
-        this.$autoSelectStyle.toggleClass('d-none', this.signMode !== 'auto');
-        this.$loadFile.toggleClass('d-none', this.signMode !== 'load');
+        this.$drawClear.toggleClass('d-none',this.signMode!=='draw');
+        this.$autoSelectStyle.toggleClass('d-none',this.signMode!=='auto');
+        this.$loadFile.toggleClass('d-none',this.signMode!=='load');
 
-        this.$drawButton.toggleClass('active', this.signMode === 'draw');
-        this.$autoButton.toggleClass('active', this.signMode === 'auto');
-        this.$loadButton.toggleClass('active', this.signMode === 'load');
+        this.$drawButton.toggleClass('active',this.signMode==='draw');
+        this.$autoButton.toggleClass('active',this.signMode==='auto');
+        this.$loadButton.toggleClass('active',this.signMode==='load');
 
-        this.$signatureField.jSignature(this.signMode === 'draw' ? 'enable' : 'disable');
+        this.$signatureField.jSignature(this.signMode==='draw'?'enable':'disable');
         this.$signatureField.jSignature('reset');
 
-        if (this.signMode === 'auto') {
-            // draw based on name
+        if(this.signMode==='auto'){
+            //drawbasedonname
             this._drawCurrentName();
-        } else {
-            // close style dialog
+        }else{
+            //closestyledialog
             this.$autoFontSelection.addClass('d-none');
         }
 
-        if (this.signMode !== 'load') {
-            // close invalid file alert
+        if(this.signMode!=='load'){
+            //closeinvalidfilealert
             this.$loadInvalid.addClass('d-none');
         }
     },
     /**
-     * Gets the current name and signature, validates them, and returns
-     * the result. If they are invalid, displays the errors to the user.
+     *Getsthecurrentnameandsignature,validatesthem,andreturns
+     *theresult.Iftheyareinvalid,displaystheerrorstotheuser.
      *
-     * @returns {boolean} whether the current name and signature are valid
+     *@returns{boolean}whetherthecurrentnameandsignaturearevalid
      */
-    validateSignature: function () {
-        var name = this.getName();
-        var isSignatureEmpty = this.isSignatureEmpty();
-        this.$nameInput.parent().toggleClass('o_has_error', !name)
-            .find('.form-control, .custom-select').toggleClass('is-invalid', !name);
-        this.$signatureGroup.toggleClass('border-danger', isSignatureEmpty);
-        return name && !isSignatureEmpty;
+    validateSignature:function(){
+        varname=this.getName();
+        varisSignatureEmpty=this.isSignatureEmpty();
+        this.$nameInput.parent().toggleClass('o_has_error',!name)
+            .find('.form-control,.custom-select').toggleClass('is-invalid',!name);
+        this.$signatureGroup.toggleClass('border-danger',isSignatureEmpty);
+        returnname&&!isSignatureEmpty;
     },
 
     //----------------------------------------------------------------------
-    // Private
+    //Private
     //----------------------------------------------------------------------
 
     /**
-     * Draws the current name with the current font in the signature field.
+     *Drawsthecurrentnamewiththecurrentfontinthesignaturefield.
      *
-     * @private
+     *@private
      */
-    _drawCurrentName: function () {
-        var font = this.fonts[this.currentFont];
-        var text = this._getCleanedName();
-        var canvas = this.$signatureField.find('canvas')[0];
-        var img = this._getSVGText(font, text, canvas.width, canvas.height);
-        return this._printImage(img);
+    _drawCurrentName:function(){
+        varfont=this.fonts[this.currentFont];
+        vartext=this._getCleanedName();
+        varcanvas=this.$signatureField.find('canvas')[0];
+        varimg=this._getSVGText(font,text,canvas.width,canvas.height);
+        returnthis._printImage(img);
     },
     /**
-     * Returns the given name after cleaning it by removing characters that
-     * are not supposed to be used in a signature. If @see signatureType is set
-     * to 'initial', returns the first letter of each word, separated by dots.
+     *Returnsthegivennameaftercleaningitbyremovingcharactersthat
+     *arenotsupposedtobeusedinasignature.If@seesignatureTypeisset
+     *to'initial',returnsthefirstletterofeachword,separatedbydots.
      *
-     * @private
-     * @returns {string} cleaned name
+     *@private
+     *@returns{string}cleanedname
      */
-    _getCleanedName: function () {
-        var text = this.getName();
-        if (this.signatureType === 'initial') {
-            return (text.split(' ').map(function (w) {
-                return w[0];
-            }).join('.') + '.');
+    _getCleanedName:function(){
+        vartext=this.getName();
+        if(this.signatureType==='initial'){
+            return(text.split('').map(function(w){
+                returnw[0];
+            }).join('.')+'.');
         }
-        return text;
+        returntext;
     },
     /**
-     * Gets an SVG matching the given parameters, output compatible with the
-     * src attribute of <img/>.
+     *GetsanSVGmatchingthegivenparameters,outputcompatiblewiththe
+     *srcattributeof<img/>.
      *
-     * @private
-     * @param {string} font: base64 encoded font to use
-     * @param {string} text: the name to draw
-     * @param {number} width: the width of the resulting image in px
-     * @param {number} height: the height of the resulting image in px
-     * @returns {string} image = mimetype + image data
+     *@private
+     *@param{string}font:base64encodedfonttouse
+     *@param{string}text:thenametodraw
+     *@param{number}width:thewidthoftheresultingimageinpx
+     *@param{number}height:theheightoftheresultingimageinpx
+     *@returns{string}image=mimetype+imagedata
      */
-    _getSVGText: function (font, text, width, height) {
-        var $svg = $(core.qweb.render('web.sign_svg_text', {
-            width: width,
-            height: height,
-            font: font,
-            text: text,
-            type: this.signatureType,
-            color: this.fontColor,
+    _getSVGText:function(font,text,width,height){
+        var$svg=$(core.qweb.render('web.sign_svg_text',{
+            width:width,
+            height:height,
+            font:font,
+            text:text,
+            type:this.signatureType,
+            color:this.fontColor,
         }));
         $svg.attr({
-            'xmlns': "http://www.w3.org/2000/svg",
-            'xmlns:xlink': "http://www.w3.org/1999/xlink",
+            'xmlns':"http://www.w3.org/2000/svg",
+            'xmlns:xlink':"http://www.w3.org/1999/xlink",
         });
 
-        return "data:image/svg+xml," + encodeURI($svg[0].outerHTML);
+        return"data:image/svg+xml,"+encodeURI($svg[0].outerHTML);
     },
     /**
-     * Displays the given image in the signature field.
-     * If needed, resizes the image to fit the existing area.
+     *Displaysthegivenimageinthesignaturefield.
+     *Ifneeded,resizestheimagetofittheexistingarea.
      *
-     * @private
-     * @param {string} imgSrc - data of the image to display
+     *@private
+     *@param{string}imgSrc-dataoftheimagetodisplay
      */
-    _printImage: function (imgSrc) {
-        var self = this;
+    _printImage:function(imgSrc){
+        varself=this;
 
-        var image = new Image;
-        image.onload = function () {
-            // don't slow down the UI if the drawing is slow, and prevent
-            // drawing twice when calling this method in rapid succession
+        varimage=newImage;
+        image.onload=function(){
+            //don'tslowdowntheUIifthedrawingisslow,andprevent
+            //drawingtwicewhencallingthismethodinrapidsuccession
             clearTimeout(self.drawTimeout);
-            self.drawTimeout = setTimeout(function () {
-                var width = 0;
-                var height = 0;
-                var ratio = image.width / image.height;
+            self.drawTimeout=setTimeout(function(){
+                varwidth=0;
+                varheight=0;
+                varratio=image.width/image.height;
 
-                var $canvas = self.$signatureField.find('canvas');
-                var context = $canvas[0].getContext('2d');
+                var$canvas=self.$signatureField.find('canvas');
+                varcontext=$canvas[0].getContext('2d');
 
-                if (image.width / $canvas[0].width > image.height / $canvas[0].height) {
-                    width = $canvas[0].width;
-                    height = parseInt(width / ratio);
-                } else {
-                    height = $canvas[0].height;
-                    width = parseInt(height * ratio);
+                if(image.width/$canvas[0].width>image.height/$canvas[0].height){
+                    width=$canvas[0].width;
+                    height=parseInt(width/ratio);
+                }else{
+                    height=$canvas[0].height;
+                    width=parseInt(height*ratio);
                 }
                 self.$signatureField.jSignature('reset');
-                var ignoredContext = _.pick(context, ['shadowOffsetX', 'shadowOffsetY']);
-                _.extend(context, {shadowOffsetX: 0, shadowOffsetY: 0});
+                varignoredContext=_.pick(context,['shadowOffsetX','shadowOffsetY']);
+                _.extend(context,{shadowOffsetX:0,shadowOffsetY:0});
                 context.drawImage(image,
                     0,
                     0,
                     image.width,
                     image.height,
-                    ($canvas[0].width - width) / 2,
-                    ($canvas[0].height - height) / 2,
+                    ($canvas[0].width-width)/2,
+                    ($canvas[0].height-height)/2,
                     width,
                     height
                 );
-                _.extend(context, ignoredContext);
+                _.extend(context,ignoredContext);
                 self.trigger_up('signature_changed');
-            }, 0);
+            },0);
         };
-        image.src = imgSrc;
+        image.src=imgSrc;
     },
     /**
-     * Sets the font to use in @see mode 'auto'. Redraws the signature if
-     * the font has been changed.
+     *Setsthefonttousein@seemode'auto'.Redrawsthesignatureif
+     *thefonthasbeenchanged.
      *
-     * @private
-     * @param {number} index - index of the font in @see this.fonts
+     *@private
+     *@param{number}index-indexofthefontin@seethis.fonts
      */
-    _setFont: function (index) {
-        if (index !== this.currentFont) {
-            this.currentFont = index;
+    _setFont:function(index){
+        if(index!==this.currentFont){
+            this.currentFont=index;
             this._drawCurrentName();
         }
     },
     /**
-     * Updates the preview buttons by rendering the signature for each font.
+     *Updatesthepreviewbuttonsbyrenderingthesignatureforeachfont.
      *
-     * @private
+     *@private
      */
-    _updatePreviewButtons: function () {
-        var self = this;
-        // don't slow down the UI if the drawing is slow, and prevent
-        // drawing twice when calling this method in rapid succession
+    _updatePreviewButtons:function(){
+        varself=this;
+        //don'tslowdowntheUIifthedrawingisslow,andprevent
+        //drawingtwicewhencallingthismethodinrapidsuccession
         clearTimeout(this.drawPreviewTimeout);
-        this.drawPreviewTimeout = setTimeout(function () {
-            var height = 100;
-            var width = parseInt(height * self.displaySignatureRatio);
-            var $existingButtons = self.$autoFontList.find('a');
-            for (var i = 0; i < self.fonts.length; i++) {
-                var imgSrc = self._getSVGText(
+        this.drawPreviewTimeout=setTimeout(function(){
+            varheight=100;
+            varwidth=parseInt(height*self.displaySignatureRatio);
+            var$existingButtons=self.$autoFontList.find('a');
+            for(vari=0;i<self.fonts.length;i++){
+                varimgSrc=self._getSVGText(
                     self.fonts[i],
-                    self._getCleanedName() || _t("Your name"),
+                    self._getCleanedName()||_t("Yourname"),
                     width,
                     height
                 );
-                $existingButtons.eq(i).find('img').attr('src', imgSrc);
+                $existingButtons.eq(i).find('img').attr('src',imgSrc);
             }
-        }, 0);
+        },0);
     },
     /**
-     * Waits for the signature to be not empty and triggers up the event
-     * `signature_changed`.
-     * This is necessary because some methods of jSignature are async but
-     * they don't return a promise and don't trigger any event.
+     *Waitsforthesignaturetobenotemptyandtriggersuptheevent
+     *`signature_changed`.
+     *ThisisnecessarybecausesomemethodsofjSignatureareasyncbut
+     *theydon'treturnapromiseanddon'ttriggeranyevent.
      *
-     * @private
-     * @param {Deferred} [def=Deferred] - Deferred that will be returned by
-     *  the method and resolved when the signature is not empty anymore.
-     * @returns {Deferred}
+     *@private
+     *@param{Deferred}[def=Deferred]-Deferredthatwillbereturnedby
+     * themethodandresolvedwhenthesignatureisnotemptyanymore.
+     *@returns{Deferred}
      */
-    _waitForSignatureNotEmpty: function (def) {
-        def = def || $.Deferred();
-        if (!this.isSignatureEmpty()) {
+    _waitForSignatureNotEmpty:function(def){
+        def=def||$.Deferred();
+        if(!this.isSignatureEmpty()){
             this.trigger_up('signature_changed');
             def.resolve();
-        } else {
-            // Use the existing def to prevent the method from creating a new
-            // one at every loop.
-            setTimeout(this._waitForSignatureNotEmpty.bind(this, def), 10);
+        }else{
+            //Usetheexistingdeftopreventthemethodfromcreatinganew
+            //oneateveryloop.
+            setTimeout(this._waitForSignatureNotEmpty.bind(this,def),10);
         }
-        return def;
+        returndef;
     },
 
     //----------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //----------------------------------------------------------------------
 
     /**
-     * Handles click on the signature: closes the font selection.
+     *Handlesclickonthesignature:closesthefontselection.
      *
-     * @see mode 'auto'
-     * @private
-     * @param {Event} ev
+     *@seemode'auto'
+     *@private
+     *@param{Event}ev
      */
-    _onClickSignature: function (ev) {
+    _onClickSignature:function(ev){
         this.$autoFontSelection.addClass('d-none');
     },
     /**
-     * Handles click on the Auto button: activates @see mode 'auto'.
+     *HandlesclickontheAutobutton:activates@seemode'auto'.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onClickSignAutoButton: function (ev) {
+    _onClickSignAutoButton:function(ev){
         ev.preventDefault();
         this.setMode('auto');
     },
     /**
-     * Handles click on a font: uses it and closes the font selection.
+     *Handlesclickonafont:usesitandclosesthefontselection.
      *
-     * @see mode 'auto'
-     * @private
-     * @param {Event} ev
+     *@seemode'auto'
+     *@private
+     *@param{Event}ev
      */
-    _onClickSignAutoFontSelection: function (ev) {
-        this.$autoFontSelection.addClass('d-none').removeClass('d-flex').css('width', 0);
+    _onClickSignAutoFontSelection:function(ev){
+        this.$autoFontSelection.addClass('d-none').removeClass('d-flex').css('width',0);
         this._setFont(parseInt($(ev.currentTarget).data('font-nb')));
     },
     /**
-     * Handles click on Select Style: opens and updates the font selection.
+     *HandlesclickonSelectStyle:opensandupdatesthefontselection.
      *
-     * @see mode 'auto'
-     * @private
-     * @param {Event} ev
+     *@seemode'auto'
+     *@private
+     *@param{Event}ev
      */
-    _onClickSignAutoSelectStyle: function (ev) {
-        var self = this;
-        var width = Math.min(
-            self.$autoFontSelection.find('a').first().height() * self.displaySignatureRatio * 1.25,
+    _onClickSignAutoSelectStyle:function(ev){
+        varself=this;
+        varwidth=Math.min(
+            self.$autoFontSelection.find('a').first().height()*self.displaySignatureRatio*1.25,
             this.$signatureField.width()
         );
 
@@ -548,115 +548,115 @@ var NameAndSignature = Widget.extend({
         self._updatePreviewButtons();
 
         this.$autoFontSelection.removeClass('d-none').addClass('d-flex');
-        this.$autoFontSelection.show().animate({'width': width}, 500, function () {});
+        this.$autoFontSelection.show().animate({'width':width},500,function(){});
     },
     /**
-     * Handles click on the Draw button: activates @see mode 'draw'.
+     *HandlesclickontheDrawbutton:activates@seemode'draw'.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onClickSignDrawButton: function (ev) {
+    _onClickSignDrawButton:function(ev){
         ev.preventDefault();
         this.setMode('draw');
     },
     /**
-     * Handles click on clear: empties the signature field.
+     *Handlesclickonclear:emptiesthesignaturefield.
      *
-     * @see mode 'draw'
-     * @private
-     * @param {Event} ev
+     *@seemode'draw'
+     *@private
+     *@param{Event}ev
      */
-    _onClickSignDrawClear: function (ev) {
+    _onClickSignDrawClear:function(ev){
         ev.preventDefault();
         this.$signatureField.jSignature('reset');
     },
     /**
-     * Handles click on the Load button: activates @see mode 'load'.
+     *HandlesclickontheLoadbutton:activates@seemode'load'.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onClickSignLoadButton: function (ev) {
+    _onClickSignLoadButton:function(ev){
         ev.preventDefault();
-        // open file upload automatically (saves 1 click)
+        //openfileuploadautomatically(saves1click)
         this.$loadFile.find('input').click();
         this.setMode('load');
     },
     /**
-     * Triggers up the signature change event.
+     *Triggersupthesignaturechangeevent.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onChangeSignature: function (ev) {
+    _onChangeSignature:function(ev){
         this.trigger_up('signature_changed');
     },
     /**
-     * Handles change on load file input: displays the loaded image if the
-     * format is correct, or diplays an error otherwise.
+     *Handleschangeonloadfileinput:displaystheloadedimageifthe
+     *formatiscorrect,ordiplaysanerrorotherwise.
      *
-     * @see mode 'load'
-     * @private
-     * @param {Event} ev
-     * @return bool|undefined
+     *@seemode'load'
+     *@private
+     *@param{Event}ev
+     *@returnbool|undefined
      */
-    _onChangeSignLoadInput: function (ev) {
-        var self = this;
-        var f = ev.target.files[0];
-        if (f === undefined) {
-            return false;
+    _onChangeSignLoadInput:function(ev){
+        varself=this;
+        varf=ev.target.files[0];
+        if(f===undefined){
+            returnfalse;
         }
-        if (f.type.substr(0, 5) !== 'image') {
+        if(f.type.substr(0,5)!=='image'){
             this.$signatureField.jSignature('reset');
             this.$loadInvalid.removeClass('d-none');
-            return false;
+            returnfalse;
         }
         this.$loadInvalid.addClass('d-none');
 
-        utils.getDataURLFromFile(f).then(function (result) {
+        utils.getDataURLFromFile(f).then(function(result){
             self._printImage(result);
         });
     },
     /**
-     * Handles input on name field: if the @see mode is 'auto', redraws the
-     * signature with the new name. Also updates the font selection if open.
+     *Handlesinputonnamefield:ifthe@seemodeis'auto',redrawsthe
+     *signaturewiththenewname.Alsoupdatesthefontselectionifopen.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onInputSignName: function (ev) {
-        if (this.signMode !== 'auto') {
+    _onInputSignName:function(ev){
+        if(this.signMode!=='auto'){
             return;
         }
         this._drawCurrentName();
-        if (!this.$autoFontSelection.hasClass('d-none')) {
+        if(!this.$autoFontSelection.hasClass('d-none')){
             this._updatePreviewButtons();
         }
     },
     /**
-     * Handles mouse over on font selection: uses this font.
+     *Handlesmouseoveronfontselection:usesthisfont.
      *
-     * @see mode 'auto'
-     * @private
-     * @param {Event} ev
+     *@seemode'auto'
+     *@private
+     *@param{Event}ev
      */
-    _onMouseOverSignAutoFontSelection: function (ev) {
+    _onMouseOverSignAutoFontSelection:function(ev){
         this._setFont(parseInt($(ev.currentTarget).data('font-nb')));
     },
     /**
-     * Handles touch start on font selection: uses this font.
+     *Handlestouchstartonfontselection:usesthisfont.
      *
-     * @see mode 'auto'
-     * @private
-     * @param {Event} ev
+     *@seemode'auto'
+     *@private
+     *@param{Event}ev
      */
-    _onTouchStartSignAutoFontSelection: function (ev) {
+    _onTouchStartSignAutoFontSelection:function(ev){
         this._setFont(parseInt($(ev.currentTarget).data('font-nb')));
     },
 });
 
-return {
-    NameAndSignature: NameAndSignature,
+return{
+    NameAndSignature:NameAndSignature,
 };
 });

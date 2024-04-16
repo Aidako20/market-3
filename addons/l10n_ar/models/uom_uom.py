@@ -1,9 +1,9 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models
 
 
-class Uom(models.Model):
+classUom(models.Model):
 
-    _inherit = 'uom.uom'
+    _inherit='uom.uom'
 
-    l10n_ar_afip_code = fields.Char('AFIP Code', help='This code will be used on electronic invoice')
+    l10n_ar_afip_code=fields.Char('AFIPCode',help='Thiscodewillbeusedonelectronicinvoice')

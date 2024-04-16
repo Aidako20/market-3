@@ -1,20 +1,20 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.ug = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.ug=factory()));
+}(this,function(){'usestrict';
 
-    var ug = {
-        code: "ug",
-        buttonText: {
-            month: "ئاي",
-            week: "ھەپتە",
-            day: "كۈن",
-            list: "كۈنتەرتىپ"
+    varug={
+        code:"ug",
+        buttonText:{
+            month:"ئاي",
+            week:"ھەپتە",
+            day:"كۈن",
+            list:"كۈنتەرتىپ"
         },
-        allDayText: "پۈتۈن كۈن"
+        allDayText:"پۈتۈنكۈن"
     };
 
-    return ug;
+    returnug;
 
 }));

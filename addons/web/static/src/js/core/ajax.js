@@ -1,311 +1,311 @@
-flectra.define('web.ajax', function (require) {
-"use strict";
+flectra.define('web.ajax',function(require){
+"usestrict";
 
-var config = require('web.config');
-var concurrency = require('web.concurrency');
-var core = require('web.core');
-var time = require('web.time');
-var download = require('web.download');
-var contentdisposition = require('web.contentdisposition');
+varconfig=require('web.config');
+varconcurrency=require('web.concurrency');
+varcore=require('web.core');
+vartime=require('web.time');
+vardownload=require('web.download');
+varcontentdisposition=require('web.contentdisposition');
 
-var _t = core._t;
+var_t=core._t;
 
-// Create the final object containing all the functions first to allow monkey
-// patching them correctly if ever needed.
-var ajax = {};
+//Createthefinalobjectcontainingallthefunctionsfirsttoallowmonkey
+//patchingthemcorrectlyifeverneeded.
+varajax={};
 
-function _genericJsonRpc (fct_name, params, settings, fct) {
-    var shadow = settings.shadow || false;
-    delete settings.shadow;
-    if (!shadow) {
+function_genericJsonRpc(fct_name,params,settings,fct){
+    varshadow=settings.shadow||false;
+    deletesettings.shadow;
+    if(!shadow){
         core.bus.trigger('rpc_request');
     }
 
-    var data = {
-        jsonrpc: "2.0",
-        method: fct_name,
-        params: params,
-        id: Math.floor(Math.random() * 1000 * 1000 * 1000)
+    vardata={
+        jsonrpc:"2.0",
+        method:fct_name,
+        params:params,
+        id:Math.floor(Math.random()*1000*1000*1000)
     };
-    var xhr = fct(data);
-    var result = xhr.then(function(result) {
-        core.bus.trigger('rpc:result', data, result);
-        if (result.error !== undefined) {
-            if (result.error.data.arguments[0] !== "bus.Bus not available in test mode") {
+    varxhr=fct(data);
+    varresult=xhr.then(function(result){
+        core.bus.trigger('rpc:result',data,result);
+        if(result.error!==undefined){
+            if(result.error.data.arguments[0]!=="bus.Busnotavailableintestmode"){
                 console.debug(
-                    "Server application error\n",
-                    "Error code:", result.error.code, "\n",
-                    "Error message:", result.error.message, "\n",
-                    "Error data message:\n", result.error.data.message, "\n",
-                    "Error data debug:\n", result.error.data.debug
+                    "Serverapplicationerror\n",
+                    "Errorcode:",result.error.code,"\n",
+                    "Errormessage:",result.error.message,"\n",
+                    "Errordatamessage:\n",result.error.data.message,"\n",
+                    "Errordatadebug:\n",result.error.data.debug
                 );
             }
-            return Promise.reject({type: "server", error: result.error});
-        } else {
-            return result.result;
+            returnPromise.reject({type:"server",error:result.error});
+        }else{
+            returnresult.result;
         }
-    }, function() {
-        //console.error("JsonRPC communication error", _.toArray(arguments));
-        var reason = {
-            type: 'communication',
-            error: arguments[0],
-            textStatus: arguments[1],
-            errorThrown: arguments[2],
+    },function(){
+        //console.error("JsonRPCcommunicationerror",_.toArray(arguments));
+        varreason={
+            type:'communication',
+            error:arguments[0],
+            textStatus:arguments[1],
+            errorThrown:arguments[2],
         };
-        return Promise.reject(reason);
+        returnPromise.reject(reason);
     });
 
-    var rejection;
-    var promise = new Promise(function (resolve, reject) {
-        rejection = reject;
+    varrejection;
+    varpromise=newPromise(function(resolve,reject){
+        rejection=reject;
 
-        result.then(function (result) {
-            if (!shadow) {
+        result.then(function(result){
+            if(!shadow){
                 core.bus.trigger('rpc_response');
             }
             resolve(result);
-        }, function (reason) {
-            var type = reason.type;
-            var error = reason.error;
-            var textStatus = reason.textStatus;
-            var errorThrown = reason.errorThrown;
-            if (type === "server") {
-                if (!shadow) {
+        },function(reason){
+            vartype=reason.type;
+            varerror=reason.error;
+            vartextStatus=reason.textStatus;
+            varerrorThrown=reason.errorThrown;
+            if(type==="server"){
+                if(!shadow){
                     core.bus.trigger('rpc_response');
                 }
-                if (error.code === 100) {
+                if(error.code===100){
                     core.bus.trigger('invalidate_session');
                 }
-                reject({message: error, event: $.Event()});
-            } else {
-                if (!shadow) {
+                reject({message:error,event:$.Event()});
+            }else{
+                if(!shadow){
                     core.bus.trigger('rpc_response_failed');
                 }
-                var nerror = {
-                    code: -32098,
-                    message: "XmlHttpRequestError " + errorThrown,
-                    data: {
-                        type: "xhr"+textStatus,
-                        debug: error.responseText,
-                        objects: [error, errorThrown],
-                        arguments: [reason || textStatus]
+                varnerror={
+                    code:-32098,
+                    message:"XmlHttpRequestError"+errorThrown,
+                    data:{
+                        type:"xhr"+textStatus,
+                        debug:error.responseText,
+                        objects:[error,errorThrown],
+                        arguments:[reason||textStatus]
                     },
                 };
-                reject({message: nerror, event: $.Event()});
+                reject({message:nerror,event:$.Event()});
             }
         });
     });
 
-    // FIXME: jsonp?
-    promise.abort = function () {
+    //FIXME:jsonp?
+    promise.abort=function(){
         rejection({
-            message: "XmlHttpRequestError abort",
-            event: $.Event('abort')
+            message:"XmlHttpRequestErrorabort",
+            event:$.Event('abort')
         });
 
-        if (!shadow) {
+        if(!shadow){
             core.bus.trigger('rpc_response');
         }
 
-        if (xhr.abort) {
+        if(xhr.abort){
             xhr.abort();
         }
     };
-    promise.guardedCatch(function (reason) { // Allow promise user to disable rpc_error call in case of failure
-        setTimeout(function () {
-            // we want to execute this handler after all others (hence
-            // setTimeout) to let the other handlers prevent the event
-            if (!reason.event.isDefaultPrevented()) {
-                core.bus.trigger('rpc_error', reason.message, reason.event);
+    promise.guardedCatch(function(reason){//Allowpromiseusertodisablerpc_errorcallincaseoffailure
+        setTimeout(function(){
+            //wewanttoexecutethishandlerafterallothers(hence
+            //setTimeout)tolettheotherhandlerspreventtheevent
+            if(!reason.event.isDefaultPrevented()){
+                core.bus.trigger('rpc_error',reason.message,reason.event);
             }
-        }, 0);
+        },0);
     });
-    return promise;
+    returnpromise;
 };
 
-function jsonRpc(url, fct_name, params, settings) {
-    settings = settings || {};
-    return _genericJsonRpc(fct_name, params, settings, function(data) {
-        return $.ajax(url, _.extend({}, settings, {
-            url: url,
-            dataType: 'json',
-            type: 'POST',
-            data: JSON.stringify(data, time.date_to_utc),
-            contentType: 'application/json'
+functionjsonRpc(url,fct_name,params,settings){
+    settings=settings||{};
+    return_genericJsonRpc(fct_name,params,settings,function(data){
+        return$.ajax(url,_.extend({},settings,{
+            url:url,
+            dataType:'json',
+            type:'POST',
+            data:JSON.stringify(data,time.date_to_utc),
+            contentType:'application/json'
         }));
     });
 }
 
-// helper function to make a rpc with a function name hardcoded to 'call'
-function rpc(url, params, settings) {
-    return jsonRpc(url, 'call', params, settings);
+//helperfunctiontomakearpcwithafunctionnamehardcodedto'call'
+functionrpc(url,params,settings){
+    returnjsonRpc(url,'call',params,settings);
 }
 
 
 /**
- * Load css asynchronously: fetch it from the url parameter and add a link tag
- * to <head>.
- * If the url has already been requested and loaded, the promise will resolve
- * immediately.
+ *Loadcssasynchronously:fetchitfromtheurlparameterandaddalinktag
+ *to<head>.
+ *Iftheurlhasalreadybeenrequestedandloaded,thepromisewillresolve
+ *immediately.
  *
- * @param {String} url of the css to be fetched
- * @returns {Promise} resolved when the css has been loaded.
+ *@param{String}urlofthecsstobefetched
+ *@returns{Promise}resolvedwhenthecsshasbeenloaded.
  */
-var loadCSS = (function () {
-    var urlDefs = {};
+varloadCSS=(function(){
+    varurlDefs={};
 
-    return function loadCSS(url) {
-        if (url in urlDefs) {
-            // nothing to do here
-        } else if ($('link[href="' + url + '"]').length) {
-            // the link is already in the DOM, the promise can be resolved
-            urlDefs[url] = Promise.resolve();
-        } else {
-            var $link = $('<link>', {
-                'href': url,
-                'rel': 'stylesheet',
-                'type': 'text/css'
+    returnfunctionloadCSS(url){
+        if(urlinurlDefs){
+            //nothingtodohere
+        }elseif($('link[href="'+url+'"]').length){
+            //thelinkisalreadyintheDOM,thepromisecanberesolved
+            urlDefs[url]=Promise.resolve();
+        }else{
+            var$link=$('<link>',{
+                'href':url,
+                'rel':'stylesheet',
+                'type':'text/css'
             });
-            urlDefs[url] = new Promise(function (resolve, reject) {
-                $link.on('load', function () {
+            urlDefs[url]=newPromise(function(resolve,reject){
+                $link.on('load',function(){
                     resolve();
-                }).on('error', function () {
-                    reject(new Error("Couldn't load css dependency: " + $link[0].href));
+                }).on('error',function(){
+                    reject(newError("Couldn'tloadcssdependency:"+$link[0].href));
                 });
             });
             $('head').append($link);
         }
-        return urlDefs[url];
+        returnurlDefs[url];
     };
 })();
 
-var loadJS = (function () {
-    var dependenciesPromise = {};
+varloadJS=(function(){
+    vardependenciesPromise={};
 
-    var load = function loadJS(url) {
-        // Check the DOM to see if a script with the specified url is already there
-        var alreadyRequired = ($('script[src="' + url + '"]').length > 0);
+    varload=functionloadJS(url){
+        //ChecktheDOMtoseeifascriptwiththespecifiedurlisalreadythere
+        varalreadyRequired=($('script[src="'+url+'"]').length>0);
 
-        // If loadJS was already called with the same URL, it will have a registered promise indicating if
-        // the script has been fully loaded. If not, the promise has to be initialized.
-        // This is initialized as already resolved if the script was already there without the need of loadJS.
-        if (url in dependenciesPromise) {
-            return dependenciesPromise[url];
+        //IfloadJSwasalreadycalledwiththesameURL,itwillhavearegisteredpromiseindicatingif
+        //thescripthasbeenfullyloaded.Ifnot,thepromisehastobeinitialized.
+        //ThisisinitializedasalreadyresolvedifthescriptwasalreadytherewithouttheneedofloadJS.
+        if(urlindependenciesPromise){
+            returndependenciesPromise[url];
         }
-        var scriptLoadedPromise = new Promise(function (resolve, reject) {
-            if (alreadyRequired) {
+        varscriptLoadedPromise=newPromise(function(resolve,reject){
+            if(alreadyRequired){
                 resolve();
-            } else {
-                // Get the script associated promise and returns it after initializing the script if needed. The
-                // promise is marked to be resolved on script load and rejected on script error.
-                var script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.src = url;
-                script.onload = script.onreadystatechange = function() {
-                    if ((script.readyState && script.readyState !== "loaded" && script.readyState !== "complete") || script.onload_done) {
+            }else{
+                //Getthescriptassociatedpromiseandreturnsitafterinitializingthescriptifneeded.The
+                //promiseismarkedtoberesolvedonscriptloadandrejectedonscripterror.
+                varscript=document.createElement('script');
+                script.type='text/javascript';
+                script.src=url;
+                script.onload=script.onreadystatechange=function(){
+                    if((script.readyState&&script.readyState!=="loaded"&&script.readyState!=="complete")||script.onload_done){
                         return;
                     }
-                    script.onload_done = true;
+                    script.onload_done=true;
                     resolve(url);
                 };
-                script.onerror = function () {
-                    console.error("Error loading file", script.src);
+                script.onerror=function(){
+                    console.error("Errorloadingfile",script.src);
                     reject(url);
                 };
-                var head = document.head || document.getElementsByTagName('head')[0];
+                varhead=document.head||document.getElementsByTagName('head')[0];
                 head.appendChild(script);
             }
         });
 
-        dependenciesPromise[url] = scriptLoadedPromise;
-        return scriptLoadedPromise;
+        dependenciesPromise[url]=scriptLoadedPromise;
+        returnscriptLoadedPromise;
     };
 
-    return load;
+    returnload;
 })();
 
 
 /**
- * Cooperative file download implementation, for ajaxy APIs.
+ *Cooperativefiledownloadimplementation,forajaxyAPIs.
  *
- * Requires that the server side implements an httprequest correctly
- * setting the `fileToken` cookie to the value provided as the `token`
- * parameter. The cookie *must* be set on the `/` path and *must not* be
- * `httpOnly`.
+ *Requiresthattheserversideimplementsanhttprequestcorrectly
+ *settingthe`fileToken`cookietothevalueprovidedasthe`token`
+ *parameter.Thecookie*must*besetonthe`/`pathand*mustnot*be
+ *`httpOnly`.
  *
- * It would probably also be a good idea for the response to use a
- * `Content-Disposition: attachment` header, especially if the MIME is a
- * "known" type (e.g. text/plain, or for some browsers application/json
+ *Itwouldprobablyalsobeagoodideafortheresponsetousea
+ *`Content-Disposition:attachment`header,especiallyiftheMIMEisa
+ *"known"type(e.g.text/plain,orforsomebrowsersapplication/json
  *
- * @param {Object} options
- * @param {String} [options.url] used to dynamically create a form
- * @param {Object} [options.data] data to add to the form submission. If can be used without a form, in which case a form is created from scratch. Otherwise, added to form data
- * @param {HTMLFormElement} [options.form] the form to submit in order to fetch the file
- * @param {Function} [options.success] callback in case of download success
- * @param {Function} [options.error] callback in case of request error, provided with the error body
- * @param {Function} [options.complete] called after both ``success`` and ``error`` callbacks have executed
- * @returns {boolean} a false value means that a popup window was blocked. This
- *   mean that we probably need to inform the user that something needs to be
- *   changed to make it work.
+ *@param{Object}options
+ *@param{String}[options.url]usedtodynamicallycreateaform
+ *@param{Object}[options.data]datatoaddtotheformsubmission.Ifcanbeusedwithoutaform,inwhichcaseaformiscreatedfromscratch.Otherwise,addedtoformdata
+ *@param{HTMLFormElement}[options.form]theformtosubmitinordertofetchthefile
+ *@param{Function}[options.success]callbackincaseofdownloadsuccess
+ *@param{Function}[options.error]callbackincaseofrequesterror,providedwiththeerrorbody
+ *@param{Function}[options.complete]calledafterboth``success``and``error``callbackshaveexecuted
+ *@returns{boolean}afalsevaluemeansthatapopupwindowwasblocked.This
+ *  meanthatweprobablyneedtoinformtheuserthatsomethingneedstobe
+ *  changedtomakeitwork.
  */
-function get_file(options) {
-    var xhr = new XMLHttpRequest();
+functionget_file(options){
+    varxhr=newXMLHttpRequest();
 
-    var data;
-    if (options.form) {
-        xhr.open(options.form.method, options.form.action);
-        data = new FormData(options.form);
-    } else {
-        xhr.open('POST', options.url);
-        data = new FormData();
-        _.each(options.data || {}, function (v, k) {
-            data.append(k, v);
+    vardata;
+    if(options.form){
+        xhr.open(options.form.method,options.form.action);
+        data=newFormData(options.form);
+    }else{
+        xhr.open('POST',options.url);
+        data=newFormData();
+        _.each(options.data||{},function(v,k){
+            data.append(k,v);
         });
     }
-    data.append('token', 'dummy-because-api-expects-one');
-    if (core.csrf_token) {
-        data.append('csrf_token', core.csrf_token);
+    data.append('token','dummy-because-api-expects-one');
+    if(core.csrf_token){
+        data.append('csrf_token',core.csrf_token);
     }
-    // IE11 wants this after xhr.open or it throws
-    xhr.responseType = 'blob';
+    //IE11wantsthisafterxhr.openoritthrows
+    xhr.responseType='blob';
 
-    // onreadystatechange[readyState = 4]
-    // => onload (success) | onerror (error) | onabort
-    // => onloadend
-    xhr.onload = function () {
-        var mimetype = xhr.response.type;
-        if (xhr.status === 200 && mimetype !== 'text/html') {
-            // replace because apparently we send some C-D headers with a trailing ";"
-            // todo: maybe a lack of CD[attachment] should be interpreted as an error case?
-            var header = (xhr.getResponseHeader('Content-Disposition') || '').replace(/;$/, '');
-            var filename = header ? contentdisposition.parse(header).parameters.filename : null;
+    //onreadystatechange[readyState=4]
+    //=>onload(success)|onerror(error)|onabort
+    //=>onloadend
+    xhr.onload=function(){
+        varmimetype=xhr.response.type;
+        if(xhr.status===200&&mimetype!=='text/html'){
+            //replacebecauseapparentlywesendsomeC-Dheaderswithatrailing";"
+            //todo:maybealackofCD[attachment]shouldbeinterpretedasanerrorcase?
+            varheader=(xhr.getResponseHeader('Content-Disposition')||'').replace(/;$/,'');
+            varfilename=header?contentdisposition.parse(header).parameters.filename:null;
 
-            download(xhr.response, filename, mimetype);
-            // not sure download is going to be sync so this may be called
-            // before the file is actually fetched (?)
-            if (options.success) { options.success(); }
-            return true;
+            download(xhr.response,filename,mimetype);
+            //notsuredownloadisgoingtobesyncsothismaybecalled
+            //beforethefileisactuallyfetched(?)
+            if(options.success){options.success();}
+            returntrue;
         }
 
-        if (!options.error) {
-            return true;
+        if(!options.error){
+            returntrue;
         }
-        var decoder = new FileReader();
-        decoder.onload = function () {
-            var contents = decoder.result;
+        vardecoder=newFileReader();
+        decoder.onload=function(){
+            varcontents=decoder.result;
 
-            var err;
-            var doc = new DOMParser().parseFromString(contents, 'text/html');
-            var nodes = doc.body.children.length === 0 ? doc.body.childNodes : doc.body.children;
-            try { // Case of a serialized Flectra Exception: It is Json Parsable
-                var node = nodes[1] || nodes[0];
-                err = JSON.parse(node.textContent);
-            } catch (e) { // Arbitrary uncaught python side exception
-                err = {
-                    message: nodes.length > 1 ? nodes[1].textContent : '',
-                    data: {
-                        name: String(xhr.status),
-                        title: nodes.length > 0 ? nodes[0].textContent : '',
+            varerr;
+            vardoc=newDOMParser().parseFromString(contents,'text/html');
+            varnodes=doc.body.children.length===0?doc.body.childNodes:doc.body.children;
+            try{//CaseofaserializedFlectraException:ItisJsonParsable
+                varnode=nodes[1]||nodes[0];
+                err=JSON.parse(node.textContent);
+            }catch(e){//Arbitraryuncaughtpythonsideexception
+                err={
+                    message:nodes.length>1?nodes[1].textContent:'',
+                    data:{
+                        name:String(xhr.status),
+                        title:nodes.length>0?nodes[0].textContent:'',
                     }
                 };
             }
@@ -313,275 +313,275 @@ function get_file(options) {
         };
         decoder.readAsText(xhr.response);
     };
-    xhr.onerror = function () {
-        if (options.error) {
+    xhr.onerror=function(){
+        if(options.error){
             options.error({
-                message: _t("Something happened while trying to contact the server, check that the server is online and that you still have a working network connection."),
-                data: { title: _t("Could not connect to the server") }
+                message:_t("Somethinghappenedwhiletryingtocontacttheserver,checkthattheserverisonlineandthatyoustillhaveaworkingnetworkconnection."),
+                data:{title:_t("Couldnotconnecttotheserver")}
             });
         }
     };
-    if (options.complete) {
-        xhr.onloadend = function () { options.complete(); };
+    if(options.complete){
+        xhr.onloadend=function(){options.complete();};
     }
 
     xhr.send(data);
-    return true;
+    returntrue;
 }
 
-function post (controller_url, data) {
-    var postData = new FormData();
+functionpost(controller_url,data){
+    varpostData=newFormData();
 
-    $.each(data, function(i,val) {
-        postData.append(i, val);
+    $.each(data,function(i,val){
+        postData.append(i,val);
     });
-    if (core.csrf_token) {
-        postData.append('csrf_token', core.csrf_token);
+    if(core.csrf_token){
+        postData.append('csrf_token',core.csrf_token);
     }
 
-    return new Promise(function (resolve, reject) {
-        $.ajax(controller_url, {
-            data: postData,
-            processData: false,
-            contentType: false,
-            type: 'POST'
+    returnnewPromise(function(resolve,reject){
+        $.ajax(controller_url,{
+            data:postData,
+            processData:false,
+            contentType:false,
+            type:'POST'
         }).then(resolve).fail(reject);
     });
 }
 
 /**
- * Loads an XML file according to the given URL and adds its associated qweb
- * templates to the given qweb engine. The function can also be used to get
- * the promise which indicates when all the calls to the function are finished.
+ *LoadsanXMLfileaccordingtothegivenURLandaddsitsassociatedqweb
+ *templatestothegivenqwebengine.Thefunctioncanalsobeusedtoget
+ *thepromisewhichindicateswhenallthecallstothefunctionarefinished.
  *
- * Note: "all the calls" = the calls that happened before the current no-args
- * one + the calls that will happen after but when the previous ones are not
- * finished yet.
+ *Note:"allthecalls"=thecallsthathappenedbeforethecurrentno-args
+ *one+thecallsthatwillhappenafterbutwhenthepreviousonesarenot
+ *finishedyet.
  *
- * @param {string} [url] - an URL where to find qweb templates
- * @param {QWeb} [qweb] - the engine to which the templates need to be added
- * @returns {Promise}
- *          If no argument is given to the function, the promise's state
- *          indicates if "all the calls" are finished (see main description).
- *          Otherwise, it indicates when the templates associated to the given
- *          url have been loaded.
+ *@param{string}[url]-anURLwheretofindqwebtemplates
+ *@param{QWeb}[qweb]-theenginetowhichthetemplatesneedtobeadded
+ *@returns{Promise}
+ *         Ifnoargumentisgiventothefunction,thepromise'sstate
+ *         indicatesif"allthecalls"arefinished(seemaindescription).
+ *         Otherwise,itindicateswhenthetemplatesassociatedtothegiven
+ *         urlhavebeenloaded.
  */
-var loadXML = (function () {
-    // Some "static" variables associated to the loadXML function
-    var isLoading = false;
-    var loadingsData = [];
-    var seenURLs = [];
+varloadXML=(function(){
+    //Some"static"variablesassociatedtotheloadXMLfunction
+    varisLoading=false;
+    varloadingsData=[];
+    varseenURLs=[];
 
-    return function (url, qweb) {
-        function _load() {
-            isLoading = true;
-            if (loadingsData.length) {
-                // There is something to load, load it, resolve the associated
-                // promise then start loading the next one
-                var loadingData = loadingsData[0];
-                loadingData.qweb.add_template(loadingData.url, function () {
-                    // Remove from array only now so that multiple calls to
-                    // loadXML with the same URL returns the right promise
+    returnfunction(url,qweb){
+        function_load(){
+            isLoading=true;
+            if(loadingsData.length){
+                //Thereissomethingtoload,loadit,resolvetheassociated
+                //promisethenstartloadingthenextone
+                varloadingData=loadingsData[0];
+                loadingData.qweb.add_template(loadingData.url,function(){
+                    //Removefromarrayonlynowsothatmultiplecallsto
+                    //loadXMLwiththesameURLreturnstherightpromise
                     loadingsData.shift();
                     loadingData.resolve();
                     _load();
                 });
-            } else {
-                // There is nothing to load anymore, so resolve the
-                // "all the calls" promise
-                isLoading = false;
+            }else{
+                //Thereisnothingtoloadanymore,soresolvethe
+                //"allthecalls"promise
+                isLoading=false;
             }
         }
 
-        // If no argument, simply returns the promise which indicates when
-        // "all the calls" are finished
-        if (!url || !qweb) {
-            return Promise.resolve();
+        //Ifnoargument,simplyreturnsthepromisewhichindicateswhen
+        //"allthecalls"arefinished
+        if(!url||!qweb){
+            returnPromise.resolve();
         }
 
-        // If the given URL has already been seen, do nothing but returning the
-        // associated promise
-        if (_.contains(seenURLs, url)) {
-            var oldLoadingData = _.findWhere(loadingsData, {url: url});
-            return oldLoadingData ? oldLoadingData.def : Promise.resolve();
+        //IfthegivenURLhasalreadybeenseen,donothingbutreturningthe
+        //associatedpromise
+        if(_.contains(seenURLs,url)){
+            varoldLoadingData=_.findWhere(loadingsData,{url:url});
+            returnoldLoadingData?oldLoadingData.def:Promise.resolve();
         }
         seenURLs.push(url);
 
 
-        // Add the information about the new data to load: the url, the qweb
-        // engine and the associated promise
-        var newLoadingData = {
-            url: url,
-            qweb: qweb,
+        //Addtheinformationaboutthenewdatatoload:theurl,theqweb
+        //engineandtheassociatedpromise
+        varnewLoadingData={
+            url:url,
+            qweb:qweb,
         };
-        newLoadingData.def = new Promise(function (resolve, reject) {
-            newLoadingData.resolve = resolve;
-            newLoadingData.reject = reject;
+        newLoadingData.def=newPromise(function(resolve,reject){
+            newLoadingData.resolve=resolve;
+            newLoadingData.reject=reject;
         });
         loadingsData.push(newLoadingData);
 
-        // If not already started, start the loading loop (reinitialize the
-        // "all the calls" promise to an unresolved state)
-        if (!isLoading) {
+        //Ifnotalreadystarted,starttheloadingloop(reinitializethe
+        //"allthecalls"promisetoanunresolvedstate)
+        if(!isLoading){
             _load();
         }
 
-        // Return the promise associated to the new given URL
-        return newLoadingData.def;
+        //ReturnthepromiseassociatedtothenewgivenURL
+        returnnewLoadingData.def;
     };
 })();
 
 /**
- * Loads a template file according to the given xmlId.
+ *LoadsatemplatefileaccordingtothegivenxmlId.
  *
- * @param {string} [xmlId] - the template xmlId
- * @param {Object} [context]
- *        additionnal rpc context to be merged with the default one
- * @param {string} [tplRoute='/web/dataset/call_kw/']
- * @returns {Deferred} resolved with an object
- *          cssLibs: list of css files
- *          cssContents: list of style tag contents
- *          jsLibs: list of JS files
- *          jsContents: list of script tag contents
+ *@param{string}[xmlId]-thetemplatexmlId
+ *@param{Object}[context]
+ *       additionnalrpccontexttobemergedwiththedefaultone
+ *@param{string}[tplRoute='/web/dataset/call_kw/']
+ *@returns{Deferred}resolvedwithanobject
+ *         cssLibs:listofcssfiles
+ *         cssContents:listofstyletagcontents
+ *         jsLibs:listofJSfiles
+ *         jsContents:listofscripttagcontents
  */
-var loadAsset = (function () {
-    var cache = {};
+varloadAsset=(function(){
+    varcache={};
 
-    var load = function loadAsset(xmlId, context, tplRoute = '/web/dataset/call_kw/') {
-        if (cache[xmlId]) {
-            return cache[xmlId];
+    varload=functionloadAsset(xmlId,context,tplRoute='/web/dataset/call_kw/'){
+        if(cache[xmlId]){
+            returncache[xmlId];
         }
-        context = _.extend({}, flectra.session_info.user_context, context);
-        const params = {
-            args: [xmlId, {
-                debug: config.isDebug()
+        context=_.extend({},flectra.session_info.user_context,context);
+        constparams={
+            args:[xmlId,{
+                debug:config.isDebug()
             }],
-            kwargs: {
-                context: context,
+            kwargs:{
+                context:context,
             },
         };
-        if (tplRoute === '/web/dataset/call_kw/') {
-            Object.assign(params, {
-                model: 'ir.ui.view',
-                method: 'render_public_asset',
+        if(tplRoute==='/web/dataset/call_kw/'){
+            Object.assign(params,{
+                model:'ir.ui.view',
+                method:'render_public_asset',
             });
         }
-        cache[xmlId] = rpc(tplRoute, params).then(function (xml) {
-            var $xml = $(xml);
-            return {
-                cssLibs: $xml.filter('link[href]:not([type="image/x-icon"])').map(function () {
-                    return $(this).attr('href');
+        cache[xmlId]=rpc(tplRoute,params).then(function(xml){
+            var$xml=$(xml);
+            return{
+                cssLibs:$xml.filter('link[href]:not([type="image/x-icon"])').map(function(){
+                    return$(this).attr('href');
                 }).get(),
-                cssContents: $xml.filter('style').map(function () {
-                    return $(this).html();
+                cssContents:$xml.filter('style').map(function(){
+                    return$(this).html();
                 }).get(),
-                jsLibs: $xml.filter('script[src]').map(function () {
-                    return $(this).attr('src');
+                jsLibs:$xml.filter('script[src]').map(function(){
+                    return$(this).attr('src');
                 }).get(),
-                jsContents: $xml.filter('script:not([src])').map(function () {
-                    return $(this).html();
+                jsContents:$xml.filter('script:not([src])').map(function(){
+                    return$(this).html();
                 }).get(),
             };
-        }).guardedCatch(reason => {
+        }).guardedCatch(reason=>{
             reason.event.preventDefault();
-            throw `Unable to render the required templates for the assets to load: ${reason.message.message}`;
+            throw`Unabletorendertherequiredtemplatesfortheassetstoload:${reason.message.message}`;
         });
-        return cache[xmlId];
+        returncache[xmlId];
     };
 
-    return load;
+    returnload;
 })();
 
 /**
- * Loads the given js/css libraries and asset bundles. Note that no library or
- * asset will be loaded if it was already done before.
+ *Loadsthegivenjs/csslibrariesandassetbundles.Notethatnolibraryor
+ *assetwillbeloadedifitwasalreadydonebefore.
  *
- * @param {Object} libs
- * @param {Array<string|string[]>} [libs.assetLibs=[]]
- *      The list of assets to load. Each list item may be a string (the xmlID
- *      of the asset to load) or a list of strings. The first level is loaded
- *      sequentially (so use this if the order matters) while the assets in
- *      inner lists are loaded in parallel (use this for efficiency but only
- *      if the order does not matter, should rarely be the case for assets).
- * @param {string[]} [libs.cssLibs=[]]
- *      The list of CSS files to load. They will all be loaded in parallel but
- *      put in the DOM in the given order (only the order in the DOM is used
- *      to determine priority of CSS rules, not loaded time).
- * @param {Array<string|string[]>} [libs.jsLibs=[]]
- *      The list of JS files to load. Each list item may be a string (the URL
- *      of the file to load) or a list of strings. The first level is loaded
- *      sequentially (so use this if the order matters) while the files in inner
- *      lists are loaded in parallel (use this for efficiency but only
- *      if the order does not matter).
- * @param {string[]} [libs.cssContents=[]]
- *      List of inline styles to add after loading the CSS files.
- * @param {string[]} [libs.jsContents=[]]
- *      List of inline scripts to add after loading the JS files.
- * @param {Object} [context]
- *        additionnal rpc context to be merged with the default one
- * @param {string} [tplRoute]
- *      Custom route to use for template rendering of the potential assets
- *      to load (see libs.assetLibs).
+ *@param{Object}libs
+ *@param{Array<string|string[]>}[libs.assetLibs=[]]
+ *     Thelistofassetstoload.Eachlistitemmaybeastring(thexmlID
+ *     oftheassettoload)oralistofstrings.Thefirstlevelisloaded
+ *     sequentially(sousethisiftheordermatters)whiletheassetsin
+ *     innerlistsareloadedinparallel(usethisforefficiencybutonly
+ *     iftheorderdoesnotmatter,shouldrarelybethecaseforassets).
+ *@param{string[]}[libs.cssLibs=[]]
+ *     ThelistofCSSfilestoload.Theywillallbeloadedinparallelbut
+ *     putintheDOMinthegivenorder(onlytheorderintheDOMisused
+ *     todeterminepriorityofCSSrules,notloadedtime).
+ *@param{Array<string|string[]>}[libs.jsLibs=[]]
+ *     ThelistofJSfilestoload.Eachlistitemmaybeastring(theURL
+ *     ofthefiletoload)oralistofstrings.Thefirstlevelisloaded
+ *     sequentially(sousethisiftheordermatters)whilethefilesininner
+ *     listsareloadedinparallel(usethisforefficiencybutonly
+ *     iftheorderdoesnotmatter).
+ *@param{string[]}[libs.cssContents=[]]
+ *     ListofinlinestylestoaddafterloadingtheCSSfiles.
+ *@param{string[]}[libs.jsContents=[]]
+ *     ListofinlinescriptstoaddafterloadingtheJSfiles.
+ *@param{Object}[context]
+ *       additionnalrpccontexttobemergedwiththedefaultone
+ *@param{string}[tplRoute]
+ *     Customroutetousefortemplaterenderingofthepotentialassets
+ *     toload(seelibs.assetLibs).
  *
- * @returns {Promise}
+ *@returns{Promise}
  */
-function loadLibs(libs, context, tplRoute) {
-    var mutex = new concurrency.Mutex();
-    mutex.exec(function () {
-        var defs = [];
-        var cssLibs = [libs.cssLibs || []];  // Force loading in parallel
-        defs.push(_loadArray(cssLibs, ajax.loadCSS).then(function () {
-            if (libs.cssContents && libs.cssContents.length) {
-                $('head').append($('<style/>', {
-                    html: libs.cssContents.join('\n'),
+functionloadLibs(libs,context,tplRoute){
+    varmutex=newconcurrency.Mutex();
+    mutex.exec(function(){
+        vardefs=[];
+        varcssLibs=[libs.cssLibs||[]]; //Forceloadinginparallel
+        defs.push(_loadArray(cssLibs,ajax.loadCSS).then(function(){
+            if(libs.cssContents&&libs.cssContents.length){
+                $('head').append($('<style/>',{
+                    html:libs.cssContents.join('\n'),
                 }));
             }
         }));
-        defs.push(_loadArray(libs.jsLibs || [], ajax.loadJS).then(function () {
-            if (libs.jsContents && libs.jsContents.length) {
-                $('head').append($('<script/>', {
-                    html: libs.jsContents.join('\n'),
+        defs.push(_loadArray(libs.jsLibs||[],ajax.loadJS).then(function(){
+            if(libs.jsContents&&libs.jsContents.length){
+                $('head').append($('<script/>',{
+                    html:libs.jsContents.join('\n'),
                 }));
             }
         }));
-        return Promise.all(defs);
+        returnPromise.all(defs);
     });
-    mutex.exec(function () {
-        return _loadArray(libs.assetLibs || [], function (xmlID) {
-            return ajax.loadAsset(xmlID, context, tplRoute).then(function (asset) {
-                return ajax.loadLibs(asset);
+    mutex.exec(function(){
+        return_loadArray(libs.assetLibs||[],function(xmlID){
+            returnajax.loadAsset(xmlID,context,tplRoute).then(function(asset){
+                returnajax.loadLibs(asset);
             });
         });
     });
 
-    function _loadArray(array, loadCallback) {
-        var _mutex = new concurrency.Mutex();
-        array.forEach(function (urlData) {
-            _mutex.exec(function () {
-                if (typeof urlData === 'string') {
-                    return loadCallback(urlData);
+    function_loadArray(array,loadCallback){
+        var_mutex=newconcurrency.Mutex();
+        array.forEach(function(urlData){
+            _mutex.exec(function(){
+                if(typeofurlData==='string'){
+                    returnloadCallback(urlData);
                 }
-                return Promise.all(urlData.map(loadCallback));
+                returnPromise.all(urlData.map(loadCallback));
             });
         });
-        return _mutex.getUnlockedDef();
+        return_mutex.getUnlockedDef();
     }
 
-    return mutex.getUnlockedDef();
+    returnmutex.getUnlockedDef();
 }
 
-_.extend(ajax, {
-    jsonRpc: jsonRpc,
-    rpc: rpc,
-    loadCSS: loadCSS,
-    loadJS: loadJS,
-    loadXML: loadXML,
-    loadAsset: loadAsset,
-    loadLibs: loadLibs,
-    get_file: get_file,
-    post: post,
+_.extend(ajax,{
+    jsonRpc:jsonRpc,
+    rpc:rpc,
+    loadCSS:loadCSS,
+    loadJS:loadJS,
+    loadXML:loadXML,
+    loadAsset:loadAsset,
+    loadLibs:loadLibs,
+    get_file:get_file,
+    post:post,
 });
 
-return ajax;
+returnajax;
 
 });

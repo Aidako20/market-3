@@ -1,70 +1,70 @@
-flectra.define('web.qweb_view_tests', function (require) {
-"use strict";
+flectra.define('web.qweb_view_tests',function(require){
+"usestrict";
 
-var utils = require('web.test_utils');
+varutils=require('web.test_utils');
 
-QUnit.module("Views", {
+QUnit.module("Views",{
 
-}, function () {
+},function(){
     QUnit.module("QWeb");
-    QUnit.test("basic", async function (assert) {
+    QUnit.test("basic",asyncfunction(assert){
         assert.expect(14);
-        var am = await utils.createActionManager({
-            data: {
-                test: {
-                    fields: {},
-                    records: [],
+        varam=awaitutils.createActionManager({
+            data:{
+                test:{
+                    fields:{},
+                    records:[],
                 }
             },
-            archs: {
-                'test,5,qweb': '<div id="xxx"><t t-esc="ok"/></div>',
-                'test,false,search': '<search/>'
+            archs:{
+                'test,5,qweb':'<divid="xxx"><tt-esc="ok"/></div>',
+                'test,false,search':'<search/>'
             },
-            mockRPC: function (route, args) {
-                if (/^\/web\/dataset\/call_kw/.test(route)) {
-                    switch (_.str.sprintf('%(model)s.%(method)s', args)) {
-                    case 'test.qweb_render_view':
+            mockRPC:function(route,args){
+                if(/^\/web\/dataset\/call_kw/.test(route)){
+                    switch(_.str.sprintf('%(model)s.%(method)s',args)){
+                    case'test.qweb_render_view':
                         assert.step('fetch');
-                        assert.equal(args.kwargs.view_id, 5);
-                        return Promise.resolve(
-                            '<div>foo' +
-                                '<div data-model="test" data-method="wheee" data-id="42" data-other="5">' +
-                                    '<a type="toggle" class="fa fa-caret-right">Unfold</a>' +
-                                '</div>' +
+                        assert.equal(args.kwargs.view_id,5);
+                        returnPromise.resolve(
+                            '<div>foo'+
+                                '<divdata-model="test"data-method="wheee"data-id="42"data-other="5">'+
+                                    '<atype="toggle"class="fafa-caret-right">Unfold</a>'+
+                                '</div>'+
                             '</div>'
                         );
-                    case 'test.wheee':
+                    case'test.wheee':
                         assert.step('unfold');
-                        assert.deepEqual(args.args, [42]);
-                        assert.deepEqual(args.kwargs, {other: 5});
-                        return Promise.resolve('<div id="sub">ok</div>');
+                        assert.deepEqual(args.args,[42]);
+                        assert.deepEqual(args.kwargs,{other:5});
+                        returnPromise.resolve('<divid="sub">ok</div>');
                     }
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             }
         });
-        try {
-            var resolved = false;
+        try{
+            varresolved=false;
             am.doAction({
-                type: 'ir.actions.act_window',
-                views: [[false, 'qweb']],
-                res_model: 'test',
-            }).then(function () { resolved = true; });
-            assert.ok(!resolved, "Action cannot be resolved synchronously");
+                type:'ir.actions.act_window',
+                views:[[false,'qweb']],
+                res_model:'test',
+            }).then(function(){resolved=true;});
+            assert.ok(!resolved,"Actioncannotberesolvedsynchronously");
 
-            await utils.nextTick();
-            assert.ok(resolved, "Action is resolved asynchronously");
+            awaitutils.nextTick();
+            assert.ok(resolved,"Actionisresolvedasynchronously");
 
-            var $content = am.$('.o_content');
+            var$content=am.$('.o_content');
             assert.ok(/^\s*foo/.test($content.text()));
-            await utils.dom.click($content.find('[type=toggle]'));
-            assert.equal($content.find('div#sub').text(), 'ok', 'should have unfolded the sub-item');
-            await utils.dom.click($content.find('[type=toggle]'));
-            assert.equal($content.find('div#sub').length, 0, "should have removed the sub-item");
-            await utils.dom.click($content.find('[type=toggle]'));
+            awaitutils.dom.click($content.find('[type=toggle]'));
+            assert.equal($content.find('div#sub').text(),'ok','shouldhaveunfoldedthesub-item');
+            awaitutils.dom.click($content.find('[type=toggle]'));
+            assert.equal($content.find('div#sub').length,0,"shouldhaveremovedthesub-item");
+            awaitutils.dom.click($content.find('[type=toggle]'));
 
-            assert.verifySteps(['fetch', 'unfold', 'unfold']);
-        } finally {
+            assert.verifySteps(['fetch','unfold','unfold']);
+        }finally{
             am.destroy();
         }
     });

@@ -1,65 +1,65 @@
-flectra.define('web.SystrayMenu', function (require) {
-"use strict";
+flectra.define('web.SystrayMenu',function(require){
+"usestrict";
 
-var dom = require('web.dom');
-var Widget = require('web.Widget');
+vardom=require('web.dom');
+varWidget=require('web.Widget');
 
 /**
- * The SystrayMenu is the class that manage the list of icons in the top right
- * of the menu bar.
+ *TheSystrayMenuistheclassthatmanagethelistoficonsinthetopright
+ *ofthemenubar.
  */
-var SystrayMenu = Widget.extend({
+varSystrayMenu=Widget.extend({
     /**
-     * This widget renders the systray menu. It creates and renders widgets
-     * pushed in instance.web.SystrayItems.
+     *Thiswidgetrendersthesystraymenu.Itcreatesandrenderswidgets
+     *pushedininstance.web.SystrayItems.
      */
-    init: function (parent) {
+    init:function(parent){
         this._super(parent);
-        this.items = [];
-        this.widgets = [];
+        this.items=[];
+        this.widgets=[];
     },
     /**
-     * Instanciate the items and add them into a temporary fragmenet
-     * @override
+     *Instanciatetheitemsandaddthemintoatemporaryfragmenet
+     *@override
      */
-    willStart: function () {
-        var self = this;
-        var proms = [];
-        SystrayMenu.Items = _.sortBy(SystrayMenu.Items, function (item) {
-            return !_.isUndefined(item.prototype.sequence) ? item.prototype.sequence : 50;
+    willStart:function(){
+        varself=this;
+        varproms=[];
+        SystrayMenu.Items=_.sortBy(SystrayMenu.Items,function(item){
+            return!_.isUndefined(item.prototype.sequence)?item.prototype.sequence:50;
         });
 
-        SystrayMenu.Items.forEach(function (WidgetClass) {
-            var cur_systray_item = new WidgetClass(self);
+        SystrayMenu.Items.forEach(function(WidgetClass){
+            varcur_systray_item=newWidgetClass(self);
             self.widgets.push(cur_systray_item);
             proms.push(cur_systray_item.appendTo($('<div>')));
         });
 
-        return this._super.apply(this, arguments).then(function () {
-            return Promise.all(proms);
+        returnthis._super.apply(this,arguments).then(function(){
+            returnPromise.all(proms);
         });
     },
-    on_attach_callback() {
+    on_attach_callback(){
         this.widgets
-            .filter(widget => widget.on_attach_callback)
-            .forEach(widget => widget.on_attach_callback());
+            .filter(widget=>widget.on_attach_callback)
+            .forEach(widget=>widget.on_attach_callback());
     },
     /**
-     * Add the instanciated items, using the object located in this.wisgets
+     *Addtheinstanciateditems,usingtheobjectlocatedinthis.wisgets
      */
-    start: function () {
-        var self = this;
-        return this._super.apply(this, arguments).then(function () {
-            self.widgets.forEach(function (widget) {
-                dom.prepend(self.$el, widget.$el);
+    start:function(){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(function(){
+            self.widgets.forEach(function(widget){
+                dom.prepend(self.$el,widget.$el);
             });
         });
     },
 });
 
-SystrayMenu.Items = [];
+SystrayMenu.Items=[];
 
-return SystrayMenu;
+returnSystrayMenu;
 
 });
 

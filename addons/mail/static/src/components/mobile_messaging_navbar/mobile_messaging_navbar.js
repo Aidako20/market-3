@@ -1,61 +1,61 @@
-flectra.define('mail/static/src/components/mobile_messaging_navbar/mobile_messaging_navbar.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/mobile_messaging_navbar/mobile_messaging_navbar.js',function(require){
+'usestrict';
 
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
 
-const { Component } = owl;
+const{Component}=owl;
 
-class MobileMessagingNavbar extends Component {
+classMobileMessagingNavbarextendsComponent{
 
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps({
-            compareDepth: {
-                tabs: 2,
+            compareDepth:{
+                tabs:2,
             },
         });
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClick(ev) {
-        this.trigger('o-select-mobile-messaging-navbar-tab', {
-            tabId: ev.currentTarget.dataset.tabId,
+    _onClick(ev){
+        this.trigger('o-select-mobile-messaging-navbar-tab',{
+            tabId:ev.currentTarget.dataset.tabId,
         });
     }
 
 }
 
-Object.assign(MobileMessagingNavbar, {
-    defaultProps: {
-        tabs: [],
+Object.assign(MobileMessagingNavbar,{
+    defaultProps:{
+        tabs:[],
     },
-    props: {
-        activeTabId: String,
-        tabs: {
-            type: Array,
-            element: {
-                type: Object,
-                shape: {
-                    icon: {
-                        type: String,
-                        optional: true,
+    props:{
+        activeTabId:String,
+        tabs:{
+            type:Array,
+            element:{
+                type:Object,
+                shape:{
+                    icon:{
+                        type:String,
+                        optional:true,
                     },
-                    id: String,
-                    label: String,
+                    id:String,
+                    label:String,
                 },
             },
         },
     },
-    template: 'mail.MobileMessagingNavbar',
+    template:'mail.MobileMessagingNavbar',
 });
 
-return MobileMessagingNavbar;
+returnMobileMessagingNavbar;
 
 });

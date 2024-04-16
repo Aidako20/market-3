@@ -1,382 +1,382 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-<data noupdate="1">
+<datanoupdate="1">
 
-    <!-- Meeting Types (for interview meetings) -->
-    <record model="calendar.event.type" id="categ_meet_interview">
-        <field name="name">Interview</field>
+    <!--MeetingTypes(forinterviewmeetings)-->
+    <recordmodel="calendar.event.type"id="categ_meet_interview">
+        <fieldname="name">Interview</field>
     </record>
 
-    <!-- Templates for interest / refusing applicants -->
-    <record id="email_template_data_applicant_refuse" model="mail.template">
-        <field name="name">Applicant: Refuse</field>
-        <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
-        <field name="subject">Your Job Application: ${object.job_id.name | safe}</field>
-        <field name="email_to">${(not object.partner_id and object.email_from or '') | safe}</field>
-        <field name="partner_to">${object.partner_id.id or ''}</field>
-        <field name="body_html" type="html">
-<table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+    <!--Templatesforinterest/refusingapplicants-->
+    <recordid="email_template_data_applicant_refuse"model="mail.template">
+        <fieldname="name">Applicant:Refuse</field>
+        <fieldname="model_id"ref="hr_recruitment.model_hr_applicant"/>
+        <fieldname="subject">YourJobApplication:${object.job_id.name|safe}</field>
+        <fieldname="email_to">${(notobject.partner_idandobject.email_fromor'')|safe}</field>
+        <fieldname="partner_to">${object.partner_id.idor''}</field>
+        <fieldname="body_html"type="html">
+<tableborder="0"cellpadding="0"cellspacing="0"width="590"style="min-width:590px;background-color:white;padding:0px8px0px8px;border-collapse:separate;">
     <tr>
-        <td valign="top">
-            <div style="font-size: 13px; margin: 0px; padding: 0px;">
+        <tdvalign="top">
+            <divstyle="font-size:13px;margin:0px;padding:0px;">
                 Hello,<br/><br/>
-                Thank you for your interest in joining the
-                <b>${object.company_id.name}</b> team.  We wanted to
-                let you know that, although your resume is competitive,
-                our hiring team reviewed your application and <b>did not
-                select it for further consideration</b>.
+                Thankyouforyourinterestinjoiningthe
+                <b>${object.company_id.name}</b>team. Wewantedto
+                letyouknowthat,althoughyourresumeiscompetitive,
+                ourhiringteamreviewedyourapplicationand<b>didnot
+                selectitforfurtherconsideration</b>.
                 <br/><br/>
-                Please note that recruiting is hard, and we can make
-                mistakes. Do not hesitate to reply to this email if you
-                think we made a mistake, or if you want more information
-                about our decision.
+                Pleasenotethatrecruitingishard,andwecanmake
+                mistakes.Donothesitatetoreplytothisemailifyou
+                thinkwemadeamistake,orifyouwantmoreinformation
+                aboutourdecision.
                 <br/><br/>
-                We will, however, keep your resume on record and get in
-                touch with you about future opportunities that may be a
-                better fit for your skills and experience.
+                Wewill,however,keepyourresumeonrecordandgetin
+                touchwithyouaboutfutureopportunitiesthatmaybea
+                betterfitforyourskillsandexperience.
                 <br/><br/>
-                We wish you all the best in your job search and hope we
-                will have the chance to consider you for another role
-                in the future.
+                Wewishyouallthebestinyourjobsearchandhopewe
+                willhavethechancetoconsideryouforanotherrole
+                inthefuture.
                 <br/><br/>
-                Thank you,
-                <div style="font-size: 11px; color: grey;">
-                    % if object.user_id:
-                        -- <br/>
+                Thankyou,
+                <divstyle="font-size:11px;color:grey;">
+                    %ifobject.user_id:
+                        --<br/>
                         <strong>${object.user_id.name}</strong><br/>
-                        Email: ${object.user_id.email or ''}<br/>
-                        Phone: ${object.user_id.phone or ''}
-                    % else:
-                        -- <br/>
+                        Email:${object.user_id.emailor''}<br/>
+                        Phone:${object.user_id.phoneor''}
+                    %else:
+                        --<br/>
                         ${object.company_id.name}<br/>
-                        The HR Team
-                    % endif
+                        TheHRTeam
+                    %endif
                 </div>
             </div>
         </td>
     </tr>
 </table>
         </field>
-        <field name="auto_delete" eval="True"/>
-        <field name="lang">${object.partner_id.lang or ''}</field>
+        <fieldname="auto_delete"eval="True"/>
+        <fieldname="lang">${object.partner_id.langor''}</field>
     </record>
 
-    <record id="email_template_data_applicant_interest" model="mail.template">
-        <field name="name">Applicant: Interest</field>
-        <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
-        <field name="subject">Your Job Application: ${object.job_id.name | safe}</field>
-        <field name="email_to">${(not object.partner_id and object.email_from or '') | safe}</field>
-        <field name="partner_to">${object.partner_id.id or ''}</field>
-        <field name="body_html" type="html">
-<table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color: white; border-collapse: collapse; margin-left: 20px;">
+    <recordid="email_template_data_applicant_interest"model="mail.template">
+        <fieldname="name">Applicant:Interest</field>
+        <fieldname="model_id"ref="hr_recruitment.model_hr_applicant"/>
+        <fieldname="subject">YourJobApplication:${object.job_id.name|safe}</field>
+        <fieldname="email_to">${(notobject.partner_idandobject.email_fromor'')|safe}</field>
+        <fieldname="partner_to">${object.partner_id.idor''}</field>
+        <fieldname="body_html"type="html">
+<tableborder="0"cellpadding="0"cellspacing="0"width="590"style="background-color:white;border-collapse:collapse;margin-left:20px;">
     <tr>
-        <td valign="top" style="padding: 0px 10px;">
-            <div style="text-align: center">
+        <tdvalign="top"style="padding:0px10px;">
+            <divstyle="text-align:center">
                 <h2>Congratulations!</h2>
-                <div style="color:grey;">Your resume has been positively reviewed.</div>
-                <img src="/hr_recruitment/static/src/img/congratulations.png" alt="Congratulations!" style="width:175px;margin:20px 0;"/>
+                <divstyle="color:grey;">Yourresumehasbeenpositivelyreviewed.</div>
+                <imgsrc="/hr_recruitment/static/src/img/congratulations.png"alt="Congratulations!"style="width:175px;margin:20px0;"/>
             </div>
-            <div style="font-size: 13px; margin: 0px; padding: 0px;">
-                We just reviewed your resume, and it caught our
-                attention. As we think you might be great for the
-                position, your application has been short listed for a
-                call or an interview.
+            <divstyle="font-size:13px;margin:0px;padding:0px;">
+                Wejustreviewedyourresume,anditcaughtour
+                attention.Aswethinkyoumightbegreatforthe
+                position,yourapplicationhasbeenshortlistedfora
+                calloraninterview.
                 <br/><br/>
-                % if 'website_url' in object.job_id and object.job_id.website_url:
-                    <div style="margin: 16px 8px 16px 8px;">
-                        <a href="${object.job_id.website_url}"
-                            style="background-color: #009EFB; text-decoration: none; color: #fff; padding: 8px 16px 8px 16px; border-radius: 5px;">Job Description</a>
+                %if'website_url'inobject.job_idandobject.job_id.website_url:
+                    <divstyle="margin:16px8px16px8px;">
+                        <ahref="${object.job_id.website_url}"
+                            style="background-color:#009EFB;text-decoration:none;color:#fff;padding:8px16px8px16px;border-radius:5px;">JobDescription</a>
                     </div>
-                % endif
+                %endif
 
-                % if object.user_id:
-                    You will soon be contacted by:
+                %ifobject.user_id:
+                    Youwillsoonbecontactedby:
                     <table>
                         <tr>
-                            <td width="75">
-                                <img src="/web/image/res.users/${object.user_id.id}/image_128" alt="Avatar" style="vertical-align:baseline; width: 64px; height: 64px; object-fit: cover;" />
+                            <tdwidth="75">
+                                <imgsrc="/web/image/res.users/${object.user_id.id}/image_128"alt="Avatar"style="vertical-align:baseline;width:64px;height:64px;object-fit:cover;"/>
                             </td>
                             <td>
                                 <strong>${object.user_id.name}</strong><br/>
-                                <span>Email: ${object.user_id.email or ''}</span><br/>
-                                <span>Phone: ${object.user_id.phone or ''}</span>
+                                <span>Email:${object.user_id.emailor''}</span><br/>
+                                <span>Phone:${object.user_id.phoneor''}</span>
                             </td>
                         </tr>
                     </table>
                     <br/><br/>
-                % endif
-                See you soon,
-                <div style="font-size: 11px; color: grey;">
-                    -- <br/>
-                    The HR Team
-                    % if 'website_url' in object.job_id and object.job_id.website_url
-                        Discover <a href="/jobs" style="text-decoration:none;color:#717188;">all our jobs</a>.<br/>
-                    % endif
+                %endif
+                Seeyousoon,
+                <divstyle="font-size:11px;color:grey;">
+                    --<br/>
+                    TheHRTeam
+                    %if'website_url'inobject.job_idandobject.job_id.website_url
+                        Discover<ahref="/jobs"style="text-decoration:none;color:#717188;">allourjobs</a>.<br/>
+                    %endif
                 </div>
 
-                <hr width="97%" style="background-color: rgb(204,204,204); border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 16px 0px 16px 0px;"/>
-                <h3 style="color:#9A6C8E;"><strong>What is the next step?</strong></h3>
-                We usually <strong>answer applications within a few days</strong>.
+                <hrwidth="97%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
+                <h3style="color:#9A6C8E;"><strong>Whatisthenextstep?</strong></h3>
+                Weusually<strong>answerapplicationswithinafewdays</strong>.
                 <br/><br/>
-                The next step is either a call or a meeting in our offices.
+                Thenextstepiseitheracallorameetinginouroffices.
                 <br/>
-                Feel free to <strong>contact us if you want a faster
-                feedback</strong> or if you don't get news from us
-                quickly enough (just reply to this email).
+                Feelfreeto<strong>contactusifyouwantafaster
+                feedback</strong>orifyoudon'tgetnewsfromus
+                quicklyenough(justreplytothisemail).
                 <br/>
 
-                <hr width="97%" style="background-color: rgb(204,204,204); border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 17px 0px 16px 0px;"/>
-                % set location = ''
-                % if object.job_id.address_id.name:
+                <hrwidth="97%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:17px0px16px0px;"/>
+                %setlocation=''
+                %ifobject.job_id.address_id.name:
                     <strong>${object.job_id.address_id.name}</strong><br/>
-                % endif
-                % if object.job_id.address_id.street:
+                %endif
+                %ifobject.job_id.address_id.street:
                     ${object.job_id.address_id.street}<br/>
-                    % set location = object.job_id.address_id.street
-                % endif
-                % if object.job_id.address_id.street2:
+                    %setlocation=object.job_id.address_id.street
+                %endif
+                %ifobject.job_id.address_id.street2:
                     ${object.job_id.address_id.street2}<br/>
-                    % set location = '%s, %s' % (location, object.job_id.address_id.street2)
-                % endif
-                % if object.job_id.address_id.city:
+                    %setlocation='%s,%s'%(location,object.job_id.address_id.street2)
+                %endif
+                %ifobject.job_id.address_id.city:
                     ${object.job_id.address_id.city},
-                    % set location = '%s, %s' % (location, object.job_id.address_id.city)
-                % endif
-                % if object.job_id.address_id.state_id.name:
+                    %setlocation='%s,%s'%(location,object.job_id.address_id.city)
+                %endif
+                %ifobject.job_id.address_id.state_id.name:
                     ${object.job_id.address_id.state_id.name},
-                    % set location = '%s, %s' % (location, object.job_id.address_id.state_id.name)
-                % endif
-                % if object.job_id.address_id.zip:
+                    %setlocation='%s,%s'%(location,object.job_id.address_id.state_id.name)
+                %endif
+                %ifobject.job_id.address_id.zip:
                     ${object.job_id.address_id.zip}
-                    % set location = '%s, %s' % (location, object.job_id.address_id.zip)
-                % endif
+                    %setlocation='%s,%s'%(location,object.job_id.address_id.zip)
+                %endif
                 <br/>
-                % if object.job_id.address_id.country_id.name:
+                %ifobject.job_id.address_id.country_id.name:
                     ${object.job_id.address_id.country_id.name}<br/>
-                    % set location = '%s, %s' % (location, object.job_id.address_id.country_id.name)
-                % endif
+                    %setlocation='%s,%s'%(location,object.job_id.address_id.country_id.name)
+                %endif
                 <br/>
             </div>
         </td>
     </tr>
 </table></field>
-        <field name="auto_delete" eval="True"/>
-        <field name="lang">${object.partner_id.lang or ''}</field>
+        <fieldname="auto_delete"eval="True"/>
+        <fieldname="lang">${object.partner_id.langor''}</field>
     </record>
 
-    <record id="email_template_data_applicant_congratulations" model="mail.template">
-        <field name="name">Applicant: Acknowledgement</field>
-        <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
-        <field name="subject">Your Job Application: ${object.job_id.name | safe}</field>
-        <field name="email_to">${(not object.partner_id and object.email_from or '') | safe}</field>
-        <field name="partner_to">${object.partner_id.id or ''}</field>
-        <field name="body_html" type="html">
-<table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color: white; border-collapse: collapse; margin-left: 20px;">
+    <recordid="email_template_data_applicant_congratulations"model="mail.template">
+        <fieldname="name">Applicant:Acknowledgement</field>
+        <fieldname="model_id"ref="hr_recruitment.model_hr_applicant"/>
+        <fieldname="subject">YourJobApplication:${object.job_id.name|safe}</field>
+        <fieldname="email_to">${(notobject.partner_idandobject.email_fromor'')|safe}</field>
+        <fieldname="partner_to">${object.partner_id.idor''}</field>
+        <fieldname="body_html"type="html">
+<tableborder="0"cellpadding="0"cellspacing="0"width="590"style="background-color:white;border-collapse:collapse;margin-left:20px;">
     <tr>
-        <td valign="top" style="padding: 0px 10px;">
-            <div style="font-size: 13px; margin: 0px; padding: 0px;">
+        <tdvalign="top"style="padding:0px10px;">
+            <divstyle="font-size:13px;margin:0px;padding:0px;">
                 Hello,
                 <br/><br/>
-                We confirm we successfully received your application for the job
-                "<a href="${object.job_id.website_url or ''}" style="color:#9A6C8E;"><strong>${object.job_id.name}</strong></a>" at <strong>${object.company_id.name}</strong>.
+                Weconfirmwesuccessfullyreceivedyourapplicationforthejob
+                "<ahref="${object.job_id.website_urlor''}"style="color:#9A6C8E;"><strong>${object.job_id.name}</strong></a>"at<strong>${object.company_id.name}</strong>.
                 <br/><br/>
-                We will come back to you shortly.
+                Wewillcomebacktoyoushortly.
 
-                % if 'website_url' in object.job_id and object.job_id.website_url:
-                    <div style="margin: 16px 8px 16px 8px;">
-                        <a href="${object.job_id.website_url}"
-                            style="background-color: #009EFB; text-decoration: none; color: #fff; padding: 8px 16px 8px 16px; border-radius: 5px;">Job Description</a>
+                %if'website_url'inobject.job_idandobject.job_id.website_url:
+                    <divstyle="margin:16px8px16px8px;">
+                        <ahref="${object.job_id.website_url}"
+                            style="background-color:#009EFB;text-decoration:none;color:#fff;padding:8px16px8px16px;border-radius:5px;">JobDescription</a>
                     </div>
-                % endif
+                %endif
 
-                <hr width="97%" style="background-color: rgb(204,204,204); border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 16px 0px 16px 0px;"/>
-                % if object.user_id:
-                    <h3 style="color:#9A6C8E;"><strong>Your Contact:</strong></h3>
+                <hrwidth="97%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
+                %ifobject.user_id:
+                    <h3style="color:#9A6C8E;"><strong>YourContact:</strong></h3>
                     <table>
                         <tr>
-                            <td width="75">
-                                <img src="/web/image/res.users/${object.user_id.id}/image_128" alt="Avatar" style="vertical-align:baseline; width: 64px; height: 64px; object-fit: cover;" />
+                            <tdwidth="75">
+                                <imgsrc="/web/image/res.users/${object.user_id.id}/image_128"alt="Avatar"style="vertical-align:baseline;width:64px;height:64px;object-fit:cover;"/>
                             </td>
                             <td>
                                 <strong>${object.user_id.name}</strong><br/>
-                                <span>Email: ${object.user_id.email or ''}</span><br/>
-                                <span>Phone: ${object.user_id.phone or ''}</span>
+                                <span>Email:${object.user_id.emailor''}</span><br/>
+                                <span>Phone:${object.user_id.phoneor''}</span>
                             </td>
                         </tr>
                     </table>
-                    <hr width="97%" style="background-color: rgb(204,204,204); border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 16px 0px 16px 0px;"/>
-                % endif
+                    <hrwidth="97%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:16px0px16px0px;"/>
+                %endif
 
-                <h3 style="color:#9A6C8E;"><strong>What is the next step?</strong></h3>
-                We usually <strong>answer applications within a few days.</strong><br/><br/>
-                Feel free to <strong>contact us if you want a faster
-                feedback</strong> or if you don't get news from us
-                quickly enough (just reply to this email).
+                <h3style="color:#9A6C8E;"><strong>Whatisthenextstep?</strong></h3>
+                Weusually<strong>answerapplicationswithinafewdays.</strong><br/><br/>
+                Feelfreeto<strong>contactusifyouwantafaster
+                feedback</strong>orifyoudon'tgetnewsfromus
+                quicklyenough(justreplytothisemail).
 
-                <hr width="97%" style="background-color: rgb(204,204,204); border: medium none; clear: both; display: block; font-size: 0px; min-height: 1px; line-height: 0; margin: 17px 0px 16px 0px;"/>
-                % set location = ''
-                % if object.job_id.address_id.name:
+                <hrwidth="97%"style="background-color:rgb(204,204,204);border:mediumnone;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:17px0px16px0px;"/>
+                %setlocation=''
+                %ifobject.job_id.address_id.name:
                     <strong>${object.job_id.address_id.name}</strong><br/>
-                % endif
-                % if object.job_id.address_id.street:
+                %endif
+                %ifobject.job_id.address_id.street:
                     ${object.job_id.address_id.street}<br/>
-                    % set location = object.job_id.address_id.street
-                % endif
-                % if object.job_id.address_id.street2:
+                    %setlocation=object.job_id.address_id.street
+                %endif
+                %ifobject.job_id.address_id.street2:
                     ${object.job_id.address_id.street2}<br/>
-                    % set location = '%s, %s' % (location, object.job_id.address_id.street2)
-                % endif
-                % if object.job_id.address_id.city:
+                    %setlocation='%s,%s'%(location,object.job_id.address_id.street2)
+                %endif
+                %ifobject.job_id.address_id.city:
                     ${object.job_id.address_id.city},
-                    % set location = '%s, %s' % (location, object.job_id.address_id.city)
-                % endif
-                % if object.job_id.address_id.state_id.name:
+                    %setlocation='%s,%s'%(location,object.job_id.address_id.city)
+                %endif
+                %ifobject.job_id.address_id.state_id.name:
                     ${object.job_id.address_id.state_id.name},
-                    % set location = '%s, %s' % (location, object.job_id.address_id.state_id.name)
-                % endif
-                % if object.job_id.address_id.zip:
+                    %setlocation='%s,%s'%(location,object.job_id.address_id.state_id.name)
+                %endif
+                %ifobject.job_id.address_id.zip:
                     ${object.job_id.address_id.zip}
-                    % set location = '%s, %s' % (location, object.job_id.address_id.zip)
-                % endif
+                    %setlocation='%s,%s'%(location,object.job_id.address_id.zip)
+                %endif
                 <br/>
-                % if object.job_id.address_id.country_id.name:
+                %ifobject.job_id.address_id.country_id.name:
                     ${object.job_id.address_id.country_id.name}<br/>
-                    % set location = '%s, %s' % (location, object.job_id.address_id.country_id.name)
-                % endif
+                    %setlocation='%s,%s'%(location,object.job_id.address_id.country_id.name)
+                %endif
                 <br/>
             </div>
         </td>
     </tr>
 </table></field>
-        <field name="auto_delete" eval="True"/>
-        <field name="lang">${object.partner_id.lang or ''}</field>
+        <fieldname="auto_delete"eval="True"/>
+        <fieldname="lang">${object.partner_id.langor''}</field>
     </record>
 
-    <record model="hr.recruitment.degree" id="degree_graduate">
-        <field name="name">Graduate</field>
-        <field name="sequence">1</field>
+    <recordmodel="hr.recruitment.degree"id="degree_graduate">
+        <fieldname="name">Graduate</field>
+        <fieldname="sequence">1</field>
     </record>
-    <record model="hr.recruitment.degree" id="degree_bachelor">
-        <field name="name">Bachelor Degree</field>
-        <field name="sequence">2</field>
+    <recordmodel="hr.recruitment.degree"id="degree_bachelor">
+        <fieldname="name">BachelorDegree</field>
+        <fieldname="sequence">2</field>
     </record>
-    <record model="hr.recruitment.degree" id="degree_licenced">
-        <field name="name">Master Degree</field>
-        <field name="sequence">3</field>
+    <recordmodel="hr.recruitment.degree"id="degree_licenced">
+        <fieldname="name">MasterDegree</field>
+        <fieldname="sequence">3</field>
     </record>
-    <record model="hr.recruitment.degree" id="degree_bac5">
-        <field name="name">Doctoral Degree</field>
-        <field name="sequence">4</field>
-    </record>
-
-    <record id="mail_alias_jobs" model="mail.alias">
-        <field name="alias_name">jobs</field>
-        <field name="alias_model_id" ref="model_hr_applicant"/>
-        <field name="alias_user_id" ref="base.user_admin"/>
-        <field name="alias_parent_model_id" ref="model_hr_job"/>
+    <recordmodel="hr.recruitment.degree"id="degree_bac5">
+        <fieldname="name">DoctoralDegree</field>
+        <fieldname="sequence">4</field>
     </record>
 
-    <!-- Applicant-related subtypes for messaging / Chatter -->
-    <record id="mt_applicant_new" model="mail.message.subtype">
-        <field name="name">New Applicant</field>
-        <field name="res_model">hr.applicant</field>
-        <field name="default" eval="False"/>
-        <field name="hidden" eval="True"/>
-        <field name="description">Applicant created</field>
-    </record>
-    <record id="mt_applicant_stage_changed" model="mail.message.subtype">
-        <field name="name">Stage Changed</field>
-        <field name="res_model">hr.applicant</field>
-        <field name="default" eval="False"/>
-        <field name="description">Stage changed</field>
-    </record>
-    <record id="mt_applicant_hired" model="mail.message.subtype">
-        <field name="name">Applicant Hired</field>
-        <field name="res_model">hr.applicant</field>
-        <field name="default" eval="True"/>
-        <field name="description">Applicant hired</field>
+    <recordid="mail_alias_jobs"model="mail.alias">
+        <fieldname="alias_name">jobs</field>
+        <fieldname="alias_model_id"ref="model_hr_applicant"/>
+        <fieldname="alias_user_id"ref="base.user_admin"/>
+        <fieldname="alias_parent_model_id"ref="model_hr_job"/>
     </record>
 
-    <!-- Job-related subtypes for messaging / Chatter -->
-    <record id="mt_job_new" model="mail.message.subtype">
-        <field name="name">Job Position created</field>
-        <field name="res_model">hr.job</field>
-        <field name="default" eval="False"/>
-        <field name="hidden" eval="True"/>
+    <!--Applicant-relatedsubtypesformessaging/Chatter-->
+    <recordid="mt_applicant_new"model="mail.message.subtype">
+        <fieldname="name">NewApplicant</field>
+        <fieldname="res_model">hr.applicant</field>
+        <fieldname="default"eval="False"/>
+        <fieldname="hidden"eval="True"/>
+        <fieldname="description">Applicantcreated</field>
     </record>
-    <record id="mt_job_applicant_stage_changed" model="mail.message.subtype">
-        <field name="name">Applicant Stage Changed</field>
-        <field name="res_model">hr.job</field>
-        <field name="default" eval="False"/>
-        <field name="parent_id" ref="mt_applicant_stage_changed"/>
-        <field name="relation_field">job_id</field>
+    <recordid="mt_applicant_stage_changed"model="mail.message.subtype">
+        <fieldname="name">StageChanged</field>
+        <fieldname="res_model">hr.applicant</field>
+        <fieldname="default"eval="False"/>
+        <fieldname="description">Stagechanged</field>
     </record>
-    <record id="mt_job_applicant_hired" model="mail.message.subtype">
-        <field name="name">Applicant Hired</field>
-        <field name="res_model">hr.job</field>
-        <field name="default" eval="True"/>
-        <field name="parent_id" ref="mt_applicant_hired"/>
-        <field name="relation_field">job_id</field>
-    </record>
-
-    <!-- Department-related (parent) subtypes for messaging / Chatter -->
-    <record id="mt_department_new" model="mail.message.subtype">
-        <field name="name">Job Position Created</field>
-        <field name="res_model">hr.department</field>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="mt_job_new"/>
-        <field name="relation_field">department_id</field>
+    <recordid="mt_applicant_hired"model="mail.message.subtype">
+        <fieldname="name">ApplicantHired</field>
+        <fieldname="res_model">hr.applicant</field>
+        <fieldname="default"eval="True"/>
+        <fieldname="description">Applicanthired</field>
     </record>
 
-    <!-- Applicant Categories(Tag) -->
-    <record id="tag_applicant_reserve" model="hr.applicant.category">
-        <field name="name">Reserve</field>
+    <!--Job-relatedsubtypesformessaging/Chatter-->
+    <recordid="mt_job_new"model="mail.message.subtype">
+        <fieldname="name">JobPositioncreated</field>
+        <fieldname="res_model">hr.job</field>
+        <fieldname="default"eval="False"/>
+        <fieldname="hidden"eval="True"/>
     </record>
-    <record id="tag_applicant_manager" model="hr.applicant.category">
-        <field name="name">Manager</field>
+    <recordid="mt_job_applicant_stage_changed"model="mail.message.subtype">
+        <fieldname="name">ApplicantStageChanged</field>
+        <fieldname="res_model">hr.job</field>
+        <fieldname="default"eval="False"/>
+        <fieldname="parent_id"ref="mt_applicant_stage_changed"/>
+        <fieldname="relation_field">job_id</field>
     </record>
-    <record id="tag_applicant_it" model="hr.applicant.category">
-        <field name="name">IT</field>
-    </record>
-    <record id="tag_applicant_sales" model="hr.applicant.category">
-        <field name="name">Sales</field>
-    </record>
-    <record model="utm.campaign" id="utm_campaign_job">
-            <field name="name">Job Campaign</field>
-    </record>
-
-    <record model="hr.recruitment.stage" id="stage_job1">
-        <field name="name">Initial Qualification</field>
-        <field name="sequence">1</field>
-    </record>
-    <record model="hr.recruitment.stage" id="stage_job2">
-        <field name="name">First Interview</field>
-        <field name="sequence">2</field>
-        <field name="template_id" ref="email_template_data_applicant_congratulations"/> 
-    </record>
-    <record model="hr.recruitment.stage" id="stage_job3">
-        <field name="name">Second Interview</field>
-        <field name="sequence">3</field>
-    </record>
-    <record model="hr.recruitment.stage" id="stage_job4">
-        <field name="name">Contract Proposal</field>
-        <field name="sequence">4</field>
-    </record>
-    <record model="hr.recruitment.stage" id="stage_job5">
-        <field name="name">Contract Signed</field>
-        <field name="sequence">5</field>
-        <field name="fold" eval="True"/>
+    <recordid="mt_job_applicant_hired"model="mail.message.subtype">
+        <fieldname="name">ApplicantHired</field>
+        <fieldname="res_model">hr.job</field>
+        <fieldname="default"eval="True"/>
+        <fieldname="parent_id"ref="mt_applicant_hired"/>
+        <fieldname="relation_field">job_id</field>
     </record>
 
-    <!-- applicant refuse reason -->
-        <record id="refuse_reason_1" model="hr.applicant.refuse.reason">
-            <field name="name">Doesn't fit the job requirements</field>
+    <!--Department-related(parent)subtypesformessaging/Chatter-->
+    <recordid="mt_department_new"model="mail.message.subtype">
+        <fieldname="name">JobPositionCreated</field>
+        <fieldname="res_model">hr.department</field>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="mt_job_new"/>
+        <fieldname="relation_field">department_id</field>
+    </record>
+
+    <!--ApplicantCategories(Tag)-->
+    <recordid="tag_applicant_reserve"model="hr.applicant.category">
+        <fieldname="name">Reserve</field>
+    </record>
+    <recordid="tag_applicant_manager"model="hr.applicant.category">
+        <fieldname="name">Manager</field>
+    </record>
+    <recordid="tag_applicant_it"model="hr.applicant.category">
+        <fieldname="name">IT</field>
+    </record>
+    <recordid="tag_applicant_sales"model="hr.applicant.category">
+        <fieldname="name">Sales</field>
+    </record>
+    <recordmodel="utm.campaign"id="utm_campaign_job">
+            <fieldname="name">JobCampaign</field>
+    </record>
+
+    <recordmodel="hr.recruitment.stage"id="stage_job1">
+        <fieldname="name">InitialQualification</field>
+        <fieldname="sequence">1</field>
+    </record>
+    <recordmodel="hr.recruitment.stage"id="stage_job2">
+        <fieldname="name">FirstInterview</field>
+        <fieldname="sequence">2</field>
+        <fieldname="template_id"ref="email_template_data_applicant_congratulations"/>
+    </record>
+    <recordmodel="hr.recruitment.stage"id="stage_job3">
+        <fieldname="name">SecondInterview</field>
+        <fieldname="sequence">3</field>
+    </record>
+    <recordmodel="hr.recruitment.stage"id="stage_job4">
+        <fieldname="name">ContractProposal</field>
+        <fieldname="sequence">4</field>
+    </record>
+    <recordmodel="hr.recruitment.stage"id="stage_job5">
+        <fieldname="name">ContractSigned</field>
+        <fieldname="sequence">5</field>
+        <fieldname="fold"eval="True"/>
+    </record>
+
+    <!--applicantrefusereason-->
+        <recordid="refuse_reason_1"model="hr.applicant.refuse.reason">
+            <fieldname="name">Doesn'tfitthejobrequirements</field>
         </record>
-        <record id="refuse_reason_2" model="hr.applicant.refuse.reason">
-            <field name="name">The applicant is not interested anymore</field>
+        <recordid="refuse_reason_2"model="hr.applicant.refuse.reason">
+            <fieldname="name">Theapplicantisnotinterestedanymore</field>
         </record>
-        <record id="refuse_reason_3" model="hr.applicant.refuse.reason">
-            <field name="name">The applicant gets a better offer</field>
+        <recordid="refuse_reason_3"model="hr.applicant.refuse.reason">
+            <fieldname="name">Theapplicantgetsabetteroffer</field>
         </record>
 
 </data>

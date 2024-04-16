@@ -1,140 +1,140 @@
-flectra.define('website.s_table_of_content_options', function (require) {
-'use strict';
+flectra.define('website.s_table_of_content_options',function(require){
+'usestrict';
 
-const options = require('web_editor.snippets.options');
+constoptions=require('web_editor.snippets.options');
 
-options.registry.TableOfContent = options.Class.extend({
+options.registry.TableOfContent=options.Class.extend({
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this.targetedElements = 'h1, h2';
-        const $headings = this.$target.find(this.targetedElements);
-        if ($headings.length > 0) {
+    start:function(){
+        this.targetedElements='h1,h2';
+        const$headings=this.$target.find(this.targetedElements);
+        if($headings.length>0){
             this._generateNav();
         }
-        // Generate the navbar if the content changes
-        const targetNode = this.$target.find('.s_table_of_content_main')[0];
-        const config = {attributes: false, childList: true, subtree: true, characterData: true};
-        this.observer = new MutationObserver(() => this._generateNav());
-        this.observer.observe(targetNode, config);
-        return this._super(...arguments);
+        //Generatethenavbarifthecontentchanges
+        consttargetNode=this.$target.find('.s_table_of_content_main')[0];
+        constconfig={attributes:false,childList:true,subtree:true,characterData:true};
+        this.observer=newMutationObserver(()=>this._generateNav());
+        this.observer.observe(targetNode,config);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
-        // The observer needs to be disconnected first.
+    destroy:function(){
+        //Theobserverneedstobedisconnectedfirst.
         this.observer.disconnect();
         this._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    onClone: function () {
+    onClone:function(){
         this._generateNav();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _generateNav: function (ev) {
-        const $nav = this.$target.find('.s_table_of_content_navbar');
-        const $headings = this.$target.find(this.targetedElements);
+    _generateNav:function(ev){
+        const$nav=this.$target.find('.s_table_of_content_navbar');
+        const$headings=this.$target.find(this.targetedElements);
         $nav.empty();
-        _.each($headings, el => {
-            const $el = $(el);
-            const id = 'table_of_content_heading_' + _.now() + '_' + _.uniqueId();
-            $('<a>').attr('href', "#" + id)
-                    .addClass('table_of_content_link list-group-item list-group-item-action py-2 border-0 rounded-0')
+        _.each($headings,el=>{
+            const$el=$(el);
+            constid='table_of_content_heading_'+_.now()+'_'+_.uniqueId();
+            $('<a>').attr('href',"#"+id)
+                    .addClass('table_of_content_linklist-group-itemlist-group-item-actionpy-2border-0rounded-0')
                     .text($el.text())
                     .appendTo($nav);
-            $el.attr('id', id);
-            $el[0].dataset.anchor = 'true';
+            $el.attr('id',id);
+            $el[0].dataset.anchor='true';
         });
 
-        const tocMainEl = this.$target[0].querySelector('.s_table_of_content_main');
-        if (tocMainEl && tocMainEl.children.length === 0) {
-            this.trigger_up('go_to_parent', {$snippet: this.$target});
-            // destroy public widget and remove the ToC since there are no more
-            // child elements.
-            this.trigger_up('will_remove_snippet', {$target: this.$target});
+        consttocMainEl=this.$target[0].querySelector('.s_table_of_content_main');
+        if(tocMainEl&&tocMainEl.children.length===0){
+            this.trigger_up('go_to_parent',{$snippet:this.$target});
+            //destroypublicwidgetandremovetheToCsincetherearenomore
+            //childelements.
+            this.trigger_up('will_remove_snippet',{$target:this.$target});
             this.$target[0].remove();
-        } else {
+        }else{
             $nav.find('a:first').addClass('active');
         }
     },
 });
 
-options.registry.TableOfContentNavbar = options.Class.extend({
+options.registry.TableOfContentNavbar=options.Class.extend({
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Change the navbar position.
+     *Changethenavbarposition.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    navbarPosition: function (previewMode, widgetValue, params) {
-        const $navbar = this.$target;
-        const $mainContent = this.$target.parent().find('.s_table_of_content_main');
-        if (widgetValue === 'top' || widgetValue === 'left') {
+    navbarPosition:function(previewMode,widgetValue,params){
+        const$navbar=this.$target;
+        const$mainContent=this.$target.parent().find('.s_table_of_content_main');
+        if(widgetValue==='top'||widgetValue==='left'){
             $navbar.prev().before($navbar);
         }
-        if (widgetValue === 'left' || widgetValue === 'right') {
-            $navbar.removeClass('s_table_of_content_horizontal_navbar col-lg-12').addClass('s_table_of_content_vertical_navbar col-lg-3');
+        if(widgetValue==='left'||widgetValue==='right'){
+            $navbar.removeClass('s_table_of_content_horizontal_navbarcol-lg-12').addClass('s_table_of_content_vertical_navbarcol-lg-3');
             $mainContent.removeClass('col-lg-12').addClass('col-lg-9');
             $navbar.find('.s_table_of_content_navbar').removeClass('list-group-horizontal-md');
         }
-        if (widgetValue === 'right') {
+        if(widgetValue==='right'){
             $navbar.next().after($navbar);
         }
-        if (widgetValue === 'top') {
-            $navbar.removeClass('s_table_of_content_vertical_navbar col-lg-3').addClass('s_table_of_content_horizontal_navbar col-lg-12');
+        if(widgetValue==='top'){
+            $navbar.removeClass('s_table_of_content_vertical_navbarcol-lg-3').addClass('s_table_of_content_horizontal_navbarcol-lg-12');
             $navbar.find('.s_table_of_content_navbar').addClass('list-group-horizontal-md');
             $mainContent.removeClass('col-lg-9').addClass('col-lg-12');
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState: function (methodName, params) {
-        switch (methodName) {
-            case 'navbarPosition': {
-                const $navbar = this.$target;
-                if ($navbar.hasClass('s_table_of_content_horizontal_navbar')) {
-                    return 'top';
-                } else {
-                    const $mainContent = $navbar.parent().find('.s_table_of_content_main');
-                    return $navbar.prev().is($mainContent) === true ? 'right' : 'left';
+    _computeWidgetState:function(methodName,params){
+        switch(methodName){
+            case'navbarPosition':{
+                const$navbar=this.$target;
+                if($navbar.hasClass('s_table_of_content_horizontal_navbar')){
+                    return'top';
+                }else{
+                    const$mainContent=$navbar.parent().find('.s_table_of_content_main');
+                    return$navbar.prev().is($mainContent)===true?'right':'left';
                 }
             }
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 });
 
-options.registry.TableOfContentMainColumns = options.Class.extend({
-    forceNoDeleteButton: true,
+options.registry.TableOfContentMainColumns=options.Class.extend({
+    forceNoDeleteButton:true,
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        const leftPanelEl = this.$overlay.data('$optionsSection')[0];
-        leftPanelEl.querySelector('.oe_snippet_clone').classList.add('d-none'); // TODO improve the way to do that
-        return this._super.apply(this, arguments);
+    start:function(){
+        constleftPanelEl=this.$overlay.data('$optionsSection')[0];
+        leftPanelEl.querySelector('.oe_snippet_clone').classList.add('d-none');//TODOimprovethewaytodothat
+        returnthis._super.apply(this,arguments);
     },
 });
 });

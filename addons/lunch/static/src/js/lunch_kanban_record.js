@@ -1,36 +1,36 @@
-flectra.define('lunch.LunchKanbanRecord', function (require) {
-    "use strict";
+flectra.define('lunch.LunchKanbanRecord',function(require){
+    "usestrict";
 
     /**
-     * This file defines the KanbanRecord for the Lunch Kanban view.
+     *ThisfiledefinestheKanbanRecordfortheLunchKanbanview.
      */
 
-    var KanbanRecord = require('web.KanbanRecord');
+    varKanbanRecord=require('web.KanbanRecord');
 
-    var LunchKanbanRecord = KanbanRecord.extend({
-        events: _.extend({}, KanbanRecord.prototype.events, {
-            'click': '_onSelectRecord',
+    varLunchKanbanRecord=KanbanRecord.extend({
+        events:_.extend({},KanbanRecord.prototype.events,{
+            'click':'_onSelectRecord',
         }),
 
         //--------------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //--------------------------------------------------------------------------
 
         /**
-         * Open the add product wizard
+         *Opentheaddproductwizard
          *
-         * @private
-         * @param {MouseEvent} ev Click event
+         *@private
+         *@param{MouseEvent}evClickevent
          */
-        _onSelectRecord: function (ev) {
+        _onSelectRecord:function(ev){
             ev.preventDefault();
-            // ignore clicks on oe_kanban_action elements
-            if (!$(ev.target).hasClass('oe_kanban_action')) {
-                this.trigger_up('open_wizard', {productId: this.recordData.product_id ? this.recordData.product_id.res_id: this.recordData.id});
+            //ignoreclicksonoe_kanban_actionelements
+            if(!$(ev.target).hasClass('oe_kanban_action')){
+                this.trigger_up('open_wizard',{productId:this.recordData.product_id?this.recordData.product_id.res_id:this.recordData.id});
             }
         },
     });
 
-    return LunchKanbanRecord;
+    returnLunchKanbanRecord;
 
     });

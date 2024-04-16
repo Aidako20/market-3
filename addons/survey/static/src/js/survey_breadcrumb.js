@@ -1,50 +1,50 @@
-flectra.define('survey.breadcrumb', function (require) {
-'use strict';
+flectra.define('survey.breadcrumb',function(require){
+'usestrict';
 
-var publicWidget = require('web.public.widget');
+varpublicWidget=require('web.public.widget');
 
-publicWidget.registry.SurveyBreadcrumbWidget = publicWidget.Widget.extend({
-    xmlDependencies: ['/survey/static/src/xml/survey_breadcrumb_templates.xml'],
-    template: "survey.survey_breadcrumb_template",
-    events: {
-        'click .breadcrumb-item a': '_onBreadcrumbClick',
+publicWidget.registry.SurveyBreadcrumbWidget=publicWidget.Widget.extend({
+    xmlDependencies:['/survey/static/src/xml/survey_breadcrumb_templates.xml'],
+    template:"survey.survey_breadcrumb_template",
+    events:{
+        'click.breadcrumb-itema':'_onBreadcrumbClick',
     },
 
     /**
-     * @override
+     *@override
      */
-    init: function (parent, options) {
-        this._super.apply(this, arguments);
-        this.canGoBack = options.canGoBack;
-        this.currentPageId = options.currentPageId;
-        this.pages = options.pages;
+    init:function(parent,options){
+        this._super.apply(this,arguments);
+        this.canGoBack=options.canGoBack;
+        this.currentPageId=options.currentPageId;
+        this.pages=options.pages;
     },
 
-    // Handlers
-    // -------------------------------------------------------------------
+    //Handlers
+    //-------------------------------------------------------------------
 
-    _onBreadcrumbClick: function (event) {
+    _onBreadcrumbClick:function(event){
         event.preventDefault();
-        this.trigger_up('breadcrumb_click', {
-            'previousPageId': this.$(event.currentTarget)
+        this.trigger_up('breadcrumb_click',{
+            'previousPageId':this.$(event.currentTarget)
                 .closest('.breadcrumb-item')
                 .data('pageId')
         });
     },
 
-    // PUBLIC METHODS
-    // -------------------------------------------------------------------
+    //PUBLICMETHODS
+    //-------------------------------------------------------------------
 
-    updateBreadcrumb: function (pageId) {
-        if (pageId) {
-            this.currentPageId = pageId;
+    updateBreadcrumb:function(pageId){
+        if(pageId){
+            this.currentPageId=pageId;
             this.renderElement();
-        } else {
+        }else{
             this.$('.breadcrumb').addClass('d-none');
         }
     },
 });
 
-return publicWidget.registry.SurveyBreadcrumbWidget;
+returnpublicWidget.registry.SurveyBreadcrumbWidget;
 
 });

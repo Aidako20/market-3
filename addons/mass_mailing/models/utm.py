@@ -1,98 +1,98 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class UtmCampaign(models.Model):
-    _inherit = 'utm.campaign'
+classUtmCampaign(models.Model):
+    _inherit='utm.campaign'
 
-    mailing_mail_ids = fields.One2many(
-        'mailing.mailing', 'campaign_id',
-        domain=[('mailing_type', '=', 'mail')],
-        string='Mass Mailings')
-    mailing_mail_count = fields.Integer('Number of Mass Mailing', compute="_compute_mailing_mail_count")
-    # stat fields
-    received_ratio = fields.Integer(compute="_compute_statistics", string='Received Ratio')
-    opened_ratio = fields.Integer(compute="_compute_statistics", string='Opened Ratio')
-    replied_ratio = fields.Integer(compute="_compute_statistics", string='Replied Ratio')
-    bounced_ratio = fields.Integer(compute="_compute_statistics", string='Bounced Ratio')
+    mailing_mail_ids=fields.One2many(
+        'mailing.mailing','campaign_id',
+        domain=[('mailing_type','=','mail')],
+        string='MassMailings')
+    mailing_mail_count=fields.Integer('NumberofMassMailing',compute="_compute_mailing_mail_count")
+    #statfields
+    received_ratio=fields.Integer(compute="_compute_statistics",string='ReceivedRatio')
+    opened_ratio=fields.Integer(compute="_compute_statistics",string='OpenedRatio')
+    replied_ratio=fields.Integer(compute="_compute_statistics",string='RepliedRatio')
+    bounced_ratio=fields.Integer(compute="_compute_statistics",string='BouncedRatio')
 
     @api.depends('mailing_mail_ids')
-    def _compute_mailing_mail_count(self):
-        if self.ids:
-            mailing_data = self.env['mailing.mailing'].read_group(
-                [('campaign_id', 'in', self.ids), ('mailing_type', '=', 'mail')],
+    def_compute_mailing_mail_count(self):
+        ifself.ids:
+            mailing_data=self.env['mailing.mailing'].read_group(
+                [('campaign_id','in',self.ids),('mailing_type','=','mail')],
                 ['campaign_id'],
                 ['campaign_id']
             )
-            mapped_data = {m['campaign_id'][0]: m['campaign_id_count'] for m in mailing_data}
+            mapped_data={m['campaign_id'][0]:m['campaign_id_count']forminmailing_data}
         else:
-            mapped_data = dict()
-        for campaign in self:
-            campaign.mailing_mail_count = mapped_data.get(campaign.id, 0)
+            mapped_data=dict()
+        forcampaigninself:
+            campaign.mailing_mail_count=mapped_data.get(campaign.id,0)
 
-    def _compute_statistics(self):
-        """ Compute statistics of the mass mailing campaign """
-        default_vals = {
-            'received_ratio': 0,
-            'opened_ratio': 0,
-            'replied_ratio': 0,
-            'bounced_ratio': 0
+    def_compute_statistics(self):
+        """Computestatisticsofthemassmailingcampaign"""
+        default_vals={
+            'received_ratio':0,
+            'opened_ratio':0,
+            'replied_ratio':0,
+            'bounced_ratio':0
         }
-        if not self.ids:
+        ifnotself.ids:
             self.update(default_vals)
             return
         self.env.cr.execute("""
             SELECT
-                c.id as campaign_id,
-                COUNT(s.id) AS expected,
-                COUNT(CASE WHEN s.sent is not null THEN 1 ELSE null END) AS sent,
-                COUNT(CASE WHEN s.scheduled is not null AND s.sent is null AND s.exception is null AND s.ignored is not null THEN 1 ELSE null END) AS ignored,
-                COUNT(CASE WHEN s.id is not null AND s.bounced is null THEN 1 ELSE null END) AS delivered,
-                COUNT(CASE WHEN s.opened is not null THEN 1 ELSE null END) AS opened,
-                COUNT(CASE WHEN s.replied is not null THEN 1 ELSE null END) AS replied,
-                COUNT(CASE WHEN s.bounced is not null THEN 1 ELSE null END) AS bounced
+                c.idascampaign_id,
+                COUNT(s.id)ASexpected,
+                COUNT(CASEWHENs.sentisnotnullTHEN1ELSEnullEND)ASsent,
+                COUNT(CASEWHENs.scheduledisnotnullANDs.sentisnullANDs.exceptionisnullANDs.ignoredisnotnullTHEN1ELSEnullEND)ASignored,
+                COUNT(CASEWHENs.idisnotnullANDs.bouncedisnullTHEN1ELSEnullEND)ASdelivered,
+                COUNT(CASEWHENs.openedisnotnullTHEN1ELSEnullEND)ASopened,
+                COUNT(CASEWHENs.repliedisnotnullTHEN1ELSEnullEND)ASreplied,
+                COUNT(CASEWHENs.bouncedisnotnullTHEN1ELSEnullEND)ASbounced
             FROM
-                mailing_trace s
-            RIGHT JOIN
-                utm_campaign c
-                ON (c.id = s.campaign_id)
+                mailing_traces
+            RIGHTJOIN
+                utm_campaignc
+                ON(c.id=s.campaign_id)
             WHERE
-                c.id IN %s
-            GROUP BY
+                c.idIN%s
+            GROUPBY
                 c.id
-        """, (tuple(self.ids), ))
+        """,(tuple(self.ids),))
 
-        all_stats = self.env.cr.dictfetchall()
-        stats_per_campaign = {
-            stats['campaign_id']: stats
-            for stats in all_stats
+        all_stats=self.env.cr.dictfetchall()
+        stats_per_campaign={
+            stats['campaign_id']:stats
+            forstatsinall_stats
         }
 
-        for campaign in self:
-            stats = stats_per_campaign.get(campaign.id)
-            if not stats:
-                vals = default_vals
+        forcampaigninself:
+            stats=stats_per_campaign.get(campaign.id)
+            ifnotstats:
+                vals=default_vals
             else:
-                total = (stats['expected'] - stats['ignored']) or 1
-                delivered = stats['sent'] - stats['bounced']
-                vals = {
-                    'received_ratio': 100.0 * delivered / total,
-                    'opened_ratio': 100.0 * stats['opened'] / total,
-                    'replied_ratio': 100.0 * stats['replied'] / total,
-                    'bounced_ratio': 100.0 * stats['bounced'] / total
+                total=(stats['expected']-stats['ignored'])or1
+                delivered=stats['sent']-stats['bounced']
+                vals={
+                    'received_ratio':100.0*delivered/total,
+                    'opened_ratio':100.0*stats['opened']/total,
+                    'replied_ratio':100.0*stats['replied']/total,
+                    'bounced_ratio':100.0*stats['bounced']/total
                 }
 
             campaign.update(vals)
 
-    def _get_mailing_recipients(self, model=None):
-        """Return the recipients of a mailing campaign. This is based on the statistics
-        build for each mailing. """
-        res = dict.fromkeys(self.ids, {})
-        for campaign in self:
-            domain = [('campaign_id', '=', campaign.id)]
-            if model:
-                domain += [('model', '=', model)]
-            res[campaign.id] = set(self.env['mailing.trace'].search(domain).mapped('res_id'))
-        return res
+    def_get_mailing_recipients(self,model=None):
+        """Returntherecipientsofamailingcampaign.Thisisbasedonthestatistics
+        buildforeachmailing."""
+        res=dict.fromkeys(self.ids,{})
+        forcampaigninself:
+            domain=[('campaign_id','=',campaign.id)]
+            ifmodel:
+                domain+=[('model','=',model)]
+            res[campaign.id]=set(self.env['mailing.trace'].search(domain).mapped('res_id'))
+        returnres

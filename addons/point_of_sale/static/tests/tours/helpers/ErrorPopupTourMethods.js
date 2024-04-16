@@ -1,30 +1,30 @@
-flectra.define('point_of_sale.tour.ErrorPopupTourMethods', function (require) {
-    'use strict';
+flectra.define('point_of_sale.tour.ErrorPopupTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        clickConfirm() {
-            return [
+    classDo{
+        clickConfirm(){
+            return[
                 {
-                    content: 'click confirm button',
-                    trigger: '.popup-error .footer .cancel',
+                    content:'clickconfirmbutton',
+                    trigger:'.popup-error.footer.cancel',
                 },
             ];
         }
     }
 
-    class Check {
-        isShown() {
-            return [
+    classCheck{
+        isShown(){
+            return[
                 {
-                    content: 'error popup is shown',
-                    trigger: '.modal-dialog .popup-error',
-                    run: () => {},
+                    content:'errorpopupisshown',
+                    trigger:'.modal-dialog.popup-error',
+                    run:()=>{},
                 },
             ];
         }
     }
 
-    return createTourMethods('ErrorPopup', Do, Check);
+    returncreateTourMethods('ErrorPopup',Do,Check);
 });

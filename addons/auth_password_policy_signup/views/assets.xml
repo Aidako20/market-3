@@ -1,8 +1,8 @@
 <flectra>
-    <template id="assets_frontend" inherit_id="web.assets_frontend" name="Auth Signup Password Policy Assets">
-        <xpath expr="." position="inside">
-            <script type="text/javascript" src="/auth_password_policy_signup/static/src/js/signup_policy.js"></script>
-            <link rel="stylesheet" type="text/scss" href="/auth_password_policy_signup/static/src/scss/signup_policy.scss"/>
+    <templateid="assets_frontend"inherit_id="web.assets_frontend"name="AuthSignupPasswordPolicyAssets">
+        <xpathexpr="."position="inside">
+            <scripttype="text/javascript"src="/auth_password_policy_signup/static/src/js/signup_policy.js"></script>
+            <linkrel="stylesheet"type="text/scss"href="/auth_password_policy_signup/static/src/scss/signup_policy.scss"/>
         </xpath>
     </template>
 

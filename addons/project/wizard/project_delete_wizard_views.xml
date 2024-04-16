@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="project_delete_wizard_form" model="ir.ui.view">
-            <field name="name">Delete Project</field>
-            <field name="model">project.delete.wizard</field>
-            <field name="arch" type="xml">
-                <form string="Delete Project">
-                    <field name="task_count" invisible="1" />
-                    <field name="projects_archived" invisible="1" />
-                    <group attrs="{'invisible': [('task_count', '=', 0)]}">
-                        <span>You cannot delete a project containing tasks. You can either archive it or first delete all of its tasks.</span>
+        <recordid="project_delete_wizard_form"model="ir.ui.view">
+            <fieldname="name">DeleteProject</field>
+            <fieldname="model">project.delete.wizard</field>
+            <fieldname="arch"type="xml">
+                <formstring="DeleteProject">
+                    <fieldname="task_count"invisible="1"/>
+                    <fieldname="projects_archived"invisible="1"/>
+                    <groupattrs="{'invisible':[('task_count','=',0)]}">
+                        <span>Youcannotdeleteaprojectcontainingtasks.Youcaneitherarchiveitorfirstdeleteallofitstasks.</span>
                     </group>
-                    <group attrs="{'invisible': [('task_count', '>', 0)]}">
-                        <span>Are you sure you want to delete this project ?</span>
+                    <groupattrs="{'invisible':[('task_count','>',0)]}">
+                        <span>Areyousureyouwanttodeletethisproject?</span>
                     </group>
-                    <footer attrs="{'invisible': [('task_count', '=', 0)]}">
-                        <button string="Archive project" type="object" name="action_archive" class="btn btn-primary" attrs="{'invisible': [('projects_archived', '=', True)]}" />
-                        <button string="Discard" special="cancel" />
+                    <footerattrs="{'invisible':[('task_count','=',0)]}">
+                        <buttonstring="Archiveproject"type="object"name="action_archive"class="btnbtn-primary"attrs="{'invisible':[('projects_archived','=',True)]}"/>
+                        <buttonstring="Discard"special="cancel"/>
                     </footer>
-                    <footer attrs="{'invisible': [('task_count', '>', 0)]}">
-                        <button string="Ok" type="object" name="confirm_delete" class="btn btn-primary" />
-                        <button string="Cancel" special="cancel" />
+                    <footerattrs="{'invisible':[('task_count','>',0)]}">
+                        <buttonstring="Ok"type="object"name="confirm_delete"class="btnbtn-primary"/>
+                        <buttonstring="Cancel"special="cancel"/>
                     </footer>
                 </form>
             </field>

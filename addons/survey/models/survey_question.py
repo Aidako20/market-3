@@ -1,407 +1,407 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import collections
-import json
-import itertools
-import operator
+importcollections
+importjson
+importitertools
+importoperator
 
-from flectra import api, fields, models, tools, _
-from flectra.exceptions import ValidationError
+fromflectraimportapi,fields,models,tools,_
+fromflectra.exceptionsimportValidationError
 
 
-class SurveyQuestion(models.Model):
-    """ Questions that will be asked in a survey.
+classSurveyQuestion(models.Model):
+    """Questionsthatwillbeaskedinasurvey.
 
-        Each question can have one of more suggested answers (eg. in case of
-        multi-answer checkboxes, radio buttons...).
+        Eachquestioncanhaveoneofmoresuggestedanswers(eg.incaseof
+        multi-answercheckboxes,radiobuttons...).
 
-        Technical note:
+        Technicalnote:
 
-        survey.question is also the model used for the survey's pages (with the "is_page" field set to True).
+        survey.questionisalsothemodelusedforthesurvey'spages(withthe"is_page"fieldsettoTrue).
 
-        A page corresponds to a "section" in the interface, and the fact that it separates the survey in
-        actual pages in the interface depends on the "questions_layout" parameter on the survey.survey model.
-        Pages are also used when randomizing questions. The randomization can happen within a "page".
+        Apagecorrespondstoa"section"intheinterface,andthefactthatitseparatesthesurveyin
+        actualpagesintheinterfacedependsonthe"questions_layout"parameteronthesurvey.surveymodel.
+        Pagesarealsousedwhenrandomizingquestions.Therandomizationcanhappenwithina"page".
 
-        Using the same model for questions and pages allows to put all the pages and questions together in a o2m field
-        (see survey.survey.question_and_page_ids) on the view side and easily reorganize your survey by dragging the
-        items around.
+        Usingthesamemodelforquestionsandpagesallowstoputallthepagesandquestionstogetherinao2mfield
+        (seesurvey.survey.question_and_page_ids)ontheviewsideandeasilyreorganizeyoursurveybydraggingthe
+        itemsaround.
 
-        It also removes on level of encoding by directly having 'Add a page' and 'Add a question'
-        links on the tree view of questions, enabling a faster encoding.
+        Italsoremovesonlevelofencodingbydirectlyhaving'Addapage'and'Addaquestion'
+        linksonthetreeviewofquestions,enablingafasterencoding.
 
-        However, this has the downside of making the code reading a little bit more complicated.
-        Efforts were made at the model level to create computed fields so that the use of these models
-        still seems somewhat logical. That means:
-        - A survey still has "page_ids" (question_and_page_ids filtered on is_page = True)
-        - These "page_ids" still have question_ids (questions located between this page and the next)
-        - These "question_ids" still have a "page_id"
+        However,thishasthedownsideofmakingthecodereadingalittlebitmorecomplicated.
+        Effortsweremadeatthemodelleveltocreatecomputedfieldssothattheuseofthesemodels
+        stillseemssomewhatlogical.Thatmeans:
+        -Asurveystillhas"page_ids"(question_and_page_idsfilteredonis_page=True)
+        -These"page_ids"stillhavequestion_ids(questionslocatedbetweenthispageandthenext)
+        -These"question_ids"stillhavea"page_id"
 
-        That makes the use and display of these information at view and controller levels easier to understand.
+        Thatmakestheuseanddisplayoftheseinformationatviewandcontrollerlevelseasiertounderstand.
     """
-    _name = 'survey.question'
-    _description = 'Survey Question'
-    _rec_name = 'title'
-    _order = 'sequence,id'
+    _name='survey.question'
+    _description='SurveyQuestion'
+    _rec_name='title'
+    _order='sequence,id'
 
     @api.model
-    def default_get(self, fields):
-        defaults = super(SurveyQuestion, self).default_get(fields)
-        if (not fields or 'question_type' in fields):
-            defaults['question_type'] = False if defaults.get('is_page') == True else 'text_box'
-        return defaults
+    defdefault_get(self,fields):
+        defaults=super(SurveyQuestion,self).default_get(fields)
+        if(notfieldsor'question_type'infields):
+            defaults['question_type']=Falseifdefaults.get('is_page')==Trueelse'text_box'
+        returndefaults
 
-    # question generic data
-    title = fields.Char('Title', required=True, translate=True)
-    description = fields.Html(
-        'Description', translate=True, sanitize=False,  # TDE TODO: sanitize but find a way to keep youtube iframe media stuff
-        help="Use this field to add additional explanations about your question or to illustrate it with pictures or a video")
-    survey_id = fields.Many2one('survey.survey', string='Survey', ondelete='cascade')
-    scoring_type = fields.Selection(related='survey_id.scoring_type', string='Scoring Type', readonly=True)
-    sequence = fields.Integer('Sequence', default=10)
-    # page specific
-    is_page = fields.Boolean('Is a page?')
-    question_ids = fields.One2many('survey.question', string='Questions', compute="_compute_question_ids")
-    questions_selection = fields.Selection(
-        related='survey_id.questions_selection', readonly=True,
-        help="If randomized is selected, add the number of random questions next to the section.")
-    random_questions_count = fields.Integer(
-        'Random questions count', default=1,
-        help="Used on randomized sections to take X random questions from all the questions of that section.")
-    # question specific
-    page_id = fields.Many2one('survey.question', string='Page', compute="_compute_page_id", store=True)
-    question_type = fields.Selection([
-        ('text_box', 'Multiple Lines Text Box'),
-        ('char_box', 'Single Line Text Box'),
-        ('numerical_box', 'Numerical Value'),
-        ('date', 'Date'),
-        ('datetime', 'Datetime'),
-        ('simple_choice', 'Multiple choice: only one answer'),
-        ('multiple_choice', 'Multiple choice: multiple answers allowed'),
-        ('matrix', 'Matrix')], string='Question Type',
-        compute='_compute_question_type', readonly=False, store=True)
-    is_scored_question = fields.Boolean(
-        'Scored', compute='_compute_is_scored_question',
-        readonly=False, store=True, copy=True,
-        help="Include this question as part of quiz scoring. Requires an answer and answer score to be taken into account.")
-    # -- scoreable/answerable simple answer_types: numerical_box / date / datetime
-    answer_numerical_box = fields.Float('Correct numerical answer', help="Correct number answer for this question.")
-    answer_date = fields.Date('Correct date answer', help="Correct date answer for this question.")
-    answer_datetime = fields.Datetime('Correct datetime answer', help="Correct date and time answer for this question.")
-    answer_score = fields.Float('Score', help="Score value for a correct answer to this question.")
-    # -- char_box
-    save_as_email = fields.Boolean(
-        "Save as user email", compute='_compute_save_as_email', readonly=False, store=True, copy=True,
-        help="If checked, this option will save the user's answer as its email address.")
-    save_as_nickname = fields.Boolean(
-        "Save as user nickname", compute='_compute_save_as_nickname', readonly=False, store=True, copy=True,
-        help="If checked, this option will save the user's answer as its nickname.")
-    # -- simple choice / multiple choice / matrix
-    suggested_answer_ids = fields.One2many(
-        'survey.question.answer', 'question_id', string='Types of answers', copy=True,
-        help='Labels used for proposed choices: simple choice, multiple choice and columns of matrix')
-    allow_value_image = fields.Boolean('Images on answers', help='Display images in addition to answer label. Valid only for simple / multiple choice questions.')
-    # -- matrix
-    matrix_subtype = fields.Selection([
-        ('simple', 'One choice per row'),
-        ('multiple', 'Multiple choices per row')], string='Matrix Type', default='simple')
-    matrix_row_ids = fields.One2many(
-        'survey.question.answer', 'matrix_question_id', string='Matrix Rows', copy=True,
-        help='Labels used for proposed choices: rows of matrix')
-    # -- display & timing options
-    column_nb = fields.Selection([
-        ('12', '1'), ('6', '2'), ('4', '3'), ('3', '4'), ('2', '6')],
-        string='Number of columns', default='12',
-        help='These options refer to col-xx-[12|6|4|3|2] classes in Bootstrap for dropdown-based simple and multiple choice questions.')
-    is_time_limited = fields.Boolean("The question is limited in time",
-        help="Currently only supported for live sessions.")
-    time_limit = fields.Integer("Time limit (seconds)")
-    # -- comments (simple choice, multiple choice, matrix (without count as an answer))
-    comments_allowed = fields.Boolean('Show Comments Field')
-    comments_message = fields.Char('Comment Message', translate=True, default=lambda self: _("If other, please specify:"))
-    comment_count_as_answer = fields.Boolean('Comment Field is an Answer Choice')
-    # question validation
-    validation_required = fields.Boolean('Validate entry')
-    validation_email = fields.Boolean('Input must be an email')
-    validation_length_min = fields.Integer('Minimum Text Length', default=0)
-    validation_length_max = fields.Integer('Maximum Text Length', default=0)
-    validation_min_float_value = fields.Float('Minimum value', default=0.0)
-    validation_max_float_value = fields.Float('Maximum value', default=0.0)
-    validation_min_date = fields.Date('Minimum Date')
-    validation_max_date = fields.Date('Maximum Date')
-    validation_min_datetime = fields.Datetime('Minimum Datetime')
-    validation_max_datetime = fields.Datetime('Maximum Datetime')
-    validation_error_msg = fields.Char('Validation Error message', translate=True, default=lambda self: _("The answer you entered is not valid."))
-    constr_mandatory = fields.Boolean('Mandatory Answer')
-    constr_error_msg = fields.Char('Error message', translate=True, default=lambda self: _("This question requires an answer."))
-    # answers
-    user_input_line_ids = fields.One2many(
-        'survey.user_input.line', 'question_id', string='Answers',
-        domain=[('skipped', '=', False)], groups='survey.group_survey_user')
+    #questiongenericdata
+    title=fields.Char('Title',required=True,translate=True)
+    description=fields.Html(
+        'Description',translate=True,sanitize=False, #TDETODO:sanitizebutfindawaytokeepyoutubeiframemediastuff
+        help="Usethisfieldtoaddadditionalexplanationsaboutyourquestionortoillustrateitwithpicturesoravideo")
+    survey_id=fields.Many2one('survey.survey',string='Survey',ondelete='cascade')
+    scoring_type=fields.Selection(related='survey_id.scoring_type',string='ScoringType',readonly=True)
+    sequence=fields.Integer('Sequence',default=10)
+    #pagespecific
+    is_page=fields.Boolean('Isapage?')
+    question_ids=fields.One2many('survey.question',string='Questions',compute="_compute_question_ids")
+    questions_selection=fields.Selection(
+        related='survey_id.questions_selection',readonly=True,
+        help="Ifrandomizedisselected,addthenumberofrandomquestionsnexttothesection.")
+    random_questions_count=fields.Integer(
+        'Randomquestionscount',default=1,
+        help="UsedonrandomizedsectionstotakeXrandomquestionsfromallthequestionsofthatsection.")
+    #questionspecific
+    page_id=fields.Many2one('survey.question',string='Page',compute="_compute_page_id",store=True)
+    question_type=fields.Selection([
+        ('text_box','MultipleLinesTextBox'),
+        ('char_box','SingleLineTextBox'),
+        ('numerical_box','NumericalValue'),
+        ('date','Date'),
+        ('datetime','Datetime'),
+        ('simple_choice','Multiplechoice:onlyoneanswer'),
+        ('multiple_choice','Multiplechoice:multipleanswersallowed'),
+        ('matrix','Matrix')],string='QuestionType',
+        compute='_compute_question_type',readonly=False,store=True)
+    is_scored_question=fields.Boolean(
+        'Scored',compute='_compute_is_scored_question',
+        readonly=False,store=True,copy=True,
+        help="Includethisquestionaspartofquizscoring.Requiresananswerandanswerscoretobetakenintoaccount.")
+    #--scoreable/answerablesimpleanswer_types:numerical_box/date/datetime
+    answer_numerical_box=fields.Float('Correctnumericalanswer',help="Correctnumberanswerforthisquestion.")
+    answer_date=fields.Date('Correctdateanswer',help="Correctdateanswerforthisquestion.")
+    answer_datetime=fields.Datetime('Correctdatetimeanswer',help="Correctdateandtimeanswerforthisquestion.")
+    answer_score=fields.Float('Score',help="Scorevalueforacorrectanswertothisquestion.")
+    #--char_box
+    save_as_email=fields.Boolean(
+        "Saveasuseremail",compute='_compute_save_as_email',readonly=False,store=True,copy=True,
+        help="Ifchecked,thisoptionwillsavetheuser'sanswerasitsemailaddress.")
+    save_as_nickname=fields.Boolean(
+        "Saveasusernickname",compute='_compute_save_as_nickname',readonly=False,store=True,copy=True,
+        help="Ifchecked,thisoptionwillsavetheuser'sanswerasitsnickname.")
+    #--simplechoice/multiplechoice/matrix
+    suggested_answer_ids=fields.One2many(
+        'survey.question.answer','question_id',string='Typesofanswers',copy=True,
+        help='Labelsusedforproposedchoices:simplechoice,multiplechoiceandcolumnsofmatrix')
+    allow_value_image=fields.Boolean('Imagesonanswers',help='Displayimagesinadditiontoanswerlabel.Validonlyforsimple/multiplechoicequestions.')
+    #--matrix
+    matrix_subtype=fields.Selection([
+        ('simple','Onechoiceperrow'),
+        ('multiple','Multiplechoicesperrow')],string='MatrixType',default='simple')
+    matrix_row_ids=fields.One2many(
+        'survey.question.answer','matrix_question_id',string='MatrixRows',copy=True,
+        help='Labelsusedforproposedchoices:rowsofmatrix')
+    #--display&timingoptions
+    column_nb=fields.Selection([
+        ('12','1'),('6','2'),('4','3'),('3','4'),('2','6')],
+        string='Numberofcolumns',default='12',
+        help='Theseoptionsrefertocol-xx-[12|6|4|3|2]classesinBootstrapfordropdown-basedsimpleandmultiplechoicequestions.')
+    is_time_limited=fields.Boolean("Thequestionislimitedintime",
+        help="Currentlyonlysupportedforlivesessions.")
+    time_limit=fields.Integer("Timelimit(seconds)")
+    #--comments(simplechoice,multiplechoice,matrix(withoutcountasananswer))
+    comments_allowed=fields.Boolean('ShowCommentsField')
+    comments_message=fields.Char('CommentMessage',translate=True,default=lambdaself:_("Ifother,pleasespecify:"))
+    comment_count_as_answer=fields.Boolean('CommentFieldisanAnswerChoice')
+    #questionvalidation
+    validation_required=fields.Boolean('Validateentry')
+    validation_email=fields.Boolean('Inputmustbeanemail')
+    validation_length_min=fields.Integer('MinimumTextLength',default=0)
+    validation_length_max=fields.Integer('MaximumTextLength',default=0)
+    validation_min_float_value=fields.Float('Minimumvalue',default=0.0)
+    validation_max_float_value=fields.Float('Maximumvalue',default=0.0)
+    validation_min_date=fields.Date('MinimumDate')
+    validation_max_date=fields.Date('MaximumDate')
+    validation_min_datetime=fields.Datetime('MinimumDatetime')
+    validation_max_datetime=fields.Datetime('MaximumDatetime')
+    validation_error_msg=fields.Char('ValidationErrormessage',translate=True,default=lambdaself:_("Theansweryouenteredisnotvalid."))
+    constr_mandatory=fields.Boolean('MandatoryAnswer')
+    constr_error_msg=fields.Char('Errormessage',translate=True,default=lambdaself:_("Thisquestionrequiresananswer."))
+    #answers
+    user_input_line_ids=fields.One2many(
+        'survey.user_input.line','question_id',string='Answers',
+        domain=[('skipped','=',False)],groups='survey.group_survey_user')
 
-    # Conditional display
-    is_conditional = fields.Boolean(
-        string='Conditional Display', copy=False, help="""If checked, this question will be displayed only 
-        if the specified conditional answer have been selected in a previous question""")
-    triggering_question_id = fields.Many2one(
-        'survey.question', string="Triggering Question", copy=False, compute="_compute_triggering_question_id",
-        store=True, readonly=False, help="Question containing the triggering answer to display the current question.",
-        domain="""[('survey_id', '=', survey_id),
-                 '&', ('question_type', 'in', ['simple_choice', 'multiple_choice']),
+    #Conditionaldisplay
+    is_conditional=fields.Boolean(
+        string='ConditionalDisplay',copy=False,help="""Ifchecked,thisquestionwillbedisplayedonly
+        ifthespecifiedconditionalanswerhavebeenselectedinapreviousquestion""")
+    triggering_question_id=fields.Many2one(
+        'survey.question',string="TriggeringQuestion",copy=False,compute="_compute_triggering_question_id",
+        store=True,readonly=False,help="Questioncontainingthetriggeringanswertodisplaythecurrentquestion.",
+        domain="""[('survey_id','=',survey_id),
+                 '&',('question_type','in',['simple_choice','multiple_choice']),
                  '|',
-                     ('sequence', '<', sequence),
-                     '&', ('sequence', '=', sequence), ('id', '<', id)]""")
-    triggering_answer_id = fields.Many2one(
-        'survey.question.answer', string="Triggering Answer", copy=False, compute="_compute_triggering_answer_id",
-        store=True, readonly=False, help="Answer that will trigger the display of the current question.",
-        domain="[('question_id', '=', triggering_question_id)]")
+                     ('sequence','<',sequence),
+                     '&',('sequence','=',sequence),('id','<',id)]""")
+    triggering_answer_id=fields.Many2one(
+        'survey.question.answer',string="TriggeringAnswer",copy=False,compute="_compute_triggering_answer_id",
+        store=True,readonly=False,help="Answerthatwilltriggerthedisplayofthecurrentquestion.",
+        domain="[('question_id','=',triggering_question_id)]")
 
-    _sql_constraints = [
-        ('positive_len_min', 'CHECK (validation_length_min >= 0)', 'A length must be positive!'),
-        ('positive_len_max', 'CHECK (validation_length_max >= 0)', 'A length must be positive!'),
-        ('validation_length', 'CHECK (validation_length_min <= validation_length_max)', 'Max length cannot be smaller than min length!'),
-        ('validation_float', 'CHECK (validation_min_float_value <= validation_max_float_value)', 'Max value cannot be smaller than min value!'),
-        ('validation_date', 'CHECK (validation_min_date <= validation_max_date)', 'Max date cannot be smaller than min date!'),
-        ('validation_datetime', 'CHECK (validation_min_datetime <= validation_max_datetime)', 'Max datetime cannot be smaller than min datetime!'),
-        ('positive_answer_score', 'CHECK (answer_score >= 0)', 'An answer score for a non-multiple choice question cannot be negative!'),
-        ('scored_datetime_have_answers', "CHECK (is_scored_question != True OR question_type != 'datetime' OR answer_datetime is not null)",
-            'All "Is a scored question = True" and "Question Type: Datetime" questions need an answer'),
-        ('scored_date_have_answers', "CHECK (is_scored_question != True OR question_type != 'date' OR answer_date is not null)",
-            'All "Is a scored question = True" and "Question Type: Date" questions need an answer')
+    _sql_constraints=[
+        ('positive_len_min','CHECK(validation_length_min>=0)','Alengthmustbepositive!'),
+        ('positive_len_max','CHECK(validation_length_max>=0)','Alengthmustbepositive!'),
+        ('validation_length','CHECK(validation_length_min<=validation_length_max)','Maxlengthcannotbesmallerthanminlength!'),
+        ('validation_float','CHECK(validation_min_float_value<=validation_max_float_value)','Maxvaluecannotbesmallerthanminvalue!'),
+        ('validation_date','CHECK(validation_min_date<=validation_max_date)','Maxdatecannotbesmallerthanmindate!'),
+        ('validation_datetime','CHECK(validation_min_datetime<=validation_max_datetime)','Maxdatetimecannotbesmallerthanmindatetime!'),
+        ('positive_answer_score','CHECK(answer_score>=0)','Ananswerscoreforanon-multiplechoicequestioncannotbenegative!'),
+        ('scored_datetime_have_answers',"CHECK(is_scored_question!=TrueORquestion_type!='datetime'ORanswer_datetimeisnotnull)",
+            'All"Isascoredquestion=True"and"QuestionType:Datetime"questionsneedananswer'),
+        ('scored_date_have_answers',"CHECK(is_scored_question!=TrueORquestion_type!='date'ORanswer_dateisnotnull)",
+            'All"Isascoredquestion=True"and"QuestionType:Date"questionsneedananswer')
     ]
 
     @api.depends('is_page')
-    def _compute_question_type(self):
-        for question in self:
-            if not question.question_type or question.is_page:
-                question.question_type = False
+    def_compute_question_type(self):
+        forquestioninself:
+            ifnotquestion.question_typeorquestion.is_page:
+                question.question_type=False
 
-    @api.depends('survey_id.question_and_page_ids.is_page', 'survey_id.question_and_page_ids.sequence')
-    def _compute_question_ids(self):
-        """Will take all questions of the survey for which the index is higher than the index of this page
-        and lower than the index of the next page."""
-        for question in self:
-            if question.is_page:
-                next_page_index = False
-                for page in question.survey_id.page_ids:
-                    if page._index() > question._index():
-                        next_page_index = page._index()
+    @api.depends('survey_id.question_and_page_ids.is_page','survey_id.question_and_page_ids.sequence')
+    def_compute_question_ids(self):
+        """Willtakeallquestionsofthesurveyforwhichtheindexishigherthantheindexofthispage
+        andlowerthantheindexofthenextpage."""
+        forquestioninself:
+            ifquestion.is_page:
+                next_page_index=False
+                forpageinquestion.survey_id.page_ids:
+                    ifpage._index()>question._index():
+                        next_page_index=page._index()
                         break
 
-                question.question_ids = question.survey_id.question_ids.filtered(
-                    lambda q: q._index() > question._index() and (not next_page_index or q._index() < next_page_index)
+                question.question_ids=question.survey_id.question_ids.filtered(
+                    lambdaq:q._index()>question._index()and(notnext_page_indexorq._index()<next_page_index)
                 )
             else:
-                question.question_ids = self.env['survey.question']
+                question.question_ids=self.env['survey.question']
 
-    @api.depends('survey_id.question_and_page_ids.is_page', 'survey_id.question_and_page_ids.sequence')
-    def _compute_page_id(self):
-        """Will find the page to which this question belongs to by looking inside the corresponding survey"""
-        for question in self:
-            if question.is_page:
-                question.page_id = None
+    @api.depends('survey_id.question_and_page_ids.is_page','survey_id.question_and_page_ids.sequence')
+    def_compute_page_id(self):
+        """Willfindthepagetowhichthisquestionbelongstobylookinginsidethecorrespondingsurvey"""
+        forquestioninself:
+            ifquestion.is_page:
+                question.page_id=None
             else:
-                page = None
-                for q in question.survey_id.question_and_page_ids.sorted():
-                    if q == question:
+                page=None
+                forqinquestion.survey_id.question_and_page_ids.sorted():
+                    ifq==question:
                         break
-                    if q.is_page:
-                        page = q
-                question.page_id = page
+                    ifq.is_page:
+                        page=q
+                question.page_id=page
 
-    @api.depends('question_type', 'validation_email')
-    def _compute_save_as_email(self):
-        for question in self:
-            if question.question_type != 'char_box' or not question.validation_email:
-                question.save_as_email = False
+    @api.depends('question_type','validation_email')
+    def_compute_save_as_email(self):
+        forquestioninself:
+            ifquestion.question_type!='char_box'ornotquestion.validation_email:
+                question.save_as_email=False
 
     @api.depends('question_type')
-    def _compute_save_as_nickname(self):
-        for question in self:
-            if question.question_type != 'char_box':
-                question.save_as_nickname = False
+    def_compute_save_as_nickname(self):
+        forquestioninself:
+            ifquestion.question_type!='char_box':
+                question.save_as_nickname=False
 
     @api.depends('is_conditional')
-    def _compute_triggering_question_id(self):
-        """ Used as an 'onchange' : Reset the triggering question if user uncheck 'Conditional Display'
-            Avoid CacheMiss : set the value to False if the value is not set yet."""
-        for question in self:
-            if not question.is_conditional or question.triggering_question_id is None:
-                question.triggering_question_id = False
+    def_compute_triggering_question_id(self):
+        """Usedasan'onchange':Resetthetriggeringquestionifuseruncheck'ConditionalDisplay'
+            AvoidCacheMiss:setthevaluetoFalseifthevalueisnotsetyet."""
+        forquestioninself:
+            ifnotquestion.is_conditionalorquestion.triggering_question_idisNone:
+                question.triggering_question_id=False
 
     @api.depends('triggering_question_id')
-    def _compute_triggering_answer_id(self):
-        """ Used as an 'onchange' : Reset the triggering answer if user unset or change the triggering question
-            or uncheck 'Conditional Display'.
-            Avoid CacheMiss : set the value to False if the value is not set yet."""
-        for question in self:
-            if not question.triggering_question_id \
-                    or question.triggering_question_id != question.triggering_answer_id.question_id\
-                    or question.triggering_answer_id is None:
-                question.triggering_answer_id = False
+    def_compute_triggering_answer_id(self):
+        """Usedasan'onchange':Resetthetriggeringanswerifuserunsetorchangethetriggeringquestion
+            oruncheck'ConditionalDisplay'.
+            AvoidCacheMiss:setthevaluetoFalseifthevalueisnotsetyet."""
+        forquestioninself:
+            ifnotquestion.triggering_question_id\
+                    orquestion.triggering_question_id!=question.triggering_answer_id.question_id\
+                    orquestion.triggering_answer_idisNone:
+                question.triggering_answer_id=False
 
-    @api.depends('question_type', 'scoring_type', 'answer_date', 'answer_datetime', 'answer_numerical_box')
-    def _compute_is_scored_question(self):
-        """ Computes whether a question "is scored" or not. Handles following cases:
-          - inconsistent Boolean=None edge case that breaks tests => False
-          - survey is not scored => False
-          - 'date'/'datetime'/'numerical_box' question types w/correct answer => True
-            (implied without user having to activate, except for numerical whose correct value is 0.0)
-          - 'simple_choice / multiple_choice': set to True even if logic is a bit different (coming from answers)
-          - question_type isn't scoreable (note: choice questions scoring logic handled separately) => False
+    @api.depends('question_type','scoring_type','answer_date','answer_datetime','answer_numerical_box')
+    def_compute_is_scored_question(self):
+        """Computeswhetheraquestion"isscored"ornot.Handlesfollowingcases:
+          -inconsistentBoolean=Noneedgecasethatbreakstests=>False
+          -surveyisnotscored=>False
+          -'date'/'datetime'/'numerical_box'questiontypesw/correctanswer=>True
+            (impliedwithoutuserhavingtoactivate,exceptfornumericalwhosecorrectvalueis0.0)
+          -'simple_choice/multiple_choice':settoTrueeveniflogicisabitdifferent(comingfromanswers)
+          -question_typeisn'tscoreable(note:choicequestionsscoringlogichandledseparately)=>False
         """
-        for question in self:
-            if question.is_scored_question is None or question.scoring_type == 'no_scoring':
-                question.is_scored_question = False
-            elif question.question_type == 'date':
-                question.is_scored_question = bool(question.answer_date)
-            elif question.question_type == 'datetime':
-                question.is_scored_question = bool(question.answer_datetime)
-            elif question.question_type == 'numerical_box' and question.answer_numerical_box:
-                question.is_scored_question = True
-            elif question.question_type in ['simple_choice', 'multiple_choice']:
-                question.is_scored_question = True
+        forquestioninself:
+            ifquestion.is_scored_questionisNoneorquestion.scoring_type=='no_scoring':
+                question.is_scored_question=False
+            elifquestion.question_type=='date':
+                question.is_scored_question=bool(question.answer_date)
+            elifquestion.question_type=='datetime':
+                question.is_scored_question=bool(question.answer_datetime)
+            elifquestion.question_type=='numerical_box'andquestion.answer_numerical_box:
+                question.is_scored_question=True
+            elifquestion.question_typein['simple_choice','multiple_choice']:
+                question.is_scored_question=True
             else:
-                question.is_scored_question = False
+                question.is_scored_question=False
 
-    # ------------------------------------------------------------
-    # VALIDATION
-    # ------------------------------------------------------------
+    #------------------------------------------------------------
+    #VALIDATION
+    #------------------------------------------------------------
 
-    def validate_question(self, answer, comment=None):
-        """ Validate question, depending on question type and parameters
-         for simple choice, text, date and number, answer is simply the answer of the question.
-         For other multiple choices questions, answer is a list of answers (the selected choices
-         or a list of selected answers per question -for matrix type-):
-            - Simple answer : answer = 'example' or 2 or question_answer_id or 2019/10/10
-            - Multiple choice : answer = [question_answer_id1, question_answer_id2, question_answer_id3]
-            - Matrix: answer = { 'rowId1' : [colId1, colId2,...], 'rowId2' : [colId1, colId3, ...] }
+    defvalidate_question(self,answer,comment=None):
+        """Validatequestion,dependingonquestiontypeandparameters
+         forsimplechoice,text,dateandnumber,answerissimplytheanswerofthequestion.
+         Forothermultiplechoicesquestions,answerisalistofanswers(theselectedchoices
+         oralistofselectedanswersperquestion-formatrixtype-):
+            -Simpleanswer:answer='example'or2orquestion_answer_idor2019/10/10
+            -Multiplechoice:answer=[question_answer_id1,question_answer_id2,question_answer_id3]
+            -Matrix:answer={'rowId1':[colId1,colId2,...],'rowId2':[colId1,colId3,...]}
 
-         return dict {question.id (int): error (str)} -> empty dict if no validation error.
+         returndict{question.id(int):error(str)}->emptydictifnovalidationerror.
          """
         self.ensure_one()
-        if isinstance(answer, str):
-            answer = answer.strip()
-        # Empty answer to mandatory question
-        if self.constr_mandatory and not answer and self.question_type not in ['simple_choice', 'multiple_choice']:
-            return {self.id: self.constr_error_msg}
+        ifisinstance(answer,str):
+            answer=answer.strip()
+        #Emptyanswertomandatoryquestion
+        ifself.constr_mandatoryandnotanswerandself.question_typenotin['simple_choice','multiple_choice']:
+            return{self.id:self.constr_error_msg}
 
-        # because in choices question types, comment can count as answer
-        if answer or self.question_type in ['simple_choice', 'multiple_choice']:
-            if self.question_type == 'char_box':
-                return self._validate_char_box(answer)
-            elif self.question_type == 'numerical_box':
-                return self._validate_numerical_box(answer)
-            elif self.question_type in ['date', 'datetime']:
-                return self._validate_date(answer)
-            elif self.question_type in ['simple_choice', 'multiple_choice']:
-                return self._validate_choice(answer, comment)
-            elif self.question_type == 'matrix':
-                return self._validate_matrix(answer)
-        return {}
+        #becauseinchoicesquestiontypes,commentcancountasanswer
+        ifanswerorself.question_typein['simple_choice','multiple_choice']:
+            ifself.question_type=='char_box':
+                returnself._validate_char_box(answer)
+            elifself.question_type=='numerical_box':
+                returnself._validate_numerical_box(answer)
+            elifself.question_typein['date','datetime']:
+                returnself._validate_date(answer)
+            elifself.question_typein['simple_choice','multiple_choice']:
+                returnself._validate_choice(answer,comment)
+            elifself.question_type=='matrix':
+                returnself._validate_matrix(answer)
+        return{}
 
-    def _validate_char_box(self, answer):
-        # Email format validation
-        # all the strings of the form "<something>@<anything>.<extension>" will be accepted
-        if self.validation_email:
-            if not tools.email_normalize(answer):
-                return {self.id: _('This answer must be an email address')}
+    def_validate_char_box(self,answer):
+        #Emailformatvalidation
+        #allthestringsoftheform"<something>@<anything>.<extension>"willbeaccepted
+        ifself.validation_email:
+            ifnottools.email_normalize(answer):
+                return{self.id:_('Thisanswermustbeanemailaddress')}
 
-        # Answer validation (if properly defined)
-        # Length of the answer must be in a range
-        if self.validation_required:
-            if not (self.validation_length_min <= len(answer) <= self.validation_length_max):
-                return {self.id: self.validation_error_msg}
-        return {}
+        #Answervalidation(ifproperlydefined)
+        #Lengthoftheanswermustbeinarange
+        ifself.validation_required:
+            ifnot(self.validation_length_min<=len(answer)<=self.validation_length_max):
+                return{self.id:self.validation_error_msg}
+        return{}
 
-    def _validate_numerical_box(self, answer):
+    def_validate_numerical_box(self,answer):
         try:
-            floatanswer = float(answer)
-        except ValueError:
-            return {self.id: _('This is not a number')}
+            floatanswer=float(answer)
+        exceptValueError:
+            return{self.id:_('Thisisnotanumber')}
 
-        if self.validation_required:
-            # Answer is not in the right range
-            with tools.ignore(Exception):
-                if not (self.validation_min_float_value <= floatanswer <= self.validation_max_float_value):
-                    return {self.id: self.validation_error_msg}
-        return {}
+        ifself.validation_required:
+            #Answerisnotintherightrange
+            withtools.ignore(Exception):
+                ifnot(self.validation_min_float_value<=floatanswer<=self.validation_max_float_value):
+                    return{self.id:self.validation_error_msg}
+        return{}
 
-    def _validate_date(self, answer):
-        isDatetime = self.question_type == 'datetime'
-        # Checks if user input is a date
+    def_validate_date(self,answer):
+        isDatetime=self.question_type=='datetime'
+        #Checksifuserinputisadate
         try:
-            dateanswer = fields.Datetime.from_string(answer) if isDatetime else fields.Date.from_string(answer)
-        except ValueError:
-            return {self.id: _('This is not a date')}
-        if self.validation_required:
-            # Check if answer is in the right range
-            if isDatetime:
-                min_date = fields.Datetime.from_string(self.validation_min_datetime)
-                max_date = fields.Datetime.from_string(self.validation_max_datetime)
-                dateanswer = fields.Datetime.from_string(answer)
+            dateanswer=fields.Datetime.from_string(answer)ifisDatetimeelsefields.Date.from_string(answer)
+        exceptValueError:
+            return{self.id:_('Thisisnotadate')}
+        ifself.validation_required:
+            #Checkifanswerisintherightrange
+            ifisDatetime:
+                min_date=fields.Datetime.from_string(self.validation_min_datetime)
+                max_date=fields.Datetime.from_string(self.validation_max_datetime)
+                dateanswer=fields.Datetime.from_string(answer)
             else:
-                min_date = fields.Date.from_string(self.validation_min_date)
-                max_date = fields.Date.from_string(self.validation_max_date)
-                dateanswer = fields.Date.from_string(answer)
+                min_date=fields.Date.from_string(self.validation_min_date)
+                max_date=fields.Date.from_string(self.validation_max_date)
+                dateanswer=fields.Date.from_string(answer)
 
-            if (min_date and max_date and not (min_date <= dateanswer <= max_date))\
-                    or (min_date and not min_date <= dateanswer)\
-                    or (max_date and not dateanswer <= max_date):
-                return {self.id: self.validation_error_msg}
-        return {}
+            if(min_dateandmax_dateandnot(min_date<=dateanswer<=max_date))\
+                    or(min_dateandnotmin_date<=dateanswer)\
+                    or(max_dateandnotdateanswer<=max_date):
+                return{self.id:self.validation_error_msg}
+        return{}
 
-    def _validate_choice(self, answer, comment):
-        # Empty comment
-        if self.constr_mandatory \
-                and not answer \
-                and not (self.comments_allowed and self.comment_count_as_answer and comment):
-            return {self.id: self.constr_error_msg}
-        return {}
+    def_validate_choice(self,answer,comment):
+        #Emptycomment
+        ifself.constr_mandatory\
+                andnotanswer\
+                andnot(self.comments_allowedandself.comment_count_as_answerandcomment):
+            return{self.id:self.constr_error_msg}
+        return{}
 
-    def _validate_matrix(self, answers):
-        # Validate that each line has been answered
-        if self.constr_mandatory and len(self.matrix_row_ids) != len(answers):
-            return {self.id: self.constr_error_msg}
-        return {}
+    def_validate_matrix(self,answers):
+        #Validatethateachlinehasbeenanswered
+        ifself.constr_mandatoryandlen(self.matrix_row_ids)!=len(answers):
+            return{self.id:self.constr_error_msg}
+        return{}
 
-    def _index(self):
-        """We would normally just use the 'sequence' field of questions BUT, if the pages and questions are
-        created without ever moving records around, the sequence field can be set to 0 for all the questions.
+    def_index(self):
+        """Wewouldnormallyjustusethe'sequence'fieldofquestionsBUT,ifthepagesandquestionsare
+        createdwithoutevermovingrecordsaround,thesequencefieldcanbesetto0forallthequestions.
 
-        However, the order of the recordset is always correct so we can rely on the index method."""
+        However,theorderoftherecordsetisalwayscorrectsowecanrelyontheindexmethod."""
         self.ensure_one()
-        return list(self.survey_id.question_and_page_ids).index(self)
+        returnlist(self.survey_id.question_and_page_ids).index(self)
 
-    # ------------------------------------------------------------
-    # STATISTICS / REPORTING
-    # ------------------------------------------------------------
+    #------------------------------------------------------------
+    #STATISTICS/REPORTING
+    #------------------------------------------------------------
 
-    def _prepare_statistics(self, user_input_lines):
-        """ Compute statistical data for questions by counting number of vote per choice on basis of filter """
-        all_questions_data = []
-        for question in self:
-            question_data = {'question': question, 'is_page': question.is_page}
+    def_prepare_statistics(self,user_input_lines):
+        """Computestatisticaldataforquestionsbycountingnumberofvoteperchoiceonbasisoffilter"""
+        all_questions_data=[]
+        forquestioninself:
+            question_data={'question':question,'is_page':question.is_page}
 
-            if question.is_page:
+            ifquestion.is_page:
                 all_questions_data.append(question_data)
                 continue
 
-            # fetch answer lines, separate comments from real answers
-            all_lines = user_input_lines.filtered(lambda line: line.question_id == question)
-            if question.question_type in ['simple_choice', 'multiple_choice', 'matrix']:
-                answer_lines = all_lines.filtered(
-                    lambda line: line.answer_type == 'suggestion' or (
-                        line.skipped and not line.answer_type) or (
-                        line.answer_type == 'char_box' and question.comment_count_as_answer)
+            #fetchanswerlines,separatecommentsfromrealanswers
+            all_lines=user_input_lines.filtered(lambdaline:line.question_id==question)
+            ifquestion.question_typein['simple_choice','multiple_choice','matrix']:
+                answer_lines=all_lines.filtered(
+                    lambdaline:line.answer_type=='suggestion'or(
+                        line.skippedandnotline.answer_type)or(
+                        line.answer_type=='char_box'andquestion.comment_count_as_answer)
                     )
-                comment_line_ids = all_lines.filtered(lambda line: line.answer_type == 'char_box')
+                comment_line_ids=all_lines.filtered(lambdaline:line.answer_type=='char_box')
             else:
-                answer_lines = all_lines
-                comment_line_ids = self.env['survey.user_input.line']
-            skipped_lines = answer_lines.filtered(lambda line: line.skipped)
-            done_lines = answer_lines - skipped_lines
+                answer_lines=all_lines
+                comment_line_ids=self.env['survey.user_input.line']
+            skipped_lines=answer_lines.filtered(lambdaline:line.skipped)
+            done_lines=answer_lines-skipped_lines
             question_data.update(
                 answer_line_ids=answer_lines,
                 answer_line_done_ids=done_lines,
@@ -410,153 +410,153 @@ class SurveyQuestion(models.Model):
                 comment_line_ids=comment_line_ids)
             question_data.update(question._get_stats_summary_data(answer_lines))
 
-            # prepare table and graph data
-            table_data, graph_data = question._get_stats_data(answer_lines)
-            question_data['table_data'] = table_data
-            question_data['graph_data'] = json.dumps(graph_data)
+            #preparetableandgraphdata
+            table_data,graph_data=question._get_stats_data(answer_lines)
+            question_data['table_data']=table_data
+            question_data['graph_data']=json.dumps(graph_data)
 
             all_questions_data.append(question_data)
-        return all_questions_data
+        returnall_questions_data
 
-    def _get_stats_data(self, user_input_lines):
-        if self.question_type == 'simple_choice':
-            return self._get_stats_data_answers(user_input_lines)
-        elif self.question_type == 'multiple_choice':
-            table_data, graph_data = self._get_stats_data_answers(user_input_lines)
-            return table_data, [{'key': self.title, 'values': graph_data}]
-        elif self.question_type == 'matrix':
-            return self._get_stats_graph_data_matrix(user_input_lines)
-        return [line for line in user_input_lines], []
+    def_get_stats_data(self,user_input_lines):
+        ifself.question_type=='simple_choice':
+            returnself._get_stats_data_answers(user_input_lines)
+        elifself.question_type=='multiple_choice':
+            table_data,graph_data=self._get_stats_data_answers(user_input_lines)
+            returntable_data,[{'key':self.title,'values':graph_data}]
+        elifself.question_type=='matrix':
+            returnself._get_stats_graph_data_matrix(user_input_lines)
+        return[lineforlineinuser_input_lines],[]
 
-    def _get_stats_data_answers(self, user_input_lines):
-        """ Statistics for question.answer based questions (simple choice, multiple
-        choice.). A corner case with a void record survey.question.answer is added
-        to count comments that should be considered as valid answers. This small hack
-        allow to have everything available in the same standard structure. """
-        suggested_answers = [answer for answer in self.mapped('suggested_answer_ids')]
-        if self.comment_count_as_answer:
-            suggested_answers += [self.env['survey.question.answer']]
+    def_get_stats_data_answers(self,user_input_lines):
+        """Statisticsforquestion.answerbasedquestions(simplechoice,multiple
+        choice.).Acornercasewithavoidrecordsurvey.question.answerisadded
+        tocountcommentsthatshouldbeconsideredasvalidanswers.Thissmallhack
+        allowtohaveeverythingavailableinthesamestandardstructure."""
+        suggested_answers=[answerforanswerinself.mapped('suggested_answer_ids')]
+        ifself.comment_count_as_answer:
+            suggested_answers+=[self.env['survey.question.answer']]
 
-        count_data = dict.fromkeys(suggested_answers, 0)
-        for line in user_input_lines:
-            if line.suggested_answer_id in count_data\
-               or (line.value_char_box and self.comment_count_as_answer):
-                count_data[line.suggested_answer_id] += 1
+        count_data=dict.fromkeys(suggested_answers,0)
+        forlineinuser_input_lines:
+            ifline.suggested_answer_idincount_data\
+               or(line.value_char_boxandself.comment_count_as_answer):
+                count_data[line.suggested_answer_id]+=1
 
-        table_data = [{
-            'value': _('Other (see comments)') if not sug_answer else sug_answer.value,
-            'suggested_answer': sug_answer,
-            'count': count_data[sug_answer]
+        table_data=[{
+            'value':_('Other(seecomments)')ifnotsug_answerelsesug_answer.value,
+            'suggested_answer':sug_answer,
+            'count':count_data[sug_answer]
             }
-            for sug_answer in suggested_answers]
-        graph_data = [{
-            'text': _('Other (see comments)') if not sug_answer else sug_answer.value,
-            'count': count_data[sug_answer]
+            forsug_answerinsuggested_answers]
+        graph_data=[{
+            'text':_('Other(seecomments)')ifnotsug_answerelsesug_answer.value,
+            'count':count_data[sug_answer]
             }
-            for sug_answer in suggested_answers]
+            forsug_answerinsuggested_answers]
 
-        return table_data, graph_data
+        returntable_data,graph_data
 
-    def _get_stats_graph_data_matrix(self, user_input_lines):
-        suggested_answers = self.mapped('suggested_answer_ids')
-        matrix_rows = self.mapped('matrix_row_ids')
+    def_get_stats_graph_data_matrix(self,user_input_lines):
+        suggested_answers=self.mapped('suggested_answer_ids')
+        matrix_rows=self.mapped('matrix_row_ids')
 
-        count_data = dict.fromkeys(itertools.product(matrix_rows, suggested_answers), 0)
-        for line in user_input_lines:
-            if line.matrix_row_id and line.suggested_answer_id:
-                count_data[(line.matrix_row_id, line.suggested_answer_id)] += 1
+        count_data=dict.fromkeys(itertools.product(matrix_rows,suggested_answers),0)
+        forlineinuser_input_lines:
+            ifline.matrix_row_idandline.suggested_answer_id:
+                count_data[(line.matrix_row_id,line.suggested_answer_id)]+=1
 
-        table_data = [{
-            'row': row,
-            'columns': [{
-                'suggested_answer': sug_answer,
-                'count': count_data[(row, sug_answer)]
-            } for sug_answer in suggested_answers],
-        } for row in matrix_rows]
-        graph_data = [{
-            'key': sug_answer.value,
-            'values': [{
-                'text': row.value,
-                'count': count_data[(row, sug_answer)]
+        table_data=[{
+            'row':row,
+            'columns':[{
+                'suggested_answer':sug_answer,
+                'count':count_data[(row,sug_answer)]
+            }forsug_answerinsuggested_answers],
+        }forrowinmatrix_rows]
+        graph_data=[{
+            'key':sug_answer.value,
+            'values':[{
+                'text':row.value,
+                'count':count_data[(row,sug_answer)]
                 }
-                for row in matrix_rows
+                forrowinmatrix_rows
             ]
-        } for sug_answer in suggested_answers]
+        }forsug_answerinsuggested_answers]
 
-        return table_data, graph_data
+        returntable_data,graph_data
 
-    def _get_stats_summary_data(self, user_input_lines):
-        stats = {}
-        if self.question_type in ['simple_choice', 'multiple_choice']:
+    def_get_stats_summary_data(self,user_input_lines):
+        stats={}
+        ifself.question_typein['simple_choice','multiple_choice']:
             stats.update(self._get_stats_summary_data_choice(user_input_lines))
-        elif self.question_type == 'numerical_box':
+        elifself.question_type=='numerical_box':
             stats.update(self._get_stats_summary_data_numerical(user_input_lines))
 
-        if self.question_type in ['numerical_box', 'date', 'datetime']:
+        ifself.question_typein['numerical_box','date','datetime']:
             stats.update(self._get_stats_summary_data_scored(user_input_lines))
-        return stats
+        returnstats
 
-    def _get_stats_summary_data_choice(self, user_input_lines):
-        right_inputs, partial_inputs = self.env['survey.user_input'], self.env['survey.user_input']
-        right_answers = self.suggested_answer_ids.filtered(lambda label: label.is_correct)
-        if self.question_type == 'multiple_choice':
-            for user_input, lines in tools.groupby(user_input_lines, operator.itemgetter('user_input_id')):
-                user_input_answers = self.env['survey.user_input.line'].concat(*lines).filtered(lambda l: l.answer_is_correct).mapped('suggested_answer_id')
-                if user_input_answers and user_input_answers < right_answers:
-                    partial_inputs += user_input
-                elif user_input_answers:
-                    right_inputs += user_input
+    def_get_stats_summary_data_choice(self,user_input_lines):
+        right_inputs,partial_inputs=self.env['survey.user_input'],self.env['survey.user_input']
+        right_answers=self.suggested_answer_ids.filtered(lambdalabel:label.is_correct)
+        ifself.question_type=='multiple_choice':
+            foruser_input,linesintools.groupby(user_input_lines,operator.itemgetter('user_input_id')):
+                user_input_answers=self.env['survey.user_input.line'].concat(*lines).filtered(lambdal:l.answer_is_correct).mapped('suggested_answer_id')
+                ifuser_input_answersanduser_input_answers<right_answers:
+                    partial_inputs+=user_input
+                elifuser_input_answers:
+                    right_inputs+=user_input
         else:
-            right_inputs = user_input_lines.filtered(lambda line: line.answer_is_correct).mapped('user_input_id')
-        return {
-            'right_answers': right_answers,
-            'right_inputs_count': len(right_inputs),
-            'partial_inputs_count': len(partial_inputs),
+            right_inputs=user_input_lines.filtered(lambdaline:line.answer_is_correct).mapped('user_input_id')
+        return{
+            'right_answers':right_answers,
+            'right_inputs_count':len(right_inputs),
+            'partial_inputs_count':len(partial_inputs),
         }
 
-    def _get_stats_summary_data_numerical(self, user_input_lines):
-        all_values = user_input_lines.filtered(lambda line: not line.skipped).mapped('value_numerical_box')
-        lines_sum = sum(all_values)
-        return {
-            'numerical_max': max(all_values, default=0),
-            'numerical_min': min(all_values, default=0),
-            'numerical_average': round(lines_sum / (len(all_values) or 1), 2),
+    def_get_stats_summary_data_numerical(self,user_input_lines):
+        all_values=user_input_lines.filtered(lambdaline:notline.skipped).mapped('value_numerical_box')
+        lines_sum=sum(all_values)
+        return{
+            'numerical_max':max(all_values,default=0),
+            'numerical_min':min(all_values,default=0),
+            'numerical_average':round(lines_sum/(len(all_values)or1),2),
         }
 
-    def _get_stats_summary_data_scored(self, user_input_lines):
-        return {
-            'common_lines': collections.Counter(
-                user_input_lines.filtered(lambda line: not line.skipped).mapped('value_%s' % self.question_type)
-            ).most_common(5) if self.question_type != 'datetime' else [],
-            'right_inputs_count': len(user_input_lines.filtered(lambda line: line.answer_is_correct).mapped('user_input_id'))
+    def_get_stats_summary_data_scored(self,user_input_lines):
+        return{
+            'common_lines':collections.Counter(
+                user_input_lines.filtered(lambdaline:notline.skipped).mapped('value_%s'%self.question_type)
+            ).most_common(5)ifself.question_type!='datetime'else[],
+            'right_inputs_count':len(user_input_lines.filtered(lambdaline:line.answer_is_correct).mapped('user_input_id'))
         }
 
 
-class SurveyQuestionAnswer(models.Model):
-    """ A preconfigured answer for a question. This model stores values used
+classSurveyQuestionAnswer(models.Model):
+    """Apreconfiguredanswerforaquestion.Thismodelstoresvaluesused
     for
 
-      * simple choice, multiple choice: proposed values for the selection /
+      *simplechoice,multiplechoice:proposedvaluesfortheselection/
         radio;
-      * matrix: row and column values;
+      *matrix:rowandcolumnvalues;
 
     """
-    _name = 'survey.question.answer'
-    _rec_name = 'value'
-    _order = 'sequence, id'
-    _description = 'Survey Label'
+    _name='survey.question.answer'
+    _rec_name='value'
+    _order='sequence,id'
+    _description='SurveyLabel'
 
-    question_id = fields.Many2one('survey.question', string='Question', ondelete='cascade')
-    matrix_question_id = fields.Many2one('survey.question', string='Question (as matrix row)', ondelete='cascade')
-    sequence = fields.Integer('Label Sequence order', default=10)
-    value = fields.Char('Suggested value', translate=True, required=True)
-    value_image = fields.Image('Image', max_width=256, max_height=256)
-    is_correct = fields.Boolean('Is a correct answer')
-    answer_score = fields.Float('Score for this choice', help="A positive score indicates a correct choice; a negative or null score indicates a wrong answer")
+    question_id=fields.Many2one('survey.question',string='Question',ondelete='cascade')
+    matrix_question_id=fields.Many2one('survey.question',string='Question(asmatrixrow)',ondelete='cascade')
+    sequence=fields.Integer('LabelSequenceorder',default=10)
+    value=fields.Char('Suggestedvalue',translate=True,required=True)
+    value_image=fields.Image('Image',max_width=256,max_height=256)
+    is_correct=fields.Boolean('Isacorrectanswer')
+    answer_score=fields.Float('Scoreforthischoice',help="Apositivescoreindicatesacorrectchoice;anegativeornullscoreindicatesawronganswer")
 
-    @api.constrains('question_id', 'matrix_question_id')
-    def _check_question_not_empty(self):
-        """Ensure that field question_id XOR field matrix_question_id is not null"""
-        for label in self:
-            if not bool(label.question_id) != bool(label.matrix_question_id):
-                raise ValidationError(_("A label must be attached to only one question."))
+    @api.constrains('question_id','matrix_question_id')
+    def_check_question_not_empty(self):
+        """Ensurethatfieldquestion_idXORfieldmatrix_question_idisnotnull"""
+        forlabelinself:
+            ifnotbool(label.question_id)!=bool(label.matrix_question_id):
+                raiseValidationError(_("Alabelmustbeattachedtoonlyonequestion."))

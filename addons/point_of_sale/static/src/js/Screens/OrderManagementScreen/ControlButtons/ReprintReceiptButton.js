@@ -1,36 +1,36 @@
-flectra.define('point_of_sale.ReprintReceiptButton', function (require) {
-    'use strict';
+flectra.define('point_of_sale.ReprintReceiptButton',function(require){
+    'usestrict';
 
-    const { useListener } = require('web.custom_hooks');
-    const { useContext } = owl.hooks;
-    const PosComponent = require('point_of_sale.PosComponent');
-    const OrderManagementScreen = require('point_of_sale.OrderManagementScreen');
-    const Registries = require('point_of_sale.Registries');
-    const contexts = require('point_of_sale.PosContext');
+    const{useListener}=require('web.custom_hooks');
+    const{useContext}=owl.hooks;
+    constPosComponent=require('point_of_sale.PosComponent');
+    constOrderManagementScreen=require('point_of_sale.OrderManagementScreen');
+    constRegistries=require('point_of_sale.Registries');
+    constcontexts=require('point_of_sale.PosContext');
 
-    class ReprintReceiptButton extends PosComponent {
-        constructor() {
+    classReprintReceiptButtonextendsPosComponent{
+        constructor(){
             super(...arguments);
-            useListener('click', this._onClick);
-            this.orderManagementContext = useContext(contexts.orderManagement);
+            useListener('click',this._onClick);
+            this.orderManagementContext=useContext(contexts.orderManagement);
         }
-        async _onClick() {
-            const order = this.orderManagementContext.selectedOrder;
-            if (!order) return;
+        async_onClick(){
+            constorder=this.orderManagementContext.selectedOrder;
+            if(!order)return;
 
-            this.showScreen('ReprintReceiptScreen', { order: order });
+            this.showScreen('ReprintReceiptScreen',{order:order});
         }
     }
-    ReprintReceiptButton.template = 'ReprintReceiptButton';
+    ReprintReceiptButton.template='ReprintReceiptButton';
 
     OrderManagementScreen.addControlButton({
-        component: ReprintReceiptButton,
-        condition: function () {
-            return true;
+        component:ReprintReceiptButton,
+        condition:function(){
+            returntrue;
         },
     });
 
     Registries.Component.add(ReprintReceiptButton);
 
-    return ReprintReceiptButton;
+    returnReprintReceiptButton;
 });

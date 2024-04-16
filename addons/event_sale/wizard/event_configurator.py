@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields
+fromflectraimportmodels,fields
 
 
-class EventConfigurator(models.TransientModel):
-    _name = 'event.event.configurator'
-    _description = 'Event Configurator'
+classEventConfigurator(models.TransientModel):
+    _name='event.event.configurator'
+    _description='EventConfigurator'
 
-    product_id = fields.Many2one('product.product', string="Product", readonly=True)
-    event_id = fields.Many2one('event.event', string="Event")
-    event_ticket_id = fields.Many2one('event.event.ticket', string="Event Ticket")
+    product_id=fields.Many2one('product.product',string="Product",readonly=True)
+    event_id=fields.Many2one('event.event',string="Event")
+    event_ticket_id=fields.Many2one('event.event.ticket',string="EventTicket")

@@ -1,63 +1,63 @@
-flectra.define("web.ComparisonMenu", function (require) {
-    "use strict";
+flectra.define("web.ComparisonMenu",function(require){
+    "usestrict";
 
-    const DropdownMenu = require("web.DropdownMenu");
-    const { FACET_ICONS } = require("web.searchUtils");
-    const { useModel } = require("web/static/src/js/model.js");
+    constDropdownMenu=require("web.DropdownMenu");
+    const{FACET_ICONS}=require("web.searchUtils");
+    const{useModel}=require("web/static/src/js/model.js");
 
     /**
-     * "Comparison" menu
+     *"Comparison"menu
      *
-     * Displays a set of comparison options related to the currently selected
-     * date filters.
-     * @extends DropdownMenu
+     *Displaysasetofcomparisonoptionsrelatedtothecurrentlyselected
+     *datefilters.
+     *@extendsDropdownMenu
      */
-    class ComparisonMenu extends DropdownMenu {
-        constructor() {
+    classComparisonMenuextendsDropdownMenu{
+        constructor(){
             super(...arguments);
-            this.model = useModel('searchModel');
+            this.model=useModel('searchModel');
         }
 
         //---------------------------------------------------------------------
-        // Getters
+        //Getters
         //---------------------------------------------------------------------
 
         /**
-         * @override
+         *@override
          */
-        get icon() {
-            return FACET_ICONS.comparison;
+        geticon(){
+            returnFACET_ICONS.comparison;
         }
 
         /**
-         * @override
+         *@override
          */
-        get items() {
-            return this.model.get('filters', f => f.type === 'comparison');
+        getitems(){
+            returnthis.model.get('filters',f=>f.type==='comparison');
         }
 
         /**
-         * @override
+         *@override
          */
-        get title() {
-            return this.env._t("Comparison");
+        gettitle(){
+            returnthis.env._t("Comparison");
         }
 
         //---------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //---------------------------------------------------------------------
 
         /**
-         * @private
-         * @param {OwlEvent} ev
+         *@private
+         *@param{OwlEvent}ev
          */
-        _onItemSelected(ev) {
+        _onItemSelected(ev){
             ev.stopPropagation();
-            const { item } = ev.detail;
-            this.model.dispatch("toggleComparison", item.id);
+            const{item}=ev.detail;
+            this.model.dispatch("toggleComparison",item.id);
         }
 
     }
 
-    return ComparisonMenu;
+    returnComparisonMenu;
 });

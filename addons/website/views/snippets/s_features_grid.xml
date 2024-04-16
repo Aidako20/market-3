@@ -1,64 +1,64 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="s_features_grid" name="Features Grid">
-    <section class="s_features_grid pt48 pb24">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 s_col_no_bgcolor pb24">
-                    <div class="row">
-                        <div class="col-lg-12 pb24" data-name="Box">
-                            <h2>First list of Features</h2>
-                            <h5>Add a great slogan.</h5>
+<templateid="s_features_grid"name="FeaturesGrid">
+    <sectionclass="s_features_gridpt48pb24">
+        <divclass="container">
+            <divclass="row">
+                <divclass="col-lg-6s_col_no_bgcolorpb24">
+                    <divclass="row">
+                        <divclass="col-lg-12pb24"data-name="Box">
+                            <h2>FirstlistofFeatures</h2>
+                            <h5>Addagreatslogan.</h5>
                         </div>
-                        <div class="col-lg-12 pt16 pb16" data-name="Box">
-                            <i class="fa fa-2x fa-font-awesome rounded-circle bg-primary s_features_grid_icon"/>
-                            <div class="s_features_grid_content">
-                                <h4>Change Icons</h4>
-                                <p>Double click an icon to replace it with one of your choice.</p>
+                        <divclass="col-lg-12pt16pb16"data-name="Box">
+                            <iclass="fafa-2xfa-font-awesomerounded-circlebg-primarys_features_grid_icon"/>
+                            <divclass="s_features_grid_content">
+                                <h4>ChangeIcons</h4>
+                                <p>Doubleclickanicontoreplaceitwithoneofyourchoice.</p>
                             </div>
                         </div>
-                        <div class="col-lg-12 pt16 pb16" data-name="Box">
-                            <i class="fa fa-2x fa-files-o rounded-circle bg-primary s_features_grid_icon"/>
-                            <div class="s_features_grid_content">
+                        <divclass="col-lg-12pt16pb16"data-name="Box">
+                            <iclass="fafa-2xfa-files-orounded-circlebg-primarys_features_grid_icon"/>
+                            <divclass="s_features_grid_content">
                                 <h4>Duplicate</h4>
-                                <p>Duplicate blocks and columns to add more features.</p>
+                                <p>Duplicateblocksandcolumnstoaddmorefeatures.</p>
                             </div>
                         </div>
-                        <div class="col-lg-12 pt16 pb16" data-name="Box">
-                            <i class="fa fa-2x fa-trash rounded-circle bg-primary s_features_grid_icon"/>
-                            <div class="s_features_grid_content">
-                                <h4>Delete Blocks</h4>
-                                <p>Select and delete blocks to remove features.</p>
+                        <divclass="col-lg-12pt16pb16"data-name="Box">
+                            <iclass="fafa-2xfa-trashrounded-circlebg-primarys_features_grid_icon"/>
+                            <divclass="s_features_grid_content">
+                                <h4>DeleteBlocks</h4>
+                                <p>Selectanddeleteblockstoremovefeatures.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 s_col_no_bgcolor pb24">
-                    <div class="row">
-                        <div class="col-lg-12 pb24" data-name="Box">
-                            <h2>Second list of Features</h2>
-                            <h5>Add a great slogan.</h5>
+                <divclass="col-lg-6s_col_no_bgcolorpb24">
+                    <divclass="row">
+                        <divclass="col-lg-12pb24"data-name="Box">
+                            <h2>SecondlistofFeatures</h2>
+                            <h5>Addagreatslogan.</h5>
                         </div>
-                        <div class="col-lg-12 pt16 pb16" data-name="Box">
-                            <i class="fa fa-2x fa-magic rounded bg-secondary s_features_grid_icon"/>
-                            <div class="s_features_grid_content">
-                                <h4>Great Value</h4>
-                                <p>Turn every feature into a benefit for your reader.</p>
+                        <divclass="col-lg-12pt16pb16"data-name="Box">
+                            <iclass="fafa-2xfa-magicroundedbg-secondarys_features_grid_icon"/>
+                            <divclass="s_features_grid_content">
+                                <h4>GreatValue</h4>
+                                <p>Turneveryfeatureintoabenefitforyourreader.</p>
                             </div>
                         </div>
-                        <div class="col-lg-12 pt16 pb16" data-name="Box">
-                            <i class="fa fa-2x fa-eyedropper rounded bg-secondary s_features_grid_icon"/>
-                            <div class="s_features_grid_content">
-                                <h4>Edit Styles</h4>
-                                <p>You can edit colors and backgrounds to highlight features.</p>
+                        <divclass="col-lg-12pt16pb16"data-name="Box">
+                            <iclass="fafa-2xfa-eyedropperroundedbg-secondarys_features_grid_icon"/>
+                            <divclass="s_features_grid_content">
+                                <h4>EditStyles</h4>
+                                <p>Youcaneditcolorsandbackgroundstohighlightfeatures.</p>
                             </div>
                         </div>
-                        <div class="col-lg-12 pt16 pb16" data-name="Box">
-                            <i class="fa fa-2x fa-picture-o rounded bg-secondary s_features_grid_icon"/>
-                            <div class="s_features_grid_content">
-                                <h4>Sample Icons</h4>
-                                <p>All these icons are completely free for commercial use.</p>
+                        <divclass="col-lg-12pt16pb16"data-name="Box">
+                            <iclass="fafa-2xfa-picture-oroundedbg-secondarys_features_grid_icon"/>
+                            <divclass="s_features_grid_content">
+                                <h4>SampleIcons</h4>
+                                <p>Alltheseiconsarecompletelyfreeforcommercialuse.</p>
                             </div>
                         </div>
                     </div>
@@ -68,9 +68,9 @@
     </section>
 </template>
 
-<template id="assets_snippet_s_features_grid_css_000" inherit_id="website.assets_frontend">
-    <xpath expr="//link[last()]" position="after">
-        <link rel="stylesheet" type="text/scss" href="/website/static/src/snippets/s_features_grid/000.scss"/>
+<templateid="assets_snippet_s_features_grid_css_000"inherit_id="website.assets_frontend">
+    <xpathexpr="//link[last()]"position="after">
+        <linkrel="stylesheet"type="text/scss"href="/website/static/src/snippets/s_features_grid/000.scss"/>
     </xpath>
 </template>
 

@@ -1,93 +1,93 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="PaymentScreen" owl="1">
-        <div class="payment-screen screen" t-att-class="{ oe_hidden: !props.isShown }">
-            <div class="screen-content">
-                <t t-if="!env.isMobile">
-                    <div class="top-content">
-                        <div class="button back"
+    <tt-name="PaymentScreen"owl="1">
+        <divclass="payment-screenscreen"t-att-class="{oe_hidden:!props.isShown}">
+            <divclass="screen-content">
+                <tt-if="!env.isMobile">
+                    <divclass="top-content">
+                        <divclass="buttonback"
                               t-on-click="showScreen('ProductScreen')">
-                            <i class="fa fa-angle-double-left fa-fw"></i>
-                            <span class="back_text">Back</span>
+                            <iclass="fafa-angle-double-leftfa-fw"></i>
+                            <spanclass="back_text">Back</span>
                         </div>
-                        <div class="top-content-center"><h1>Payment</h1></div>
-                        <div class="button next" t-att-class="{ highlight: currentOrder.is_paid() }"
+                        <divclass="top-content-center"><h1>Payment</h1></div>
+                        <divclass="buttonnext"t-att-class="{highlight:currentOrder.is_paid()}"
                               t-on-click="validateOrder(false)">
-                            <span class="next_text">Validate</span>
-                            <i class="fa fa-angle-double-right fa-fw"></i>
+                            <spanclass="next_text">Validate</span>
+                            <iclass="fafa-angle-double-rightfa-fw"></i>
                         </div>
                     </div>
                 </t>
-                <div class="main-content">
-                    <div class="left-content">
-                        <t t-if="env.isMobile">
-                            <section class="paymentlines-container">
-                                <PaymentScreenStatus paymentLines="paymentLines" />
+                <divclass="main-content">
+                    <divclass="left-content">
+                        <tt-if="env.isMobile">
+                            <sectionclass="paymentlines-container">
+                                <PaymentScreenStatuspaymentLines="paymentLines"/>
                             </section>
                         </t>
-                        <div class="paymentmethods-container">
-                            <PaymentScreenPaymentLines paymentLines="paymentLines" />
-                            <div class="paymentmethods">
-                                <t t-foreach="payment_methods_from_config" t-as="paymentMethod"
+                        <divclass="paymentmethods-container">
+                            <PaymentScreenPaymentLinespaymentLines="paymentLines"/>
+                            <divclass="paymentmethods">
+                                <tt-foreach="payment_methods_from_config"t-as="paymentMethod"
                                    t-key="paymentMethod.id">
-                                    <PaymentMethodButton paymentMethod="paymentMethod" />
+                                    <PaymentMethodButtonpaymentMethod="paymentMethod"/>
                                 </t>
                             </div>
                         </div>
                     </div>
-                    <div class="right-content">
-                        <t t-if="!env.isMobile">
-                            <section class="paymentlines-container">
-                                <PaymentScreenStatus paymentLines="paymentLines" />
+                    <divclass="right-content">
+                        <tt-if="!env.isMobile">
+                            <sectionclass="paymentlines-container">
+                                <PaymentScreenStatuspaymentLines="paymentLines"/>
                             </section>
                         </t>
 
-                        <div class="payment-buttons-container">
-                            <section class="payment-numpad">
-                                <PaymentScreenNumpad />
+                        <divclass="payment-buttons-container">
+                            <sectionclass="payment-numpad">
+                                <PaymentScreenNumpad/>
                             </section>
 
-                            <div class="payment-buttons">
-                                <div class="customer-button">
-                                    <div class="button" t-on-click="selectClient">
-                                        <i class="fa fa-user" role="img" aria-label="Customer"
-                                           title="Customer" />
-                                        <span class="js_customer_name">
-                                            <t t-if="env.pos.get_client()">
-                                                <t t-esc="env.pos.get_client().name" />
+                            <divclass="payment-buttons">
+                                <divclass="customer-button">
+                                    <divclass="button"t-on-click="selectClient">
+                                        <iclass="fafa-user"role="img"aria-label="Customer"
+                                           title="Customer"/>
+                                        <spanclass="js_customer_name">
+                                            <tt-if="env.pos.get_client()">
+                                                <tt-esc="env.pos.get_client().name"/>
                                             </t>
-                                            <t t-if="!env.pos.get_client()">
+                                            <tt-if="!env.pos.get_client()">
                                                 Customer
                                             </t>
                                         </span>
                                     </div>
                                 </div>
-                                <div class="payment-controls">
-                                    <div t-if="env.pos.config.module_account" class="button js_invoice"
-                                        t-att-class="{ highlight: currentOrder.is_to_invoice() }"
+                                <divclass="payment-controls">
+                                    <divt-if="env.pos.config.module_account"class="buttonjs_invoice"
+                                        t-att-class="{highlight:currentOrder.is_to_invoice()}"
                                         t-on-click="toggleIsToInvoice">
-                                        <i class="fa fa-file-text-o" /> Invoice
+                                        <iclass="fafa-file-text-o"/>Invoice
                                     </div>
-                                    <div t-if="env.pos.config.tip_product_id" class="button js_tip"
+                                    <divt-if="env.pos.config.tip_product_id"class="buttonjs_tip"
                                         t-on-click="addTip">
-                                        <i class="fa fa-heart" /> Tip
+                                        <iclass="fafa-heart"/>Tip
                                     </div>
-                                    <div t-if="env.pos.config.iface_cashdrawer" class="button js_cashdrawer"
+                                    <divt-if="env.pos.config.iface_cashdrawer"class="buttonjs_cashdrawer"
                                         t-on-click="openCashbox">
-                                        <i class="fa fa-archive" /> Open Cashbox
+                                        <iclass="fafa-archive"/>OpenCashbox
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <t t-if="env.isMobile">
-                    <div class="switchpane">
-                        <button class="btn-switchpane" t-att-class="{ secondary: !currentOrder.is_paid() }" t-on-click="validateOrder(false)">
+                <tt-if="env.isMobile">
+                    <divclass="switchpane">
+                        <buttonclass="btn-switchpane"t-att-class="{secondary:!currentOrder.is_paid()}"t-on-click="validateOrder(false)">
                             <h1>Validate</h1>
                         </button>
-                        <button class="btn-switchpane secondary" t-on-click="showScreen('ProductScreen', {mobile_pane: 'left'})">
+                        <buttonclass="btn-switchpanesecondary"t-on-click="showScreen('ProductScreen',{mobile_pane:'left'})">
                             <h1>Review</h1>
                         </button>
                     </div>

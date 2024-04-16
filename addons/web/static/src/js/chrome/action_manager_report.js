@@ -1,203 +1,203 @@
-flectra.define('web.ReportActionManager', function (require) {
-"use strict";
+flectra.define('web.ReportActionManager',function(require){
+"usestrict";
 
 /**
- * The purpose of this file is to add the support of Flectra actions of type
- * 'ir.actions.report' to the ActionManager.
+ *ThepurposeofthisfileistoaddthesupportofFlectraactionsoftype
+ *'ir.actions.report'totheActionManager.
  */
 
-var ActionManager = require('web.ActionManager');
-var core = require('web.core');
-var framework = require('web.framework');
-var session = require('web.session');
+varActionManager=require('web.ActionManager');
+varcore=require('web.core');
+varframework=require('web.framework');
+varsession=require('web.session');
 
 
-var _t = core._t;
-var _lt = core._lt;
+var_t=core._t;
+var_lt=core._lt;
 
-// Messages that might be shown to the user dependening on the state of wkhtmltopdf
-var link = '<br><br><a href="http://wkhtmltopdf.org/" target="_blank">wkhtmltopdf.org</a>';
-var WKHTMLTOPDF_MESSAGES = {
-    broken: _lt('Your installation of Wkhtmltopdf seems to be broken. The report will be shown ' +
-                'in html.') + link,
-    install: _lt('Unable to find Wkhtmltopdf on this system. The report will be shown in ' +
-                 'html.') + link,
-    upgrade: _lt('You should upgrade your version of Wkhtmltopdf to at least 0.12.0 in order to ' +
-                 'get a correct display of headers and footers as well as support for ' +
-                 'table-breaking between pages.') + link,
-    workers: _lt('You need to start Flectra with at least two workers to print a pdf version of ' +
-                 'the reports.'),
+//Messagesthatmightbeshowntotheuserdependeningonthestateofwkhtmltopdf
+varlink='<br><br><ahref="http://wkhtmltopdf.org/"target="_blank">wkhtmltopdf.org</a>';
+varWKHTMLTOPDF_MESSAGES={
+    broken:_lt('YourinstallationofWkhtmltopdfseemstobebroken.Thereportwillbeshown'+
+                'inhtml.')+link,
+    install:_lt('UnabletofindWkhtmltopdfonthissystem.Thereportwillbeshownin'+
+                 'html.')+link,
+    upgrade:_lt('YoushouldupgradeyourversionofWkhtmltopdftoatleast0.12.0inorderto'+
+                 'getacorrectdisplayofheadersandfootersaswellassupportfor'+
+                 'table-breakingbetweenpages.')+link,
+    workers:_lt('YouneedtostartFlectrawithatleasttwoworkerstoprintapdfversionof'+
+                 'thereports.'),
 };
 
 ActionManager.include({
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Downloads a PDF report for the given url. It blocks the UI during the
-     * report generation and download.
+     *DownloadsaPDFreportforthegivenurl.ItblockstheUIduringthe
+     *reportgenerationanddownload.
      *
-     * @param {string} url
-     * @returns {Promise} resolved when the report has been downloaded ;
-     *   rejected if something went wrong during the report generation
+     *@param{string}url
+     *@returns{Promise}resolvedwhenthereporthasbeendownloaded;
+     *  rejectedifsomethingwentwrongduringthereportgeneration
      */
-    _downloadReport: function (url) {
-        var self = this;
+    _downloadReport:function(url){
+        varself=this;
         framework.blockUI();
-        return new Promise(function (resolve, reject) {
-            var type = 'qweb-' + url.split('/')[2];
-            var blocked = !session.get_file({
-                url: '/report/download',
-                data: {
-                    data: JSON.stringify([url, type]),
-                    context: JSON.stringify(session.user_context),
+        returnnewPromise(function(resolve,reject){
+            vartype='qweb-'+url.split('/')[2];
+            varblocked=!session.get_file({
+                url:'/report/download',
+                data:{
+                    data:JSON.stringify([url,type]),
+                    context:JSON.stringify(session.user_context),
                 },
-                success: resolve,
-                error: (error) => {
-                    self.call('crash_manager', 'rpc_error', error);
+                success:resolve,
+                error:(error)=>{
+                    self.call('crash_manager','rpc_error',error);
                     reject();
                 },
-                complete: framework.unblockUI,
+                complete:framework.unblockUI,
             });
-            if (blocked) {
-                // AAB: this check should be done in get_file service directly,
-                // should not be the concern of the caller (and that way, get_file
-                // could return a promise)
-                var message = _t('A popup window with your report was blocked. You ' +
-                                 'may need to change your browser settings to allow ' +
-                                 'popup windows for this page.');
-                self.do_warn(_t('Warning'), message, true);
+            if(blocked){
+                //AAB:thischeckshouldbedoneinget_fileservicedirectly,
+                //shouldnotbetheconcernofthecaller(andthatway,get_file
+                //couldreturnapromise)
+                varmessage=_t('Apopupwindowwithyourreportwasblocked.You'+
+                                 'mayneedtochangeyourbrowsersettingstoallow'+
+                                 'popupwindowsforthispage.');
+                self.do_warn(_t('Warning'),message,true);
             }
         });
     },
 
     /**
-     * Launch download action of the report
+     *Launchdownloadactionofthereport
      *
-     * @private
-     * @param {Object} action the description of the action to execute
-     * @param {Object} options @see doAction for details
-     * @returns {Promise} resolved when the action has been executed
+     *@private
+     *@param{Object}actionthedescriptionoftheactiontoexecute
+     *@param{Object}options@seedoActionfordetails
+     *@returns{Promise}resolvedwhentheactionhasbeenexecuted
      */
-    _triggerDownload: function (action, options, type){
-        var self = this;
-        var reportUrls = this._makeReportUrls(action);
-        return this._downloadReport(reportUrls[type]).then(function () {
-            if (action.close_on_report_download) {
-                var closeAction = { type: 'ir.actions.act_window_close' };
-                return self.doAction(closeAction, _.pick(options, 'on_close'));
-            } else {
-                return options.on_close();
+    _triggerDownload:function(action,options,type){
+        varself=this;
+        varreportUrls=this._makeReportUrls(action);
+        returnthis._downloadReport(reportUrls[type]).then(function(){
+            if(action.close_on_report_download){
+                varcloseAction={type:'ir.actions.act_window_close'};
+                returnself.doAction(closeAction,_.pick(options,'on_close'));
+            }else{
+                returnoptions.on_close();
             }
         });
     },
     /**
-     * Executes actions of type 'ir.actions.report'.
+     *Executesactionsoftype'ir.actions.report'.
      *
-     * @private
-     * @param {Object} action the description of the action to execute
-     * @param {Object} options @see doAction for details
-     * @returns {Promise} resolved when the action has been executed
+     *@private
+     *@param{Object}actionthedescriptionoftheactiontoexecute
+     *@param{Object}options@seedoActionfordetails
+     *@returns{Promise}resolvedwhentheactionhasbeenexecuted
      */
-    _executeReportAction: function (action, options) {
-        var self = this;
+    _executeReportAction:function(action,options){
+        varself=this;
 
-        if (action.report_type === 'qweb-html') {
-            return this._executeReportClientAction(action, options);
-        } else if (action.report_type === 'qweb-pdf') {
-            // check the state of wkhtmltopdf before proceeding
-            return this.call('report', 'checkWkhtmltopdf').then(function (state) {
-                // display a notification according to wkhtmltopdf's state
-                if (state in WKHTMLTOPDF_MESSAGES) {
-                    self.do_notify(_t('Report'), WKHTMLTOPDF_MESSAGES[state], true);
+        if(action.report_type==='qweb-html'){
+            returnthis._executeReportClientAction(action,options);
+        }elseif(action.report_type==='qweb-pdf'){
+            //checkthestateofwkhtmltopdfbeforeproceeding
+            returnthis.call('report','checkWkhtmltopdf').then(function(state){
+                //displayanotificationaccordingtowkhtmltopdf'sstate
+                if(stateinWKHTMLTOPDF_MESSAGES){
+                    self.do_notify(_t('Report'),WKHTMLTOPDF_MESSAGES[state],true);
                 }
 
-                if (state === 'upgrade' || state === 'ok') {
-                    // trigger the download of the PDF report
-                    return self._triggerDownload(action, options, 'pdf');
-                } else {
-                    // open the report in the client action if generating the PDF is not possible
-                    return self._executeReportClientAction(action, options);
+                if(state==='upgrade'||state==='ok'){
+                    //triggerthedownloadofthePDFreport
+                    returnself._triggerDownload(action,options,'pdf');
+                }else{
+                    //openthereportintheclientactionifgeneratingthePDFisnotpossible
+                    returnself._executeReportClientAction(action,options);
                 }
             });
-        } else if (action.report_type === 'qweb-text') {
-            return self._triggerDownload(action, options, 'text');
-        } else {
-            console.error("The ActionManager can't handle reports of type " +
-                action.report_type, action);
-            return Promise.reject();
+        }elseif(action.report_type==='qweb-text'){
+            returnself._triggerDownload(action,options,'text');
+        }else{
+            console.error("TheActionManagercan'thandlereportsoftype"+
+                action.report_type,action);
+            returnPromise.reject();
         }
     },
     /**
-     * Executes the report client action, either because the report_type is
-     * 'qweb-html', or because the PDF can't be generated by wkhtmltopdf (in
-     * the case of 'qweb-pdf' reports).
+     *Executesthereportclientaction,eitherbecausethereport_typeis
+     *'qweb-html',orbecausethePDFcan'tbegeneratedbywkhtmltopdf(in
+     *thecaseof'qweb-pdf'reports).
      *
-     * @param {Object} action
-     * @param {Object} options
-     * @returns {Promise} resolved when the client action has been executed
+     *@param{Object}action
+     *@param{Object}options
+     *@returns{Promise}resolvedwhentheclientactionhasbeenexecuted
      */
-    _executeReportClientAction: function (action, options) {
-        var urls = this._makeReportUrls(action);
-        var clientActionOptions = _.extend({}, options, {
-            context: action.context,
-            data: action.data,
-            display_name: action.display_name,
-            name: action.name,
-            report_file: action.report_file,
-            report_name: action.report_name,
-            report_url: urls.html,
+    _executeReportClientAction:function(action,options){
+        varurls=this._makeReportUrls(action);
+        varclientActionOptions=_.extend({},options,{
+            context:action.context,
+            data:action.data,
+            display_name:action.display_name,
+            name:action.name,
+            report_file:action.report_file,
+            report_name:action.report_name,
+            report_url:urls.html,
         });
-        return this.doAction('report.client_action', clientActionOptions);
+        returnthis.doAction('report.client_action',clientActionOptions);
     },
     /**
-     * Overrides to handle the 'ir.actions.report' actions.
+     *Overridestohandlethe'ir.actions.report'actions.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _handleAction: function (action, options) {
-        if (action.type === 'ir.actions.report') {
-            return this._executeReportAction(action, options);
+    _handleAction:function(action,options){
+        if(action.type==='ir.actions.report'){
+            returnthis._executeReportAction(action,options);
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * Generates an object containing the report's urls (as value) for every
-     * qweb-type we support (as key). It's convenient because we may want to use
-     * another report's type at some point (for example, when `qweb-pdf` is not
-     * available).
+     *Generatesanobjectcontainingthereport'surls(asvalue)forevery
+     *qweb-typewesupport(askey).It'sconvenientbecausewemaywanttouse
+     *anotherreport'stypeatsomepoint(forexample,when`qweb-pdf`isnot
+     *available).
      *
-     * @param {Object} action
-     * @returns {Object}
+     *@param{Object}action
+     *@returns{Object}
      */
-    _makeReportUrls: function (action) {
-        var reportUrls = {
-            html: '/report/html/' + action.report_name,
-            pdf: '/report/pdf/' + action.report_name,
-            text: '/report/text/' + action.report_name,
+    _makeReportUrls:function(action){
+        varreportUrls={
+            html:'/report/html/'+action.report_name,
+            pdf:'/report/pdf/'+action.report_name,
+            text:'/report/text/'+action.report_name,
         };
-        // We may have to build a query string with `action.data`. It's the place
-        // were report's using a wizard to customize the output traditionally put
-        // their options.
-        if (_.isUndefined(action.data) || _.isNull(action.data) ||
-            (_.isObject(action.data) && _.isEmpty(action.data))) {
-            if (action.context.active_ids) {
-                var activeIDsPath = '/' + action.context.active_ids.join(',');
-                reportUrls = _.mapObject(reportUrls, function (value) {
-                    return value += activeIDsPath;
+        //Wemayhavetobuildaquerystringwith`action.data`.It'stheplace
+        //werereport'susingawizardtocustomizetheoutputtraditionallyput
+        //theiroptions.
+        if(_.isUndefined(action.data)||_.isNull(action.data)||
+            (_.isObject(action.data)&&_.isEmpty(action.data))){
+            if(action.context.active_ids){
+                varactiveIDsPath='/'+action.context.active_ids.join(',');
+                reportUrls=_.mapObject(reportUrls,function(value){
+                    returnvalue+=activeIDsPath;
                 });
             }
-            reportUrls.html += '?context=' + encodeURIComponent(JSON.stringify(session.user_context));
-        } else {
-            var serializedOptionsPath = '?options=' + encodeURIComponent(JSON.stringify(action.data));
-            serializedOptionsPath += '&context=' + encodeURIComponent(JSON.stringify(action.context));
-            reportUrls = _.mapObject(reportUrls, function (value) {
-                return value += serializedOptionsPath;
+            reportUrls.html+='?context='+encodeURIComponent(JSON.stringify(session.user_context));
+        }else{
+            varserializedOptionsPath='?options='+encodeURIComponent(JSON.stringify(action.data));
+            serializedOptionsPath+='&context='+encodeURIComponent(JSON.stringify(action.context));
+            reportUrls=_.mapObject(reportUrls,function(value){
+                returnvalue+=serializedOptionsPath;
             });
         }
-        return reportUrls;
+        returnreportUrls;
     },
 });
 });

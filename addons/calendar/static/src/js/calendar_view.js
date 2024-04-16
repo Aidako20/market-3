@@ -1,22 +1,22 @@
-flectra.define('calendar.CalendarView', function (require) {
-"use strict";
+flectra.define('calendar.CalendarView',function(require){
+"usestrict";
 
-var CalendarController = require('calendar.CalendarController');
-var CalendarModel = require('calendar.CalendarModel');
-const CalendarRenderer = require('calendar.CalendarRenderer');
-var CalendarView = require('web.CalendarView');
-var viewRegistry = require('web.view_registry');
+varCalendarController=require('calendar.CalendarController');
+varCalendarModel=require('calendar.CalendarModel');
+constCalendarRenderer=require('calendar.CalendarRenderer');
+varCalendarView=require('web.CalendarView');
+varviewRegistry=require('web.view_registry');
 
-var AttendeeCalendarView = CalendarView.extend({
-    config: _.extend({}, CalendarView.prototype.config, {
-        Renderer: CalendarRenderer,
-        Controller: CalendarController,
-        Model: CalendarModel,
+varAttendeeCalendarView=CalendarView.extend({
+    config:_.extend({},CalendarView.prototype.config,{
+        Renderer:CalendarRenderer,
+        Controller:CalendarController,
+        Model:CalendarModel,
     }),
 });
 
-viewRegistry.add('attendee_calendar', AttendeeCalendarView);
+viewRegistry.add('attendee_calendar',AttendeeCalendarView);
 
-return AttendeeCalendarView
+returnAttendeeCalendarView
 
 });

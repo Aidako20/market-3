@@ -1,18 +1,18 @@
-flectra.define('mail.field_text_emojis', function (require) {
-"use strict";
+flectra.define('mail.field_text_emojis',function(require){
+"usestrict";
 
-var basicFields = require('web.basic_fields');
-var registry = require('web.field_registry');
-var FieldEmojiCommon = require('mail.field_emojis_common');
-var MailEmojisMixin = require('mail.emoji_mixin');
+varbasicFields=require('web.basic_fields');
+varregistry=require('web.field_registry');
+varFieldEmojiCommon=require('mail.field_emojis_common');
+varMailEmojisMixin=require('mail.emoji_mixin');
 
 /**
- * Extension of the FieldText that will add emojis support
+ *ExtensionoftheFieldTextthatwilladdemojissupport
  */
-var FieldTextEmojis = basicFields.FieldText.extend(MailEmojisMixin, FieldEmojiCommon);
+varFieldTextEmojis=basicFields.FieldText.extend(MailEmojisMixin,FieldEmojiCommon);
 
-registry.add('text_emojis', FieldTextEmojis);
+registry.add('text_emojis',FieldTextEmojis);
 
-return FieldTextEmojis;
+returnFieldTextEmojis;
 
 });

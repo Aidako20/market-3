@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra noupdate="1">
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectranoupdate="1">
 
-    <record id="ir_rule_sms_template_stock_manager" model="ir.rule">
-        <field name="name">SMS Template: stock manager CUD on stock picking templates</field>
-        <field name="model_id" ref="sms.model_sms_template"/>
-        <field name="groups" eval="[(4, ref('stock.group_stock_manager'))]"/>
-        <field name="domain_force">[('model_id.model', '=', 'stock.picking')]</field>
-        <field name="perm_read" eval="False"/>
+    <recordid="ir_rule_sms_template_stock_manager"model="ir.rule">
+        <fieldname="name">SMSTemplate:stockmanagerCUDonstockpickingtemplates</field>
+        <fieldname="model_id"ref="sms.model_sms_template"/>
+        <fieldname="groups"eval="[(4,ref('stock.group_stock_manager'))]"/>
+        <fieldname="domain_force">[('model_id.model','=','stock.picking')]</field>
+        <fieldname="perm_read"eval="False"/>
     </record>
 
 </flectra>

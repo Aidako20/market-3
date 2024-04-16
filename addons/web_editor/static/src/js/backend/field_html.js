@@ -1,542 +1,542 @@
-flectra.define('web_editor.field.html', function (require) {
-'use strict';
+flectra.define('web_editor.field.html',function(require){
+'usestrict';
 
-var ajax = require('web.ajax');
-var basic_fields = require('web.basic_fields');
-var config = require('web.config');
-var core = require('web.core');
-var Wysiwyg = require('web_editor.wysiwyg.root');
-var field_registry = require('web.field_registry');
-// must wait for web/ to add the default html widget, otherwise it would override the web_editor one
+varajax=require('web.ajax');
+varbasic_fields=require('web.basic_fields');
+varconfig=require('web.config');
+varcore=require('web.core');
+varWysiwyg=require('web_editor.wysiwyg.root');
+varfield_registry=require('web.field_registry');
+//mustwaitforweb/toaddthedefaulthtmlwidget,otherwiseitwouldoverridetheweb_editorone
 require('web._field_registry');
 
-var _lt = core._lt;
-var TranslatableFieldMixin = basic_fields.TranslatableFieldMixin;
-var QWeb = core.qweb;
-var assetsLoaded;
+var_lt=core._lt;
+varTranslatableFieldMixin=basic_fields.TranslatableFieldMixin;
+varQWeb=core.qweb;
+varassetsLoaded;
 
-var jinjaRegex = /(^|\n)\s*%\s(end|set\s)/;
+varjinjaRegex=/(^|\n)\s*%\s(end|set\s)/;
 
 /**
- * FieldHtml Widget
- * Intended to display HTML content. This widget uses the wysiwyg editor
- * improved by flectra.
+ *FieldHtmlWidget
+ *IntendedtodisplayHTMLcontent.Thiswidgetusesthewysiwygeditor
+ *improvedbyflectra.
  *
- * nodeOptions:
- *  - style-inline => convert class to inline style (no re-edition) => for sending by email
- *  - no-attachment
- *  - cssEdit
- *  - cssReadonly
- *  - snippets
- *  - wrapper
+ *nodeOptions:
+ * -style-inline=>convertclasstoinlinestyle(nore-edition)=>forsendingbyemail
+ * -no-attachment
+ * -cssEdit
+ * -cssReadonly
+ * -snippets
+ * -wrapper
  */
-var FieldHtml = basic_fields.DebouncedField.extend(TranslatableFieldMixin, {
-    description: _lt("Html"),
-    className: 'oe_form_field oe_form_field_html',
-    supportedFieldTypes: ['html'],
+varFieldHtml=basic_fields.DebouncedField.extend(TranslatableFieldMixin,{
+    description:_lt("Html"),
+    className:'oe_form_fieldoe_form_field_html',
+    supportedFieldTypes:['html'],
 
-    custom_events: {
-        wysiwyg_focus: '_onWysiwygFocus',
-        wysiwyg_blur: '_onWysiwygBlur',
-        wysiwyg_change: '_onChange',
-        wysiwyg_attachment: '_onAttachmentChange',
+    custom_events:{
+        wysiwyg_focus:'_onWysiwygFocus',
+        wysiwyg_blur:'_onWysiwygBlur',
+        wysiwyg_change:'_onChange',
+        wysiwyg_attachment:'_onAttachmentChange',
     },
 
     /**
-     * @override
+     *@override
      */
-    willStart: function () {
-        var self = this;
-        this.isRendered = false;
-        this._onUpdateIframeId = 'onLoad_' + _.uniqueId('FieldHtml');
-        var defAsset;
-        if (this.nodeOptions.cssReadonly) {
-            defAsset = ajax.loadAsset(this.nodeOptions.cssReadonly);
+    willStart:function(){
+        varself=this;
+        this.isRendered=false;
+        this._onUpdateIframeId='onLoad_'+_.uniqueId('FieldHtml');
+        vardefAsset;
+        if(this.nodeOptions.cssReadonly){
+            defAsset=ajax.loadAsset(this.nodeOptions.cssReadonly);
         }
 
-        if (!assetsLoaded) { // avoid flickering when begin to edit
-            assetsLoaded = new Promise(function (resolve) {
-                var wysiwyg = new Wysiwyg(self, {});
-                wysiwyg.attachTo($('<textarea>')).then(function () {
+        if(!assetsLoaded){//avoidflickeringwhenbegintoedit
+            assetsLoaded=newPromise(function(resolve){
+                varwysiwyg=newWysiwyg(self,{});
+                wysiwyg.attachTo($('<textarea>')).then(function(){
                     wysiwyg.destroy();
                     resolve();
                 });
             });
         }
 
-        return Promise.all([this._super(), assetsLoaded, defAsset]);
+        returnPromise.all([this._super(),assetsLoaded,defAsset]);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
-        delete window.top[this._onUpdateIframeId];
-        if (this.$iframe) {
+    destroy:function(){
+        deletewindow.top[this._onUpdateIframeId];
+        if(this.$iframe){
             this.$iframe.remove();
         }
         this._super();
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    activate: function (options) {
-        if (this.wysiwyg) {
+    activate:function(options){
+        if(this.wysiwyg){
             this.wysiwyg.focus();
-            return true;
+            returntrue;
         }
     },
     /**
-     * Wysiwyg doesn't notify for changes done in code mode. We override
-     * commitChanges to manually switch back to normal mode before committing
-     * changes, so that the widget is aware of the changes done in code mode.
+     *Wysiwygdoesn'tnotifyforchangesdoneincodemode.Weoverride
+     *commitChangestomanuallyswitchbacktonormalmodebeforecommitting
+     *changes,sothatthewidgetisawareofthechangesdoneincodemode.
      *
-     * @override
+     *@override
      */
-    commitChanges: function () {
-        var self = this;
-        if (config.isDebug() && this.mode === 'edit') {
-            var layoutInfo = $.summernote.core.dom.makeLayoutInfo(this.wysiwyg.$editor);
-            $.summernote.pluginEvents.codeview(undefined, undefined, layoutInfo, false);
+    commitChanges:function(){
+        varself=this;
+        if(config.isDebug()&&this.mode==='edit'){
+            varlayoutInfo=$.summernote.core.dom.makeLayoutInfo(this.wysiwyg.$editor);
+            $.summernote.pluginEvents.codeview(undefined,undefined,layoutInfo,false);
         }
-        if (this.mode == "readonly" || !this.isRendered) {
-            return this._super();
+        if(this.mode=="readonly"||!this.isRendered){
+            returnthis._super();
         }
-        var _super = this._super.bind(this);
-        return this.wysiwyg.saveModifiedImages(this.$content).then(function () {
-            return self.wysiwyg.save(self.nodeOptions).then(function (result) {
-                self._isDirty = result.isDirty;
+        var_super=this._super.bind(this);
+        returnthis.wysiwyg.saveModifiedImages(this.$content).then(function(){
+            returnself.wysiwyg.save(self.nodeOptions).then(function(result){
+                self._isDirty=result.isDirty;
                 _super();
             });
         });
     },
     /**
-     * @override
+     *@override
      */
-    isSet: function () {
-        var value = this.value && this.value.split('&nbsp;').join('').replace(/\s/g, ''); // Removing spaces & html spaces
-        return value && value !== "<p></p>" && value !== "<p><br></p>" && value.match(/\S/);
+    isSet:function(){
+        varvalue=this.value&&this.value.split('&nbsp;').join('').replace(/\s/g,'');//Removingspaces&htmlspaces
+        returnvalue&&value!=="<p></p>"&&value!=="<p><br></p>"&&value.match(/\S/);
     },
     /**
-     * @override
+     *@override
      */
-    getFocusableElement: function () {
-        return this.$target || $();
+    getFocusableElement:function(){
+        returnthis.$target||$();
     },
     /**
-     * Do not re-render this field if it was the origin of the onchange call.
+     *Donotre-renderthisfieldifitwastheoriginoftheonchangecall.
      *
-     * @override
+     *@override
      */
-    reset: function (record, event) {
-        this._reset(record, event);
-        var value = this.value;
-        if (this.nodeOptions.wrapper) {
-            value = this._wrap(value);
+    reset:function(record,event){
+        this._reset(record,event);
+        varvalue=this.value;
+        if(this.nodeOptions.wrapper){
+            value=this._wrap(value);
         }
-        value = this._textToHtml(value);
-        if (!event || event.target !== this) {
-            if (this.mode === 'edit') {
+        value=this._textToHtml(value);
+        if(!event||event.target!==this){
+            if(this.mode==='edit'){
                 this.wysiwyg.setValue(value);
-            } else {
+            }else{
                 this.$content.html(value);
             }
         }
-        return Promise.resolve();
+        returnPromise.resolve();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _getValue: function () {
-        var value = this.$target.val();
-        if (this.nodeOptions.wrapper) {
-            return this._unWrap(value);
+    _getValue:function(){
+        varvalue=this.$target.val();
+        if(this.nodeOptions.wrapper){
+            returnthis._unWrap(value);
         }
-        return value;
+        returnvalue;
     },
     /**
-     * Create the wysiwyg instance with the target (this.$target)
-     * then add the editable content (this.$content).
+     *Createthewysiwyginstancewiththetarget(this.$target)
+     *thenaddtheeditablecontent(this.$content).
      *
-     * @private
-     * @returns {$.Promise}
+     *@private
+     *@returns{$.Promise}
      */
-    _createWysiwygIntance: function () {
-        var self = this;
-        this.wysiwyg = new Wysiwyg(this, this._getWysiwygOptions());
-        this.wysiwyg.__extraAssetsForIframe = this.__extraAssetsForIframe || [];
+    _createWysiwygIntance:function(){
+        varself=this;
+        this.wysiwyg=newWysiwyg(this,this._getWysiwygOptions());
+        this.wysiwyg.__extraAssetsForIframe=this.__extraAssetsForIframe||[];
 
-        // by default this is synchronous because the assets are already loaded in willStart
-        // but it can be async in the case of options such as iframe, snippets...
-        return this.wysiwyg.attachTo(this.$target).then(function () {
-            self.$content = self.wysiwyg.$editor.closest('body, flectra-wysiwyg-container');
+        //bydefaultthisissynchronousbecausetheassetsarealreadyloadedinwillStart
+        //butitcanbeasyncinthecaseofoptionssuchasiframe,snippets...
+        returnthis.wysiwyg.attachTo(this.$target).then(function(){
+            self.$content=self.wysiwyg.$editor.closest('body,flectra-wysiwyg-container');
             self._onLoadWysiwyg();
-            self.isRendered = true;
+            self.isRendered=true;
         });
     },
     /**
-     * Get wysiwyg options to create wysiwyg instance.
+     *Getwysiwygoptionstocreatewysiwyginstance.
      *
-     * @private
-     * @returns {Object}
+     *@private
+     *@returns{Object}
      */
-    _getWysiwygOptions: function () {
-        var self = this;
-        return Object.assign({}, this.nodeOptions, {
-            recordInfo: {
-                context: this.record.getContext(this.recordParams),
-                res_model: this.model,
-                res_id: this.res_id,
+    _getWysiwygOptions:function(){
+        varself=this;
+        returnObject.assign({},this.nodeOptions,{
+            recordInfo:{
+                context:this.record.getContext(this.recordParams),
+                res_model:this.model,
+                res_id:this.res_id,
             },
-            noAttachment: this.nodeOptions['no-attachment'],
-            inIframe: !!this.nodeOptions.cssEdit,
-            iframeCssAssets: this.nodeOptions.cssEdit,
-            snippets: this.nodeOptions.snippets,
+            noAttachment:this.nodeOptions['no-attachment'],
+            inIframe:!!this.nodeOptions.cssEdit,
+            iframeCssAssets:this.nodeOptions.cssEdit,
+            snippets:this.nodeOptions.snippets,
 
-            tabsize: 0,
-            height: 180,
-            generateOptions: function (options) {
-                var toolbar = options.toolbar || options.airPopover || {};
-                var para = _.find(toolbar, function (item) {
-                    return item[0] === 'para';
+            tabsize:0,
+            height:180,
+            generateOptions:function(options){
+                vartoolbar=options.toolbar||options.airPopover||{};
+                varpara=_.find(toolbar,function(item){
+                    returnitem[0]==='para';
                 });
-                if (para && para[1] && para[1].indexOf('checklist') === -1) {
-                    para[1].splice(2, 0, 'checklist');
+                if(para&&para[1]&&para[1].indexOf('checklist')===-1){
+                    para[1].splice(2,0,'checklist');
                 }
-                if (config.isDebug()) {
-                    options.codeview = true;
-                    var view = _.find(toolbar, function (item) {
-                        return item[0] === 'view';
+                if(config.isDebug()){
+                    options.codeview=true;
+                    varview=_.find(toolbar,function(item){
+                        returnitem[0]==='view';
                     });
-                    if (view) {
-                        if (!view[1].includes('codeview')) {
-                            view[1].splice(-1, 0, 'codeview');
+                    if(view){
+                        if(!view[1].includes('codeview')){
+                            view[1].splice(-1,0,'codeview');
                         }
-                    } else {
-                        toolbar.splice(-1, 0, ['view', ['codeview']]);
+                    }else{
+                        toolbar.splice(-1,0,['view',['codeview']]);
                     }
                 }
-                if (self.model === "mail.compose.message" || self.model === "mailing.mailing") {
-                    options.noVideos = true;
+                if(self.model==="mail.compose.message"||self.model==="mailing.mailing"){
+                    options.noVideos=true;
                 }
-                options.prettifyHtml = false;
-                return options;
+                options.prettifyHtml=false;
+                returnoptions;
             },
         });
     },
     /**
-     * trigger_up 'field_changed' add record into the "ir.attachment" field found in the view.
-     * This method is called when an image is uploaded via the media dialog.
+     *trigger_up'field_changed'addrecordintothe"ir.attachment"fieldfoundintheview.
+     *Thismethodiscalledwhenanimageisuploadedviathemediadialog.
      *
-     * For e.g. when sending email, this allows people to add attachments with the content
-     * editor interface and that they appear in the attachment list.
-     * The new documents being attached to the email, they will not be erased by the CRON
-     * when closing the wizard.
+     *Fore.g.whensendingemail,thisallowspeopletoaddattachmentswiththecontent
+     *editorinterfaceandthattheyappearintheattachmentlist.
+     *Thenewdocumentsbeingattachedtotheemail,theywillnotbeerasedbytheCRON
+     *whenclosingthewizard.
      *
-     * @private
-     * @param {Object} event the event containing attachment data
+     *@private
+     *@param{Object}eventtheeventcontainingattachmentdata
      */
-    _onAttachmentChange: function (event) {
-        // This only needs to happen for the composer for now
-        if (!this.fieldNameAttachment || this.model !== 'mail.compose.message') {
+    _onAttachmentChange:function(event){
+        //Thisonlyneedstohappenforthecomposerfornow
+        if(!this.fieldNameAttachment||this.model!=='mail.compose.message'){
             return;
         }
-        this.trigger_up('field_changed', {
-            dataPointID: this.dataPointID,
-            changes: _.object([this.fieldNameAttachment], [{
-                operation: 'ADD_M2M',
-                ids: event.data
+        this.trigger_up('field_changed',{
+            dataPointID:this.dataPointID,
+            changes:_.object([this.fieldNameAttachment],[{
+                operation:'ADD_M2M',
+                ids:event.data
             }])
         });
     },
     /**
-     * @override
+     *@override
      */
-    _renderEdit: function () {
-        var value = this._textToHtml(this.value);
-        if (this.nodeOptions.wrapper) {
-            value = this._wrap(value);
+    _renderEdit:function(){
+        varvalue=this._textToHtml(this.value);
+        if(this.nodeOptions.wrapper){
+            value=this._wrap(value);
         }
-        this.$target = $('<textarea>').val(value).hide();
+        this.$target=$('<textarea>').val(value).hide();
         this.$target.appendTo(this.$el);
 
-        var fieldNameAttachment = _.chain(this.recordData)
+        varfieldNameAttachment=_.chain(this.recordData)
             .pairs()
-            .find(function (value) {
-                return _.isObject(value[1]) && value[1].model === "ir.attachment";
+            .find(function(value){
+                return_.isObject(value[1])&&value[1].model==="ir.attachment";
             })
             .first()
             .value();
-        if (fieldNameAttachment) {
-            this.fieldNameAttachment = fieldNameAttachment;
+        if(fieldNameAttachment){
+            this.fieldNameAttachment=fieldNameAttachment;
         }
 
-        if (this.nodeOptions.cssEdit) {
-            // must be async because the target must be append in the DOM
+        if(this.nodeOptions.cssEdit){
+            //mustbeasyncbecausethetargetmustbeappendintheDOM
             this._createWysiwygIntance();
-        } else {
-            return this._createWysiwygIntance();
+        }else{
+            returnthis._createWysiwygIntance();
         }
     },
     /**
-     * @override
+     *@override
      */
-    _renderReadonly: function () {
-        var self = this;
-        var value = this._textToHtml(this.value);
-        if (this.nodeOptions.wrapper) {
-            value = this._wrap(value);
+    _renderReadonly:function(){
+        varself=this;
+        varvalue=this._textToHtml(this.value);
+        if(this.nodeOptions.wrapper){
+            value=this._wrap(value);
         }
 
         this.$el.empty();
-        var resolver;
-        var def = new Promise(function (resolve) {
-            resolver = resolve;
+        varresolver;
+        vardef=newPromise(function(resolve){
+            resolver=resolve;
         });
-        if (this.nodeOptions.cssReadonly) {
-            this.$iframe = $('<iframe class="o_readonly"/>');
+        if(this.nodeOptions.cssReadonly){
+            this.$iframe=$('<iframeclass="o_readonly"/>');
             this.$iframe.appendTo(this.$el);
 
-            var avoidDoubleLoad = 0; // this bug only appears on some computers with some chrome version.
+            varavoidDoubleLoad=0;//thisbugonlyappearsonsomecomputerswithsomechromeversion.
 
-            // inject content in iframe
+            //injectcontentiniframe
 
-            this.$iframe.data('loadDef', def); // for unit test
-            window.top[this._onUpdateIframeId] = function (_avoidDoubleLoad) {
-                if (_avoidDoubleLoad !== avoidDoubleLoad) {
-                    console.warn('Wysiwyg iframe double load detected');
+            this.$iframe.data('loadDef',def);//forunittest
+            window.top[this._onUpdateIframeId]=function(_avoidDoubleLoad){
+                if(_avoidDoubleLoad!==avoidDoubleLoad){
+                    console.warn('Wysiwygiframedoubleloaddetected');
                     return;
                 }
-                self.$content = $('#iframe_target', self.$iframe[0].contentWindow.document.body);
+                self.$content=$('#iframe_target',self.$iframe[0].contentWindow.document.body);
                 resolver();
             };
 
-            this.$iframe.on('load', function onLoad() {
-                var _avoidDoubleLoad = ++avoidDoubleLoad;
-                ajax.loadAsset(self.nodeOptions.cssReadonly).then(function (asset) {
-                    if (_avoidDoubleLoad !== avoidDoubleLoad) {
-                        console.warn('Wysiwyg immediate iframe double load detected');
+            this.$iframe.on('load',functiononLoad(){
+                var_avoidDoubleLoad=++avoidDoubleLoad;
+                ajax.loadAsset(self.nodeOptions.cssReadonly).then(function(asset){
+                    if(_avoidDoubleLoad!==avoidDoubleLoad){
+                        console.warn('Wysiwygimmediateiframedoubleloaddetected');
                         return;
                     }
-                    var cwindow = self.$iframe[0].contentWindow;
-                    try {
+                    varcwindow=self.$iframe[0].contentWindow;
+                    try{
                         cwindow.document;
-                    } catch (e) {
+                    }catch(e){
                         return;
                     }
                     cwindow.document
-                        .open("text/html", "replace")
+                        .open("text/html","replace")
                         .write(
-                            '<head>' +
-                                '<meta charset="utf-8"/>' +
-                                '<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>\n' +
-                                '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>\n' +
-                                _.map(asset.cssLibs, function (cssLib) {
-                                    return '<link type="text/css" rel="stylesheet" href="' + cssLib + '"/>';
-                                }).join('\n') + '\n' +
-                                _.map(asset.cssContents, function (cssContent) {
-                                    return '<style type="text/css">' + cssContent + '</style>';
-                                }).join('\n') + '\n' +
-                            '</head>\n' +
-                            '<body class="o_in_iframe o_readonly">\n' +
-                                '<div id="iframe_target">' + value + '</div>\n' +
-                                '<script type="text/javascript">' +
-                                    'if (window.top.' + self._onUpdateIframeId + ') {' +
-                                        'window.top.' + self._onUpdateIframeId + '(' + _avoidDoubleLoad + ')' +
-                                    '}' +
-                                '</script>\n' +
+                            '<head>'+
+                                '<metacharset="utf-8"/>'+
+                                '<metahttp-equiv="X-UA-Compatible"content="IE=edge,chrome=1"/>\n'+
+                                '<metaname="viewport"content="width=device-width,initial-scale=1,user-scalable=no"/>\n'+
+                                _.map(asset.cssLibs,function(cssLib){
+                                    return'<linktype="text/css"rel="stylesheet"href="'+cssLib+'"/>';
+                                }).join('\n')+'\n'+
+                                _.map(asset.cssContents,function(cssContent){
+                                    return'<styletype="text/css">'+cssContent+'</style>';
+                                }).join('\n')+'\n'+
+                            '</head>\n'+
+                            '<bodyclass="o_in_iframeo_readonly">\n'+
+                                '<divid="iframe_target">'+value+'</div>\n'+
+                                '<scripttype="text/javascript">'+
+                                    'if(window.top.'+self._onUpdateIframeId+'){'+
+                                        'window.top.'+self._onUpdateIframeId+'('+_avoidDoubleLoad+')'+
+                                    '}'+
+                                '</script>\n'+
                             '</body>');
 
-                    var height = cwindow.document.body.scrollHeight;
-                    self.$iframe.css('height', Math.max(30, Math.min(height, 500)) + 'px');
+                    varheight=cwindow.document.body.scrollHeight;
+                    self.$iframe.css('height',Math.max(30,Math.min(height,500))+'px');
                 });
             });
-        } else {
-            this.$content = $('<div class="o_readonly"/>').html(value);
+        }else{
+            this.$content=$('<divclass="o_readonly"/>').html(value);
             this.$content.appendTo(this.$el);
             resolver();
         }
 
-        def.then(function () {
-            self.$content.on('click', 'ul.o_checklist > li', self._onReadonlyClickChecklist.bind(self));
+        def.then(function(){
+            self.$content.on('click','ul.o_checklist>li',self._onReadonlyClickChecklist.bind(self));
         });
     },
     /**
-     * @private
-     * @param {string} text
-     * @returns {string} the text converted to html
+     *@private
+     *@param{string}text
+     *@returns{string}thetextconvertedtohtml
      */
-    _textToHtml: function (text) {
-        var value = text || "";
-        if (jinjaRegex.test(value)) { // is jinja
-            return value;
+    _textToHtml:function(text){
+        varvalue=text||"";
+        if(jinjaRegex.test(value)){//isjinja
+            returnvalue;
         }
-        try {
-            $(text)[0].innerHTML; // crashes if text isn't html
-        } catch (e) {
-            if (value.match(/^\s*$/)) {
-                value = '<p><br/></p>';
-            } else {
-                value = "<p>" + value.split(/<br\/?>/).join("<br/></p><p>") + "</p>";
-                value = value
-                            .replace(/<p><\/p>/g, '')
-                            .replace('<p><p>', '<p>')
-                            .replace('<p><p ', '<p ')
-                            .replace('</p></p>', '</p>');
+        try{
+            $(text)[0].innerHTML;//crashesiftextisn'thtml
+        }catch(e){
+            if(value.match(/^\s*$/)){
+                value='<p><br/></p>';
+            }else{
+                value="<p>"+value.split(/<br\/?>/).join("<br/></p><p>")+"</p>";
+                value=value
+                            .replace(/<p><\/p>/g,'')
+                            .replace('<p><p>','<p>')
+                            .replace('<p><p','<p')
+                            .replace('</p></p>','</p>');
             }
         }
-        return value;
+        returnvalue;
     },
     /**
-     * Move HTML contents out of their wrapper.
+     *MoveHTMLcontentsoutoftheirwrapper.
      *
-     * @private
-     * @param {string} html content
-     * @returns {string} html content
+     *@private
+     *@param{string}htmlcontent
+     *@returns{string}htmlcontent
      */
-    _unWrap: function (html) {
-        var $wrapper = $(html).find('#wrapper');
-        return $wrapper.length ? $wrapper.html() : html;
+    _unWrap:function(html){
+        var$wrapper=$(html).find('#wrapper');
+        return$wrapper.length?$wrapper.html():html;
     },
     /**
-     * Wrap HTML in order to create a custom display.
+     *WrapHTMLinordertocreateacustomdisplay.
      *
-     * The wrapper (this.nodeOptions.wrapper) must be a static
-     * XML template with content id="wrapper".
+     *Thewrapper(this.nodeOptions.wrapper)mustbeastatic
+     *XMLtemplatewithcontentid="wrapper".
      *
-     * @private
-     * @param {string} html content
-     * @returns {string} html content
+     *@private
+     *@param{string}htmlcontent
+     *@returns{string}htmlcontent
      */
-    _wrap: function (html) {
-        return $(QWeb.render(this.nodeOptions.wrapper))
+    _wrap:function(html){
+        return$(QWeb.render(this.nodeOptions.wrapper))
             .find('#wrapper').html(html)
             .end().prop('outerHTML');
     },
 
     //--------------------------------------------------------------------------
-    // Handler
+    //Handler
     //--------------------------------------------------------------------------
 
     /**
-     * Method called when wysiwyg triggers a change.
+     *Methodcalledwhenwysiwygtriggersachange.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onChange: function (ev) {
-        this._doDebouncedAction.apply(this, arguments);
+    _onChange:function(ev){
+        this._doDebouncedAction.apply(this,arguments);
 
-        var $lis = this.$content.find('.note-editable ul.o_checklist > li:not(:has(> ul.o_checklist))');
-        if (!$lis.length) {
+        var$lis=this.$content.find('.note-editableul.o_checklist>li:not(:has(>ul.o_checklist))');
+        if(!$lis.length){
             return;
         }
-        var max = 0;
-        var ids = [];
-        $lis.map(function () {
-            var checklistId = parseInt(($(this).attr('id') || '0').replace(/^checklist-id-/, ''));
-            if (ids.indexOf(checklistId) === -1) {
-                if (checklistId > max) {
-                    max = checklistId;
+        varmax=0;
+        varids=[];
+        $lis.map(function(){
+            varchecklistId=parseInt(($(this).attr('id')||'0').replace(/^checklist-id-/,''));
+            if(ids.indexOf(checklistId)===-1){
+                if(checklistId>max){
+                    max=checklistId;
                 }
                 ids.push(checklistId);
-            } else {
+            }else{
                 $(this).removeAttr('id');
             }
         });
-        $lis.not('[id]').each(function () {
-            $(this).attr('id', 'checklist-id-' + (++max));
+        $lis.not('[id]').each(function(){
+            $(this).attr('id','checklist-id-'+(++max));
         });
     },
     /**
-     * Allows Enter keypress in a textarea (source mode)
+     *AllowsEnterkeypressinatextarea(sourcemode)
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onKeydown: function (ev) {
-        if (ev.which === $.ui.keyCode.ENTER) {
+    _onKeydown:function(ev){
+        if(ev.which===$.ui.keyCode.ENTER){
             ev.stopPropagation();
             return;
         }
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
     /**
-     * Method called when wysiwyg triggers a change.
+     *Methodcalledwhenwysiwygtriggersachange.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onReadonlyClickChecklist: function (ev) {
-        var self = this;
-        if (ev.offsetX > 0) {
+    _onReadonlyClickChecklist:function(ev){
+        varself=this;
+        if(ev.offsetX>0){
             return;
         }
         ev.stopPropagation();
         ev.preventDefault();
-        var checked = $(ev.target).hasClass('o_checked');
-        var checklistId = parseInt(($(ev.target).attr('id') || '0').replace(/^checklist-id-/, ''));
+        varchecked=$(ev.target).hasClass('o_checked');
+        varchecklistId=parseInt(($(ev.target).attr('id')||'0').replace(/^checklist-id-/,''));
 
         this._rpc({
-            route: '/web_editor/checklist',
-            params: {
-                res_model: this.model,
-                res_id: this.res_id,
-                filename: this.name,
-                checklistId: checklistId,
-                checked: !checked,
+            route:'/web_editor/checklist',
+            params:{
+                res_model:this.model,
+                res_id:this.res_id,
+                filename:this.name,
+                checklistId:checklistId,
+                checked:!checked,
             },
-        }).then(function (value) {
+        }).then(function(value){
             self._setValue(value);
         });
     },
     /**
-     * Method called when the wysiwyg instance is loaded.
+     *Methodcalledwhenthewysiwyginstanceisloaded.
      *
-     * @private
+     *@private
      */
-    _onLoadWysiwyg: function () {
-        var $button = this._renderTranslateButton();
+    _onLoadWysiwyg:function(){
+        var$button=this._renderTranslateButton();
         $button.css({
-            'font-size': '15px',
-            position: 'absolute',
-            right: '+5px',
-            top: '+5px',
+            'font-size':'15px',
+            position:'absolute',
+            right:'+5px',
+            top:'+5px',
         });
         this.$el.append($button);
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onWysiwygBlur: function (ev) {
+    _onWysiwygBlur:function(ev){
         ev.stopPropagation();
         this._doAction();
-        if (ev.data.key === 'TAB') {
-            this.trigger_up('navigation_move', {
-                direction: ev.data.shiftKey ? 'left' : 'right',
+        if(ev.data.key==='TAB'){
+            this.trigger_up('navigation_move',{
+                direction:ev.data.shiftKey?'left':'right',
             });
         }
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onWysiwygFocus: function (ev) {},
+    _onWysiwygFocus:function(ev){},
 });
 
 
-field_registry.add('html', FieldHtml);
+field_registry.add('html',FieldHtml);
 
 
-return FieldHtml;
+returnFieldHtml;
 });

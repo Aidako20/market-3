@@ -1,44 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="res_users_view_form_preferences" model="ir.ui.view">
-            <field name="name">res.users.preferences.form.inherit</field>
-            <field name="model">res.users</field>
-            <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
-            <field name="arch" type="xml">
-                <group name="signature" position="after">
-                    <group name="Warehouses">
-                        <field name="property_warehouse_id" groups="stock.group_stock_multi_warehouses"/>
+        <recordid="res_users_view_form_preferences"model="ir.ui.view">
+            <fieldname="name">res.users.preferences.form.inherit</field>
+            <fieldname="model">res.users</field>
+            <fieldname="inherit_id"ref="base.view_users_form_simple_modif"/>
+            <fieldname="arch"type="xml">
+                <groupname="signature"position="after">
+                    <groupname="Warehouses">
+                        <fieldname="property_warehouse_id"groups="stock.group_stock_multi_warehouses"/>
                     </group>
                 </group>
             </field>
         </record>
 
-        <record id="res_users_view_simple_form" model="ir.ui.view">
-            <field name="name">res.users.simple.form.inherit</field>
-            <field name="model">res.users</field>
-            <field name="inherit_id" ref="base.view_users_simple_form"/>
-            <field name="arch" type="xml">
-                <group name="phone_numbers" position="after">
-                    <group name="Warehouses">
-                        <field name="property_warehouse_id" groups="stock.group_stock_multi_warehouses"/>
+        <recordid="res_users_view_simple_form"model="ir.ui.view">
+            <fieldname="name">res.users.simple.form.inherit</field>
+            <fieldname="model">res.users</field>
+            <fieldname="inherit_id"ref="base.view_users_simple_form"/>
+            <fieldname="arch"type="xml">
+                <groupname="phone_numbers"position="after">
+                    <groupname="Warehouses">
+                        <fieldname="property_warehouse_id"groups="stock.group_stock_multi_warehouses"/>
                     </group>
                 </group>
             </field>
         </record>
 
-        <record id="res_users_view_form" model="ir.ui.view">
-            <field name="name">res.users.form.inherit</field>
-            <field name="model">res.users</field>
-            <field name="inherit_id" ref="base.view_users_form"/>
-            <field name="arch" type="xml">
-                <group name="messaging" position="after">
-                    <group name="Warehouses" string="Inventory" groups="stock.group_stock_multi_warehouses">
-                        <field name="property_warehouse_id" groups="stock.group_stock_multi_warehouses"/>
+        <recordid="res_users_view_form"model="ir.ui.view">
+            <fieldname="name">res.users.form.inherit</field>
+            <fieldname="model">res.users</field>
+            <fieldname="inherit_id"ref="base.view_users_form"/>
+            <fieldname="arch"type="xml">
+                <groupname="messaging"position="after">
+                    <groupname="Warehouses"string="Inventory"groups="stock.group_stock_multi_warehouses">
+                        <fieldname="property_warehouse_id"groups="stock.group_stock_multi_warehouses"/>
                     </group>
                 </group>
             </field>
         </record>
 
     </data>
-</flectra> 
+</flectra>

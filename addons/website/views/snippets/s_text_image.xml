@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="s_text_image" name="Text - Image">
-    <section class="s_text_image pt32 pb32">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 pt16 pb16">
-                    <h2>A Section Subtitle</h2>
-                    <p>Write one or two paragraphs describing your product or services. To be successful your content needs to be useful to your readers.</p>
-                    <p>Start with the customer – find out what they want and give it to them.</p>
-                    <p><a href="#" class="btn btn-primary mb-2">Learn more</a></p>
+<templateid="s_text_image"name="Text-Image">
+    <sectionclass="s_text_imagept32pb32">
+        <divclass="container">
+            <divclass="rowalign-items-center">
+                <divclass="col-lg-6pt16pb16">
+                    <h2>ASectionSubtitle</h2>
+                    <p>Writeoneortwoparagraphsdescribingyourproductorservices.Tobesuccessfulyourcontentneedstobeusefultoyourreaders.</p>
+                    <p>Startwiththecustomer–findoutwhattheywantandgiveittothem.</p>
+                    <p><ahref="#"class="btnbtn-primarymb-2">Learnmore</a></p>
                 </div>
-                <div class="col-lg-6 pt16 pb16">
-                    <img src="/web/image/website.s_text_image_default_image" class="img img-fluid mx-auto" alt=""/>
+                <divclass="col-lg-6pt16pb16">
+                    <imgsrc="/web/image/website.s_text_image_default_image"class="imgimg-fluidmx-auto"alt=""/>
                 </div>
             </div>
         </div>

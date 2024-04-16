@@ -1,16 +1,16 @@
 <flectra>
-    <template id="portal_digest_unsubscribed" name="Unsubscription">
-        <t t-call="portal.portal_layout">
-            <div class="container mt8">
-                <div class="row">
-                    <div class="col-lg-6 offset-lg-3">
-                        <h3>Digest Subscriptions</h3>
-                        <div class="alert alert-success text-center" role="status">
-                            <p>You have been successfully unsubscribed from <strong t-field="digest.name"/></p>
+    <templateid="portal_digest_unsubscribed"name="Unsubscription">
+        <tt-call="portal.portal_layout">
+            <divclass="containermt8">
+                <divclass="row">
+                    <divclass="col-lg-6offset-lg-3">
+                        <h3>DigestSubscriptions</h3>
+                        <divclass="alertalert-successtext-center"role="status">
+                            <p>Youhavebeensuccessfullyunsubscribedfrom<strongt-field="digest.name"/></p>
                         </div>
                     </div>
                 </div>
             </div>
         </t>
     </template>
-</flectra> 
+</flectra>

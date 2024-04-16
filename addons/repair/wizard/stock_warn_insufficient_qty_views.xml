@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="stock_warn_insufficient_qty_repair_form_view" model="ir.ui.view">
-        <field name="name">stock.warn.insufficient.qty.repair</field>
-        <field name="model">stock.warn.insufficient.qty.repair</field>
-        <field name="inherit_id" ref="stock.stock_warn_insufficient_qty_form_view"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[@name='description']" position="after">
-                Do you confirm you want to repair <strong><field name="quantity" readonly="True"/></strong><field name="product_uom_name" readonly="True" class="mx-1"/>from location <strong><field name="location_id" readonly="True"/></strong>? This may lead to inconsistencies in your inventory.
+    <recordid="stock_warn_insufficient_qty_repair_form_view"model="ir.ui.view">
+        <fieldname="name">stock.warn.insufficient.qty.repair</field>
+        <fieldname="model">stock.warn.insufficient.qty.repair</field>
+        <fieldname="inherit_id"ref="stock.stock_warn_insufficient_qty_form_view"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[@name='description']"position="after">
+                Doyouconfirmyouwanttorepair<strong><fieldname="quantity"readonly="True"/></strong><fieldname="product_uom_name"readonly="True"class="mx-1"/>fromlocation<strong><fieldname="location_id"readonly="True"/></strong>?Thismayleadtoinconsistenciesinyourinventory.
             </xpath>
         </field>
     </record>

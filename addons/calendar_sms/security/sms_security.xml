@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="ir_rule_sms_template_system" model="ir.rule">
-        <field name="name">SMS Template: unnecessary rule for system group</field>
-        <field name="model_id" ref="sms.model_sms_template"/>
-        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
-        <!-- TDE NOTE: remove me in master, broken fix from flectra/flectra#64626 -->
-        <field name="domain_force">[(1, '=', 1)]</field>
-        <field name="perm_read" eval="False"/>
+    <recordid="ir_rule_sms_template_system"model="ir.rule">
+        <fieldname="name">SMSTemplate:unnecessaryruleforsystemgroup</field>
+        <fieldname="model_id"ref="sms.model_sms_template"/>
+        <fieldname="groups"eval="[(4,ref('base.group_system'))]"/>
+        <!--TDENOTE:removemeinmaster,brokenfixfromflectra/flectra#64626-->
+        <fieldname="domain_force">[(1,'=',1)]</field>
+        <fieldname="perm_read"eval="False"/>
     </record>
 </flectra>

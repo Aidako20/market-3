@@ -1,76 +1,76 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="s_comparisons" name="Comparisons">
-    <section class="s_comparisons pt32 pb32">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 s_col_no_bgcolor text-center pt32 pb16" data-name="Box">
-                    <div class="card bg-200">
-                        <h4 class="card-header">Beginner</h4>
-                        <div class="card-body text-center">
-                            <h2 class="card-title">
-                                <span class="s_comparisons_currency">$</span>
-                                <span class="s_comparisons_price"><b>35</b></span>
-                                <span class="s_comparisons_decimal">.00</span>
+<templateid="s_comparisons"name="Comparisons">
+    <sectionclass="s_comparisonspt32pb32">
+        <divclass="container">
+            <divclass="row">
+                <divclass="col-lg-4s_col_no_bgcolortext-centerpt32pb16"data-name="Box">
+                    <divclass="cardbg-200">
+                        <h4class="card-header">Beginner</h4>
+                        <divclass="card-bodytext-center">
+                            <h2class="card-title">
+                                <spanclass="s_comparisons_currency">$</span>
+                                <spanclass="s_comparisons_price"><b>35</b></span>
+                                <spanclass="s_comparisons_decimal">.00</span>
                             </h2>
-                            <small>/ month</small>
+                            <small>/month</small>
                         </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Basic sales &amp; marketing for up to 2 users</li>
-                            <li class="list-group-item">Account &amp; Sales management</li>
-                            <li class="list-group-item">No customization</li>
-                            <li class="list-group-item">No support</li>
+                        <ulclass="list-grouplist-group-flush">
+                            <liclass="list-group-item">Basicsales&amp;marketingforupto2users</li>
+                            <liclass="list-group-item">Account&amp;Salesmanagement</li>
+                            <liclass="list-group-item">Nocustomization</li>
+                            <liclass="list-group-item">Nosupport</li>
                         </ul>
-                        <div class="card-footer">
-                            <p><i>Instant setup, satisfied or reimbursed.</i></p>
-                            <a href="/contactus" class="btn btn-primary mb-2">Order now</a>
+                        <divclass="card-footer">
+                            <p><i>Instantsetup,satisfiedorreimbursed.</i></p>
+                            <ahref="/contactus"class="btnbtn-primarymb-2">Ordernow</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 s_col_no_bgcolor text-center pt32 pb16" data-name="Box">
-                    <div class="card bg-o-color-5">
-                        <h4 class="card-header">Professional</h4>
-                        <div class="card-body">
-                            <h2 class="card-title">
-                                <span class="s_comparisons_currency">$</span>
-                                <span class="s_comparisons_price"><b>65</b></span>
-                                <span class="s_comparisons_decimal">.00</span>
+                <divclass="col-lg-4s_col_no_bgcolortext-centerpt32pb16"data-name="Box">
+                    <divclass="cardbg-o-color-5">
+                        <h4class="card-header">Professional</h4>
+                        <divclass="card-body">
+                            <h2class="card-title">
+                                <spanclass="s_comparisons_currency">$</span>
+                                <spanclass="s_comparisons_price"><b>65</b></span>
+                                <spanclass="s_comparisons_decimal">.00</span>
                             </h2>
-                            <small>/ month</small>
+                            <small>/month</small>
                         </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Complete CRM for any size team</li>
-                            <li class="list-group-item">Get access to all modules</li>
-                            <li class="list-group-item">Limited customization</li>
-                            <li class="list-group-item">Email support</li>
+                        <ulclass="list-grouplist-group-flush">
+                            <liclass="list-group-item">CompleteCRMforanysizeteam</li>
+                            <liclass="list-group-item">Getaccesstoallmodules</li>
+                            <liclass="list-group-item">Limitedcustomization</li>
+                            <liclass="list-group-item">Emailsupport</li>
                         </ul>
-                        <div class="card-footer">
-                            <p><i>Instant setup, satisfied or reimbursed.</i></p>
-                            <a href="/contactus" class="btn btn-primary mb-2">Start now</a>
+                        <divclass="card-footer">
+                            <p><i>Instantsetup,satisfiedorreimbursed.</i></p>
+                            <ahref="/contactus"class="btnbtn-primarymb-2">Startnow</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 s_col_no_bgcolor text-center pt32 pb16" data-name="Box">
-                    <div class="card bg-secondary">
-                        <h4 class="card-header">Expert</h4>
-                        <div class="card-body text-center">
-                            <h2 class="card-title">
-                                <span class="s_comparisons_currency">$</span>
-                                <span class="s_comparisons_price"><b>125</b></span>
-                                <span class="s_comparisons_decimal">.00</span>
+                <divclass="col-lg-4s_col_no_bgcolortext-centerpt32pb16"data-name="Box">
+                    <divclass="cardbg-secondary">
+                        <h4class="card-header">Expert</h4>
+                        <divclass="card-bodytext-center">
+                            <h2class="card-title">
+                                <spanclass="s_comparisons_currency">$</span>
+                                <spanclass="s_comparisons_price"><b>125</b></span>
+                                <spanclass="s_comparisons_decimal">.00</span>
                             </h2>
-                            <small>/ month</small>
+                            <small>/month</small>
                         </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Unlimited CRM power and support</li>
-                            <li class="list-group-item">Get access to all modules and features</li>
-                            <li class="list-group-item">Unlimited customization</li>
-                            <li class="list-group-item">24x7 toll-free support</li>
+                        <ulclass="list-grouplist-group-flush">
+                            <liclass="list-group-item">UnlimitedCRMpowerandsupport</li>
+                            <liclass="list-group-item">Getaccesstoallmodulesandfeatures</li>
+                            <liclass="list-group-item">Unlimitedcustomization</li>
+                            <liclass="list-group-item">24x7toll-freesupport</li>
                         </ul>
-                        <div class="card-footer">
-                            <p><i>Instant setup, satisfied or reimbursed.</i></p>
-                            <a href="/contactus" class="btn btn-primary mb-2">Contact us</a>
+                        <divclass="card-footer">
+                            <p><i>Instantsetup,satisfiedorreimbursed.</i></p>
+                            <ahref="/contactus"class="btnbtn-primarymb-2">Contactus</a>
                         </div>
                     </div>
                 </div>
@@ -79,9 +79,9 @@
     </section>
 </template>
 
-<template id="assets_snippet_s_comparisons_css_000" inherit_id="website.assets_frontend">
-    <xpath expr="//link[last()]" position="after">
-        <link rel="stylesheet" type="text/scss" href="/website/static/src/snippets/s_comparisons/000.scss"/>
+<templateid="assets_snippet_s_comparisons_css_000"inherit_id="website.assets_frontend">
+    <xpathexpr="//link[last()]"position="after">
+        <linkrel="stylesheet"type="text/scss"href="/website/static/src/snippets/s_comparisons/000.scss"/>
     </xpath>
 </template>
 

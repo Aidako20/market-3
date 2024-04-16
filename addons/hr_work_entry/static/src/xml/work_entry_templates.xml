@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <templates>
-    <t t-name="hr_work_entry.work_entry_button">
-        <button t-if="disabled" disabled="" title="Solve conflicts first" t-attf-class="btn btn-primary btn-work-entry {{ event_class }}" type="button" t-esc="button_text"/>
-        <button t-else="" t-attf-class="btn btn-primary btn-work-entry {{ event_class }}" type="button" t-esc="button_text"/>
+    <tt-name="hr_work_entry.work_entry_button">
+        <buttont-if="disabled"disabled=""title="Solveconflictsfirst"t-attf-class="btnbtn-primarybtn-work-entry{{event_class}}"type="button"t-esc="button_text"/>
+        <buttont-else=""t-attf-class="btnbtn-primarybtn-work-entry{{event_class}}"type="button"t-esc="button_text"/>
     </t>
 </templates>

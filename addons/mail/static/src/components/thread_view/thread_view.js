@@ -1,222 +1,222 @@
-flectra.define('mail/static/src/components/thread_view/thread_view.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/thread_view/thread_view.js',function(require){
+'usestrict';
 
-const components = {
-    Composer: require('mail/static/src/components/composer/composer.js'),
-    MessageList: require('mail/static/src/components/message_list/message_list.js'),
+constcomponents={
+    Composer:require('mail/static/src/components/composer/composer.js'),
+    MessageList:require('mail/static/src/components/message_list/message_list.js'),
 };
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
-const useUpdate = require('mail/static/src/component_hooks/use_update/use_update.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseUpdate=require('mail/static/src/component_hooks/use_update/use_update.js');
 
-const { Component } = owl;
-const { useRef } = owl.hooks;
+const{Component}=owl;
+const{useRef}=owl.hooks;
 
-class ThreadView extends Component {
+classThreadViewextendsComponent{
 
     /**
-     * @param {...any} args
+     *@param{...any}args
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps();
-        useStore((...args) => this._useStoreSelector(...args), {
-            compareDepth: {
-                threadTextInputSendShortcuts: 1,
+        useStore((...args)=>this._useStoreSelector(...args),{
+            compareDepth:{
+                threadTextInputSendShortcuts:1,
             },
         });
-        useUpdate({ func: () => this._update() });
+        useUpdate({func:()=>this._update()});
         /**
-         * Reference of the composer. Useful to set focus on composer when
-         * thread has the focus.
+         *Referenceofthecomposer.Usefultosetfocusoncomposerwhen
+         *threadhasthefocus.
          */
-        this._composerRef = useRef('composer');
+        this._composerRef=useRef('composer');
         /**
-         * Reference of the message list. Useful to determine scroll positions.
+         *Referenceofthemessagelist.Usefultodeterminescrollpositions.
          */
-        this._messageListRef = useRef('messageList');
+        this._messageListRef=useRef('messageList');
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Focus the thread. If it has a composer, focus it.
+     *Focusthethread.Ifithasacomposer,focusit.
      */
-    focus() {
-        if (!this._composerRef.comp) {
+    focus(){
+        if(!this._composerRef.comp){
             return;
         }
         this._composerRef.comp.focus();
     }
 
     /**
-     * Focusout the thread.
+     *Focusoutthethread.
      */
-    focusout() {
-        if (!this._composerRef.comp) {
+    focusout(){
+        if(!this._composerRef.comp){
             return;
         }
         this._composerRef.comp.focusout();
     }
 
     /**
-     * Get the scroll height in the message list.
+     *Getthescrollheightinthemessagelist.
      *
-     * @returns {integer|undefined}
+     *@returns{integer|undefined}
      */
-    getScrollHeight() {
-        if (!this._messageListRef.comp) {
-            return undefined;
+    getScrollHeight(){
+        if(!this._messageListRef.comp){
+            returnundefined;
         }
-        return this._messageListRef.comp.getScrollHeight();
+        returnthis._messageListRef.comp.getScrollHeight();
     }
 
     /**
-     * Get the scroll position in the message list.
+     *Getthescrollpositioninthemessagelist.
      *
-     * @returns {integer|undefined}
+     *@returns{integer|undefined}
      */
-    getScrollTop() {
-        if (!this._messageListRef.comp) {
-            return undefined;
+    getScrollTop(){
+        if(!this._messageListRef.comp){
+            returnundefined;
         }
-        return this._messageListRef.comp.getScrollTop();
+        returnthis._messageListRef.comp.getScrollTop();
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    onScroll(ev) {
-        if (!this._messageListRef.comp) {
+    onScroll(ev){
+        if(!this._messageListRef.comp){
             return;
         }
         this._messageListRef.comp.onScroll(ev);
     }
 
     /**
-     * @returns {mail.thread_view}
+     *@returns{mail.thread_view}
      */
-    get threadView() {
-        return this.env.models['mail.thread_view'].get(this.props.threadViewLocalId);
+    getthreadView(){
+        returnthis.env.models['mail.thread_view'].get(this.props.threadViewLocalId);
     }
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Called when thread component is mounted or patched.
+     *Calledwhenthreadcomponentismountedorpatched.
      *
-     * @private
+     *@private
      */
-    _update() {
+    _update(){
         this.trigger('o-rendered');
     }
 
     /**
-     * Returns data selected from the store.
+     *Returnsdataselectedfromthestore.
      *
-     * @private
-     * @param {Object} props
-     * @returns {Object}
+     *@private
+     *@param{Object}props
+     *@returns{Object}
      */
-    _useStoreSelector(props) {
-        const threadView = this.env.models['mail.thread_view'].get(props.threadViewLocalId);
-        const thread = threadView ? threadView.thread : undefined;
-        const threadCache = threadView ? threadView.threadCache : undefined;
-        const correspondent = thread && thread.correspondent;
-        return {
-            composer: thread && thread.composer,
-            correspondentId: correspondent && correspondent.id,
-            isDeviceMobile: this.env.messaging.device.isMobile,
+    _useStoreSelector(props){
+        constthreadView=this.env.models['mail.thread_view'].get(props.threadViewLocalId);
+        constthread=threadView?threadView.thread:undefined;
+        constthreadCache=threadView?threadView.threadCache:undefined;
+        constcorrespondent=thread&&thread.correspondent;
+        return{
+            composer:thread&&thread.composer,
+            correspondentId:correspondent&&correspondent.id,
+            isDeviceMobile:this.env.messaging.device.isMobile,
             thread,
-            threadCacheIsLoaded: threadCache && threadCache.isLoaded,
-            threadIsTemporary: thread && thread.isTemporary,
-            threadMassMailing: thread && thread.mass_mailing,
-            threadModel: thread && thread.model,
-            threadTextInputSendShortcuts: thread && thread.textInputSendShortcuts || [],
+            threadCacheIsLoaded:threadCache&&threadCache.isLoaded,
+            threadIsTemporary:thread&&thread.isTemporary,
+            threadMassMailing:thread&&thread.mass_mailing,
+            threadModel:thread&&thread.model,
+            threadTextInputSendShortcuts:thread&&thread.textInputSendShortcuts||[],
             threadView,
-            threadViewIsLoading: threadView && threadView.isLoading,
+            threadViewIsLoading:threadView&&threadView.isLoading,
         };
     }
 
 }
 
-Object.assign(ThreadView, {
+Object.assign(ThreadView,{
     components,
-    defaultProps: {
-        composerAttachmentsDetailsMode: 'auto',
-        hasComposer: false,
-        hasMessageCheckbox: false,
-        hasSquashCloseMessages: false,
-        haveMessagesMarkAsReadIcon: false,
-        haveMessagesReplyIcon: false,
-        isDoFocus: false,
-        order: 'asc',
-        showComposerAttachmentsExtensions: true,
-        showComposerAttachmentsFilenames: true,
+    defaultProps:{
+        composerAttachmentsDetailsMode:'auto',
+        hasComposer:false,
+        hasMessageCheckbox:false,
+        hasSquashCloseMessages:false,
+        haveMessagesMarkAsReadIcon:false,
+        haveMessagesReplyIcon:false,
+        isDoFocus:false,
+        order:'asc',
+        showComposerAttachmentsExtensions:true,
+        showComposerAttachmentsFilenames:true,
     },
-    props: {
-        composerAttachmentsDetailsMode: {
-            type: String,
-            validate: prop => ['auto', 'card', 'hover', 'none'].includes(prop),
+    props:{
+        composerAttachmentsDetailsMode:{
+            type:String,
+            validate:prop=>['auto','card','hover','none'].includes(prop),
         },
-        hasComposer: Boolean,
-        hasComposerCurrentPartnerAvatar: {
-            type: Boolean,
-            optional: true,
+        hasComposer:Boolean,
+        hasComposerCurrentPartnerAvatar:{
+            type:Boolean,
+            optional:true,
         },
-        hasComposerSendButton: {
-            type: Boolean,
-            optional: true,
-        },
-        /**
-         * If set, determines whether the composer should display status of
-         * members typing on related thread. When this prop is not provided,
-         * it defaults to composer component default value.
-         */
-        hasComposerThreadTyping: {
-            type: Boolean,
-            optional: true,
-        },
-        hasMessageCheckbox: Boolean,
-        hasScrollAdjust: {
-            type: Boolean,
-            optional: true,
-        },
-        hasSquashCloseMessages: Boolean,
-        haveMessagesMarkAsReadIcon: Boolean,
-        haveMessagesReplyIcon: Boolean,
-        /**
-         * Determines whether this should become focused.
-         */
-        isDoFocus: Boolean,
-        order: {
-            type: String,
-            validate: prop => ['asc', 'desc'].includes(prop),
-        },
-        selectedMessageLocalId: {
-            type: String,
-            optional: true,
+        hasComposerSendButton:{
+            type:Boolean,
+            optional:true,
         },
         /**
-         * Function returns the exact scrollable element from the parent
-         * to manage proper scroll heights which affects the load more messages.
+         *Ifset,determineswhetherthecomposershoulddisplaystatusof
+         *memberstypingonrelatedthread.Whenthispropisnotprovided,
+         *itdefaultstocomposercomponentdefaultvalue.
          */
-        getScrollableElement: {
-            type: Function,
-            optional: true,
+        hasComposerThreadTyping:{
+            type:Boolean,
+            optional:true,
         },
-        showComposerAttachmentsExtensions: Boolean,
-        showComposerAttachmentsFilenames: Boolean,
-        threadViewLocalId: String,
+        hasMessageCheckbox:Boolean,
+        hasScrollAdjust:{
+            type:Boolean,
+            optional:true,
+        },
+        hasSquashCloseMessages:Boolean,
+        haveMessagesMarkAsReadIcon:Boolean,
+        haveMessagesReplyIcon:Boolean,
+        /**
+         *Determineswhetherthisshouldbecomefocused.
+         */
+        isDoFocus:Boolean,
+        order:{
+            type:String,
+            validate:prop=>['asc','desc'].includes(prop),
+        },
+        selectedMessageLocalId:{
+            type:String,
+            optional:true,
+        },
+        /**
+         *Functionreturnstheexactscrollableelementfromtheparent
+         *tomanageproperscrollheightswhichaffectstheloadmoremessages.
+         */
+        getScrollableElement:{
+            type:Function,
+            optional:true,
+        },
+        showComposerAttachmentsExtensions:Boolean,
+        showComposerAttachmentsFilenames:Boolean,
+        threadViewLocalId:String,
     },
-    template: 'mail.ThreadView',
+    template:'mail.ThreadView',
 });
 
-return ThreadView;
+returnThreadView;
 
 });

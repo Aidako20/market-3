@@ -1,37 +1,37 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import _, models
-from flectra.exceptions import UserError
+fromflectraimport_,models
+fromflectra.exceptionsimportUserError
 
 
-class MrpBom(models.Model):
-    _inherit = 'mrp.bom'
+classMrpBom(models.Model):
+    _inherit='mrp.bom'
 
-    def toggle_active(self):
-        self.filtered(lambda bom: bom.active)._ensure_bom_is_free()
-        return super().toggle_active()
+    deftoggle_active(self):
+        self.filtered(lambdabom:bom.active)._ensure_bom_is_free()
+        returnsuper().toggle_active()
 
-    def unlink(self):
+    defunlink(self):
         self._ensure_bom_is_free()
-        return super().unlink()
+        returnsuper().unlink()
 
-    def _ensure_bom_is_free(self):
-        product_ids = []
-        for bom in self:
-            if bom.type != 'phantom':
+    def_ensure_bom_is_free(self):
+        product_ids=[]
+        forbominself:
+            ifbom.type!='phantom':
                 continue
-            product_ids += bom.product_id.ids or bom.product_tmpl_id.product_variant_ids.ids
-        if not product_ids:
+            product_ids+=bom.product_id.idsorbom.product_tmpl_id.product_variant_ids.ids
+        ifnotproduct_ids:
             return
-        lines = self.env['sale.order.line'].search([
-            ('state', 'in', ('sale', 'done')),
-            ('invoice_status', 'in', ('no', 'to invoice')),
-            ('product_id', 'in', product_ids),
-            ('move_ids.state', '!=', 'cancel'),
+        lines=self.env['sale.order.line'].search([
+            ('state','in',('sale','done')),
+            ('invoice_status','in',('no','toinvoice')),
+            ('product_id','in',product_ids),
+            ('move_ids.state','!=','cancel'),
         ])
-        if lines:
-            product_names = ', '.join(lines.product_id.mapped('name'))
-            raise UserError(_('As long as there are some sale order lines that must be delivered/invoiced and are '
-                              'related to these bills of materials, you can not remove them.\n'
-                              'The error concerns these products: %s', product_names))
+        iflines:
+            product_names=','.join(lines.product_id.mapped('name'))
+            raiseUserError(_('Aslongastherearesomesaleorderlinesthatmustbedelivered/invoicedandare'
+                              'relatedtothesebillsofmaterials,youcannotremovethem.\n'
+                              'Theerrorconcernstheseproducts:%s',product_names))

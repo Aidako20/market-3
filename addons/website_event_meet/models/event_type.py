@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class EventType(models.Model):
-    _inherit = "event.type"
+classEventType(models.Model):
+    _inherit="event.type"
 
-    meeting_room_allow_creation = fields.Boolean(
-        "Allow Room Creation", compute='_compute_meeting_room_allow_creation',
-        readonly=False, store=True,
-        help="Let Visitors Create Rooms")
+    meeting_room_allow_creation=fields.Boolean(
+        "AllowRoomCreation",compute='_compute_meeting_room_allow_creation',
+        readonly=False,store=True,
+        help="LetVisitorsCreateRooms")
 
     @api.depends('community_menu')
-    def _compute_meeting_room_allow_creation(self):
-        for event_type in self:
-            event_type.meeting_room_allow_creation = event_type.community_menu
+    def_compute_meeting_room_allow_creation(self):
+        forevent_typeinself:
+            event_type.meeting_room_allow_creation=event_type.community_menu

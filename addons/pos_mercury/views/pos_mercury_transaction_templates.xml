@@ -1,66 +1,66 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xmlversion='1.0'encoding='utf-8'?>
 <flectra>
   <data>
-    <template id='mercury_common'>
-      <MerchantID><t t-esc='merchant_id'/></MerchantID>
-      <TranType><t t-esc='transaction_type'/></TranType>
-      <TranCode><t t-esc='transaction_code'/></TranCode>
-      <InvoiceNo><t t-esc='invoice_no'/></InvoiceNo>
-      <Frequency t-translation="off">OneTime</Frequency>
+    <templateid='mercury_common'>
+      <MerchantID><tt-esc='merchant_id'/></MerchantID>
+      <TranType><tt-esc='transaction_type'/></TranType>
+      <TranCode><tt-esc='transaction_code'/></TranCode>
+      <InvoiceNo><tt-esc='invoice_no'/></InvoiceNo>
+      <Frequencyt-translation="off">OneTime</Frequency>
     </template>
 
-    <template id='mercury_transaction'>
-      <TStream t-translation="off">
+    <templateid='mercury_transaction'>
+      <TStreamt-translation="off">
         <Transaction>
-          <t t-call='pos_mercury.mercury_common'/>
-          <OperatorID><t t-esc='operator_id'/></OperatorID>
+          <tt-call='pos_mercury.mercury_common'/>
+          <OperatorID><tt-esc='operator_id'/></OperatorID>
           <RecordNo>RecordNumberRequested</RecordNo>
           <PartialAuth>Allow</PartialAuth>
-          <Memo><t t-esc='memo'/></Memo>
+          <Memo><tt-esc='memo'/></Memo>
           <Account>
             <AccountSource>Swiped</AccountSource>
-            <EncryptedBlock><t t-esc='encrypted_block'/></EncryptedBlock>
-            <EncryptedKey><t t-esc='encrypted_key'/></EncryptedKey>
+            <EncryptedBlock><tt-esc='encrypted_block'/></EncryptedBlock>
+            <EncryptedKey><tt-esc='encrypted_key'/></EncryptedKey>
             <EncryptedFormat>MagneSafe</EncryptedFormat>
           </Account>
           <Amount>
-            <Purchase><t t-esc='"%.2f" % purchase'/></Purchase> <!-- format required by Vantiv -->
+            <Purchase><tt-esc='"%.2f"%purchase'/></Purchase><!--formatrequiredbyVantiv-->
           </Amount>
         </Transaction>
       </TStream>
     </template>
 
-    <template id='mercury_voidsale'>
-      <TStream t-translation="off">
+    <templateid='mercury_voidsale'>
+      <TStreamt-translation="off">
         <Transaction>
-          <t t-call='pos_mercury.mercury_common'/>
-          <RefNo><t t-esc='ref_no'/></RefNo>
-          <RecordNo><t t-esc='record_no'/></RecordNo>
-          <Memo><t t-esc='memo'/></Memo>
+          <tt-call='pos_mercury.mercury_common'/>
+          <RefNo><tt-esc='ref_no'/></RefNo>
+          <RecordNo><tt-esc='record_no'/></RecordNo>
+          <Memo><tt-esc='memo'/></Memo>
           <Amount>
-            <Purchase><t t-esc='"%.2f" % authorize'/></Purchase> <!-- format required by Vantiv -->
+            <Purchase><tt-esc='"%.2f"%authorize'/></Purchase><!--formatrequiredbyVantiv-->
           </Amount>
           <TranInfo>
-            <AuthCode><t t-esc='auth_code'/></AuthCode>
-            <t t-if='not is_voidsale'>
-              <AcqRefData><t t-esc='acq_ref_data'/></AcqRefData>
-              <ProcessData><t t-esc='process_data'/></ProcessData>
+            <AuthCode><tt-esc='auth_code'/></AuthCode>
+            <tt-if='notis_voidsale'>
+              <AcqRefData><tt-esc='acq_ref_data'/></AcqRefData>
+              <ProcessData><tt-esc='process_data'/></ProcessData>
             </t>
           </TranInfo>
         </Transaction>
       </TStream>
     </template>
 
-    <template id='mercury_return'>
-      <TStream t-translation="off">
+    <templateid='mercury_return'>
+      <TStreamt-translation="off">
         <Transaction>
-          <t t-call='pos_mercury.mercury_common'/>
-          <OperatorID><t t-esc='operator_id'/></OperatorID>
+          <tt-call='pos_mercury.mercury_common'/>
+          <OperatorID><tt-esc='operator_id'/></OperatorID>
           <PartialAuth>Allow</PartialAuth>
-          <RefNo><t t-esc='ref_no'/></RefNo>
-          <RecordNo><t t-esc='record_no'/></RecordNo>
+          <RefNo><tt-esc='ref_no'/></RefNo>
+          <RecordNo><tt-esc='record_no'/></RecordNo>
           <Amount>
-            <Purchase><t t-esc='"%.2f" % purchase'/></Purchase>
+            <Purchase><tt-esc='"%.2f"%purchase'/></Purchase>
           </Amount>
         </Transaction>
       </TStream>

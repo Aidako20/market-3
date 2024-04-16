@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = "res.config.settings"
+classResConfigSettings(models.TransientModel):
+    _inherit="res.config.settings"
 
-    website_slide_google_app_key = fields.Char(related='website_id.website_slide_google_app_key', readonly=False)
-    module_website_sale_slides = fields.Boolean(string="Sell on eCommerce")
-    module_website_slides_forum = fields.Boolean(string="Forum")
-    module_website_slides_survey = fields.Boolean(string="Certifications")
-    module_mass_mailing_slides = fields.Boolean(string="Mailing")
+    website_slide_google_app_key=fields.Char(related='website_id.website_slide_google_app_key',readonly=False)
+    module_website_sale_slides=fields.Boolean(string="SelloneCommerce")
+    module_website_slides_forum=fields.Boolean(string="Forum")
+    module_website_slides_survey=fields.Boolean(string="Certifications")
+    module_mass_mailing_slides=fields.Boolean(string="Mailing")

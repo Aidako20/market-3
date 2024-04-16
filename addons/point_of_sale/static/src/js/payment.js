@@ -1,95 +1,95 @@
-flectra.define('point_of_sale.PaymentInterface', function (require) {
-"use strict";
+flectra.define('point_of_sale.PaymentInterface',function(require){
+"usestrict";
 
-var core = require('web.core');
+varcore=require('web.core');
 
 /**
- * Implement this interface to support a new payment method in the POS:
+ *ImplementthisinterfacetosupportanewpaymentmethodinthePOS:
  *
- * var PaymentInterface = require('point_of_sale.PaymentInterface');
- * var MyPayment = PaymentInterface.extend({
- *     ...
- * })
+ *varPaymentInterface=require('point_of_sale.PaymentInterface');
+ *varMyPayment=PaymentInterface.extend({
+ *    ...
+ *})
  *
- * To connect the interface to the right payment methods register it:
+ *Toconnecttheinterfacetotherightpaymentmethodsregisterit:
  *
- * var models = require('point_of_sale.models');
- * models.register_payment_method('my_payment', MyPayment);
+ *varmodels=require('point_of_sale.models');
+ *models.register_payment_method('my_payment',MyPayment);
  *
- * my_payment is the technical name of the added selection in
- * use_payment_terminal.
+ *my_paymentisthetechnicalnameoftheaddedselectionin
+ *use_payment_terminal.
  *
- * If necessary new fields can be loaded on any model:
+ *Ifnecessarynewfieldscanbeloadedonanymodel:
  *
- * models.load_fields('pos.payment.method', ['new_field1', 'new_field2']);
+ *models.load_fields('pos.payment.method',['new_field1','new_field2']);
  */
-var PaymentInterface = core.Class.extend({
-    init: function (pos, payment_method) {
-        this.pos = pos;
-        this.payment_method = payment_method;
-        this.supports_reversals = false;
+varPaymentInterface=core.Class.extend({
+    init:function(pos,payment_method){
+        this.pos=pos;
+        this.payment_method=payment_method;
+        this.supports_reversals=false;
     },
 
     /**
-     * Call this function to enable UI elements that allow a user to
-     * reverse a payment. This requires that you implement
-     * send_payment_reversal.
+     *CallthisfunctiontoenableUIelementsthatallowauserto
+     *reverseapayment.Thisrequiresthatyouimplement
+     *send_payment_reversal.
      */
-    enable_reversals: function () {
-        this.supports_reversals = true;
+    enable_reversals:function(){
+        this.supports_reversals=true;
     },
 
     /**
-     * Called when a user clicks the "Send" button in the
-     * interface. This should initiate a payment request and return a
-     * Promise that resolves when the final status of the payment line
-     * is set with set_payment_status.
+     *Calledwhenauserclicksthe"Send"buttoninthe
+     *interface.Thisshouldinitiateapaymentrequestandreturna
+     *Promisethatresolveswhenthefinalstatusofthepaymentline
+     *issetwithset_payment_status.
      *
-     * For successful transactions set_receipt_info() should be used
-     * to set info that should to be printed on the receipt. You
-     * should also set card_type and transaction_id on the line for
-     * successful transactions.
+     *Forsuccessfultransactionsset_receipt_info()shouldbeused
+     *tosetinfothatshouldtobeprintedonthereceipt.You
+     *shouldalsosetcard_typeandtransaction_idonthelinefor
+     *successfultransactions.
      *
-     * @param {string} cid - The id of the paymentline
-     * @returns {Promise} resolved with a boolean that is false when
-     * the payment should be retried. Rejected when the status of the
-     * paymentline will be manually updated.
+     *@param{string}cid-Theidofthepaymentline
+     *@returns{Promise}resolvedwithabooleanthatisfalsewhen
+     *thepaymentshouldberetried.Rejectedwhenthestatusofthe
+     *paymentlinewillbemanuallyupdated.
      */
-    send_payment_request: function (cid) {},
+    send_payment_request:function(cid){},
 
     /**
-     * Called when a user removes a payment line that's still waiting
-     * on send_payment_request to complete. Should execute some
-     * request to ensure the current payment request is
-     * cancelled. This is not to refund payments, only to cancel
-     * them. The payment line being cancelled will be deleted
-     * automatically after the returned promise resolves.
+     *Calledwhenauserremovesapaymentlinethat'sstillwaiting
+     *onsend_payment_requesttocomplete.Shouldexecutesome
+     *requesttoensurethecurrentpaymentrequestis
+     *cancelled.Thisisnottorefundpayments,onlytocancel
+     *them.Thepaymentlinebeingcancelledwillbedeleted
+     *automaticallyafterthereturnedpromiseresolves.
      *
-     * @param {} order - The order of the paymentline
-     * @param {string} cid - The id of the paymentline
-     * @returns {Promise}
+     *@param{}order-Theorderofthepaymentline
+     *@param{string}cid-Theidofthepaymentline
+     *@returns{Promise}
      */
-    send_payment_cancel: function (order, cid) {},
+    send_payment_cancel:function(order,cid){},
 
     /**
-     * This is an optional method. When implementing this make sure to
-     * call enable_reversals() in the constructor of your
-     * interface. This should reverse a previous payment with status
-     * 'done'. The paymentline will be removed based on returned
-     * Promise.
+     *Thisisanoptionalmethod.Whenimplementingthismakesureto
+     *callenable_reversals()intheconstructorofyour
+     *interface.Thisshouldreverseapreviouspaymentwithstatus
+     *'done'.Thepaymentlinewillberemovedbasedonreturned
+     *Promise.
      *
-     * @param {string} cid - The id of the paymentline
-     * @returns {Promise} returns true if the reversal was successful.
+     *@param{string}cid-Theidofthepaymentline
+     *@returns{Promise}returnstrueifthereversalwassuccessful.
      */
-    send_payment_reversal: function (cid) {},
+    send_payment_reversal:function(cid){},
 
     /**
-     * Called when the payment screen in the POS is closed (by
-     * e.g. clicking the "Back" button). Could be used to cancel in
-     * progress payments.
+     *CalledwhenthepaymentscreeninthePOSisclosed(by
+     *e.g.clickingthe"Back"button).Couldbeusedtocancelin
+     *progresspayments.
      */
-    close: function () {},
+    close:function(){},
 });
 
-return PaymentInterface;
+returnPaymentInterface;
 });

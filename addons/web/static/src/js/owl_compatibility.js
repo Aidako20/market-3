@@ -1,399 +1,399 @@
-flectra.define('web.OwlCompatibility', function () {
-    "use strict";
+flectra.define('web.OwlCompatibility',function(){
+    "usestrict";
 
     /**
-     * This file defines the necessary tools for the transition phase where Flectra
-     * legacy widgets and Owl components will coexist. There are two possible
-     * scenarios:
-     *  1) An Owl component has to instantiate legacy widgets
-     *  2) A legacy widget has to instantiate Owl components
+     *ThisfiledefinesthenecessarytoolsforthetransitionphasewhereFlectra
+     *legacywidgetsandOwlcomponentswillcoexist.Therearetwopossible
+     *scenarios:
+     * 1)AnOwlcomponenthastoinstantiatelegacywidgets
+     * 2)AlegacywidgethastoinstantiateOwlcomponents
      */
 
-    const { Component, hooks, tags } = owl;
-    const { useRef, useSubEnv } = hooks;
-    const { xml } = tags;
+    const{Component,hooks,tags}=owl;
+    const{useRef,useSubEnv}=hooks;
+    const{xml}=tags;
 
-    const widgetSymbol = flectra.widgetSymbol;
-    const children = new WeakMap(); // associates legacy widgets with their Owl children
+    constwidgetSymbol=flectra.widgetSymbol;
+    constchildren=newWeakMap();//associateslegacywidgetswiththeirOwlchildren
 
     /**
-     * Case 1) An Owl component has to instantiate legacy widgets
-     * ----------------------------------------------------------
+     *Case1)AnOwlcomponenthastoinstantiatelegacywidgets
+     *----------------------------------------------------------
      *
-     * The ComponentAdapter is an Owl component meant to be used as universal
-     * adapter for Owl components that embed Flectra legacy widgets (or dynamically
-     * both Owl components and Flectra legacy widgets), e.g.:
+     *TheComponentAdapterisanOwlcomponentmeanttobeusedasuniversal
+     *adapterforOwlcomponentsthatembedFlectralegacywidgets(ordynamically
+     *bothOwlcomponentsandFlectralegacywidgets),e.g.:
      *
-     *                           Owl Component
-     *                                 |
-     *                         ComponentAdapter (Owl component)
-     *                                 |
-     *                       Legacy Widget(s) (or Owl component(s))
+     *                          OwlComponent
+     *                                |
+     *                        ComponentAdapter(Owlcomponent)
+     *                                |
+     *                      LegacyWidget(s)(orOwlcomponent(s))
      *
      *
-     * The adapter takes the component/widget class as 'Component' prop, and the
-     * arguments (except first arg 'parent') to initialize it as props.
-     * For instance:
-     *     <ComponentAdapter Component="LegacyWidget" params="params"/>
-     * will be translated to:
-     *     const LegacyWidget = this.props.Component;
-     *     const legacyWidget = new LegacyWidget(this, this.props.params);
+     *Theadaptertakesthecomponent/widgetclassas'Component'prop,andthe
+     *arguments(exceptfirstarg'parent')toinitializeitasprops.
+     *Forinstance:
+     *    <ComponentAdapterComponent="LegacyWidget"params="params"/>
+     *willbetranslatedto:
+     *    constLegacyWidget=this.props.Component;
+     *    constlegacyWidget=newLegacyWidget(this,this.props.params);
      *
-     * If more than one argument (in addition to 'parent') is given to initialize
-     * the legacy widget, the arguments order (to initialize the sub widget) has
-     * to be somehow specified. There are two alternatives. One can either (1)
-     * specify the prop 'widgetArgs', corresponding to the array of arguments,
-     * otherwise (2) a subclass of ComponentAdapter has to be defined. This
-     * subclass must override the 'widgetArgs' getter to translate arguments
-     * received as props to an array of arguments for the call to init.
-     * For instance:
-     *     (1) <ComponentAdapter Component="LegacyWidget" firstArg="a" secondArg="b" widgetsArgs="[a, b]"/>
-     *     (2) class SpecificAdapter extends ComponentAdapter {
-     *             get widgetArgs() {
-     *                 return [this.props.firstArg, this.props.secondArg];
-     *             }
-     *         }
-     *         <SpecificAdapter Component="LegacyWidget" firstArg="a" secondArg="b"/>
+     *Ifmorethanoneargument(inadditionto'parent')isgiventoinitialize
+     *thelegacywidget,theargumentsorder(toinitializethesubwidget)has
+     *tobesomehowspecified.Therearetwoalternatives.Onecaneither(1)
+     *specifytheprop'widgetArgs',correspondingtothearrayofarguments,
+     *otherwise(2)asubclassofComponentAdapterhastobedefined.This
+     *subclassmustoverridethe'widgetArgs'gettertotranslatearguments
+     *receivedaspropstoanarrayofargumentsforthecalltoinit.
+     *Forinstance:
+     *    (1)<ComponentAdapterComponent="LegacyWidget"firstArg="a"secondArg="b"widgetsArgs="[a,b]"/>
+     *    (2)classSpecificAdapterextendsComponentAdapter{
+     *            getwidgetArgs(){
+     *                return[this.props.firstArg,this.props.secondArg];
+     *            }
+     *        }
+     *        <SpecificAdapterComponent="LegacyWidget"firstArg="a"secondArg="b"/>
      *
-     * If the legacy widget has to be updated when props change, one must define
-     * a subclass of ComponentAdapter to override 'updateWidget' and 'renderWidget'. The
-     * 'updateWidget' function takes the nextProps as argument, and should update the
-     * internal state of the widget (might be async, and return a Promise).
-     * However, to ensure that the DOM is updated all at once, it shouldn't do
-     * a re-rendering. This is the role of function 'renderWidget', which will be
-     * called just before patching the DOM, and which thus must be synchronous.
-     * For instance:
-     *     class SpecificAdapter extends ComponentAdapter {
-     *         updateWidget(nextProps) {
-     *             return this.widget.updateState(nextProps);
-     *         }
-     *         renderWidget() {
-     *             return this.widget.render();
-     *         }
-     *     }
+     *Ifthelegacywidgethastobeupdatedwhenpropschange,onemustdefine
+     *asubclassofComponentAdaptertooverride'updateWidget'and'renderWidget'.The
+     *'updateWidget'functiontakesthenextPropsasargument,andshouldupdatethe
+     *internalstateofthewidget(mightbeasync,andreturnaPromise).
+     *However,toensurethattheDOMisupdatedallatonce,itshouldn'tdo
+     *are-rendering.Thisistheroleoffunction'renderWidget',whichwillbe
+     *calledjustbeforepatchingtheDOM,andwhichthusmustbesynchronous.
+     *Forinstance:
+     *    classSpecificAdapterextendsComponentAdapter{
+     *        updateWidget(nextProps){
+     *            returnthis.widget.updateState(nextProps);
+     *        }
+     *        renderWidget(){
+     *            returnthis.widget.render();
+     *        }
+     *    }
      */
-    class ComponentAdapter extends Component {
+    classComponentAdapterextendsComponent{
         /**
-         * Creates the template on-the-fly, depending on the type of Component
-         * (legacy widget or Owl component).
+         *Createsthetemplateon-the-fly,dependingonthetypeofComponent
+         *(legacywidgetorOwlcomponent).
          *
-         * @override
+         *@override
          */
-        constructor(parent, props) {
-            if (!props.Component) {
-                throw Error(`ComponentAdapter: 'Component' prop is missing.`);
+        constructor(parent,props){
+            if(!props.Component){
+                throwError(`ComponentAdapter:'Component'propismissing.`);
             }
-            let template;
-            if (!(props.Component.prototype instanceof Component)) {
-                template = tags.xml`<div/>`;
-            } else {
-                let propsStr = '';
-                for (let p in props) {
-                    if (p !== 'Component') {
-                        propsStr += ` ${p}="props.${p}"`;
+            lettemplate;
+            if(!(props.Component.prototypeinstanceofComponent)){
+                template=tags.xml`<div/>`;
+            }else{
+                letpropsStr='';
+                for(letpinprops){
+                    if(p!=='Component'){
+                        propsStr+=`${p}="props.${p}"`;
                     }
                 }
-                template = tags.xml`<t t-component="props.Component"${propsStr}/>`;
+                template=tags.xml`<tt-component="props.Component"${propsStr}/>`;
             }
-            ComponentAdapter.template = template;
+            ComponentAdapter.template=template;
             super(...arguments);
-            this.template = template;
-            ComponentAdapter.template = null;
+            this.template=template;
+            ComponentAdapter.template=null;
 
-            this.widget = null; // widget instance, if Component is a legacy widget
+            this.widget=null;//widgetinstance,ifComponentisalegacywidget
         }
 
         /**
-         * Starts the legacy widget (not in the DOM yet)
+         *Startsthelegacywidget(notintheDOMyet)
          *
-         * @override
+         *@override
          */
-        willStart() {
-            if (!(this.props.Component.prototype instanceof Component)) {
-                this.widget = new this.props.Component(this, ...this.widgetArgs);
-                return this.widget._widgetRenderAndInsert(() => {});
+        willStart(){
+            if(!(this.props.Component.prototypeinstanceofComponent)){
+                this.widget=newthis.props.Component(this,...this.widgetArgs);
+                returnthis.widget._widgetRenderAndInsert(()=>{});
             }
         }
 
         /**
-         * Updates the internal state of the legacy widget (but doesn't re-render
-         * it yet).
+         *Updatestheinternalstateofthelegacywidget(butdoesn'tre-render
+         *ityet).
          *
-         * @override
+         *@override
          */
-        willUpdateProps(nextProps) {
-            if (this.widget) {
-                return this.updateWidget(nextProps);
+        willUpdateProps(nextProps){
+            if(this.widget){
+                returnthis.updateWidget(nextProps);
             }
         }
 
         /**
-         * Hooks just before the actual patch to replace the fake div in the
-         * vnode by the actual node of the legacy widget. If the widget has to
-         * be re-render (because it has previously been updated), re-render it.
-         * This must be synchronous.
+         *Hooksjustbeforetheactualpatchtoreplacethefakedivinthe
+         *vnodebytheactualnodeofthelegacywidget.Ifthewidgethasto
+         *bere-render(becauseithaspreviouslybeenupdated),re-renderit.
+         *Thismustbesynchronous.
          *
-         * @override
+         *@override
          */
-        __patch(target, vnode) {
-            if (this.widget) {
-                if (this.__owl__.vnode) { // not at first rendering
+        __patch(target,vnode){
+            if(this.widget){
+                if(this.__owl__.vnode){//notatfirstrendering
                     this.renderWidget();
                 }
-                vnode.elm = this.widget.el;
+                vnode.elm=this.widget.el;
             }
-            const result = super.__patch(...arguments);
-            if (this.widget && this.el !== this.widget.el) {
-                this.__owl__.vnode.elm = this.widget.el;
+            constresult=super.__patch(...arguments);
+            if(this.widget&&this.el!==this.widget.el){
+                this.__owl__.vnode.elm=this.widget.el;
             }
-            return result;
+            returnresult;
         }
 
         /**
-         * @override
+         *@override
          */
-        mounted() {
-            if (this.widget && this.widget.on_attach_callback) {
+        mounted(){
+            if(this.widget&&this.widget.on_attach_callback){
                 this.widget.on_attach_callback();
             }
         }
 
         /**
-         * @override
+         *@override
          */
-        willUnmount() {
-            if (this.widget && this.widget.on_detach_callback) {
+        willUnmount(){
+            if(this.widget&&this.widget.on_detach_callback){
                 this.widget.on_detach_callback();
             }
         }
 
         /**
-         * @override
+         *@override
          */
-        __destroy() {
+        __destroy(){
             super.__destroy(...arguments);
-            if (this.widget) {
+            if(this.widget){
                 this.widget.destroy();
             }
         }
 
         /**
-         * Getter that translates the props (except 'Component') into the array
-         * of arguments used to initialize the legacy widget.
+         *Getterthattranslatestheprops(except'Component')intothearray
+         *ofargumentsusedtoinitializethelegacywidget.
          *
-         * Must be overriden if at least two props (other that Component) are
-         * given.
+         *Mustbeoverridenifatleasttwoprops(otherthatComponent)are
+         *given.
          *
-         * @returns {Array}
+         *@returns{Array}
          */
-        get widgetArgs() {
-            if (this.props.widgetArgs) {
-                return this.props.widgetArgs;
+        getwidgetArgs(){
+            if(this.props.widgetArgs){
+                returnthis.props.widgetArgs;
             }
-            const args = Object.keys(this.props);
-            args.splice(args.indexOf('Component'), 1);
-            if (args.length > 1) {
-                throw new Error(`ComponentAdapter has more than 1 argument, 'widgetArgs' must be overriden.`);
+            constargs=Object.keys(this.props);
+            args.splice(args.indexOf('Component'),1);
+            if(args.length>1){
+                thrownewError(`ComponentAdapterhasmorethan1argument,'widgetArgs'mustbeoverriden.`);
             }
-            return args.map(a => this.props[a]);
+            returnargs.map(a=>this.props[a]);
         }
 
         /**
-         * Can be overriden to update the internal state of the widget when props
-         * change. To ensure that the DOM is updated at once, this function should
-         * not do a re-rendering (which should be done by 'render' instead).
+         *Canbeoverridentoupdatetheinternalstateofthewidgetwhenprops
+         *change.ToensurethattheDOMisupdatedatonce,thisfunctionshould
+         *notdoare-rendering(whichshouldbedoneby'render'instead).
          *
-         * @param {Object} nextProps
-         * @returns {Promise}
+         *@param{Object}nextProps
+         *@returns{Promise}
          */
-        updateWidget(/*nextProps*/) {
-            if (this.env.isDebug('assets')) {
-                console.warn(`ComponentAdapter: Widget could not be updated, maybe override 'updateWidget' function?`);
-            }
-        }
-
-        /**
-         * Can be overriden to re-render the widget after an update. This
-         * function will be called just before patchin the DOM, s.t. the DOM is
-         * updated at once. It must be synchronous
-         */
-        renderWidget() {
-            if (this.env.isDebug('assets')) {
-                console.warn(`ComponentAdapter: Widget could not be re-rendered, maybe override 'renderWidget' function?`);
+        updateWidget(/*nextProps*/){
+            if(this.env.isDebug('assets')){
+                console.warn(`ComponentAdapter:Widgetcouldnotbeupdated,maybeoverride'updateWidget'function?`);
             }
         }
 
         /**
-         * Mocks _trigger_up to redirect Flectra legacy events to OWL events.
-         *
-         * @private
-         * @param {FlectraEvent} ev
+         *Canbeoverridentore-renderthewidgetafteranupdate.This
+         *functionwillbecalledjustbeforepatchintheDOM,s.t.theDOMis
+         *updatedatonce.Itmustbesynchronous
          */
-        _trigger_up(ev) {
-            const evType = ev.name;
-            const payload = ev.data;
-            if (evType === 'call_service') {
-                let args = payload.args || [];
-                if (payload.service === 'ajax' && payload.method === 'rpc') {
-                    // ajax service uses an extra 'target' argument for rpc
-                    args = args.concat(ev.target);
+        renderWidget(){
+            if(this.env.isDebug('assets')){
+                console.warn(`ComponentAdapter:Widgetcouldnotbere-rendered,maybeoverride'renderWidget'function?`);
+            }
+        }
+
+        /**
+         *Mocks_trigger_uptoredirectFlectralegacyeventstoOWLevents.
+         *
+         *@private
+         *@param{FlectraEvent}ev
+         */
+        _trigger_up(ev){
+            constevType=ev.name;
+            constpayload=ev.data;
+            if(evType==='call_service'){
+                letargs=payload.args||[];
+                if(payload.service==='ajax'&&payload.method==='rpc'){
+                    //ajaxserviceusesanextra'target'argumentforrpc
+                    args=args.concat(ev.target);
                 }
-                const service = this.env.services[payload.service];
-                const result = service[payload.method].apply(service, args);
+                constservice=this.env.services[payload.service];
+                constresult=service[payload.method].apply(service,args);
                 payload.callback(result);
-            } else if (evType === 'get_session') {
-                if (payload.callback) {
+            }elseif(evType==='get_session'){
+                if(payload.callback){
                     payload.callback(this.env.session);
                 }
-            } else if (evType === 'load_views') {
-                const params = {
-                    model: payload.modelName,
-                    context: payload.context,
-                    views_descr: payload.views,
+            }elseif(evType==='load_views'){
+                constparams={
+                    model:payload.modelName,
+                    context:payload.context,
+                    views_descr:payload.views,
                 };
                 this.env.dataManager
-                    .load_views(params, payload.options || {})
+                    .load_views(params,payload.options||{})
                     .then(payload.on_success);
-            } else if (evType === 'load_filters') {
-                return this.env.dataManager
+            }elseif(evType==='load_filters'){
+                returnthis.env.dataManager
                     .load_filters(payload)
                     .then(payload.on_success);
-            } else {
-                payload.__targetWidget = ev.target;
-                this.trigger(evType.replace(/_/g, '-'), payload);
+            }else{
+                payload.__targetWidget=ev.target;
+                this.trigger(evType.replace(/_/g,'-'),payload);
             }
         }
     }
 
 
     /**
-     * Case 2) A legacy widget has to instantiate Owl components
-     * ---------------------------------------------------------
+     *Case2)AlegacywidgethastoinstantiateOwlcomponents
+     *---------------------------------------------------------
      *
-     * The WidgetAdapterMixin and the ComponentWrapper are meant to be used
-     * together when an Flectra legacy widget needs to instantiate Owl components.
-     * In this case, the widgets/components hierarchy would look like:
+     *TheWidgetAdapterMixinandtheComponentWrapperaremeanttobeused
+     *togetherwhenanFlectralegacywidgetneedstoinstantiateOwlcomponents.
+     *Inthiscase,thewidgets/componentshierarchywouldlooklike:
      *
-     *             Legacy Widget + WidgetAdapterMixin
-     *                          |
-     *                 ComponentWrapper (Owl component)
-     *                          |
-     *                    Owl Component
+     *            LegacyWidget+WidgetAdapterMixin
+     *                         |
+     *                ComponentWrapper(Owlcomponent)
+     *                         |
+     *                   OwlComponent
      *
-     * In this case, the parent legacy widget must use the WidgetAdapterMixin,
-     * which ensures that Owl hooks (mounted, willUnmount, destroy...) are
-     * properly called on the sub components. Moreover, it must instantiate a
-     * ComponentWrapper, and provide it the Owl component class to use alongside
-     * its props. This wrapper will ensure that the Owl component will be
-     * correctly updated (with willUpdateProps) like it would be if it was embed
-     * in an Owl hierarchy. Moreover, this wrapper automatically redirects all
-     * events triggered by the Owl component (or its descendants) to legacy
-     * custom events (trigger_up) on the parent legacy widget.
+     *Inthiscase,theparentlegacywidgetmustusetheWidgetAdapterMixin,
+     *whichensuresthatOwlhooks(mounted,willUnmount,destroy...)are
+     *properlycalledonthesubcomponents.Moreover,itmustinstantiatea
+     *ComponentWrapper,andprovideittheOwlcomponentclasstousealongside
+     *itsprops.ThiswrapperwillensurethattheOwlcomponentwillbe
+     *correctlyupdated(withwillUpdateProps)likeitwouldbeifitwasembed
+     *inanOwlhierarchy.Moreover,thiswrapperautomaticallyredirectsall
+     *eventstriggeredbytheOwlcomponent(oritsdescendants)tolegacy
+     *customevents(trigger_up)ontheparentlegacywidget.
 
-     * For example:
-     *      class MyComponent extends Component {}
-     *      MyComponent.template = xml`<div>Owl component with value <t t-esc="props.value"/></div>`;
-     *      const MyWidget = Widget.extend(WidgetAdapterMixin, {
-     *          start() {
-     *              this.component = new ComponentWrapper(this, MyComponent, {value: 44});
-     *              return this.component.mount(this.el);
-     *          },
-     *          update() {
-     *              return this.component.update({value: 45});
-     *          },
-     *      });
+     *Forexample:
+     *     classMyComponentextendsComponent{}
+     *     MyComponent.template=xml`<div>Owlcomponentwithvalue<tt-esc="props.value"/></div>`;
+     *     constMyWidget=Widget.extend(WidgetAdapterMixin,{
+     *         start(){
+     *             this.component=newComponentWrapper(this,MyComponent,{value:44});
+     *             returnthis.component.mount(this.el);
+     *         },
+     *         update(){
+     *             returnthis.component.update({value:45});
+     *         },
+     *     });
      */
-    const WidgetAdapterMixin = {
+    constWidgetAdapterMixin={
         /**
-         * Calls on_attach_callback on each child ComponentWrapper, which will
-         * call __callMounted on each sub component (recursively), to mark them
-         * as mounted.
+         *Callson_attach_callbackoneachchildComponentWrapper,whichwill
+         *call__callMountedoneachsubcomponent(recursively),tomarkthem
+         *asmounted.
          */
-        on_attach_callback() {
-            for (const component of children.get(this) || []) {
+        on_attach_callback(){
+            for(constcomponentofchildren.get(this)||[]){
                 component.on_attach_callback();
             }
         },
         /**
-         * Calls on_detach_callback on each child ComponentWrapper, which will
-         * call __callWillUnmount to mark itself and its children as no longer
-         * mounted.
+         *Callson_detach_callbackoneachchildComponentWrapper,whichwill
+         *call__callWillUnmounttomarkitselfanditschildrenasnolonger
+         *mounted.
          */
-        on_detach_callback() {
-            for (const component of children.get(this) || []) {
+        on_detach_callback(){
+            for(constcomponentofchildren.get(this)||[]){
                 component.on_detach_callback();
             }
         },
         /**
-         * Destroys each sub component when the widget is destroyed. We call the
-         * private __destroy function as there is no need to remove the el from
-         * the DOM (will be removed alongside this widget).
+         *Destroyseachsubcomponentwhenthewidgetisdestroyed.Wecallthe
+         *private__destroyfunctionasthereisnoneedtoremovetheelfrom
+         *theDOM(willberemovedalongsidethiswidget).
          */
-        destroy() {
-            for (const component of children.get(this) || []) {
+        destroy(){
+            for(constcomponentofchildren.get(this)||[]){
                 component.__destroy();
             }
             children.delete(this);
         },
     };
-    class ComponentWrapper extends Component {
+    classComponentWrapperextendsComponent{
         /**
-         * Stores the reference of the instance in the parent (in __components).
-         * Also creates a sub environment with a function that will be called
-         * just before events are triggered (see component_extension.js). This
-         * allows to add DOM event listeners on-the-fly, to redirect those Owl
-         * custom (yet DOM) events to legacy custom events (trigger_up).
+         *Storesthereferenceoftheinstanceintheparent(in__components).
+         *Alsocreatesasubenvironmentwithafunctionthatwillbecalled
+         *justbeforeeventsaretriggered(seecomponent_extension.js).This
+         *allowstoaddDOMeventlistenerson-the-fly,toredirectthoseOwl
+         *custom(yetDOM)eventstolegacycustomevents(trigger_up).
          *
-         * @override
-         * @param {Widget|null} parent
-         * @param {Component} Component this is a Class, not an instance
-         * @param {Object} props
+         *@override
+         *@param{Widget|null}parent
+         *@param{Component}ComponentthisisaClass,notaninstance
+         *@param{Object}props
          */
-        constructor(parent, Component, props) {
-            if (parent instanceof Component) {
-                throw new Error('ComponentWrapper must be used with a legacy Widget as parent');
+        constructor(parent,Component,props){
+            if(parentinstanceofComponent){
+                thrownewError('ComponentWrappermustbeusedwithalegacyWidgetasparent');
             }
-            super(null, props);
-            if (parent) {
+            super(null,props);
+            if(parent){
                 this._register(parent);
             }
             useSubEnv({
-                [widgetSymbol]: this._addListener.bind(this)
+                [widgetSymbol]:this._addListener.bind(this)
             });
 
-            this.parentWidget = parent;
-            this.Component = Component;
-            this.props = props || {};
-            this._handledEvents = new Set(); // Owl events we are redirecting
+            this.parentWidget=parent;
+            this.Component=Component;
+            this.props=props||{};
+            this._handledEvents=newSet();//Owleventsweareredirecting
 
-            this.componentRef = useRef("component");
+            this.componentRef=useRef("component");
         }
 
         /**
-         * Calls __callMounted on itself and on each sub component (as this
-         * function isn't recursive) when the component is appended into the DOM.
+         *Calls__callMountedonitselfandoneachsubcomponent(asthis
+         *functionisn'trecursive)whenthecomponentisappendedintotheDOM.
          */
-        on_attach_callback() {
-            function recursiveCallMounted(component) {
-                const { status, currentFiber } = component.__owl__;
+        on_attach_callback(){
+            functionrecursiveCallMounted(component){
+                const{status,currentFiber}=component.__owl__;
 
-                if (status === 2 && currentFiber && !currentFiber.isCompleted) {
-                    // the component is rendered but another rendering is being done
-                    // it would be foolish to declare the component and children as mounted
+                if(status===2&&currentFiber&&!currentFiber.isCompleted){
+                    //thecomponentisrenderedbutanotherrenderingisbeingdone
+                    //itwouldbefoolishtodeclarethecomponentandchildrenasmounted
                     return;
                 }
-                if (
-                   status !== 2 /* RENDERED */ &&
-                   status !== 3 /* MOUNTED */ &&
-                   status !== 4 /* UNMOUNTED */
-                ) {
-                    // Avoid calling mounted on a component that is not even
-                    // rendered. Doing otherwise will lead to a crash if a
-                    // specific mounted callback is legitimately relying on the
-                    // component being mounted.
+                if(
+                   status!==2/*RENDERED*/&&
+                   status!==3/*MOUNTED*/&&
+                   status!==4/*UNMOUNTED*/
+                ){
+                    //Avoidcallingmountedonacomponentthatisnoteven
+                    //rendered.Doingotherwisewillleadtoacrashifa
+                    //specificmountedcallbackislegitimatelyrelyingonthe
+                    //componentbeingmounted.
                     return;
                 }
-                for (const key in component.__owl__.children) {
+                for(constkeyincomponent.__owl__.children){
                     recursiveCallMounted(component.__owl__.children[key]);
                 }
                 component.__callMounted();
@@ -401,145 +401,145 @@ flectra.define('web.OwlCompatibility', function () {
             recursiveCallMounted(this);
         }
         /**
-         * Calls __callWillUnmount to notify the component it will be unmounted.
+         *Calls__callWillUnmounttonotifythecomponentitwillbeunmounted.
          */
-        on_detach_callback() {
+        on_detach_callback(){
             this.__callWillUnmount();
         }
 
         /**
-         * Overrides to remove the reference to this component in the parent.
+         *Overridestoremovethereferencetothiscomponentintheparent.
          *
-         * @override
+         *@override
          */
-        destroy() {
-            if (this.parentWidget) {
-                const parentChildren = children.get(this.parentWidget);
-                if (parentChildren) {
-                    const index = parentChildren.indexOf(this);
-                    children.get(this.parentWidget).splice(index, 1);
+        destroy(){
+            if(this.parentWidget){
+                constparentChildren=children.get(this.parentWidget);
+                if(parentChildren){
+                    constindex=parentChildren.indexOf(this);
+                    children.get(this.parentWidget).splice(index,1);
                 }
             }
             super.destroy();
         }
 
         /**
-         * Changes the parent of the wrapper component. This is a function of the
-         * legacy widgets (ParentedMixin), so we have to handle it someway.
-         * It simply removes the reference of this component in the current
-         * parent (if there was one), and adds the reference to the new one.
+         *Changestheparentofthewrappercomponent.Thisisafunctionofthe
+         *legacywidgets(ParentedMixin),sowehavetohandleitsomeway.
+         *Itsimplyremovesthereferenceofthiscomponentinthecurrent
+         *parent(iftherewasone),andaddsthereferencetothenewone.
          *
-         * We have at least one usecase for this: in views, the renderer is
-         * instantiated without parent, then a controller is instantiated with
-         * the renderer as argument, and finally, setParent is called to set the
-         * controller as parent of the renderer. This implies that Owl renderers
-         * can't trigger events in their constructor.
+         *Wehaveatleastoneusecaseforthis:inviews,therendereris
+         *instantiatedwithoutparent,thenacontrollerisinstantiatedwith
+         *therendererasargument,andfinally,setParentiscalledtosetthe
+         *controllerasparentoftherenderer.ThisimpliesthatOwlrenderers
+         *can'ttriggereventsintheirconstructor.
          *
-         * @param {Widget} parent
+         *@param{Widget}parent
          */
-        setParent(parent) {
-            if (parent instanceof Component) {
-                throw new Error('ComponentWrapper must be used with a legacy Widget as parent');
+        setParent(parent){
+            if(parentinstanceofComponent){
+                thrownewError('ComponentWrappermustbeusedwithalegacyWidgetasparent');
             }
             this._register(parent);
-            if (this.parentWidget) {
-                const parentChildren = children.get(this.parentWidget);
-                parentChildren.splice(parentChildren.indexOf(this), 1);
+            if(this.parentWidget){
+                constparentChildren=children.get(this.parentWidget);
+                parentChildren.splice(parentChildren.indexOf(this),1);
             }
-            this.parentWidget = parent;
+            this.parentWidget=parent;
         }
 
         /**
-         * Updates the props and re-render the component.
+         *Updatesthepropsandre-renderthecomponent.
          *
-         * @async
-         * @param {Object} props
-         * @return {Promise}
+         *@async
+         *@param{Object}props
+         *@return{Promise}
          */
-        async update(props = {}) {
-            if (this.__owl__.status === 5 /* destroyed */) {
-                return new Promise(() => {});
+        asyncupdate(props={}){
+            if(this.__owl__.status===5/*destroyed*/){
+                returnnewPromise(()=>{});
             }
 
-            Object.assign(this.props, props);
+            Object.assign(this.props,props);
 
-            let prom;
-            if (this.__owl__.status === 3 /* mounted */) {
-                prom = this.render();
-            } else {
-                // we may not be in the DOM, but actually want to be redrawn
-                // (e.g. we were detached from the DOM, and now we're going to
-                // be re-attached, but we need to be reloaded first). In this
-                // case, we have to call 'mount' as Owl would skip the rendering
-                // if we simply call render.
-                prom = this.mount(...this._mountArgs);
+            letprom;
+            if(this.__owl__.status===3/*mounted*/){
+                prom=this.render();
+            }else{
+                //wemaynotbeintheDOM,butactuallywanttoberedrawn
+                //(e.g.weweredetachedfromtheDOM,andnowwe'regoingto
+                //bere-attached,butweneedtobereloadedfirst).Inthis
+                //case,wehavetocall'mount'asOwlwouldskiptherendering
+                //ifwesimplycallrender.
+                prom=this.mount(...this._mountArgs);
             }
-            return prom;
+            returnprom;
         }
 
         /**
-         * Adds an event handler that will redirect the given Owl event to an
-         * Flectra legacy event. This function is called just before the event is
-         * actually triggered.
+         *AddsaneventhandlerthatwillredirectthegivenOwleventtoan
+         *Flectralegacyevent.Thisfunctioniscalledjustbeforetheeventis
+         *actuallytriggered.
          *
-         * @private
-         * @param {string} evType
+         *@private
+         *@param{string}evType
          */
-        _addListener(evType) {
-            if (this.parentWidget && !this._handledEvents.has(evType)) {
+        _addListener(evType){
+            if(this.parentWidget&&!this._handledEvents.has(evType)){
                 this._handledEvents.add(evType);
-                this.el.addEventListener(evType, ev => {
-                    // as the WrappeComponent has the same root node as the
-                    // actual sub Component, we have to check that the event
-                    // hasn't been stopped by that component (it would naturally
-                    // call stopPropagation, whereas it should actually call
-                    // stopImmediatePropagation to prevent from getting here)
-                    if (!ev.cancelBubble) {
+                this.el.addEventListener(evType,ev=>{
+                    //astheWrappeComponenthasthesamerootnodeasthe
+                    //actualsubComponent,wehavetocheckthattheevent
+                    //hasn'tbeenstoppedbythatcomponent(itwouldnaturally
+                    //callstopPropagation,whereasitshouldactuallycall
+                    //stopImmediatePropagationtopreventfromgettinghere)
+                    if(!ev.cancelBubble){
                         ev.stopPropagation();
-                        const detail = Object.assign({}, ev.detail, {
-                            __originalComponent: ev.originalComponent,
+                        constdetail=Object.assign({},ev.detail,{
+                            __originalComponent:ev.originalComponent,
                         });
-                        this.parentWidget.trigger_up(ev.type.replace(/-/g, '_'), detail);
+                        this.parentWidget.trigger_up(ev.type.replace(/-/g,'_'),detail);
                     }
                 });
             }
         }
 
         /**
-         * Registers this instance as a child of the given parent in the
-         * 'children' weakMap.
+         *Registersthisinstanceasachildofthegivenparentinthe
+         *'children'weakMap.
          *
-         * @private
-         * @param {Widget} parent
+         *@private
+         *@param{Widget}parent
          */
-        _register(parent) {
-            let parentChildren = children.get(parent);
-            if (!parentChildren) {
-                parentChildren = [];
-                children.set(parent, parentChildren);
+        _register(parent){
+            letparentChildren=children.get(parent);
+            if(!parentChildren){
+                parentChildren=[];
+                children.set(parent,parentChildren);
             }
             parentChildren.push(this);
         }
         /**
-         * Stores mount target and position at first mount. That way, when updating
-         * while out of DOM, we know where and how to remount.
-         * @see update()
-         * @override
+         *Storesmounttargetandpositionatfirstmount.Thatway,whenupdating
+         *whileoutofDOM,weknowwhereandhowtoremount.
+         *@seeupdate()
+         *@override
          */
-        async mount(target, options) {
-            if (options && options.position === 'self') {
-                throw new Error(
-                    'Unsupported position: "self" is not allowed for wrapper components. ' +
-                    'Contact the JS Framework team or open an issue if your use case is relevant.'
+        asyncmount(target,options){
+            if(options&&options.position==='self'){
+                thrownewError(
+                    'Unsupportedposition:"self"isnotallowedforwrappercomponents.'+
+                    'ContacttheJSFrameworkteamoropenanissueifyourusecaseisrelevant.'
                 );
             }
-            this._mountArgs = arguments;
-            return super.mount(...arguments);
+            this._mountArgs=arguments;
+            returnsuper.mount(...arguments);
         }
     }
-    ComponentWrapper.template = xml`<t t-component="Component" t-props="props" t-ref="component"/>`;
+    ComponentWrapper.template=xml`<tt-component="Component"t-props="props"t-ref="component"/>`;
 
-    return {
+    return{
         ComponentAdapter,
         ComponentWrapper,
         WidgetAdapterMixin,

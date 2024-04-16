@@ -1,49 +1,49 @@
-flectra.define('mail/static/src/widgets/notification_alert/notification_alert_tests.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/widgets/notification_alert/notification_alert_tests.js',function(require){
+'usestrict';
 
-const { afterEach, beforeEach, start } = require('mail/static/src/utils/test_utils.js');
+const{afterEach,beforeEach,start}=require('mail/static/src/utils/test_utils.js');
 
-const FormView = require('web.FormView');
+constFormView=require('web.FormView');
 
-QUnit.module('mail', {}, function () {
-QUnit.module('widgets', {}, function () {
-QUnit.module('notification_alert', {}, function () {
-QUnit.module('notification_alert_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('widgets',{},function(){
+QUnit.module('notification_alert',{},function(){
+QUnit.module('notification_alert_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.start = async params => {
-            let { widget } = await start(Object.assign({
-                data: this.data,
-                hasView: true,
-                // View params
-                View: FormView,
-                model: 'mail.message',
-                arch: `
+        this.start=asyncparams=>{
+            let{widget}=awaitstart(Object.assign({
+                data:this.data,
+                hasView:true,
+                //Viewparams
+                View:FormView,
+                model:'mail.message',
+                arch:`
                     <form>
-                        <widget name="notification_alert"/>
+                        <widgetname="notification_alert"/>
                     </form>
                 `,
-            }, params));
-            this.widget = widget;
+            },params));
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.skip('notification_alert widget: display blocked notification alert', async function (assert) {
-    // FIXME: Test should work, but for some reasons OWL always flags the
-    // component as not mounted, even though it is in the DOM and it's state
-    // is good for rendering... task-227947
+QUnit.skip('notification_alertwidget:displayblockednotificationalert',asyncfunction(assert){
+    //FIXME:Testshouldwork,butforsomereasonsOWLalwaysflagsthe
+    //componentasnotmounted,eventhoughitisintheDOMandit'sstate
+    //isgoodforrendering...task-227947
     assert.expect(1);
 
-    await this.start({
-        env: {
-            browser: {
-                Notification: {
-                    permission: 'denied',
+    awaitthis.start({
+        env:{
+            browser:{
+                Notification:{
+                    permission:'denied',
                 },
             },
         },
@@ -52,18 +52,18 @@ QUnit.skip('notification_alert widget: display blocked notification alert', asyn
     assert.containsOnce(
         document.body,
         '.o_notification_alert',
-        "Blocked notification alert should be displayed"
+        "Blockednotificationalertshouldbedisplayed"
     );
 });
 
-QUnit.test('notification_alert widget: no notification alert when granted', async function (assert) {
+QUnit.test('notification_alertwidget:nonotificationalertwhengranted',asyncfunction(assert){
     assert.expect(1);
 
-    await this.start({
-        env: {
-            browser: {
-                Notification: {
-                    permission: 'granted',
+    awaitthis.start({
+        env:{
+            browser:{
+                Notification:{
+                    permission:'granted',
                 },
             },
         },
@@ -72,18 +72,18 @@ QUnit.test('notification_alert widget: no notification alert when granted', asyn
     assert.containsNone(
         document.body,
         '.o_notification_alert',
-        "Blocked notification alert should not be displayed"
+        "Blockednotificationalertshouldnotbedisplayed"
     );
 });
 
-QUnit.test('notification_alert widget: no notification alert when default', async function (assert) {
+QUnit.test('notification_alertwidget:nonotificationalertwhendefault',asyncfunction(assert){
     assert.expect(1);
 
-    await this.start({
-        env: {
-            browser: {
-                Notification: {
-                    permission: 'default',
+    awaitthis.start({
+        env:{
+            browser:{
+                Notification:{
+                    permission:'default',
                 },
             },
         },
@@ -92,7 +92,7 @@ QUnit.test('notification_alert widget: no notification alert when default', asyn
     assert.containsNone(
         document.body,
         '.o_notification_alert',
-        "Blocked notification alert should not be displayed"
+        "Blockednotificationalertshouldnotbedisplayed"
     );
 });
 

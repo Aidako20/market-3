@@ -1,134 +1,134 @@
-flectra.define('event_sale.product_configurator', function (require) {
-var ProductConfiguratorWidget = require('sale.product_configurator');
+flectra.define('event_sale.product_configurator',function(require){
+varProductConfiguratorWidget=require('sale.product_configurator');
 
 /**
- * Extension of the ProductConfiguratorWidget to support event product configuration.
- * It opens when an event product_product is set.
+ *ExtensionoftheProductConfiguratorWidgettosupporteventproductconfiguration.
+ *Itopenswhenaneventproduct_productisset.
  *
- * The event information include:
- * - event_id
- * - event_ticket_id
+ *Theeventinformationinclude:
+ *-event_id
+ *-event_ticket_id
  *
  */
 ProductConfiguratorWidget.include({
     /**
-     * @returns {boolean}
+     *@returns{boolean}
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _isConfigurableLine: function () {
-        return this.recordData.event_ok || this._super.apply(this, arguments);
+    _isConfigurableLine:function(){
+        returnthis.recordData.event_ok||this._super.apply(this,arguments);
     },
 
     /**
-     * @param {integer} productId
-     * @param {String} dataPointID
-     * @returns {Promise<Boolean>} stopPropagation true if a suitable configurator has been found.
+     *@param{integer}productId
+     *@param{String}dataPointID
+     *@returns{Promise<Boolean>}stopPropagationtrueifasuitableconfiguratorhasbeenfound.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onProductChange: function (productId, dataPointId) {
-      var self = this;
-      return this._super.apply(this, arguments).then(function (stopPropagation) {
-          if (stopPropagation || productId === undefined) {
-              return Promise.resolve(true);
-          } else {
-              return self._checkForEvent(productId, dataPointId);
+    _onProductChange:function(productId,dataPointId){
+      varself=this;
+      returnthis._super.apply(this,arguments).then(function(stopPropagation){
+          if(stopPropagation||productId===undefined){
+              returnPromise.resolve(true);
+          }else{
+              returnself._checkForEvent(productId,dataPointId);
           }
       });
     },
 
     /**
-     * This method will check if the productId needs configuration or not:
+     *ThismethodwillcheckiftheproductIdneedsconfigurationornot:
      *
-     * @param {integer} productId
-     * @param {string} dataPointID
-     * @returns {Promise<Boolean>} stopPropagation true if the product is an event ticket.
+     *@param{integer}productId
+     *@param{string}dataPointID
+     *@returns{Promise<Boolean>}stopPropagationtrueiftheproductisaneventticket.
      *
-     * @private
+     *@private
      */
-    _checkForEvent: function (productId, dataPointId) {
-        var self = this;
-        return this._rpc({
-            model: 'product.product',
-            method: 'read',
-            args: [productId, ['event_ok']],
-        }).then(function (result) {
-            if (Array.isArray(result) && result.length && result[0].event_ok) {
+    _checkForEvent:function(productId,dataPointId){
+        varself=this;
+        returnthis._rpc({
+            model:'product.product',
+            method:'read',
+            args:[productId,['event_ok']],
+        }).then(function(result){
+            if(Array.isArray(result)&&result.length&&result[0].event_ok){
                 self._openEventConfigurator({
-                        default_product_id: productId
+                        default_product_id:productId
                     },
                     dataPointId
                 );
-                return Promise.resolve(true);
+                returnPromise.resolve(true);
             }
-            return Promise.resolve(false);
+            returnPromise.resolve(false);
         });
     },
 
     /**
-     * Opens the event configurator in 'edit' mode.
+     *Openstheeventconfiguratorin'edit'mode.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onEditLineConfiguration: function () {
-        if (this.recordData.event_ok) {
-            var defaultValues = {
-                default_product_id: this.recordData.product_id.data.id
+    _onEditLineConfiguration:function(){
+        if(this.recordData.event_ok){
+            vardefaultValues={
+                default_product_id:this.recordData.product_id.data.id
             };
 
-            if (this.recordData.event_id) {
-                defaultValues.default_event_id = this.recordData.event_id.data.id;
+            if(this.recordData.event_id){
+                defaultValues.default_event_id=this.recordData.event_id.data.id;
             }
 
-            if (this.recordData.event_ticket_id) {
-                defaultValues.default_event_ticket_id = this.recordData.event_ticket_id.data.id;
+            if(this.recordData.event_ticket_id){
+                defaultValues.default_event_ticket_id=this.recordData.event_ticket_id.data.id;
             }
 
-            this._openEventConfigurator(defaultValues, this.dataPointID);
-        } else {
-            this._super.apply(this, arguments);
+            this._openEventConfigurator(defaultValues,this.dataPointID);
+        }else{
+            this._super.apply(this,arguments);
         }
     },
 
     /**
-     * Opens the event configurator to allow configuring the SO line with events information.
+     *OpenstheeventconfiguratortoallowconfiguringtheSOlinewitheventsinformation.
      *
-     * When the window is closed, configured values are used to trigger a 'field_changed'
-     * event to modify the current SO line.
+     *Whenthewindowisclosed,configuredvaluesareusedtotriggera'field_changed'
+     *eventtomodifythecurrentSOline.
      *
-     * If the window is closed without providing the required values 'event_id' and
-     * 'event_ticket_id', the product_id field is cleaned.
+     *Ifthewindowisclosedwithoutprovidingtherequiredvalues'event_id'and
+     *'event_ticket_id',theproduct_idfieldiscleaned.
      *
-     * @param {Object} data various "default_" values
-     * @param {string} dataPointId
+     *@param{Object}datavarious"default_"values
+     *@param{string}dataPointId
      *
-     * @private
+     *@private
      */
-    _openEventConfigurator: function (data, dataPointId) {
-        var self = this;
-        this.do_action('event_sale.event_configurator_action', {
-            additional_context: data,
-            on_close: function (result) {
-                if (result && !result.special) {
-                    self.trigger_up('field_changed', {
-                        dataPointID: dataPointId,
-                        changes: result.eventConfiguration,
-                        onSuccess: function () {
-                            // Call post-init function.
+    _openEventConfigurator:function(data,dataPointId){
+        varself=this;
+        this.do_action('event_sale.event_configurator_action',{
+            additional_context:data,
+            on_close:function(result){
+                if(result&&!result.special){
+                    self.trigger_up('field_changed',{
+                        dataPointID:dataPointId,
+                        changes:result.eventConfiguration,
+                        onSuccess:function(){
+                            //Callpost-initfunction.
                             self._onLineConfigured();
                         }
                     });
-                } else {
-                    if (!self.recordData.event_id || !self.recordData.event_ticket_id) {
-                        self.trigger_up('field_changed', {
-                            dataPointID: dataPointId,
-                            changes: {
-                                product_id: false,
-                                name: ''
+                }else{
+                    if(!self.recordData.event_id||!self.recordData.event_ticket_id){
+                        self.trigger_up('field_changed',{
+                            dataPointID:dataPointId,
+                            changes:{
+                                product_id:false,
+                                name:''
                             },
                         });
                     }
@@ -139,6 +139,6 @@ ProductConfiguratorWidget.include({
 });
 
 
-return ProductConfiguratorWidget;
+returnProductConfiguratorWidget;
 
 });

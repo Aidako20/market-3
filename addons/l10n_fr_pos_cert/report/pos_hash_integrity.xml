@@ -1,72 +1,72 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <template id="report_pos_hash_integrity">
-            <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="company">
-                    <t t-call="web.external_layout">
-                        <div class="page">
-                            <div class="row" id="hash_header">
-                                <div class="col-12">
+        <templateid="report_pos_hash_integrity">
+            <tt-call="web.html_container">
+                <tt-foreach="docs"t-as="company">
+                    <tt-call="web.external_layout">
+                        <divclass="page">
+                            <divclass="row"id="hash_header">
+                                <divclass="col-12">
                                     <br/>
-                                    <h2>Résultat du test d'intégrité - <span t-esc="data['printing_date']"/></h2>
+                                    <h2>Résultatdutestd'intégrité-<spant-esc="data['printing_date']"/></h2>
                                     <br/>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-12" id="hash_config_review">
+                            <divclass="row">
+                                <divclass="col-12"id="hash_config_review">
                                     <h6>
-                                        Selon l’article 286 du code général des impôts français, toute livraison de bien ou prestation
-                                        de services ne donnant pas lieu à facturation et étant enregistrée au moyen d’un logiciel ou
-                                        d’un système de caisse doit satisfaire à des conditions d’inaltérabilité et de sécurisation des
-                                        données en vue d’un contrôle de l’administration fiscale.
+                                        Selonl’article286ducodegénéraldesimpôtsfrançais,toutelivraisondebienouprestation
+                                        deservicesnedonnantpaslieuàfacturationetétantenregistréeaumoyend’unlogicielou
+                                        d’unsystèmedecaissedoitsatisfaireàdesconditionsd’inaltérabilitéetdesécurisationdes
+                                        donnéesenvued’uncontrôledel’administrationfiscale.
                                         <br/>
                                         <br/>
-                                        Ces conditions sont respectées via une fonction de hachage des ventes du Point de Vente.
+                                        CesconditionssontrespectéesviaunefonctiondehachagedesventesduPointdeVente.
                                         <br/>
                                         <br/>
                                     </h6>
                                 </div>
                             </div>
-                            <t t-if="data['result'] != 'None'">
-                                <div class="row">
-                                    <div class="col-12" id="hash_data_consistency">
+                            <tt-if="data['result']!='None'">
+                                <divclass="row">
+                                    <divclass="col-12"id="hash_data_consistency">
                                         <br/>
-                                        <h3>Contrôle des données du point de vente</h3>
+                                        <h3>Contrôledesdonnéesdupointdevente</h3>
                                         <br/>
-                                        <t t-if="data['result'] != 'None' and data['corrupted_orders'] == 'None'">
+                                        <tt-if="data['result']!='None'anddata['corrupted_orders']=='None'">
                                             <h5>
-                                                Toutes les ventes effectuées via le Point de Vente
-                                                sont bien dans la chaîne de hachage.
+                                                TouteslesventeseffectuéesvialePointdeVente
+                                                sontbiendanslachaînedehachage.
                                             </h5>
                                             <br/>
                                         </t>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12" id="hash_data_consistency_table">
-                                        <table class="table table-bordered" style="table-layout: fixed">
-                                            <thead style="display: table-row-group">
+                                <divclass="row">
+                                    <divclass="col-12"id="hash_data_consistency_table">
+                                        <tableclass="tabletable-bordered"style="table-layout:fixed">
+                                            <theadstyle="display:table-row-group">
                                                 <tr>
-                                                    <th class="text-center" style="width: 25%" scope="col">First Hash</th>
-                                                    <th class="text-center" style="width: 25%" scope="col">First Entry</th>
-                                                    <th class="text-center" style="width: 25%" scope="col">Last Hash</th>
-                                                    <th class="text-center" style="width: 25%" scope="col">Last Entry</th>
+                                                    <thclass="text-center"style="width:25%"scope="col">FirstHash</th>
+                                                    <thclass="text-center"style="width:25%"scope="col">FirstEntry</th>
+                                                    <thclass="text-center"style="width:25%"scope="col">LastHash</th>
+                                                    <thclass="text-center"style="width:25%"scope="col">LastEntry</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <t t-if="data['result'] != 'None'">
-                                                    <t t-if="data['result']['first_order_hash'] != 'None'">
+                                                <tt-if="data['result']!='None'">
+                                                    <tt-if="data['result']['first_order_hash']!='None'">
                                                         <tr>
-                                                            <td><span t-esc="data['result']['first_order_hash']"/></td>
+                                                            <td><spant-esc="data['result']['first_order_hash']"/></td>
                                                             <td>
-                                                                <span t-esc="data['result']['first_order_name']"/> <br/>
-                                                                <span t-esc="data['result']['first_order_date']"/>
+                                                                <spant-esc="data['result']['first_order_name']"/><br/>
+                                                                <spant-esc="data['result']['first_order_date']"/>
                                                             </td>
-                                                            <td><span t-esc="data['result']['last_order_hash']"/></td>
+                                                            <td><spant-esc="data['result']['last_order_hash']"/></td>
                                                             <td>
-                                                                <span t-esc="data['result']['last_order_name']"/> <br/>
-                                                                <span t-esc="data['result']['last_order_date']"/>
+                                                                <spant-esc="data['result']['last_order_name']"/><br/>
+                                                                <spant-esc="data['result']['last_order_date']"/>
                                                             </td>
                                                         </tr>
                                                     </t>
@@ -76,19 +76,19 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <t t-if="data['corrupted_orders'] != 'None'">
+                                    <tt-if="data['corrupted_orders']!='None'">
                                         <h5>
-                                            Données corrompues sur la commande du point de vente:
+                                            Donnéescorrompuessurlacommandedupointdevente:
                                         </h5>
-                                        <span t-esc="data['corrupted_orders']"/> <br/>
+                                        <spant-esc="data['corrupted_orders']"/><br/>
                                     </t>
                                 </div>
-                                <div class="row" id="hash_last_div">
-                                    <div class="col-12" id="hash_chain_compliant">
+                                <divclass="row"id="hash_last_div">
+                                    <divclass="col-12"id="hash_chain_compliant">
                                         <br/>
                                         <h6>
-                                            La chaîne de hachage est conforme: il n’est pas possible d’altérer les données
-                                            sans casser la chaîne de hachage pour les pièces ultérieures.
+                                            Lachaînedehachageestconforme:iln’estpaspossibled’altérerlesdonnées
+                                            sanscasserlachaînedehachagepourlespiècesultérieures.
                                         </h6>
                                         <br/>
                                     </div>

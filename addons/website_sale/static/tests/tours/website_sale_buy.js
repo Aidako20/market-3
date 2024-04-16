@@ -1,98 +1,98 @@
-flectra.define('website_sale.tour', function (require) {
-'use strict';
+flectra.define('website_sale.tour',function(require){
+'usestrict';
 
-var tour = require("web_tour.tour");
+vartour=require("web_tour.tour");
 
-tour.register('shop_buy_product', {
-    test: true,
-    url: '/shop',
+tour.register('shop_buy_product',{
+    test:true,
+    url:'/shop',
 },
     [
         {
-            content: "search conference chair",
-            trigger: 'form input[name="search"]',
-            run: "text conference chair",
+            content:"searchconferencechair",
+            trigger:'forminput[name="search"]',
+            run:"textconferencechair",
         },
         {
-            content: "search conference chair",
-            trigger: 'form:has(input[name="search"]) .oe_search_button',
+            content:"searchconferencechair",
+            trigger:'form:has(input[name="search"]).oe_search_button',
         },
         {
-            content: "select conference chair",
-            trigger: '.oe_product_cart:first a:contains("Conference Chair")',
+            content:"selectconferencechair",
+            trigger:'.oe_product_cart:firsta:contains("ConferenceChair")',
         },
         {
-            content: "select Conference Chair Aluminium",
-            extra_trigger: '#product_detail',
-            trigger: 'label:contains(Aluminium) input',
+            content:"selectConferenceChairAluminium",
+            extra_trigger:'#product_detail',
+            trigger:'label:contains(Aluminium)input',
         },
         {
-            content: "select Conference Chair Steel",
-            extra_trigger: '#product_detail',
-            trigger: 'label:contains(Steel) input',
+            content:"selectConferenceChairSteel",
+            extra_trigger:'#product_detail',
+            trigger:'label:contains(Steel)input',
         },
         {
-            id: 'add_cart_step',
-            content: "click on add to cart",
-            extra_trigger: 'label:contains(Steel) input:propChecked',
-            trigger: '#product_detail form[action^="/shop/cart/update"] .btn-primary',
+            id:'add_cart_step',
+            content:"clickonaddtocart",
+            extra_trigger:'label:contains(Steel)input:propChecked',
+            trigger:'#product_detailform[action^="/shop/cart/update"].btn-primary',
         },
         {
-            content: "add suggested",
-            extra_trigger: '#wrap:not(:has(#cart_products:contains("Storage Box")))',
-            trigger: '.oe_cart:has(tr:contains("Storage Box")) a:contains("Add to Cart")',
+            content:"addsuggested",
+            extra_trigger:'#wrap:not(:has(#cart_products:contains("StorageBox")))',
+            trigger:'.oe_cart:has(tr:contains("StorageBox"))a:contains("AddtoCart")',
         },
         {
-            content: "add one more",
-            extra_trigger: '#cart_products tr:contains("Storage Box")',
-            trigger: '#cart_products tr:contains("Steel") a.js_add_cart_json:eq(1)',
+            content:"addonemore",
+            extra_trigger:'#cart_productstr:contains("StorageBox")',
+            trigger:'#cart_productstr:contains("Steel")a.js_add_cart_json:eq(1)',
         },
         {
-            content: "remove Storage Box",
-            extra_trigger: '#cart_products tr:contains("Steel") input.js_quantity:propValue(2)',
-            trigger: '#cart_products tr:contains("Storage Box") a.js_add_cart_json:first',
+            content:"removeStorageBox",
+            extra_trigger:'#cart_productstr:contains("Steel")input.js_quantity:propValue(2)',
+            trigger:'#cart_productstr:contains("StorageBox")a.js_add_cart_json:first',
         },
         {
-            content: "set three",
-            extra_trigger: '#wrap:not(:has(#cart_products tr:contains("Storage Box")))',
-            trigger: '#cart_products input.js_quantity',
-            run: 'text 3',
+            content:"setthree",
+            extra_trigger:'#wrap:not(:has(#cart_productstr:contains("StorageBox")))',
+            trigger:'#cart_productsinput.js_quantity',
+            run:'text3',
         },
         {
-            content: "check amount",
-            // wait for cart_update_json to prevent concurrent update
-            trigger: '#order_total span.oe_currency_value:contains("49.50")',
-            run: function () {}, // it's a check
+            content:"checkamount",
+            //waitforcart_update_jsontopreventconcurrentupdate
+            trigger:'#order_totalspan.oe_currency_value:contains("49.50")',
+            run:function(){},//it'sacheck
         },
         {
-            content: "go to checkout",
-            extra_trigger: '#cart_products input.js_quantity:propValue(3)',
-            trigger: 'a[href*="/shop/checkout"]',
+            content:"gotocheckout",
+            extra_trigger:'#cart_productsinput.js_quantity:propValue(3)',
+            trigger:'a[href*="/shop/checkout"]',
         },
         {
-            content: "select payment",
-            trigger: '#payment_method label:contains("Wire Transfer")',
+            content:"selectpayment",
+            trigger:'#payment_methodlabel:contains("WireTransfer")',
         },
         {
-            content: "Pay Now",
-            //Either there are multiple payment methods, and one is checked, either there is only one, and therefore there are no radio inputs
-            extra_trigger: '#payment_method label:contains("Wire Transfer") input:checked,#payment_method:not(:has("input:radio:visible"))',
-            trigger: 'button[id="o_payment_form_pay"]:visible:not(:disabled)',
+            content:"PayNow",
+            //Eithertherearemultiplepaymentmethods,andoneischecked,eitherthereisonlyone,andthereforetherearenoradioinputs
+            extra_trigger:'#payment_methodlabel:contains("WireTransfer")input:checked,#payment_method:not(:has("input:radio:visible"))',
+            trigger:'button[id="o_payment_form_pay"]:visible:not(:disabled)',
         },
         {
-            content: "finish",
-            trigger: '.oe_website_sale:contains("Please make a payment to:")',
-            // Leave /shop/confirmation to prevent RPC loop to /shop/payment/get_status.
-            // The RPC could be handled in python while the tour is killed (and the session), leading to crashes
-            run: function () {
-                window.location.href = '/contactus'; // Redirect in JS to avoid the RPC loop (20x1sec)
+            content:"finish",
+            trigger:'.oe_website_sale:contains("Pleasemakeapaymentto:")',
+            //Leave/shop/confirmationtopreventRPCloopto/shop/payment/get_status.
+            //TheRPCcouldbehandledinpythonwhilethetouriskilled(andthesession),leadingtocrashes
+            run:function(){
+                window.location.href='/contactus';//RedirectinJStoavoidtheRPCloop(20x1sec)
             },
-            timeout: 30000,
+            timeout:30000,
         },
         {
-            content: "wait page loaded",
-            trigger: 'h1:contains("Contact us")',
-            run: function () {}, // it's a check
+            content:"waitpageloaded",
+            trigger:'h1:contains("Contactus")',
+            run:function(){},//it'sacheck
         },
     ]
 );

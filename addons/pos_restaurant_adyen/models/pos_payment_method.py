@@ -1,17 +1,17 @@
-# coding: utf-8
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#coding:utf-8
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class PosPaymentMethod(models.Model):
-    _inherit = 'pos.payment.method'
+classPosPaymentMethod(models.Model):
+    _inherit='pos.payment.method'
 
-    adyen_merchant_account = fields.Char(help='The POS merchant account code used in Adyen')
+    adyen_merchant_account=fields.Char(help='ThePOSmerchantaccountcodeusedinAdyen')
 
-    def _get_adyen_endpoints(self):
-        return {
-            **super(PosPaymentMethod, self)._get_adyen_endpoints(),
-            'adjust': 'https://pal-%s.adyen.com/pal/servlet/Payment/v52/adjustAuthorisation',
-            'capture': 'https://pal-%s.adyen.com/pal/servlet/Payment/v52/capture',
+    def_get_adyen_endpoints(self):
+        return{
+            **super(PosPaymentMethod,self)._get_adyen_endpoints(),
+            'adjust':'https://pal-%s.adyen.com/pal/servlet/Payment/v52/adjustAuthorisation',
+            'capture':'https://pal-%s.adyen.com/pal/servlet/Payment/v52/capture',
         }

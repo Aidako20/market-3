@@ -1,228 +1,228 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-import base64
-import io
-import os
-import tempfile
-import zipfile
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+importbase64
+importio
+importos
+importtempfile
+importzipfile
 
-from unittest.mock import patch
+fromunittest.mockimportpatch
 
-from flectra.addons import __path__ as __addons_path__
-from flectra.tools import mute_logger
-from flectra.tests.common import TransactionCase, HttpCase
+fromflectra.addonsimport__path__as__addons_path__
+fromflectra.toolsimportmute_logger
+fromflectra.tests.commonimportTransactionCase,HttpCase
 
-class TestImportModule(TransactionCase):
-    def import_zipfile(self, files):
-        archive = io.BytesIO()
-        with zipfile.ZipFile(archive, 'w') as zipf:
-            for path, data in files:
-                zipf.writestr(path, data)
-        return self.env['ir.module.module'].import_zipfile(archive)
+classTestImportModule(TransactionCase):
+    defimport_zipfile(self,files):
+        archive=io.BytesIO()
+        withzipfile.ZipFile(archive,'w')aszipf:
+            forpath,datainfiles:
+                zipf.writestr(path,data)
+        returnself.env['ir.module.module'].import_zipfile(archive)
 
-    def test_import_zip(self):
-        """Assert the behaviors expected by the module import feature using a ZIP archive"""
-        files = [
-            ('foo/__manifest__.py', b"{'data': ['data.xml', 'res.partner.csv', 'data.sql']}"),
-            ('foo/data.xml', b"""
+    deftest_import_zip(self):
+        """AssertthebehaviorsexpectedbythemoduleimportfeatureusingaZIParchive"""
+        files=[
+            ('foo/__manifest__.py',b"{'data':['data.xml','res.partner.csv','data.sql']}"),
+            ('foo/data.xml',b"""
                 <data>
-                    <record id="foo" model="res.partner">
-                        <field name="name">foo</field>
+                    <recordid="foo"model="res.partner">
+                        <fieldname="name">foo</field>
                     </record>
                 </data>
             """),
             ('foo/res.partner.csv',
-                b'"id","name"\n' \
+                b'"id","name"\n'\
                 b'bar,bar'
             ),
-            ('foo/data.sql', b"INSERT INTO res_partner (active, name) VALUES (true, 'baz');"),
-            ('foo/static/css/style.css', b".foo{color: black;}"),
-            ('foo/static/js/foo.js', b"console.log('foo')"),
-            ('bar/__manifest__.py', b"{'data': ['data.xml']}"),
-            ('bar/data.xml', b"""
+            ('foo/data.sql',b"INSERTINTOres_partner(active,name)VALUES(true,'baz');"),
+            ('foo/static/css/style.css',b".foo{color:black;}"),
+            ('foo/static/js/foo.js',b"console.log('foo')"),
+            ('bar/__manifest__.py',b"{'data':['data.xml']}"),
+            ('bar/data.xml',b"""
                 <data>
-                    <record id="foo" model="res.country">
-                        <field name="name">foo</field>
+                    <recordid="foo"model="res.country">
+                        <fieldname="name">foo</field>
                     </record>
                 </data>
             """),
         ]
         self.import_zipfile(files)
-        self.assertEqual(self.env.ref('foo.foo')._name, 'res.partner')
-        self.assertEqual(self.env.ref('foo.foo').name, 'foo')
-        self.assertEqual(self.env.ref('foo.bar')._name, 'res.partner')
-        self.assertEqual(self.env.ref('foo.bar').name, 'bar')
-        self.assertEqual(self.env['res.partner'].search_count([('name', '=', 'baz')]), 1)
+        self.assertEqual(self.env.ref('foo.foo')._name,'res.partner')
+        self.assertEqual(self.env.ref('foo.foo').name,'foo')
+        self.assertEqual(self.env.ref('foo.bar')._name,'res.partner')
+        self.assertEqual(self.env.ref('foo.bar').name,'bar')
+        self.assertEqual(self.env['res.partner'].search_count([('name','=','baz')]),1)
 
-        self.assertEqual(self.env.ref('bar.foo')._name, 'res.country')
-        self.assertEqual(self.env.ref('bar.foo').name, 'foo')
+        self.assertEqual(self.env.ref('bar.foo')._name,'res.country')
+        self.assertEqual(self.env.ref('bar.foo').name,'foo')
 
-        for path, data in files:
-            if path.split('/')[1] == 'static':
-                static_attachment = self.env['ir.attachment'].search([('url', '=', '/%s' % path)])
-                self.assertEqual(static_attachment.name, os.path.basename(path))
-                self.assertEqual(static_attachment.datas, base64.b64encode(data))
+        forpath,datainfiles:
+            ifpath.split('/')[1]=='static':
+                static_attachment=self.env['ir.attachment'].search([('url','=','/%s'%path)])
+                self.assertEqual(static_attachment.name,os.path.basename(path))
+                self.assertEqual(static_attachment.datas,base64.b64encode(data))
 
-    def test_import_zip_invalid_manifest(self):
-        """Assert the expected behavior when import a ZIP module with an invalid manifest"""
-        files = [
-            ('foo/__manifest__.py', b"foo")
+    deftest_import_zip_invalid_manifest(self):
+        """AsserttheexpectedbehaviorwhenimportaZIPmodulewithaninvalidmanifest"""
+        files=[
+            ('foo/__manifest__.py',b"foo")
         ]
-        with mute_logger("flectra.addons.base_import_module.models.ir_module"):
-            result = self.import_zipfile(files)
-        self.assertIn("Error while importing module 'foo'", result[0])
+        withmute_logger("flectra.addons.base_import_module.models.ir_module"):
+            result=self.import_zipfile(files)
+        self.assertIn("Errorwhileimportingmodule'foo'",result[0])
 
-    def test_import_zip_data_not_in_manifest(self):
-        """Assert a data file not mentioned in the manifest is not imported"""
-        files = [
-            ('foo/__manifest__.py', b"{'data': ['foo.xml']}"),
-            ('foo/foo.xml', b"""
+    deftest_import_zip_data_not_in_manifest(self):
+        """Assertadatafilenotmentionedinthemanifestisnotimported"""
+        files=[
+            ('foo/__manifest__.py',b"{'data':['foo.xml']}"),
+            ('foo/foo.xml',b"""
                 <data>
-                    <record id="foo" model="res.partner">
-                        <field name="name">foo</field>
+                    <recordid="foo"model="res.partner">
+                        <fieldname="name">foo</field>
                     </record>
                 </data>
             """),
-            ('foo/bar.xml', b"""
+            ('foo/bar.xml',b"""
                 <data>
-                    <record id="bar" model="res.partner">
-                        <field name="name">bar</field>
+                    <recordid="bar"model="res.partner">
+                        <fieldname="name">bar</field>
                     </record>
                 </data>
             """),
         ]
         self.import_zipfile(files)
-        self.assertEqual(self.env.ref('foo.foo').name, 'foo')
-        self.assertFalse(self.env.ref('foo.bar', raise_if_not_found=False))
+        self.assertEqual(self.env.ref('foo.foo').name,'foo')
+        self.assertFalse(self.env.ref('foo.bar',raise_if_not_found=False))
 
-    def test_import_zip_ignore_unexpected_data_extension(self):
-        """Assert data files using an unexpected extensions are correctly ignored"""
-        files = [
-            ('foo/__manifest__.py', b"{'data': ['res.partner.xls']}"),
+    deftest_import_zip_ignore_unexpected_data_extension(self):
+        """Assertdatafilesusinganunexpectedextensionsarecorrectlyignored"""
+        files=[
+            ('foo/__manifest__.py',b"{'data':['res.partner.xls']}"),
             ('foo/res.partner.xls',
-                b'"id","name"\n' \
+                b'"id","name"\n'\
                 b'foo,foo'
             ),
         ]
-        with self.assertLogs('flectra.addons.base_import_module.models.ir_module') as log_catcher:
+        withself.assertLogs('flectra.addons.base_import_module.models.ir_module')aslog_catcher:
             self.import_zipfile(files)
-            self.assertEqual(len(log_catcher.output), 1)
-            self.assertIn('module foo: skip unsupported file res.partner.xls', log_catcher.output[0])
-            self.assertFalse(self.env.ref('foo.foo', raise_if_not_found=False))
+            self.assertEqual(len(log_catcher.output),1)
+            self.assertIn('modulefoo:skipunsupportedfileres.partner.xls',log_catcher.output[0])
+            self.assertFalse(self.env.ref('foo.foo',raise_if_not_found=False))
 
-    def test_import_zip_extract_only_useful(self):
-        """Assert only the data and static files are extracted of the ZIP archive during the module import"""
-        files = [
-            ('foo/__manifest__.py', b"{'data': ['data.xml', 'res.partner.xls']}"),
-            ('foo/data.xml', b"""
+    deftest_import_zip_extract_only_useful(self):
+        """AssertonlythedataandstaticfilesareextractedoftheZIParchiveduringthemoduleimport"""
+        files=[
+            ('foo/__manifest__.py',b"{'data':['data.xml','res.partner.xls']}"),
+            ('foo/data.xml',b"""
                 <data>
-                    <record id="foo" model="res.partner">
-                        <field name="name">foo</field>
+                    <recordid="foo"model="res.partner">
+                        <fieldname="name">foo</field>
                     </record>
                 </data>
             """),
             ('foo/res.partner.xls',
-                b'"id","name"\n' \
+                b'"id","name"\n'\
                 b'foo,foo'
             ),
-            ('foo/static/css/style.css', b".foo{color: black;}"),
-            ('foo/foo.py', b"foo = 42"),
+            ('foo/static/css/style.css',b".foo{color:black;}"),
+            ('foo/foo.py',b"foo=42"),
         ]
-        extracted_files = []
-        addons_path = []
-        origin_import_module = type(self.env['ir.module.module'])._import_module
-        def _import_module(self, *args, **kwargs):
-            _module, path = args
-            for root, _dirs, files in os.walk(path):
-                for file in files:
-                    extracted_files.append(os.path.relpath(os.path.join(root, file), path))
+        extracted_files=[]
+        addons_path=[]
+        origin_import_module=type(self.env['ir.module.module'])._import_module
+        def_import_module(self,*args,**kwargs):
+            _module,path=args
+            forroot,_dirs,filesinos.walk(path):
+                forfileinfiles:
+                    extracted_files.append(os.path.relpath(os.path.join(root,file),path))
             addons_path.extend(__addons_path__)
-            return origin_import_module(self, *args, **kwargs)
-        with patch.object(type(self.env['ir.module.module']), '_import_module', _import_module):
+            returnorigin_import_module(self,*args,**kwargs)
+        withpatch.object(type(self.env['ir.module.module']),'_import_module',_import_module):
             self.import_zipfile(files)
         self.assertIn(
-            '__manifest__.py', extracted_files,
-            "__manifest__.py must be in the extracted files")
+            '__manifest__.py',extracted_files,
+            "__manifest__.pymustbeintheextractedfiles")
         self.assertIn(
-            'data.xml', extracted_files,
-            "data.xml must be in the extracted files as its in the manifest's data")
+            'data.xml',extracted_files,
+            "data.xmlmustbeintheextractedfilesasitsinthemanifest'sdata")
         self.assertIn(
-            'static/css/style.css', extracted_files,
-            "style.css must be in the extracted files as its in the static folder")
+            'static/css/style.css',extracted_files,
+            "style.cssmustbeintheextractedfilesasitsinthestaticfolder")
         self.assertNotIn(
-            'res.partner.xls', extracted_files,
-            "res.partner.xls must not be in the extracted files as it uses an unsupported extension of data file")
+            'res.partner.xls',extracted_files,
+            "res.partner.xlsmustnotbeintheextractedfilesasitusesanunsupportedextensionofdatafile")
         self.assertNotIn(
-            'foo.py', extracted_files,
-            "foo.py must not be in the extracted files as its not the manifest's data")
+            'foo.py',extracted_files,
+            "foo.pymustnotbeintheextractedfilesasitsnotthemanifest'sdata")
         self.assertFalse(
             set(addons_path).difference(__addons_path__),
-            'No directory must be added in the addons path during import')
+            'Nodirectorymustbeaddedintheaddonspathduringimport')
 
-    def test_import_module_addons_path(self):
-        """Assert it's possible to import a module using directly `_import_module` without zip from the addons path"""
-        files = [
-            ('foo/__manifest__.py', b"{'data': ['data.xml']}"),
-            ('foo/data.xml', b"""
+    deftest_import_module_addons_path(self):
+        """Assertit'spossibletoimportamoduleusingdirectly`_import_module`withoutzipfromtheaddonspath"""
+        files=[
+            ('foo/__manifest__.py',b"{'data':['data.xml']}"),
+            ('foo/data.xml',b"""
                 <data>
-                    <record id="foo" model="res.partner">
-                        <field name="name">foo</field>
+                    <recordid="foo"model="res.partner">
+                        <fieldname="name">foo</field>
                     </record>
                 </data>
             """),
-            ('foo/static/css/style.css', b".foo{color: black;}"),
+            ('foo/static/css/style.css',b".foo{color:black;}"),
         ]
-        with tempfile.TemporaryDirectory() as module_dir:
-            for path, data in files:
-                os.makedirs(os.path.join(module_dir, os.path.dirname(path)), exist_ok=True)
-                with open(os.path.join(module_dir, path), 'wb') as fp:
+        withtempfile.TemporaryDirectory()asmodule_dir:
+            forpath,datainfiles:
+                os.makedirs(os.path.join(module_dir,os.path.dirname(path)),exist_ok=True)
+                withopen(os.path.join(module_dir,path),'wb')asfp:
                     fp.write(data)
             try:
                 __addons_path__.append(module_dir)
-                self.env['ir.module.module']._import_module('foo', os.path.join(module_dir, 'foo'))
+                self.env['ir.module.module']._import_module('foo',os.path.join(module_dir,'foo'))
             finally:
                 __addons_path__.remove(module_dir)
 
-        self.assertEqual(self.env.ref('foo.foo')._name, 'res.partner')
-        self.assertEqual(self.env.ref('foo.foo').name, 'foo')
-        static_path, static_data = files[2]
-        static_attachment = self.env['ir.attachment'].search([('url', '=', '/%s' % static_path)])
-        self.assertEqual(static_attachment.name, os.path.basename(static_path))
-        self.assertEqual(static_attachment.datas, base64.b64encode(static_data))
+        self.assertEqual(self.env.ref('foo.foo')._name,'res.partner')
+        self.assertEqual(self.env.ref('foo.foo').name,'foo')
+        static_path,static_data=files[2]
+        static_attachment=self.env['ir.attachment'].search([('url','=','/%s'%static_path)])
+        self.assertEqual(static_attachment.name,os.path.basename(static_path))
+        self.assertEqual(static_attachment.datas,base64.b64encode(static_data))
 
 
-class TestImportModuleHttp(TestImportModule, HttpCase):
-    def test_import_module_icon(self):
-        """Assert import a module with an icon result in the module displaying the icon in the apps menu,
-        and with the base module icon if module without icon"""
-        files = [
-            ('foo/__manifest__.py', b"{'name': 'foo'}"),
-            ('foo/static/description/icon.png', b"foo_icon"),
-            ('bar/__manifest__.py', b"{'name': 'bar'}"),
+classTestImportModuleHttp(TestImportModule,HttpCase):
+    deftest_import_module_icon(self):
+        """Assertimportamodulewithaniconresultinthemoduledisplayingtheiconintheappsmenu,
+        andwiththebasemoduleiconifmodulewithouticon"""
+        files=[
+            ('foo/__manifest__.py',b"{'name':'foo'}"),
+            ('foo/static/description/icon.png',b"foo_icon"),
+            ('bar/__manifest__.py',b"{'name':'bar'}"),
         ]
         self.import_zipfile(files)
-        foo_icon_path, foo_icon_data = files[1]
-        # Assert icon of module foo, which must be the icon provided in the zip
-        self.assertEqual(self.url_open('/' + foo_icon_path).content, foo_icon_data)
-        # Assert icon of module bar, which must be the icon of the base module as none was provided
-        self.assertEqual(self.env.ref('base.module_bar').icon_image, self.env.ref('base.module_base').icon_image)
+        foo_icon_path,foo_icon_data=files[1]
+        #Asserticonofmodulefoo,whichmustbetheiconprovidedinthezip
+        self.assertEqual(self.url_open('/'+foo_icon_path).content,foo_icon_data)
+        #Asserticonofmodulebar,whichmustbetheiconofthebasemoduleasnonewasprovided
+        self.assertEqual(self.env.ref('base.module_bar').icon_image,self.env.ref('base.module_base').icon_image)
 
-    def test_import_module_field_file(self):
-        files = [
-            ('foo/__manifest__.py', b"{'data': ['data.xml']}"),
-            ('foo/data.xml', b"""
+    deftest_import_module_field_file(self):
+        files=[
+            ('foo/__manifest__.py',b"{'data':['data.xml']}"),
+            ('foo/data.xml',b"""
                 <data>
-                    <record id="logo" model="ir.attachment">
-                        <field name="name">Company Logo</field>
-                        <field name="datas" type="base64" file="foo/static/src/img/content/logo.png"/>
-                        <field name="res_model">ir.ui.view</field>
-                        <field name="public" eval="True"/>
+                    <recordid="logo"model="ir.attachment">
+                        <fieldname="name">CompanyLogo</field>
+                        <fieldname="datas"type="base64"file="foo/static/src/img/content/logo.png"/>
+                        <fieldname="res_model">ir.ui.view</field>
+                        <fieldname="public"eval="True"/>
                     </record>
                 </data>
             """),
-            ('foo/static/src/img/content/logo.png', b"foo_logo"),
+            ('foo/static/src/img/content/logo.png',b"foo_logo"),
         ]
         self.import_zipfile(files)
-        logo_path, logo_data = files[2]
-        self.assertEqual(base64.b64decode(self.env.ref('foo.logo').datas), logo_data)
-        self.assertEqual(self.url_open('/' + logo_path).content, logo_data)
+        logo_path,logo_data=files[2]
+        self.assertEqual(base64.b64decode(self.env.ref('foo.logo').datas),logo_data)
+        self.assertEqual(self.url_open('/'+logo_path).content,logo_data)

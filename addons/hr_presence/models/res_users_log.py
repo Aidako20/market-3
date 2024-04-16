@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class ResUsersLog(models.Model):
-    _inherit = 'res.users.log'
+classResUsersLog(models.Model):
+    _inherit='res.users.log'
 
-    create_uid = fields.Integer(index=True)
-    ip = fields.Char(string="IP Address")
+    create_uid=fields.Integer(index=True)
+    ip=fields.Char(string="IPAddress")

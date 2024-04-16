@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.http import Controller, request, route
+fromflectra.httpimportController,request,route
 
 
-class TestBusController(Controller):
+classTestBusController(Controller):
     """
-    This controller is only useful for test purpose. Bus is unavailable in test mode, but there is no way to know,
-    at client side, if we are running in test mode or not. This route can be called while running tours to mock
-    some behaviour in function of the test mode status (activated or not).
+    Thiscontrollerisonlyusefulfortestpurpose.Busisunavailableintestmode,butthereisnowaytoknow,
+    atclientside,ifwearerunningintestmodeornot.Thisroutecanbecalledwhilerunningtourstomock
+    somebehaviourinfunctionofthetestmodestatus(activatedornot).
 
-    E.g. : To test the livechat and to check there is no duplicates in message displayed in the chatter,
-    in test mode, we need to mock a 'message added' notification that is normally triggered by the bus.
-    In Normal mode, the bus triggers itself the notification.
+    E.g.:Totestthelivechatandtocheckthereisnoduplicatesinmessagedisplayedinthechatter,
+    intestmode,weneedtomocka'messageadded'notificationthatisnormallytriggeredbythebus.
+    InNormalmode,thebustriggersitselfthenotification.
     """
-    @route('/bus/test_mode_activated', type="json", auth="public")
-    def is_test_mode_activated(self):
-        return request.registry.in_test_mode()
+    @route('/bus/test_mode_activated',type="json",auth="public")
+    defis_test_mode_activated(self):
+        returnrequest.registry.in_test_mode()

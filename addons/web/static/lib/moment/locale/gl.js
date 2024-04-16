@@ -1,77 +1,77 @@
-//! moment.js locale configuration
-//! locale : Galician [gl]
-//! author : Juan G. Hurtado : https://github.com/juanghurtado
+//!moment.jslocaleconfiguration
+//!locale:Galician[gl]
+//!author:JuanG.Hurtado:https://github.com/juanghurtado
 
-;(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined'
-       && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+;(function(global,factory){
+   typeofexports==='object'&&typeofmodule!=='undefined'
+       &&typeofrequire==='function'?factory(require('../moment')):
+   typeofdefine==='function'&&define.amd?define(['../moment'],factory):
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this,(function(moment){'usestrict';
 
 
-var gl = moment.defineLocale('gl', {
-    months : 'xaneiro_febreiro_marzo_abril_maio_xuño_xullo_agosto_setembro_outubro_novembro_decembro'.split('_'),
-    monthsShort : 'xan._feb._mar._abr._mai._xuñ._xul._ago._set._out._nov._dec.'.split('_'),
-    monthsParseExact: true,
-    weekdays : 'domingo_luns_martes_mércores_xoves_venres_sábado'.split('_'),
-    weekdaysShort : 'dom._lun._mar._mér._xov._ven._sáb.'.split('_'),
-    weekdaysMin : 'do_lu_ma_mé_xo_ve_sá'.split('_'),
-    weekdaysParseExact : true,
-    longDateFormat : {
-        LT : 'H:mm',
-        LTS : 'H:mm:ss',
-        L : 'DD/MM/YYYY',
-        LL : 'D [de] MMMM [de] YYYY',
-        LLL : 'D [de] MMMM [de] YYYY H:mm',
-        LLLL : 'dddd, D [de] MMMM [de] YYYY H:mm'
+vargl=moment.defineLocale('gl',{
+    months:'xaneiro_febreiro_marzo_abril_maio_xuño_xullo_agosto_setembro_outubro_novembro_decembro'.split('_'),
+    monthsShort:'xan._feb._mar._abr._mai._xuñ._xul._ago._set._out._nov._dec.'.split('_'),
+    monthsParseExact:true,
+    weekdays:'domingo_luns_martes_mércores_xoves_venres_sábado'.split('_'),
+    weekdaysShort:'dom._lun._mar._mér._xov._ven._sáb.'.split('_'),
+    weekdaysMin:'do_lu_ma_mé_xo_ve_sá'.split('_'),
+    weekdaysParseExact:true,
+    longDateFormat:{
+        LT:'H:mm',
+        LTS:'H:mm:ss',
+        L:'DD/MM/YYYY',
+        LL:'D[de]MMMM[de]YYYY',
+        LLL:'D[de]MMMM[de]YYYYH:mm',
+        LLLL:'dddd,D[de]MMMM[de]YYYYH:mm'
     },
-    calendar : {
-        sameDay : function () {
-            return '[hoxe ' + ((this.hours() !== 1) ? 'ás' : 'á') + '] LT';
+    calendar:{
+        sameDay:function(){
+            return'[hoxe'+((this.hours()!==1)?'ás':'á')+']LT';
         },
-        nextDay : function () {
-            return '[mañá ' + ((this.hours() !== 1) ? 'ás' : 'á') + '] LT';
+        nextDay:function(){
+            return'[mañá'+((this.hours()!==1)?'ás':'á')+']LT';
         },
-        nextWeek : function () {
-            return 'dddd [' + ((this.hours() !== 1) ? 'ás' : 'a') + '] LT';
+        nextWeek:function(){
+            return'dddd['+((this.hours()!==1)?'ás':'a')+']LT';
         },
-        lastDay : function () {
-            return '[onte ' + ((this.hours() !== 1) ? 'á' : 'a') + '] LT';
+        lastDay:function(){
+            return'[onte'+((this.hours()!==1)?'á':'a')+']LT';
         },
-        lastWeek : function () {
-            return '[o] dddd [pasado ' + ((this.hours() !== 1) ? 'ás' : 'a') + '] LT';
+        lastWeek:function(){
+            return'[o]dddd[pasado'+((this.hours()!==1)?'ás':'a')+']LT';
         },
-        sameElse : 'L'
+        sameElse:'L'
     },
-    relativeTime : {
-        future : function (str) {
-            if (str.indexOf('un') === 0) {
-                return 'n' + str;
+    relativeTime:{
+        future:function(str){
+            if(str.indexOf('un')===0){
+                return'n'+str;
             }
-            return 'en ' + str;
+            return'en'+str;
         },
-        past : 'hai %s',
-        s : 'uns segundos',
-        m : 'un minuto',
-        mm : '%d minutos',
-        h : 'unha hora',
-        hh : '%d horas',
-        d : 'un día',
-        dd : '%d días',
-        M : 'un mes',
-        MM : '%d meses',
-        y : 'un ano',
-        yy : '%d anos'
+        past:'hai%s',
+        s:'unssegundos',
+        m:'unminuto',
+        mm:'%dminutos',
+        h:'unhahora',
+        hh:'%dhoras',
+        d:'undía',
+        dd:'%ddías',
+        M:'unmes',
+        MM:'%dmeses',
+        y:'unano',
+        yy:'%danos'
     },
-    ordinalParse : /\d{1,2}º/,
-    ordinal : '%dº',
-    week : {
-        dow : 1, // Monday is the first day of the week.
-        doy : 4  // The week that contains Jan 4th is the first week of the year.
+    ordinalParse:/\d{1,2}º/,
+    ordinal:'%dº',
+    week:{
+        dow:1,//Mondayisthefirstdayoftheweek.
+        doy:4 //TheweekthatcontainsJan4thisthefirstweekoftheyear.
     }
 });
 
-return gl;
+returngl;
 
 })));

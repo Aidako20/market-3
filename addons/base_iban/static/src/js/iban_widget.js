@@ -1,129 +1,129 @@
-flectra.define('base_iban.iban_widget', function (require) {
-"use strict";
+flectra.define('base_iban.iban_widget',function(require){
+"usestrict";
 
-var basicFields = require('web.basic_fields');
-var core = require('web.core');
-var fieldRegistry = require('web.field_registry');
+varbasicFields=require('web.basic_fields');
+varcore=require('web.core');
+varfieldRegistry=require('web.field_registry');
 
-var FieldChar = basicFields.FieldChar;
+varFieldChar=basicFields.FieldChar;
 
-var _t = core._t;
+var_t=core._t;
 /**
- * IbanWidget is a widget to check if the iban number is valide.
- * If the bank account is correct, it will show a green check pictogram
- * next to number, if the number is not complient with IBAN format, a
- * red cross will be show. This pictogram is computed every time the user
- * changes the field (If user is typing, there is a debouce of 400ms).
+ *IbanWidgetisawidgettocheckiftheibannumberisvalide.
+ *Ifthebankaccountiscorrect,itwillshowagreencheckpictogram
+ *nexttonumber,ifthenumberisnotcomplientwithIBANformat,a
+ *redcrosswillbeshow.Thispictogramiscomputedeverytimetheuser
+ *changesthefield(Ifuseristyping,thereisadebouceof400ms).
  */
-var IbanWidget = FieldChar.extend({
+varIbanWidget=FieldChar.extend({
     /**
-     * @constructor
+     *@constructor
      */
-    init: function () {
-        this._super.apply(this, arguments);
+    init:function(){
+        this._super.apply(this,arguments);
         this.ibanIsValid;
-        this._isValid = true;
-        this._compute_debounce = _.debounce(this._compute, 400);
+        this._isValid=true;
+        this._compute_debounce=_.debounce(this._compute,400);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Compute if iban is valid
-     * @private
+     *Computeifibanisvalid
+     *@private
      */
-    _compute: function () {
-        var self = this;
-        var content = this._getValue();
+    _compute:function(){
+        varself=this;
+        varcontent=this._getValue();
 
-        if (content.length === 0) {
-            this.ibanIsValid = true;
-            this.$el.last().filter('.o_iban').removeClass('fa-check text-success fa-times text-danger o_iban_fail');
-            this.$el.last().filter('.o_iban').attr('title', '');
-        } else if (content.length < 15) {
-            if (this.ibanIsValid !== false) {
-                this.ibanIsValid = false;
+        if(content.length===0){
+            this.ibanIsValid=true;
+            this.$el.last().filter('.o_iban').removeClass('fa-checktext-successfa-timestext-dangero_iban_fail');
+            this.$el.last().filter('.o_iban').attr('title','');
+        }elseif(content.length<15){
+            if(this.ibanIsValid!==false){
+                this.ibanIsValid=false;
                 this._renderValid();
             }
-        } else {
+        }else{
             this._rpc({
-                model: 'res.partner.bank',
-                method: 'check_iban',
-                args: [[], content],
+                model:'res.partner.bank',
+                method:'check_iban',
+                args:[[],content],
             })
-            .then(function (result) {
-                if (result !== self.ibanIsValid) {
-                    self.ibanIsValid = result;
+            .then(function(result){
+                if(result!==self.ibanIsValid){
+                    self.ibanIsValid=result;
                     self._renderValid();
                 }
             });
         }
     },
     /**
-     * @private
-     * @override
-     * @returns {Promise|undefined}
+     *@private
+     *@override
+     *@returns{Promise|undefined}
      */
-    _renderEdit: function () {
-        var res = this._super.apply(this, arguments);
+    _renderEdit:function(){
+        varres=this._super.apply(this,arguments);
         this._compute();
-        return res;
+        returnres;
     },
     /**
-     * Render the pictogram next to account number.
-     * @private
+     *Renderthepictogramnexttoaccountnumber.
+     *@private
      */
-    _renderValid: function () {
-        var warningMessage = _t("Account isn't IBAN compliant.");
+    _renderValid:function(){
+        varwarningMessage=_t("Accountisn'tIBANcompliant.");
 
-        if (this.$el.filter('.o_iban').length === 0) {
-            var $span;
-            if (!this.ibanIsValid) {
-                $span = $('<span class="fa fa-times o_iban text-danger o_iban_fail"/>');
-                $span.attr('title', warningMessage);
-            } else {
-                $span = $('<span class="fa fa-check o_iban text-success"/>');
+        if(this.$el.filter('.o_iban').length===0){
+            var$span;
+            if(!this.ibanIsValid){
+                $span=$('<spanclass="fafa-timeso_ibantext-dangero_iban_fail"/>');
+                $span.attr('title',warningMessage);
+            }else{
+                $span=$('<spanclass="fafa-checko_ibantext-success"/>');
             }
             this.$el.addClass('o_iban_input_with_validator');
             $span.insertAfter(this.$el);
-            this.$el = this.$el.add($span);
+            this.$el=this.$el.add($span);
         }
 
-        if (!this.ibanIsValid) {
-            this.$el.last().filter('.o_iban').removeClass('fa-check text-success').addClass('fa-times text-danger o_iban_fail');
-            this.$el.last().filter('.o_iban').attr('title', warningMessage);
-        } else {
-            this.$el.last().filter('.o_iban').removeClass('fa-times text-danger o_iban_fail').addClass('fa-check text-success');
-            this.$el.last().filter('.o_iban').attr('title', '');
+        if(!this.ibanIsValid){
+            this.$el.last().filter('.o_iban').removeClass('fa-checktext-success').addClass('fa-timestext-dangero_iban_fail');
+            this.$el.last().filter('.o_iban').attr('title',warningMessage);
+        }else{
+            this.$el.last().filter('.o_iban').removeClass('fa-timestext-dangero_iban_fail').addClass('fa-checktext-success');
+            this.$el.last().filter('.o_iban').attr('title','');
 
         }
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onChange: function () {
-        this._super.apply(this, arguments);
+    _onChange:function(){
+        this._super.apply(this,arguments);
         this._compute();
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onInput: function () {
-        this._super.apply(this, arguments);
+    _onInput:function(){
+        this._super.apply(this,arguments);
         this._compute_debounce();
     },
 });
 
-fieldRegistry.add('iban', IbanWidget);
+fieldRegistry.add('iban',IbanWidget);
 
-return IbanWidget;
+returnIbanWidget;
 });

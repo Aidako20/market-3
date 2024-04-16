@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class CrmLeadLost(models.TransientModel):
-    _name = 'crm.lead.lost'
-    _description = 'Get Lost Reason'
+classCrmLeadLost(models.TransientModel):
+    _name='crm.lead.lost'
+    _description='GetLostReason'
 
-    lost_reason_id = fields.Many2one('crm.lost.reason', 'Lost Reason')
+    lost_reason_id=fields.Many2one('crm.lost.reason','LostReason')
 
-    def action_lost_reason_apply(self):
-        leads = self.env['crm.lead'].browse(self.env.context.get('active_ids'))
-        return leads.action_set_lost(lost_reason=self.lost_reason_id.id)
+    defaction_lost_reason_apply(self):
+        leads=self.env['crm.lead'].browse(self.env.context.get('active_ids'))
+        returnleads.action_set_lost(lost_reason=self.lost_reason_id.id)

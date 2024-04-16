@@ -1,139 +1,139 @@
-<?xml version="1.0" ?>
+<?xmlversion="1.0"?>
 <flectra>
     <data>
         <!--
-            This template is the PDF Viewer. It will mostly rendered throught an iFrame.
-            The js file to bind event is slides_embed.js
+            ThistemplateisthePDFViewer.ItwillmostlyrenderedthroughtaniFrame.
+            Thejsfiletobindeventisslides_embed.js
         -->
-        <template id="embed_slide" name="Embedded Slide Page">
+        <templateid="embed_slide"name="EmbeddedSlidePage">
             <html>
                 <head>
-                    <title><t t-esc="slide.name"/></title>
-                    <t t-call-assets="web.assets_common" t-js="false"/>
-                    <t t-call-assets="website_slides.slide_embed_assets" t-js="false"/>
-                    <t t-call-assets="web.assets_common" t-css="false"/>
-                    <t t-call-assets="website_slides.slide_embed_assets" t-css="false"/>
+                    <title><tt-esc="slide.name"/></title>
+                    <tt-call-assets="web.assets_common"t-js="false"/>
+                    <tt-call-assets="website_slides.slide_embed_assets"t-js="false"/>
+                    <tt-call-assets="web.assets_common"t-css="false"/>
+                    <tt-call-assets="website_slides.slide_embed_assets"t-css="false"/>
                 </head>
                 <body>
-                    <div id="PDFViewer" class="o_wslides_fs_pdf_viewer d-flex flex-column h-100">
-                        <!-- PDF Viewer Header : contains the name, and the share links -->
-                        <div t-if="is_embedded" class="oe_slides_share_bar">
-                            <div class="container-fluid">
-                                <div class="row align-items-center">
-                                    <div class="col">
-                                        <div class="oe_slides_ellipsis">
-                                            <a target="_new" t-att-href="slide.website_url">
-                                                <span  t-esc="slide.name" t-att-title="slide.name"/>
+                    <divid="PDFViewer"class="o_wslides_fs_pdf_viewerd-flexflex-columnh-100">
+                        <!--PDFViewerHeader:containsthename,andthesharelinks-->
+                        <divt-if="is_embedded"class="oe_slides_share_bar">
+                            <divclass="container-fluid">
+                                <divclass="rowalign-items-center">
+                                    <divclass="col">
+                                        <divclass="oe_slides_ellipsis">
+                                            <atarget="_new"t-att-href="slide.website_url">
+                                                <span t-esc="slide.name"t-att-title="slide.name"/>
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="col flex-grow-0 d-flex text-nowrap small">
-                                        <a href="#" class="oe_slide_js_embed_option_link" data-slide-option-id="#slide_share"><i class="fa fa-share-alt"/> Share</a>
-                                        <a href="#" class="oe_slide_js_embed_option_link mx-4" data-slide-option-id="#slide_email"><i class="fa fa-envelope"/> Email</a>
-                                        <a href="#" class="oe_slide_js_embed_option_link" data-slide-option-id="#slide_embed"><i class="fa fa-code"/> Embed</a>
+                                    <divclass="colflex-grow-0d-flextext-nowrapsmall">
+                                        <ahref="#"class="oe_slide_js_embed_option_link"data-slide-option-id="#slide_share"><iclass="fafa-share-alt"/>Share</a>
+                                        <ahref="#"class="oe_slide_js_embed_option_linkmx-4"data-slide-option-id="#slide_email"><iclass="fafa-envelope"/>Email</a>
+                                        <ahref="#"class="oe_slide_js_embed_option_link"data-slide-option-id="#slide_embed"><iclass="fafa-code"/>Embed</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!--  PDF Viewer Body : contains the canvas, the loader, or the image-->
-                        <div id="PDFSlideViewer" class="d-flex align-items-start position-relative flex-grow-1 overflow-auto" style="height: 0;"
+                        <!-- PDFViewerBody:containsthecanvas,theloader,ortheimage-->
+                        <divid="PDFSlideViewer"class="d-flexalign-items-startposition-relativeflex-grow-1overflow-auto"style="height:0;"
                                 t-attf-data-slideid="#{slide.id}"
                                 t-attf-data-slideurl="/slides/slide/#{slug(slide)}/pdf_content"
                                 t-attf-data-downloadable="#{False}"
                                 t-att-data-defaultpage="page">
-                            <t t-if="is_embedded">
-                                <div id="slide_share" class="oe_slide_embed_option" style="display: none;">
-                                    <t t-call="website_slides.slide_share_modal">
-                                        <t t-set="record" t-value="slide"/>
-                                        <t t-set="website_url" t-value="slide.channel_id.website_url"/>
+                            <tt-if="is_embedded">
+                                <divid="slide_share"class="oe_slide_embed_option"style="display:none;">
+                                    <tt-call="website_slides.slide_share_modal">
+                                        <tt-set="record"t-value="slide"/>
+                                        <tt-set="website_url"t-value="slide.channel_id.website_url"/>
                                     </t>
                                 </div>
-                                <div id="slide_email" class="oe_slide_embed_option" style="display: none;">
-                                    <t t-call="website_slides.slide_social_email"/>
+                                <divid="slide_email"class="oe_slide_embed_option"style="display:none;">
+                                    <tt-call="website_slides.slide_social_email"/>
                                 </div>
-                                <div id="slide_embed" class="oe_slide_embed_option" style="display: none;">
-                                    <t t-call="website_slides.slide_social_embed"/>
+                                <divid="slide_embed"class="oe_slide_embed_option"style="display:none;">
+                                    <tt-call="website_slides.slide_social_embed"/>
                                 </div>
                             </t>
-                            <div id="slide_suggest" class="oe_slide_embed_option bg-300 container-fluid overflow-auto d-none">
-                                <div class="row">
-                                    <t t-foreach="related_slides" t-as="suggest_slide">
-                                        <div class="col-6 col-md-4 col-lg-3 oe_slides_suggestion_media">
-                                            <div class="card mb-3">
-                                                <a t-att-href="suggest_slide.website_url" target="_new" class="card-img-top embed-responsive embed-responsive-16by9">
-                                                    <img t-att-src="website.image_url(suggest_slide, 'image_1024')" class="card-img-top embed-responsive-item" t-att-alt="suggest_slide.name"/>
+                            <divid="slide_suggest"class="oe_slide_embed_optionbg-300container-fluidoverflow-autod-none">
+                                <divclass="row">
+                                    <tt-foreach="related_slides"t-as="suggest_slide">
+                                        <divclass="col-6col-md-4col-lg-3oe_slides_suggestion_media">
+                                            <divclass="cardmb-3">
+                                                <at-att-href="suggest_slide.website_url"target="_new"class="card-img-topembed-responsiveembed-responsive-16by9">
+                                                    <imgt-att-src="website.image_url(suggest_slide,'image_1024')"class="card-img-topembed-responsive-item"t-att-alt="suggest_slide.name"/>
                                                 </a>
-                                                <div class="card-body">
-                                                    <h6 class="card-title">
-                                                        <a t-att-href="suggest_slide.website_url" target="_new">
-                                                            <t t-esc="suggest_slide.name"/>
+                                                <divclass="card-body">
+                                                    <h6class="card-title">
+                                                        <at-att-href="suggest_slide.website_url"target="_new">
+                                                            <tt-esc="suggest_slide.name"/>
                                                         </a>
                                                     </h6>
-                                                    <div class="oe_slides_suggestion_caption"/>
+                                                    <divclass="oe_slides_suggestion_caption"/>
                                                 </div>
                                             </div>
                                         </div>
                                     </t>
                                 </div>
                             </div>
-                            <t t-if="slide.slide_type in ('presentation', 'document')">
-                                <div id="PDFViewerLoader" class="oe_slides_loader mt-3 mx-2 w-100">
-                                    <div class="toast show mx-auto">
-                                        <div class="toast-header">
-                                            <i class="fa fa-circle-o-notch fa-spin mr-2"/><b>Loading...</b>
+                            <tt-if="slide.slide_typein('presentation','document')">
+                                <divid="PDFViewerLoader"class="oe_slides_loadermt-3mx-2w-100">
+                                    <divclass="toastshowmx-auto">
+                                        <divclass="toast-header">
+                                            <iclass="fafa-circle-o-notchfa-spinmr-2"/><b>Loading...</b>
                                         </div>
-                                        <div class="toast-body p-0">
-                                            <img class="img-fluid w-100" t-att-src="website.image_url(slide, 'image_256')"/>
+                                        <divclass="toast-bodyp-0">
+                                            <imgclass="img-fluidw-100"t-att-src="website.image_url(slide,'image_256')"/>
                                         </div>
                                     </div>
                                 </div>
-                                <canvas id="PDFViewerCanvas" class="mx-auto" style="display: none;"></canvas>
+                                <canvasid="PDFViewerCanvas"class="mx-auto"style="display:none;"></canvas>
                             </t>
-                            <t t-if="slide.slide_type == 'infographic'">
-                                <img t-att-src="website.image_url(slide, 'image_1024')" class="img-fluid" style="width: 100%" alt="Slide image"/>
+                            <tt-if="slide.slide_type=='infographic'">
+                                <imgt-att-src="website.image_url(slide,'image_1024')"class="img-fluid"style="width:100%"alt="Slideimage"/>
                             </t>
                         </div>
-                        <!-- Fixed bottom navbar -->
-                        <div id="PDFViewerNav" class="pt-2 pb-2 bg-light text-white" role="navigation" t-if="slide.slide_type in ('presentation', 'document')">
-                            <div class="container-fluid oe_slides_panel_footer">
-                                <div class="row align-items-center">
-                                    <div class="col-3 d-flex align-items-center">
-                                        <div class="input-group input-group-sm flex-nowrap" style="max-width: 100px">
-                                            <input type="number" class="form-control text-center" id="page_number" style="min-width: 60px"/>
-                                            <div class="input-group-append">
-                                                <span class="input-group-text" id="page_count"/>
+                        <!--Fixedbottomnavbar-->
+                        <divid="PDFViewerNav"class="pt-2pb-2bg-lighttext-white"role="navigation"t-if="slide.slide_typein('presentation','document')">
+                            <divclass="container-fluidoe_slides_panel_footer">
+                                <divclass="rowalign-items-center">
+                                    <divclass="col-3d-flexalign-items-center">
+                                        <divclass="input-groupinput-group-smflex-nowrap"style="max-width:100px">
+                                            <inputtype="number"class="form-controltext-center"id="page_number"style="min-width:60px"/>
+                                            <divclass="input-group-append">
+                                                <spanclass="input-group-text"id="page_count"/>
                                             </div>
                                         </div>
-                                        <a id="zoomout" href="#" class="text-decoration-none d-none d-sm-inline ml-2 mr-2" title="Zoom out" aria-label="Zoom out" role="button">
-                                            <i class="fa fa-search-minus" />
+                                        <aid="zoomout"href="#"class="text-decoration-noned-noned-sm-inlineml-2mr-2"title="Zoomout"aria-label="Zoomout"role="button">
+                                            <iclass="fafa-search-minus"/>
                                         </a>
-                                        <a id="zoomin" href="#" class="text-decoration-none d-none d-sm-inline" title="Zoom in" aria-label="Zoom in" role="button">
-                                            <i class="fa fa-search-plus" />
+                                        <aid="zoomin"href="#"class="text-decoration-noned-noned-sm-inline"title="Zoomin"aria-label="Zoomin"role="button">
+                                            <iclass="fafa-search-plus"/>
                                         </a>
                                     </div>
-                                    <div class="col text-center">
-                                        <a id="first" href="#" onclick="return false;"
-                                           class="text-decoration-none mr-1 mr-sm-2" title="First slide"
-                                           role="button" aria-label="First slide"> <i class="fa fa-step-backward"/> </a>
-                                        <a id="previous" href="#" onclick="return false;"
-                                           class="text-decoration-none mx-1 mx-sm-2" title="Previous slide"
-                                           aria-label="Previous slide" role="button"> <i class="fa fa-arrow-circle-left"/> </a>
-                                        <a id="next" href="#" onclick="return false;"
-                                           class="text-decoration-none mx-1 mx-sm-2" title="Next slide"
-                                           aria-label="Next slide" role="button"> <i class="fa fa-arrow-circle-right"/> </a>
-                                        <a id="last" href="#" onclick="return false;"
-                                           class="text-decoration-none mx-1 mx-sm-2" title="Last slide"
-                                           aria-label="Last slide" role="button"> <i class="fa fa-step-forward"/> </a>
-                                        <a t-if="slide.slide_resource_downloadable" id="download" t-attf-href="/web/content/slide.slide/#{slide.id}/datas?download=true"
-                                           class="text-decoration-none ml-1 ml-sm-2" title="Download Content" role="img" aria-label="Download">
-                                            <i class="fa fa-download" />
+                                    <divclass="coltext-center">
+                                        <aid="first"href="#"onclick="returnfalse;"
+                                           class="text-decoration-nonemr-1mr-sm-2"title="Firstslide"
+                                           role="button"aria-label="Firstslide"><iclass="fafa-step-backward"/></a>
+                                        <aid="previous"href="#"onclick="returnfalse;"
+                                           class="text-decoration-nonemx-1mx-sm-2"title="Previousslide"
+                                           aria-label="Previousslide"role="button"><iclass="fafa-arrow-circle-left"/></a>
+                                        <aid="next"href="#"onclick="returnfalse;"
+                                           class="text-decoration-nonemx-1mx-sm-2"title="Nextslide"
+                                           aria-label="Nextslide"role="button"><iclass="fafa-arrow-circle-right"/></a>
+                                        <aid="last"href="#"onclick="returnfalse;"
+                                           class="text-decoration-nonemx-1mx-sm-2"title="Lastslide"
+                                           aria-label="Lastslide"role="button"><iclass="fafa-step-forward"/></a>
+                                        <at-if="slide.slide_resource_downloadable"id="download"t-attf-href="/web/content/slide.slide/#{slide.id}/datas?download=true"
+                                           class="text-decoration-noneml-1ml-sm-2"title="DownloadContent"role="img"aria-label="Download">
+                                            <iclass="fafa-download"/>
                                         </a>
-                                    </div>                                    
-                                    <div class="col-3 text-right flex-grow-0">
-                                        <a id="fullscreen" href="#" onclick="return false;"
-                                           class="text-decoration-none ml-1 ml-sm-2"
-                                           title="View fullscreen" role="img" aria-label="Fullscreen">
-                                            <i class="fa fa-arrows-alt"/>
+                                    </div>                                   
+                                    <divclass="col-3text-rightflex-grow-0">
+                                        <aid="fullscreen"href="#"onclick="returnfalse;"
+                                           class="text-decoration-noneml-1ml-sm-2"
+                                           title="Viewfullscreen"role="img"aria-label="Fullscreen">
+                                            <iclass="fafa-arrows-alt"/>
                                         </a>
                                     </div>
                                 </div>
@@ -145,17 +145,17 @@
         </template>
 
         <!--
-            Template render isntead of Embedded Slide, it this one is forbidden.
-            So, it will mostly be rendered throught an iFrame
+            TemplaterenderisnteadofEmbeddedSlide,itthisoneisforbidden.
+            So,itwillmostlyberenderedthroughtaniFrame
         -->
-        <template id="embed_slide_forbidden" name="Forbidden Embedded Slide">
+        <templateid="embed_slide_forbidden"name="ForbiddenEmbeddedSlide">
             <html>
                 <head>
-                    <t t-call-assets="website_slides.slide_embed_assets" t-js="false"/>
+                    <tt-call-assets="website_slides.slide_embed_assets"t-js="false"/>
                 </head>
                 <body>
-                    <div class="slide-private-view">
-                        <h3 style="border-bottom: 1px solid !important;padding-bottom: 10px;"><i class="fa fa-exclamation-triangle" role="img" aria-label="Attention" title="Attention"></i> This document is private.</h3>
+                    <divclass="slide-private-view">
+                        <h3style="border-bottom:1pxsolid!important;padding-bottom:10px;"><iclass="fafa-exclamation-triangle"role="img"aria-label="Attention"title="Attention"></i>Thisdocumentisprivate.</h3>
                     </div>
                 </body>
             </html>

@@ -1,52 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="eu_service_view" model="ir.ui.view">
-            <field name="name">l10n_eu_service.wizard.form</field>
-            <field name="model">l10n_eu_service.wizard</field>
-            <field name="arch" type="xml">
-                <form string='Setup EU MOSS Taxes'>
+        <recordid="eu_service_view"model="ir.ui.view">
+            <fieldname="name">l10n_eu_service.wizard.form</field>
+            <fieldname="model">l10n_eu_service.wizard</field>
+            <fieldname="arch"type="xml">
+                <formstring='SetupEUMOSSTaxes'>
                     <p>
-                        Based on the options selected below, this wizard will create one
-                        fiscal position mapping for each EU country to which you are selling
+                        Basedontheoptionsselectedbelow,thiswizardwillcreateone
+                        fiscalpositionmappingforeachEUcountrytowhichyouareselling
                         services.
-                        Each fiscal position will automatically map your national VAT tax for
-                        services to the corresponding VAT tax in the country your customer
-                        belongs to.
+                        EachfiscalpositionwillautomaticallymapyournationalVATtaxfor
+                        servicestothecorrespondingVATtaxinthecountryyourcustomer
+                        belongsto.
                         <br/>
-                        You can use the wizard again later to add more countries.
+                        Youcanusethewizardagainlatertoaddmorecountries.
                     </p>
                     <group>
-                        <field name="company_id" groups="base.group_multi_company"/>
-                        <field name="fiscal_position_id" domain="[('company_id','=', company_id)]"
-                               options="{'no_create': True}"
-                               placeholder="Current EU B2C Fiscal Position, if any"/>
-                        <field name="tax_id"
-                               domain="[('type_tax_use', '=', 'sale'),
-                                        ('amount_type', '=', 'percent'),
-                                        ('company_id','=', company_id)]"
-                               options="{'no_create': True}"/>
-                        <field name="account_collected_id"
-                            placeholder="Keep empty to use current Service VAT account"/>
-                        <field name="done_country_ids" widget="many2many_tags" readonly="1"
-                               attrs="{'invisible': [('done_country_ids', '=', [(6, False, [])])]}"/>
-                        <field name="todo_country_ids" widget="many2many_tags"
-                               domain="[('country_group_ids', 'in', %(base.europe)d)]"/>
+                        <fieldname="company_id"groups="base.group_multi_company"/>
+                        <fieldname="fiscal_position_id"domain="[('company_id','=',company_id)]"
+                               options="{'no_create':True}"
+                               placeholder="CurrentEUB2CFiscalPosition,ifany"/>
+                        <fieldname="tax_id"
+                               domain="[('type_tax_use','=','sale'),
+                                        ('amount_type','=','percent'),
+                                        ('company_id','=',company_id)]"
+                               options="{'no_create':True}"/>
+                        <fieldname="account_collected_id"
+                            placeholder="KeepemptytousecurrentServiceVATaccount"/>
+                        <fieldname="done_country_ids"widget="many2many_tags"readonly="1"
+                               attrs="{'invisible':[('done_country_ids','=',[(6,False,[])])]}"/>
+                        <fieldname="todo_country_ids"widget="many2many_tags"
+                               domain="[('country_group_ids','in',%(base.europe)d)]"/>
                     </group>
                     <footer>
-                        <button string="Create Fiscal Positions and Taxes"
-                                name="generate_eu_service" type="object" class="btn-primary"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        <buttonstring="CreateFiscalPositionsandTaxes"
+                                name="generate_eu_service"type="object"class="btn-primary"/>
+                        <buttonstring="Cancel"class="btn-secondary"special="cancel"/>
                     </footer>
                  </form>
             </field>
         </record>
 
-        <record id="action_eu_service" model="ir.actions.act_window">
-            <field name="name">Setup EU MOSS Taxes</field>
-            <field name="res_model">l10n_eu_service.wizard</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="eu_service_view"/>
-            <field name="target">new</field>
+        <recordid="action_eu_service"model="ir.actions.act_window">
+            <fieldname="name">SetupEUMOSSTaxes</field>
+            <fieldname="res_model">l10n_eu_service.wizard</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="view_id"ref="eu_service_view"/>
+            <fieldname="target">new</field>
         </record>
 
 </flectra>

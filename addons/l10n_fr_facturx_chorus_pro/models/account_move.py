@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-from flectra import fields, models
+#-*-coding:utf-8-*-
+fromflectraimportfields,models
 
 
-class AccountMove(models.Model):
-    _inherit = "account.move"
+classAccountMove(models.Model):
+    _inherit="account.move"
 
-    buyer_reference = fields.Char(help="'Service Exécutant' in Chorus PRO.")
-    contract_reference = fields.Char(help="'Numéro de Marché' in Chorus PRO.")
-    purchase_order_reference = fields.Char(help="'Engagement Juridique' in Chorus PRO.")
+    buyer_reference=fields.Char(help="'ServiceExécutant'inChorusPRO.")
+    contract_reference=fields.Char(help="'NumérodeMarché'inChorusPRO.")
+    purchase_order_reference=fields.Char(help="'EngagementJuridique'inChorusPRO.")

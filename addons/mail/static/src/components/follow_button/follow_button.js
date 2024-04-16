@@ -1,94 +1,94 @@
-flectra.define('mail/static/src/components/follow_button/follow_button.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/follow_button/follow_button.js',function(require){
+'usestrict';
 
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-const { Component } = owl;
-const { useState } = owl.hooks;
+const{Component}=owl;
+const{useState}=owl.hooks;
 
-class FollowButton extends Component {
+classFollowButtonextendsComponent{
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps();
-        this.state = useState({
+        this.state=useState({
             /**
-             * Determine whether the unfollow button is highlighted or not.
+             *Determinewhethertheunfollowbuttonishighlightedornot.
              */
-            isUnfollowButtonHighlighted: false,
+            isUnfollowButtonHighlighted:false,
         });
-        useStore(props => {
-            const thread = this.env.models['mail.thread'].get(props.threadLocalId);
-            return {
-                threadIsCurrentPartnerFollowing: thread && thread.isCurrentPartnerFollowing,
+        useStore(props=>{
+            constthread=this.env.models['mail.thread'].get(props.threadLocalId);
+            return{
+                threadIsCurrentPartnerFollowing:thread&&thread.isCurrentPartnerFollowing,
             };
         });
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @return {mail.thread}
+     *@return{mail.thread}
      */
-    get thread() {
-        return this.env.models['mail.thread'].get(this.props.threadLocalId);
+    getthread(){
+        returnthis.env.models['mail.thread'].get(this.props.threadLocalId);
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickFollow(ev) {
+    _onClickFollow(ev){
         this.thread.follow();
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    async _onClickUnfollow(ev) {
-        await this.thread.unfollow();
-        this.trigger('reload', { fieldNames: ['message_follower_ids'], keepChanges: true });
+    async_onClickUnfollow(ev){
+        awaitthis.thread.unfollow();
+        this.trigger('reload',{fieldNames:['message_follower_ids'],keepChanges:true});
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onMouseLeaveUnfollow(ev) {
-        this.state.isUnfollowButtonHighlighted = false;
+    _onMouseLeaveUnfollow(ev){
+        this.state.isUnfollowButtonHighlighted=false;
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onMouseEnterUnfollow(ev) {
-        this.state.isUnfollowButtonHighlighted = true;
+    _onMouseEnterUnfollow(ev){
+        this.state.isUnfollowButtonHighlighted=true;
     }
 
 }
 
-Object.assign(FollowButton, {
-    defaultProps: {
-        isDisabled: false,
+Object.assign(FollowButton,{
+    defaultProps:{
+        isDisabled:false,
     },
-    props: {
-        isDisabled: Boolean,
-        threadLocalId: String,
+    props:{
+        isDisabled:Boolean,
+        threadLocalId:String,
     },
-    template: 'mail.FollowButton',
+    template:'mail.FollowButton',
 });
 
-return FollowButton;
+returnFollowButton;
 
 });

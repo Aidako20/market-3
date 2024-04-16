@@ -1,21 +1,21 @@
-flectra.define('event.EventConfiguratorFormView', function (require) {
-"use strict";
+flectra.define('event.EventConfiguratorFormView',function(require){
+"usestrict";
 
-var EventConfiguratorFormController = require('event.EventConfiguratorFormController');
-var FormView = require('web.FormView');
-var viewRegistry = require('web.view_registry');
+varEventConfiguratorFormController=require('event.EventConfiguratorFormController');
+varFormView=require('web.FormView');
+varviewRegistry=require('web.view_registry');
 
 /**
- * @see EventConfiguratorFormController for more information
+ *@seeEventConfiguratorFormControllerformoreinformation
  */
-var EventConfiguratorFormView = FormView.extend({
-    config: _.extend({}, FormView.prototype.config, {
-        Controller: EventConfiguratorFormController
+varEventConfiguratorFormView=FormView.extend({
+    config:_.extend({},FormView.prototype.config,{
+        Controller:EventConfiguratorFormController
     }),
 });
 
-viewRegistry.add('event_configurator_form', EventConfiguratorFormView);
+viewRegistry.add('event_configurator_form',EventConfiguratorFormView);
 
-return EventConfiguratorFormView;
+returnEventConfiguratorFormView;
 
 });

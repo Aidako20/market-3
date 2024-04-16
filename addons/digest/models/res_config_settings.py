@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
-    digest_emails = fields.Boolean(string="Digest Emails", config_parameter='digest.default_digest_emails')
-    digest_id = fields.Many2one('digest.digest', string='Digest Email', config_parameter='digest.default_digest_id')
+    digest_emails=fields.Boolean(string="DigestEmails",config_parameter='digest.default_digest_emails')
+    digest_id=fields.Many2one('digest.digest',string='DigestEmail',config_parameter='digest.default_digest_id')

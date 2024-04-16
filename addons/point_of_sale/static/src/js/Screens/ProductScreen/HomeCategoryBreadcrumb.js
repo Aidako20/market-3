@@ -1,47 +1,47 @@
-flectra.define('point_of_sale.HomeCategoryBreadcrumb', function(require) {
-    'use strict';
+flectra.define('point_of_sale.HomeCategoryBreadcrumb',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
-    const { useListener } = require('web.custom_hooks');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
+    const{useListener}=require('web.custom_hooks');
 
-    class HomeCategoryBreadcrumb extends PosComponent {
-        constructor() {
+    classHomeCategoryBreadcrumbextendsPosComponent{
+        constructor(){
             super(...arguments);
-            useListener('categ-popup', this._categPopup);
+            useListener('categ-popup',this._categPopup);
         }
-        get selectedCategoryId() {
-            return this.env.pos.get('selectedCategoryId');
+        getselectedCategoryId(){
+            returnthis.env.pos.get('selectedCategoryId');
         }
-        async _categPopup() {
-            let selectionList = [{
-                id: 0,
-                label:'All Items',
-                isSelected: 0 === this.env.pos.get('selectedCategoryId'),
-                item: {id:0,name:'All Items'},
+        async_categPopup(){
+            letselectionList=[{
+                id:0,
+                label:'AllItems',
+                isSelected:0===this.env.pos.get('selectedCategoryId'),
+                item:{id:0,name:'AllItems'},
             }];
-            let subs = this.props.subcategories.map(category => ({
-                id: category.id,
-                label: category.name,
-                isSelected: category.id === this.env.pos.get('selectedCategoryId'),
-                item: category,
+            letsubs=this.props.subcategories.map(category=>({
+                id:category.id,
+                label:category.name,
+                isSelected:category.id===this.env.pos.get('selectedCategoryId'),
+                item:category,
             }));
-            selectionList = selectionList.concat(subs);
-            const { confirmed, payload: selectedCategory } = await this.showPopup(
+            selectionList=selectionList.concat(subs);
+            const{confirmed,payload:selectedCategory}=awaitthis.showPopup(
                 'SelectionPopup',
                 {
-                    title: this.env._t('Select the category'),
-                    list: selectionList,
+                    title:this.env._t('Selectthecategory'),
+                    list:selectionList,
                 }
             );
-            if (confirmed) {
-                this.trigger('switch-category', selectedCategory.id);
+            if(confirmed){
+                this.trigger('switch-category',selectedCategory.id);
             }
         }
     }
-    HomeCategoryBreadcrumb.template = 'HomeCategoryBreadcrumb';
+    HomeCategoryBreadcrumb.template='HomeCategoryBreadcrumb';
 
     Registries.Component.add(HomeCategoryBreadcrumb);
 
-    return HomeCategoryBreadcrumb;
+    returnHomeCategoryBreadcrumb;
 });

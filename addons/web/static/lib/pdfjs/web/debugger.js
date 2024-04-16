@@ -1,613 +1,613 @@
-/* Copyright 2012 Mozilla Foundation
+/*Copyright2012MozillaFoundation
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *LicensedundertheApacheLicense,Version2.0(the"License");
+ *youmaynotusethisfileexceptincompliancewiththeLicense.
+ *YoumayobtainacopyoftheLicenseat
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *Unlessrequiredbyapplicablelaworagreedtoinwriting,software
+ *distributedundertheLicenseisdistributedonan"ASIS"BASIS,
+ *WITHOUTWARRANTIESORCONDITIONSOFANYKIND,eitherexpressorimplied.
+ *SeetheLicenseforthespecificlanguagegoverningpermissionsand
+ *limitationsundertheLicense.
  */
-/* eslint-disable no-var */
+/*eslint-disableno-var*/
 
-'use strict';
+'usestrict';
 
-var FontInspector = (function FontInspectorClosure() {
-  var fonts, createObjectURL;
-  var active = false;
-  var fontAttribute = 'data-font-name';
-  function removeSelection() {
-    let divs = document.querySelectorAll(`span[${fontAttribute}]`);
-    for (let div of divs) {
-      div.className = '';
+varFontInspector=(functionFontInspectorClosure(){
+  varfonts,createObjectURL;
+  varactive=false;
+  varfontAttribute='data-font-name';
+  functionremoveSelection(){
+    letdivs=document.querySelectorAll(`span[${fontAttribute}]`);
+    for(letdivofdivs){
+      div.className='';
     }
   }
-  function resetSelection() {
-    let divs = document.querySelectorAll(`span[${fontAttribute}]`);
-    for (let div of divs) {
-      div.className = 'debuggerHideText';
+  functionresetSelection(){
+    letdivs=document.querySelectorAll(`span[${fontAttribute}]`);
+    for(letdivofdivs){
+      div.className='debuggerHideText';
     }
   }
-  function selectFont(fontName, show) {
-    let divs = document.querySelectorAll(`span[${fontAttribute}=${fontName}]`);
-    for (let div of divs) {
-      div.className = show ? 'debuggerShowText' : 'debuggerHideText';
+  functionselectFont(fontName,show){
+    letdivs=document.querySelectorAll(`span[${fontAttribute}=${fontName}]`);
+    for(letdivofdivs){
+      div.className=show?'debuggerShowText':'debuggerHideText';
     }
   }
-  function textLayerClick(e) {
-    if (!e.target.dataset.fontName ||
-        e.target.tagName.toUpperCase() !== 'SPAN') {
+  functiontextLayerClick(e){
+    if(!e.target.dataset.fontName||
+        e.target.tagName.toUpperCase()!=='SPAN'){
       return;
     }
-    var fontName = e.target.dataset.fontName;
-    var selects = document.getElementsByTagName('input');
-    for (var i = 0; i < selects.length; ++i) {
-      var select = selects[i];
-      if (select.dataset.fontName !== fontName) {
+    varfontName=e.target.dataset.fontName;
+    varselects=document.getElementsByTagName('input');
+    for(vari=0;i<selects.length;++i){
+      varselect=selects[i];
+      if(select.dataset.fontName!==fontName){
         continue;
       }
-      select.checked = !select.checked;
-      selectFont(fontName, select.checked);
+      select.checked=!select.checked;
+      selectFont(fontName,select.checked);
       select.scrollIntoView();
     }
   }
-  return {
-    // Properties/functions needed by PDFBug.
-    id: 'FontInspector',
-    name: 'Font Inspector',
-    panel: null,
-    manager: null,
-    init: function init(pdfjsLib) {
-      var panel = this.panel;
-      panel.setAttribute('style', 'padding: 5px;');
-      var tmp = document.createElement('button');
-      tmp.addEventListener('click', resetSelection);
-      tmp.textContent = 'Refresh';
+  return{
+    //Properties/functionsneededbyPDFBug.
+    id:'FontInspector',
+    name:'FontInspector',
+    panel:null,
+    manager:null,
+    init:functioninit(pdfjsLib){
+      varpanel=this.panel;
+      panel.setAttribute('style','padding:5px;');
+      vartmp=document.createElement('button');
+      tmp.addEventListener('click',resetSelection);
+      tmp.textContent='Refresh';
       panel.appendChild(tmp);
 
-      fonts = document.createElement('div');
+      fonts=document.createElement('div');
       panel.appendChild(fonts);
 
-      createObjectURL = pdfjsLib.createObjectURL;
+      createObjectURL=pdfjsLib.createObjectURL;
     },
-    cleanup: function cleanup() {
-      fonts.textContent = '';
+    cleanup:functioncleanup(){
+      fonts.textContent='';
     },
-    enabled: false,
-    get active() {
-      return active;
+    enabled:false,
+    getactive(){
+      returnactive;
     },
-    set active(value) {
-      active = value;
-      if (active) {
-        document.body.addEventListener('click', textLayerClick, true);
+    setactive(value){
+      active=value;
+      if(active){
+        document.body.addEventListener('click',textLayerClick,true);
         resetSelection();
-      } else {
-        document.body.removeEventListener('click', textLayerClick, true);
+      }else{
+        document.body.removeEventListener('click',textLayerClick,true);
         removeSelection();
       }
     },
-    // FontInspector specific functions.
-    fontAdded: function fontAdded(fontObj, url) {
-      function properties(obj, list) {
-        var moreInfo = document.createElement('table');
-        for (var i = 0; i < list.length; i++) {
-          var tr = document.createElement('tr');
-          var td1 = document.createElement('td');
-          td1.textContent = list[i];
+    //FontInspectorspecificfunctions.
+    fontAdded:functionfontAdded(fontObj,url){
+      functionproperties(obj,list){
+        varmoreInfo=document.createElement('table');
+        for(vari=0;i<list.length;i++){
+          vartr=document.createElement('tr');
+          vartd1=document.createElement('td');
+          td1.textContent=list[i];
           tr.appendChild(td1);
-          var td2 = document.createElement('td');
-          td2.textContent = obj[list[i]].toString();
+          vartd2=document.createElement('td');
+          td2.textContent=obj[list[i]].toString();
           tr.appendChild(td2);
           moreInfo.appendChild(tr);
         }
-        return moreInfo;
+        returnmoreInfo;
       }
-      var moreInfo = properties(fontObj, ['name', 'type']);
-      var fontName = fontObj.loadedName;
-      var font = document.createElement('div');
-      var name = document.createElement('span');
-      name.textContent = fontName;
-      var download = document.createElement('a');
-      if (url) {
-        url = /url\(['"]?([^\)"']+)/.exec(url);
-        download.href = url[1];
-      } else if (fontObj.data) {
-        download.href = createObjectURL(fontObj.data, fontObj.mimeType);
+      varmoreInfo=properties(fontObj,['name','type']);
+      varfontName=fontObj.loadedName;
+      varfont=document.createElement('div');
+      varname=document.createElement('span');
+      name.textContent=fontName;
+      vardownload=document.createElement('a');
+      if(url){
+        url=/url\(['"]?([^\)"']+)/.exec(url);
+        download.href=url[1];
+      }elseif(fontObj.data){
+        download.href=createObjectURL(fontObj.data,fontObj.mimeType);
       }
-      download.textContent = 'Download';
-      var logIt = document.createElement('a');
-      logIt.href = '';
-      logIt.textContent = 'Log';
-      logIt.addEventListener('click', function(event) {
+      download.textContent='Download';
+      varlogIt=document.createElement('a');
+      logIt.href='';
+      logIt.textContent='Log';
+      logIt.addEventListener('click',function(event){
         event.preventDefault();
         console.log(fontObj);
       });
-      var select = document.createElement('input');
-      select.setAttribute('type', 'checkbox');
-      select.dataset.fontName = fontName;
-      select.addEventListener('click', (function(select, fontName) {
-        return (function() {
-           selectFont(fontName, select.checked);
+      varselect=document.createElement('input');
+      select.setAttribute('type','checkbox');
+      select.dataset.fontName=fontName;
+      select.addEventListener('click',(function(select,fontName){
+        return(function(){
+           selectFont(fontName,select.checked);
         });
-      })(select, fontName));
+      })(select,fontName));
       font.appendChild(select);
       font.appendChild(name);
-      font.appendChild(document.createTextNode(' '));
+      font.appendChild(document.createTextNode(''));
       font.appendChild(download);
-      font.appendChild(document.createTextNode(' '));
+      font.appendChild(document.createTextNode(''));
       font.appendChild(logIt);
       font.appendChild(moreInfo);
       fonts.appendChild(font);
-      // Somewhat of a hack, should probably add a hook for when the text layer
-      // is done rendering.
-      setTimeout(() => {
-        if (this.active) {
+      //Somewhatofahack,shouldprobablyaddahookforwhenthetextlayer
+      //isdonerendering.
+      setTimeout(()=>{
+        if(this.active){
           resetSelection();
         }
-      }, 2000);
+      },2000);
     },
   };
 })();
 
-var opMap;
+varopMap;
 
-// Manages all the page steppers.
-var StepperManager = (function StepperManagerClosure() {
-  var steppers = [];
-  var stepperDiv = null;
-  var stepperControls = null;
-  var stepperChooser = null;
-  var breakPoints = Object.create(null);
-  return {
-    // Properties/functions needed by PDFBug.
-    id: 'Stepper',
-    name: 'Stepper',
-    panel: null,
-    manager: null,
-    init: function init(pdfjsLib) {
-      var self = this;
-      this.panel.setAttribute('style', 'padding: 5px;');
-      stepperControls = document.createElement('div');
-      stepperChooser = document.createElement('select');
-      stepperChooser.addEventListener('change', function(event) {
+//Managesallthepagesteppers.
+varStepperManager=(functionStepperManagerClosure(){
+  varsteppers=[];
+  varstepperDiv=null;
+  varstepperControls=null;
+  varstepperChooser=null;
+  varbreakPoints=Object.create(null);
+  return{
+    //Properties/functionsneededbyPDFBug.
+    id:'Stepper',
+    name:'Stepper',
+    panel:null,
+    manager:null,
+    init:functioninit(pdfjsLib){
+      varself=this;
+      this.panel.setAttribute('style','padding:5px;');
+      stepperControls=document.createElement('div');
+      stepperChooser=document.createElement('select');
+      stepperChooser.addEventListener('change',function(event){
         self.selectStepper(this.value);
       });
       stepperControls.appendChild(stepperChooser);
-      stepperDiv = document.createElement('div');
+      stepperDiv=document.createElement('div');
       this.panel.appendChild(stepperControls);
       this.panel.appendChild(stepperDiv);
-      if (sessionStorage.getItem('pdfjsBreakPoints')) {
-        breakPoints = JSON.parse(sessionStorage.getItem('pdfjsBreakPoints'));
+      if(sessionStorage.getItem('pdfjsBreakPoints')){
+        breakPoints=JSON.parse(sessionStorage.getItem('pdfjsBreakPoints'));
       }
 
-      opMap = Object.create(null);
-      for (var key in pdfjsLib.OPS) {
-        opMap[pdfjsLib.OPS[key]] = key;
+      opMap=Object.create(null);
+      for(varkeyinpdfjsLib.OPS){
+        opMap[pdfjsLib.OPS[key]]=key;
       }
     },
-    cleanup: function cleanup() {
-      stepperChooser.textContent = '';
-      stepperDiv.textContent = '';
-      steppers = [];
+    cleanup:functioncleanup(){
+      stepperChooser.textContent='';
+      stepperDiv.textContent='';
+      steppers=[];
     },
-    enabled: false,
-    active: false,
-    // Stepper specific functions.
-    create: function create(pageIndex) {
-      var debug = document.createElement('div');
-      debug.id = 'stepper' + pageIndex;
-      debug.setAttribute('hidden', true);
-      debug.className = 'stepper';
+    enabled:false,
+    active:false,
+    //Stepperspecificfunctions.
+    create:functioncreate(pageIndex){
+      vardebug=document.createElement('div');
+      debug.id='stepper'+pageIndex;
+      debug.setAttribute('hidden',true);
+      debug.className='stepper';
       stepperDiv.appendChild(debug);
-      var b = document.createElement('option');
-      b.textContent = 'Page ' + (pageIndex + 1);
-      b.value = pageIndex;
+      varb=document.createElement('option');
+      b.textContent='Page'+(pageIndex+1);
+      b.value=pageIndex;
       stepperChooser.appendChild(b);
-      var initBreakPoints = breakPoints[pageIndex] || [];
-      var stepper = new Stepper(debug, pageIndex, initBreakPoints);
+      varinitBreakPoints=breakPoints[pageIndex]||[];
+      varstepper=newStepper(debug,pageIndex,initBreakPoints);
       steppers.push(stepper);
-      if (steppers.length === 1) {
-        this.selectStepper(pageIndex, false);
+      if(steppers.length===1){
+        this.selectStepper(pageIndex,false);
       }
-      return stepper;
+      returnstepper;
     },
-    selectStepper: function selectStepper(pageIndex, selectPanel) {
-      var i;
-      pageIndex = pageIndex | 0;
-      if (selectPanel) {
+    selectStepper:functionselectStepper(pageIndex,selectPanel){
+      vari;
+      pageIndex=pageIndex|0;
+      if(selectPanel){
         this.manager.selectPanel(this);
       }
-      for (i = 0; i < steppers.length; ++i) {
-        var stepper = steppers[i];
-        if (stepper.pageIndex === pageIndex) {
+      for(i=0;i<steppers.length;++i){
+        varstepper=steppers[i];
+        if(stepper.pageIndex===pageIndex){
           stepper.panel.removeAttribute('hidden');
-        } else {
-          stepper.panel.setAttribute('hidden', true);
+        }else{
+          stepper.panel.setAttribute('hidden',true);
         }
       }
-      var options = stepperChooser.options;
-      for (i = 0; i < options.length; ++i) {
-        var option = options[i];
-        option.selected = (option.value | 0) === pageIndex;
+      varoptions=stepperChooser.options;
+      for(i=0;i<options.length;++i){
+        varoption=options[i];
+        option.selected=(option.value|0)===pageIndex;
       }
     },
-    saveBreakPoints: function saveBreakPoints(pageIndex, bps) {
-      breakPoints[pageIndex] = bps;
-      sessionStorage.setItem('pdfjsBreakPoints', JSON.stringify(breakPoints));
+    saveBreakPoints:functionsaveBreakPoints(pageIndex,bps){
+      breakPoints[pageIndex]=bps;
+      sessionStorage.setItem('pdfjsBreakPoints',JSON.stringify(breakPoints));
     },
   };
 })();
 
-// The stepper for each page's IRQueue.
-var Stepper = (function StepperClosure() {
-  // Shorter way to create element and optionally set textContent.
-  function c(tag, textContent) {
-    var d = document.createElement(tag);
-    if (textContent) {
-      d.textContent = textContent;
+//Thestepperforeachpage'sIRQueue.
+varStepper=(functionStepperClosure(){
+  //ShorterwaytocreateelementandoptionallysettextContent.
+  functionc(tag,textContent){
+    vard=document.createElement(tag);
+    if(textContent){
+      d.textContent=textContent;
     }
-    return d;
+    returnd;
   }
 
-  function simplifyArgs(args) {
-    if (typeof args === 'string') {
-      var MAX_STRING_LENGTH = 75;
-      return args.length <= MAX_STRING_LENGTH ? args :
-        args.substring(0, MAX_STRING_LENGTH) + '...';
+  functionsimplifyArgs(args){
+    if(typeofargs==='string'){
+      varMAX_STRING_LENGTH=75;
+      returnargs.length<=MAX_STRING_LENGTH?args:
+        args.substring(0,MAX_STRING_LENGTH)+'...';
     }
-    if (typeof args !== 'object' || args === null) {
-      return args;
+    if(typeofargs!=='object'||args===null){
+      returnargs;
     }
-    if ('length' in args) { // array
-      var simpleArgs = [], i, ii;
-      var MAX_ITEMS = 10;
-      for (i = 0, ii = Math.min(MAX_ITEMS, args.length); i < ii; i++) {
+    if('length'inargs){//array
+      varsimpleArgs=[],i,ii;
+      varMAX_ITEMS=10;
+      for(i=0,ii=Math.min(MAX_ITEMS,args.length);i<ii;i++){
         simpleArgs.push(simplifyArgs(args[i]));
       }
-      if (i < args.length) {
+      if(i<args.length){
         simpleArgs.push('...');
       }
-      return simpleArgs;
+      returnsimpleArgs;
     }
-    var simpleObj = {};
-    for (var key in args) {
-      simpleObj[key] = simplifyArgs(args[key]);
+    varsimpleObj={};
+    for(varkeyinargs){
+      simpleObj[key]=simplifyArgs(args[key]);
     }
-    return simpleObj;
+    returnsimpleObj;
   }
 
-  function Stepper(panel, pageIndex, initialBreakPoints) {
-    this.panel = panel;
-    this.breakPoint = 0;
-    this.nextBreakPoint = null;
-    this.pageIndex = pageIndex;
-    this.breakPoints = initialBreakPoints;
-    this.currentIdx = -1;
-    this.operatorListIdx = 0;
+  functionStepper(panel,pageIndex,initialBreakPoints){
+    this.panel=panel;
+    this.breakPoint=0;
+    this.nextBreakPoint=null;
+    this.pageIndex=pageIndex;
+    this.breakPoints=initialBreakPoints;
+    this.currentIdx=-1;
+    this.operatorListIdx=0;
   }
-  Stepper.prototype = {
-    init: function init(operatorList) {
-      var panel = this.panel;
-      var content = c('div', 'c=continue, s=step');
-      var table = c('table');
+  Stepper.prototype={
+    init:functioninit(operatorList){
+      varpanel=this.panel;
+      varcontent=c('div','c=continue,s=step');
+      vartable=c('table');
       content.appendChild(table);
-      table.cellSpacing = 0;
-      var headerRow = c('tr');
+      table.cellSpacing=0;
+      varheaderRow=c('tr');
       table.appendChild(headerRow);
-      headerRow.appendChild(c('th', 'Break'));
-      headerRow.appendChild(c('th', 'Idx'));
-      headerRow.appendChild(c('th', 'fn'));
-      headerRow.appendChild(c('th', 'args'));
+      headerRow.appendChild(c('th','Break'));
+      headerRow.appendChild(c('th','Idx'));
+      headerRow.appendChild(c('th','fn'));
+      headerRow.appendChild(c('th','args'));
       panel.appendChild(content);
-      this.table = table;
+      this.table=table;
       this.updateOperatorList(operatorList);
     },
-    updateOperatorList: function updateOperatorList(operatorList) {
-      var self = this;
+    updateOperatorList:functionupdateOperatorList(operatorList){
+      varself=this;
 
-      function cboxOnClick() {
-        var x = +this.dataset.idx;
-        if (this.checked) {
+      functioncboxOnClick(){
+        varx=+this.dataset.idx;
+        if(this.checked){
           self.breakPoints.push(x);
-        } else {
-          self.breakPoints.splice(self.breakPoints.indexOf(x), 1);
+        }else{
+          self.breakPoints.splice(self.breakPoints.indexOf(x),1);
         }
-        StepperManager.saveBreakPoints(self.pageIndex, self.breakPoints);
+        StepperManager.saveBreakPoints(self.pageIndex,self.breakPoints);
       }
 
-      var MAX_OPERATORS_COUNT = 15000;
-      if (this.operatorListIdx > MAX_OPERATORS_COUNT) {
+      varMAX_OPERATORS_COUNT=15000;
+      if(this.operatorListIdx>MAX_OPERATORS_COUNT){
         return;
       }
 
-      var chunk = document.createDocumentFragment();
-      var operatorsToDisplay = Math.min(MAX_OPERATORS_COUNT,
+      varchunk=document.createDocumentFragment();
+      varoperatorsToDisplay=Math.min(MAX_OPERATORS_COUNT,
                                         operatorList.fnArray.length);
-      for (var i = this.operatorListIdx; i < operatorsToDisplay; i++) {
-        var line = c('tr');
-        line.className = 'line';
-        line.dataset.idx = i;
+      for(vari=this.operatorListIdx;i<operatorsToDisplay;i++){
+        varline=c('tr');
+        line.className='line';
+        line.dataset.idx=i;
         chunk.appendChild(line);
-        var checked = this.breakPoints.includes(i);
-        var args = operatorList.argsArray[i] || [];
+        varchecked=this.breakPoints.includes(i);
+        varargs=operatorList.argsArray[i]||[];
 
-        var breakCell = c('td');
-        var cbox = c('input');
-        cbox.type = 'checkbox';
-        cbox.className = 'points';
-        cbox.checked = checked;
-        cbox.dataset.idx = i;
-        cbox.onclick = cboxOnClick;
+        varbreakCell=c('td');
+        varcbox=c('input');
+        cbox.type='checkbox';
+        cbox.className='points';
+        cbox.checked=checked;
+        cbox.dataset.idx=i;
+        cbox.onclick=cboxOnClick;
 
         breakCell.appendChild(cbox);
         line.appendChild(breakCell);
-        line.appendChild(c('td', i.toString()));
-        var fn = opMap[operatorList.fnArray[i]];
-        var decArgs = args;
-        if (fn === 'showText') {
-          var glyphs = args[0];
-          var newArgs = [];
-          var str = [];
-          for (var j = 0; j < glyphs.length; j++) {
-            var glyph = glyphs[j];
-            if (typeof glyph === 'object' && glyph !== null) {
+        line.appendChild(c('td',i.toString()));
+        varfn=opMap[operatorList.fnArray[i]];
+        vardecArgs=args;
+        if(fn==='showText'){
+          varglyphs=args[0];
+          varnewArgs=[];
+          varstr=[];
+          for(varj=0;j<glyphs.length;j++){
+            varglyph=glyphs[j];
+            if(typeofglyph==='object'&&glyph!==null){
               str.push(glyph.fontChar);
-            } else {
-              if (str.length > 0) {
+            }else{
+              if(str.length>0){
                 newArgs.push(str.join(''));
-                str = [];
+                str=[];
               }
-              newArgs.push(glyph); // null or number
+              newArgs.push(glyph);//nullornumber
             }
           }
-          if (str.length > 0) {
+          if(str.length>0){
             newArgs.push(str.join(''));
           }
-          decArgs = [newArgs];
+          decArgs=[newArgs];
         }
-        line.appendChild(c('td', fn));
-        line.appendChild(c('td', JSON.stringify(simplifyArgs(decArgs))));
+        line.appendChild(c('td',fn));
+        line.appendChild(c('td',JSON.stringify(simplifyArgs(decArgs))));
       }
-      if (operatorsToDisplay < operatorList.fnArray.length) {
-        line = c('tr');
-        var lastCell = c('td', '...');
-        lastCell.colspan = 4;
+      if(operatorsToDisplay<operatorList.fnArray.length){
+        line=c('tr');
+        varlastCell=c('td','...');
+        lastCell.colspan=4;
         chunk.appendChild(lastCell);
       }
-      this.operatorListIdx = operatorList.fnArray.length;
+      this.operatorListIdx=operatorList.fnArray.length;
       this.table.appendChild(chunk);
     },
-    getNextBreakPoint: function getNextBreakPoint() {
-      this.breakPoints.sort(function(a, b) {
-        return a - b;
+    getNextBreakPoint:functiongetNextBreakPoint(){
+      this.breakPoints.sort(function(a,b){
+        returna-b;
       });
-      for (var i = 0; i < this.breakPoints.length; i++) {
-        if (this.breakPoints[i] > this.currentIdx) {
-          return this.breakPoints[i];
+      for(vari=0;i<this.breakPoints.length;i++){
+        if(this.breakPoints[i]>this.currentIdx){
+          returnthis.breakPoints[i];
         }
       }
-      return null;
+      returnnull;
     },
-    breakIt: function breakIt(idx, callback) {
-      StepperManager.selectStepper(this.pageIndex, true);
-      var self = this;
-      var dom = document;
-      self.currentIdx = idx;
-      var listener = function(e) {
-        switch (e.keyCode) {
-          case 83: // step
-            dom.removeEventListener('keydown', listener);
-            self.nextBreakPoint = self.currentIdx + 1;
+    breakIt:functionbreakIt(idx,callback){
+      StepperManager.selectStepper(this.pageIndex,true);
+      varself=this;
+      vardom=document;
+      self.currentIdx=idx;
+      varlistener=function(e){
+        switch(e.keyCode){
+          case83://step
+            dom.removeEventListener('keydown',listener);
+            self.nextBreakPoint=self.currentIdx+1;
             self.goTo(-1);
             callback();
             break;
-          case 67: // continue
-            dom.removeEventListener('keydown', listener);
-            var breakPoint = self.getNextBreakPoint();
-            self.nextBreakPoint = breakPoint;
+          case67://continue
+            dom.removeEventListener('keydown',listener);
+            varbreakPoint=self.getNextBreakPoint();
+            self.nextBreakPoint=breakPoint;
             self.goTo(-1);
             callback();
             break;
         }
       };
-      dom.addEventListener('keydown', listener);
+      dom.addEventListener('keydown',listener);
       self.goTo(idx);
     },
-    goTo: function goTo(idx) {
-      var allRows = this.panel.getElementsByClassName('line');
-      for (var x = 0, xx = allRows.length; x < xx; ++x) {
-        var row = allRows[x];
-        if ((row.dataset.idx | 0) === idx) {
-          row.style.backgroundColor = 'rgb(251,250,207)';
+    goTo:functiongoTo(idx){
+      varallRows=this.panel.getElementsByClassName('line');
+      for(varx=0,xx=allRows.length;x<xx;++x){
+        varrow=allRows[x];
+        if((row.dataset.idx|0)===idx){
+          row.style.backgroundColor='rgb(251,250,207)';
           row.scrollIntoView();
-        } else {
-          row.style.backgroundColor = null;
+        }else{
+          row.style.backgroundColor=null;
         }
       }
     },
   };
-  return Stepper;
+  returnStepper;
 })();
 
-var Stats = (function Stats() {
-  var stats = [];
-  function clear(node) {
-    while (node.hasChildNodes()) {
+varStats=(functionStats(){
+  varstats=[];
+  functionclear(node){
+    while(node.hasChildNodes()){
       node.removeChild(node.lastChild);
     }
   }
-  function getStatIndex(pageNumber) {
-    for (var i = 0, ii = stats.length; i < ii; ++i) {
-      if (stats[i].pageNumber === pageNumber) {
-        return i;
+  functiongetStatIndex(pageNumber){
+    for(vari=0,ii=stats.length;i<ii;++i){
+      if(stats[i].pageNumber===pageNumber){
+        returni;
       }
     }
-    return false;
+    returnfalse;
   }
-  return {
-    // Properties/functions needed by PDFBug.
-    id: 'Stats',
-    name: 'Stats',
-    panel: null,
-    manager: null,
-    init(pdfjsLib) {
-      this.panel.setAttribute('style', 'padding: 5px;');
+  return{
+    //Properties/functionsneededbyPDFBug.
+    id:'Stats',
+    name:'Stats',
+    panel:null,
+    manager:null,
+    init(pdfjsLib){
+      this.panel.setAttribute('style','padding:5px;');
     },
-    enabled: false,
-    active: false,
-    // Stats specific functions.
-    add(pageNumber, stat) {
-      if (!stat) {
+    enabled:false,
+    active:false,
+    //Statsspecificfunctions.
+    add(pageNumber,stat){
+      if(!stat){
         return;
       }
-      var statsIndex = getStatIndex(pageNumber);
-      if (statsIndex !== false) {
-        var b = stats[statsIndex];
+      varstatsIndex=getStatIndex(pageNumber);
+      if(statsIndex!==false){
+        varb=stats[statsIndex];
         this.panel.removeChild(b.div);
-        stats.splice(statsIndex, 1);
+        stats.splice(statsIndex,1);
       }
-      var wrapper = document.createElement('div');
-      wrapper.className = 'stats';
-      var title = document.createElement('div');
-      title.className = 'title';
-      title.textContent = 'Page: ' + pageNumber;
-      var statsDiv = document.createElement('div');
-      statsDiv.textContent = stat.toString();
+      varwrapper=document.createElement('div');
+      wrapper.className='stats';
+      vartitle=document.createElement('div');
+      title.className='title';
+      title.textContent='Page:'+pageNumber;
+      varstatsDiv=document.createElement('div');
+      statsDiv.textContent=stat.toString();
       wrapper.appendChild(title);
       wrapper.appendChild(statsDiv);
-      stats.push({ pageNumber, div: wrapper, });
-      stats.sort(function(a, b) {
-        return a.pageNumber - b.pageNumber;
+      stats.push({pageNumber,div:wrapper,});
+      stats.sort(function(a,b){
+        returna.pageNumber-b.pageNumber;
       });
       clear(this.panel);
-      for (var i = 0, ii = stats.length; i < ii; ++i) {
+      for(vari=0,ii=stats.length;i<ii;++i){
         this.panel.appendChild(stats[i].div);
       }
     },
-    cleanup() {
-      stats = [];
+    cleanup(){
+      stats=[];
       clear(this.panel);
     },
   };
 })();
 
-// Manages all the debugging tools.
-window.PDFBug = (function PDFBugClosure() {
-  var panelWidth = 300;
-  var buttons = [];
-  var activePanel = null;
+//Managesallthedebuggingtools.
+window.PDFBug=(functionPDFBugClosure(){
+  varpanelWidth=300;
+  varbuttons=[];
+  varactivePanel=null;
 
-  return {
-    tools: [
+  return{
+    tools:[
       FontInspector,
       StepperManager,
       Stats
     ],
-    enable(ids) {
-      var all = false, tools = this.tools;
-      if (ids.length === 1 && ids[0] === 'all') {
-        all = true;
+    enable(ids){
+      varall=false,tools=this.tools;
+      if(ids.length===1&&ids[0]==='all'){
+        all=true;
       }
-      for (var i = 0; i < tools.length; ++i) {
-        var tool = tools[i];
-        if (all || ids.includes(tool.id)) {
-          tool.enabled = true;
+      for(vari=0;i<tools.length;++i){
+        vartool=tools[i];
+        if(all||ids.includes(tool.id)){
+          tool.enabled=true;
         }
       }
-      if (!all) {
-        // Sort the tools by the order they are enabled.
-        tools.sort(function(a, b) {
-          var indexA = ids.indexOf(a.id);
-          indexA = indexA < 0 ? tools.length : indexA;
-          var indexB = ids.indexOf(b.id);
-          indexB = indexB < 0 ? tools.length : indexB;
-          return indexA - indexB;
+      if(!all){
+        //Sortthetoolsbytheordertheyareenabled.
+        tools.sort(function(a,b){
+          varindexA=ids.indexOf(a.id);
+          indexA=indexA<0?tools.length:indexA;
+          varindexB=ids.indexOf(b.id);
+          indexB=indexB<0?tools.length:indexB;
+          returnindexA-indexB;
         });
       }
     },
-    init(pdfjsLib, container) {
+    init(pdfjsLib,container){
       /*
-       * Basic Layout:
-       * PDFBug
-       *  Controls
-       *  Panels
-       *    Panel
-       *    Panel
-       *    ...
+       *BasicLayout:
+       *PDFBug
+       * Controls
+       * Panels
+       *   Panel
+       *   Panel
+       *   ...
        */
-      var ui = document.createElement('div');
-      ui.id = 'PDFBug';
+      varui=document.createElement('div');
+      ui.id='PDFBug';
 
-      var controls = document.createElement('div');
-      controls.setAttribute('class', 'controls');
+      varcontrols=document.createElement('div');
+      controls.setAttribute('class','controls');
       ui.appendChild(controls);
 
-      var panels = document.createElement('div');
-      panels.setAttribute('class', 'panels');
+      varpanels=document.createElement('div');
+      panels.setAttribute('class','panels');
       ui.appendChild(panels);
 
       container.appendChild(ui);
-      container.style.right = panelWidth + 'px';
+      container.style.right=panelWidth+'px';
 
-      // Initialize all the debugging tools.
-      var tools = this.tools;
-      var self = this;
-      for (var i = 0; i < tools.length; ++i) {
-        var tool = tools[i];
-        var panel = document.createElement('div');
-        var panelButton = document.createElement('button');
-        panelButton.textContent = tool.name;
-        panelButton.addEventListener('click', (function(selected) {
-          return function(event) {
+      //Initializeallthedebuggingtools.
+      vartools=this.tools;
+      varself=this;
+      for(vari=0;i<tools.length;++i){
+        vartool=tools[i];
+        varpanel=document.createElement('div');
+        varpanelButton=document.createElement('button');
+        panelButton.textContent=tool.name;
+        panelButton.addEventListener('click',(function(selected){
+          returnfunction(event){
             event.preventDefault();
             self.selectPanel(selected);
           };
         })(i));
         controls.appendChild(panelButton);
         panels.appendChild(panel);
-        tool.panel = panel;
-        tool.manager = this;
-        if (tool.enabled) {
+        tool.panel=panel;
+        tool.manager=this;
+        if(tool.enabled){
           tool.init(pdfjsLib);
-        } else {
-          panel.textContent = tool.name + ' is disabled. To enable add ' +
-                              ' "' + tool.id + '" to the pdfBug parameter ' +
-                              'and refresh (separate multiple by commas).';
+        }else{
+          panel.textContent=tool.name+'isdisabled.Toenableadd'+
+                              '"'+tool.id+'"tothepdfBugparameter'+
+                              'andrefresh(separatemultiplebycommas).';
         }
         buttons.push(panelButton);
       }
       this.selectPanel(0);
     },
-    cleanup() {
-      for (var i = 0, ii = this.tools.length; i < ii; i++) {
-        if (this.tools[i].enabled) {
+    cleanup(){
+      for(vari=0,ii=this.tools.length;i<ii;i++){
+        if(this.tools[i].enabled){
           this.tools[i].cleanup();
         }
       }
     },
-    selectPanel(index) {
-      if (typeof index !== 'number') {
-        index = this.tools.indexOf(index);
+    selectPanel(index){
+      if(typeofindex!=='number'){
+        index=this.tools.indexOf(index);
       }
-      if (index === activePanel) {
+      if(index===activePanel){
         return;
       }
-      activePanel = index;
-      var tools = this.tools;
-      for (var j = 0; j < tools.length; ++j) {
-        if (j === index) {
-          buttons[j].setAttribute('class', 'active');
-          tools[j].active = true;
+      activePanel=index;
+      vartools=this.tools;
+      for(varj=0;j<tools.length;++j){
+        if(j===index){
+          buttons[j].setAttribute('class','active');
+          tools[j].active=true;
           tools[j].panel.removeAttribute('hidden');
-        } else {
-          buttons[j].setAttribute('class', '');
-          tools[j].active = false;
-          tools[j].panel.setAttribute('hidden', 'true');
+        }else{
+          buttons[j].setAttribute('class','');
+          tools[j].active=false;
+          tools[j].panel.setAttribute('hidden','true');
         }
       }
     },

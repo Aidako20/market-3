@@ -1,31 +1,31 @@
-flectra.define('point_of_sale.OrderList', function (require) {
-    'use strict';
+flectra.define('point_of_sale.OrderList',function(require){
+    'usestrict';
 
-    const { useState } = owl.hooks;
-    const { useListener } = require('web.custom_hooks');
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    const{useState}=owl.hooks;
+    const{useListener}=require('web.custom_hooks');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
     /**
-     * @props {models.Order} [initHighlightedOrder] initially highligted order
-     * @props {Array<models.Order>} orders
+     *@props{models.Order}[initHighlightedOrder]initiallyhighligtedorder
+     *@props{Array<models.Order>}orders
      */
-    class OrderList extends PosComponent {
-        constructor() {
+    classOrderListextendsPosComponent{
+        constructor(){
             super(...arguments);
-            useListener('click-order', this._onClickOrder);
-            this.state = useState({ highlightedOrder: this.props.initHighlightedOrder || null });
+            useListener('click-order',this._onClickOrder);
+            this.state=useState({highlightedOrder:this.props.initHighlightedOrder||null});
         }
-        get highlightedOrder() {
-            return this.state.highlightedOrder;
+        gethighlightedOrder(){
+            returnthis.state.highlightedOrder;
         }
-        _onClickOrder({ detail: order }) {
-            this.state.highlightedOrder = order;
+        _onClickOrder({detail:order}){
+            this.state.highlightedOrder=order;
         }
     }
-    OrderList.template = 'OrderList';
+    OrderList.template='OrderList';
 
     Registries.Component.add(OrderList);
 
-    return OrderList;
+    returnOrderList;
 });

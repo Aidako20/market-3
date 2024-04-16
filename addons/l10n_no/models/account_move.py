@@ -1,29 +1,29 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
-from stdnum import luhn
+fromflectraimportmodels
+fromstdnumimportluhn
 
 
-class AccountMove(models.Model):
-    _inherit = "account.move"
+classAccountMove(models.Model):
+    _inherit="account.move"
 
-    def _get_invoice_reference_no_invoice(self):
-        """ This computes the reference based on the Flectra format.
-            We calculat reference using invoice number and
-            partner id and added control digit at last.
+    def_get_invoice_reference_no_invoice(self):
+        """ThiscomputesthereferencebasedontheFlectraformat.
+            Wecalculatreferenceusinginvoicenumberand
+            partneridandaddedcontroldigitatlast.
         """
-        return self._get_kid_number()
+        returnself._get_kid_number()
 
-    def _get_invoice_reference_no_partner(self):
-        """ This computes the reference based on the Flectra format.
-            We calculat reference using invoice number and
-            partner id and added control digit at last.
+    def_get_invoice_reference_no_partner(self):
+        """ThiscomputesthereferencebasedontheFlectraformat.
+            Wecalculatreferenceusinginvoicenumberand
+            partneridandaddedcontroldigitatlast.
         """
-        return self._get_kid_number()
+        returnself._get_kid_number()
 
-    def _get_kid_number(self):
+    def_get_kid_number(self):
         self.ensure_one()
-        invoice_name = ''.join([i for i in self.name if i.isdigit()]).zfill(7)
-        ref = (str(self.partner_id.id).zfill(7)[-7:] + invoice_name[-7:])
-        return ref + luhn.calc_check_digit(ref)
+        invoice_name=''.join([iforiinself.nameifi.isdigit()]).zfill(7)
+        ref=(str(self.partner_id.id).zfill(7)[-7:]+invoice_name[-7:])
+        returnref+luhn.calc_check_digit(ref)

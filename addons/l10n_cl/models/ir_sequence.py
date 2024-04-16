@@ -1,10 +1,10 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models
 
 
-class IrSequence(models.Model):
+classIrSequence(models.Model):
 
-    _inherit = 'ir.sequence'
+    _inherit='ir.sequence'
 
-    l10n_cl_journal_ids = fields.Many2many('account.journal', 'l10n_cl_journal_sequence_rel', 'sequence_id',
-                                           'journal_id', 'Journals', readonly=True)
+    l10n_cl_journal_ids=fields.Many2many('account.journal','l10n_cl_journal_sequence_rel','sequence_id',
+                                           'journal_id','Journals',readonly=True)

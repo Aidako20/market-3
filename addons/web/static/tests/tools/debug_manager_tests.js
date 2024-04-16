@@ -1,172 +1,172 @@
-flectra.define('web.debugManagerTests', function (require) {
-"use strict";
+flectra.define('web.debugManagerTests',function(require){
+"usestrict";
 
-var testUtils = require('web.test_utils');
-var FormView = require('web.FormView');
+vartestUtils=require('web.test_utils');
+varFormView=require('web.FormView');
 
-var createDebugManager = testUtils.createDebugManager;
+varcreateDebugManager=testUtils.createDebugManager;
 
-QUnit.module('DebugManager', {}, function () {
+QUnit.module('DebugManager',{},function(){
 
-    QUnit.test("list: edit view menu item", async function (assert) {
+    QUnit.test("list:editviewmenuitem",asyncfunction(assert){
         assert.expect(3);
 
-        var debugManager = await createDebugManager();
+        vardebugManager=awaitcreateDebugManager();
 
-        await debugManager.appendTo($('#qunit-fixture'));
+        awaitdebugManager.appendTo($('#qunit-fixture'));
 
-        // Simulate update debug manager from web client
-        var action = {
-            views: [{
-                displayName: "List",
-                fieldsView: {
-                    view_id: 1,
+        //Simulateupdatedebugmanagerfromwebclient
+        varaction={
+            views:[{
+                displayName:"List",
+                fieldsView:{
+                    view_id:1,
                 },
-                type: "list",
+                type:"list",
             }],
         };
-        var view = {
-            viewType: "list",
+        varview={
+            viewType:"list",
         };
-        await testUtils.nextTick();
-        await debugManager.update('action', action, view);
+        awaittestUtils.nextTick();
+        awaitdebugManager.update('action',action,view);
 
-        var $editView = debugManager.$('a[data-action=edit][data-model="ir.ui.view"]');
-        assert.strictEqual($editView.length, 1, "should have edit view menu item");
-        assert.strictEqual($editView.text().trim(), "Edit View: List",
-            "should have correct menu item text for editing view");
-        assert.strictEqual($editView.data('id'), 1, "should have correct view_id");
+        var$editView=debugManager.$('a[data-action=edit][data-model="ir.ui.view"]');
+        assert.strictEqual($editView.length,1,"shouldhaveeditviewmenuitem");
+        assert.strictEqual($editView.text().trim(),"EditView:List",
+            "shouldhavecorrectmenuitemtextforeditingview");
+        assert.strictEqual($editView.data('id'),1,"shouldhavecorrectview_id");
 
         debugManager.destroy();
     });
 
-    QUnit.test("form: Manage Attachments option", async function (assert) {
+    QUnit.test("form:ManageAttachmentsoption",asyncfunction(assert){
         assert.expect(3);
 
-        var debugManager = await createDebugManager({
-            intercepts: {
-                do_action: function (event) {
-                    assert.deepEqual(event.data.action, {
-                      context: {
-                        default_res_model: "test.model",
-                        default_res_id: 5,
+        vardebugManager=awaitcreateDebugManager({
+            intercepts:{
+                do_action:function(event){
+                    assert.deepEqual(event.data.action,{
+                      context:{
+                        default_res_model:"test.model",
+                        default_res_id:5,
                       },
-                      domain: [["res_model", "=", "test.model"],["res_id", "=", 5]],
-                      name: "Manage Attachments",
-                      res_model: "ir.attachment",
-                      type: "ir.actions.act_window",
-                      views: [[false, "list"],[false, "form"]],
+                      domain:[["res_model","=","test.model"],["res_id","=",5]],
+                      name:"ManageAttachments",
+                      res_model:"ir.attachment",
+                      type:"ir.actions.act_window",
+                      views:[[false,"list"],[false,"form"]],
                     });
                 },
             },
         });
-        await debugManager.appendTo($('#qunit-fixture'));
+        awaitdebugManager.appendTo($('#qunit-fixture'));
 
-        // Simulate update debug manager from web client
-        var action = {
-            views: [{
-                displayName: "Form",
-                fieldsView: {
-                    view_id: 2,
+        //Simulateupdatedebugmanagerfromwebclient
+        varaction={
+            views:[{
+                displayName:"Form",
+                fieldsView:{
+                    view_id:2,
                 },
-                type: "form",
+                type:"form",
             }],
-            res_model: "test.model",
+            res_model:"test.model",
         };
-        var view = {
-            viewType: "form",
-            getSelectedIds: function () {
-                return [5];
+        varview={
+            viewType:"form",
+            getSelectedIds:function(){
+                return[5];
             },
         };
-        await debugManager.update('action', action, view);
+        awaitdebugManager.update('action',action,view);
 
-        var $attachmentMenu = debugManager.$('a[data-action=get_attachments]');
-        assert.strictEqual($attachmentMenu.length, 1, "should have Manage Attachments menu item");
-        assert.strictEqual($attachmentMenu.text().trim(), "Manage Attachments",
-            "should have correct menu item text");
-        await testUtils.dom.click(debugManager.$('> a')); // open dropdown
-        await testUtils.dom.click($attachmentMenu);
+        var$attachmentMenu=debugManager.$('a[data-action=get_attachments]');
+        assert.strictEqual($attachmentMenu.length,1,"shouldhaveManageAttachmentsmenuitem");
+        assert.strictEqual($attachmentMenu.text().trim(),"ManageAttachments",
+            "shouldhavecorrectmenuitemtext");
+        awaittestUtils.dom.click(debugManager.$('>a'));//opendropdown
+        awaittestUtils.dom.click($attachmentMenu);
 
         debugManager.destroy();
     });
 
-    QUnit.test("Debug: Set defaults with right model", async function (assert) {
+    QUnit.test("Debug:Setdefaultswithrightmodel",asyncfunction(assert){
         assert.expect(2);
 
-        /*  Click on debug > set default,
-         *  set some defaults, click on save
-         *  model and some other data should be sent to server
+        /* Clickondebug>setdefault,
+         * setsomedefaults,clickonsave
+         * modelandsomeotherdatashouldbesenttoserver
          */
 
-        // We'll need a full blown architecture with some data
-        var data = {
-            partner: {
-                fields: {
-                    foo: {string: "Foo", type: "char", default: "My little Foo Value"},
+        //We'llneedafullblownarchitecturewithsomedata
+        vardata={
+            partner:{
+                fields:{
+                    foo:{string:"Foo",type:"char",default:"MylittleFooValue"},
                 },
-                records: [{
-                    id: 1,
-                    foo: "yop",
+                records:[{
+                    id:1,
+                    foo:"yop",
                 }]
             },
-            'ir.default': { // We just need this to be defined
-                fields: {},
+            'ir.default':{//Wejustneedthistobedefined
+                fields:{},
             },
         };
 
-        var form = await testUtils.createView({
-            View: FormView,
-            model: 'partner',
-            data: data,
-            arch: '<form string="Partners">' +
-                    '<field name="foo" />' +
+        varform=awaittestUtils.createView({
+            View:FormView,
+            model:'partner',
+            data:data,
+            arch:'<formstring="Partners">'+
+                    '<fieldname="foo"/>'+
                 '</form>',
-            res_id: 1,
+            res_id:1,
         });
 
-        // Now the real tested component
-        var debugManager = await createDebugManager({
-            data: data,
-            mockRPC: function (route, args) {
-                if (route == "/web/dataset/call_kw/ir.default/set") {
-                    assert.deepEqual(args.args, ["partner", "foo", "yop", true, true, false],
-                        'Model, field, value and booleans for current user/company should have been passed');
-                    return Promise.resolve();
+        //Nowtherealtestedcomponent
+        vardebugManager=awaitcreateDebugManager({
+            data:data,
+            mockRPC:function(route,args){
+                if(route=="/web/dataset/call_kw/ir.default/set"){
+                    assert.deepEqual(args.args,["partner","foo","yop",true,true,false],
+                        'Model,field,valueandbooleansforcurrentuser/companyshouldhavebeenpassed');
+                    returnPromise.resolve();
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             }
         });
 
-        await debugManager.appendTo($('#qunit-fixture'));
+        awaitdebugManager.appendTo($('#qunit-fixture'));
 
-        // Simulate update debug manager from web client
-        var action = {
-            controlPanelFieldsView: {},
-            views: [{
-                fieldsView: {
-                    view_id: 1,
-                    model: 'partner',
-                    type: 'form',
+        //Simulateupdatedebugmanagerfromwebclient
+        varaction={
+            controlPanelFieldsView:{},
+            views:[{
+                fieldsView:{
+                    view_id:1,
+                    model:'partner',
+                    type:'form',
                 },
-                type: "form",
+                type:"form",
             }],
-            res_model: 'partner',
+            res_model:'partner',
         };
 
-        // We are all set
-        await debugManager.update('action', action, form);
+        //Weareallset
+        awaitdebugManager.update('action',action,form);
 
-        // click on set_defaults dropdown
-        await testUtils.dom.click(debugManager.$('> a')); // open dropdown
-        await testUtils.dom.click(debugManager.$('a[data-action="set_defaults"]'));
-        var $modal = $('.modal-content');
-        assert.strictEqual($modal.length, 1, 'One modal present');
+        //clickonset_defaultsdropdown
+        awaittestUtils.dom.click(debugManager.$('>a'));//opendropdown
+        awaittestUtils.dom.click(debugManager.$('a[data-action="set_defaults"]'));
+        var$modal=$('.modal-content');
+        assert.strictEqual($modal.length,1,'Onemodalpresent');
 
-        $modal.find('select[id=formview_default_fields] option[value=foo]').prop('selected', true);
+        $modal.find('select[id=formview_default_fields]option[value=foo]').prop('selected',true);
 
-        // Save
-        await testUtils.dom.click($modal.find('.modal-footer button').eq(1));
+        //Save
+        awaittestUtils.dom.click($modal.find('.modal-footerbutton').eq(1));
 
         form.destroy();
         debugManager.destroy();

@@ -1,30 +1,30 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.nl = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.nl=factory()));
+}(this,function(){'usestrict';
 
-    var nl = {
-        code: "nl",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
+    varnl={
+        code:"nl",
+        week:{
+            dow:1,
+            doy:4//TheweekthatcontainsJan4thisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "Voorgaand",
-            next: "Volgende",
-            today: "Vandaag",
-            year: "Jaar",
-            month: "Maand",
-            week: "Week",
-            day: "Dag",
-            list: "Agenda"
+        buttonText:{
+            prev:"Voorgaand",
+            next:"Volgende",
+            today:"Vandaag",
+            year:"Jaar",
+            month:"Maand",
+            week:"Week",
+            day:"Dag",
+            list:"Agenda"
         },
-        allDayText: "Hele dag",
-        eventLimitText: "extra",
-        noEventsMessage: "Geen evenementen om te laten zien"
+        allDayText:"Heledag",
+        eventLimitText:"extra",
+        noEventsMessage:"Geenevenementenomtelatenzien"
     };
 
-    return nl;
+    returnnl;
 
 }));

@@ -1,170 +1,170 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, tools, api
+fromflectraimportfields,models,tools,api
 
 
-class ReportStockQuantity(models.Model):
-    _name = 'report.stock.quantity'
-    _auto = False
-    _description = 'Stock Quantity Report'
+classReportStockQuantity(models.Model):
+    _name='report.stock.quantity'
+    _auto=False
+    _description='StockQuantityReport'
 
-    date = fields.Date(string='Date', readonly=True)
-    product_tmpl_id = fields.Many2one('product.template', related='product_id.product_tmpl_id')
-    product_id = fields.Many2one('product.product', string='Product', readonly=True)
-    state = fields.Selection([
-        ('forecast', 'Forecasted Stock'),
-        ('in', 'Forecasted Receipts'),
-        ('out', 'Forecasted Deliveries'),
-    ], string='State', readonly=True)
-    product_qty = fields.Float(string='Quantity', readonly=True)
-    company_id = fields.Many2one('res.company', readonly=True)
-    warehouse_id = fields.Many2one('stock.warehouse', readonly=True)
+    date=fields.Date(string='Date',readonly=True)
+    product_tmpl_id=fields.Many2one('product.template',related='product_id.product_tmpl_id')
+    product_id=fields.Many2one('product.product',string='Product',readonly=True)
+    state=fields.Selection([
+        ('forecast','ForecastedStock'),
+        ('in','ForecastedReceipts'),
+        ('out','ForecastedDeliveries'),
+    ],string='State',readonly=True)
+    product_qty=fields.Float(string='Quantity',readonly=True)
+    company_id=fields.Many2one('res.company',readonly=True)
+    warehouse_id=fields.Many2one('stock.warehouse',readonly=True)
 
-    def init(self):
+    definit(self):
         """
-        Because we can transfer a product from a warehouse to another one thanks to a stock move, we need to
-        generate some fake stock moves before processing all of them. That way, in case of an interwarehouse
-        transfer, we will have an outgoing stock move for the source warehouse and an incoming stock move
-        for the destination one. To do so, we select all relevant SM (incoming, outgoing and interwarehouse),
-        then we duplicate all these SM and edit the values:
-            - product_qty is kept if the SM is not the duplicated one or if the SM is an interwarehouse one
-                otherwise, we set the value to 0 (this allows us to filter it out during the SM processing)
-            - the source warehouse is kept if the SM is not the duplicated one
-            - the dest warehouse is kept if the SM is not the duplicated one and is not an interwarehouse
-                OR the SM is the duplicated one and is an interwarehouse
-            - the usage of source/dest location follows the same logic as the warehouses
+        Becausewecantransferaproductfromawarehousetoanotheronethankstoastockmove,weneedto
+        generatesomefakestockmovesbeforeprocessingallofthem.Thatway,incaseofaninterwarehouse
+        transfer,wewillhaveanoutgoingstockmoveforthesourcewarehouseandanincomingstockmove
+        forthedestinationone.Todoso,weselectallrelevantSM(incoming,outgoingandinterwarehouse),
+        thenweduplicatealltheseSMandeditthevalues:
+            -product_qtyiskeptiftheSMisnottheduplicatedoneoriftheSMisaninterwarehouseone
+                otherwise,wesetthevalueto0(thisallowsustofilteritoutduringtheSMprocessing)
+            -thesourcewarehouseiskeptiftheSMisnottheduplicatedone
+            -thedestwarehouseiskeptiftheSMisnottheduplicatedoneandisnotaninterwarehouse
+                ORtheSMistheduplicatedoneandisaninterwarehouse
+            -theusageofsource/destlocationfollowsthesamelogicasthewarehouses
         """
-        tools.drop_view_if_exists(self._cr, 'report_stock_quantity')
-        query = """
-CREATE or REPLACE VIEW report_stock_quantity AS (
+        tools.drop_view_if_exists(self._cr,'report_stock_quantity')
+        query="""
+CREATEorREPLACEVIEWreport_stock_quantityAS(
 WITH
-    existing_sm (id, product_id, product_qty, date, state, company_id, whs_id, whd_id, ls_usage, ld_usage) AS (
-        SELECT m.id, m.product_id, m.product_qty, m.date, m.state, m.company_id, whs.id, whd.id, ls.usage, ld.usage
-        FROM stock_move m
-        LEFT JOIN stock_location ls on (ls.id=m.location_id)
-        LEFT JOIN stock_location ld on (ld.id=m.location_dest_id)
-        LEFT JOIN stock_warehouse whs ON ls.parent_path like concat('%/', whs.view_location_id, '/%')
-        LEFT JOIN stock_warehouse whd ON ld.parent_path like concat('%/', whd.view_location_id, '/%')
-        LEFT JOIN product_product pp on pp.id=m.product_id
-        LEFT JOIN product_template pt on pt.id=pp.product_tmpl_id
-        WHERE pt.type = 'product' AND
-            (whs.id IS NOT NULL OR whd.id IS NOT NULL) AND
-            (whs.id IS NULL OR whd.id IS NULL OR whs.id != whd.id) AND
-            m.product_qty != 0 AND
-            m.state NOT IN ('draft', 'cancel') AND
-            (m.state IN ('draft', 'waiting', 'confirmed', 'partially_available', 'assigned') or m.date >= ((now() at time zone 'utc')::date - interval '3month'))
+    existing_sm(id,product_id,product_qty,date,state,company_id,whs_id,whd_id,ls_usage,ld_usage)AS(
+        SELECTm.id,m.product_id,m.product_qty,m.date,m.state,m.company_id,whs.id,whd.id,ls.usage,ld.usage
+        FROMstock_movem
+        LEFTJOINstock_locationlson(ls.id=m.location_id)
+        LEFTJOINstock_locationldon(ld.id=m.location_dest_id)
+        LEFTJOINstock_warehousewhsONls.parent_pathlikeconcat('%/',whs.view_location_id,'/%')
+        LEFTJOINstock_warehousewhdONld.parent_pathlikeconcat('%/',whd.view_location_id,'/%')
+        LEFTJOINproduct_productpponpp.id=m.product_id
+        LEFTJOINproduct_templateptonpt.id=pp.product_tmpl_id
+        WHEREpt.type='product'AND
+            (whs.idISNOTNULLORwhd.idISNOTNULL)AND
+            (whs.idISNULLORwhd.idISNULLORwhs.id!=whd.id)AND
+            m.product_qty!=0AND
+            m.stateNOTIN('draft','cancel')AND
+            (m.stateIN('draft','waiting','confirmed','partially_available','assigned')orm.date>=((now()attimezone'utc')::date-interval'3month'))
     ),
-    all_sm (id, product_id, product_qty, date, state, company_id, whs_id, whd_id, ls_usage, ld_usage) AS (
-        SELECT sm.id, sm.product_id, 
-            CASE 
-                WHEN is_duplicated = 0 THEN sm.product_qty
-                WHEN sm.whs_id IS NOT NULL AND sm.whd_id IS NOT NULL AND sm.whs_id != sm.whd_id THEN sm.product_qty
-                ELSE 0
-            END, 
-            sm.date, sm.state, sm.company_id,
-            CASE WHEN is_duplicated = 0 THEN sm.whs_id END,
-            CASE 
-                WHEN is_duplicated = 0 AND NOT (sm.whs_id IS NOT NULL AND sm.whd_id IS NOT NULL AND sm.whs_id != sm.whd_id) THEN sm.whd_id 
-                WHEN is_duplicated = 1 AND (sm.whs_id IS NOT NULL AND sm.whd_id IS NOT NULL AND sm.whs_id != sm.whd_id) THEN sm.whd_id 
+    all_sm(id,product_id,product_qty,date,state,company_id,whs_id,whd_id,ls_usage,ld_usage)AS(
+        SELECTsm.id,sm.product_id,
+            CASE
+                WHENis_duplicated=0THENsm.product_qty
+                WHENsm.whs_idISNOTNULLANDsm.whd_idISNOTNULLANDsm.whs_id!=sm.whd_idTHENsm.product_qty
+                ELSE0
             END,
-            CASE WHEN is_duplicated = 0 THEN sm.ls_usage END,
-            CASE 
-                WHEN is_duplicated = 0 AND NOT (sm.whs_id IS NOT NULL AND sm.whd_id IS NOT NULL AND sm.whs_id != sm.whd_id) THEN sm.ld_usage 
-                WHEN is_duplicated = 1 AND (sm.whs_id IS NOT NULL AND sm.whd_id IS NOT NULL AND sm.whs_id != sm.whd_id) THEN sm.ld_usage
+            sm.date,sm.state,sm.company_id,
+            CASEWHENis_duplicated=0THENsm.whs_idEND,
+            CASE
+                WHENis_duplicated=0ANDNOT(sm.whs_idISNOTNULLANDsm.whd_idISNOTNULLANDsm.whs_id!=sm.whd_id)THENsm.whd_id
+                WHENis_duplicated=1AND(sm.whs_idISNOTNULLANDsm.whd_idISNOTNULLANDsm.whs_id!=sm.whd_id)THENsm.whd_id
+            END,
+            CASEWHENis_duplicated=0THENsm.ls_usageEND,
+            CASE
+                WHENis_duplicated=0ANDNOT(sm.whs_idISNOTNULLANDsm.whd_idISNOTNULLANDsm.whs_id!=sm.whd_id)THENsm.ld_usage
+                WHENis_duplicated=1AND(sm.whs_idISNOTNULLANDsm.whd_idISNOTNULLANDsm.whs_id!=sm.whd_id)THENsm.ld_usage
             END
         FROM
-            GENERATE_SERIES(0, 1, 1) is_duplicated,
-            existing_sm sm
+            GENERATE_SERIES(0,1,1)is_duplicated,
+            existing_smsm
     )
 SELECT
-    MIN(id) as id,
+    MIN(id)asid,
     product_id,
     state,
     date,
-    sum(product_qty) as product_qty,
+    sum(product_qty)asproduct_qty,
     company_id,
     warehouse_id
-FROM (SELECT
+FROM(SELECT
         m.id,
         m.product_id,
         CASE
-            WHEN m.whs_id IS NOT NULL AND m.whd_id IS NULL THEN 'out'
-            WHEN m.whd_id IS NOT NULL AND m.whs_id IS NULL THEN 'in'
-        END AS state,
-        m.date::date AS date,
+            WHENm.whs_idISNOTNULLANDm.whd_idISNULLTHEN'out'
+            WHENm.whd_idISNOTNULLANDm.whs_idISNULLTHEN'in'
+        ENDASstate,
+        m.date::dateASdate,
         CASE
-            WHEN m.whs_id IS NOT NULL AND m.whd_id IS NULL THEN -m.product_qty
-            WHEN m.whd_id IS NOT NULL AND m.whs_id IS NULL THEN m.product_qty
-        END AS product_qty,
+            WHENm.whs_idISNOTNULLANDm.whd_idISNULLTHEN-m.product_qty
+            WHENm.whd_idISNOTNULLANDm.whs_idISNULLTHENm.product_qty
+        ENDASproduct_qty,
         m.company_id,
         CASE
-            WHEN m.whs_id IS NOT NULL AND m.whd_id IS NULL THEN m.whs_id
-            WHEN m.whd_id IS NOT NULL AND m.whs_id IS NULL THEN m.whd_id
-        END AS warehouse_id
+            WHENm.whs_idISNOTNULLANDm.whd_idISNULLTHENm.whs_id
+            WHENm.whd_idISNOTNULLANDm.whs_idISNULLTHENm.whd_id
+        ENDASwarehouse_id
     FROM
-        all_sm m
+        all_smm
     WHERE
-        m.product_qty != 0 AND
-        m.state != 'done'
-    UNION ALL
+        m.product_qty!=0AND
+        m.state!='done'
+    UNIONALL
     SELECT
-        -q.id as id,
+        -q.idasid,
         q.product_id,
-        'forecast' as state,
+        'forecast'asstate,
         date.*::date,
-        q.quantity as product_qty,
+        q.quantityasproduct_qty,
         q.company_id,
-        wh.id as warehouse_id
+        wh.idaswarehouse_id
     FROM
-        GENERATE_SERIES((now() at time zone 'utc')::date - interval '3month',
-        (now() at time zone 'utc')::date + interval '3 month', '1 day'::interval) date,
-        stock_quant q
-    LEFT JOIN stock_location l on (l.id=q.location_id)
-    LEFT JOIN stock_warehouse wh ON l.parent_path like concat('%/', wh.view_location_id, '/%')
+        GENERATE_SERIES((now()attimezone'utc')::date-interval'3month',
+        (now()attimezone'utc')::date+interval'3month','1day'::interval)date,
+        stock_quantq
+    LEFTJOINstock_locationlon(l.id=q.location_id)
+    LEFTJOINstock_warehousewhONl.parent_pathlikeconcat('%/',wh.view_location_id,'/%')
     WHERE
-        (l.usage = 'internal' AND wh.id IS NOT NULL) OR
-        l.usage = 'transit'
-    UNION ALL
+        (l.usage='internal'ANDwh.idISNOTNULL)OR
+        l.usage='transit'
+    UNIONALL
     SELECT
         m.id,
         m.product_id,
-        'forecast' as state,
+        'forecast'asstate,
         GENERATE_SERIES(
         CASE
-            WHEN m.state = 'done' THEN (now() at time zone 'utc')::date - interval '3month'
-            ELSE m.date::date
+            WHENm.state='done'THEN(now()attimezone'utc')::date-interval'3month'
+            ELSEm.date::date
         END,
         CASE
-            WHEN m.state != 'done' THEN (now() at time zone 'utc')::date + interval '3 month'
-            ELSE m.date::date - interval '1 day'
-        END, '1 day'::interval)::date date,
+            WHENm.state!='done'THEN(now()attimezone'utc')::date+interval'3month'
+            ELSEm.date::date-interval'1day'
+        END,'1day'::interval)::datedate,
         CASE
-            WHEN m.whs_id IS NOT NULL AND m.whd_id IS NULL AND m.state = 'done' THEN m.product_qty
-            WHEN m.whd_id IS NOT NULL AND m.whs_id IS NULL AND m.state = 'done' THEN -m.product_qty
-            WHEN m.whs_id IS NOT NULL AND m.whd_id IS NULL THEN -m.product_qty
-            WHEN m.whd_id IS NOT NULL AND m.whs_id IS NULL THEN m.product_qty
-        END AS product_qty,
+            WHENm.whs_idISNOTNULLANDm.whd_idISNULLANDm.state='done'THENm.product_qty
+            WHENm.whd_idISNOTNULLANDm.whs_idISNULLANDm.state='done'THEN-m.product_qty
+            WHENm.whs_idISNOTNULLANDm.whd_idISNULLTHEN-m.product_qty
+            WHENm.whd_idISNOTNULLANDm.whs_idISNULLTHENm.product_qty
+        ENDASproduct_qty,
         m.company_id,
         CASE
-            WHEN m.whs_id IS NOT NULL AND m.whd_id IS NULL THEN m.whs_id
-            WHEN m.whd_id IS NOT NULL AND m.whs_id IS NULL THEN m.whd_id
-        END AS warehouse_id
+            WHENm.whs_idISNOTNULLANDm.whd_idISNULLTHENm.whs_id
+            WHENm.whd_idISNOTNULLANDm.whs_idISNULLTHENm.whd_id
+        ENDASwarehouse_id
     FROM
-        all_sm m
+        all_smm
     WHERE
-        m.product_qty != 0) AS forecast_qty
-GROUP BY product_id, state, date, company_id, warehouse_id
+        m.product_qty!=0)ASforecast_qty
+GROUPBYproduct_id,state,date,company_id,warehouse_id
 );
 """
         self.env.cr.execute(query)
 
     @api.model
-    def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
-        for i in range(len(domain)):
-            if domain[i][0] == 'product_tmpl_id' and domain[i][1] in ('=', 'in'):
-                tmpl = self.env['product.template'].browse(domain[i][2])
-                # Avoid the subquery done for the related, the postgresql will plan better with the SQL view
-                # and then improve a lot the performance for the forecasted report of the product template.
-                domain[i] = ('product_id', 'in', tmpl.with_context(active_test=False).product_variant_ids.ids)
-        return super().read_group(domain, fields, groupby, offset, limit, orderby, lazy)
+    defread_group(self,domain,fields,groupby,offset=0,limit=None,orderby=False,lazy=True):
+        foriinrange(len(domain)):
+            ifdomain[i][0]=='product_tmpl_id'anddomain[i][1]in('=','in'):
+                tmpl=self.env['product.template'].browse(domain[i][2])
+                #Avoidthesubquerydonefortherelated,thepostgresqlwillplanbetterwiththeSQLview
+                #andthenimprovealottheperformancefortheforecastedreportoftheproducttemplate.
+                domain[i]=('product_id','in',tmpl.with_context(active_test=False).product_variant_ids.ids)
+        returnsuper().read_group(domain,fields,groupby,offset,limit,orderby,lazy)

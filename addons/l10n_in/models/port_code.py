@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class L10nInPortCode(models.Model):
-    """Port code must be mentioned in export and import of goods under GST."""
-    _name = 'l10n_in.port.code'
-    _description = "Indian port code"
-    _rec_name = 'code'
+classL10nInPortCode(models.Model):
+    """PortcodemustbementionedinexportandimportofgoodsunderGST."""
+    _name='l10n_in.port.code'
+    _description="Indianportcode"
+    _rec_name='code'
 
-    code = fields.Char(string="Port Code", required=True)
-    name = fields.Char(string="Port", required=True)
-    state_id = fields.Many2one('res.country.state', string="State")
+    code=fields.Char(string="PortCode",required=True)
+    name=fields.Char(string="Port",required=True)
+    state_id=fields.Many2one('res.country.state',string="State")
 
-    _sql_constraints = [
-        ('code_uniq', 'unique (code)', 'The Port Code must be unique!')
+    _sql_constraints=[
+        ('code_uniq','unique(code)','ThePortCodemustbeunique!')
     ]

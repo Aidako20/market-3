@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
-class RestaurantPrinter(models.Model):
+classRestaurantPrinter(models.Model):
 
-    _inherit = 'restaurant.printer'
+    _inherit='restaurant.printer'
 
-    printer_type = fields.Selection(selection_add=[('epson_epos', 'Use an Epson printer')])
-    epson_printer_ip = fields.Char(string='Epson Receipt Printer IP Address', help="Local IP address of an Epson receipt printer.")
+    printer_type=fields.Selection(selection_add=[('epson_epos','UseanEpsonprinter')])
+    epson_printer_ip=fields.Char(string='EpsonReceiptPrinterIPAddress',help="LocalIPaddressofanEpsonreceiptprinter.")

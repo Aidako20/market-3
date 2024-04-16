@@ -1,19 +1,19 @@
-flectra.define('pos_restaurant.EditBar', function(require) {
-    'use strict';
+flectra.define('pos_restaurant.EditBar',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
-    const { useState } = owl.hooks;
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
+    const{useState}=owl.hooks;
 
-    class EditBar extends PosComponent {
-        constructor() {
+    classEditBarextendsPosComponent{
+        constructor(){
             super(...arguments);
-            this.state = useState({ isColorPicker: false })
+            this.state=useState({isColorPicker:false})
         }
     }
-    EditBar.template = 'EditBar';
+    EditBar.template='EditBar';
 
     Registries.Component.add(EditBar);
 
-    return EditBar;
+    returnEditBar;
 });

@@ -1,103 +1,103 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import api, fields, models, _
-from flectra.addons.payment.models.payment_acquirer import ValidationError
-from flectra.tools.float_utils import float_compare
+fromflectraimportapi,fields,models,_
+fromflectra.addons.payment.models.payment_acquirerimportValidationError
+fromflectra.tools.float_utilsimportfloat_compare
 
-import logging
-import pprint
+importlogging
+importpprint
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class TransferPaymentAcquirer(models.Model):
-    _inherit = 'payment.acquirer'
+classTransferPaymentAcquirer(models.Model):
+    _inherit='payment.acquirer'
 
-    provider = fields.Selection(selection_add=[
-        ('transfer', 'Manual Payment')
-    ], default='transfer', ondelete={'transfer': 'set default'})
+    provider=fields.Selection(selection_add=[
+        ('transfer','ManualPayment')
+    ],default='transfer',ondelete={'transfer':'setdefault'})
 
     @api.model
-    def _create_missing_journal_for_acquirers(self, company=None):
-        # By default, the wire transfer method uses the default Bank journal.
-        company = company or self.env.company
-        acquirers = self.env['payment.acquirer'].search(
-            [('provider', '=', 'transfer'), ('journal_id', '=', False), ('company_id', '=', company.id)])
+    def_create_missing_journal_for_acquirers(self,company=None):
+        #Bydefault,thewiretransfermethodusesthedefaultBankjournal.
+        company=companyorself.env.company
+        acquirers=self.env['payment.acquirer'].search(
+            [('provider','=','transfer'),('journal_id','=',False),('company_id','=',company.id)])
 
-        bank_journal = self.env['account.journal'].search(
-            [('type', '=', 'bank'), ('company_id', '=', company.id)], limit=1)
-        if bank_journal:
-            acquirers.write({'journal_id': bank_journal.id})
-        return super(TransferPaymentAcquirer, self)._create_missing_journal_for_acquirers(company=company)
+        bank_journal=self.env['account.journal'].search(
+            [('type','=','bank'),('company_id','=',company.id)],limit=1)
+        ifbank_journal:
+            acquirers.write({'journal_id':bank_journal.id})
+        returnsuper(TransferPaymentAcquirer,self)._create_missing_journal_for_acquirers(company=company)
 
-    def transfer_get_form_action_url(self):
-        return '/payment/transfer/feedback'
+    deftransfer_get_form_action_url(self):
+        return'/payment/transfer/feedback'
 
-    def _format_transfer_data(self):
-        company_id = self.env.company.id
-        # filter only bank accounts marked as visible
-        journals = self.env['account.journal'].search([('type', '=', 'bank'), ('company_id', '=', company_id)])
-        accounts = journals.mapped('bank_account_id').name_get()
-        bank_title = _('Bank Accounts') if len(accounts) > 1 else _('Bank Account')
-        bank_accounts = ''.join(['<ul>'] + ['<li>%s</li>' % name for id, name in accounts] + ['</ul>'])
-        post_msg = _('''<div>
-<h3>Please use the following transfer details</h3>
+    def_format_transfer_data(self):
+        company_id=self.env.company.id
+        #filteronlybankaccountsmarkedasvisible
+        journals=self.env['account.journal'].search([('type','=','bank'),('company_id','=',company_id)])
+        accounts=journals.mapped('bank_account_id').name_get()
+        bank_title=_('BankAccounts')iflen(accounts)>1else_('BankAccount')
+        bank_accounts=''.join(['<ul>']+['<li>%s</li>'%nameforid,nameinaccounts]+['</ul>'])
+        post_msg=_('''<div>
+<h3>Pleaseusethefollowingtransferdetails</h3>
 <h4>%(bank_title)s</h4>
 %(bank_accounts)s
 <h4>Communication</h4>
-<p>Please use the order name as communication reference.</p>
-</div>''') % {
-            'bank_title': bank_title,
-            'bank_accounts': bank_accounts,
+<p>Pleaseusetheordernameascommunicationreference.</p>
+</div>''')%{
+            'bank_title':bank_title,
+            'bank_accounts':bank_accounts,
         }
-        return post_msg
+        returnpost_msg
 
     @api.model
-    def create(self, values):
-        """ Hook in create to create a default pending_msg. This is done in create
-        to have access to the name and other creation values. If no pending_msg
-        or a void pending_msg is given at creation, generate a default one. """
-        if values.get('provider') == 'transfer' and not values.get('pending_msg'):
-            values['pending_msg'] = self._format_transfer_data()
-        return super(TransferPaymentAcquirer, self).create(values)
+    defcreate(self,values):
+        """Hookincreatetocreateadefaultpending_msg.Thisisdoneincreate
+        tohaveaccesstothenameandothercreationvalues.Ifnopending_msg
+        oravoidpending_msgisgivenatcreation,generateadefaultone."""
+        ifvalues.get('provider')=='transfer'andnotvalues.get('pending_msg'):
+            values['pending_msg']=self._format_transfer_data()
+        returnsuper(TransferPaymentAcquirer,self).create(values)
 
-    def write(self, values):
-        """ Hook in write to create a default pending_msg. See create(). """
-        if not values.get('pending_msg', False) and all(not acquirer.pending_msg and acquirer.provider != 'transfer' for acquirer in self) and values.get('provider') == 'transfer':
-            values['pending_msg'] = self._format_transfer_data()
-        return super(TransferPaymentAcquirer, self).write(values)
+    defwrite(self,values):
+        """Hookinwritetocreateadefaultpending_msg.Seecreate()."""
+        ifnotvalues.get('pending_msg',False)andall(notacquirer.pending_msgandacquirer.provider!='transfer'foracquirerinself)andvalues.get('provider')=='transfer':
+            values['pending_msg']=self._format_transfer_data()
+        returnsuper(TransferPaymentAcquirer,self).write(values)
 
 
-class TransferPaymentTransaction(models.Model):
-    _inherit = 'payment.transaction'
+classTransferPaymentTransaction(models.Model):
+    _inherit='payment.transaction'
 
     @api.model
-    def _transfer_form_get_tx_from_data(self, data):
-        reference, amount, currency_name = data.get('reference'), data.get('amount'), data.get('currency_name')
-        tx = self.search([('reference', '=', reference)])
+    def_transfer_form_get_tx_from_data(self,data):
+        reference,amount,currency_name=data.get('reference'),data.get('amount'),data.get('currency_name')
+        tx=self.search([('reference','=',reference)])
 
-        if not tx or len(tx) > 1:
-            error_msg = _('received data for reference %s') % (pprint.pformat(reference))
-            if not tx:
-                error_msg += _('; no order found')
+        ifnottxorlen(tx)>1:
+            error_msg=_('receiveddataforreference%s')%(pprint.pformat(reference))
+            ifnottx:
+                error_msg+=_(';noorderfound')
             else:
-                error_msg += _('; multiple order found')
+                error_msg+=_(';multipleorderfound')
             _logger.info(error_msg)
-            raise ValidationError(error_msg)
+            raiseValidationError(error_msg)
 
-        return tx
+        returntx
 
-    def _transfer_form_get_invalid_parameters(self, data):
-        invalid_parameters = []
+    def_transfer_form_get_invalid_parameters(self,data):
+        invalid_parameters=[]
 
-        if float_compare(float(data.get('amount') or '0.0'), self.amount, 2) != 0:
-            invalid_parameters.append(('amount', data.get('amount'), '%.2f' % self.amount))
-        if data.get('currency') != self.currency_id.name:
-            invalid_parameters.append(('currency', data.get('currency'), self.currency_id.name))
+        iffloat_compare(float(data.get('amount')or'0.0'),self.amount,2)!=0:
+            invalid_parameters.append(('amount',data.get('amount'),'%.2f'%self.amount))
+        ifdata.get('currency')!=self.currency_id.name:
+            invalid_parameters.append(('currency',data.get('currency'),self.currency_id.name))
 
-        return invalid_parameters
+        returninvalid_parameters
 
-    def _transfer_form_validate(self, data):
-        _logger.info('Validated transfer payment for tx %s: set as pending' % (self.reference))
+    def_transfer_form_validate(self,data):
+        _logger.info('Validatedtransferpaymentfortx%s:setaspending'%(self.reference))
         self._set_transaction_pending()
-        return True
+        returnTrue

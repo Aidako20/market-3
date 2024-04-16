@@ -1,36 +1,36 @@
-flectra.define('hr_timesheet.task_with_hours', function (require) {
-"use strict";
+flectra.define('hr_timesheet.task_with_hours',function(require){
+"usestrict";
 
-var field_registry = require('web.field_registry');
-var relational_fields = require('web.relational_fields');
-var FieldMany2One = relational_fields.FieldMany2One;
+varfield_registry=require('web.field_registry');
+varrelational_fields=require('web.relational_fields');
+varFieldMany2One=relational_fields.FieldMany2One;
 
-var TaskWithHours = FieldMany2One.extend({
+varTaskWithHours=FieldMany2One.extend({
     /**
-     * @override
+     *@override
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        this.additionalContext.hr_timesheet_display_remaining_hours = true;
+    init:function(){
+        this._super.apply(this,arguments);
+        this.additionalContext.hr_timesheet_display_remaining_hours=true;
     },
     /**
-     * @override
+     *@override
      */
-    _getDisplayNameWithoutHours: function (value) {
-        return value.split(' ‒ ')[0];
+    _getDisplayNameWithoutHours:function(value){
+        returnvalue.split('‒')[0];
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _renderEdit: function (){
-        this.m2o_value = this._getDisplayNameWithoutHours(this.m2o_value);
-        this._super.apply(this, arguments);
+    _renderEdit:function(){
+        this.m2o_value=this._getDisplayNameWithoutHours(this.m2o_value);
+        this._super.apply(this,arguments);
     },
 });
 
-field_registry.add('task_with_hours', TaskWithHours);
+field_registry.add('task_with_hours',TaskWithHours);
 
-return TaskWithHours;
+returnTaskWithHours;
 
-}); 
+});

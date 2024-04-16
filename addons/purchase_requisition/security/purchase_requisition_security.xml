@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra noupdate="1">
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectranoupdate="1">
 
-    <record model="ir.rule" id="purchase_requisition_comp_rule">
-        <field name="name">Purchase Requisition multi-company</field>
-        <field name="model_id" ref="model_purchase_requisition"/>
-        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    <recordmodel="ir.rule"id="purchase_requisition_comp_rule">
+        <fieldname="name">PurchaseRequisitionmulti-company</field>
+        <fieldname="model_id"ref="model_purchase_requisition"/>
+        <fieldname="domain_force">[('company_id','in',company_ids)]</field>
     </record>
 
-    <record model="ir.rule" id="purchase_requisition_line_comp_rule">
-        <field name="name">Purchase requisition Line multi-company</field>
-        <field name="model_id" ref="model_purchase_requisition_line"/>
-        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    <recordmodel="ir.rule"id="purchase_requisition_line_comp_rule">
+        <fieldname="name">PurchaserequisitionLinemulti-company</field>
+        <fieldname="model_id"ref="model_purchase_requisition_line"/>
+        <fieldname="domain_force">[('company_id','in',company_ids)]</field>
     </record>
 
 </flectra>

@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class MrpWorkcenter(models.Model):
-    _inherit = 'mrp.workcenter'
+classMrpWorkcenter(models.Model):
+    _inherit='mrp.workcenter'
 
-    costs_hour_account_id = fields.Many2one('account.analytic.account', string='Analytic Account',
-                                            help="Fill this only if you want automatic analytic accounting entries on production orders.")
+    costs_hour_account_id=fields.Many2one('account.analytic.account',string='AnalyticAccount',
+                                            help="Fillthisonlyifyouwantautomaticanalyticaccountingentriesonproductionorders.")

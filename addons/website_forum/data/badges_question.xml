@@ -1,398 +1,398 @@
-<!-- <?xml version="1.0" encoding="utf-8"?> -->
+<!--<?xmlversion="1.0"encoding="utf-8"?>-->
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <!-- POPULARITY (VIEWS) -->
-        <!-- Popular: 150 views -->
-        <record id="badge_q_1" model="gamification.badge">
-            <field name="name">Popular Question</field>
-            <field name="description">Asked a question with at least 150 views</field>
-            <field name="level">bronze</field>
-            <field name="rule_auth">nobody</field>
+        <!--POPULARITY(VIEWS)-->
+        <!--Popular:150views-->
+        <recordid="badge_q_1"model="gamification.badge">
+            <fieldname="name">PopularQuestion</field>
+            <fieldname="description">Askedaquestionwithatleast150views</field>
+            <fieldname="level">bronze</field>
+            <fieldname="rule_auth">nobody</field>
         </record>
-        <record model="gamification.goal.definition" id="definition_popular_question">
-            <field name="name">Popular Question (150)</field>
-            <field name="description">Asked a question with at least 150 views</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="website_forum.model_forum_post"/>
-            <field name="domain">[('parent_id', '=', False), ('views', '>=', 150)]</field>
-            <field name="condition">higher</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_post__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
+        <recordmodel="gamification.goal.definition"id="definition_popular_question">
+            <fieldname="name">PopularQuestion(150)</field>
+            <fieldname="description">Askedaquestionwithatleast150views</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="website_forum.model_forum_post"/>
+            <fieldname="domain">[('parent_id','=',False),('views','>=',150)]</field>
+            <fieldname="condition">higher</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_post__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
         </record>
-        <record model="gamification.challenge" id="challenge_popular_question">
-            <field name="name">Popular Question</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_q_1"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
+        <recordmodel="gamification.challenge"id="challenge_popular_question">
+            <fieldname="name">PopularQuestion</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_q_1"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
         </record>
-        <record model="gamification.challenge.line" id="line_popular_question">
-            <field name="definition_id" ref="definition_popular_question"/>
-            <field name="challenge_id" ref="challenge_popular_question"/>
-            <field name="target_goal">1</field>
-        </record>
-
-        <!-- Notable: 250 views -->
-        <record id="badge_q_2" model="gamification.badge">
-            <field name="name">Notable Question</field>
-            <field name="description">Asked a question with at least 250 views</field>
-            <field name="level">silver</field>
-            <field name="rule_auth">nobody</field>
-        </record>
-        <record model="gamification.goal.definition" id="definition_notable_question">
-            <field name="name">Popular Question (250)</field>
-            <field name="description">Asked a question with at least 250 views</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="website_forum.model_forum_post"/>
-            <field name="domain">[('parent_id', '=', False), ('views', '>=', 250)]</field>
-            <field name="condition">higher</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_post__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
-        </record>
-        <record model="gamification.challenge" id="challenge_notable_question">
-            <field name="name">Notable Question</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_q_2"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
-        </record>
-        <record model="gamification.challenge.line" id="line_notable_question">
-            <field name="definition_id" ref="definition_notable_question"/>
-            <field name="challenge_id" ref="challenge_notable_question"/>
-            <field name="target_goal">1</field>
-        </record>
-        <!-- Famous: 500 views -->
-        <record id="badge_q_3" model="gamification.badge">
-            <field name="name">Famous Question</field>
-            <field name="description">Asked a question with at least 500 views</field>
-            <field name="level">gold</field>
-            <field name="rule_auth">nobody</field>
-        </record>
-        <record model="gamification.goal.definition" id="definition_famous_question">
-            <field name="name">Popular Question (500)</field>
-            <field name="description">Asked a question with at least 500 views</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="website_forum.model_forum_post"/>
-            <field name="domain">[('parent_id', '=', False), ('views', '>=', 500)]</field>
-            <field name="condition">higher</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_post__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
-        </record>
-        <record model="gamification.challenge" id="challenge_famous_question">
-            <field name="name">Famous Question</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_q_3"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
-        </record>
-        <record model="gamification.challenge.line" id="line_famous_question">
-            <field name="definition_id" ref="definition_famous_question"/>
-            <field name="challenge_id" ref="challenge_famous_question"/>
-            <field name="target_goal">1</field>
+        <recordmodel="gamification.challenge.line"id="line_popular_question">
+            <fieldname="definition_id"ref="definition_popular_question"/>
+            <fieldname="challenge_id"ref="challenge_popular_question"/>
+            <fieldname="target_goal">1</field>
         </record>
 
-        <!-- FAVORITE -->
-        <!-- Credible: at least 1 user have it in favorite -->
-        <record id="badge_q_4" model="gamification.badge">
-            <field name="name">Credible Question</field>
-            <field name="description">Question set as favorite by 1 user</field>
-            <field name="level">bronze</field>
-            <field name="rule_auth">nobody</field>
+        <!--Notable:250views-->
+        <recordid="badge_q_2"model="gamification.badge">
+            <fieldname="name">NotableQuestion</field>
+            <fieldname="description">Askedaquestionwithatleast250views</field>
+            <fieldname="level">silver</field>
+            <fieldname="rule_auth">nobody</field>
         </record>
-        <record model="gamification.goal.definition" id="definition_favorite_question_1">
-            <field name="name">Favourite Question (1)</field>
-            <field name="description">Question set as favorite by 1 user</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="website_forum.model_forum_post"/>
-            <field name="domain">[('parent_id', '=', False), ('favourite_count', '>=', 1)]</field>
-            <field name="condition">higher</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_post__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
+        <recordmodel="gamification.goal.definition"id="definition_notable_question">
+            <fieldname="name">PopularQuestion(250)</field>
+            <fieldname="description">Askedaquestionwithatleast250views</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="website_forum.model_forum_post"/>
+            <fieldname="domain">[('parent_id','=',False),('views','>=',250)]</field>
+            <fieldname="condition">higher</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_post__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
         </record>
-        <record model="gamification.challenge" id="challenge_favorite_question_1">
-            <field name="name">Credible Question</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_q_4"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
+        <recordmodel="gamification.challenge"id="challenge_notable_question">
+            <fieldname="name">NotableQuestion</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_q_2"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
         </record>
-        <record model="gamification.challenge.line" id="line_favorite_question_1">
-            <field name="definition_id" ref="definition_favorite_question_1"/>
-            <field name="challenge_id" ref="challenge_favorite_question_1"/>
-            <field name="target_goal">1</field>
+        <recordmodel="gamification.challenge.line"id="line_notable_question">
+            <fieldname="definition_id"ref="definition_notable_question"/>
+            <fieldname="challenge_id"ref="challenge_notable_question"/>
+            <fieldname="target_goal">1</field>
         </record>
-        <!-- Favorite: at least 5 users have it in favorite -->
-        <record id="badge_q_5" model="gamification.badge">
-            <field name="name">Favorite Question</field>
-            <field name="description">Question set as favorite by 5 users</field>
-            <field name="level">silver</field>
-            <field name="rule_auth">nobody</field>
+        <!--Famous:500views-->
+        <recordid="badge_q_3"model="gamification.badge">
+            <fieldname="name">FamousQuestion</field>
+            <fieldname="description">Askedaquestionwithatleast500views</field>
+            <fieldname="level">gold</field>
+            <fieldname="rule_auth">nobody</field>
         </record>
-        <record model="gamification.goal.definition" id="definition_favorite_question_5">
-            <field name="name">Favourite Question (5)</field>
-            <field name="description">Question set as favorite by 5 user</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="website_forum.model_forum_post"/>
-            <field name="domain">[('parent_id', '=', False), ('favourite_count', '>=', 5)]</field>
-            <field name="condition">higher</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_post__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
+        <recordmodel="gamification.goal.definition"id="definition_famous_question">
+            <fieldname="name">PopularQuestion(500)</field>
+            <fieldname="description">Askedaquestionwithatleast500views</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="website_forum.model_forum_post"/>
+            <fieldname="domain">[('parent_id','=',False),('views','>=',500)]</field>
+            <fieldname="condition">higher</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_post__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
         </record>
-        <record model="gamification.challenge" id="challenge_favorite_question_5">
-            <field name="name">Favorite Question</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_q_5"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
+        <recordmodel="gamification.challenge"id="challenge_famous_question">
+            <fieldname="name">FamousQuestion</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_q_3"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
         </record>
-        <record model="gamification.challenge.line" id="line_favorite_question_5">
-            <field name="definition_id" ref="definition_favorite_question_5"/>
-            <field name="challenge_id" ref="challenge_favorite_question_5"/>
-            <field name="target_goal">1</field>
-        </record>
-        <!-- Stellar: at least 25 users have it in favorite -->
-        <record id="badge_q_6" model="gamification.badge">
-            <field name="name">Stellar Question</field>
-            <field name="description">Question set as favorite by 25 users</field>
-            <field name="level">bronze</field>
-            <field name="rule_auth">nobody</field>
-        </record>
-        <record model="gamification.goal.definition" id="definition_stellar_question_25">
-            <field name="name">Favourite Question (25)</field>
-            <field name="description">Question set as favorite by 25 user</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="website_forum.model_forum_post"/>
-            <field name="domain">[('parent_id', '=', False), ('favourite_count', '>=', 25)]</field>
-            <field name="condition">higher</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_post__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
-        </record>
-        <record model="gamification.challenge" id="challenge_stellar_question_25">
-            <field name="name">Stellar Question</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_q_6"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
-        </record>
-        <record model="gamification.challenge.line" id="line_stellar_question_25">
-            <field name="definition_id" ref="definition_stellar_question_25"/>
-            <field name="challenge_id" ref="challenge_stellar_question_25"/>
-            <field name="target_goal">1</field>
+        <recordmodel="gamification.challenge.line"id="line_famous_question">
+            <fieldname="definition_id"ref="definition_famous_question"/>
+            <fieldname="challenge_id"ref="challenge_famous_question"/>
+            <fieldname="target_goal">1</field>
         </record>
 
-        <!-- QUALITY (VOTES) -->
-        <!-- Student: at least 1 upvote -->
-        <record id="badge_q_7" model="gamification.badge">
-            <field name="name">Student</field>
-            <field name="description">Asked first question with at least one up vote</field>
-            <field name="level">gold</field>
-            <field name="rule_auth">nobody</field>
+        <!--FAVORITE-->
+        <!--Credible:atleast1userhaveitinfavorite-->
+        <recordid="badge_q_4"model="gamification.badge">
+            <fieldname="name">CredibleQuestion</field>
+            <fieldname="description">Questionsetasfavoriteby1user</field>
+            <fieldname="level">bronze</field>
+            <fieldname="rule_auth">nobody</field>
         </record>
-        <record model="gamification.goal.definition" id="definition_student">
-            <field name="name">Upvoted question (1)</field>
-            <field name="description">Asked first question with at least one up vote</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="website_forum.model_forum_post"/>
-            <field name="domain">[('parent_id', '=', False), ('vote_count', '>=', 1)]</field>
-            <field name="condition">higher</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_post__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
+        <recordmodel="gamification.goal.definition"id="definition_favorite_question_1">
+            <fieldname="name">FavouriteQuestion(1)</field>
+            <fieldname="description">Questionsetasfavoriteby1user</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="website_forum.model_forum_post"/>
+            <fieldname="domain">[('parent_id','=',False),('favourite_count','>=',1)]</field>
+            <fieldname="condition">higher</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_post__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
         </record>
-        <record model="gamification.challenge" id="challenge_student">
-            <field name="name">Student</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_q_7"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
+        <recordmodel="gamification.challenge"id="challenge_favorite_question_1">
+            <fieldname="name">CredibleQuestion</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_q_4"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
         </record>
-        <record model="gamification.challenge.line" id="line_student">
-            <field name="definition_id" ref="definition_student"/>
-            <field name="challenge_id" ref="challenge_student"/>
-            <field name="target_goal">1</field>
+        <recordmodel="gamification.challenge.line"id="line_favorite_question_1">
+            <fieldname="definition_id"ref="definition_favorite_question_1"/>
+            <fieldname="challenge_id"ref="challenge_favorite_question_1"/>
+            <fieldname="target_goal">1</field>
         </record>
-        <!-- Nice: at least 4 upvotes -->
-        <record id="badge_q_8" model="gamification.badge">
-            <field name="name">Nice Question</field>
-            <field name="description">Question voted up 4 times</field>
-            <field name="level">bronze</field>
-            <field name="rule_auth">nobody</field>
+        <!--Favorite:atleast5usershaveitinfavorite-->
+        <recordid="badge_q_5"model="gamification.badge">
+            <fieldname="name">FavoriteQuestion</field>
+            <fieldname="description">Questionsetasfavoriteby5users</field>
+            <fieldname="level">silver</field>
+            <fieldname="rule_auth">nobody</field>
         </record>
-        <record model="gamification.goal.definition" id="definition_nice_question">
-            <field name="name">Upvoted question (4)</field>
-            <field name="description">Asked first question with at least 4 up votes</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="website_forum.model_forum_post"/>
-            <field name="domain">[('parent_id', '=', False), ('vote_count', '>=', 4)]</field>
-            <field name="condition">higher</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_post__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
+        <recordmodel="gamification.goal.definition"id="definition_favorite_question_5">
+            <fieldname="name">FavouriteQuestion(5)</field>
+            <fieldname="description">Questionsetasfavoriteby5user</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="website_forum.model_forum_post"/>
+            <fieldname="domain">[('parent_id','=',False),('favourite_count','>=',5)]</field>
+            <fieldname="condition">higher</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_post__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
         </record>
-        <record model="gamification.challenge" id="challenge_nice_question">
-            <field name="name">Nice Question</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_q_8"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
+        <recordmodel="gamification.challenge"id="challenge_favorite_question_5">
+            <fieldname="name">FavoriteQuestion</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_q_5"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
         </record>
-        <record model="gamification.challenge.line" id="line_nice_question">
-            <field name="definition_id" ref="definition_nice_question"/>
-            <field name="challenge_id" ref="challenge_nice_question"/>
-            <field name="target_goal">1</field>
+        <recordmodel="gamification.challenge.line"id="line_favorite_question_5">
+            <fieldname="definition_id"ref="definition_favorite_question_5"/>
+            <fieldname="challenge_id"ref="challenge_favorite_question_5"/>
+            <fieldname="target_goal">1</field>
         </record>
-        <!-- Good: at least 6 upvotes -->
-        <record id="badge_q_9" model="gamification.badge">
-            <field name="name">Good Question</field>
-            <field name="description">Question voted up 6 times</field>
-            <field name="level">silver</field>
-            <field name="rule_auth">nobody</field>
+        <!--Stellar:atleast25usershaveitinfavorite-->
+        <recordid="badge_q_6"model="gamification.badge">
+            <fieldname="name">StellarQuestion</field>
+            <fieldname="description">Questionsetasfavoriteby25users</field>
+            <fieldname="level">bronze</field>
+            <fieldname="rule_auth">nobody</field>
         </record>
-        <record model="gamification.goal.definition" id="definition_good_question">
-            <field name="name">Upvoted question (6)</field>
-            <field name="description">Asked first question with at least 6 up votes</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="website_forum.model_forum_post"/>
-            <field name="domain">[('parent_id', '=', False), ('vote_count', '>=', 6)]</field>
-            <field name="condition">higher</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_post__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
+        <recordmodel="gamification.goal.definition"id="definition_stellar_question_25">
+            <fieldname="name">FavouriteQuestion(25)</field>
+            <fieldname="description">Questionsetasfavoriteby25user</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="website_forum.model_forum_post"/>
+            <fieldname="domain">[('parent_id','=',False),('favourite_count','>=',25)]</field>
+            <fieldname="condition">higher</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_post__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
         </record>
-        <record model="gamification.challenge" id="challenge_good_question">
-            <field name="name">Good Question</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_q_9"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
+        <recordmodel="gamification.challenge"id="challenge_stellar_question_25">
+            <fieldname="name">StellarQuestion</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_q_6"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
         </record>
-        <record model="gamification.challenge.line" id="line_good_question">
-            <field name="definition_id" ref="definition_good_question"/>
-            <field name="challenge_id" ref="challenge_good_question"/>
-            <field name="target_goal">1</field>
-        </record>
-        <!-- Great: at least 15 upvotes -->
-        <record id="badge_q_10" model="gamification.badge">
-            <field name="name">Great Question</field>
-            <field name="description">Question voted up 15 times</field>
-            <field name="level">gold</field>
-            <field name="rule_auth">nobody</field>
-        </record>
-        <record model="gamification.goal.definition" id="definition_great_question">
-            <field name="name">Upvoted question (15)</field>
-            <field name="description">Asked first question with at least 15 up votes</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="website_forum.model_forum_post"/>
-            <field name="domain">[('parent_id', '=', False), ('vote_count', '>=', 15)]</field>
-            <field name="condition">higher</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_post__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
-        </record>
-        <record model="gamification.challenge" id="challenge_great_question">
-            <field name="name">Great Question</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_q_10"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
-        </record>
-        <record model="gamification.challenge.line" id="line_great_question">
-            <field name="definition_id" ref="definition_great_question"/>
-            <field name="target_goal">1</field>
-            <field name="challenge_id" ref="challenge_great_question"/>
+        <recordmodel="gamification.challenge.line"id="line_stellar_question_25">
+            <fieldname="definition_id"ref="definition_stellar_question_25"/>
+            <fieldname="challenge_id"ref="challenge_stellar_question_25"/>
+            <fieldname="target_goal">1</field>
         </record>
 
-        <!-- Question + Answer -->
-        <record id="badge_26" model="gamification.badge">
-            <field name="name">Scholar</field>
-            <field name="description">Asked a question and accepted an answer</field>
-            <field name="level">gold</field>
-            <field name="rule_auth">nobody</field>
+        <!--QUALITY(VOTES)-->
+        <!--Student:atleast1upvote-->
+        <recordid="badge_q_7"model="gamification.badge">
+            <fieldname="name">Student</field>
+            <fieldname="description">Askedfirstquestionwithatleastoneupvote</field>
+            <fieldname="level">gold</field>
+            <fieldname="rule_auth">nobody</field>
         </record>
-        <record model="gamification.goal.definition" id="definition_scholar">
-            <field name="name">Scholar</field>
-            <field name="description">Ask a question and accept an answer</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="website_forum.model_forum_post"/>
-            <field name="domain">[('parent_id', '=', False), ('has_validated_answer', '=', True)]</field>
-            <field name="condition">higher</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_post__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
+        <recordmodel="gamification.goal.definition"id="definition_student">
+            <fieldname="name">Upvotedquestion(1)</field>
+            <fieldname="description">Askedfirstquestionwithatleastoneupvote</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="website_forum.model_forum_post"/>
+            <fieldname="domain">[('parent_id','=',False),('vote_count','>=',1)]</field>
+            <fieldname="condition">higher</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_post__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
         </record>
-        <record model="gamification.challenge" id="challenge_scholar">
-            <field name="name">Scholar</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_26"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
+        <recordmodel="gamification.challenge"id="challenge_student">
+            <fieldname="name">Student</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_q_7"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
         </record>
-        <record model="gamification.challenge.line" id="line_scholar">
-            <field name="definition_id" ref="definition_scholar"/>
-            <field name="target_goal">1</field>
-            <field name="challenge_id" ref="challenge_scholar"/>
+        <recordmodel="gamification.challenge.line"id="line_student">
+            <fieldname="definition_id"ref="definition_student"/>
+            <fieldname="challenge_id"ref="challenge_student"/>
+            <fieldname="target_goal">1</field>
+        </record>
+        <!--Nice:atleast4upvotes-->
+        <recordid="badge_q_8"model="gamification.badge">
+            <fieldname="name">NiceQuestion</field>
+            <fieldname="description">Questionvotedup4times</field>
+            <fieldname="level">bronze</field>
+            <fieldname="rule_auth">nobody</field>
+        </record>
+        <recordmodel="gamification.goal.definition"id="definition_nice_question">
+            <fieldname="name">Upvotedquestion(4)</field>
+            <fieldname="description">Askedfirstquestionwithatleast4upvotes</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="website_forum.model_forum_post"/>
+            <fieldname="domain">[('parent_id','=',False),('vote_count','>=',4)]</field>
+            <fieldname="condition">higher</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_post__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
+        </record>
+        <recordmodel="gamification.challenge"id="challenge_nice_question">
+            <fieldname="name">NiceQuestion</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_q_8"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
+        </record>
+        <recordmodel="gamification.challenge.line"id="line_nice_question">
+            <fieldname="definition_id"ref="definition_nice_question"/>
+            <fieldname="challenge_id"ref="challenge_nice_question"/>
+            <fieldname="target_goal">1</field>
+        </record>
+        <!--Good:atleast6upvotes-->
+        <recordid="badge_q_9"model="gamification.badge">
+            <fieldname="name">GoodQuestion</field>
+            <fieldname="description">Questionvotedup6times</field>
+            <fieldname="level">silver</field>
+            <fieldname="rule_auth">nobody</field>
+        </record>
+        <recordmodel="gamification.goal.definition"id="definition_good_question">
+            <fieldname="name">Upvotedquestion(6)</field>
+            <fieldname="description">Askedfirstquestionwithatleast6upvotes</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="website_forum.model_forum_post"/>
+            <fieldname="domain">[('parent_id','=',False),('vote_count','>=',6)]</field>
+            <fieldname="condition">higher</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_post__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
+        </record>
+        <recordmodel="gamification.challenge"id="challenge_good_question">
+            <fieldname="name">GoodQuestion</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_q_9"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
+        </record>
+        <recordmodel="gamification.challenge.line"id="line_good_question">
+            <fieldname="definition_id"ref="definition_good_question"/>
+            <fieldname="challenge_id"ref="challenge_good_question"/>
+            <fieldname="target_goal">1</field>
+        </record>
+        <!--Great:atleast15upvotes-->
+        <recordid="badge_q_10"model="gamification.badge">
+            <fieldname="name">GreatQuestion</field>
+            <fieldname="description">Questionvotedup15times</field>
+            <fieldname="level">gold</field>
+            <fieldname="rule_auth">nobody</field>
+        </record>
+        <recordmodel="gamification.goal.definition"id="definition_great_question">
+            <fieldname="name">Upvotedquestion(15)</field>
+            <fieldname="description">Askedfirstquestionwithatleast15upvotes</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="website_forum.model_forum_post"/>
+            <fieldname="domain">[('parent_id','=',False),('vote_count','>=',15)]</field>
+            <fieldname="condition">higher</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_post__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
+        </record>
+        <recordmodel="gamification.challenge"id="challenge_great_question">
+            <fieldname="name">GreatQuestion</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_q_10"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
+        </record>
+        <recordmodel="gamification.challenge.line"id="line_great_question">
+            <fieldname="definition_id"ref="definition_great_question"/>
+            <fieldname="target_goal">1</field>
+            <fieldname="challenge_id"ref="challenge_great_question"/>
+        </record>
+
+        <!--Question+Answer-->
+        <recordid="badge_26"model="gamification.badge">
+            <fieldname="name">Scholar</field>
+            <fieldname="description">Askedaquestionandacceptedananswer</field>
+            <fieldname="level">gold</field>
+            <fieldname="rule_auth">nobody</field>
+        </record>
+        <recordmodel="gamification.goal.definition"id="definition_scholar">
+            <fieldname="name">Scholar</field>
+            <fieldname="description">Askaquestionandacceptananswer</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="website_forum.model_forum_post"/>
+            <fieldname="domain">[('parent_id','=',False),('has_validated_answer','=',True)]</field>
+            <fieldname="condition">higher</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_post__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
+        </record>
+        <recordmodel="gamification.challenge"id="challenge_scholar">
+            <fieldname="name">Scholar</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_26"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
+        </record>
+        <recordmodel="gamification.challenge.line"id="line_scholar">
+            <fieldname="definition_id"ref="definition_scholar"/>
+            <fieldname="target_goal">1</field>
+            <fieldname="challenge_id"ref="challenge_scholar"/>
         </record>
 
     </data>

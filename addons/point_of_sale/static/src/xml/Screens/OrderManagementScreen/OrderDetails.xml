@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="OrderDetails" owl="1">
-        <div class="order-container">
-            <div t-ref="scrollable" class="order-scroller touch-scrollable">
-                <div class="order">
-                    <t t-if="!props.order">
-                        <div class="order-empty">
-                            <i class="fa fa-shopping-cart" role="img" aria-label="Shopping cart"
-                               title="Shopping cart" />
-                            <h1>Select an order</h1>
+    <tt-name="OrderDetails"owl="1">
+        <divclass="order-container">
+            <divt-ref="scrollable"class="order-scrollertouch-scrollable">
+                <divclass="order">
+                    <tt-if="!props.order">
+                        <divclass="order-empty">
+                            <iclass="fafa-shopping-cart"role="img"aria-label="Shoppingcart"
+                               title="Shoppingcart"/>
+                            <h1>Selectanorder</h1>
                         </div>
                     </t>
-                    <t t-elif="orderlines.length === 0">
-                        <div class="order-empty">
-                            <i class="fa fa-shopping-cart" role="img" aria-label="Shopping cart"
-                               title="Shopping cart" />
-                            <h1>Order is empty</h1>
+                    <tt-elif="orderlines.length===0">
+                        <divclass="order-empty">
+                            <iclass="fafa-shopping-cart"role="img"aria-label="Shoppingcart"
+                               title="Shoppingcart"/>
+                            <h1>Orderisempty</h1>
                         </div>
                     </t>
-                    <t t-else="">
-                        <ul class="orderlines">
-                            <t t-foreach="orderlines" t-as="orderline" t-key="orderline.id">
-                                <OrderlineDetails line="orderline" />
+                    <tt-else="">
+                        <ulclass="orderlines">
+                            <tt-foreach="orderlines"t-as="orderline"t-key="orderline.id">
+                                <OrderlineDetailsline="orderline"/>
                             </t>
                         </ul>
-                        <OrderSummary total="total" tax="tax" />
+                        <OrderSummarytotal="total"tax="tax"/>
                     </t>
                 </div>
             </div>

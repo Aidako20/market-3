@@ -1,34 +1,34 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, _
-from flectra.exceptions import AccessError
+fromflectraimportfields,models,_
+fromflectra.exceptionsimportAccessError
 
 
-class Digest(models.Model):
-    _inherit = 'digest.digest'
+classDigest(models.Model):
+    _inherit='digest.digest'
 
-    kpi_account_total_revenue = fields.Boolean('Revenue')
-    kpi_account_total_revenue_value = fields.Monetary(compute='_compute_kpi_account_total_revenue_value')
+    kpi_account_total_revenue=fields.Boolean('Revenue')
+    kpi_account_total_revenue_value=fields.Monetary(compute='_compute_kpi_account_total_revenue_value')
 
-    def _compute_kpi_account_total_revenue_value(self):
-        if not self.env.user.has_group('account.group_account_invoice'):
-            raise AccessError(_("Do not have access, skip this data for user's digest email"))
-        for record in self:
-            start, end, company = record._get_kpi_compute_parameters()
+    def_compute_kpi_account_total_revenue_value(self):
+        ifnotself.env.user.has_group('account.group_account_invoice'):
+            raiseAccessError(_("Donothaveaccess,skipthisdataforuser'sdigestemail"))
+        forrecordinself:
+            start,end,company=record._get_kpi_compute_parameters()
             self._cr.execute('''
-                SELECT -SUM(line.balance)
-                FROM account_move_line line
-                JOIN account_move move ON move.id = line.move_id
-                JOIN account_account account ON account.id = line.account_id
-                WHERE line.company_id = %s AND line.date >= %s AND line.date < %s
-                AND account.internal_group = 'income'
-                AND move.state = 'posted'
-            ''', [company.id, start, end])
-            query_res = self._cr.fetchone()
-            record.kpi_account_total_revenue_value = query_res and query_res[0] or 0.0
+                SELECT-SUM(line.balance)
+                FROMaccount_move_lineline
+                JOINaccount_movemoveONmove.id=line.move_id
+                JOINaccount_accountaccountONaccount.id=line.account_id
+                WHEREline.company_id=%sANDline.date>=%sANDline.date<%s
+                ANDaccount.internal_group='income'
+                ANDmove.state='posted'
+            ''',[company.id,start,end])
+            query_res=self._cr.fetchone()
+            record.kpi_account_total_revenue_value=query_resandquery_res[0]or0.0
 
-    def _compute_kpis_actions(self, company, user):
-        res = super(Digest, self)._compute_kpis_actions(company, user)
-        res['kpi_account_total_revenue'] = 'account.action_move_out_invoice_type&menu_id=%s' % self.env.ref('account.menu_finance').id
-        return res
+    def_compute_kpis_actions(self,company,user):
+        res=super(Digest,self)._compute_kpis_actions(company,user)
+        res['kpi_account_total_revenue']='account.action_move_out_invoice_type&menu_id=%s'%self.env.ref('account.menu_finance').id
+        returnres

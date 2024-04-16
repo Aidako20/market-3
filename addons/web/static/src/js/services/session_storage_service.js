@@ -1,20 +1,20 @@
-flectra.define('web.SessionStorageService', function (require) {
-'use strict';
+flectra.define('web.SessionStorageService',function(require){
+'usestrict';
 
 /**
- * This module defines a service to access the sessionStorage object.
+ *ThismoduledefinesaservicetoaccessthesessionStorageobject.
  */
 
-var AbstractStorageService = require('web.AbstractStorageService');
-var core = require('web.core');
-var sessionStorage = require('web.sessionStorage');
+varAbstractStorageService=require('web.AbstractStorageService');
+varcore=require('web.core');
+varsessionStorage=require('web.sessionStorage');
 
-var SessionStorageService = AbstractStorageService.extend({
-    storage: sessionStorage,
+varSessionStorageService=AbstractStorageService.extend({
+    storage:sessionStorage,
 });
 
-core.serviceRegistry.add('session_storage', SessionStorageService);
+core.serviceRegistry.add('session_storage',SessionStorageService);
 
-return SessionStorageService;
+returnSessionStorageService;
 
 });

@@ -1,202 +1,202 @@
-flectra.define('mail/static/src/components/activity/activity.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/activity/activity.js',function(require){
+'usestrict';
 
-const components = {
-    ActivityMarkDonePopover: require('mail/static/src/components/activity_mark_done_popover/activity_mark_done_popover.js'),
-    FileUploader: require('mail/static/src/components/file_uploader/file_uploader.js'),
-    MailTemplate: require('mail/static/src/components/mail_template/mail_template.js'),
+constcomponents={
+    ActivityMarkDonePopover:require('mail/static/src/components/activity_mark_done_popover/activity_mark_done_popover.js'),
+    FileUploader:require('mail/static/src/components/file_uploader/file_uploader.js'),
+    MailTemplate:require('mail/static/src/components/mail_template/mail_template.js'),
 };
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-const {
+const{
     auto_str_to_date,
     getLangDateFormat,
     getLangDatetimeFormat,
-} = require('web.time');
+}=require('web.time');
 
-const { Component, useState } = owl;
-const { useRef } = owl.hooks;
+const{Component,useState}=owl;
+const{useRef}=owl.hooks;
 
-class Activity extends Component {
+classActivityextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps();
-        this.state = useState({
-            areDetailsVisible: false,
+        this.state=useState({
+            areDetailsVisible:false,
         });
-        useStore(props => {
-            const activity = this.env.models['mail.activity'].get(props.activityLocalId);
-            return {
-                activity: activity ? activity.__state : undefined,
-                assigneeNameOrDisplayName: (
-                    activity &&
-                    activity.assignee &&
+        useStore(props=>{
+            constactivity=this.env.models['mail.activity'].get(props.activityLocalId);
+            return{
+                activity:activity?activity.__state:undefined,
+                assigneeNameOrDisplayName:(
+                    activity&&
+                    activity.assignee&&
                     activity.assignee.nameOrDisplayName
                 ),
             };
         });
         /**
-         * Reference of the file uploader.
-         * Useful to programmatically prompts the browser file uploader.
+         *Referenceofthefileuploader.
+         *Usefultoprogrammaticallypromptsthebrowserfileuploader.
          */
-        this._fileUploaderRef = useRef('fileUploader');
+        this._fileUploaderRef=useRef('fileUploader');
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {mail.activity}
+     *@returns{mail.activity}
      */
-    get activity() {
-        return this.env.models['mail.activity'].get(this.props.activityLocalId);
+    getactivity(){
+        returnthis.env.models['mail.activity'].get(this.props.activityLocalId);
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get assignedUserText() {
-        return _.str.sprintf(this.env._t("for %s"), this.activity.assignee.nameOrDisplayName);
+    getassignedUserText(){
+        return_.str.sprintf(this.env._t("for%s"),this.activity.assignee.nameOrDisplayName);
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get delayLabel() {
-        const today = moment().startOf('day');
-        const momentDeadlineDate = moment(auto_str_to_date(this.activity.dateDeadline));
-        // true means no rounding
-        const diff = momentDeadlineDate.diff(today, 'days', true);
-        if (diff === 0) {
-            return this.env._t("Today:");
-        } else if (diff === -1) {
-            return this.env._t("Yesterday:");
-        } else if (diff < 0) {
-            return _.str.sprintf(this.env._t("%d days overdue:"), Math.abs(diff));
-        } else if (diff === 1) {
-            return this.env._t("Tomorrow:");
-        } else {
-            return _.str.sprintf(this.env._t("Due in %d days:"), Math.abs(diff));
+    getdelayLabel(){
+        consttoday=moment().startOf('day');
+        constmomentDeadlineDate=moment(auto_str_to_date(this.activity.dateDeadline));
+        //truemeansnorounding
+        constdiff=momentDeadlineDate.diff(today,'days',true);
+        if(diff===0){
+            returnthis.env._t("Today:");
+        }elseif(diff===-1){
+            returnthis.env._t("Yesterday:");
+        }elseif(diff<0){
+            return_.str.sprintf(this.env._t("%ddaysoverdue:"),Math.abs(diff));
+        }elseif(diff===1){
+            returnthis.env._t("Tomorrow:");
+        }else{
+            return_.str.sprintf(this.env._t("Duein%ddays:"),Math.abs(diff));
         }
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get formattedCreateDatetime() {
-        const momentCreateDate = moment(auto_str_to_date(this.activity.dateCreate));
-        const datetimeFormat = getLangDatetimeFormat();
-        return momentCreateDate.format(datetimeFormat);
+    getformattedCreateDatetime(){
+        constmomentCreateDate=moment(auto_str_to_date(this.activity.dateCreate));
+        constdatetimeFormat=getLangDatetimeFormat();
+        returnmomentCreateDate.format(datetimeFormat);
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get formattedDeadlineDate() {
-        const momentDeadlineDate = moment(auto_str_to_date(this.activity.dateDeadline));
-        const datetimeFormat = getLangDateFormat();
-        return momentDeadlineDate.format(datetimeFormat);
+    getformattedDeadlineDate(){
+        constmomentDeadlineDate=moment(auto_str_to_date(this.activity.dateDeadline));
+        constdatetimeFormat=getLangDateFormat();
+        returnmomentDeadlineDate.format(datetimeFormat);
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get MARK_DONE() {
-        return this.env._t("Mark Done");
+    getMARK_DONE(){
+        returnthis.env._t("MarkDone");
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get summary() {
-        return _.str.sprintf(this.env._t("“%s”"), this.activity.summary);
+    getsummary(){
+        return_.str.sprintf(this.env._t("“%s”"),this.activity.summary);
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {CustomEvent} ev
-     * @param {Object} ev.detail
-     * @param {mail.attachment} ev.detail.attachment
+     *@private
+     *@param{CustomEvent}ev
+     *@param{Object}ev.detail
+     *@param{mail.attachment}ev.detail.attachment
      */
-    async _onAttachmentCreated(ev) {
-        await this.activity.markAsDone({ attachments: [ev.detail.attachment] });
+    async_onAttachmentCreated(ev){
+        awaitthis.activity.markAsDone({attachments:[ev.detail.attachment]});
         this.trigger('o-attachments-changed');
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClick(ev) {
-        if (
-            ev.target.tagName === 'A' &&
-            ev.target.dataset.oeId &&
+    _onClick(ev){
+        if(
+            ev.target.tagName==='A'&&
+            ev.target.dataset.oeId&&
             ev.target.dataset.oeModel
-        ) {
+        ){
             this.env.messaging.openProfile({
-                id: Number(ev.target.dataset.oeId),
-                model: ev.target.dataset.oeModel,
+                id:Number(ev.target.dataset.oeId),
+                model:ev.target.dataset.oeModel,
             });
-            // avoid following dummy href
+            //avoidfollowingdummyhref
             ev.preventDefault();
         }
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    async _onClickCancel(ev) {
+    async_onClickCancel(ev){
         ev.preventDefault();
-        await this.activity.deleteServerRecord();
-        this.trigger('reload', { keepChanges: true });
+        awaitthis.activity.deleteServerRecord();
+        this.trigger('reload',{keepChanges:true});
     }
 
     /**
-     * @private
+     *@private
      */
-    _onClickDetailsButton(ev) {
+    _onClickDetailsButton(ev){
         ev.preventDefault();
-        this.state.areDetailsVisible = !this.state.areDetailsVisible;
+        this.state.areDetailsVisible=!this.state.areDetailsVisible;
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    async _onClickEdit(ev) {
-        await this.activity.edit();
-        this.trigger('reload', { keepChanges: true });
+    async_onClickEdit(ev){
+        awaitthis.activity.edit();
+        this.trigger('reload',{keepChanges:true});
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickUploadDocument(ev) {
+    _onClickUploadDocument(ev){
         this._fileUploaderRef.comp.openBrowserFileUploader();
     }
 
 }
 
-Object.assign(Activity, {
+Object.assign(Activity,{
     components,
-    props: {
-        activityLocalId: String,
+    props:{
+        activityLocalId:String,
     },
-    template: 'mail.Activity',
+    template:'mail.Activity',
 });
 
-return Activity;
+returnActivity;
 
 });

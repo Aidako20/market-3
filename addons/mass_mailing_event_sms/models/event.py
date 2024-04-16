@@ -1,20 +1,20 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class Event(models.Model):
-    _inherit = "event.event"
+classEvent(models.Model):
+    _inherit="event.event"
 
-    def action_mass_mailing_attendees(self):
-        # Minimal override: set form view being the one mixing sms and mail (not prioritized one)
-        action = super(Event, self).action_mass_mailing_attendees()
-        action['view_id'] = self.env.ref('mass_mailing_sms.mailing_mailing_view_form_mixed').id
-        return action
+    defaction_mass_mailing_attendees(self):
+        #Minimaloverride:setformviewbeingtheonemixingsmsandmail(notprioritizedone)
+        action=super(Event,self).action_mass_mailing_attendees()
+        action['view_id']=self.env.ref('mass_mailing_sms.mailing_mailing_view_form_mixed').id
+        returnaction
 
-    def action_invite_contacts(self):
-        # Minimal override: set form view being the one mixing sms and mail (not prioritized one)
-        action = super(Event, self).action_invite_contacts()
-        action['view_id'] = self.env.ref('mass_mailing_sms.mailing_mailing_view_form_mixed').id
-        return action
+    defaction_invite_contacts(self):
+        #Minimaloverride:setformviewbeingtheonemixingsmsandmail(notprioritizedone)
+        action=super(Event,self).action_invite_contacts()
+        action['view_id']=self.env.ref('mass_mailing_sms.mailing_mailing_view_form_mixed').id
+        returnaction

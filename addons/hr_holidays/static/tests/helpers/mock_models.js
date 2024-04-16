@@ -1,25 +1,25 @@
-flectra.define('hr_holidays/static/tests/helpers/mock_models.js', function (require) {
-'use strict';
+flectra.define('hr_holidays/static/tests/helpers/mock_models.js',function(require){
+'usestrict';
 
-const MockModels = require('mail/static/tests/helpers/mock_models.js');
+constMockModels=require('mail/static/tests/helpers/mock_models.js');
 
-MockModels.patch('hr_holidays/static/tests/helpers/mock_models.js', T =>
-    class extends T {
+MockModels.patch('hr_holidays/static/tests/helpers/mock_models.js',T=>
+    classextendsT{
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * @override
+         *@override
          */
-        static generateData() {
-            const data = super.generateData(...arguments);
-            Object.assign(data['res.partner'].fields, {
-                // Not a real field but ease the testing
-                out_of_office_date_end: { type: 'datetime' },
+        staticgenerateData(){
+            constdata=super.generateData(...arguments);
+            Object.assign(data['res.partner'].fields,{
+                //Notarealfieldbuteasethetesting
+                out_of_office_date_end:{type:'datetime'},
             });
-            return data;
+            returndata;
         }
 
     }

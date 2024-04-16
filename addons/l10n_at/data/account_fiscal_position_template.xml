@@ -1,132 +1,132 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
     <data>
-        <!-- Vorlagen: Steuerliche Positionen -->
+        <!--Vorlagen:SteuerlichePositionen-->
 
-        <record id="fiscal_position_template_national" model="account.fiscal.position.template">
-            <field name="name">National</field>
-            <field name="auto_apply" eval="True" />
-            <field name="country_id" ref="base.at" />
-            <field name="chart_template_id" ref="l10n_at_chart_template"/>
+        <recordid="fiscal_position_template_national"model="account.fiscal.position.template">
+            <fieldname="name">National</field>
+            <fieldname="auto_apply"eval="True"/>
+            <fieldname="country_id"ref="base.at"/>
+            <fieldname="chart_template_id"ref="l10n_at_chart_template"/>
         </record>
-        <record id="fiscal_position_template_eu" model="account.fiscal.position.template">
-            <field name="name">Europäische Union</field>
-            <field name="auto_apply" eval="True" />
-            <field name="vat_required" eval="True" />
-            <field name="country_group_id" ref="base.europe" />
-            <field name="chart_template_id" ref="l10n_at_chart_template"/>
+        <recordid="fiscal_position_template_eu"model="account.fiscal.position.template">
+            <fieldname="name">EuropäischeUnion</field>
+            <fieldname="auto_apply"eval="True"/>
+            <fieldname="vat_required"eval="True"/>
+            <fieldname="country_group_id"ref="base.europe"/>
+            <fieldname="chart_template_id"ref="l10n_at_chart_template"/>
         </record>
-        <record id="fiscal_position_template_non_eu" model="account.fiscal.position.template">
-            <field name="name">Drittstaaten</field>
-            <field name="auto_apply" eval="True" />
-            <field name="chart_template_id" ref="l10n_at_chart_template"/>
-        </record>
-
-        <!-- Vorlagen: Steuerliche Positionen (Steuerzuordnung) -->
-
-        <!-- Eurpäische Union (Binnenmarkt)) -->
-
-        <record id="fiscal_position_tax_template_eu_code022" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fiscal_position_template_eu" />
-            <field name="tax_src_id" ref="account_tax_template_sales_20_code022" />
-            <field name="tax_dest_id" ref="account_tax_template_sales_eu_0_code017" />
-        </record>
-        <record id="fiscal_position_tax_template_eu_katalog022" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fiscal_position_template_eu" />
-            <field name="tax_src_id" ref="account_tax_template_sales_20_katalog022" />
-            <field name="tax_dest_id" ref="account_tax_template_sales_eu_0_services" />
-        </record>
-        <record id="fiscal_position_tax_template_eu_code029" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fiscal_position_template_eu" />
-            <field name="tax_src_id" ref="account_tax_template_sales_10_code029" />
-            <field name="tax_dest_id" ref="account_tax_template_sales_eu_0_code017" />
-        </record>
-        <record id="fiscal_position_tax_template_eu_code007" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fiscal_position_template_eu" />
-            <field name="tax_src_id" ref="account_tax_template_sales_add7_code007" />
-            <field name="tax_dest_id" ref="account_tax_template_sales_eu_0_code017" />
+        <recordid="fiscal_position_template_non_eu"model="account.fiscal.position.template">
+            <fieldname="name">Drittstaaten</field>
+            <fieldname="auto_apply"eval="True"/>
+            <fieldname="chart_template_id"ref="l10n_at_chart_template"/>
         </record>
 
-        <record id="fiscal_position_tax_template_eu_vst_20_code060" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fiscal_position_template_eu" />
-            <field name="tax_src_id" ref="account_tax_template_purchase_20_code060" />
-            <field name="tax_dest_id" ref="account_tax_template_purchase_eu_20" />
+        <!--Vorlagen:SteuerlichePositionen(Steuerzuordnung)-->
+
+        <!--EurpäischeUnion(Binnenmarkt))-->
+
+        <recordid="fiscal_position_tax_template_eu_code022"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fiscal_position_template_eu"/>
+            <fieldname="tax_src_id"ref="account_tax_template_sales_20_code022"/>
+            <fieldname="tax_dest_id"ref="account_tax_template_sales_eu_0_code017"/>
         </record>
-        <record id="fiscal_position_tax_template_eu_vst_20_code060K" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fiscal_position_template_eu" />
-            <field name="tax_src_id" ref="account_tax_template_purchase_20_misc_code060" />
-            <field name="tax_dest_id" ref="account_tax_template_purchase_rev_charge_1c" />
+        <recordid="fiscal_position_tax_template_eu_katalog022"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fiscal_position_template_eu"/>
+            <fieldname="tax_src_id"ref="account_tax_template_sales_20_katalog022"/>
+            <fieldname="tax_dest_id"ref="account_tax_template_sales_eu_0_services"/>
         </record>
-        <record id="fiscal_position_tax_template_eu_vst_10_code060" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fiscal_position_template_eu" />
-            <field name="tax_src_id" ref="account_tax_template_purchase_10_code060" />
-            <field name="tax_dest_id" ref="account_tax_template_purchase_eu_10" />
+        <recordid="fiscal_position_tax_template_eu_code029"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fiscal_position_template_eu"/>
+            <fieldname="tax_src_id"ref="account_tax_template_sales_10_code029"/>
+            <fieldname="tax_dest_id"ref="account_tax_template_sales_eu_0_code017"/>
         </record>
-        <record id="fiscal_position_tax_template_eu_vst_19_code060" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fiscal_position_template_eu" />
-            <field name="tax_src_id" ref="account_tax_template_purchase_19_code060" />
-            <field name="tax_dest_id" ref="account_tax_template_purchase_eu_19" />
+        <recordid="fiscal_position_tax_template_eu_code007"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fiscal_position_template_eu"/>
+            <fieldname="tax_src_id"ref="account_tax_template_sales_add7_code007"/>
+            <fieldname="tax_dest_id"ref="account_tax_template_sales_eu_0_code017"/>
         </record>
 
-        <!-- Drittstaaten -->
-
-        <record id="fiscal_position_tax_template_non_eu_code022" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fiscal_position_template_non_eu" />
-            <field name="tax_src_id" ref="account_tax_template_sales_20_code022" />
-            <field name="tax_dest_id" ref="account_tax_template_sales_non_eu_0_code011" />
+        <recordid="fiscal_position_tax_template_eu_vst_20_code060"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fiscal_position_template_eu"/>
+            <fieldname="tax_src_id"ref="account_tax_template_purchase_20_code060"/>
+            <fieldname="tax_dest_id"ref="account_tax_template_purchase_eu_20"/>
         </record>
-        <record id="fiscal_position_tax_template_non_eu_code029" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fiscal_position_template_non_eu" />
-            <field name="tax_src_id" ref="account_tax_template_sales_10_code029" />
-            <field name="tax_dest_id" ref="account_tax_template_sales_non_eu_0_services" />
+        <recordid="fiscal_position_tax_template_eu_vst_20_code060K"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fiscal_position_template_eu"/>
+            <fieldname="tax_src_id"ref="account_tax_template_purchase_20_misc_code060"/>
+            <fieldname="tax_dest_id"ref="account_tax_template_purchase_rev_charge_1c"/>
         </record>
-        <record id="fiscal_position_tax_template_non_eu_code007" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fiscal_position_template_non_eu" />
-            <field name="tax_src_id" ref="account_tax_template_sales_add7_code007" />
-            <field name="tax_dest_id" ref="account_tax_template_sales_non_eu_0_code011" />
+        <recordid="fiscal_position_tax_template_eu_vst_10_code060"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fiscal_position_template_eu"/>
+            <fieldname="tax_src_id"ref="account_tax_template_purchase_10_code060"/>
+            <fieldname="tax_dest_id"ref="account_tax_template_purchase_eu_10"/>
         </record>
-
-        <!-- Vorlagen: Steuerliche Positionen (Finanzkontenzuordnung) -->
-
-        <!-- Europäische Union (Binnenmarkt)) -->
-
-        <record id="fiscal_position_account_template_eu_1" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fiscal_position_template_eu" />
-            <field name="account_src_id" ref="chart_at_template_4000" />
-            <field name="account_dest_id" ref="chart_at_template_4100" />
-        </record>
-        <record id="fiscal_position_account_template_eu_11" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fiscal_position_template_eu" />
-            <field name="account_src_id" ref="chart_at_template_4001" />
-            <field name="account_dest_id" ref="chart_at_template_4110" />
-        </record>
-        <record id="fiscal_position_account_template_eu_2" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fiscal_position_template_eu" />
-            <field name="account_src_id" ref="chart_at_template_2000" />
-            <field name="account_dest_id" ref="chart_at_template_2100" />
-        </record>
-        <record id="fiscal_position_account_template_eu_3" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fiscal_position_template_eu" />
-            <field name="account_src_id" ref="chart_at_template_5000" />
-            <field name="account_dest_id" ref="chart_at_template_5050" />
+        <recordid="fiscal_position_tax_template_eu_vst_19_code060"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fiscal_position_template_eu"/>
+            <fieldname="tax_src_id"ref="account_tax_template_purchase_19_code060"/>
+            <fieldname="tax_dest_id"ref="account_tax_template_purchase_eu_19"/>
         </record>
 
-        <!-- Drittstaaten -->
+        <!--Drittstaaten-->
 
-        <record id="fiscal_position_account_template_non_eu_1" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fiscal_position_template_non_eu" />
-            <field name="account_src_id" ref="chart_at_template_4000" />
-            <field name="account_dest_id" ref="chart_at_template_4200" />
+        <recordid="fiscal_position_tax_template_non_eu_code022"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fiscal_position_template_non_eu"/>
+            <fieldname="tax_src_id"ref="account_tax_template_sales_20_code022"/>
+            <fieldname="tax_dest_id"ref="account_tax_template_sales_non_eu_0_code011"/>
         </record>
-        <record id="fiscal_position_account_template_non_eu_2" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fiscal_position_template_non_eu" />
-            <field name="account_src_id" ref="chart_at_template_2000" />
-            <field name="account_dest_id" ref="chart_at_template_2150" />
+        <recordid="fiscal_position_tax_template_non_eu_code029"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fiscal_position_template_non_eu"/>
+            <fieldname="tax_src_id"ref="account_tax_template_sales_10_code029"/>
+            <fieldname="tax_dest_id"ref="account_tax_template_sales_non_eu_0_services"/>
         </record>
-        <record id="fiscal_position_account_template_non_eu_3" model="account.fiscal.position.account.template">
-            <field name="position_id" ref="fiscal_position_template_non_eu" />
-            <field name="account_src_id" ref="chart_at_template_5000" />
-            <field name="account_dest_id" ref="chart_at_template_5090" />
+        <recordid="fiscal_position_tax_template_non_eu_code007"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fiscal_position_template_non_eu"/>
+            <fieldname="tax_src_id"ref="account_tax_template_sales_add7_code007"/>
+            <fieldname="tax_dest_id"ref="account_tax_template_sales_non_eu_0_code011"/>
+        </record>
+
+        <!--Vorlagen:SteuerlichePositionen(Finanzkontenzuordnung)-->
+
+        <!--EuropäischeUnion(Binnenmarkt))-->
+
+        <recordid="fiscal_position_account_template_eu_1"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fiscal_position_template_eu"/>
+            <fieldname="account_src_id"ref="chart_at_template_4000"/>
+            <fieldname="account_dest_id"ref="chart_at_template_4100"/>
+        </record>
+        <recordid="fiscal_position_account_template_eu_11"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fiscal_position_template_eu"/>
+            <fieldname="account_src_id"ref="chart_at_template_4001"/>
+            <fieldname="account_dest_id"ref="chart_at_template_4110"/>
+        </record>
+        <recordid="fiscal_position_account_template_eu_2"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fiscal_position_template_eu"/>
+            <fieldname="account_src_id"ref="chart_at_template_2000"/>
+            <fieldname="account_dest_id"ref="chart_at_template_2100"/>
+        </record>
+        <recordid="fiscal_position_account_template_eu_3"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fiscal_position_template_eu"/>
+            <fieldname="account_src_id"ref="chart_at_template_5000"/>
+            <fieldname="account_dest_id"ref="chart_at_template_5050"/>
+        </record>
+
+        <!--Drittstaaten-->
+
+        <recordid="fiscal_position_account_template_non_eu_1"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fiscal_position_template_non_eu"/>
+            <fieldname="account_src_id"ref="chart_at_template_4000"/>
+            <fieldname="account_dest_id"ref="chart_at_template_4200"/>
+        </record>
+        <recordid="fiscal_position_account_template_non_eu_2"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fiscal_position_template_non_eu"/>
+            <fieldname="account_src_id"ref="chart_at_template_2000"/>
+            <fieldname="account_dest_id"ref="chart_at_template_2150"/>
+        </record>
+        <recordid="fiscal_position_account_template_non_eu_3"model="account.fiscal.position.account.template">
+            <fieldname="position_id"ref="fiscal_position_template_non_eu"/>
+            <fieldname="account_src_id"ref="chart_at_template_5000"/>
+            <fieldname="account_dest_id"ref="chart_at_template_5090"/>
         </record>
     </data>
 </flectra>

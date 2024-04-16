@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-from flectra.tests import common
+#-*-coding:utf-8-*-
+fromflectra.testsimportcommon
 
 
-class TestBarcodeNomenclature(common.TransactionCase):
+classTestBarcodeNomenclature(common.TransactionCase):
 
-    def test_ean8_checksum(self):
-        barcode_nomenclature = self.env['barcode.nomenclature']
-        ean8 = "87111125"
-        checksum = barcode_nomenclature.ean8_checksum(ean8)
-        self.assertEqual(checksum, int(ean8[-1]))
-        checksum = barcode_nomenclature.ean8_checksum("8711112")
-        self.assertEqual(checksum, -1)
-        checksum = barcode_nomenclature.ean8_checksum("871111256")
-        self.assertEqual(checksum, -1)
+    deftest_ean8_checksum(self):
+        barcode_nomenclature=self.env['barcode.nomenclature']
+        ean8="87111125"
+        checksum=barcode_nomenclature.ean8_checksum(ean8)
+        self.assertEqual(checksum,int(ean8[-1]))
+        checksum=barcode_nomenclature.ean8_checksum("8711112")
+        self.assertEqual(checksum,-1)
+        checksum=barcode_nomenclature.ean8_checksum("871111256")
+        self.assertEqual(checksum,-1)

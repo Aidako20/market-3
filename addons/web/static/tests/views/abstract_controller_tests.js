@@ -1,117 +1,117 @@
-flectra.define("base.abstract_controller_tests", function (require) {
-"use strict";
+flectra.define("base.abstract_controller_tests",function(require){
+"usestrict";
 
-const { xml } = owl.tags;
+const{xml}=owl.tags;
 
-var testUtils = require("web.test_utils");
-var createView = testUtils.createView;
-var BasicView = require("web.BasicView");
-var BasicRenderer = require("web.BasicRenderer");
-const AbstractRenderer = require('web.AbstractRendererOwl');
-const RendererWrapper = require('web.RendererWrapper');
+vartestUtils=require("web.test_utils");
+varcreateView=testUtils.createView;
+varBasicView=require("web.BasicView");
+varBasicRenderer=require("web.BasicRenderer");
+constAbstractRenderer=require('web.AbstractRendererOwl');
+constRendererWrapper=require('web.RendererWrapper');
 
-function getHtmlRenderer(html) {
-    return BasicRenderer.extend({
-        start: function () {
+functiongetHtmlRenderer(html){
+    returnBasicRenderer.extend({
+        start:function(){
             this.$el.html(html);
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         }
     });
 }
 
-function getOwlView(owlRenderer, viewType) {
-    viewType = viewType || "test";
-    return BasicView.extend({
-        viewType: viewType,
-        config: _.extend({}, BasicView.prototype.config, {
-            Renderer: owlRenderer,
+functiongetOwlView(owlRenderer,viewType){
+    viewType=viewType||"test";
+    returnBasicView.extend({
+        viewType:viewType,
+        config:_.extend({},BasicView.prototype.config,{
+            Renderer:owlRenderer,
         }),
-        getRenderer() {
-            return new RendererWrapper(null, this.config.Renderer, {});
+        getRenderer(){
+            returnnewRendererWrapper(null,this.config.Renderer,{});
         }
     });
 }
 
-function getHtmlView(html, viewType) {
-    viewType = viewType || "test";
-    return BasicView.extend({
-        viewType: viewType,
-        config: _.extend({}, BasicView.prototype.config, {
-            Renderer: getHtmlRenderer(html)
+functiongetHtmlView(html,viewType){
+    viewType=viewType||"test";
+    returnBasicView.extend({
+        viewType:viewType,
+        config:_.extend({},BasicView.prototype.config,{
+            Renderer:getHtmlRenderer(html)
         })
     });
 }
 
-QUnit.module("Views", {
-    beforeEach: function () {
-        this.data = {
-            test_model: {
-                fields: {},
-                records: []
+QUnit.module("Views",{
+    beforeEach:function(){
+        this.data={
+            test_model:{
+                fields:{},
+                records:[]
             }
         };
     }
-}, function () {
+},function(){
     QUnit.module('AbstractController');
 
-    QUnit.test('click on a a[type="action"] child triggers the correct action', async function (assert) {
+    QUnit.test('clickonaa[type="action"]childtriggersthecorrectaction',asyncfunction(assert){
         assert.expect(7);
 
-        var html =
-            "<div>" +
-            '<a name="a1" type="action" class="simple">simple</a>' +
-            '<a name="a2" type="action" class="with-child">' +
-            "<span>child</input>" +
-            "</a>" +
-            '<a type="action" data-model="foo" data-method="bar" class="method">method</a>' +
-            '<a type="action" data-model="foo" data-res-id="42" class="descr">descr</a>' +
-            '<a type="action" data-model="foo" class="descr2">descr2</a>' +
+        varhtml=
+            "<div>"+
+            '<aname="a1"type="action"class="simple">simple</a>'+
+            '<aname="a2"type="action"class="with-child">'+
+            "<span>child</input>"+
+            "</a>"+
+            '<atype="action"data-model="foo"data-method="bar"class="method">method</a>'+
+            '<atype="action"data-model="foo"data-res-id="42"class="descr">descr</a>'+
+            '<atype="action"data-model="foo"class="descr2">descr2</a>'+
             "</div>";
 
-        var view = await createView({
-            View: getHtmlView(html, "test"),
-            data: this.data,
-            model: "test_model",
-            arch: "<test/>",
-            intercepts: {
-                do_action: function (event) {
-                    assert.step(event.data.action.name || event.data.action);
+        varview=awaitcreateView({
+            View:getHtmlView(html,"test"),
+            data:this.data,
+            model:"test_model",
+            arch:"<test/>",
+            intercepts:{
+                do_action:function(event){
+                    assert.step(event.data.action.name||event.data.action);
                 }
             },
-            mockRPC: function (route, args) {
-                if (args.model === 'foo' && args.method === 'bar') {
+            mockRPC:function(route,args){
+                if(args.model==='foo'&&args.method==='bar'){
                     assert.step("method");
-                    return Promise.resolve({name: 'method'});
+                    returnPromise.resolve({name:'method'});
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             }
         });
-        await testUtils.dom.click(view.$(".simple"));
-        await testUtils.dom.click(view.$(".with-child span"));
-        await testUtils.dom.click(view.$(".method"));
-        await testUtils.dom.click(view.$(".descr"));
-        await testUtils.dom.click(view.$(".descr2"));
-        assert.verifySteps(["a1", "a2", "method", "method", "descr", "descr2"]);
+        awaittestUtils.dom.click(view.$(".simple"));
+        awaittestUtils.dom.click(view.$(".with-childspan"));
+        awaittestUtils.dom.click(view.$(".method"));
+        awaittestUtils.dom.click(view.$(".descr"));
+        awaittestUtils.dom.click(view.$(".descr2"));
+        assert.verifySteps(["a1","a2","method","method","descr","descr2"]);
 
         view.destroy();
     });
 
-    QUnit.test('OWL Renderer correctly destroyed', async function (assert) {
+    QUnit.test('OWLRenderercorrectlydestroyed',asyncfunction(assert){
         assert.expect(2);
 
-        class Renderer extends AbstractRenderer {
-            __destroy() {
+        classRendererextendsAbstractRenderer{
+            __destroy(){
                 assert.step("destroy");
                 super.__destroy();
             }
         }
-        Renderer.template = xml`<div>Test</div>`;
+        Renderer.template=xml`<div>Test</div>`;
 
-        var view = await createView({
-            View: getOwlView(Renderer, "test"),
-            data: this.data,
-            model: "test_model",
-            arch: "<test/>",
+        varview=awaitcreateView({
+            View:getOwlView(Renderer,"test"),
+            data:this.data,
+            model:"test_model",
+            arch:"<test/>",
         });
         view.destroy();
 
@@ -119,42 +119,42 @@ QUnit.module("Views", {
 
     });
 
-    QUnit.test('Correctly set focus to search panel with Owl Renderer', async function (assert) {
+    QUnit.test('CorrectlysetfocustosearchpanelwithOwlRenderer',asyncfunction(assert){
         assert.expect(1);
 
-        class Renderer extends AbstractRenderer { }
-        Renderer.template = xml`<div>Test</div>`;
+        classRendererextendsAbstractRenderer{}
+        Renderer.template=xml`<div>Test</div>`;
 
-        var view = await createView({
-            View: getOwlView(Renderer, "test"),
-            data: this.data,
-            model: "test_model",
-            arch: "<test/>",
+        varview=awaitcreateView({
+            View:getOwlView(Renderer,"test"),
+            data:this.data,
+            model:"test_model",
+            arch:"<test/>",
         });
-        assert.hasClass(document.activeElement, "o_searchview_input");
+        assert.hasClass(document.activeElement,"o_searchview_input");
         view.destroy();
     });
 
-    QUnit.test('Owl Renderer mounted/willUnmount hooks are properly called', async function (assert) {
-        // This test could be removed as soon as controllers and renderers will
-        // both be converted in Owl.
+    QUnit.test('OwlRenderermounted/willUnmounthooksareproperlycalled',asyncfunction(assert){
+        //Thistestcouldberemovedassoonascontrollersandrendererswill
+        //bothbeconvertedinOwl.
         assert.expect(3);
 
-        class Renderer extends AbstractRenderer {
-            mounted() {
+        classRendererextendsAbstractRenderer{
+            mounted(){
                 assert.step("mounted");
             }
-            willUnmount() {
+            willUnmount(){
                 assert.step("unmounted");
             }
         }
-        Renderer.template = xml`<div>Test</div>`;
+        Renderer.template=xml`<div>Test</div>`;
 
-        const view = await createView({
-            View: getOwlView(Renderer, "test"),
-            data: this.data,
-            model: "test_model",
-            arch: "<test/>",
+        constview=awaitcreateView({
+            View:getOwlView(Renderer,"test"),
+            data:this.data,
+            model:"test_model",
+            arch:"<test/>",
         });
 
         view.destroy();

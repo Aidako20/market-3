@@ -1,264 +1,264 @@
-flectra.define('website_livechat/static/src/components/discuss/discuss_tests.js', function (require) {
-'use strict';
+flectra.define('website_livechat/static/src/components/discuss/discuss_tests.js',function(require){
+'usestrict';
 
-const {
+const{
     afterEach,
     beforeEach,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-QUnit.module('website_livechat', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('discuss', {}, function () {
-QUnit.module('discuss_tests.js', {
-    beforeEach() {
+QUnit.module('website_livechat',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('discuss',{},function(){
+QUnit.module('discuss_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.start = async params => {
-            const { env, widget } = await start(Object.assign({}, params, {
-                autoOpenDiscuss: true,
-                data: this.data,
-                hasDiscuss: true,
+        this.start=asyncparams=>{
+            const{env,widget}=awaitstart(Object.assign({},params,{
+                autoOpenDiscuss:true,
+                data:this.data,
+                hasDiscuss:true,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('rendering of visitor banner', async function (assert) {
+QUnit.test('renderingofvisitorbanner',asyncfunction(assert){
     assert.expect(13);
 
     this.data['res.country'].records.push({
-        id: 11,
-        code: 'FAKE',
+        id:11,
+        code:'FAKE',
     });
     this.data['website.visitor'].records.push({
-        id: 11,
-        country_id: 11,
-        display_name: 'Visitor #11',
-        history: 'Home → Contact',
-        is_connected: true,
-        lang: "English",
-        website: "General website",
+        id:11,
+        country_id:11,
+        display_name:'Visitor#11',
+        history:'Home→Contact',
+        is_connected:true,
+        lang:"English",
+        website:"Generalwebsite",
     });
     this.data['mail.channel'].records.push({
-        channel_type: 'livechat',
-        id: 11,
-        livechat_operator_id: this.data.currentPartnerId,
-        livechat_visitor_id: 11,
-        members: [this.data.currentPartnerId, this.data.publicPartnerId],
+        channel_type:'livechat',
+        id:11,
+        livechat_operator_id:this.data.currentPartnerId,
+        livechat_visitor_id:11,
+        members:[this.data.currentPartnerId,this.data.publicPartnerId],
     });
-    await this.start({
-        discuss: {
-            context: {
-                active_id: 'mail.channel_11',
+    awaitthis.start({
+        discuss:{
+            context:{
+                active_id:'mail.channel_11',
             },
         },
     });
     assert.containsOnce(
         document.body,
         '.o_VisitorBanner',
-        "should have a visitor banner",
+        "shouldhaveavisitorbanner",
     );
     assert.containsOnce(
         document.body,
         '.o_VisitorBanner_avatar',
-        "should show the visitor avatar in the banner",
+        "shouldshowthevisitoravatarinthebanner",
     );
     assert.strictEqual(
         document.querySelector('.o_VisitorBanner_avatar').dataset.src,
         "/mail/static/src/img/smiley/avatar.jpg",
-        "should show the default avatar",
+        "shouldshowthedefaultavatar",
     );
     assert.containsOnce(
         document.body,
         '.o_VisitorBanner_onlineStatusIcon',
-        "should show the visitor online status icon on the avatar",
+        "shouldshowthevisitoronlinestatusiconontheavatar",
     );
     assert.strictEqual(
         document.querySelector('.o_VisitorBanner_country').dataset.src,
         "/base/static/img/country_flags/FAKE.png",
-        "should show the flag of the country of the visitor",
+        "shouldshowtheflagofthecountryofthevisitor",
     );
     assert.containsOnce(
         document.body,
         '.o_VisitorBanner_visitor',
-        "should show the visitor name in the banner",
+        "shouldshowthevisitornameinthebanner",
     );
     assert.strictEqual(
         document.querySelector('.o_VisitorBanner_visitor').textContent,
-        "Visitor #11",
-        "should have 'Visitor #11' as visitor name",
+        "Visitor#11",
+        "shouldhave'Visitor#11'asvisitorname",
     );
     assert.containsOnce(
         document.body,
         '.o_VisitorBanner_language',
-        "should show the visitor language in the banner",
+        "shouldshowthevisitorlanguageinthebanner",
     );
     assert.strictEqual(
         document.querySelector('.o_VisitorBanner_language').textContent,
         "English",
-        "should have 'English' as language of the visitor",
+        "shouldhave'English'aslanguageofthevisitor",
     );
     assert.containsOnce(
         document.body,
         '.o_VisitorBanner_website',
-        "should show the visitor website in the banner",
+        "shouldshowthevisitorwebsiteinthebanner",
     );
     assert.strictEqual(
         document.querySelector('.o_VisitorBanner_website').textContent,
-        "General website",
-        "should have 'General website' as website of the visitor",
+        "Generalwebsite",
+        "shouldhave'Generalwebsite'aswebsiteofthevisitor",
     );
     assert.containsOnce(
         document.body,
         '.o_VisitorBanner_history',
-        "should show the visitor history in the banner",
+        "shouldshowthevisitorhistoryinthebanner",
     );
     assert.strictEqual(
         document.querySelector('.o_VisitorBanner_history').textContent,
-        "Home → Contact",
-        "should have 'Home → Contact' as history of the visitor",
+        "Home→Contact",
+        "shouldhave'Home→Contact'ashistoryofthevisitor",
     );
 });
 
-QUnit.test('livechat with non-logged visitor should show visitor banner', async function (assert) {
+QUnit.test('livechatwithnon-loggedvisitorshouldshowvisitorbanner',asyncfunction(assert){
     assert.expect(1);
 
     this.data['res.country'].records.push({
-        id: 11,
-        code: 'FAKE',
+        id:11,
+        code:'FAKE',
     });
     this.data['website.visitor'].records.push({
-        id: 11,
-        country_id: 11,
-        display_name: 'Visitor #11',
-        history: 'Home → Contact',
-        is_connected: true,
-        lang: "English",
-        website: "General website",
+        id:11,
+        country_id:11,
+        display_name:'Visitor#11',
+        history:'Home→Contact',
+        is_connected:true,
+        lang:"English",
+        website:"Generalwebsite",
     });
     this.data['mail.channel'].records.push({
-        channel_type: 'livechat',
-        id: 11,
-        livechat_operator_id: this.data.currentPartnerId,
-        livechat_visitor_id: 11,
-        members: [this.data.currentPartnerId, this.data.publicPartnerId],
+        channel_type:'livechat',
+        id:11,
+        livechat_operator_id:this.data.currentPartnerId,
+        livechat_visitor_id:11,
+        members:[this.data.currentPartnerId,this.data.publicPartnerId],
     });
-    await this.start({
-        discuss: {
-            context: {
-                active_id: 'mail.channel_11',
+    awaitthis.start({
+        discuss:{
+            context:{
+                active_id:'mail.channel_11',
             },
         },
     });
     assert.containsOnce(
         document.body,
         '.o_VisitorBanner',
-        "should have a visitor banner",
+        "shouldhaveavisitorbanner",
     );
 });
 
-QUnit.test('livechat with logged visitor should show visitor banner', async function (assert) {
+QUnit.test('livechatwithloggedvisitorshouldshowvisitorbanner',asyncfunction(assert){
     assert.expect(2);
 
     this.data['res.country'].records.push({
-        id: 11,
-        code: 'FAKE',
+        id:11,
+        code:'FAKE',
     });
     this.data['res.partner'].records.push({
-        id: 12,
-        name: 'Partner Visitor',
+        id:12,
+        name:'PartnerVisitor',
     });
     this.data['website.visitor'].records.push({
-        id: 11,
-        country_id: 11,
-        display_name: 'Visitor #11',
-        history: 'Home → Contact',
-        is_connected: true,
-        lang: "English",
-        partner_id: 12,
-        website: "General website",
+        id:11,
+        country_id:11,
+        display_name:'Visitor#11',
+        history:'Home→Contact',
+        is_connected:true,
+        lang:"English",
+        partner_id:12,
+        website:"Generalwebsite",
     });
     this.data['mail.channel'].records.push({
-        channel_type: 'livechat',
-        id: 11,
-        livechat_operator_id: this.data.currentPartnerId,
-        livechat_visitor_id: 11,
-        members: [this.data.currentPartnerId, 12],
+        channel_type:'livechat',
+        id:11,
+        livechat_operator_id:this.data.currentPartnerId,
+        livechat_visitor_id:11,
+        members:[this.data.currentPartnerId,12],
     });
-    await this.start({
-        discuss: {
-            context: {
-                active_id: 'mail.channel_11',
+    awaitthis.start({
+        discuss:{
+            context:{
+                active_id:'mail.channel_11',
             },
         },
     });
     assert.containsOnce(
         document.body,
         '.o_VisitorBanner',
-        "should have a visitor banner",
+        "shouldhaveavisitorbanner",
     );
     assert.strictEqual(
         document.querySelector('.o_VisitorBanner_visitor').textContent,
-        "Partner Visitor",
-        "should have partner name as display name of logged visitor on the visitor banner"
+        "PartnerVisitor",
+        "shouldhavepartnernameasdisplaynameofloggedvisitoronthevisitorbanner"
     );
 });
 
-QUnit.test('livechat without visitor should not show visitor banner', async function (assert) {
+QUnit.test('livechatwithoutvisitorshouldnotshowvisitorbanner',asyncfunction(assert){
     assert.expect(2);
 
-    this.data['res.partner'].records.push({ id: 11 });
+    this.data['res.partner'].records.push({id:11});
     this.data['mail.channel'].records.push({
-        channel_type: 'livechat',
-        id: 11,
-        livechat_operator_id: this.data.currentPartnerId,
-        members: [this.data.currentPartnerId, 11],
+        channel_type:'livechat',
+        id:11,
+        livechat_operator_id:this.data.currentPartnerId,
+        members:[this.data.currentPartnerId,11],
     });
-    await this.start({
-        discuss: {
-            context: {
-                active_id: 'mail.channel_11',
+    awaitthis.start({
+        discuss:{
+            context:{
+                active_id:'mail.channel_11',
             },
         },
     });
     assert.containsOnce(
         document.body,
         '.o_MessageList',
-        "should have a message list",
+        "shouldhaveamessagelist",
     );
     assert.containsNone(
         document.body,
         '.o_VisitorBanner',
-        "should not have any visitor banner",
+        "shouldnothaveanyvisitorbanner",
     );
 });
 
-QUnit.test('non-livechat channel should not show visitor banner', async function (assert) {
+QUnit.test('non-livechatchannelshouldnotshowvisitorbanner',asyncfunction(assert){
     assert.expect(2);
 
-    this.data['mail.channel'].records.push({ id: 11, name: "General" });
-    await this.start({
-        discuss: {
-            context: {
-                active_id: 'mail.channel_11',
+    this.data['mail.channel'].records.push({id:11,name:"General"});
+    awaitthis.start({
+        discuss:{
+            context:{
+                active_id:'mail.channel_11',
             },
         },
     });
     assert.containsOnce(
         document.body,
         '.o_MessageList',
-        "should have a message list",
+        "shouldhaveamessagelist",
     );
     assert.containsNone(
         document.body,
         '.o_VisitorBanner',
-        "should not have any visitor banner",
+        "shouldnothaveanyvisitorbanner",
     );
 });
 

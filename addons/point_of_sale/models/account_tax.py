@@ -1,37 +1,37 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import _, api, models
-from flectra.exceptions import UserError
-from flectra.tools import split_every
+fromflectraimport_,api,models
+fromflectra.exceptionsimportUserError
+fromflectra.toolsimportsplit_every
 
 
-class AccountTax(models.Model):
-    _inherit = 'account.tax'
+classAccountTax(models.Model):
+    _inherit='account.tax'
 
-    def write(self, vals):
-        forbidden_fields = {
-            'amount_type', 'amount', 'type_tax_use', 'tax_group_id', 'price_include',
+    defwrite(self,vals):
+        forbidden_fields={
+            'amount_type','amount','type_tax_use','tax_group_id','price_include',
             'include_base_amount'
         }
-        if forbidden_fields & set(vals.keys()):
-            lines = self.env['pos.order.line'].sudo().search([
-                ('order_id.session_id.state', '!=', 'closed')
+        ifforbidden_fields&set(vals.keys()):
+            lines=self.env['pos.order.line'].sudo().search([
+                ('order_id.session_id.state','!=','closed')
             ])
-            self_ids = set(self.ids)
-            for lines_chunk in map(self.env['pos.order.line'].sudo().browse, split_every(100000, lines.ids)):
-                if any(tid in self_ids for ts in lines_chunk.read(['tax_ids']) for tid in ts['tax_ids']):
-                    raise UserError(_(
-                        'It is forbidden to modify a tax used in a POS order not posted. '
-                        'You must close the POS sessions before modifying the tax.'
+            self_ids=set(self.ids)
+            forlines_chunkinmap(self.env['pos.order.line'].sudo().browse,split_every(100000,lines.ids)):
+                ifany(tidinself_idsfortsinlines_chunk.read(['tax_ids'])fortidints['tax_ids']):
+                    raiseUserError(_(
+                        'ItisforbiddentomodifyataxusedinaPOSordernotposted.'
+                        'YoumustclosethePOSsessionsbeforemodifyingthetax.'
                     ))
-                lines_chunk.invalidate_cache(['tax_ids'], lines_chunk.ids)
-        return super(AccountTax, self).write(vals)
+                lines_chunk.invalidate_cache(['tax_ids'],lines_chunk.ids)
+        returnsuper(AccountTax,self).write(vals)
 
-    def get_real_tax_amount(self):
-        tax_list = []
-        for tax in self:
-            tax_repartition_lines = tax.invoice_repartition_line_ids.filtered(lambda x: x.repartition_type == 'tax')
-            total_factor = sum(tax_repartition_lines.mapped('factor'))
-            real_amount = tax.amount * total_factor
-            tax_list.append({'id': tax.id, 'amount': real_amount})
-        return tax_list
+    defget_real_tax_amount(self):
+        tax_list=[]
+        fortaxinself:
+            tax_repartition_lines=tax.invoice_repartition_line_ids.filtered(lambdax:x.repartition_type=='tax')
+            total_factor=sum(tax_repartition_lines.mapped('factor'))
+            real_amount=tax.amount*total_factor
+            tax_list.append({'id':tax.id,'amount':real_amount})
+        returntax_list

@@ -1,102 +1,102 @@
-flectra.define('web.PieChart', function (require) {
-"use strict";
+flectra.define('web.PieChart',function(require){
+"usestrict";
 
 /**
- * This widget render a Pie Chart. It is used in the dashboard view.
+ *ThiswidgetrenderaPieChart.Itisusedinthedashboardview.
  */
 
-var core = require('web.core');
-var Domain = require('web.Domain');
-var viewRegistry = require('web.view_registry');
-var Widget = require('web.Widget');
-var widgetRegistry = require('web.widget_registry');
+varcore=require('web.core');
+varDomain=require('web.Domain');
+varviewRegistry=require('web.view_registry');
+varWidget=require('web.Widget');
+varwidgetRegistry=require('web.widget_registry');
 
-var qweb = core.qweb;
+varqweb=core.qweb;
 
-var PieChart = Widget.extend({
-    className: 'o_pie_chart',
-    xmlDependencies: ['/web/static/src/xml/chart.xml'],
+varPieChart=Widget.extend({
+    className:'o_pie_chart',
+    xmlDependencies:['/web/static/src/xml/chart.xml'],
 
     /**
-     * @override
-     * @param {Widget} parent
-     * @param {Object} record
-     * @param {Object} node node from arch
+     *@override
+     *@param{Widget}parent
+     *@param{Object}record
+     *@param{Object}nodenodefromarch
      */
-    init: function (parent, record, node) {
-        this._super.apply(this, arguments);
+    init:function(parent,record,node){
+        this._super.apply(this,arguments);
 
-        var modifiers = node.attrs.modifiers;
-        var domain = record.domain.concat(
-            Domain.prototype.stringToArray(modifiers.domain || '[]'));
-        var arch = qweb.render('web.PieChart', {
-            modifiers: modifiers,
-            title: node.attrs.title || modifiers.title || modifiers.measure,
+        varmodifiers=node.attrs.modifiers;
+        vardomain=record.domain.concat(
+            Domain.prototype.stringToArray(modifiers.domain||'[]'));
+        vararch=qweb.render('web.PieChart',{
+            modifiers:modifiers,
+            title:node.attrs.title||modifiers.title||modifiers.measure,
         });
 
-        var pieChartContext = JSON.parse(JSON.stringify(record.context));
-        delete pieChartContext.graph_mode;
-        delete pieChartContext.graph_measure;
-        delete pieChartContext.graph_groupbys;
+        varpieChartContext=JSON.parse(JSON.stringify(record.context));
+        deletepieChartContext.graph_mode;
+        deletepieChartContext.graph_measure;
+        deletepieChartContext.graph_groupbys;
 
-        this.subViewParams = {
-            modelName: record.model,
-            withButtons: false,
-            withControlPanel: false,
-            withSearchPanel: false,
-            isEmbedded: true,
-            useSampleModel: record.isSample,
-            mode: 'pie',
+        this.subViewParams={
+            modelName:record.model,
+            withButtons:false,
+            withControlPanel:false,
+            withSearchPanel:false,
+            isEmbedded:true,
+            useSampleModel:record.isSample,
+            mode:'pie',
         };
-        this.subViewParams.searchQuery = {
-            context: pieChartContext,
-            domain: domain,
-            groupBy: [],
-            timeRanges: record.timeRanges || {},
+        this.subViewParams.searchQuery={
+            context:pieChartContext,
+            domain:domain,
+            groupBy:[],
+            timeRanges:record.timeRanges||{},
         };
 
-        this.viewInfo = {
-            arch: arch,
-            fields: record.fields,
-            viewFields: record.fieldsInfo.dashboard,
+        this.viewInfo={
+            arch:arch,
+            fields:record.fields,
+            viewFields:record.fieldsInfo.dashboard,
         };
     },
     /**
-     * Instantiates the pie chart view and starts the graph controller.
+     *Instantiatesthepiechartviewandstartsthegraphcontroller.
      *
-     * @override
+     *@override
      */
-    willStart: function () {
-        var self = this;
-        var def1 = this._super.apply(this, arguments);
+    willStart:function(){
+        varself=this;
+        vardef1=this._super.apply(this,arguments);
 
-        var SubView = viewRegistry.get('graph');
-        var subView = new SubView(this.viewInfo, this.subViewParams);
-        var def2 = subView.getController(this).then(function (controller) {
-            self.controller = controller;
-            return self.controller.appendTo(document.createDocumentFragment());
+        varSubView=viewRegistry.get('graph');
+        varsubView=newSubView(this.viewInfo,this.subViewParams);
+        vardef2=subView.getController(this).then(function(controller){
+            self.controller=controller;
+            returnself.controller.appendTo(document.createDocumentFragment());
         });
-        return Promise.all([def1, def2]);
+        returnPromise.all([def1,def2]);
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
+    start:function(){
         this.$el.append(this.controller.$el);
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * Call `on_attach_callback` for each subview
+     *Call`on_attach_callback`foreachsubview
      *
-     * @override
+     *@override
      */
-    on_attach_callback: function () {
+    on_attach_callback:function(){
         this.controller.on_attach_callback();
     },
 });
 
-widgetRegistry.add('pie_chart', PieChart);
+widgetRegistry.add('pie_chart',PieChart);
 
-return PieChart;
+returnPieChart;
 
 });

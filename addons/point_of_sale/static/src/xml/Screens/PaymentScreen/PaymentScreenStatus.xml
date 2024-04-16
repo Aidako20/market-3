@@ -1,39 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-<t t-name="PaymentScreenStatus" owl="1">
-    <div t-if="props.paymentLines.length === 0" class="paymentlines-empty">
-        <div class="total">
-            <t t-esc="totalDueText" />
+<tt-name="PaymentScreenStatus"owl="1">
+    <divt-if="props.paymentLines.length===0"class="paymentlines-empty">
+        <divclass="total">
+            <tt-esc="totalDueText"/>
         </div>
-        <div class="message">
-            Please select a payment method.
+        <divclass="message">
+            Pleaseselectapaymentmethod.
         </div>
     </div>
 
-    <div t-else="">
-        <div class="payment-status-container">
+    <divt-else="">
+        <divclass="payment-status-container">
             <div>
-                <div class="payment-status-remaining">
-                    <span class="label">Remaining</span>
-                    <span class="amount"
-                          t-att-class="{ highlight: currentOrder.get_due() > 0 }">
-                        <t t-esc="remainingText" />
+                <divclass="payment-status-remaining">
+                    <spanclass="label">Remaining</span>
+                    <spanclass="amount"
+                          t-att-class="{highlight:currentOrder.get_due()>0}">
+                        <tt-esc="remainingText"/>
                     </span>
                 </div>
-                <div class="payment-status-total-due">
-                    <span class="label">Total Due</span>
+                <divclass="payment-status-total-due">
+                    <spanclass="label">TotalDue</span>
                     <span>
-                        <t t-esc="totalDueText" />
+                        <tt-esc="totalDueText"/>
                     </span>
                 </div>
             </div>
             <div>
-                <div class="payment-status-change">
-                    <span class="label">Change</span>
-                    <span class="amount"
-                          t-att-class="{ highlight: currentOrder.get_change() > 0 }">
-                        <t t-esc="changeText" />
+                <divclass="payment-status-change">
+                    <spanclass="label">Change</span>
+                    <spanclass="amount"
+                          t-att-class="{highlight:currentOrder.get_change()>0}">
+                        <tt-esc="changeText"/>
                     </span>
                 </div>
             </div>

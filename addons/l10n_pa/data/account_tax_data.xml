@@ -1,69 +1,69 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="ITAX_19" model="account.tax.template">
-        <field name="chart_template_id" ref="l10npa_chart_template"/>
-        <field name="name">ITBMS 7% Venta</field>
-        <field name="description">ITBMS 7% Venta</field>
-        <field name="amount">7</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_7"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="ITAX_19"model="account.tax.template">
+        <fieldname="chart_template_id"ref="l10npa_chart_template"/>
+        <fieldname="name">ITBMS7%Venta</field>
+        <fieldname="description">ITBMS7%Venta</field>
+        <fieldname="amount">7</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_7"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('231'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('231'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('231'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('231'),
             }),
         ]"/>
     </record>
 
-    <record id="OTAX_19" model="account.tax.template">
-        <field name="chart_template_id" ref="l10npa_chart_template"/>
-        <field name="name">ITBMS 7% Compra</field>
-        <field name="description">ITBMS 7% Compra</field>
-        <field name="amount">7</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_7"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="OTAX_19"model="account.tax.template">
+        <fieldname="chart_template_id"ref="l10npa_chart_template"/>
+        <fieldname="name">ITBMS7%Compra</field>
+        <fieldname="description">ITBMS7%Compra</field>
+        <fieldname="amount">7</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_7"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('231'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('231'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('231'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('231'),
             }),
         ]"/>
     </record>

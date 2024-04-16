@@ -1,47 +1,47 @@
-flectra.define('point_of_sale.OrderReceipt', function(require) {
-    'use strict';
+flectra.define('point_of_sale.OrderReceipt',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
-    class OrderReceipt extends PosComponent {
-        constructor() {
+    classOrderReceiptextendsPosComponent{
+        constructor(){
             super(...arguments);
-            this._receiptEnv = this.props.order.getOrderReceiptEnv();
+            this._receiptEnv=this.props.order.getOrderReceiptEnv();
         }
-        willUpdateProps(nextProps) {
-            this._receiptEnv = nextProps.order.getOrderReceiptEnv();
+        willUpdateProps(nextProps){
+            this._receiptEnv=nextProps.order.getOrderReceiptEnv();
         }
-        get receipt() {
-            return this.receiptEnv.receipt;
+        getreceipt(){
+            returnthis.receiptEnv.receipt;
         }
-        get orderlines() {
-            return this.receiptEnv.orderlines;
+        getorderlines(){
+            returnthis.receiptEnv.orderlines;
         }
-        get paymentlines() {
-            return this.receiptEnv.paymentlines;
+        getpaymentlines(){
+            returnthis.receiptEnv.paymentlines;
         }
-        get isTaxIncluded() {
-            return Math.abs(this.receipt.subtotal - this.receipt.total_with_tax) <= 0.000001;
+        getisTaxIncluded(){
+            returnMath.abs(this.receipt.subtotal-this.receipt.total_with_tax)<=0.000001;
         }
-        get receiptEnv () {
-          return this._receiptEnv;
+        getreceiptEnv(){
+          returnthis._receiptEnv;
         }
-        isSimple(line) {
-            return (
-                line.discount === 0 &&
-                line.is_in_unit &&
-                line.quantity === 1 &&
+        isSimple(line){
+            return(
+                line.discount===0&&
+                line.is_in_unit&&
+                line.quantity===1&&
                 !(
-                    line.display_discount_policy == 'without_discount' &&
-                    line.price < line.price_lst
+                    line.display_discount_policy=='without_discount'&&
+                    line.price<line.price_lst
                 )
             );
         }
     }
-    OrderReceipt.template = 'OrderReceipt';
+    OrderReceipt.template='OrderReceipt';
 
     Registries.Component.add(OrderReceipt);
 
-    return OrderReceipt;
+    returnOrderReceipt;
 });

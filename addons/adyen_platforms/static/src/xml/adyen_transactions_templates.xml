@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <templates>
-    <t t-extend="ListView.buttons" t-name="AdyenTransactionsListView.buttons">
-        <t t-jquery="button.o_list_button_discard" t-operation="after">
-            <button type="button" class="btn btn-primary o_button_sync_transactions">
-                Sync Transactions
+    <tt-extend="ListView.buttons"t-name="AdyenTransactionsListView.buttons">
+        <tt-jquery="button.o_list_button_discard"t-operation="after">
+            <buttontype="button"class="btnbtn-primaryo_button_sync_transactions">
+                SyncTransactions
             </button>
         </t>
     </t>

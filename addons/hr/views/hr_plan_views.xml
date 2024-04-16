@@ -1,50 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-        <record id="hr_plan_view_search" model="ir.ui.view">
-            <field name="name">hr.plan.view.search</field>
-            <field name="model">hr.plan</field>
-            <field name="arch" type="xml">
-                <search string="Plan">
-                    <field name="name"/>
+        <recordid="hr_plan_view_search"model="ir.ui.view">
+            <fieldname="name">hr.plan.view.search</field>
+            <fieldname="model">hr.plan</field>
+            <fieldname="arch"type="xml">
+                <searchstring="Plan">
+                    <fieldname="name"/>
                     <separator/>
-                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <filterstring="Archived"name="inactive"domain="[('active','=',False)]"/>
                 </search>
             </field>
         </record>
 
-        <record id="hr_plan_view_tree" model="ir.ui.view">
-            <field name="name">hr.plan.view.tree</field>
-            <field name="model">hr.plan</field>
-            <field name="arch" type="xml">
-                <tree string="Planning">
-                    <field name="name"/>
+        <recordid="hr_plan_view_tree"model="ir.ui.view">
+            <fieldname="name">hr.plan.view.tree</field>
+            <fieldname="model">hr.plan</field>
+            <fieldname="arch"type="xml">
+                <treestring="Planning">
+                    <fieldname="name"/>
                 </tree>
             </field>
         </record>
 
-        <record id="hr_plan_view_form" model="ir.ui.view">
-            <field name="name">hr.plan.view.form</field>
-            <field name="model">hr.plan</field>
-            <field name="arch" type="xml">
-                <form string="Planning">
+        <recordid="hr_plan_view_form"model="ir.ui.view">
+            <fieldname="name">hr.plan.view.form</field>
+            <fieldname="model">hr.plan</field>
+            <fieldname="arch"type="xml">
+                <formstring="Planning">
                     <sheet>
-                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
-                        <div class="oe_title">
-                            <label for="name" class="oe_edit_only"/>
+                        <widgetname="web_ribbon"title="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
+                        <divclass="oe_title">
+                            <labelfor="name"class="oe_edit_only"/>
                             <h1>
-                                <field name="name"/>
+                                <fieldname="name"/>
                             </h1>
                         </div>
-                        <group string="Activities">
-                            <field name="active" invisible="1"/>
-                            <field name="plan_activity_type_ids" nolabel="1">
-                                <tree editable="bottom">
-                                    <field name="activity_type_id"/>
-                                    <field name="summary"/>
-                                    <field name="responsible"/>
-                                    <field name="responsible_id" attrs="{'readonly': [('responsible', '!=', 'other')]}"/>
+                        <groupstring="Activities">
+                            <fieldname="active"invisible="1"/>
+                            <fieldname="plan_activity_type_ids"nolabel="1">
+                                <treeeditable="bottom">
+                                    <fieldname="activity_type_id"/>
+                                    <fieldname="summary"/>
+                                    <fieldname="responsible"/>
+                                    <fieldname="responsible_id"attrs="{'readonly':[('responsible','!=','other')]}"/>
                                 </tree>
                             </field>
                         </group>
@@ -53,47 +53,47 @@
             </field>
         </record>
 
-        <record id="hr_plan_activity_type_view_tree" model="ir.ui.view">
-            <field name="name">hr.plan.activity.type.view.tree</field>
-            <field name="model">hr.plan.activity.type</field>
-            <field name="arch" type="xml">
-                <tree string="Activities">
-                    <field name="activity_type_id"/>
-                    <field name="summary"/>
-                    <field name="responsible"/>
+        <recordid="hr_plan_activity_type_view_tree"model="ir.ui.view">
+            <fieldname="name">hr.plan.activity.type.view.tree</field>
+            <fieldname="model">hr.plan.activity.type</field>
+            <fieldname="arch"type="xml">
+                <treestring="Activities">
+                    <fieldname="activity_type_id"/>
+                    <fieldname="summary"/>
+                    <fieldname="responsible"/>
                 </tree>
             </field>
         </record>
 
-        <record id="hr_plan_activity_type_view_form" model="ir.ui.view">
-            <field name="name">hr.plan.activity.type.view.form</field>
-            <field name="model">hr.plan.activity.type</field>
-            <field name="arch" type="xml">
-                <form string="Activity">
+        <recordid="hr_plan_activity_type_view_form"model="ir.ui.view">
+            <fieldname="name">hr.plan.activity.type.view.form</field>
+            <fieldname="model">hr.plan.activity.type</field>
+            <fieldname="arch"type="xml">
+                <formstring="Activity">
                     <sheet>
                         <group>
-                            <field name="activity_type_id"/>
-                            <field name="summary"/>
-                            <field name="responsible"/>
-                            <field name="responsible_id" attrs="{'invisible': [('responsible', '!=', 'other')]}"/>
-                            <field name="note"/>
+                            <fieldname="activity_type_id"/>
+                            <fieldname="summary"/>
+                            <fieldname="responsible"/>
+                            <fieldname="responsible_id"attrs="{'invisible':[('responsible','!=','other')]}"/>
+                            <fieldname="note"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <record id="hr_plan_action" model="ir.actions.act_window">
-            <field name="name">Planning</field>
-            <field name="res_model">hr.plan</field>
-            <field name="view_mode">tree,form</field>
-            <field name="search_view_id" ref="hr_plan_view_search"/>
+        <recordid="hr_plan_action"model="ir.actions.act_window">
+            <fieldname="name">Planning</field>
+            <fieldname="res_model">hr.plan</field>
+            <fieldname="view_mode">tree,form</field>
+            <fieldname="search_view_id"ref="hr_plan_view_search"/>
         </record>
 
-        <record id="hr_plan_activity_type_action" model="ir.actions.act_window">
-            <field name="name">Planning Types</field>
-            <field name="res_model">hr.plan.activity.type</field>
-            <field name="view_mode">tree,form</field>
+        <recordid="hr_plan_activity_type_action"model="ir.actions.act_window">
+            <fieldname="name">PlanningTypes</field>
+            <fieldname="res_model">hr.plan.activity.type</field>
+            <fieldname="view_mode">tree,form</field>
         </record>
 
     </data>

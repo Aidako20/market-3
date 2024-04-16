@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import ValidationError
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportValidationError
 
 
-class ResPartner(models.Model):
-    _inherit = 'res.partner'
+classResPartner(models.Model):
+    _inherit='res.partner'
 
-    l10n_in_shipping_gstin = fields.Char("Shipping GSTIN")
+    l10n_in_shipping_gstin=fields.Char("ShippingGSTIN")
 
     @api.constrains('l10n_in_shipping_gstin')
-    def _check_l10n_in_shipping_gstin(self):
-        check_vat_in = self.env['res.partner'].check_vat_in
-        wrong_shipping_gstin_partner = self.filtered(lambda p: p.l10n_in_shipping_gstin and not check_vat_in(p.l10n_in_shipping_gstin))
-        if wrong_shipping_gstin_partner:
-            raise ValidationError(_("The shipping GSTIN number [%s] does not seem to be valid") %(",".join(p.l10n_in_shipping_gstin for p in wrong_shipping_gstin_partner)))
+    def_check_l10n_in_shipping_gstin(self):
+        check_vat_in=self.env['res.partner'].check_vat_in
+        wrong_shipping_gstin_partner=self.filtered(lambdap:p.l10n_in_shipping_gstinandnotcheck_vat_in(p.l10n_in_shipping_gstin))
+        ifwrong_shipping_gstin_partner:
+            raiseValidationError(_("TheshippingGSTINnumber[%s]doesnotseemtobevalid")%(",".join(p.l10n_in_shipping_gstinforpinwrong_shipping_gstin_partner)))

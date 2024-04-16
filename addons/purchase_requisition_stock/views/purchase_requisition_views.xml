@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="view_purchase_requisition_form_inherit" model="ir.ui.view">
-            <field name="name">purchase.requisition.form.inherit</field>
-            <field name="model">purchase.requisition</field>
-            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form" />
-            <field name="arch" type="xml">
-                <field name="origin" position="after">
-                    <field name="picking_type_id" widget="selection" groups="stock.group_adv_location" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+        <recordid="view_purchase_requisition_form_inherit"model="ir.ui.view">
+            <fieldname="name">purchase.requisition.form.inherit</field>
+            <fieldname="model">purchase.requisition</field>
+            <fieldname="inherit_id"ref="purchase_requisition.view_purchase_requisition_form"/>
+            <fieldname="arch"type="xml">
+                <fieldname="origin"position="after">
+                    <fieldname="picking_type_id"widget="selection"groups="stock.group_adv_location"attrs="{'readonly':[('state','!=','draft')]}"/>
                 </field>
             </field>
         </record>

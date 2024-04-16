@@ -1,295 +1,295 @@
-(function (exports) {
+(function(exports){
     /**
-     * The purpose of this test is to click on every installed App and then
-     * open each view. On each view, click on each filter.
+     *ThepurposeofthistestistoclickoneveryinstalledAppandthen
+     *openeachview.Oneachview,clickoneachfilter.
      */
-    "use strict";
-    var clientActionCount = 0;
-    var viewUpdateCount = 0;
-    var testedApps;
-    var testedMenus;
-    var blackListedMenus = ['base.menu_theme_store', 'base.menu_third_party', 'account.menu_action_account_bank_journal_form', 'pos_adyen.menu_pos_adyen_account'];
-    var appsMenusOnly = false;
-    let isEnterprise = flectra.session_info.server_version_info[5] === 'e';
+    "usestrict";
+    varclientActionCount=0;
+    varviewUpdateCount=0;
+    vartestedApps;
+    vartestedMenus;
+    varblackListedMenus=['base.menu_theme_store','base.menu_third_party','account.menu_action_account_bank_journal_form','pos_adyen.menu_pos_adyen_account'];
+    varappsMenusOnly=false;
+    letisEnterprise=flectra.session_info.server_version_info[5]==='e';
 
-    function createWebClientHooks() {
-        var AbstractController = flectra.__DEBUG__.services['web.AbstractController'];
-        var DiscussWidget = flectra.__DEBUG__.services['mail/static/src/widgets/discuss/discuss.js'];
-        var WebClient = flectra.__DEBUG__.services["web.WebClient"];
+    functioncreateWebClientHooks(){
+        varAbstractController=flectra.__DEBUG__.services['web.AbstractController'];
+        varDiscussWidget=flectra.__DEBUG__.services['mail/static/src/widgets/discuss/discuss.js'];
+        varWebClient=flectra.__DEBUG__.services["web.WebClient"];
 
         WebClient.include({
-            current_action_updated : function (action, controller) {
-                this._super(action, controller);
+            current_action_updated:function(action,controller){
+                this._super(action,controller);
                 clientActionCount++;
             },
         });
 
         AbstractController.include({
-            start: function(){
-                this.$el.attr('data-view-type', this.viewType);
-                return this._super.apply(this, arguments);
+            start:function(){
+                this.$el.attr('data-view-type',this.viewType);
+                returnthis._super.apply(this,arguments);
             },
-            update: function(params, options) {
-                return this._super(params, options).then(function (){
+            update:function(params,options){
+                returnthis._super(params,options).then(function(){
                     viewUpdateCount++;
                 });
             },
         });
 
-        if (DiscussWidget) {
+        if(DiscussWidget){
             DiscussWidget.include({
                 /**
-                 * Overriding a method that is called every time the discuss
-                 * component is updated.
+                 *Overridingamethodthatiscalledeverytimethediscuss
+                 *componentisupdated.
                  */
-                _updateControlPanel: async function () {
-                    await this._super(...arguments);
+                _updateControlPanel:asyncfunction(){
+                    awaitthis._super(...arguments);
                     viewUpdateCount++;
                 },
             });
         }
     }
 
-    function clickEverywhere(xmlId, light){
-        appsMenusOnly = light;
-        setTimeout(_clickEverywhere, 1000, xmlId);
+    functionclickEverywhere(xmlId,light){
+        appsMenusOnly=light;
+        setTimeout(_clickEverywhere,1000,xmlId);
     }
 
-    // Main function that starts orchestration of tests
-    async function _clickEverywhere(xmlId){
-        console.log("Starting ClickEverywhere test");
-        var startTime = performance.now();
+    //Mainfunctionthatstartsorchestrationoftests
+    asyncfunction_clickEverywhere(xmlId){
+        console.log("StartingClickEverywheretest");
+        varstartTime=performance.now();
         createWebClientHooks();
-        testedApps = [];
-        testedMenus = [];
-        // finding applications menus
-        let appMenuItems;
-        if (isEnterprise) {
-            console.log("Flectra flavor: Enterprise");
-            appMenuItems = document.querySelectorAll(xmlId ?
-                `a.o_app.o_menuitem[data-menu-xmlid="${xmlId}"]` :
+        testedApps=[];
+        testedMenus=[];
+        //findingapplicationsmenus
+        letappMenuItems;
+        if(isEnterprise){
+            console.log("Flectraflavor:Enterprise");
+            appMenuItems=document.querySelectorAll(xmlId?
+                `a.o_app.o_menuitem[data-menu-xmlid="${xmlId}"]`:
                 'a.o_app.o_menuitem'
             );
-        } else {
-            console.log("Flectra flavor: Community");
-            appMenuItems = document.querySelectorAll(xmlId ?
-                `a.o_app[data-menu-xmlid="${xmlId}"]` :
+        }else{
+            console.log("Flectraflavor:Community");
+            appMenuItems=document.querySelectorAll(xmlId?
+                `a.o_app[data-menu-xmlid="${xmlId}"]`:
                 'a.o_app'
             );
         }
-        console.log("Found", appMenuItems.length, "apps to test");
-        try {
-            for (const app of appMenuItems) {
-                await testApp(app);
+        console.log("Found",appMenuItems.length,"appstotest");
+        try{
+            for(constappofappMenuItems){
+                awaittestApp(app);
             }
-            console.log("Test took", (performance.now() - startTime) / 1000, "seconds");
-            console.log("Successfully tested", testedApps.length, " apps");
-            console.log("Successfully tested", testedMenus.length - testedApps.length, "menus");
-            console.log("test successful");
-        } catch (err) {
-            console.log("Test took", (performance.now() - startTime) / 1000, "seconds");
-            console.error(err || "test failed");
+            console.log("Testtook",(performance.now()-startTime)/1000,"seconds");
+            console.log("Successfullytested",testedApps.length,"apps");
+            console.log("Successfullytested",testedMenus.length-testedApps.length,"menus");
+            console.log("testsuccessful");
+        }catch(err){
+            console.log("Testtook",(performance.now()-startTime)/1000,"seconds");
+            console.error(err||"testfailed");
         }
     }
 
 
     /**
-     * Test an "App" menu item by orchestrating the following actions:
-     *  1 - clicking on its menuItem
-     *  2 - clicking on each view
-     *  3 - clicking on each menu
-     *  3.1  - clicking on each view
-     * @param {DomElement} element: the App menu item
-     * @returns {Promise}
+     *Testan"App"menuitembyorchestratingthefollowingactions:
+     * 1-clickingonitsmenuItem
+     * 2-clickingoneachview
+     * 3-clickingoneachmenu
+     * 3.1 -clickingoneachview
+     *@param{DomElement}element:theAppmenuitem
+     *@returns{Promise}
      */
-    async function testApp(element) {
-        console.log("Testing app menu:", element.dataset.menuXmlid);
-        if (testedApps.indexOf(element.dataset.menuXmlid) >= 0) return; // Another infinite loop protection
+    asyncfunctiontestApp(element){
+        console.log("Testingappmenu:",element.dataset.menuXmlid);
+        if(testedApps.indexOf(element.dataset.menuXmlid)>=0)return;//Anotherinfiniteloopprotection
         testedApps.push(element.dataset.menuXmlid);
-        if (isEnterprise) {
-            await ensureHomeMenu();
+        if(isEnterprise){
+            awaitensureHomeMenu();
         }
-        await testMenuItem(element);
-        if (appsMenusOnly === true) return;
-        const subMenuItems = document.querySelectorAll('.o_menu_entry_lvl_1, .o_menu_entry_lvl_2, .o_menu_entry_lvl_3, .o_menu_entry_lvl_4');
-        for (const subMenuItem of subMenuItems) {
-            await testMenuItem(subMenuItem);
+        awaittestMenuItem(element);
+        if(appsMenusOnly===true)return;
+        constsubMenuItems=document.querySelectorAll('.o_menu_entry_lvl_1,.o_menu_entry_lvl_2,.o_menu_entry_lvl_3,.o_menu_entry_lvl_4');
+        for(constsubMenuItemofsubMenuItems){
+            awaittestMenuItem(subMenuItem);
         }
-        if (isEnterprise) {
-            await ensureHomeMenu();
+        if(isEnterprise){
+            awaitensureHomeMenu();
         }
     }
 
 
     /**
-     * Test a menu item by:
-     *  1 - clikcing on the menuItem
-     *  2 - Orchestrate the view switch
+     *Testamenuitemby:
+     * 1-clikcingonthemenuItem
+     * 2-Orchestratetheviewswitch
      *
-     *  @param {DomElement} element: the menu item
-     *  @returns {Promise}
+     * @param{DomElement}element:themenuitem
+     * @returns{Promise}
      */
-    async function testMenuItem(element){
-        if (testedMenus.indexOf(element.dataset.menuXmlid) >= 0) return Promise.resolve(); // Avoid infinite loop
-        var menuDescription = element.innerText.trim() + " " + element.dataset.menuXmlid;
-        var menuTimeLimit = 10000;
-        console.log("Testing menu", menuDescription);
+    asyncfunctiontestMenuItem(element){
+        if(testedMenus.indexOf(element.dataset.menuXmlid)>=0)returnPromise.resolve();//Avoidinfiniteloop
+        varmenuDescription=element.innerText.trim()+""+element.dataset.menuXmlid;
+        varmenuTimeLimit=10000;
+        console.log("Testingmenu",menuDescription);
         testedMenus.push(element.dataset.menuXmlid);
-        if (blackListedMenus.includes(element.dataset.menuXmlid)) return Promise.resolve(); // Skip black listed menus
-        if (element.innerText.trim() == 'Settings') menuTimeLimit = 20000;
-        var startActionCount = clientActionCount;
-        await triggerClick(element, `menu item "${element.innerText.trim()}"`);
-        var isModal = false;
-        return waitForCondition(function () {
-            // sometimes, the app is just a modal that needs to be closed
-            var $modal = $('.modal[role="dialog"][open="open"]');
-            if ($modal.length > 0) {
-                const closeButton = document.querySelector('header > button.close');
-                if (closeButton) {
+        if(blackListedMenus.includes(element.dataset.menuXmlid))returnPromise.resolve();//Skipblacklistedmenus
+        if(element.innerText.trim()=='Settings')menuTimeLimit=20000;
+        varstartActionCount=clientActionCount;
+        awaittriggerClick(element,`menuitem"${element.innerText.trim()}"`);
+        varisModal=false;
+        returnwaitForCondition(function(){
+            //sometimes,theappisjustamodalthatneedstobeclosed
+            var$modal=$('.modal[role="dialog"][open="open"]');
+            if($modal.length>0){
+                constcloseButton=document.querySelector('header>button.close');
+                if(closeButton){
                     closeButton.focus();
-                    triggerClick(closeButton, "modal close button");
-                } else { $modal.modal('hide'); }
-                isModal = true;
-                return true;
+                    triggerClick(closeButton,"modalclosebutton");
+                }else{$modal.modal('hide');}
+                isModal=true;
+                returntrue;
             }
-            return startActionCount !== clientActionCount;
-        }, menuTimeLimit).then(function() {
-            if (!isModal) {
-                return testFilters();
+            returnstartActionCount!==clientActionCount;
+        },menuTimeLimit).then(function(){
+            if(!isModal){
+                returntestFilters();
             }
-        }).then(function () {
-            if (!isModal) {
-                return testViews();
+        }).then(function(){
+            if(!isModal){
+                returntestViews();
             }
-        }).catch(function (err) {
-            console.error("Error while testing", menuDescription);
-            return Promise.reject(err);
+        }).catch(function(err){
+            console.error("Errorwhiletesting",menuDescription);
+            returnPromise.reject(err);
         });
     };
 
 
     /**
-     * Orchestrate the test of views
-     * This function finds the buttons that permit to switch views and orchestrate
-     * the click on each of them
-     * @returns {Promise}
+     *Orchestratethetestofviews
+     *Thisfunctionfindsthebuttonsthatpermittoswitchviewsandorchestrate
+     *theclickoneachofthem
+     *@returns{Promise}
      */
-    async function testViews() {
-        if (appsMenusOnly === true) {
+    asyncfunctiontestViews(){
+        if(appsMenusOnly===true){
             return;
         }
-        const switchButtons = document.querySelectorAll('nav.o_cp_switch_buttons > button.o_switch_view:not(.active):not(.o_map)');
-        for (const switchButton of switchButtons) {
-            // Only way to get the viewType from the switchButton
-            const viewType = [...switchButton.classList]
-                .find(cls => cls !== 'o_switch_view' && cls.startsWith('o_'))
+        constswitchButtons=document.querySelectorAll('nav.o_cp_switch_buttons>button.o_switch_view:not(.active):not(.o_map)');
+        for(constswitchButtonofswitchButtons){
+            //OnlywaytogettheviewTypefromtheswitchButton
+            constviewType=[...switchButton.classList]
+                .find(cls=>cls!=='o_switch_view'&&cls.startsWith('o_'))
                 .slice(2);
-            console.log("Testing view switch:", viewType);
-            // timeout to avoid click debounce
-            setTimeout(function () {
-                const target = document.querySelector(`nav.o_cp_switch_buttons > button.o_switch_view.o_${viewType}`);
-                if (target) {
-                    triggerClick(target, `${viewType} view switcher`);
+            console.log("Testingviewswitch:",viewType);
+            //timeouttoavoidclickdebounce
+            setTimeout(function(){
+                consttarget=document.querySelector(`nav.o_cp_switch_buttons>button.o_switch_view.o_${viewType}`);
+                if(target){
+                    triggerClick(target,`${viewType}viewswitcher`);
                 }
-            }, 250);
-            await waitForCondition(() => document.querySelector('.o_action_manager > .o_action.o_view_controller').dataset.viewType === viewType);
-            await testFilters();
+            },250);
+            awaitwaitForCondition(()=>document.querySelector('.o_action_manager>.o_action.o_view_controller').dataset.viewType===viewType);
+            awaittestFilters();
         }
     }
 
     /**
-     * Test filters
-     * Click on each filter in the control pannel
+     *Testfilters
+     *Clickoneachfilterinthecontrolpannel
      */
-    async function testFilters() {
-        if (appsMenusOnly === true) {
+    asyncfunctiontestFilters(){
+        if(appsMenusOnly===true){
             return;
         }
-        const filterMenuButton = document.querySelector('.o_control_panel .o_filter_menu > button');
-        if (!filterMenuButton) {
+        constfilterMenuButton=document.querySelector('.o_control_panel.o_filter_menu>button');
+        if(!filterMenuButton){
             return;
         }
-        // Open the filter menu dropdown
-        await triggerClick(filterMenuButton, `toggling menu "${filterMenuButton.innerText.trim()}"`);
+        //Openthefiltermenudropdown
+        awaittriggerClick(filterMenuButton,`togglingmenu"${filterMenuButton.innerText.trim()}"`);
 
-        const filterMenuItems = document.querySelectorAll('.o_control_panel .o_filter_menu > ul > li.o_menu_item');
-        console.log("Testing", filterMenuItems.length, "filters");
+        constfilterMenuItems=document.querySelectorAll('.o_control_panel.o_filter_menu>ul>li.o_menu_item');
+        console.log("Testing",filterMenuItems.length,"filters");
 
-        for (const filter of filterMenuItems) {
-            const currentViewCount = viewUpdateCount;
-            const filterLink = filter.querySelector('a');
-            await triggerClick(filterLink, `filter "${filter.innerText.trim()}"`);
-            if (filterLink.classList.contains('o_menu_item_parent')) {
-                // If a fitler has options, it will simply unfold and show all options.
-                // We then click on the first one.
-                const firstOption = filter.querySelector('.o_menu_item_options > li.o_item_option > a');
+        for(constfilteroffilterMenuItems){
+            constcurrentViewCount=viewUpdateCount;
+            constfilterLink=filter.querySelector('a');
+            awaittriggerClick(filterLink,`filter"${filter.innerText.trim()}"`);
+            if(filterLink.classList.contains('o_menu_item_parent')){
+                //Ifafitlerhasoptions,itwillsimplyunfoldandshowalloptions.
+                //Wethenclickonthefirstone.
+                constfirstOption=filter.querySelector('.o_menu_item_options>li.o_item_option>a');
                 console.log();
-                await triggerClick(firstOption, `filter option "${firstOption.innerText.trim()}"`);
+                awaittriggerClick(firstOption,`filteroption"${firstOption.innerText.trim()}"`);
             }
-            await waitForCondition(() => currentViewCount !== viewUpdateCount);
+            awaitwaitForCondition(()=>currentViewCount!==viewUpdateCount);
         }
     }
 
-    // utility functions
+    //utilityfunctions
     /**
-     * Wait a certain amount of time for a condition to occur
-     * @param {function} stopCondition a function that returns a boolean
-     * @returns {Promise} that is rejected if the timeout is exceeded
+     *Waitacertainamountoftimeforaconditiontooccur
+     *@param{function}stopConditionafunctionthatreturnsaboolean
+     *@returns{Promise}thatisrejectedifthetimeoutisexceeded
      */
-    function waitForCondition(stopCondition, tl=10000) {
-        var prom = new Promise(function (resolve, reject) {
-            var interval = 250;
-            var timeLimit = tl;
+    functionwaitForCondition(stopCondition,tl=10000){
+        varprom=newPromise(function(resolve,reject){
+            varinterval=250;
+            vartimeLimit=tl;
 
-            function checkCondition() {
-                if (stopCondition()) {
+            functioncheckCondition(){
+                if(stopCondition()){
                     resolve();
-                } else {
-                    timeLimit -= interval;
-                    if (timeLimit > 0) {
-                        // recursive call until the resolve or the timeout
-                        setTimeout(checkCondition, interval);
-                    } else {
-                        console.error('Timeout, the clicked element took more than', tl/1000,'seconds to load');
+                }else{
+                    timeLimit-=interval;
+                    if(timeLimit>0){
+                        //recursivecalluntiltheresolveorthetimeout
+                        setTimeout(checkCondition,interval);
+                    }else{
+                        console.error('Timeout,theclickedelementtookmorethan',tl/1000,'secondstoload');
                         reject();
                     }
                 }
             }
-            setTimeout(checkCondition, interval);
+            setTimeout(checkCondition,interval);
         });
-        return prom;
+        returnprom;
     }
 
 
     /**
-     * Chain deferred actions.
+     *Chaindeferredactions.
      *
-     * @param {jQueryElement} $elements a list of jquery elements to be passed as arg to the function
-     * @param {Promise} promise the promise on which other promises will be chained
-     * @param {function} f the function to be deferred
-     * @returns {Promise} the chained promise
+     *@param{jQueryElement}$elementsalistofjqueryelementstobepassedasargtothefunction
+     *@param{Promise}promisethepromiseonwhichotherpromiseswillbechained
+     *@param{function}fthefunctiontobedeferred
+     *@returns{Promise}thechainedpromise
      */
-    function chainDeferred($elements, promise, f) {
-        _.each($elements, function(el) {
-            promise = promise.then(function () {
-                return f(el);
+    functionchainDeferred($elements,promise,f){
+        _.each($elements,function(el){
+            promise=promise.then(function(){
+                returnf(el);
             });
         });
-        return promise;
+        returnpromise;
     }
 
     /**
-     * Make sure the home menu is open
+     *Makesurethehomemenuisopen
      */
-    async function ensureHomeMenu() {
-        const menuToggle = document.querySelector('nav.o_main_navbar > a.o_menu_toggle.fa-th');
-        if (menuToggle) {
-            await triggerClick(menuToggle, 'home menu toggle button');
-            await waitForCondition(() => document.querySelector('.o_home_menu'));
+    asyncfunctionensureHomeMenu(){
+        constmenuToggle=document.querySelector('nav.o_main_navbar>a.o_menu_toggle.fa-th');
+        if(menuToggle){
+            awaittriggerClick(menuToggle,'homemenutogglebutton');
+            awaitwaitForCondition(()=>document.querySelector('.o_home_menu'));
         }
     }
 
-    const MOUSE_EVENTS = [
+    constMOUSE_EVENTS=[
         'mouseover',
         'mouseenter',
         'mousedown',
@@ -298,24 +298,24 @@
     ];
 
     /**
-     * Simulate all of the mouse events triggered during a click action.
-     * @param {EventTarget} target the element on which to perform the click
-     * @param {string} elDescription description of the item
-     * @returns {Promise} resolved after next animation frame
+     *Simulateallofthemouseeventstriggeredduringaclickaction.
+     *@param{EventTarget}targettheelementonwhichtoperformtheclick
+     *@param{string}elDescriptiondescriptionoftheitem
+     *@returns{Promise}resolvedafternextanimationframe
      */
-    async function triggerClick(target, elDescription) {
-        if (target) {
-            console.log("Clicking on", elDescription);
-        } else {
-            throw new Error(`No element "${elDescription}" found.`);
+    asyncfunctiontriggerClick(target,elDescription){
+        if(target){
+            console.log("Clickingon",elDescription);
+        }else{
+            thrownewError(`Noelement"${elDescription}"found.`);
         }
-        MOUSE_EVENTS.forEach(type => {
-            const event = new MouseEvent(type, { bubbles: true, cancelable: true, view: window });
+        MOUSE_EVENTS.forEach(type=>{
+            constevent=newMouseEvent(type,{bubbles:true,cancelable:true,view:window});
             target.dispatchEvent(event);
         });
-        await new Promise(setTimeout);
-        await new Promise(r => requestAnimationFrame(r));
+        awaitnewPromise(setTimeout);
+        awaitnewPromise(r=>requestAnimationFrame(r));
     }
 
-    exports.clickEverywhere = clickEverywhere;
+    exports.clickEverywhere=clickEverywhere;
 })(window);

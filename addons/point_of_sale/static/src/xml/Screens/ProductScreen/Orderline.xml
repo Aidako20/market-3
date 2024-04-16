@@ -1,70 +1,70 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="Orderline" owl="1">
-        <li t-on-click="selectLine" class="orderline" t-att-class="addedClasses">
-            <span class="product-name">
-                <t t-esc="props.line.get_full_product_name()"/>
-                <span> </span>
-                <t t-if="props.line.get_product().tracking!=='none' &amp;&amp; (env.pos.picking_type.use_create_lots || env.pos.picking_type.use_existing_lots)">
-                    <t t-if="props.line.has_valid_product_lot()">
-                        <i  t-on-click.stop="lotIconClicked"
-                            class="oe_link_icon fa fa-list oe_icon line-lot-icon oe_green"
-                            aria-label="Valid product lot"
+    <tt-name="Orderline"owl="1">
+        <lit-on-click="selectLine"class="orderline"t-att-class="addedClasses">
+            <spanclass="product-name">
+                <tt-esc="props.line.get_full_product_name()"/>
+                <span></span>
+                <tt-if="props.line.get_product().tracking!=='none'&amp;&amp;(env.pos.picking_type.use_create_lots||env.pos.picking_type.use_existing_lots)">
+                    <tt-if="props.line.has_valid_product_lot()">
+                        <i t-on-click.stop="lotIconClicked"
+                            class="oe_link_iconfafa-listoe_iconline-lot-iconoe_green"
+                            aria-label="Validproductlot"
                             role="img"
-                            title="Valid product lot"
+                            title="Validproductlot"
                         />
                     </t>
-                    <t t-else="">
-                        <i  t-on-click.stop="lotIconClicked"
-                            class="oe_link_icon fa fa-list oe_icon line-lot-icon oe_red"
-                            aria-label="Invalid product lot"
+                    <tt-else="">
+                        <i t-on-click.stop="lotIconClicked"
+                            class="oe_link_iconfafa-listoe_iconline-lot-iconoe_red"
+                            aria-label="Invalidproductlot"
                             role="img"
-                            title="Invalid product lot"
+                            title="Invalidproductlot"
                         />
                     </t>
                 </t>
             </span>
-            <span class="price">
-                <t t-esc="env.pos.format_currency(props.line.get_display_price())"/>
+            <spanclass="price">
+                <tt-esc="env.pos.format_currency(props.line.get_display_price())"/>
             </span>
-            <ul class="info-list">
-                <t t-if="props.line.get_quantity_str() !== '1' || props.line.selected ">
-                    <li class="info">
+            <ulclass="info-list">
+                <tt-if="props.line.get_quantity_str()!=='1'||props.line.selected">
+                    <liclass="info">
                         <em>
-                            <t t-esc="props.line.get_quantity_str()" />
+                            <tt-esc="props.line.get_quantity_str()"/>
                         </em>
-                        <span> </span><t t-esc="props.line.get_unit().name" />
+                        <span></span><tt-esc="props.line.get_unit().name"/>
                         at
-                        <t t-if="props.line.display_discount_policy() == 'without_discount' and
-                            props.line.get_unit_display_price() &lt; props.line.get_taxed_lst_unit_price()">
+                        <tt-if="props.line.display_discount_policy()=='without_discount'and
+                            props.line.get_unit_display_price()&lt;props.line.get_taxed_lst_unit_price()">
                             <s>
-                                <t t-esc="env.pos.format_currency(props.line.get_taxed_lst_unit_price(),'Product Price')" />
+                                <tt-esc="env.pos.format_currency(props.line.get_taxed_lst_unit_price(),'ProductPrice')"/>
                             </s>
-                            <t t-esc="env.pos.format_currency(props.line.get_unit_display_price(),'Product Price')" />
+                            <tt-esc="env.pos.format_currency(props.line.get_unit_display_price(),'ProductPrice')"/>
                         </t>
-                        <t t-else="">
-                            <t t-esc="env.pos.format_currency(props.line.get_unit_display_price(),'Product Price')" />
+                        <tt-else="">
+                            <tt-esc="env.pos.format_currency(props.line.get_unit_display_price(),'ProductPrice')"/>
                         </t>
                         /
-                        <t t-esc="props.line.get_unit().name" />
+                        <tt-esc="props.line.get_unit().name"/>
                     </li>
                 </t>
-                <t t-if="props.line.get_discount_str() !== '0'">
-                    <li class="info">
-                        With a
+                <tt-if="props.line.get_discount_str()!=='0'">
+                    <liclass="info">
+                        Witha
                         <em>
-                            <t t-esc="props.line.get_discount_str()" />%
+                            <tt-esc="props.line.get_discount_str()"/>%
                         </em>
                         discount
                     </li>
                 </t>
             </ul>
-            <t t-if="props.line.get_lot_lines()">
-                <ul class="info-list">
-                    <t t-foreach="props.line.get_lot_lines()" t-as="lot" t-key="lot.cid">
+            <tt-if="props.line.get_lot_lines()">
+                <ulclass="info-list">
+                    <tt-foreach="props.line.get_lot_lines()"t-as="lot"t-key="lot.cid">
                         <li>
-                            SN <t t-esc="lot.attributes['lot_name']"/>
+                            SN<tt-esc="lot.attributes['lot_name']"/>
                         </li>
                     </t>
                 </ul>

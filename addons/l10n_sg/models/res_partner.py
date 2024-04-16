@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import fields, models
+fromflectraimportfields,models
 
-class ResPartner(models.Model):
-    _name = 'res.partner'
-    _inherit = 'res.partner'
+classResPartner(models.Model):
+    _name='res.partner'
+    _inherit='res.partner'
 
-    l10n_sg_unique_entity_number = fields.Char(string='UEN')
+    l10n_sg_unique_entity_number=fields.Char(string='UEN')

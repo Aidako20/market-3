@@ -1,30 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="UF" model="res.currency">
-            <field name="name">UF</field>
-            <field name="symbol">UF</field>
-            <field name="rounding">0.01</field>
-            <field name="position">after</field>
-            <field name="currency_unit_label">Unidad de Fomento</field>
-            <field name="l10n_cl_short_name">Unidad de Fomento</field>
+    <datanoupdate="1">
+        <recordid="UF"model="res.currency">
+            <fieldname="name">UF</field>
+            <fieldname="symbol">UF</field>
+            <fieldname="rounding">0.01</field>
+            <fieldname="position">after</field>
+            <fieldname="currency_unit_label">UnidaddeFomento</field>
+            <fieldname="l10n_cl_short_name">UnidaddeFomento</field>
         </record>
 
-        <record id="UTM" model="res.currency">
-            <field name="name">UTM</field>
-            <field name="symbol">UTM</field>
-            <field name="rounding">0.01</field>
-            <field name="position">after</field>
-            <field name="currency_unit_label">Unidad Tributaria Mensual</field>
-            <field name="l10n_cl_short_name">Unidad Tributaria Mensual</field>
+        <recordid="UTM"model="res.currency">
+            <fieldname="name">UTM</field>
+            <fieldname="symbol">UTM</field>
+            <fieldname="rounding">0.01</field>
+            <fieldname="position">after</field>
+            <fieldname="currency_unit_label">UnidadTributariaMensual</field>
+            <fieldname="l10n_cl_short_name">UnidadTributariaMensual</field>
         </record>
 
-        <record id="OTR" model="res.currency">
-            <field name="name">OTR</field>
-            <field name="symbol">OTR</field>
-            <field name="rounding">1</field>
-            <field name="l10n_cl_currency_code">900</field>
-            <field name="l10n_cl_short_name">OTR</field>
+        <recordid="OTR"model="res.currency">
+            <fieldname="name">OTR</field>
+            <fieldname="symbol">OTR</field>
+            <fieldname="rounding">1</field>
+            <fieldname="l10n_cl_currency_code">900</field>
+            <fieldname="l10n_cl_short_name">OTR</field>
         </record>
     </data>
 </flectra>

@@ -1,109 +1,109 @@
-flectra.define('mail/static/src/components/thread_preview/thread_preview_tests.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/thread_preview/thread_preview_tests.js',function(require){
+'usestrict';
 
-const components = {
-    ThreadPreview: require('mail/static/src/components/thread_preview/thread_preview.js'),
+constcomponents={
+    ThreadPreview:require('mail/static/src/components/thread_preview/thread_preview.js'),
 };
 
-const {
+const{
     afterEach,
     afterNextRender,
     beforeEach,
     createRootComponent,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-QUnit.module('mail', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('thread_preview', {}, function () {
-QUnit.module('thread_preview_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('thread_preview',{},function(){
+QUnit.module('thread_preview_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.createThreadPreviewComponent = async props => {
-            await createRootComponent(this, components.ThreadPreview, {
+        this.createThreadPreviewComponent=asyncprops=>{
+            awaitcreateRootComponent(this,components.ThreadPreview,{
                 props,
-                target: this.widget.el,
+                target:this.widget.el,
             });
         };
 
-        this.start = async params => {
-            const { env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
+        this.start=asyncparams=>{
+            const{env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('mark as read', async function (assert) {
+QUnit.test('markasread',asyncfunction(assert){
     assert.expect(8);
     this.data['mail.channel'].records.push({
-        id: 11,
-        message_unread_counter: 1,
+        id:11,
+        message_unread_counter:1,
     });
     this.data['mail.message'].records.push({
-        channel_ids: [11],
-        id: 100,
-        model: 'mail.channel',
-        res_id: 11,
+        channel_ids:[11],
+        id:100,
+        model:'mail.channel',
+        res_id:11,
     });
 
-    await this.start({
-        hasChatWindow: true,
-        async mockRPC(route, args) {
-            if (route.includes('channel_seen')) {
+    awaitthis.start({
+        hasChatWindow:true,
+        asyncmockRPC(route,args){
+            if(route.includes('channel_seen')){
                 assert.step('channel_seen');
             }
-            return this._super(...arguments);
+            returnthis._super(...arguments);
         },
     });
-    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
-        id: 11,
-        model: 'mail.channel',
+    constthread=this.env.models['mail.thread'].findFromIdentifyingData({
+        id:11,
+        model:'mail.channel',
     });
-    await this.createThreadPreviewComponent({ threadLocalId: thread.localId });
+    awaitthis.createThreadPreviewComponent({threadLocalId:thread.localId});
     assert.containsOnce(
         document.body,
         '.o_ThreadPreview_markAsRead',
-        "should have the mark as read button"
+        "shouldhavethemarkasreadbutton"
     );
     assert.containsOnce(
         document.body,
         '.o_ThreadPreview_counter',
-        "should have an unread counter"
+        "shouldhaveanunreadcounter"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_ThreadPreview_markAsRead').click()
     );
     assert.verifySteps(
         ['channel_seen'],
-        "should have marked the thread as seen"
+        "shouldhavemarkedthethreadasseen"
     );
     assert.hasClass(
         document.querySelector('.o_ThreadPreview'),
         'o-muted',
-        "should be muted once marked as read"
+        "shouldbemutedoncemarkedasread"
     );
     assert.containsNone(
         document.body,
         '.o_ThreadPreview_markAsRead',
-        "should no longer have the mark as read button"
+        "shouldnolongerhavethemarkasreadbutton"
     );
     assert.containsNone(
         document.body,
         '.o_ThreadPreview_counter',
-        "should no longer have an unread counter"
+        "shouldnolongerhaveanunreadcounter"
     );
     assert.containsNone(
         document.body,
         '.o_ChatWindow',
-        "should not have opened the thread"
+        "shouldnothaveopenedthethread"
     );
 });
 

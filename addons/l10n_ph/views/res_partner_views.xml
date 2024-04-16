@@ -1,15 +1,15 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xmlversion='1.0'encoding='utf-8'?>
 <flectra>
-    <record id="view_partner_form" model="ir.ui.view">
-        <field name="name">res.partner.form.inherit.l10n_ph_bir</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='vat']" position="after">
-                <field name="branch_code"/>
-                <field name="first_name" attrs="{'invisible': [('is_company','=', True)]}"/>
-                <field name="middle_name" attrs="{'invisible': [('is_company','=', True)]}"/>
-                <field name="last_name" attrs="{'invisible': [('is_company','=', True)]}"/>
+    <recordid="view_partner_form"model="ir.ui.view">
+        <fieldname="name">res.partner.form.inherit.l10n_ph_bir</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="inherit_id"ref="base.view_partner_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='vat']"position="after">
+                <fieldname="branch_code"/>
+                <fieldname="first_name"attrs="{'invisible':[('is_company','=',True)]}"/>
+                <fieldname="middle_name"attrs="{'invisible':[('is_company','=',True)]}"/>
+                <fieldname="last_name"attrs="{'invisible':[('is_company','=',True)]}"/>
             </xpath>
         </field>
     </record>

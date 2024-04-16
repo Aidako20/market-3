@@ -1,116 +1,116 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
-import requests
-from flectra.addons.microsoft_calendar.models.microsoft_sync import microsoft_calendar_token
-from datetime import timedelta
+importlogging
+importrequests
+fromflectra.addons.microsoft_calendar.models.microsoft_syncimportmicrosoft_calendar_token
+fromdatetimeimporttimedelta
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
-from flectra.loglevels import exception_to_unicode
-from flectra.addons.microsoft_account.models.microsoft_service import MICROSOFT_TOKEN_ENDPOINT
-from flectra.addons.microsoft_calendar.utils.microsoft_calendar import InvalidSyncToken
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportUserError
+fromflectra.loglevelsimportexception_to_unicode
+fromflectra.addons.microsoft_account.models.microsoft_serviceimportMICROSOFT_TOKEN_ENDPOINT
+fromflectra.addons.microsoft_calendar.utils.microsoft_calendarimportInvalidSyncToken
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class User(models.Model):
-    _inherit = 'res.users'
+classUser(models.Model):
+    _inherit='res.users'
 
-    microsoft_calendar_sync_token = fields.Char('Microsoft Next Sync Token', copy=False)
+    microsoft_calendar_sync_token=fields.Char('MicrosoftNextSyncToken',copy=False)
 
-    def _microsoft_calendar_authenticated(self):
-        return bool(self.sudo().microsoft_calendar_rtoken)
+    def_microsoft_calendar_authenticated(self):
+        returnbool(self.sudo().microsoft_calendar_rtoken)
 
-    def _get_microsoft_calendar_token(self):
+    def_get_microsoft_calendar_token(self):
         self.ensure_one()
-        if self.microsoft_calendar_rtoken and not self._is_microsoft_calendar_valid():
+        ifself.microsoft_calendar_rtokenandnotself._is_microsoft_calendar_valid():
             self._refresh_microsoft_calendar_token()
-        return self.microsoft_calendar_token
+        returnself.microsoft_calendar_token
 
-    def _is_microsoft_calendar_valid(self):
-        return self.microsoft_calendar_token_validity and self.microsoft_calendar_token_validity >= (fields.Datetime.now() + timedelta(minutes=1))
+    def_is_microsoft_calendar_valid(self):
+        returnself.microsoft_calendar_token_validityandself.microsoft_calendar_token_validity>=(fields.Datetime.now()+timedelta(minutes=1))
 
-    def _refresh_microsoft_calendar_token(self):
+    def_refresh_microsoft_calendar_token(self):
         self.ensure_one()
-        get_param = self.env['ir.config_parameter'].sudo().get_param
-        client_id = get_param('microsoft_calendar_client_id')
-        client_secret = get_param('microsoft_calendar_client_secret')
+        get_param=self.env['ir.config_parameter'].sudo().get_param
+        client_id=get_param('microsoft_calendar_client_id')
+        client_secret=get_param('microsoft_calendar_client_secret')
 
-        if not client_id or not client_secret:
-            raise UserError(_("The account for the Outlook Calendar service is not configured."))
+        ifnotclient_idornotclient_secret:
+            raiseUserError(_("TheaccountfortheOutlookCalendarserviceisnotconfigured."))
 
-        headers = {"content-type": "application/x-www-form-urlencoded"}
-        data = {
-            'refresh_token': self.microsoft_calendar_rtoken,
-            'client_id': client_id,
-            'client_secret': client_secret,
-            'grant_type': 'refresh_token',
+        headers={"content-type":"application/x-www-form-urlencoded"}
+        data={
+            'refresh_token':self.microsoft_calendar_rtoken,
+            'client_id':client_id,
+            'client_secret':client_secret,
+            'grant_type':'refresh_token',
         }
 
         try:
-            dummy, response, dummy = self.env['microsoft.service']._do_request(
-                MICROSOFT_TOKEN_ENDPOINT, params=data, headers=headers, method='POST', preuri=''
+            dummy,response,dummy=self.env['microsoft.service']._do_request(
+                MICROSOFT_TOKEN_ENDPOINT,params=data,headers=headers,method='POST',preuri=''
             )
-            ttl = response.get('expires_in')
+            ttl=response.get('expires_in')
             self.write({
-                'microsoft_calendar_token': response.get('access_token'),
-                'microsoft_calendar_token_validity': fields.Datetime.now() + timedelta(seconds=ttl),
+                'microsoft_calendar_token':response.get('access_token'),
+                'microsoft_calendar_token_validity':fields.Datetime.now()+timedelta(seconds=ttl),
             })
-        except requests.HTTPError as error:
-            if error.response.status_code in (400, 401):  # invalid grant or invalid client
-                # Delete refresh token and make sure it's commited
+        exceptrequests.HTTPErroraserror:
+            iferror.response.status_codein(400,401): #invalidgrantorinvalidclient
+                #Deleterefreshtokenandmakesureit'scommited
                 self.env.cr.rollback()
                 self.write({
-                    'microsoft_calendar_rtoken': False,
-                    'microsoft_calendar_token': False,
-                    'microsoft_calendar_token_validity': False,
-                    'microsoft_calendar_sync_token': False,
+                    'microsoft_calendar_rtoken':False,
+                    'microsoft_calendar_token':False,
+                    'microsoft_calendar_token_validity':False,
+                    'microsoft_calendar_sync_token':False,
                 })
                 self.env.cr.commit()
-            error_key = error.response.json().get("error", "nc")
-            error_msg = _(
-                "An error occurred while generating the token. Your authorization code may be invalid or has already expired [%s]. "
-                "You should check your Client ID and secret on the Microsoft Azure portal or try to stop and restart your calendar synchronisation.",
+            error_key=error.response.json().get("error","nc")
+            error_msg=_(
+                "Anerroroccurredwhilegeneratingthetoken.Yourauthorizationcodemaybeinvalidorhasalreadyexpired[%s]."
+                "YoushouldcheckyourClientIDandsecretontheMicrosoftAzureportalortrytostopandrestartyourcalendarsynchronisation.",
                 error_key)
-            raise UserError(error_msg)
+            raiseUserError(error_msg)
 
-    def _sync_microsoft_calendar(self):
+    def_sync_microsoft_calendar(self):
         self.ensure_one()
-        calendar_service = self.env["calendar.event"]._get_microsoft_service()
-        full_sync = not bool(self.microsoft_calendar_sync_token)
-        with microsoft_calendar_token(self) as token:
+        calendar_service=self.env["calendar.event"]._get_microsoft_service()
+        full_sync=notbool(self.microsoft_calendar_sync_token)
+        withmicrosoft_calendar_token(self)astoken:
             try:
-                events, next_sync_token = calendar_service.get_events(self.microsoft_calendar_sync_token, token=token)
-            except InvalidSyncToken:
-                events, next_sync_token = calendar_service.get_events(token=token)
-                full_sync = True
-        self.microsoft_calendar_sync_token = next_sync_token
+                events,next_sync_token=calendar_service.get_events(self.microsoft_calendar_sync_token,token=token)
+            exceptInvalidSyncToken:
+                events,next_sync_token=calendar_service.get_events(token=token)
+                full_sync=True
+        self.microsoft_calendar_sync_token=next_sync_token
 
-        # Microsoft -> Flectra
-        synced_events, synced_recurrences = self.env['calendar.event']._sync_microsoft2flectra(events) if events else (self.env['calendar.event'], self.env['calendar.recurrence'])
+        #Microsoft->Flectra
+        synced_events,synced_recurrences=self.env['calendar.event']._sync_microsoft2flectra(events)ifeventselse(self.env['calendar.event'],self.env['calendar.recurrence'])
 
-        # Flectra -> Microsoft
-        recurrences = self.env['calendar.recurrence']._get_microsoft_records_to_sync(full_sync=full_sync)
-        recurrences -= synced_recurrences
+        #Flectra->Microsoft
+        recurrences=self.env['calendar.recurrence']._get_microsoft_records_to_sync(full_sync=full_sync)
+        recurrences-=synced_recurrences
         recurrences._sync_flectra2microsoft()
-        synced_events |= recurrences.calendar_event_ids
+        synced_events|=recurrences.calendar_event_ids
 
-        events = self.env['calendar.event']._get_microsoft_records_to_sync(full_sync=full_sync)
-        (events - synced_events)._sync_flectra2microsoft()
+        events=self.env['calendar.event']._get_microsoft_records_to_sync(full_sync=full_sync)
+        (events-synced_events)._sync_flectra2microsoft()
 
-        return bool(events | synced_events) or bool(recurrences | synced_recurrences)
+        returnbool(events|synced_events)orbool(recurrences|synced_recurrences)
 
     @api.model
-    def _sync_all_microsoft_calendar(self):
-        """ Cron job """
-        users = self.env['res.users'].search([('microsoft_calendar_rtoken', '!=', False)])
-        for user in users:
-            _logger.info("Calendar Synchro - Starting synchronization for %s", user)
+    def_sync_all_microsoft_calendar(self):
+        """Cronjob"""
+        users=self.env['res.users'].search([('microsoft_calendar_rtoken','!=',False)])
+        foruserinusers:
+            _logger.info("CalendarSynchro-Startingsynchronizationfor%s",user)
             try:
                 user.with_user(user).sudo()._sync_microsoft_calendar()
                 self.env.cr.commit()
-            except Exception as e:
-                _logger.exception("[%s] Calendar Synchro - Exception : %s !", user, exception_to_unicode(e))
+            exceptExceptionase:
+                _logger.exception("[%s]CalendarSynchro-Exception:%s!",user,exception_to_unicode(e))
                 self.env.cr.rollback()

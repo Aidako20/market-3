@@ -1,129 +1,129 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <!-- Fiscal Position Purchase Eurozone -->
-        <record id="fpp_euro_25_services" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_euro_b2b" />
-            <field name="tax_src_id" ref="purchase_tax_25_services" />
-            <field name="tax_dest_id" ref="purchase_services_tax_25_EC" />
+    <datanoupdate="1">
+        <!--FiscalPositionPurchaseEurozone-->
+        <recordid="fpp_euro_25_services"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="tax_src_id"ref="purchase_tax_25_services"/>
+            <fieldname="tax_dest_id"ref="purchase_services_tax_25_EC"/>
         </record>
-        <record id="fpp_euro_25_goods" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_euro_b2b" />
-            <field name="tax_src_id" ref="purchase_tax_25_goods" />
-            <field name="tax_dest_id" ref="purchase_goods_tax_25_EC" />
+        <recordid="fpp_euro_25_goods"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="tax_src_id"ref="purchase_tax_25_goods"/>
+            <fieldname="tax_dest_id"ref="purchase_goods_tax_25_EC"/>
         </record>
-        <record id="fpp_euro_12_services" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_euro_b2b" />
-            <field name="tax_src_id" ref="purchase_tax_12_services" />
-            <field name="tax_dest_id" ref="purchase_services_tax_12_EC" />
+        <recordid="fpp_euro_12_services"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="tax_src_id"ref="purchase_tax_12_services"/>
+            <fieldname="tax_dest_id"ref="purchase_services_tax_12_EC"/>
         </record>
-        <record id="fpp_euro_12_goods" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_euro_b2b" />
-            <field name="tax_src_id" ref="purchase_tax_12_goods" />
-            <field name="tax_dest_id" ref="purchase_goods_tax_12_EC" />
+        <recordid="fpp_euro_12_goods"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="tax_src_id"ref="purchase_tax_12_goods"/>
+            <fieldname="tax_dest_id"ref="purchase_goods_tax_12_EC"/>
         </record>
-        <record id="fpp_euro_6_services" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_euro_b2b" />
-            <field name="tax_src_id" ref="purchase_tax_6_services" />
-            <field name="tax_dest_id" ref="purchase_services_tax_6_EC" />
+        <recordid="fpp_euro_6_services"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="tax_src_id"ref="purchase_tax_6_services"/>
+            <fieldname="tax_dest_id"ref="purchase_services_tax_6_EC"/>
         </record>
-        <record id="fpp_euro_6_goods" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_euro_b2b" />
-            <field name="tax_src_id" ref="purchase_tax_6_goods" />
-            <field name="tax_dest_id" ref="purchase_goods_tax_6_EC" />
+        <recordid="fpp_euro_6_goods"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="tax_src_id"ref="purchase_tax_6_goods"/>
+            <fieldname="tax_dest_id"ref="purchase_goods_tax_6_EC"/>
         </record>
-        <!-- Fiscal Position VAT on sales eurozone -->
-        <record id="fps_euro_25_services" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_euro_b2b" />
-            <field name="tax_src_id" ref="sale_tax_25_services" />
-            <field name="tax_dest_id" ref="sale_tax_services_EC" />
+        <!--FiscalPositionVATonsaleseurozone-->
+        <recordid="fps_euro_25_services"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="tax_src_id"ref="sale_tax_25_services"/>
+            <fieldname="tax_dest_id"ref="sale_tax_services_EC"/>
         </record>
-        <record id="fps_euro_25_goods" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_euro_b2b" />
-            <field name="tax_src_id" ref="sale_tax_25_goods" />
-            <field name="tax_dest_id" ref="sale_tax_goods_EC" />
+        <recordid="fps_euro_25_goods"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="tax_src_id"ref="sale_tax_25_goods"/>
+            <fieldname="tax_dest_id"ref="sale_tax_goods_EC"/>
         </record>
-        <record id="fps_euro_12_services" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_euro_b2b" />
-            <field name="tax_src_id" ref="sale_tax_12_services" />
-            <field name="tax_dest_id" ref="sale_tax_services_EC" />
+        <recordid="fps_euro_12_services"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="tax_src_id"ref="sale_tax_12_services"/>
+            <fieldname="tax_dest_id"ref="sale_tax_services_EC"/>
         </record>
-        <record id="fps_euro_12_goods" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_euro_b2b" />
-            <field name="tax_src_id" ref="sale_tax_12_goods" />
-            <field name="tax_dest_id" ref="sale_tax_goods_EC" />
+        <recordid="fps_euro_12_goods"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="tax_src_id"ref="sale_tax_12_goods"/>
+            <fieldname="tax_dest_id"ref="sale_tax_goods_EC"/>
         </record>
-        <record id="fps_euro_6_services" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_euro_b2b" />
-            <field name="tax_src_id" ref="sale_tax_6_services" />
-            <field name="tax_dest_id" ref="sale_tax_services_EC" />
+        <recordid="fps_euro_6_services"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="tax_src_id"ref="sale_tax_6_services"/>
+            <fieldname="tax_dest_id"ref="sale_tax_services_EC"/>
         </record>
-        <record id="fps_euro_6_goods" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_euro_b2b" />
-            <field name="tax_src_id" ref="sale_tax_6_goods" />
-            <field name="tax_dest_id" ref="sale_tax_goods_EC" />
+        <recordid="fps_euro_6_goods"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_euro_b2b"/>
+            <fieldname="tax_src_id"ref="sale_tax_6_goods"/>
+            <fieldname="tax_dest_id"ref="sale_tax_goods_EC"/>
         </record>
-        <!-- Fiscal Position Purchase None Eurozone -->
-        <record id="fpp_outside_25_services" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_outside_euro" />
-            <field name="tax_src_id" ref="purchase_tax_25_services" />
-            <field name="tax_dest_id" ref="purchase_services_tax_25_NEC" />
+        <!--FiscalPositionPurchaseNoneEurozone-->
+        <recordid="fpp_outside_25_services"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="tax_src_id"ref="purchase_tax_25_services"/>
+            <fieldname="tax_dest_id"ref="purchase_services_tax_25_NEC"/>
         </record>
-        <record id="fpp_outside_25_goods" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_outside_euro" />
-            <field name="tax_src_id" ref="purchase_tax_25_goods" />
-            <field name="tax_dest_id" ref="purchase_goods_tax_25_NEC" />
+        <recordid="fpp_outside_25_goods"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="tax_src_id"ref="purchase_tax_25_goods"/>
+            <fieldname="tax_dest_id"ref="purchase_goods_tax_25_NEC"/>
         </record>
-        <record id="fpp_outside_12_services" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_outside_euro" />
-            <field name="tax_src_id" ref="purchase_tax_12_services" />
-            <field name="tax_dest_id" ref="purchase_services_tax_12_NEC" />
+        <recordid="fpp_outside_12_services"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="tax_src_id"ref="purchase_tax_12_services"/>
+            <fieldname="tax_dest_id"ref="purchase_services_tax_12_NEC"/>
         </record>
-        <record id="fpp_outside_12_goods" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_outside_euro" />
-            <field name="tax_src_id" ref="purchase_tax_12_goods" />
-            <field name="tax_dest_id" ref="purchase_goods_tax_12_NEC" />
+        <recordid="fpp_outside_12_goods"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="tax_src_id"ref="purchase_tax_12_goods"/>
+            <fieldname="tax_dest_id"ref="purchase_goods_tax_12_NEC"/>
         </record>
-        <record id="fpp_outside_6_services" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_outside_euro" />
-            <field name="tax_src_id" ref="purchase_tax_6_services" />
-            <field name="tax_dest_id" ref="purchase_services_tax_6_NEC" />
+        <recordid="fpp_outside_6_services"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="tax_src_id"ref="purchase_tax_6_services"/>
+            <fieldname="tax_dest_id"ref="purchase_services_tax_6_NEC"/>
         </record>
-        <record id="fpp_outside_6_goods" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_outside_euro" />
-            <field name="tax_src_id" ref="purchase_tax_6_goods" />
-            <field name="tax_dest_id" ref="purchase_goods_tax_6_NEC" />
+        <recordid="fpp_outside_6_goods"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="tax_src_id"ref="purchase_tax_6_goods"/>
+            <fieldname="tax_dest_id"ref="purchase_goods_tax_6_NEC"/>
         </record>
-        <!-- Fiscal Position VAT on sales eurozone -->
-        <record id="fps_outside_25_services" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_outside_euro" />
-            <field name="tax_src_id" ref="sale_tax_25_services" />
-            <field name="tax_dest_id" ref="sale_tax_services_NEC" />
+        <!--FiscalPositionVATonsaleseurozone-->
+        <recordid="fps_outside_25_services"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="tax_src_id"ref="sale_tax_25_services"/>
+            <fieldname="tax_dest_id"ref="sale_tax_services_NEC"/>
         </record>
-        <record id="fps_outside_25_goods" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_outside_euro" />
-            <field name="tax_src_id" ref="sale_tax_25_goods" />
-            <field name="tax_dest_id" ref="sale_tax_goods_NEC" />
+        <recordid="fps_outside_25_goods"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="tax_src_id"ref="sale_tax_25_goods"/>
+            <fieldname="tax_dest_id"ref="sale_tax_goods_NEC"/>
         </record>
-        <record id="fps_outside_12_services" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_outside_euro" />
-            <field name="tax_src_id" ref="sale_tax_12_services" />
-            <field name="tax_dest_id" ref="sale_tax_services_NEC" />
+        <recordid="fps_outside_12_services"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="tax_src_id"ref="sale_tax_12_services"/>
+            <fieldname="tax_dest_id"ref="sale_tax_services_NEC"/>
         </record>
-        <record id="fps_outside_12_goods" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_outside_euro" />
-            <field name="tax_src_id" ref="sale_tax_12_goods" />
-            <field name="tax_dest_id" ref="sale_tax_goods_NEC" />
+        <recordid="fps_outside_12_goods"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="tax_src_id"ref="sale_tax_12_goods"/>
+            <fieldname="tax_dest_id"ref="sale_tax_goods_NEC"/>
         </record>
-        <record id="fps_outside_6_services" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_outside_euro" />
-            <field name="tax_src_id" ref="sale_tax_6_services" />
-            <field name="tax_dest_id" ref="sale_tax_services_NEC" />
+        <recordid="fps_outside_6_services"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="tax_src_id"ref="sale_tax_6_services"/>
+            <fieldname="tax_dest_id"ref="sale_tax_services_NEC"/>
         </record>
-        <record id="fps_outside_6_goods" model="account.fiscal.position.tax.template">
-            <field name="position_id" ref="fp_outside_euro" />
-            <field name="tax_src_id" ref="sale_tax_6_goods" />
-            <field name="tax_dest_id" ref="sale_tax_goods_NEC" />
+        <recordid="fps_outside_6_goods"model="account.fiscal.position.tax.template">
+            <fieldname="position_id"ref="fp_outside_euro"/>
+            <fieldname="tax_src_id"ref="sale_tax_6_goods"/>
+            <fieldname="tax_dest_id"ref="sale_tax_goods_NEC"/>
         </record>
     </data>
 </flectra>

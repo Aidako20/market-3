@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <templates>
-    <div t-name="account.GroupedListTemplate" owl="1" class="d-block">
-        <table t-if="data.groups_vals.length" class="table table-sm o_list_table table table-sm table-hover table-striped o_list_table_grouped">
+    <divt-name="account.GroupedListTemplate"owl="1"class="d-block">
+        <tablet-if="data.groups_vals.length"class="tabletable-smo_list_tabletabletable-smtable-hovertable-stripedo_list_table_grouped">
             <thead><tr>
-                <t t-foreach="data.options.columns" t-as="col">
-                    <th t-esc="col['label']" t-attf-class="{{col['class']}}"/>
+                <tt-foreach="data.options.columns"t-as="col">
+                    <tht-esc="col['label']"t-attf-class="{{col['class']}}"/>
                 </t>
             </tr></thead>
-            <t t-foreach="data.groups_vals" t-as="group_vals">
-                <ListGroup group_vals="group_vals" options="data.options"/>
+            <tt-foreach="data.groups_vals"t-as="group_vals">
+                <ListGroupgroup_vals="group_vals"options="data.options"/>
             </t>
         </table>
-        <t t-if="data.options.discarded_number">
-            <span><t t-esc="data.options.discarded_number"/> are not shown in the preview</span>
+        <tt-if="data.options.discarded_number">
+            <span><tt-esc="data.options.discarded_number"/>arenotshowninthepreview</span>
         </t>
     </div>
 
-    <tbody t-name="account.GroupedItemsTemplate" owl="1">
-        <tr style="background-color: #dee2e6;">
-            <td t-attf-colspan="{{props.options.columns.length}}">
-                <t t-esc="props.group_vals.group_name"/>
+    <tbodyt-name="account.GroupedItemsTemplate"owl="1">
+        <trstyle="background-color:#dee2e6;">
+            <tdt-attf-colspan="{{props.options.columns.length}}">
+                <tt-esc="props.group_vals.group_name"/>
             </td>
         </tr>
-        <t t-foreach="props.group_vals.items_vals" t-as="item_vals">
-            <ListItem item_vals="item_vals[2]" options="props.options"/>
+        <tt-foreach="props.group_vals.items_vals"t-as="item_vals">
+            <ListItemitem_vals="item_vals[2]"options="props.options"/>
         </t>
     </tbody>
 
-    <tr t-name="account.GroupedItemTemplate" owl="1">
-        <t t-foreach="props.options.columns" t-as="col">
-            <td t-esc="props.item_vals[col['field']]" t-attf-class="{{col['class']}}"/>
+    <trt-name="account.GroupedItemTemplate"owl="1">
+        <tt-foreach="props.options.columns"t-as="col">
+            <tdt-esc="props.item_vals[col['field']]"t-attf-class="{{col['class']}}"/>
         </t>
     </tr>
 

@@ -1,25 +1,25 @@
-flectra.define('auth_signup.signup', function (require) {
-'use strict';
+flectra.define('auth_signup.signup',function(require){
+'usestrict';
 
-var publicWidget = require('web.public.widget');
+varpublicWidget=require('web.public.widget');
 
-publicWidget.registry.SignUpForm = publicWidget.Widget.extend({
-    selector: '.oe_signup_form',
-    events: {
-        'submit': '_onSubmit',
+publicWidget.registry.SignUpForm=publicWidget.Widget.extend({
+    selector:'.oe_signup_form',
+    events:{
+        'submit':'_onSubmit',
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onSubmit: function () {
-        var $btn = this.$('.oe_login_buttons > button[type="submit"]');
-        $btn.attr('disabled', 'disabled');
-        $btn.prepend('<i class="fa fa-refresh fa-spin"/> ');
+    _onSubmit:function(){
+        var$btn=this.$('.oe_login_buttons>button[type="submit"]');
+        $btn.attr('disabled','disabled');
+        $btn.prepend('<iclass="fafa-refreshfa-spin"/>');
     },
 });
 });

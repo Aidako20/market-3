@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="action_open_website" model="ir.actions.act_url">
-            <field name="name">Website Recruitment Form</field>
-            <field name="target">self</field>
-            <field name="url">/jobs</field>
+    <datanoupdate="1">
+        <recordid="action_open_website"model="ir.actions.act_url">
+            <fieldname="name">WebsiteRecruitmentForm</field>
+            <fieldname="target">self</field>
+            <fieldname="url">/jobs</field>
         </record>
-        <record id="base.open_menu" model="ir.actions.todo">
-            <field name="action_id" ref="action_open_website"/>
-            <field name="state">open</field>
+        <recordid="base.open_menu"model="ir.actions.todo">
+            <fieldname="action_id"ref="action_open_website"/>
+            <fieldname="state">open</field>
         </record>
     </data>
     <data>
-        <record id="hr_recruitment.model_hr_applicant" model="ir.model">
-            <field name="website_form_key">apply_job</field>
-            <field name="website_form_default_field_id" ref="hr_recruitment.field_hr_applicant__description" />
-            <field name="website_form_access">True</field>
-            <field name="website_form_label">Apply for a Job</field>
+        <recordid="hr_recruitment.model_hr_applicant"model="ir.model">
+            <fieldname="website_form_key">apply_job</field>
+            <fieldname="website_form_default_field_id"ref="hr_recruitment.field_hr_applicant__description"/>
+            <fieldname="website_form_access">True</field>
+            <fieldname="website_form_label">ApplyforaJob</field>
         </record>
-        <function model="ir.model.fields" name="formbuilder_whitelist">
+        <functionmodel="ir.model.fields"name="formbuilder_whitelist">
             <value>hr.applicant</value>
-            <value eval="[
+            <valueeval="[
                 'description',
                 'email_from',
                 'partner_name',

@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="website_crm_partner_assign.res_partner_grade_platinium" model="res.partner.grade">
-            <field name="is_published" eval="True" />
+    <datanoupdate="1">
+        <recordid="website_crm_partner_assign.res_partner_grade_platinium"model="res.partner.grade">
+            <fieldname="is_published"eval="True"/>
         </record>
-        <record id="website_crm_partner_assign.res_partner_grade_gold" model="res.partner.grade">
-            <field name="is_published" eval="True" />
+        <recordid="website_crm_partner_assign.res_partner_grade_gold"model="res.partner.grade">
+            <fieldname="is_published"eval="True"/>
         </record>
-        <record id="website_crm_partner_assign.res_partner_grade_silver" model="res.partner.grade">
-            <field name="is_published" eval="True" />
+        <recordid="website_crm_partner_assign.res_partner_grade_silver"model="res.partner.grade">
+            <fieldname="is_published"eval="True"/>
         </record>
-        <record id="website_crm_partner_assign.res_partner_grade_bronze" model="res.partner.grade">
-            <field name="is_published" eval="True" />
+        <recordid="website_crm_partner_assign.res_partner_grade_bronze"model="res.partner.grade">
+            <fieldname="is_published"eval="True"/>
         </record>
-        <record id="base.partner_demo_portal" model="res.partner">
-            <field name="grade_id" ref="website_crm_partner_assign.res_partner_grade_platinium"/>
-            <field name="partner_weight">10</field>
+        <recordid="base.partner_demo_portal"model="res.partner">
+            <fieldname="grade_id"ref="website_crm_partner_assign.res_partner_grade_platinium"/>
+            <fieldname="partner_weight">10</field>
         </record>
     </data>
 </flectra>

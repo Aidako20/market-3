@@ -1,56 +1,56 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
     <data>
 
-        <record id="l10n_es_edi_certificate_form" model="ir.ui.view">
-            <field name="name">l10n_es_edi.certificate.form</field>
-            <field name="model">l10n_es_edi.certificate</field>
-            <field name="arch" type="xml">
+        <recordid="l10n_es_edi_certificate_form"model="ir.ui.view">
+            <fieldname="name">l10n_es_edi.certificate.form</field>
+            <fieldname="model">l10n_es_edi.certificate</field>
+            <fieldname="arch"type="xml">
                 <form>
                     <sheet>
                         <group>
-                            <field name="content"/>
-                            <field name="password" password="True"/>
-                            <label for="date_start" string="Validity"/>
+                            <fieldname="content"/>
+                            <fieldname="password"password="True"/>
+                            <labelfor="date_start"string="Validity"/>
                             <div>
-                                <field name="date_start"/> -
-                                <field name="date_end"/>
+                                <fieldname="date_start"/>-
+                                <fieldname="date_end"/>
                             </div>
-                            <field name="company_id" groups="base.group_multi_company"/>
+                            <fieldname="company_id"groups="base.group_multi_company"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <record id="l10n_es_edi_certificate_tree" model="ir.ui.view">
-            <field name="name">l10n_es_edi.certificate.tree</field>
-            <field name="model">l10n_es_edi.certificate</field>
-            <field name="arch" type="xml">
+        <recordid="l10n_es_edi_certificate_tree"model="ir.ui.view">
+            <fieldname="name">l10n_es_edi.certificate.tree</field>
+            <fieldname="model">l10n_es_edi.certificate</field>
+            <fieldname="arch"type="xml">
                 <tree>
-                    <field name="date_start"/>
-                    <field name="date_end"/>
-                    <field name="company_id" groups="base.group_multi_company"/>
+                    <fieldname="date_start"/>
+                    <fieldname="date_end"/>
+                    <fieldname="company_id"groups="base.group_multi_company"/>
                 </tree>
             </field>
         </record>
 
-        <record id="l10n_es_edi_certificate_action" model="ir.actions.act_window">
-            <field name="name">Certificates for EDI invoices on Spain</field>
-            <field name="res_model">l10n_es_edi.certificate</field>
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Create the first certificate</p>
+        <recordid="l10n_es_edi_certificate_action"model="ir.actions.act_window">
+            <fieldname="name">CertificatesforEDIinvoicesonSpain</field>
+            <fieldname="res_model">l10n_es_edi.certificate</field>
+            <fieldname="view_mode">tree,form</field>
+            <fieldname="help"type="html">
+                <pclass="oe_view_nocontent_create">Createthefirstcertificate</p>
             </field>
         </record>
 
-        <menuitem id="menu_l10n_es_edi_root"
+        <menuitemid="menu_l10n_es_edi_root"
                   name="Spain"
                   sequence="110"
                   groups="account.group_account_manager"
                   parent="account.menu_finance_configuration">
-            <menuitem id="menu_l10n_es_edi_certificates"
-                      name="Certificates (ES)"
+            <menuitemid="menu_l10n_es_edi_certificates"
+                      name="Certificates(ES)"
                       action="l10n_es_edi_certificate_action"
                       sequence="100"
                       groups="account.group_account_manager"/>

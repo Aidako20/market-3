@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResUsers(models.Model):
-    _inherit = 'res.users'
+classResUsers(models.Model):
+    _inherit='res.users'
 
-    goal_ids = fields.One2many('gamification.goal', 'user_id')
-    badge_ids = fields.One2many('gamification.badge.user', 'user_id')
+    goal_ids=fields.One2many('gamification.goal','user_id')
+    badge_ids=fields.One2many('gamification.badge.user','user_id')

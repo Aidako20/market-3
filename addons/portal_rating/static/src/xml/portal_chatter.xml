@@ -1,112 +1,112 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
     <!--
-        Inherited templates from portal to custom chatter with rating
+        Inheritedtemplatesfromportaltocustomchatterwithrating
     -->
-    <t t-extend="portal.Composer">
-        <t t-jquery="textarea" t-operation="inner"><t t-esc="widget.options['default_message'] ? _.str.trim(widget.options['default_message']) : ''"/></t><!-- need to be one line to avoid \t in textarea -->
-        <t t-jquery="form" t-operation="attributes">
-            <attribute name="t-attf-action">#{widget.options['force_submit_url'] ? widget.options['force_submit_url'] : '/mail/chatter_post'}</attribute>
+    <tt-extend="portal.Composer">
+        <tt-jquery="textarea"t-operation="inner"><tt-esc="widget.options['default_message']?_.str.trim(widget.options['default_message']):''"/></t><!--needtobeonelinetoavoid\tintextarea-->
+        <tt-jquery="form"t-operation="attributes">
+            <attributename="t-attf-action">#{widget.options['force_submit_url']?widget.options['force_submit_url']:'/mail/chatter_post'}</attribute>
         </t>
-        <t t-jquery=".o_portal_chatter_composer_form input[name='csrf_token']" t-operation="after">
-            <t t-call="portal_rating.rating_star_input">
-                <t t-set="default_rating" t-value="widget.options['default_rating_value']"/>
+        <tt-jquery=".o_portal_chatter_composer_forminput[name='csrf_token']"t-operation="after">
+            <tt-call="portal_rating.rating_star_input">
+                <tt-set="default_rating"t-value="widget.options['default_rating_value']"/>
             </t>
-            <input type="hidden" name="message_id" t-att-value="widget.options['default_message_id']" t-if="widget.options['default_message_id']"/>
+            <inputtype="hidden"name="message_id"t-att-value="widget.options['default_message_id']"t-if="widget.options['default_message_id']"/>
         </t>
     </t>
 
-    <t t-extend="portal.chatter_messages">
-        <t t-jquery="t[t-raw='message.body']" t-operation="before">
-            <t t-if="message['rating_value']">
-                <t t-call="portal_rating.rating_stars_static">
-                    <t t-set="val" t-value="message.rating_value"/>
+    <tt-extend="portal.chatter_messages">
+        <tt-jquery="t[t-raw='message.body']"t-operation="before">
+            <tt-if="message['rating_value']">
+                <tt-call="portal_rating.rating_stars_static">
+                    <tt-set="val"t-value="message.rating_value"/>
                 </t>
             </t>
         </t>
-        <t t-jquery=".o_portal_chatter_attachments" t-operation="after">
-            <!--Only possible if a rating is link to the message, for now we can't comment if no rating
-                is link to the message (because publisher comment data
-                is on the rating.rating model - one comment max) -->
-            <t t-if="message.rating and message.rating.id" t-call="portal_rating.chatter_rating_publisher">
-                <t t-set="is_publisher" t-value="widget.options['is_user_publisher']"/>
-                <t t-set="rating" t-value="message.rating"/>
+        <tt-jquery=".o_portal_chatter_attachments"t-operation="after">
+            <!--Onlypossibleifaratingislinktothemessage,fornowwecan'tcommentifnorating
+                islinktothemessage(becausepublishercommentdata
+                isontherating.ratingmodel-onecommentmax)-->
+            <tt-if="message.ratingandmessage.rating.id"t-call="portal_rating.chatter_rating_publisher">
+                <tt-set="is_publisher"t-value="widget.options['is_user_publisher']"/>
+                <tt-set="rating"t-value="message.rating"/>
             </t>
         </t>
     </t>
 
-    <t t-extend="portal.Chatter">
-        <t t-jquery="t[t-call='portal.chatter_message_count']" t-operation="replace">
-            <t t-if="widget.options['display_rating']">
-                <t t-call="portal_rating.rating_card"/>
+    <tt-extend="portal.Chatter">
+        <tt-jquery="t[t-call='portal.chatter_message_count']"t-operation="replace">
+            <tt-if="widget.options['display_rating']">
+                <tt-call="portal_rating.rating_card"/>
             </t>
-            <t t-if="!widget.options['display_rating']">
-                <t t-call="portal.chatter_message_count"/>
+            <tt-if="!widget.options['display_rating']">
+                <tt-call="portal.chatter_message_count"/>
             </t>
         </t>
     </t>
 
     <!--
-        New templates specific of rating in Chatter
+        NewtemplatesspecificofratinginChatter
     -->
-    <t t-name="portal_rating.chatter_rating_publisher">
-        <div class="o_wrating_publisher_container">
-            <button t-if="is_publisher"
-                t-attf-class="btn px-2 mb-2 btn-sm border o_wrating_js_publisher_comment_btn {{ rating.publisher_comment !== '' ? 'd-none' : '' }}"
+    <tt-name="portal_rating.chatter_rating_publisher">
+        <divclass="o_wrating_publisher_container">
+            <buttont-if="is_publisher"
+                t-attf-class="btnpx-2mb-2btn-smbordero_wrating_js_publisher_comment_btn{{rating.publisher_comment!==''?'d-none':''}}"
                 t-att-data-mes_index="rating.mes_index">
-                <i class="fa fa-comment text-muted mr-1"/>Comment
+                <iclass="fafa-commenttext-mutedmr-1"/>Comment
             </button>
-            <div class="o_wrating_publisher_comment mt-2 mb-2">
-                <t t-if="rating.publisher_comment" t-call="portal_rating.chatter_rating_publisher_comment"/>
+            <divclass="o_wrating_publisher_commentmt-2mb-2">
+                <tt-if="rating.publisher_comment"t-call="portal_rating.chatter_rating_publisher_comment"/>
             </div>
         </div>
     </t>
 
-    <t t-name="portal_rating.chatter_rating_publisher_comment">
-        <div class="media o_portal_chatter_message">
-            <img class="o_portal_chatter_avatar" t-att-src="rating.publisher_avatar" alt="avatar"/>
-            <div class="media-body">
-                <div class="o_portal_chatter_message_title">
-                    <div class="d-inline-block">
-                        <h5 class="mb-1"><t t-esc="rating.publisher_name"/></h5>
+    <tt-name="portal_rating.chatter_rating_publisher_comment">
+        <divclass="mediao_portal_chatter_message">
+            <imgclass="o_portal_chatter_avatar"t-att-src="rating.publisher_avatar"alt="avatar"/>
+            <divclass="media-body">
+                <divclass="o_portal_chatter_message_title">
+                    <divclass="d-inline-block">
+                        <h5class="mb-1"><tt-esc="rating.publisher_name"/></h5>
                     </div>
-                    <div t-if="is_publisher" class="dropdown d-inline-block">
-                        <button class="btn py-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-ellipsis-v"/>
+                    <divt-if="is_publisher"class="dropdownd-inline-block">
+                        <buttonclass="btnpy-0"type="button"id="dropdownMenuButton"data-toggle="dropdown"aria-haspopup="true"aria-expanded="false">
+                            <iclass="fafa-ellipsis-v"/>
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <button class="dropdown-item o_wrating_js_publisher_comment_edit" t-att-data-mes_index="rating.mes_index">
-                                <i class="fa fa-fw fa-pencil mr-1"/>Edit
+                        <divclass="dropdown-menu"aria-labelledby="dropdownMenuButton">
+                            <buttonclass="dropdown-itemo_wrating_js_publisher_comment_edit"t-att-data-mes_index="rating.mes_index">
+                                <iclass="fafa-fwfa-pencilmr-1"/>Edit
                             </button>
-                            <button class="dropdown-item o_wrating_js_publisher_comment_delete" t-att-data-mes_index="rating.mes_index">
-                                <i class="fa fa-fw fa-trash-o mr-1"/>Delete
+                            <buttonclass="dropdown-itemo_wrating_js_publisher_comment_delete"t-att-data-mes_index="rating.mes_index">
+                                <iclass="fafa-fwfa-trash-omr-1"/>Delete
                             </button>
                         </div>
                     </div>
-                    <p>Published on <t t-esc="rating.publisher_datetime"/></p>
+                    <p>Publishedon<tt-esc="rating.publisher_datetime"/></p>
                 </div>
-                <t t-esc="rating.publisher_comment"/>
+                <tt-esc="rating.publisher_comment"/>
             </div>
         </div>
     </t>
-    <t t-name="portal_rating.chatter_rating_publisher_form">
-        <div t-if="is_publisher" class="media o_portal_chatter_message shadow bg-white rounded px-3 py-3 my-1">
-            <img class="o_portal_chatter_avatar" t-att-src="rating.publisher_avatar" alt="avatar"/>
-            <div class="media-body">
-                <div class="o_portal_chatter_message_title">
-                    <h5 class='mb-1'><t t-esc="rating.publisher_name"/></h5>
-                    <p>Published on <t t-esc="rating.publisher_datetime"/></p>
+    <tt-name="portal_rating.chatter_rating_publisher_form">
+        <divt-if="is_publisher"class="mediao_portal_chatter_messageshadowbg-whiteroundedpx-3py-3my-1">
+            <imgclass="o_portal_chatter_avatar"t-att-src="rating.publisher_avatar"alt="avatar"/>
+            <divclass="media-body">
+                <divclass="o_portal_chatter_message_title">
+                    <h5class='mb-1'><tt-esc="rating.publisher_name"/></h5>
+                    <p>Publishedon<tt-esc="rating.publisher_datetime"/></p>
                 </div>
-                <textarea rows="3" class="form-control o_portal_rating_comment_input"><t t-esc="rating.publisher_comment"/></textarea>
+                <textarearows="3"class="form-controlo_portal_rating_comment_input"><tt-esc="rating.publisher_comment"/></textarea>
                 <div>
-                    <button class="btn btn-primary mt-2 o_wrating_js_publisher_comment_submit" t-att-data-mes_index="rating.mes_index">
-                        <t t-if="rating.publisher_comment === ''">
-                            Post comment
-                        </t><t t-else="">
-                            Update comment
+                    <buttonclass="btnbtn-primarymt-2o_wrating_js_publisher_comment_submit"t-att-data-mes_index="rating.mes_index">
+                        <tt-if="rating.publisher_comment===''">
+                            Postcomment
+                        </t><tt-else="">
+                            Updatecomment
                         </t>
                     </button>
-                    <button class="border btn btn-light mt-2 bg-white o_wrating_js_publisher_comment_cancel" t-att-data-mes_index="rating.mes_index">
+                    <buttonclass="borderbtnbtn-lightmt-2bg-whiteo_wrating_js_publisher_comment_cancel"t-att-data-mes_index="rating.mes_index">
                         Cancel
                     </button>
                 </div>

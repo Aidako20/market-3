@@ -1,219 +1,219 @@
-flectra.define('mail/static/src/components/messaging_menu/messaging_menu_tests.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/messaging_menu/messaging_menu_tests.js',function(require){
+'usestrict';
 
-const {
+const{
     afterEach,
     afterNextRender,
     beforeEach,
     nextAnimationFrame,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-const { makeTestPromise } = require('web.test_utils');
+const{makeTestPromise}=require('web.test_utils');
 
-QUnit.module('mail', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('messaging_menu', {}, function () {
-QUnit.module('messaging_menu_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('messaging_menu',{},function(){
+QUnit.module('messaging_menu_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.start = async params => {
-            let { discussWidget, env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
-                hasMessagingMenu: true,
+        this.start=asyncparams=>{
+            let{discussWidget,env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
+                hasMessagingMenu:true,
             }));
-            this.discussWidget = discussWidget;
-            this.env = env;
-            this.widget = widget;
+            this.discussWidget=discussWidget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('[technical] messaging not created then becomes created', async function (assert) {
+QUnit.test('[technical]messagingnotcreatedthenbecomescreated',asyncfunction(assert){
     /**
-     * Creation of messaging in env is async due to generation of models being
-     * async. Generation of models is async because it requires parsing of all
-     * JS modules that contain pieces of model definitions.
+     *Creationofmessaginginenvisasyncduetogenerationofmodelsbeing
+     *async.Generationofmodelsisasyncbecauseitrequiresparsingofall
+     *JSmodulesthatcontainpiecesofmodeldefinitions.
      *
-     * Time of having no messaging is very short, almost imperceptible by user
-     * on UI, but the display should not crash during this critical time period.
+     *Timeofhavingnomessagingisveryshort,almostimperceptiblebyuser
+     *onUI,butthedisplayshouldnotcrashduringthiscriticaltimeperiod.
      */
     assert.expect(2);
 
-    const messagingBeforeCreationDeferred = makeTestPromise();
-    await this.start({
+    constmessagingBeforeCreationDeferred=makeTestPromise();
+    awaitthis.start({
         messagingBeforeCreationDeferred,
-        waitUntilMessagingCondition: 'none',
+        waitUntilMessagingCondition:'none',
     });
     assert.containsOnce(
         document.body,
         '.o_MessagingMenu',
-        "should have messaging menu even when messaging is not yet created"
+        "shouldhavemessagingmenuevenwhenmessagingisnotyetcreated"
     );
 
-    // simulate messaging becoming created
+    //simulatemessagingbecomingcreated
     messagingBeforeCreationDeferred.resolve();
-    await nextAnimationFrame();
+    awaitnextAnimationFrame();
     assert.containsOnce(
         document.body,
         '.o_MessagingMenu',
-        "should still contain messaging menu after messaging has been created"
+        "shouldstillcontainmessagingmenuaftermessaginghasbeencreated"
     );
 });
 
-QUnit.test('[technical] no crash on attempting opening messaging menu when messaging not created', async function (assert) {
+QUnit.test('[technical]nocrashonattemptingopeningmessagingmenuwhenmessagingnotcreated',asyncfunction(assert){
     /**
-     * Creation of messaging in env is async due to generation of models being
-     * async. Generation of models is async because it requires parsing of all
-     * JS modules that contain pieces of model definitions.
+     *Creationofmessaginginenvisasyncduetogenerationofmodelsbeing
+     *async.Generationofmodelsisasyncbecauseitrequiresparsingofall
+     *JSmodulesthatcontainpiecesofmodeldefinitions.
      *
-     * Time of having no messaging is very short, almost imperceptible by user
-     * on UI, but the display should not crash during this critical time period.
+     *Timeofhavingnomessagingisveryshort,almostimperceptiblebyuser
+     *onUI,butthedisplayshouldnotcrashduringthiscriticaltimeperiod.
      *
-     * Messaging menu is not expected to be open on click because state of
-     * messaging menu requires messaging being created.
+     *Messagingmenuisnotexpectedtobeopenonclickbecausestateof
+     *messagingmenurequiresmessagingbeingcreated.
      */
     assert.expect(2);
 
-    await this.start({
-        messagingBeforeCreationDeferred: new Promise(() => {}), // keep messaging not created
-        waitUntilMessagingCondition: 'none',
+    awaitthis.start({
+        messagingBeforeCreationDeferred:newPromise(()=>{}),//keepmessagingnotcreated
+        waitUntilMessagingCondition:'none',
     });
     assert.containsOnce(
         document.body,
         '.o_MessagingMenu',
-        "should have messaging menu even when messaging is not yet created"
+        "shouldhavemessagingmenuevenwhenmessagingisnotyetcreated"
     );
 
-    let error;
-    try {
+    leterror;
+    try{
         document.querySelector('.o_MessagingMenu_toggler').click();
-        await nextAnimationFrame();
-    } catch (err) {
-        error = err;
+        awaitnextAnimationFrame();
+    }catch(err){
+        error=err;
     }
     assert.notOk(
         !!error,
-        "Should not crash on attempt to open messaging menu when messaging not created"
+        "Shouldnotcrashonattempttoopenmessagingmenuwhenmessagingnotcreated"
     );
-    if (error) {
-        throw error;
+    if(error){
+        throwerror;
     }
 });
 
-QUnit.test('messaging not initialized', async function (assert) {
+QUnit.test('messagingnotinitialized',asyncfunction(assert){
     assert.expect(2);
 
-    await this.start({
-        async mockRPC(route) {
-            if (route === '/mail/init_messaging') {
-                // simulate messaging never initialized
-                return new Promise(resolve => {});
+    awaitthis.start({
+        asyncmockRPC(route){
+            if(route==='/mail/init_messaging'){
+                //simulatemessagingneverinitialized
+                returnnewPromise(resolve=>{});
             }
-            return this._super(...arguments);
+            returnthis._super(...arguments);
         },
-        waitUntilMessagingCondition: 'created',
+        waitUntilMessagingCondition:'created',
     });
     assert.strictEqual(
         document.querySelectorAll('.o_MessagingMenu_loading').length,
         1,
-        "should display loading icon on messaging menu when messaging not yet initialized"
+        "shoulddisplayloadingicononmessagingmenuwhenmessagingnotyetinitialized"
     );
 
-    await afterNextRender(() => document.querySelector(`.o_MessagingMenu_toggler`).click());
+    awaitafterNextRender(()=>document.querySelector(`.o_MessagingMenu_toggler`).click());
     assert.strictEqual(
         document.querySelector('.o_MessagingMenu_dropdownMenu').textContent,
-        "Please wait...",
-        "should prompt loading when opening messaging menu"
+        "Pleasewait...",
+        "shouldpromptloadingwhenopeningmessagingmenu"
     );
 });
 
-QUnit.test('messaging becomes initialized', async function (assert) {
+QUnit.test('messagingbecomesinitialized',asyncfunction(assert){
     assert.expect(2);
 
-    const messagingInitializedProm = makeTestPromise();
+    constmessagingInitializedProm=makeTestPromise();
 
-    await this.start({
-        async mockRPC(route) {
-            const _super = this._super.bind(this, ...arguments); // limitation of class.js
-            if (route === '/mail/init_messaging') {
-                await messagingInitializedProm;
+    awaitthis.start({
+        asyncmockRPC(route){
+            const_super=this._super.bind(this,...arguments);//limitationofclass.js
+            if(route==='/mail/init_messaging'){
+                awaitmessagingInitializedProm;
             }
-            return _super();
+            return_super();
         },
-        waitUntilMessagingCondition: 'created',
+        waitUntilMessagingCondition:'created',
     });
-    await afterNextRender(() => document.querySelector(`.o_MessagingMenu_toggler`).click());
+    awaitafterNextRender(()=>document.querySelector(`.o_MessagingMenu_toggler`).click());
 
-    // simulate messaging becomes initialized
-    await afterNextRender(() => messagingInitializedProm.resolve());
+    //simulatemessagingbecomesinitialized
+    awaitafterNextRender(()=>messagingInitializedProm.resolve());
     assert.strictEqual(
         document.querySelectorAll('.o_MessagingMenu_loading').length,
         0,
-        "should no longer display loading icon on messaging menu when messaging becomes initialized"
+        "shouldnolongerdisplayloadingicononmessagingmenuwhenmessagingbecomesinitialized"
     );
     assert.notOk(
-        document.querySelector('.o_MessagingMenu_dropdownMenu').textContent.includes("Please wait..."),
-        "should no longer prompt loading when opening messaging menu when messaging becomes initialized"
+        document.querySelector('.o_MessagingMenu_dropdownMenu').textContent.includes("Pleasewait..."),
+        "shouldnolongerpromptloadingwhenopeningmessagingmenuwhenmessagingbecomesinitialized"
     );
 });
 
-QUnit.test('basic rendering', async function (assert) {
+QUnit.test('basicrendering',asyncfunction(assert){
     assert.expect(21);
 
-    await this.start();
+    awaitthis.start();
     assert.strictEqual(
         document.querySelectorAll('.o_MessagingMenu').length,
         1,
-        "should have messaging menu"
+        "shouldhavemessagingmenu"
     );
     assert.notOk(
         document.querySelector('.o_MessagingMenu').classList.contains('show'),
-        "should not mark messaging menu item as shown by default"
+        "shouldnotmarkmessagingmenuitemasshownbydefault"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_toggler`).length,
         1,
-        "should have clickable element on messaging menu"
+        "shouldhaveclickableelementonmessagingmenu"
     );
     assert.notOk(
         document.querySelector(`.o_MessagingMenu_toggler`).classList.contains('show'),
-        "should not mark messaging menu clickable item as shown by default"
+        "shouldnotmarkmessagingmenuclickableitemasshownbydefault"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_icon`).length,
         1,
-        "should have icon on clickable element in messaging menu"
+        "shouldhaveicononclickableelementinmessagingmenu"
     );
     assert.ok(
         document.querySelector(`.o_MessagingMenu_icon`).classList.contains('fa-comments'),
-        "should have 'comments' icon on clickable element in messaging menu"
+        "shouldhave'comments'icononclickableelementinmessagingmenu"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_dropdownMenu`).length,
         0,
-        "should not display any messaging menu dropdown by default"
+        "shouldnotdisplayanymessagingmenudropdownbydefault"
     );
 
-    await afterNextRender(() => document.querySelector(`.o_MessagingMenu_toggler`).click());
+    awaitafterNextRender(()=>document.querySelector(`.o_MessagingMenu_toggler`).click());
     assert.hasClass(
         document.querySelector('.o_MessagingMenu'),
         "o-is-open",
-        "should mark messaging menu as opened"
+        "shouldmarkmessagingmenuasopened"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_dropdownMenu`).length,
         1,
-        "should display messaging menu dropdown after click"
+        "shoulddisplaymessagingmenudropdownafterclick"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_dropdownMenuHeader`).length,
         1,
-        "should have dropdown menu header"
+        "shouldhavedropdownmenuheader"
     );
     assert.strictEqual(
         document.querySelectorAll(`
@@ -221,45 +221,45 @@ QUnit.test('basic rendering', async function (assert) {
             .o_MessagingMenu_tabButton
         `).length,
         3,
-        "should have 3 tab buttons to filter items in the header"
+        "shouldhave3tabbuttonstofilteritemsintheheader"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_tabButton[data-tab-id="all"]`).length,
         1,
-        "1 tab button should be 'All'"
+        "1tabbuttonshouldbe'All'"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_tabButton[data-tab-id="chat"]`).length,
         1,
-        "1 tab button should be 'Chat'"
+        "1tabbuttonshouldbe'Chat'"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_tabButton[data-tab-id="channel"]`).length,
         1,
-        "1 tab button should be 'Channels'"
+        "1tabbuttonshouldbe'Channels'"
     );
     assert.ok(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="all"]
         `).classList.contains('o-active'),
-        "'all' tab button should be active"
+        "'all'tabbuttonshouldbeactive"
     );
     assert.notOk(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="chat"]
         `).classList.contains('o-active'),
-        "'chat' tab button should not be active"
+        "'chat'tabbuttonshouldnotbeactive"
     );
     assert.notOk(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="channel"]
         `).classList.contains('o-active'),
-        "'channel' tab button should not be active"
+        "'channel'tabbuttonshouldnotbeactive"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_newMessageButton`).length,
         1,
-        "should have button to make a new message"
+        "shouldhavebuttontomakeanewmessage"
     );
     assert.strictEqual(
         document.querySelectorAll(`
@@ -267,7 +267,7 @@ QUnit.test('basic rendering', async function (assert) {
             .o_NotificationList
         `).length,
         1,
-        "should display thread preview list"
+        "shoulddisplaythreadpreviewlist"
     );
     assert.strictEqual(
         document.querySelectorAll(`
@@ -275,248 +275,248 @@ QUnit.test('basic rendering', async function (assert) {
             .o_NotificationList_noConversation
         `).length,
         1,
-        "should display no conversation in thread preview list"
+        "shoulddisplaynoconversationinthreadpreviewlist"
     );
 
-    await afterNextRender(() => document.querySelector(`.o_MessagingMenu_toggler`).click());
+    awaitafterNextRender(()=>document.querySelector(`.o_MessagingMenu_toggler`).click());
     assert.doesNotHaveClass(
         document.querySelector('.o_MessagingMenu'),
         "o-is-open",
-        "should mark messaging menu as closed"
+        "shouldmarkmessagingmenuasclosed"
     );
 });
 
-QUnit.test('counter is taking into account failure notification', async function (assert) {
+QUnit.test('counteristakingintoaccountfailurenotification',asyncfunction(assert){
     assert.expect(2);
 
     this.data['mail.channel'].records.push({
-        id: 31,
-        seen_message_id: 11,
+        id:31,
+        seen_message_id:11,
     });
-    // message that is expected to have a failure
+    //messagethatisexpectedtohaveafailure
     this.data['mail.message'].records.push({
-        id: 11, // random unique id, will be used to link failure to message
-        model: 'mail.channel', // expected value to link message to channel
-        res_id: 31, // id of a random channel
+        id:11,//randomuniqueid,willbeusedtolinkfailuretomessage
+        model:'mail.channel',//expectedvaluetolinkmessagetochannel
+        res_id:31,//idofarandomchannel
     });
-    // failure that is expected to be used in the test
+    //failurethatisexpectedtobeusedinthetest
     this.data['mail.notification'].records.push({
-        mail_message_id: 11, // id of the related message
-        notification_status: 'exception', // necessary value to have a failure
+        mail_message_id:11,//idoftherelatedmessage
+        notification_status:'exception',//necessaryvaluetohaveafailure
     });
-    await this.start();
+    awaitthis.start();
 
     assert.containsOnce(
         document.body,
         '.o_MessagingMenu_counter',
-        "should display a notification counter next to the messaging menu for one notification"
+        "shoulddisplayanotificationcounternexttothemessagingmenuforonenotification"
     );
     assert.strictEqual(
         document.querySelector('.o_MessagingMenu_counter').textContent,
         "1",
-        "should display a counter of '1' next to the messaging menu"
+        "shoulddisplayacounterof'1'nexttothemessagingmenu"
     );
 });
 
-QUnit.test('switch tab', async function (assert) {
+QUnit.test('switchtab',asyncfunction(assert){
     assert.expect(15);
 
-    await this.start();
+    awaitthis.start();
 
-    await afterNextRender(() => document.querySelector(`.o_MessagingMenu_toggler`).click());
+    awaitafterNextRender(()=>document.querySelector(`.o_MessagingMenu_toggler`).click());
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_tabButton[data-tab-id="all"]`).length,
         1,
-        "1 tab button should be 'All'"
+        "1tabbuttonshouldbe'All'"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_tabButton[data-tab-id="chat"]`).length,
         1,
-        "1 tab button should be 'Chat'"
+        "1tabbuttonshouldbe'Chat'"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_tabButton[data-tab-id="channel"]`).length,
         1,
-        "1 tab button should be 'Channels'"
+        "1tabbuttonshouldbe'Channels'"
     );
     assert.ok(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="all"]
         `).classList.contains('o-active'),
-        "'all' tab button should be active"
+        "'all'tabbuttonshouldbeactive"
     );
     assert.notOk(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="chat"]
         `).classList.contains('o-active'),
-        "'chat' tab button should not be active"
+        "'chat'tabbuttonshouldnotbeactive"
     );
     assert.notOk(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="channel"]
         `).classList.contains('o-active'),
-        "'channel' tab button should not be active"
+        "'channel'tabbuttonshouldnotbeactive"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_MessagingMenu_tabButton[data-tab-id="chat"]`).click()
     );
     assert.notOk(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="all"]
         `).classList.contains('o-active'),
-        "'all' tab button should become inactive"
+        "'all'tabbuttonshouldbecomeinactive"
     );
     assert.ok(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="chat"]
         `).classList.contains('o-active'),
-        "'chat' tab button should not become active"
+        "'chat'tabbuttonshouldnotbecomeactive"
     );
     assert.notOk(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="channel"]
         `).classList.contains('o-active'),
-        "'channel' tab button should stay inactive"
+        "'channel'tabbuttonshouldstayinactive"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_MessagingMenu_tabButton[data-tab-id="channel"]`).click()
     );
     assert.notOk(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="all"]
         `).classList.contains('o-active'),
-        "'all' tab button should stay active"
+        "'all'tabbuttonshouldstayactive"
     );
     assert.notOk(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="chat"]
         `).classList.contains('o-active'),
-        "'chat' tab button should become inactive"
+        "'chat'tabbuttonshouldbecomeinactive"
     );
     assert.ok(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="channel"]
         `).classList.contains('o-active'),
-        "'channel' tab button should become active"
+        "'channel'tabbuttonshouldbecomeactive"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_MessagingMenu_tabButton[data-tab-id="all"]`).click()
     );
     assert.ok(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="all"]
         `).classList.contains('o-active'),
-        "'all' tab button should become active"
+        "'all'tabbuttonshouldbecomeactive"
     );
     assert.notOk(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="chat"]
         `).classList.contains('o-active'),
-        "'chat' tab button should stay inactive"
+        "'chat'tabbuttonshouldstayinactive"
     );
     assert.notOk(
         document.querySelector(`
             .o_MessagingMenu_tabButton[data-tab-id="channel"]
         `).classList.contains('o-active'),
-        "'channel' tab button should become inactive"
+        "'channel'tabbuttonshouldbecomeinactive"
     );
 });
 
-QUnit.test('new message', async function (assert) {
+QUnit.test('newmessage',asyncfunction(assert){
     assert.expect(3);
 
-    await this.start({
-        hasChatWindow: true,
+    awaitthis.start({
+        hasChatWindow:true,
     });
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_MessagingMenu_toggler`).click()
     );
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_MessagingMenu_newMessageButton`).click()
     );
 
     assert.strictEqual(
         document.querySelectorAll(`.o_ChatWindow`).length,
         1,
-        "should have open a chat window"
+        "shouldhaveopenachatwindow"
     );
     assert.ok(
         document.querySelector(`.o_ChatWindow`).classList.contains('o-new-message'),
-        "chat window should be for new message"
+        "chatwindowshouldbefornewmessage"
     );
     assert.ok(
         document.querySelector(`.o_ChatWindow`).classList.contains('o-focused'),
-        "chat window should be focused"
+        "chatwindowshouldbefocused"
     );
 });
 
-QUnit.test('no new message when discuss is open', async function (assert) {
+QUnit.test('nonewmessagewhendiscussisopen',asyncfunction(assert){
     assert.expect(3);
 
-    await this.start({
-        autoOpenDiscuss: true,
-        hasDiscuss: true,
+    awaitthis.start({
+        autoOpenDiscuss:true,
+        hasDiscuss:true,
     });
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_MessagingMenu_toggler`).click()
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_newMessageButton`).length,
         0,
-        "should not have 'new message' when discuss is open"
+        "shouldnothave'newmessage'whendiscussisopen"
     );
 
-    // simulate closing discuss app
-    await afterNextRender(() => this.discussWidget.on_detach_callback());
+    //simulateclosingdiscussapp
+    awaitafterNextRender(()=>this.discussWidget.on_detach_callback());
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_newMessageButton`).length,
         1,
-        "should have 'new message' when discuss is closed"
+        "shouldhave'newmessage'whendiscussisclosed"
     );
 
-    // simulate opening discuss app
-    await afterNextRender(() => this.discussWidget.on_attach_callback());
+    //simulateopeningdiscussapp
+    awaitafterNextRender(()=>this.discussWidget.on_attach_callback());
     assert.strictEqual(
         document.querySelectorAll(`.o_MessagingMenu_newMessageButton`).length,
         0,
-        "should not have 'new message' when discuss is open again"
+        "shouldnothave'newmessage'whendiscussisopenagain"
     );
 });
 
-QUnit.test('channel preview: basic rendering', async function (assert) {
+QUnit.test('channelpreview:basicrendering',asyncfunction(assert){
     assert.expect(9);
 
     this.data['res.partner'].records.push({
-        id: 7, // random unique id, to link message author
-        name: "Demo", // random name, will be asserted in the test
+        id:7,//randomuniqueid,tolinkmessageauthor
+        name:"Demo",//randomname,willbeassertedinthetest
     });
-    // channel that is expected to be found in the test
+    //channelthatisexpectedtobefoundinthetest
     this.data['mail.channel'].records.push({
-        id: 20, // random unique id, will be used to link message to channel
-        name: "General", // random name, will be asserted in the test
+        id:20,//randomuniqueid,willbeusedtolinkmessagetochannel
+        name:"General",//randomname,willbeassertedinthetest
     });
-    // message that is expected to be displayed in the test
+    //messagethatisexpectedtobedisplayedinthetest
     this.data['mail.message'].records.push({
-        author_id: 7, // not current partner, will be asserted in the test
-        body: "<p>test</p>", // random body, will be asserted in the test
-        channel_ids: [20], // id of related channel
-        model: 'mail.channel', // necessary to link message to channel
-        res_id: 20, // id of related channel
+        author_id:7,//notcurrentpartner,willbeassertedinthetest
+        body:"<p>test</p>",//randombody,willbeassertedinthetest
+        channel_ids:[20],//idofrelatedchannel
+        model:'mail.channel',//necessarytolinkmessagetochannel
+        res_id:20,//idofrelatedchannel
     });
-    await this.start();
+    awaitthis.start();
 
-    await afterNextRender(() => document.querySelector(`.o_MessagingMenu_toggler`).click());
+    awaitafterNextRender(()=>document.querySelector(`.o_MessagingMenu_toggler`).click());
     assert.strictEqual(
         document.querySelectorAll(`
-            .o_MessagingMenu_dropdownMenu .o_ThreadPreview
+            .o_MessagingMenu_dropdownMenu.o_ThreadPreview
         `).length,
         1,
-        "should have one preview"
+        "shouldhaveonepreview"
     );
     assert.strictEqual(
         document.querySelectorAll(`
@@ -524,7 +524,7 @@ QUnit.test('channel preview: basic rendering', async function (assert) {
             .o_ThreadPreview_sidebar
         `).length,
         1,
-        "preview should have a sidebar"
+        "previewshouldhaveasidebar"
     );
     assert.strictEqual(
         document.querySelectorAll(`
@@ -532,7 +532,7 @@ QUnit.test('channel preview: basic rendering', async function (assert) {
             .o_ThreadPreview_content
         `).length,
         1,
-        "preview should have some content"
+        "previewshouldhavesomecontent"
     );
     assert.strictEqual(
         document.querySelectorAll(`
@@ -540,7 +540,7 @@ QUnit.test('channel preview: basic rendering', async function (assert) {
             .o_ThreadPreview_header
         `).length,
         1,
-        "preview should have header in content"
+        "previewshouldhaveheaderincontent"
     );
     assert.strictEqual(
         document.querySelectorAll(`
@@ -549,14 +549,14 @@ QUnit.test('channel preview: basic rendering', async function (assert) {
             .o_ThreadPreview_name
         `).length,
         1,
-        "preview should have name in header of content"
+        "previewshouldhavenameinheaderofcontent"
     );
     assert.strictEqual(
         document.querySelector(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview_name
         `).textContent,
-        "General", "preview should have name of channel"
+        "General","previewshouldhavenameofchannel"
     );
     assert.strictEqual(
         document.querySelectorAll(`
@@ -565,7 +565,7 @@ QUnit.test('channel preview: basic rendering', async function (assert) {
             .o_ThreadPreview_core
         `).length,
         1,
-        "preview should have core in content"
+        "previewshouldhavecoreincontent"
     );
     assert.strictEqual(
         document.querySelectorAll(`
@@ -574,7 +574,7 @@ QUnit.test('channel preview: basic rendering', async function (assert) {
             .o_ThreadPreview_inlineText
         `).length,
         1,
-        "preview should have inline text in core of content"
+        "previewshouldhaveinlinetextincoreofcontent"
     );
     assert.strictEqual(
         document.querySelector(`
@@ -582,104 +582,104 @@ QUnit.test('channel preview: basic rendering', async function (assert) {
             .o_ThreadPreview_core
             .o_ThreadPreview_inlineText
         `).textContent.trim(),
-        "Demo: test",
-        "preview should have message content as inline text of core content"
+        "Demo:test",
+        "previewshouldhavemessagecontentasinlinetextofcorecontent"
     );
 });
 
-QUnit.test('filtered previews', async function (assert) {
+QUnit.test('filteredpreviews',asyncfunction(assert){
     assert.expect(12);
 
-    // chat and channel expected to be found in the menu
+    //chatandchannelexpectedtobefoundinthemenu
     this.data['mail.channel'].records.push(
-        { channel_type: "chat", id: 10 },
-        { id: 20 },
+        {channel_type:"chat",id:10},
+        {id:20},
     );
     this.data['mail.message'].records.push(
         {
-            channel_ids: [10], // id of related channel
-            model: 'mail.channel', // to link message to channel
-            res_id: 10, // id of related channel
+            channel_ids:[10],//idofrelatedchannel
+            model:'mail.channel',//tolinkmessagetochannel
+            res_id:10,//idofrelatedchannel
         },
         {
-            channel_ids: [20], // id of related channel
-            model: 'mail.channel', // to link message to channel
-            res_id: 20, // id of related channel
+            channel_ids:[20],//idofrelatedchannel
+            model:'mail.channel',//tolinkmessagetochannel
+            res_id:20,//idofrelatedchannel
         },
     );
-    await this.start();
+    awaitthis.start();
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_MessagingMenu_toggler`).click()
     );
     assert.strictEqual(
-        document.querySelectorAll(`.o_MessagingMenu_dropdownMenu .o_ThreadPreview`).length,
+        document.querySelectorAll(`.o_MessagingMenu_dropdownMenu.o_ThreadPreview`).length,
         2,
-        "should have 2 previews"
+        "shouldhave2previews"
     );
     assert.strictEqual(
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
                 this.env.models['mail.thread'].findFromIdentifyingData({
-                    id: 10,
-                    model: 'mail.channel',
+                    id:10,
+                    model:'mail.channel',
                 }).localId
             }"]
         `).length,
         1,
-        "should have preview of chat"
+        "shouldhavepreviewofchat"
     );
     assert.strictEqual(
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
                 this.env.models['mail.thread'].findFromIdentifyingData({
-                    id: 20,
-                    model: 'mail.channel',
+                    id:20,
+                    model:'mail.channel',
                 }).localId
             }"]
         `).length,
         1,
-        "should have preview of channel"
+        "shouldhavepreviewofchannel"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_MessagingMenu_tabButton[data-tab-id="chat"]').click()
     );
     assert.strictEqual(
-        document.querySelectorAll(`.o_MessagingMenu_dropdownMenu .o_ThreadPreview`).length,
+        document.querySelectorAll(`.o_MessagingMenu_dropdownMenu.o_ThreadPreview`).length,
         1,
-        "should have one preview"
+        "shouldhaveonepreview"
     );
     assert.strictEqual(
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
                 this.env.models['mail.thread'].findFromIdentifyingData({
-                    id: 10,
-                    model: 'mail.channel',
+                    id:10,
+                    model:'mail.channel',
                 }).localId
             }"]
         `).length,
         1,
-        "should have preview of chat"
+        "shouldhavepreviewofchat"
     );
     assert.strictEqual(
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
                 this.env.models['mail.thread'].findFromIdentifyingData({
-                    id: 20,
-                    model: 'mail.channel',
+                    id:20,
+                    model:'mail.channel',
                 }).localId
             }"]
         `).length,
         0,
-        "should not have preview of channel"
+        "shouldnothavepreviewofchannel"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_MessagingMenu_tabButton[data-tab-id="channel"]').click()
     );
     assert.strictEqual(
@@ -688,218 +688,218 @@ QUnit.test('filtered previews', async function (assert) {
             .o_ThreadPreview
         `).length,
         1,
-        "should have one preview"
+        "shouldhaveonepreview"
     );
     assert.strictEqual(
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
                 this.env.models['mail.thread'].findFromIdentifyingData({
-                    id: 10,
-                    model: 'mail.channel',
+                    id:10,
+                    model:'mail.channel',
                 }).localId
             }"]
         `).length,
         0,
-        "should not have preview of chat"
+        "shouldnothavepreviewofchat"
     );
     assert.strictEqual(
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
                 this.env.models['mail.thread'].findFromIdentifyingData({
-                    id: 20,
-                    model: 'mail.channel',
+                    id:20,
+                    model:'mail.channel',
                 }).localId
             }"]
         `).length,
         1,
-        "should have preview of channel"
+        "shouldhavepreviewofchannel"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_MessagingMenu_tabButton[data-tab-id="all"]').click()
     );
     assert.strictEqual(
-        document.querySelectorAll(`.o_MessagingMenu_dropdownMenu .o_ThreadPreview`).length,
+        document.querySelectorAll(`.o_MessagingMenu_dropdownMenu.o_ThreadPreview`).length,
         2,
-        "should have 2 previews"
+        "shouldhave2previews"
     );
     assert.strictEqual(
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
                 this.env.models['mail.thread'].findFromIdentifyingData({
-                    id: 10,
-                    model: 'mail.channel',
+                    id:10,
+                    model:'mail.channel',
                 }).localId
             }"]
         `).length,
         1,
-        "should have preview of chat"
+        "shouldhavepreviewofchat"
     );
     assert.strictEqual(
         document.querySelectorAll(`
             .o_MessagingMenu_dropdownMenu
             .o_ThreadPreview[data-thread-local-id="${
                 this.env.models['mail.thread'].findFromIdentifyingData({
-                    id: 20,
-                    model: 'mail.channel',
+                    id:20,
+                    model:'mail.channel',
                 }).localId
             }"]
         `).length,
         1,
-        "should have preview of channel"
+        "shouldhavepreviewofchannel"
     );
 });
 
-QUnit.test('open chat window from preview', async function (assert) {
+QUnit.test('openchatwindowfrompreview',asyncfunction(assert){
     assert.expect(1);
 
-    // channel expected to be found in the menu, only its existence matters, data are irrelevant
+    //channelexpectedtobefoundinthemenu,onlyitsexistencematters,dataareirrelevant
     this.data['mail.channel'].records.push({});
-    await this.start({
-        hasChatWindow: true,
+    awaitthis.start({
+        hasChatWindow:true,
     });
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_MessagingMenu_toggler`).click()
     );
-    await afterNextRender(() =>
-        document.querySelector(`.o_MessagingMenu_dropdownMenu .o_ThreadPreview`).click()
+    awaitafterNextRender(()=>
+        document.querySelector(`.o_MessagingMenu_dropdownMenu.o_ThreadPreview`).click()
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_ChatWindow`).length,
         1,
-        "should have open a chat window"
+        "shouldhaveopenachatwindow"
     );
 });
 
-QUnit.test('no code injection in message body preview', async function (assert) {
+QUnit.test('nocodeinjectioninmessagebodypreview',asyncfunction(assert){
     assert.expect(5);
 
-    this.data['mail.channel'].records.push({ id: 11 });
+    this.data['mail.channel'].records.push({id:11});
     this.data['mail.message'].records.push({
-        body: "<p><em>&shoulnotberaised</em><script>throw new Error('CodeInjectionError');</script></p>",
-        channel_ids: [11],
+        body:"<p><em>&shoulnotberaised</em><script>thrownewError('CodeInjectionError');</script></p>",
+        channel_ids:[11],
     });
-    await this.start();
+    awaitthis.start();
 
-    await afterNextRender(() => {
+    awaitafterNextRender(()=>{
         document.querySelector(`.o_MessagingMenu_toggler`).click();
     });
     assert.containsOnce(
         document.body,
-        '.o_MessagingMenu_dropdownMenu .o_ThreadPreview',
-        "should display a preview",
+        '.o_MessagingMenu_dropdownMenu.o_ThreadPreview',
+        "shoulddisplayapreview",
     );
     assert.containsOnce(
         document.body,
         '.o_ThreadPreview_core',
-        "preview should have core in content",
+        "previewshouldhavecoreincontent",
     );
     assert.containsOnce(
         document.body,
         '.o_ThreadPreview_inlineText',
-        "preview should have inline text in core of content",
+        "previewshouldhaveinlinetextincoreofcontent",
     );
     assert.strictEqual(
         document.querySelector('.o_ThreadPreview_inlineText')
-            .textContent.replace(/\s/g, ""),
+            .textContent.replace(/\s/g,""),
         "You:&shoulnotberaisedthrownewError('CodeInjectionError');",
-        "should display correct uninjected last message inline content"
+        "shoulddisplaycorrectuninjectedlastmessageinlinecontent"
     );
     assert.containsNone(
         document.querySelector('.o_ThreadPreview_inlineText'),
         'script',
-        "last message inline content should not have any code injection"
+        "lastmessageinlinecontentshouldnothaveanycodeinjection"
     );
 });
 
-QUnit.test('no code injection in message body preview from sanitized message', async function (assert) {
+QUnit.test('nocodeinjectioninmessagebodypreviewfromsanitizedmessage',asyncfunction(assert){
     assert.expect(5);
 
-    this.data['mail.channel'].records.push({ id: 11 });
+    this.data['mail.channel'].records.push({id:11});
     this.data['mail.message'].records.push({
-        body: "<p>&lt;em&gt;&shoulnotberaised&lt;/em&gt;&lt;script&gt;throw new Error('CodeInjectionError');&lt;/script&gt;</p>",
-        channel_ids: [11],
+        body:"<p>&lt;em&gt;&shoulnotberaised&lt;/em&gt;&lt;script&gt;thrownewError('CodeInjectionError');&lt;/script&gt;</p>",
+        channel_ids:[11],
     });
-    await this.start();
+    awaitthis.start();
 
-    await afterNextRender(() => {
+    awaitafterNextRender(()=>{
         document.querySelector(`.o_MessagingMenu_toggler`).click();
     });
     assert.containsOnce(
         document.body,
-        '.o_MessagingMenu_dropdownMenu .o_ThreadPreview',
-        "should display a preview",
+        '.o_MessagingMenu_dropdownMenu.o_ThreadPreview',
+        "shoulddisplayapreview",
     );
     assert.containsOnce(
         document.body,
         '.o_ThreadPreview_core',
-        "preview should have core in content",
+        "previewshouldhavecoreincontent",
     );
     assert.containsOnce(
         document.body,
         '.o_ThreadPreview_inlineText',
-        "preview should have inline text in core of content",
+        "previewshouldhaveinlinetextincoreofcontent",
     );
     assert.strictEqual(
         document.querySelector('.o_ThreadPreview_inlineText')
-            .textContent.replace(/\s/g, ""),
+            .textContent.replace(/\s/g,""),
         "You:<em>&shoulnotberaised</em><script>thrownewError('CodeInjectionError');</script>",
-        "should display correct uninjected last message inline content"
+        "shoulddisplaycorrectuninjectedlastmessageinlinecontent"
     );
     assert.containsNone(
         document.querySelector('.o_ThreadPreview_inlineText'),
         'script',
-        "last message inline content should not have any code injection"
+        "lastmessageinlinecontentshouldnothaveanycodeinjection"
     );
 });
 
-QUnit.test('<br/> tags in message body preview are transformed in spaces', async function (assert) {
+QUnit.test('<br/>tagsinmessagebodypreviewaretransformedinspaces',asyncfunction(assert){
     assert.expect(4);
 
-    this.data['mail.channel'].records.push({ id: 11 });
+    this.data['mail.channel'].records.push({id:11});
     this.data['mail.message'].records.push({
-        body: "<p>a<br/>b<br>c<br   />d<br     ></p>",
-        channel_ids: [11],
+        body:"<p>a<br/>b<br>c<br  />d<br    ></p>",
+        channel_ids:[11],
     });
-    await this.start();
+    awaitthis.start();
 
-    await afterNextRender(() => {
+    awaitafterNextRender(()=>{
         document.querySelector(`.o_MessagingMenu_toggler`).click();
     });
     assert.containsOnce(
         document.body,
-        '.o_MessagingMenu_dropdownMenu .o_ThreadPreview',
-        "should display a preview",
+        '.o_MessagingMenu_dropdownMenu.o_ThreadPreview',
+        "shoulddisplayapreview",
     );
     assert.containsOnce(
         document.body,
         '.o_ThreadPreview_core',
-        "preview should have core in content",
+        "previewshouldhavecoreincontent",
     );
     assert.containsOnce(
         document.body,
         '.o_ThreadPreview_inlineText',
-        "preview should have inline text in core of content",
+        "previewshouldhaveinlinetextincoreofcontent",
     );
     assert.strictEqual(
         document.querySelector('.o_ThreadPreview_inlineText').textContent,
-        "You: a b c d",
-        "should display correct last message inline content with brs replaced by spaces"
+        "You:abcd",
+        "shoulddisplaycorrectlastmessageinlinecontentwithbrsreplacedbyspaces"
     );
 });
 
-QUnit.test('rendering with FlectraBot has a request (default)', async function (assert) {
+QUnit.test('renderingwithFlectraBothasarequest(default)',asyncfunction(assert){
     assert.expect(4);
 
-    await this.start({
-        env: {
-            browser: {
-                Notification: {
-                    permission: 'default',
+    awaitthis.start({
+        env:{
+            browser:{
+                Notification:{
+                    permission:'default',
                 },
             },
         },
@@ -907,37 +907,37 @@ QUnit.test('rendering with FlectraBot has a request (default)', async function (
 
     assert.ok(
         document.querySelector('.o_MessagingMenu_counter'),
-        "should display a notification counter next to the messaging menu for FlectraBot request"
+        "shoulddisplayanotificationcounternexttothemessagingmenuforFlectraBotrequest"
     );
     assert.strictEqual(
         document.querySelector('.o_MessagingMenu_counter').textContent,
         "1",
-        "should display a counter of '1' next to the messaging menu"
+        "shoulddisplayacounterof'1'nexttothemessagingmenu"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_MessagingMenu_toggler').click()
     );
     assert.containsOnce(
         document.body,
         '.o_NotificationRequest',
-        "should display a notification in the messaging menu"
+        "shoulddisplayanotificationinthemessagingmenu"
     );
     assert.strictEqual(
         document.querySelector('.o_NotificationRequest_name').textContent.trim(),
-        'FlectraBot has a request',
-        "notification should display that FlectraBot has a request"
+        'FlectraBothasarequest',
+        "notificationshoulddisplaythatFlectraBothasarequest"
     );
 });
 
-QUnit.test('rendering without FlectraBot has a request (denied)', async function (assert) {
+QUnit.test('renderingwithoutFlectraBothasarequest(denied)',asyncfunction(assert){
     assert.expect(2);
 
-    await this.start({
-        env: {
-            browser: {
-                Notification: {
-                    permission: 'denied',
+    awaitthis.start({
+        env:{
+            browser:{
+                Notification:{
+                    permission:'denied',
                 },
             },
         },
@@ -946,27 +946,27 @@ QUnit.test('rendering without FlectraBot has a request (denied)', async function
     assert.containsNone(
         document.body,
         '.o_MessagingMenu_counter',
-        "should not display a notification counter next to the messaging menu"
+        "shouldnotdisplayanotificationcounternexttothemessagingmenu"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_MessagingMenu_toggler').click()
     );
     assert.containsNone(
         document.body,
         '.o_NotificationRequest',
-        "should display no notification in the messaging menu"
+        "shoulddisplaynonotificationinthemessagingmenu"
     );
 });
 
-QUnit.test('rendering without FlectraBot has a request (accepted)', async function (assert) {
+QUnit.test('renderingwithoutFlectraBothasarequest(accepted)',asyncfunction(assert){
     assert.expect(2);
 
-    await this.start({
-        env: {
-            browser: {
-                Notification: {
-                    permission: 'granted',
+    awaitthis.start({
+        env:{
+            browser:{
+                Notification:{
+                    permission:'granted',
                 },
             },
         },
@@ -975,60 +975,60 @@ QUnit.test('rendering without FlectraBot has a request (accepted)', async functi
     assert.containsNone(
         document.body,
         '.o_MessagingMenu_counter',
-        "should not display a notification counter next to the messaging menu"
+        "shouldnotdisplayanotificationcounternexttothemessagingmenu"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_MessagingMenu_toggler').click()
     );
     assert.containsNone(
         document.body,
         '.o_NotificationRequest',
-        "should display no notification in the messaging menu"
+        "shoulddisplaynonotificationinthemessagingmenu"
     );
 });
 
-QUnit.test('respond to notification prompt (denied)', async function (assert) {
+QUnit.test('respondtonotificationprompt(denied)',asyncfunction(assert){
     assert.expect(3);
 
-    await this.start({
-        env: {
-            browser: {
-                Notification: {
-                    permission: 'default',
-                    async requestPermission() {
-                        this.permission = 'denied';
-                        return this.permission;
+    awaitthis.start({
+        env:{
+            browser:{
+                Notification:{
+                    permission:'default',
+                    asyncrequestPermission(){
+                        this.permission='denied';
+                        returnthis.permission;
                     },
                 },
             },
         },
     });
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_MessagingMenu_toggler').click()
     );
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_NotificationRequest').click()
     );
     assert.containsOnce(
         document.body,
-        '.toast .o_notification_content',
-        "should display a toast notification with the deny confirmation"
+        '.toast.o_notification_content',
+        "shoulddisplayatoastnotificationwiththedenyconfirmation"
     );
     assert.containsNone(
         document.body,
         '.o_MessagingMenu_counter',
-        "should not display a notification counter next to the messaging menu"
+        "shouldnotdisplayanotificationcounternexttothemessagingmenu"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_MessagingMenu_toggler').click()
     );
     assert.containsNone(
         document.body,
         '.o_NotificationRequest',
-        "should display no notification in the messaging menu"
+        "shoulddisplaynonotificationinthemessagingmenu"
     );
 });
 

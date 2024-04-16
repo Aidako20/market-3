@@ -1,136 +1,136 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import re
-import werkzeug
+importre
+importwerkzeug
 
-from flectra import models, fields, api, _
-from flectra.exceptions import AccessDenied, ValidationError
+fromflectraimportmodels,fields,api,_
+fromflectra.exceptionsimportAccessDenied,ValidationError
 
-import logging
-_logger = logging.getLogger(__name__)
+importlogging
+_logger=logging.getLogger(__name__)
 
 
-class WebsiteRoute(models.Model):
-    _rec_name = 'path'
-    _name = 'website.route'
-    _description = "All Website Route"
-    _order = 'path'
+classWebsiteRoute(models.Model):
+    _rec_name='path'
+    _name='website.route'
+    _description="AllWebsiteRoute"
+    _order='path'
 
-    path = fields.Char('Route')
+    path=fields.Char('Route')
 
     @api.model
-    def _name_search(self, name='', args=None, operator='ilike', limit=100, name_get_uid=None):
-        res = super(WebsiteRoute, self)._name_search(name=name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
-        if not len(res):
+    def_name_search(self,name='',args=None,operator='ilike',limit=100,name_get_uid=None):
+        res=super(WebsiteRoute,self)._name_search(name=name,args=args,operator=operator,limit=limit,name_get_uid=name_get_uid)
+        ifnotlen(res):
             self._refresh()
-            return super(WebsiteRoute, self)._name_search(name=name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
-        return res
+            returnsuper(WebsiteRoute,self)._name_search(name=name,args=args,operator=operator,limit=limit,name_get_uid=name_get_uid)
+        returnres
 
-    def _refresh(self):
-        _logger.debug("Refreshing website.route")
-        ir_http = self.env['ir.http']
-        tocreate = []
-        paths = {rec.path: rec for rec in self.search([])}
-        for url, _, routing in ir_http._generate_routing_rules(self.pool._init_modules, converters=ir_http._get_converters()):
-            if 'GET' in (routing.get('methods') or ['GET']):
-                if paths.get(url):
+    def_refresh(self):
+        _logger.debug("Refreshingwebsite.route")
+        ir_http=self.env['ir.http']
+        tocreate=[]
+        paths={rec.path:recforrecinself.search([])}
+        forurl,_,routinginir_http._generate_routing_rules(self.pool._init_modules,converters=ir_http._get_converters()):
+            if'GET'in(routing.get('methods')or['GET']):
+                ifpaths.get(url):
                     paths.pop(url)
                 else:
-                    tocreate.append({'path': url})
+                    tocreate.append({'path':url})
 
-        if tocreate:
-            _logger.info("Add %d website.route" % len(tocreate))
+        iftocreate:
+            _logger.info("Add%dwebsite.route"%len(tocreate))
             self.create(tocreate)
 
-        if paths:
-            find = self.search([('path', 'in', list(paths.keys()))])
-            _logger.info("Delete %d website.route" % len(find))
+        ifpaths:
+            find=self.search([('path','in',list(paths.keys()))])
+            _logger.info("Delete%dwebsite.route"%len(find))
             find.unlink()
 
 
-class WebsiteRewrite(models.Model):
-    _name = 'website.rewrite'
-    _description = "Website rewrite"
+classWebsiteRewrite(models.Model):
+    _name='website.rewrite'
+    _description="Websiterewrite"
 
-    name = fields.Char('Name', required=True)
-    website_id = fields.Many2one('website', string="Website", ondelete='cascade', index=True)
-    active = fields.Boolean(default=True)
-    url_from = fields.Char('URL from', index=True)
-    route_id = fields.Many2one('website.route')
-    url_to = fields.Char("URL to")
-    redirect_type = fields.Selection([
-        ('404', '404 Not Found'),
-        ('301', '301 Moved permanently'),
-        ('302', '302 Moved temporarily'),
-        ('308', '308 Redirect / Rewrite'),
-    ], string='Action', default="302",
-        help='''Type of redirect/Rewrite:\n
-        301 Moved permanently: The browser will keep in cache the new url.
-        302 Moved temporarily: The browser will not keep in cache the new url and ask again the next time the new url.
-        404 Not Found: If you want remove a specific page/controller (e.g. Ecommerce is installed, but you don't want /shop on a specific website)
-        308 Redirect / Rewrite: If you want rename a controller with a new url. (Eg: /shop -> /garden - Both url will be accessible but /shop will automatically be redirected to /garden)
+    name=fields.Char('Name',required=True)
+    website_id=fields.Many2one('website',string="Website",ondelete='cascade',index=True)
+    active=fields.Boolean(default=True)
+    url_from=fields.Char('URLfrom',index=True)
+    route_id=fields.Many2one('website.route')
+    url_to=fields.Char("URLto")
+    redirect_type=fields.Selection([
+        ('404','404NotFound'),
+        ('301','301Movedpermanently'),
+        ('302','302Movedtemporarily'),
+        ('308','308Redirect/Rewrite'),
+    ],string='Action',default="302",
+        help='''Typeofredirect/Rewrite:\n
+        301Movedpermanently:Thebrowserwillkeepincachethenewurl.
+        302Movedtemporarily:Thebrowserwillnotkeepincachethenewurlandaskagainthenexttimethenewurl.
+        404NotFound:Ifyouwantremoveaspecificpage/controller(e.g.Ecommerceisinstalled,butyoudon'twant/shoponaspecificwebsite)
+        308Redirect/Rewrite:Ifyouwantrenameacontrollerwithanewurl.(Eg:/shop->/garden-Bothurlwillbeaccessiblebut/shopwillautomaticallyberedirectedto/garden)
     ''')
 
-    sequence = fields.Integer()
+    sequence=fields.Integer()
 
     @api.onchange('route_id')
-    def _onchange_route_id(self):
-        self.url_from = self.route_id.path
-        self.url_to = self.route_id.path
+    def_onchange_route_id(self):
+        self.url_from=self.route_id.path
+        self.url_to=self.route_id.path
 
-    @api.constrains('url_to', 'url_from', 'redirect_type')
-    def _check_url_to(self):
-        for rewrite in self:
-            if rewrite.redirect_type in ['301', '302', '308']:
-                if not rewrite.url_to:
-                    raise ValidationError(_('"URL to" can not be empty.'))
-                if not rewrite.url_from:
-                    raise ValidationError(_('"URL from" can not be empty.'))
+    @api.constrains('url_to','url_from','redirect_type')
+    def_check_url_to(self):
+        forrewriteinself:
+            ifrewrite.redirect_typein['301','302','308']:
+                ifnotrewrite.url_to:
+                    raiseValidationError(_('"URLto"cannotbeempty.'))
+                ifnotrewrite.url_from:
+                    raiseValidationError(_('"URLfrom"cannotbeempty.'))
 
-            if rewrite.redirect_type == '308':
-                if not rewrite.url_to.startswith('/'):
-                    raise ValidationError(_('"URL to" must start with a leading slash.'))
-                for param in re.findall('/<.*?>', rewrite.url_from):
-                    if param not in rewrite.url_to:
-                        raise ValidationError(_('"URL to" must contain parameter %s used in "URL from".') % param)
-                for param in re.findall('/<.*?>', rewrite.url_to):
-                    if param not in rewrite.url_from:
-                        raise ValidationError(_('"URL to" cannot contain parameter %s which is not used in "URL from".') % param)
+            ifrewrite.redirect_type=='308':
+                ifnotrewrite.url_to.startswith('/'):
+                    raiseValidationError(_('"URLto"muststartwithaleadingslash.'))
+                forparaminre.findall('/<.*?>',rewrite.url_from):
+                    ifparamnotinrewrite.url_to:
+                        raiseValidationError(_('"URLto"mustcontainparameter%susedin"URLfrom".')%param)
+                forparaminre.findall('/<.*?>',rewrite.url_to):
+                    ifparamnotinrewrite.url_from:
+                        raiseValidationError(_('"URLto"cannotcontainparameter%swhichisnotusedin"URLfrom".')%param)
                 try:
-                    converters = self.env['ir.http']._get_converters()
-                    routing_map = werkzeug.routing.Map(strict_slashes=False, converters=converters)
-                    rule = werkzeug.routing.Rule(rewrite.url_to)
+                    converters=self.env['ir.http']._get_converters()
+                    routing_map=werkzeug.routing.Map(strict_slashes=False,converters=converters)
+                    rule=werkzeug.routing.Rule(rewrite.url_to)
                     routing_map.add(rule)
-                except ValueError as e:
-                    raise ValidationError(_('"URL to" is invalid: %s') % e)
+                exceptValueErrorase:
+                    raiseValidationError(_('"URLto"isinvalid:%s')%e)
 
-    def name_get(self):
-        result = []
-        for rewrite in self:
-            name = "%s - %s" % (rewrite.redirect_type, rewrite.name)
-            result.append((rewrite.id, name))
-        return result
+    defname_get(self):
+        result=[]
+        forrewriteinself:
+            name="%s-%s"%(rewrite.redirect_type,rewrite.name)
+            result.append((rewrite.id,name))
+        returnresult
 
     @api.model
-    def create(self, vals):
-        res = super(WebsiteRewrite, self).create(vals)
+    defcreate(self,vals):
+        res=super(WebsiteRewrite,self).create(vals)
         self._invalidate_routing()
-        return res
+        returnres
 
-    def write(self, vals):
-        res = super(WebsiteRewrite, self).write(vals)
+    defwrite(self,vals):
+        res=super(WebsiteRewrite,self).write(vals)
         self._invalidate_routing()
-        return res
+        returnres
 
-    def unlink(self):
-        res = super(WebsiteRewrite, self).unlink()
+    defunlink(self):
+        res=super(WebsiteRewrite,self).unlink()
         self._invalidate_routing()
-        return res
+        returnres
 
-    def _invalidate_routing(self):
-        # call clear_caches on this worker to reload routing table
+    def_invalidate_routing(self):
+        #callclear_cachesonthisworkertoreloadroutingtable
         self.env['ir.http'].clear_caches()
 
-    def refresh_routes(self):
+    defrefresh_routes(self):
         self.env['website.route']._refresh()

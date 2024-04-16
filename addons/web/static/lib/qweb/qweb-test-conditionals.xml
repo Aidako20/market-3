@@ -1,68 +1,68 @@
 <templates>
-    <t t-name="boolean-value-condition">
-        <t t-if="condition">ok</t>
+    <tt-name="boolean-value-condition">
+        <tt-if="condition">ok</t>
     </t>
-    <params id="boolean-value-condition">{"condition": true}</params>
-    <result id="boolean-value-condition">ok</result>
+    <paramsid="boolean-value-condition">{"condition":true}</params>
+    <resultid="boolean-value-condition">ok</result>
 
-    <t t-name="boolean-value-condition-false">
-        <t t-if="condition">fail</t>
+    <tt-name="boolean-value-condition-false">
+        <tt-if="condition">fail</t>
     </t>
-    <params id="boolean-value-condition-false">{"condition": false}</params>
-    <result id="boolean-value-condition-false"/>
+    <paramsid="boolean-value-condition-false">{"condition":false}</params>
+    <resultid="boolean-value-condition-false"/>
 
-    <t t-name="boolean-value-condition-missing">
-        <t t-if="condition">fail</t>
+    <tt-name="boolean-value-condition-missing">
+        <tt-if="condition">fail</t>
     </t>
-    <result id="boolean-value-condition-missing"/>
+    <resultid="boolean-value-condition-missing"/>
 
-    <t t-name="boolean-value-condition-elif">
-        <t t-if="color == 'black'">black pearl</t>
-        <t t-elif="color == 'yellow'">yellow submarine</t>
-        <t t-elif="color == 'red'">red is dead</t>
-        <t t-else="">beer</t>
+    <tt-name="boolean-value-condition-elif">
+        <tt-if="color=='black'">blackpearl</t>
+        <tt-elif="color=='yellow'">yellowsubmarine</t>
+        <tt-elif="color=='red'">redisdead</t>
+        <tt-else="">beer</t>
     </t>
-    <params id="boolean-value-condition-elif">{"color": "red"}</params>
-    <result id="boolean-value-condition-elif">red is dead</result>
+    <paramsid="boolean-value-condition-elif">{"color":"red"}</params>
+    <resultid="boolean-value-condition-elif">redisdead</result>
 
-    <t t-name="boolean-value-condition-else">
-        <div><span>begin</span><t t-if="condition">ok</t>
-        <t t-else="">ok-else</t><span>end</span></div>
+    <tt-name="boolean-value-condition-else">
+        <div><span>begin</span><tt-if="condition">ok</t>
+        <tt-else="">ok-else</t><span>end</span></div>
     </t>
-    <params id="boolean-value-condition-else">{"condition": true}</params>
-    <result id="boolean-value-condition-else"><![CDATA[<div><span>begin</span>ok<span>end</span></div>]]></result>
+    <paramsid="boolean-value-condition-else">{"condition":true}</params>
+    <resultid="boolean-value-condition-else"><![CDATA[<div><span>begin</span>ok<span>end</span></div>]]></result>
 
-    <t t-name="boolean-value-condition-false-else">
-        <div><span>begin</span><t t-if="condition">fail</t>
-        <t t-else="">fail-else</t><span>end</span></div>
+    <tt-name="boolean-value-condition-false-else">
+        <div><span>begin</span><tt-if="condition">fail</t>
+        <tt-else="">fail-else</t><span>end</span></div>
     </t>
-    <params id="boolean-value-condition-false-else">{"condition": false}</params>
-    <result id="boolean-value-condition-false-else"><![CDATA[<div><span>begin</span>fail-else<span>end</span></div>]]></result>
+    <paramsid="boolean-value-condition-false-else">{"condition":false}</params>
+    <resultid="boolean-value-condition-false-else"><![CDATA[<div><span>begin</span>fail-else<span>end</span></div>]]></result>
 
-    <t t-name="comment-branching">
-        <t t-if="condition == 'if'">if</t>
-        <t t-elif="condition == 'elif1'">elif1</t>
-        <!-- Comment ignored PART OF THE TEST !!!  -->
-        <t t-elif="condition == 'elif2'">elif2</t>
-        <t t-else="">else</t>
+    <tt-name="comment-branching">
+        <tt-if="condition=='if'">if</t>
+        <tt-elif="condition=='elif1'">elif1</t>
+        <!--CommentignoredPARTOFTHETEST!!! -->
+        <tt-elif="condition=='elif2'">elif2</t>
+        <tt-else="">else</t>
     </t>
-    <params id="comment-branching">{"condition": "elif1"}</params>
-    <result id="comment-branching"><![CDATA[elif1]]></result>
+    <paramsid="comment-branching">{"condition":"elif1"}</params>
+    <resultid="comment-branching"><![CDATA[elif1]]></result>
 
-    <t t-name="comment-branching-1">
-        <t t-if="condition == 'if'">if</t>
-        <t t-elif="condition == 'elif1'">elif1</t>
-        <!-- Comment ignored PART OF THE TEST !!!  -->
-        <t t-elif="condition == 'elif2'">elif2</t>
-        <t t-else="">else</t>
+    <tt-name="comment-branching-1">
+        <tt-if="condition=='if'">if</t>
+        <tt-elif="condition=='elif1'">elif1</t>
+        <!--CommentignoredPARTOFTHETEST!!! -->
+        <tt-elif="condition=='elif2'">elif2</t>
+        <tt-else="">else</t>
     </t>
-    <params id="comment-branching-1">{"condition": "elif2"}</params>
-    <result id="comment-branching-1"><![CDATA[elif2]]></result>
+    <paramsid="comment-branching-1">{"condition":"elif2"}</params>
+    <resultid="comment-branching-1"><![CDATA[elif2]]></result>
 
-    <t t-name="comment-branching-2">
-        <div t-if="condition == 'if'">if</div><!-- Comment ignored PART OF THE TEST !!!  --><div>sometext</div>
+    <tt-name="comment-branching-2">
+        <divt-if="condition=='if'">if</div><!--CommentignoredPARTOFTHETEST!!! --><div>sometext</div>
     </t>
-    <params id="comment-branching-2">{"condition": "if"}</params>
-    <result id="comment-branching-2"><![CDATA[<div>if</div><div>sometext</div>]]></result>
+    <paramsid="comment-branching-2">{"condition":"if"}</params>
+    <resultid="comment-branching-2"><![CDATA[<div>if</div><div>sometext</div>]]></result>
 
 </templates>

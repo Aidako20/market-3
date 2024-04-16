@@ -1,37 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="res_config_settings_view_form" model="ir.ui.view">
-            <field name="name">res.config.settings.view.form.inherit.product</field>
-            <field name="model">res.config.settings</field>
-            <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//div[@id='multi_company']" position="before">
-                    <h2>Units of Measure</h2>
-                    <div class="row mt16 o_settings_container" id="product_general_settings">
-                        <div class="col-12 col-lg-6 o_setting_box" id="weight_uom_setting">
-                            <div class="o_setting_left_pane">
+        <recordid="res_config_settings_view_form"model="ir.ui.view">
+            <fieldname="name">res.config.settings.view.form.inherit.product</field>
+            <fieldname="model">res.config.settings</field>
+            <fieldname="inherit_id"ref="base_setup.res_config_settings_view_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//div[@id='multi_company']"position="before">
+                    <h2>UnitsofMeasure</h2>
+                    <divclass="rowmt16o_settings_container"id="product_general_settings">
+                        <divclass="col-12col-lg-6o_setting_box"id="weight_uom_setting">
+                            <divclass="o_setting_left_pane">
                             </div>
-                            <div class="o_setting_right_pane">
-                                <label for="product_weight_in_lbs" string="Weight UoM"/>
-                                <div class="text-muted">
-                                    Define your weight unit of measure
+                            <divclass="o_setting_right_pane">
+                                <labelfor="product_weight_in_lbs"string="WeightUoM"/>
+                                <divclass="text-muted">
+                                    Defineyourweightunitofmeasure
                                 </div>
-                                <div class="content-group">
-                                    <div class="mt16">
-                                        <field name="product_weight_in_lbs" class="o_light_label" widget="radio"/>
+                                <divclass="content-group">
+                                    <divclass="mt16">
+                                        <fieldname="product_weight_in_lbs"class="o_light_label"widget="radio"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-6 o_setting_box" id="manage_volume_uom_setting">
-                            <div class="o_setting_right_pane">
-                                <label for="product_volume_volume_in_cubic_feet" string="Volume UoM "/>
-                                <div class="text-muted">
-                                    Define your volume unit of measure
+                        <divclass="col-12col-lg-6o_setting_box"id="manage_volume_uom_setting">
+                            <divclass="o_setting_right_pane">
+                                <labelfor="product_volume_volume_in_cubic_feet"string="VolumeUoM"/>
+                                <divclass="text-muted">
+                                    Defineyourvolumeunitofmeasure
                                 </div>
-                                <div class="content-group">
-                                    <div class="mt16">
-                                        <field name="product_volume_volume_in_cubic_feet" class="o_light_label" widget="radio"/>
+                                <divclass="content-group">
+                                    <divclass="mt16">
+                                        <fieldname="product_volume_volume_in_cubic_feet"class="o_light_label"widget="radio"/>
                                     </div>
                                 </div>
                             </div>

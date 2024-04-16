@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <template id="blacklist_main" name="Unsubscribed">
-        <t t-call="portal.frontend_layout">
-            <div class="container mb64">
-                <div class="row">
-                    <div class="col-lg-6 offset-lg-3">
-                        <h3>SMS Subscription</h3>
+    <templateid="blacklist_main"name="Unsubscribed">
+        <tt-call="portal.frontend_layout">
+            <divclass="containermb64">
+                <divclass="row">
+                    <divclass="col-lg-6offset-lg-3">
+                        <h3>SMSSubscription</h3>
 
-                        <form t-att-action="'/sms/%s/unsubscribe/%s' % (mailing_id, trace_code)" method="post">
-                            <p>Please enter your phone number</p>
-                            <div class="form-group row">
-                                <label for="sms_number" class="col-sm-2 col-form-label">Number</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="sms_number" id="sms_number" t-att-required="true"/>
+                        <formt-att-action="'/sms/%s/unsubscribe/%s'%(mailing_id,trace_code)"method="post">
+                            <p>Pleaseenteryourphonenumber</p>
+                            <divclass="form-grouprow">
+                                <labelfor="sms_number"class="col-sm-2col-form-label">Number</label>
+                                <divclass="col-sm-10">
+                                    <inputtype="text"class="form-control"name="sms_number"id="sms_number"t-att-required="true"/>
                                 </div>
                             </div>
-                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                            <input type="hidden" name="trace_code" t-att-value="trace_code"/>
-                            <input type="hidden" name="mailing_id" t-att-value="mailing_id"/>
-                            <div class="form-group row">
-                                <div class="col-sm-10 offset-sm-2">
-                                    <button type="submit" class="btn btn-primary">Unsubscribe me</button>
+                            <inputtype="hidden"name="csrf_token"t-att-value="request.csrf_token()"/>
+                            <inputtype="hidden"name="trace_code"t-att-value="trace_code"/>
+                            <inputtype="hidden"name="mailing_id"t-att-value="mailing_id"/>
+                            <divclass="form-grouprow">
+                                <divclass="col-sm-10offset-sm-2">
+                                    <buttontype="submit"class="btnbtn-primary">Unsubscribeme</button>
                                 </div>
                             </div>
                         </form>
@@ -30,26 +30,26 @@
         </t>
     </template>
 
-    <template id="blacklist_number" name="Unsubscribed">
-        <t t-call="portal.frontend_layout">
-            <div class="container mb64">
-                <div class="row">
-                    <div class="col-lg-6 offset-lg-3">
-                        <h3>SMS Subscription</h3>
+    <templateid="blacklist_number"name="Unsubscribed">
+        <tt-call="portal.frontend_layout">
+            <divclass="containermb64">
+                <divclass="row">
+                    <divclass="col-lg-6offset-lg-3">
+                        <h3>SMSSubscription</h3>
 
-                        <div t-if="unsubscribe_error" class="alert alert-danger text-center" role="alert">
-                            <p>There was an error when trying to unsubscribe <strong t-esc="sms_number"/></p>
-                            <p t-esc="unsubscribe_error"/>
+                        <divt-if="unsubscribe_error"class="alertalert-dangertext-center"role="alert">
+                            <p>Therewasanerrorwhentryingtounsubscribe<strongt-esc="sms_number"/></p>
+                            <pt-esc="unsubscribe_error"/>
                         </div>
-                        <div t-else="" class="alert alert-success text-center" role="status">
-                            <t t-if="lists_optout">
-                                <p><strong t-esc="sms_number"/> has been successfully removed from</p>
-                                <t t-foreach="lists_optout" t-as="list_id">
-                                    <strong t-esc="list_id.name"/><br />
+                        <divt-else=""class="alertalert-successtext-center"role="status">
+                            <tt-if="lists_optout">
+                                <p><strongt-esc="sms_number"/>hasbeensuccessfullyremovedfrom</p>
+                                <tt-foreach="lists_optout"t-as="list_id">
+                                    <strongt-esc="list_id.name"/><br/>
                                 </t>
                             </t>
-                            <p t-else="">
-                                <strong t-esc="sms_number"/> has been successfully blacklisted
+                            <pt-else="">
+                                <strongt-esc="sms_number"/>hasbeensuccessfullyblacklisted
                             </p>
                         </div>
                     </div>

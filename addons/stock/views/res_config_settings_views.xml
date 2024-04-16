@@ -1,394 +1,394 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="res_config_settings_view_form" model="ir.ui.view">
-            <field name="name">res.config.settings.view.form.inherit.stock</field>
-            <field name="model">res.config.settings</field>
-            <field name="priority" eval="30"/>
-            <field name="inherit_id" ref="base.res_config_settings_view_form" />
-            <field name="arch" type="xml">
-                <xpath expr="//div[hasclass('settings')]" position="inside" >
-                    <div class="app_settings_block" data-string="Inventory" string="Inventory" data-key="stock" groups="stock.group_stock_manager">
+        <recordid="res_config_settings_view_form"model="ir.ui.view">
+            <fieldname="name">res.config.settings.view.form.inherit.stock</field>
+            <fieldname="model">res.config.settings</field>
+            <fieldname="priority"eval="30"/>
+            <fieldname="inherit_id"ref="base.res_config_settings_view_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//div[hasclass('settings')]"position="inside">
+                    <divclass="app_settings_block"data-string="Inventory"string="Inventory"data-key="stock"groups="stock.group_stock_manager">
                         <h2>Operations</h2>
-                        <div class="row mt16 o_settings_container" name="operations_setting_container">
-                            <div class="col-12 col-lg-6 o_setting_box"
+                        <divclass="rowmt16o_settings_container"name="operations_setting_container">
+                            <divclass="col-12col-lg-6o_setting_box"
                                 id="product_packs_tracking"
-                                title="Put your products in packs (e.g. parcels, boxes) and track them">
-                                <div class="o_setting_left_pane">
-                                    <field name="group_stock_tracking_lot"/>
+                                title="Putyourproductsinpacks(e.g.parcels,boxes)andtrackthem">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="group_stock_tracking_lot"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="group_stock_tracking_lot"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/management/products/usage.html#packages" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Put your products in packs (e.g. parcels, boxes) and track them
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="group_stock_tracking_lot"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/management/products/usage.html#packages"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        Putyourproductsinpacks(e.g.parcels,boxes)andtrackthem
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 o_setting_box" id="process_transfers">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_stock_picking_batch"/>
+                            <divclass="col-12col-lg-6o_setting_box"id="process_transfers">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_stock_picking_batch"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="module_stock_picking_batch"/>
-                                    <div class="text-muted">
-                                        Process transfers in batch per worker
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="module_stock_picking_batch"/>
+                                    <divclass="text-muted">
+                                        Processtransfersinbatchperworker
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 o_setting_box" id="warning_info">
-                                <div class="o_setting_left_pane">
-                                    <field name="group_warning_stock"/>
+                            <divclass="col-12col-lg-6o_setting_box"id="warning_info">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="group_warning_stock"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="group_warning_stock" string="Warnings"/>
-                                    <div class="text-muted">
-                                        Get informative or blocking warnings on partners
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="group_warning_stock"string="Warnings"/>
+                                    <divclass="text-muted">
+                                        Getinformativeorblockingwarningsonpartners
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <h2>Barcode</h2>
-                        <div class="row mt16 o_settings_container" name="barcode_setting_container">
-                            <div class="col-12 col-lg-6 o_setting_box" id="process_operations_barcodes">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_stock_barcode" widget="upgrade_boolean"/>
+                        <divclass="rowmt16o_settings_container"name="barcode_setting_container">
+                            <divclass="col-12col-lg-6o_setting_box"id="process_operations_barcodes">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_stock_barcode"widget="upgrade_boolean"/>
                                 </div>
-                                <div class="o_setting_right_pane" id="barcode_settings">
-                                    <label for="module_stock_barcode"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/barcode/setup/software.html" title="Documentation" class="mr-2 o_doc_link" target="_blank"></a>
-                                    <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
-                                    <div class="text-muted" name="stock_barcode">
-                                        Process operations faster with barcodes
+                                <divclass="o_setting_right_pane"id="barcode_settings">
+                                    <labelfor="module_stock_barcode"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/barcode/setup/software.html"title="Documentation"class="mr-2o_doc_link"target="_blank"></a>
+                                    <spanclass="fafa-lgfa-building-o"title="Valuessetherearecompany-specific."groups="base.group_multi_company"/>
+                                    <divclass="text-muted"name="stock_barcode">
+                                        Processoperationsfasterwithbarcodes
                                     </div>
-                                    <div class="content-group">
-                                        <div id="use_product_barcode"/>
+                                    <divclass="content-group">
+                                        <divid="use_product_barcode"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <h2>Shipping</h2>
-                        <div class="row mt16 o_settings_container" name="shipping_setting_container">
-                            <div class="col-12 col-lg-6 o_setting_box" id="stock_move_email">
-                                <div class="o_setting_left_pane">
-                                    <field name="stock_move_email_validation"/>
+                        <divclass="rowmt16o_settings_container"name="shipping_setting_container">
+                            <divclass="col-12col-lg-6o_setting_box"id="stock_move_email">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="stock_move_email_validation"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="stock_move_email_validation" string="Email Confirmation"/>
-                                    <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
-                                    <div class="text-muted">
-                                        Send an automatic confirmation email when Delivery Orders are done
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="stock_move_email_validation"string="EmailConfirmation"/>
+                                    <spanclass="fafa-lgfa-building-o"title="Valuessetherearecompany-specific."groups="base.group_multi_company"/>
+                                    <divclass="text-muted">
+                                        SendanautomaticconfirmationemailwhenDeliveryOrdersaredone
                                     </div>
-                                    <div class="row mt16" attrs="{'invisible': [('stock_move_email_validation', '=', False)]}">
-                                        <label for="stock_mail_confirmation_template_id" string="Email Template" class="col-lg-4 o_light_label"/>
-                                        <field name="stock_mail_confirmation_template_id" class="oe_inline" attrs="{'required': [('stock_move_email_validation', '=', True)]}" context="{'default_model': 'stock.picking'}"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-lg-6 o_setting_box" id="stock_sms">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_stock_sms"/>
-                                </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="module_stock_sms"/>
-                                    <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
-                                    <div class="text-muted">
-                                        Send an automatic confirmation SMS Text Message when Delivery Orders are done
-                                    </div>
-                                    <div class="content-group">
-                                        <div id="stock_confirmation_sms"/>
+                                    <divclass="rowmt16"attrs="{'invisible':[('stock_move_email_validation','=',False)]}">
+                                        <labelfor="stock_mail_confirmation_template_id"string="EmailTemplate"class="col-lg-4o_light_label"/>
+                                        <fieldname="stock_mail_confirmation_template_id"class="oe_inline"attrs="{'required':[('stock_move_email_validation','=',True)]}"context="{'default_model':'stock.picking'}"/>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 o_setting_box" id="signature_delivery_orders">
-                                <div class="o_setting_left_pane">
-                                    <field name="group_stock_sign_delivery"/>
+                            <divclass="col-12col-lg-6o_setting_box"id="stock_sms">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_stock_sms"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="group_stock_sign_delivery"/>
-                                    <div class="text-muted">
-                                        Require a signature on your delivery orders
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="module_stock_sms"/>
+                                    <spanclass="fafa-lgfa-building-o"title="Valuessetherearecompany-specific."groups="base.group_multi_company"/>
+                                    <divclass="text-muted">
+                                        SendanautomaticconfirmationSMSTextMessagewhenDeliveryOrdersaredone
+                                    </div>
+                                    <divclass="content-group">
+                                        <divid="stock_confirmation_sms"/>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 o_setting_box" id="delivery" title="Shipping connectors allow to compute accurate shipping costs, print shipping labels and request carrier picking at your warehouse to ship to the customer. Apply shipping connector from delivery methods.">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_delivery"/>
+                            <divclass="col-12col-lg-6o_setting_box"id="signature_delivery_orders">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="group_stock_sign_delivery"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="module_delivery"/>
-                                    <div class="text-muted" id="delivery_carrier">
-                                        Compute shipping costs
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="group_stock_sign_delivery"/>
+                                    <divclass="text-muted">
+                                        Requireasignatureonyourdeliveryorders
+                                    </div>
+                                </div>
+                            </div>
+                            <divclass="col-12col-lg-6o_setting_box"id="delivery"title="Shippingconnectorsallowtocomputeaccurateshippingcosts,printshippinglabelsandrequestcarrierpickingatyourwarehousetoshiptothecustomer.Applyshippingconnectorfromdeliverymethods.">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_delivery"/>
+                                </div>
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="module_delivery"/>
+                                    <divclass="text-muted"id="delivery_carrier">
+                                        Computeshippingcosts
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <h2>Shipping Connectors</h2>
-                        <div class="row mt16 o_settings_container" name="product_setting_container">
-                            <div class="col-12 col-lg-6 o_setting_box" id="compute_shipping_costs_ups">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_delivery_ups" widget="upgrade_boolean"/>
+                        <h2>ShippingConnectors</h2>
+                        <divclass="rowmt16o_settings_container"name="product_setting_container">
+                            <divclass="col-12col-lg-6o_setting_box"id="compute_shipping_costs_ups">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_delivery_ups"widget="upgrade_boolean"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="module_delivery_ups"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/shipping/setup/third_party_shipper.html" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Compute shipping costs and ship with UPS
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="module_delivery_ups"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/shipping/setup/third_party_shipper.html"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        ComputeshippingcostsandshipwithUPS
                                     </div>
-                                    <div class="content-group">
-                                        <div id="stock_delivery_ups"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-lg-6 o_setting_box" id="compute_shipping_costs_dhl">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_delivery_dhl" widget="upgrade_boolean"/>
-                                </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="module_delivery_dhl"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/shipping/setup/third_party_shipper.html" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Compute shipping costs and ship with DHL
-                                    </div>
-                                    <div class="content-group">
-                                        <div id="stock_delivery_dhl"/>
+                                    <divclass="content-group">
+                                        <divid="stock_delivery_ups"/>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 o_setting_box" id="compute_shipping_costs_fedex">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_delivery_fedex" widget="upgrade_boolean"/>
+                            <divclass="col-12col-lg-6o_setting_box"id="compute_shipping_costs_dhl">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_delivery_dhl"widget="upgrade_boolean"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="module_delivery_fedex"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/shipping/setup/third_party_shipper.html" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Compute shipping costs and ship with FedEx
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="module_delivery_dhl"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/shipping/setup/third_party_shipper.html"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        ComputeshippingcostsandshipwithDHL
                                     </div>
-                                    <div class="content-group">
-                                        <div id="stock_delivery_fedex"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-lg-6 o_setting_box" id="compute_shipping_costs_usps">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_delivery_usps" widget="upgrade_boolean"/>
-                                </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="module_delivery_usps"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/shipping/setup/third_party_shipper.html" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Compute shipping costs and ship with USPS
-                                    </div>
-                                    <div class="content-group">
-                                        <div id="stock_delivery_usps"/>
+                                    <divclass="content-group">
+                                        <divid="stock_delivery_dhl"/>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 o_setting_box" id="compute_shipping_costs_bpost">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_delivery_bpost" widget="upgrade_boolean"/>
+                            <divclass="col-12col-lg-6o_setting_box"id="compute_shipping_costs_fedex">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_delivery_fedex"widget="upgrade_boolean"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="module_delivery_bpost"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/shipping/setup/third_party_shipper.html" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Compute shipping costs and ship with bpost
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="module_delivery_fedex"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/shipping/setup/third_party_shipper.html"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        ComputeshippingcostsandshipwithFedEx
                                     </div>
-                                    <div class="content-group">
-                                        <div id="stock_delivery_bpost"/>
+                                    <divclass="content-group">
+                                        <divid="stock_delivery_fedex"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <divclass="col-12col-lg-6o_setting_box"id="compute_shipping_costs_usps">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_delivery_usps"widget="upgrade_boolean"/>
+                                </div>
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="module_delivery_usps"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/shipping/setup/third_party_shipper.html"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        ComputeshippingcostsandshipwithUSPS
+                                    </div>
+                                    <divclass="content-group">
+                                        <divid="stock_delivery_usps"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <divclass="col-12col-lg-6o_setting_box"id="compute_shipping_costs_bpost">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_delivery_bpost"widget="upgrade_boolean"/>
+                                </div>
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="module_delivery_bpost"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/shipping/setup/third_party_shipper.html"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        Computeshippingcostsandshipwithbpost
+                                    </div>
+                                    <divclass="content-group">
+                                        <divid="stock_delivery_bpost"/>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-12 col-lg-6 o_setting_box" id="compute_shipping_costs_easypost">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_delivery_easypost" widget="upgrade_boolean"/>
+                            <divclass="col-12col-lg-6o_setting_box"id="compute_shipping_costs_easypost">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_delivery_easypost"widget="upgrade_boolean"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="module_delivery_easypost"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/shipping/setup/third_party_shipper.html" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Compute shipping costs and ship with Easypost
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="module_delivery_easypost"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/shipping/setup/third_party_shipper.html"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        ComputeshippingcostsandshipwithEasypost
                                     </div>
-                                    <div class="content-group">
-                                        <div id="stock_delivery_easypost"/>
+                                    <divclass="content-group">
+                                        <divid="stock_delivery_easypost"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <h2>Products</h2>
-                        <div class="row mt16 o_settings_container" name="product_setting_container">
-                            <div class="col-12 col-lg-6 o_setting_box" id="product_attributes">
-                                <div class="o_setting_left_pane">
-                                    <field name="group_product_variant"/>
+                        <divclass="rowmt16o_settings_container"name="product_setting_container">
+                            <divclass="col-12col-lg-6o_setting_box"id="product_attributes">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="group_product_variant"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="group_product_variant"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/sales/sales/products_prices/products/variants.html" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Set product attributes (e.g. color, size) to manage variants
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="group_product_variant"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/sales/sales/products_prices/products/variants.html"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        Setproductattributes(e.g.color,size)tomanagevariants
                                     </div>
-                                    <div class="content-group">
-                                        <div class="mt8" attrs="{'invisible': [('group_product_variant', '=', False)]}">
-                                            <button name="%(product.attribute_action)d" icon="fa-arrow-right" type="action" string="Attributes" class="btn-link"/>
+                                    <divclass="content-group">
+                                        <divclass="mt8"attrs="{'invisible':[('group_product_variant','=',False)]}">
+                                            <buttonname="%(product.attribute_action)d"icon="fa-arrow-right"type="action"string="Attributes"class="btn-link"/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 o_setting_box" id="sell_purchase_uom">
-                                <div class="o_setting_left_pane">
-                                    <field name="group_uom"/>
+                            <divclass="col-12col-lg-6o_setting_box"id="sell_purchase_uom">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="group_uom"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="group_uom"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/management/products/uom.html" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Sell and purchase products in different units of measure
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="group_uom"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/management/products/uom.html"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        Sellandpurchaseproductsindifferentunitsofmeasure
                                     </div>
-                                    <div class="content-group">
-                                        <div class="mt8" attrs="{'invisible': [('group_uom', '=', False)]}">
-                                            <button name="%(uom.product_uom_form_action)d" icon="fa-arrow-right" type="action" string="Units Of Measure" class="btn-link"/>
+                                    <divclass="content-group">
+                                        <divclass="mt8"attrs="{'invisible':[('group_uom','=',False)]}">
+                                            <buttonname="%(uom.product_uom_form_action)d"icon="fa-arrow-right"type="action"string="UnitsOfMeasure"class="btn-link"/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 o_setting_box"
+                            <divclass="col-12col-lg-6o_setting_box"
                                 id="manage_product_packaging"
-                                title="Manage product packagings (e.g. pack of 6 bottles, box of 10 pieces)">
-                                <div class="o_setting_left_pane">
-                                    <field name="group_stock_packaging"/>
+                                title="Manageproductpackagings(e.g.packof6bottles,boxof10pieces)">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="group_stock_packaging"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="group_stock_packaging"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/management/products/usage.html#packaging" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Manage product packagings (e.g. pack of 6 bottles, box of 10 pieces)
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="group_stock_packaging"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/management/products/usage.html#packaging"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        Manageproductpackagings(e.g.packof6bottles,boxof10pieces)
                                     </div>
-                                    <div class="content-group">
-                                        <div class="mt8" attrs="{'invisible': [('group_stock_packaging', '=', False)]}">
-                                            <button name="%(product.action_packaging_view)d" icon="fa-arrow-right" type="action" string="Product Packagings" class="btn-link"/>
+                                    <divclass="content-group">
+                                        <divclass="mt8"attrs="{'invisible':[('group_stock_packaging','=',False)]}">
+                                            <buttonname="%(product.action_packaging_view)d"icon="fa-arrow-right"type="action"string="ProductPackagings"class="btn-link"/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <h2>Traceability</h2>
-                        <div class="row mt16 o_settings_container" id="production_lot_info">
-                            <div class="col-12 col-lg-6 o_setting_box" id="full_traceability">
-                                <div class="o_setting_left_pane">
-                                    <field name="group_stock_production_lot"/>
+                        <divclass="rowmt16o_settings_container"id="production_lot_info">
+                            <divclass="col-12col-lg-6o_setting_box"id="full_traceability">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="group_stock_production_lot"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="group_stock_production_lot"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/management/lots_serial_numbers/differences.html" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Get a full traceability from vendors to customers
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="group_stock_production_lot"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/management/lots_serial_numbers/differences.html"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        Getafulltraceabilityfromvendorstocustomers
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 o_setting_box"
+                            <divclass="col-12col-lg-6o_setting_box"
                                 id="expiration_dates_serial_numbers"
-                                attrs="{'invisible': [('group_stock_production_lot', '=', False)]}"
-                                title="Track following dates on lots &amp; serial numbers: best before, removal, end of life, alert. Such dates are set automatically at lot/serial number creation based on values set on the product (in days).">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_product_expiry"/>
+                                attrs="{'invisible':[('group_stock_production_lot','=',False)]}"
+                                title="Trackfollowingdatesonlots&amp;serialnumbers:bestbefore,removal,endoflife,alert.Suchdatesaresetautomaticallyatlot/serialnumbercreationbasedonvaluessetontheproduct(indays).">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_product_expiry"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="module_product_expiry"/>
-                                    <div class="text-muted">
-                                        Set expiration dates on lots &amp; serial numbers
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="module_product_expiry"/>
+                                    <divclass="text-muted">
+                                        Setexpirationdatesonlots&amp;serialnumbers
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 o_setting_box" attrs="{'invisible': [('group_stock_production_lot', '=', False)]}" id="group_lot_on_delivery_slip">
-                                <div class="o_setting_left_pane">
-                                    <field name="group_lot_on_delivery_slip"/>
+                            <divclass="col-12col-lg-6o_setting_box"attrs="{'invisible':[('group_stock_production_lot','=',False)]}"id="group_lot_on_delivery_slip">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="group_lot_on_delivery_slip"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="group_lot_on_delivery_slip"/>
-                                    <div class="text-muted">
-                                        Lots &amp; Serial numbers will appear on the delivery slip
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="group_lot_on_delivery_slip"/>
+                                    <divclass="text-muted">
+                                        Lots&amp;Serialnumberswillappearonthedeliveryslip
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 o_setting_box" id="owner_stored_products">
-                                <div class="o_setting_left_pane">
-                                    <field name="group_stock_tracking_owner"/>
+                            <divclass="col-12col-lg-6o_setting_box"id="owner_stored_products">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="group_stock_tracking_owner"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="group_stock_tracking_owner"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/management/misc/owned_stock.html" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Set owner on stored products
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="group_stock_tracking_owner"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/management/misc/owned_stock.html"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        Setowneronstoredproducts
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <h2 class="mt32">Warehouse</h2>
-                        <div class="row mt16 o_settings_container" name="warehouse_setting_container">
-                            <div class="col-12 col-lg-6 o_setting_box"
+                        <h2class="mt32">Warehouse</h2>
+                        <divclass="rowmt16o_settings_container"name="warehouse_setting_container">
+                            <divclass="col-12col-lg-6o_setting_box"
                                 id="track_product_location"
-                                title="Store products in specific locations of your warehouse (e.g. bins, racks) and to track inventory accordingly.">
-                                <div class="o_setting_left_pane">
-                                    <field name="group_stock_multi_locations"/>
+                                title="Storeproductsinspecificlocationsofyourwarehouse(e.g.bins,racks)andtotrackinventoryaccordingly.">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="group_stock_multi_locations"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="group_stock_multi_locations"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/management/warehouses/difference_warehouse_location.html" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Track product location in your warehouse
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="group_stock_multi_locations"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/management/warehouses/difference_warehouse_location.html"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        Trackproductlocationinyourwarehouse
                                     </div>
-                                    <div class="content-group">
-                                        <div class="mt8" attrs="{'invisible': [('group_stock_multi_locations', '=', False)]}">
-                                            <button name="%(stock.action_location_form)d" icon="fa-arrow-right" type="action" string="Locations" class="btn-link"/><br/>
-                                            <button name="stock.action_putaway_tree" icon="fa-arrow-right" type="action" string="Putaway Rules" class="btn-link"/>
+                                    <divclass="content-group">
+                                        <divclass="mt8"attrs="{'invisible':[('group_stock_multi_locations','=',False)]}">
+                                            <buttonname="%(stock.action_location_form)d"icon="fa-arrow-right"type="action"string="Locations"class="btn-link"/><br/>
+                                            <buttonname="stock.action_putaway_tree"icon="fa-arrow-right"type="action"string="PutawayRules"class="btn-link"/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6 o_setting_box"
+                            <divclass="col-12col-lg-6o_setting_box"
                                 id="use_own_routes"
-                                title="Add and customize route operations to process product moves in your warehouse(s): e.g. unload &gt; quality control &gt; stock for incoming products, pick &gt; pack &gt; ship for outgoing products. You can also set putaway strategies on warehouse locations in order to send incoming products into specific child locations straight away (e.g. specific bins, racks).">
-                                <div class="o_setting_left_pane">
-                                    <field name="group_stock_adv_location"/>
+                                title="Addandcustomizerouteoperationstoprocessproductmovesinyourwarehouse(s):e.g.unload&gt;qualitycontrol&gt;stockforincomingproducts,pick&gt;pack&gt;shipforoutgoingproducts.Youcanalsosetputawaystrategiesonwarehouselocationsinordertosendincomingproductsintospecificchildlocationsstraightaway(e.g.specificbins,racks).">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="group_stock_adv_location"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="group_stock_adv_location"/>
-                                    <a href="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/routes/concepts/use-routes.html" title="Documentation" class="o_doc_link" target="_blank"></a>
-                                    <div class="text-muted">
-                                        Use your own routes
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="group_stock_adv_location"/>
+                                    <ahref="https://doc.flectrahq.com/2.0/applications/inventory_and_mrp/inventory/routes/concepts/use-routes.html"title="Documentation"class="o_doc_link"target="_blank"></a>
+                                    <divclass="text-muted">
+                                        Useyourownroutes
                                     </div>
-                                    <div class="content-group">
-                                        <div class="mt8" attrs="{'invisible': [('group_stock_adv_location', '=', False)]}">
-                                            <button name="%(stock.action_warehouse_form)d" icon="fa-arrow-right" type="action" string="Set Warehouse Routes" class="btn-link"/>
+                                    <divclass="content-group">
+                                        <divclass="mt8"attrs="{'invisible':[('group_stock_adv_location','=',False)]}">
+                                            <buttonname="%(stock.action_warehouse_form)d"icon="fa-arrow-right"type="action"string="SetWarehouseRoutes"class="btn-link"/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <h2 id="schedule_info" invisible="1">Advanced Scheduling</h2>
-                        <div class="row mt16 o_settings_container">
-                            <div id="sale_security_lead"/>
-                            <div id="purchase_po_lead"/>
+                        <h2id="schedule_info"invisible="1">AdvancedScheduling</h2>
+                        <divclass="rowmt16o_settings_container">
+                            <divid="sale_security_lead"/>
+                            <divid="purchase_po_lead"/>
                         </div>
                     </div>
                 </xpath>
             </field>
         </record>
 
-        <record id="action_stock_config_settings" model="ir.actions.act_window">
-            <field name="name">Settings</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">res.config.settings</field>
-            <field name="view_mode">form</field>
-            <field name="target">inline</field>
-            <field name="context">{'module' : 'stock', 'bin_size': False}</field>
+        <recordid="action_stock_config_settings"model="ir.actions.act_window">
+            <fieldname="name">Settings</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">res.config.settings</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">inline</field>
+            <fieldname="context">{'module':'stock','bin_size':False}</field>
         </record>
 
-        <menuitem id="menu_stock_config_settings" name="Configuration" parent="menu_stock_root"
-            sequence="100" groups="group_stock_manager"/>
-        <menuitem id="menu_stock_general_settings" name="Settings" parent="menu_stock_config_settings"
-            sequence="0" action="action_stock_config_settings" groups="base.group_system"/>
+        <menuitemid="menu_stock_config_settings"name="Configuration"parent="menu_stock_root"
+            sequence="100"groups="group_stock_manager"/>
+        <menuitemid="menu_stock_general_settings"name="Settings"parent="menu_stock_config_settings"
+            sequence="0"action="action_stock_config_settings"groups="base.group_system"/>
     </data>
 </flectra>

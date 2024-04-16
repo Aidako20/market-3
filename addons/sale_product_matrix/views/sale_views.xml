@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-  <record id="view_order_form_with_variant_grid" model="ir.ui.view">
-      <field name="name">sale.order.line.variant.grid</field>
-      <field name="model">sale.order</field>
-      <field name="inherit_id" ref="sale.view_order_form"/>
-      <field name="arch" type="xml">
-          <field name="partner_id" position="after">
-              <!-- Technical non stored fields for Order Grid Entry -->
-              <field name="grid" invisible="1"/>
-              <field name="grid_product_tmpl_id" invisible="1"/>
-              <field name="grid_update" invisible="1"/>
+  <recordid="view_order_form_with_variant_grid"model="ir.ui.view">
+      <fieldname="name">sale.order.line.variant.grid</field>
+      <fieldname="model">sale.order</field>
+      <fieldname="inherit_id"ref="sale.view_order_form"/>
+      <fieldname="arch"type="xml">
+          <fieldname="partner_id"position="after">
+              <!--TechnicalnonstoredfieldsforOrderGridEntry-->
+              <fieldname="grid"invisible="1"/>
+              <fieldname="grid_product_tmpl_id"invisible="1"/>
+              <fieldname="grid_update"invisible="1"/>
           </field>
-          <xpath expr="//notebook//group[@name='sales_person']" position="inside">
-              <field name="report_grids" groups="base.group_no_one"/>
+          <xpathexpr="//notebook//group[@name='sales_person']"position="inside">
+              <fieldname="report_grids"groups="base.group_no_one"/>
           </xpath>
       </field>
   </record>

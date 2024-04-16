@@ -1,44 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="action_report_production_order" model="ir.actions.report">
-            <field name="name">Production Order</field>
-            <field name="model">mrp.production</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">mrp.report_mrporder</field>
-            <field name="report_file">mrp.report.mrp_production_templates</field>
-            <field name="print_report_name">'Production Order - %s' % object.name</field>
-            <field name="binding_model_id" ref="model_mrp_production"/>
-            <field name="binding_type">report</field>
+        <recordid="action_report_production_order"model="ir.actions.report">
+            <fieldname="name">ProductionOrder</field>
+            <fieldname="model">mrp.production</field>
+            <fieldname="report_type">qweb-pdf</field>
+            <fieldname="report_name">mrp.report_mrporder</field>
+            <fieldname="report_file">mrp.report.mrp_production_templates</field>
+            <fieldname="print_report_name">'ProductionOrder-%s'%object.name</field>
+            <fieldname="binding_model_id"ref="model_mrp_production"/>
+            <fieldname="binding_type">report</field>
         </record>
-        <record id="action_report_bom_structure" model="ir.actions.report">
-            <field name="name">BoM Structure</field>
-            <field name="model">mrp.bom</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">mrp.report_bom_structure</field>
-            <field name="report_file">mrp.report_bom_structure</field>
-            <field name="print_report_name">'Bom Structure - %s' % object.display_name</field>
-            <field name="binding_model_id" ref="model_mrp_bom"/>
-            <field name="binding_type">report</field>
+        <recordid="action_report_bom_structure"model="ir.actions.report">
+            <fieldname="name">BoMStructure</field>
+            <fieldname="model">mrp.bom</field>
+            <fieldname="report_type">qweb-pdf</field>
+            <fieldname="report_name">mrp.report_bom_structure</field>
+            <fieldname="report_file">mrp.report_bom_structure</field>
+            <fieldname="print_report_name">'BomStructure-%s'%object.display_name</field>
+            <fieldname="binding_model_id"ref="model_mrp_bom"/>
+            <fieldname="binding_type">report</field>
         </record>
-        <record id="label_manufacture_template" model="ir.actions.report">
-            <field name="name">Finished Product Label (ZPL)</field>
-            <field name="model">mrp.production</field>
-            <field name="report_type">qweb-text</field>
-            <field name="report_name">mrp.label_production_view</field>
-            <field name="report_file">mrp.label_production_view</field>
-            <field name="binding_model_id" ref="model_mrp_production"/>
-            <field name="binding_type">report</field>
+        <recordid="label_manufacture_template"model="ir.actions.report">
+            <fieldname="name">FinishedProductLabel(ZPL)</field>
+            <fieldname="model">mrp.production</field>
+            <fieldname="report_type">qweb-text</field>
+            <fieldname="report_name">mrp.label_production_view</field>
+            <fieldname="report_file">mrp.label_production_view</field>
+            <fieldname="binding_model_id"ref="model_mrp_production"/>
+            <fieldname="binding_type">report</field>
         </record>
-        <record id="action_report_finished_product" model="ir.actions.report">
-            <field name="name">Finished Product Label (PDF)</field>
-            <field name="model">mrp.production</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">mrp.label_production_view_pdf</field>
-            <field name="report_file">mrp.label_production_view_pdf</field>
-            <field name="print_report_name">'Finished products - %s' % object.name</field>
-            <field name="binding_model_id" ref="model_mrp_production"/>
-            <field name="binding_type">report</field>
+        <recordid="action_report_finished_product"model="ir.actions.report">
+            <fieldname="name">FinishedProductLabel(PDF)</field>
+            <fieldname="model">mrp.production</field>
+            <fieldname="report_type">qweb-pdf</field>
+            <fieldname="report_name">mrp.label_production_view_pdf</field>
+            <fieldname="report_file">mrp.label_production_view_pdf</field>
+            <fieldname="print_report_name">'Finishedproducts-%s'%object.name</field>
+            <fieldname="binding_model_id"ref="model_mrp_production"/>
+            <fieldname="binding_type">report</field>
         </record>
     </data>
 </flectra>

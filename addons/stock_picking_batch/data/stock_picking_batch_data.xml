@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra><data noupdate="1">
-    <!-- Batch picking related subtypes for messaging / Chatter -->
-    <record id="mt_batch_state" model="mail.message.subtype">
-        <field name="name">Stage Changed</field>
-        <field name="res_model">stock.picking.batch</field>
-        <field name="default" eval="False"/>
-        <field name="description">Stage Changed</field>
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectra><datanoupdate="1">
+    <!--Batchpickingrelatedsubtypesformessaging/Chatter-->
+    <recordid="mt_batch_state"model="mail.message.subtype">
+        <fieldname="name">StageChanged</field>
+        <fieldname="res_model">stock.picking.batch</field>
+        <fieldname="default"eval="False"/>
+        <fieldname="description">StageChanged</field>
     </record>
 
-    <record id="seq_picking_batch" model="ir.sequence">
-        <field name="name">Batch Transfer</field>
-        <field name="code">picking.batch</field>
-        <field name="prefix">BATCH/</field>
-        <field name="padding">5</field>
-        <field name="company_id" eval="False"/>
+    <recordid="seq_picking_batch"model="ir.sequence">
+        <fieldname="name">BatchTransfer</field>
+        <fieldname="code">picking.batch</field>
+        <fieldname="prefix">BATCH/</field>
+        <fieldname="padding">5</field>
+        <fieldname="company_id"eval="False"/>
     </record>
 </data></flectra>

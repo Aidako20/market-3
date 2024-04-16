@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
-class StockWarnInsufficientQtyRepair(models.TransientModel):
-    _name = 'stock.warn.insufficient.qty.repair'
-    _inherit = 'stock.warn.insufficient.qty'
-    _description = 'Warn Insufficient Repair Quantity'
+classStockWarnInsufficientQtyRepair(models.TransientModel):
+    _name='stock.warn.insufficient.qty.repair'
+    _inherit='stock.warn.insufficient.qty'
+    _description='WarnInsufficientRepairQuantity'
 
-    repair_id = fields.Many2one('repair.order', string='Repair')
+    repair_id=fields.Many2one('repair.order',string='Repair')
 
-    def _get_reference_document_company_id(self):
-        return self.repair_id.company_id
+    def_get_reference_document_company_id(self):
+        returnself.repair_id.company_id
 
-    def action_done(self):
+    defaction_done(self):
         self.ensure_one()
-        return self.repair_id.action_repair_confirm()
+        returnself.repair_id.action_repair_confirm()

@@ -1,42 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <!-- Add action entry in the Action Menu for Leads -->
-    <record id="crm_lead_act_window_sms_composer_single" model="ir.actions.act_window">
-        <field name="name">Send SMS Text Message</field>
-        <field name="res_model">sms.composer</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-        <field name="context">{
-            'default_composition_mode': 'mass',
-            'default_mass_keep_log': True,
-            'default_res_ids': active_ids
+    <!--AddactionentryintheActionMenuforLeads-->
+    <recordid="crm_lead_act_window_sms_composer_single"model="ir.actions.act_window">
+        <fieldname="name">SendSMSTextMessage</field>
+        <fieldname="res_model">sms.composer</field>
+        <fieldname="view_mode">form</field>
+        <fieldname="target">new</field>
+        <fieldname="context">{
+            'default_composition_mode':'mass',
+            'default_mass_keep_log':True,
+            'default_res_ids':active_ids
         }</field>
-        <field name="binding_model_id" ref="model_crm_lead"/>
-        <field name="binding_view_types">list</field>
+        <fieldname="binding_model_id"ref="model_crm_lead"/>
+        <fieldname="binding_view_types">list</field>
     </record>
-    <record id="crm_lead_act_window_sms_composer_multi" model="ir.actions.act_window">
-        <field name="name">Send SMS Text Message</field>
-        <field name="res_model">sms.composer</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-        <field name="context">{
-            'default_composition_mode': 'comment',
-            'default_res_id': active_id,
+    <recordid="crm_lead_act_window_sms_composer_multi"model="ir.actions.act_window">
+        <fieldname="name">SendSMSTextMessage</field>
+        <fieldname="res_model">sms.composer</field>
+        <fieldname="view_mode">form</field>
+        <fieldname="target">new</field>
+        <fieldname="context">{
+            'default_composition_mode':'comment',
+            'default_res_id':active_id,
         }</field>
-        <field name="binding_model_id" ref="model_crm_lead"/>
-        <field name="binding_view_types">form</field>
+        <fieldname="binding_model_id"ref="model_crm_lead"/>
+        <fieldname="binding_view_types">form</field>
     </record>
 
-    <record id="crm_lead_view_list_activities" model="ir.ui.view">
-        <field name="name">crm.lead.view.list.activities.inherit.sms</field>
-        <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm.crm_lead_view_list_activities"/>
-        <field name="arch" type="xml">
-            <xpath expr="//header" position="inside">
-                <button name="%(crm_sms.crm_lead_act_window_sms_composer_single)d" type="action" string="SMS" />
+    <recordid="crm_lead_view_list_activities"model="ir.ui.view">
+        <fieldname="name">crm.lead.view.list.activities.inherit.sms</field>
+        <fieldname="model">crm.lead</field>
+        <fieldname="inherit_id"ref="crm.crm_lead_view_list_activities"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//header"position="inside">
+                <buttonname="%(crm_sms.crm_lead_act_window_sms_composer_single)d"type="action"string="SMS"/>
             </xpath>
-            <xpath expr="//button[@name='%(crm.crm_lead_act_window_compose)d']" position="after">
-                <button name="%(crm_sms.crm_lead_act_window_sms_composer_multi)d" type="action" string="SMS" icon="fa-comments" />
+            <xpathexpr="//button[@name='%(crm.crm_lead_act_window_compose)d']"position="after">
+                <buttonname="%(crm_sms.crm_lead_act_window_sms_composer_multi)d"type="action"string="SMS"icon="fa-comments"/>
             </xpath>
         </field>
     </record>

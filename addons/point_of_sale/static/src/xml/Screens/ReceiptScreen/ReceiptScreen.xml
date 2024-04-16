@@ -1,41 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="ReceiptScreen" owl="1">
-        <div class="receipt-screen screen">
-            <div class="screen-content">
-                <div class="top-content">
-                    <div class="top-content-center">
-                        <h1 t-if="!env.isMobile">
-                            <t t-esc="orderAmountPlusTip" />
+    <tt-name="ReceiptScreen"owl="1">
+        <divclass="receipt-screenscreen">
+            <divclass="screen-content">
+                <divclass="top-content">
+                    <divclass="top-content-center">
+                        <h1t-if="!env.isMobile">
+                            <tt-esc="orderAmountPlusTip"/>
                         </h1>
                     </div>
-                    <div class="button next" t-att-class="{ highlight: !locked }"
+                    <divclass="buttonnext"t-att-class="{highlight:!locked}"
                         t-on-click="orderDone">
-                        New Order <i class="fa fa-angle-double-right"></i>
+                        NewOrder<iclass="fafa-angle-double-right"></i>
                     </div>
                 </div>
-                <div class="default-view">
-                    <div class="pos-receipt-container">
-                        <OrderReceipt order="currentOrder" t-ref="order-receipt" />
+                <divclass="default-view">
+                    <divclass="pos-receipt-container">
+                        <OrderReceiptorder="currentOrder"t-ref="order-receipt"/>
                     </div>
-                    <div class="actions">
-                        <h1>How would you like to receive your receipt?</h1>
-                        <div class="buttons">
-                            <div class="button print" t-on-click="printReceipt">
-                                <i class="fa fa-print"></i> Print Receipt
+                    <divclass="actions">
+                        <h1>Howwouldyouliketoreceiveyourreceipt?</h1>
+                        <divclass="buttons">
+                            <divclass="buttonprint"t-on-click="printReceipt">
+                                <iclass="fafa-print"></i>PrintReceipt
                             </div>
                         </div>
-                        <form t-on-submit.prevent="onSendEmail" class="send-email">
-                            <div class="email-icon"><i class="fa fa-envelope-o" aria-hidden="true"></i></div>
-                            <div class="input-email">
-                                <input type="email" placeholder="Email Receipt" t-model="orderUiState.inputEmail" />
-                                <button class="send" t-att-class="{ highlight: is_email(orderUiState.inputEmail) }" type="submit">Send</button>
+                        <formt-on-submit.prevent="onSendEmail"class="send-email">
+                            <divclass="email-icon"><iclass="fafa-envelope-o"aria-hidden="true"></i></div>
+                            <divclass="input-email">
+                                <inputtype="email"placeholder="EmailReceipt"t-model="orderUiState.inputEmail"/>
+                                <buttonclass="send"t-att-class="{highlight:is_email(orderUiState.inputEmail)}"type="submit">Send</button>
                             </div>
                         </form>
-                        <t t-if="orderUiState.emailSuccessful !== null">
-                            <div class="notice" t-attf-class="{{ orderUiState.emailSuccessful ? 'successful' : 'failed' }}">
-                                <t t-esc="orderUiState.emailNotice"></t>
+                        <tt-if="orderUiState.emailSuccessful!==null">
+                            <divclass="notice"t-attf-class="{{orderUiState.emailSuccessful?'successful':'failed'}}">
+                                <tt-esc="orderUiState.emailNotice"></t>
                             </div>
                         </t>
                     </div>

@@ -1,98 +1,98 @@
-flectra.define('sale.product_configurator_tests', function (require) {
-    "use strict";
+flectra.define('sale.product_configurator_tests',function(require){
+    "usestrict";
 
-    const FormView = require('web.FormView');
-    const testUtils = require('web.test_utils');
+    constFormView=require('web.FormView');
+    consttestUtils=require('web.test_utils');
 
-    const createView = testUtils.createView;
+    constcreateView=testUtils.createView;
 
-    QUnit.module('product_configurator', {
-        beforeEach: function () {
-            this.data = {
-                order: {
-                    fields: {
-                        line_ids: {
-                            string: "Lines",
-                            type: 'one2many',
-                            relation: 'line',
-                            relation_field: 'order_id'
+    QUnit.module('product_configurator',{
+        beforeEach:function(){
+            this.data={
+                order:{
+                    fields:{
+                        line_ids:{
+                            string:"Lines",
+                            type:'one2many',
+                            relation:'line',
+                            relation_field:'order_id'
                         },
                     },
-                    records: [
-                        {id: 1, line_ids: [1, 2]},
+                    records:[
+                        {id:1,line_ids:[1,2]},
                     ],
                 },
-                line: {
-                    fields: {
-                        product_id: {
-                            string: "Product",
-                            type: 'many2one',
-                            relation: 'product',
+                line:{
+                    fields:{
+                        product_id:{
+                            string:"Product",
+                            type:'many2one',
+                            relation:'product',
                         },
-                        order_id: {
-                            string: "Order",
-                            type: 'many2one',
-                            relation: 'order'
+                        order_id:{
+                            string:"Order",
+                            type:'many2one',
+                            relation:'order'
                         },
-                        sequence: {
-                            string: "Sequence",
-                            type: 'number',
+                        sequence:{
+                            string:"Sequence",
+                            type:'number',
                         },
                     },
-                    records: [
-                        {id: 1, sequence: 4, product_id: 3, order_id: 1},
-                        {id: 2, sequence: 14, product_id: 4, order_id: 1},
+                    records:[
+                        {id:1,sequence:4,product_id:3,order_id:1},
+                        {id:2,sequence:14,product_id:4,order_id:1},
                     ]
                 },
-                product: {
-                    fields: {
-                        name: {
-                            string: "Name",
-                            type: 'char',
+                product:{
+                    fields:{
+                        name:{
+                            string:"Name",
+                            type:'char',
                         },
                     },
-                    records: [
-                        {id: 3, name: "Chair"},
-                        {id: 4, name: "Table"},
+                    records:[
+                        {id:3,name:"Chair"},
+                        {id:4,name:"Table"},
                     ],
                 },
             };
         },
-    }, function () {
-        QUnit.test('drag and drop rows containing product_configurator many2one', async function (assert) {
+    },function(){
+        QUnit.test('draganddroprowscontainingproduct_configuratormany2one',asyncfunction(assert){
             assert.expect(4);
 
-            const form = await createView({
-                View: FormView,
-                model: 'order',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'order',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="line_ids"/>
+                        <fieldname="line_ids"/>
                     </form>`,
-                archs: {
-                    'line,false,list': `
-                        <tree editable="bottom">
-                            <field name="sequence" widget="handle"/>
-                            <field name="product_id" widget="product_configurator"/>
+                archs:{
+                    'line,false,list':`
+                        <treeeditable="bottom">
+                            <fieldname="sequence"widget="handle"/>
+                            <fieldname="product_id"widget="product_configurator"/>
                         </tree>`,
                 },
-                res_id: 1,
-                viewOptions: {
-                    mode: 'edit',
+                res_id:1,
+                viewOptions:{
+                    mode:'edit',
                 },
             });
 
-            assert.containsN(form, '.o_data_row', 2);
-            assert.strictEqual(form.$('.o_data_row').text(), 'ChairTable');
-            assert.containsN(form, '.o_data_row .o_row_handle', 2);
+            assert.containsN(form,'.o_data_row',2);
+            assert.strictEqual(form.$('.o_data_row').text(),'ChairTable');
+            assert.containsN(form,'.o_data_row.o_row_handle',2);
 
-            // move first row below second
-            const $firstHandle = form.$('.o_data_row:nth(0) .o_row_handle');
-            const $secondHandle = form.$('.o_data_row:nth(1) .o_row_handle');
-            await testUtils.dom.dragAndDrop($firstHandle, $secondHandle, { position: 'bottom' });
+            //movefirstrowbelowsecond
+            const$firstHandle=form.$('.o_data_row:nth(0).o_row_handle');
+            const$secondHandle=form.$('.o_data_row:nth(1).o_row_handle');
+            awaittestUtils.dom.dragAndDrop($firstHandle,$secondHandle,{position:'bottom'});
 
-            assert.strictEqual(form.$('.o_data_row').text(), 'TableChair');
+            assert.strictEqual(form.$('.o_data_row').text(),'TableChair');
 
             form.destroy();
         });

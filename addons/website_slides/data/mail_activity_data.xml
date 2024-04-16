@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="mail_activity_data_access_request" model="mail.activity.type">
-            <field name="name">Access Request</field>
-            <field name="icon">fa-check-circle</field>
-            <field name="sequence">50</field>
-            <field name="res_model_id" ref="website_slides.model_slide_channel"/>
+    <datanoupdate="1">
+        <recordid="mail_activity_data_access_request"model="mail.activity.type">
+            <fieldname="name">AccessRequest</field>
+            <fieldname="icon">fa-check-circle</field>
+            <fieldname="sequence">50</field>
+            <fieldname="res_model_id"ref="website_slides.model_slide_channel"/>
         </record>
     </data>
 </flectra>

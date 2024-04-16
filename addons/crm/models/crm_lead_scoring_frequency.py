@@ -1,24 +1,24 @@
-# -*- coding: utf-8 -*-
-from flectra import fields, models
+#-*-coding:utf-8-*-
+fromflectraimportfields,models
 
 
-class LeadScoringFrequency(models.Model):
-    _name = 'crm.lead.scoring.frequency'
-    _description = 'Lead Scoring Frequency'
+classLeadScoringFrequency(models.Model):
+    _name='crm.lead.scoring.frequency'
+    _description='LeadScoringFrequency'
 
-    variable = fields.Char('Variable', index=True)
-    value = fields.Char('Value')
-    won_count = fields.Float('Won Count', digits=(16, 1))  # Float because we add 0.1 to avoid zero Frequency issue
-    lost_count = fields.Float('Lost Count', digits=(16, 1))  # Float because we add 0.1 to avoid zero Frequency issue
-    team_id = fields.Many2one('crm.team', 'Sales Team')
+    variable=fields.Char('Variable',index=True)
+    value=fields.Char('Value')
+    won_count=fields.Float('WonCount',digits=(16,1)) #Floatbecauseweadd0.1toavoidzeroFrequencyissue
+    lost_count=fields.Float('LostCount',digits=(16,1)) #Floatbecauseweadd0.1toavoidzeroFrequencyissue
+    team_id=fields.Many2one('crm.team','SalesTeam')
 
 
-class FrequencyField(models.Model):
-    _name = 'crm.lead.scoring.frequency.field'
-    _description = 'Fields that can be used for predictive lead scoring computation'
+classFrequencyField(models.Model):
+    _name='crm.lead.scoring.frequency.field'
+    _description='Fieldsthatcanbeusedforpredictiveleadscoringcomputation'
 
-    name = fields.Char(related="field_id.field_description")
-    field_id = fields.Many2one(
-        'ir.model.fields', domain=[('model_id.model', '=', 'crm.lead')], required=True,
+    name=fields.Char(related="field_id.field_description")
+    field_id=fields.Many2one(
+        'ir.model.fields',domain=[('model_id.model','=','crm.lead')],required=True,
         ondelete='cascade',
     )

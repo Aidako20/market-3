@@ -1,32 +1,32 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-import datetime
-from dateutil.relativedelta import relativedelta
+importdatetime
+fromdateutil.relativedeltaimportrelativedelta
 
-from flectra.addons.account.tests.common import AccountTestInvoicingCommon
+fromflectra.addons.account.tests.commonimportAccountTestInvoicingCommon
 
 
-class TestMembershipCommon(AccountTestInvoicingCommon):
+classTestMembershipCommon(AccountTestInvoicingCommon):
 
     @classmethod
-    def setUpClass(cls, chart_template_ref=None):
+    defsetUpClass(cls,chart_template_ref=None):
         super().setUpClass(chart_template_ref=chart_template_ref)
 
-        # Test memberships
-        cls.membership_1 = cls.env['product.product'].create({
-            'membership': True,
-            'membership_date_from': datetime.date.today() + relativedelta(days=-2),
-            'membership_date_to': datetime.date.today() + relativedelta(months=1),
-            'name': 'Basic Limited',
-            'type': 'service',
-            'list_price': 100.00,
+        #Testmemberships
+        cls.membership_1=cls.env['product.product'].create({
+            'membership':True,
+            'membership_date_from':datetime.date.today()+relativedelta(days=-2),
+            'membership_date_to':datetime.date.today()+relativedelta(months=1),
+            'name':'BasicLimited',
+            'type':'service',
+            'list_price':100.00,
         })
 
-        # Test people
-        cls.partner_1 = cls.env['res.partner'].create({
-            'name': 'Ignasse Reblochon',
+        #Testpeople
+        cls.partner_1=cls.env['res.partner'].create({
+            'name':'IgnasseReblochon',
         })
-        cls.partner_2 = cls.env['res.partner'].create({
-            'name': 'Martine Poulichette',
-            'free_member': True,
+        cls.partner_2=cls.env['res.partner'].create({
+            'name':'MartinePoulichette',
+            'free_member':True,
         })

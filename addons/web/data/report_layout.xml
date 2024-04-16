@@ -1,44 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-         <record id="report_layout_background" model="report.layout">
-            <field name="name">Background</field>
-            <field name="sequence">5</field>
-            <field name="view_id" ref="web.external_layout_background"/>
-            <field name="image">/web/static/img/preview_background.png</field>
-            <field name="pdf">/web/static/pdf/preview_background.pdf</field>
+         <recordid="report_layout_background"model="report.layout">
+            <fieldname="name">Background</field>
+            <fieldname="sequence">5</field>
+            <fieldname="view_id"ref="web.external_layout_background"/>
+            <fieldname="image">/web/static/img/preview_background.png</field>
+            <fieldname="pdf">/web/static/pdf/preview_background.pdf</field>
         </record>
 
-        <record id="report_layout_standard" model="report.layout">
-            <field name="name">Light</field>
-            <field name="sequence">2</field>
-            <field name="view_id" ref="web.external_layout_standard"/>
-            <field name="image">/web/static/img/preview_standard.png</field>
-            <field name="pdf">/web/static/pdf/preview_standard.pdf</field>
+        <recordid="report_layout_standard"model="report.layout">
+            <fieldname="name">Light</field>
+            <fieldname="sequence">2</field>
+            <fieldname="view_id"ref="web.external_layout_standard"/>
+            <fieldname="image">/web/static/img/preview_standard.png</field>
+            <fieldname="pdf">/web/static/pdf/preview_standard.pdf</field>
         </record>
 
-        <record id="report_layout_boxed" model="report.layout">
-            <field name="name">Boxed</field>
-            <field name="sequence">3</field>
-            <field name="view_id" ref="web.external_layout_boxed"/>
-            <field name="image">/web/static/img/preview_boxed.png</field>
-            <field name="pdf">/web/static/pdf/preview_boxed.pdf</field>
+        <recordid="report_layout_boxed"model="report.layout">
+            <fieldname="name">Boxed</field>
+            <fieldname="sequence">3</field>
+            <fieldname="view_id"ref="web.external_layout_boxed"/>
+            <fieldname="image">/web/static/img/preview_boxed.png</field>
+            <fieldname="pdf">/web/static/pdf/preview_boxed.pdf</field>
         </record>
-        <record id="report_layout_clean" model="report.layout">
-            <field name="name">Clean</field>
-            <field name="sequence">4</field>
-            <field name="view_id" ref="web.external_layout_clean"/>
-            <field name="image">/web/static/img/preview_clean.png</field>
-            <field name="pdf">/web/static/pdf/preview_clean.pdf</field>
+        <recordid="report_layout_clean"model="report.layout">
+            <fieldname="name">Clean</field>
+            <fieldname="sequence">4</field>
+            <fieldname="view_id"ref="web.external_layout_clean"/>
+            <fieldname="image">/web/static/img/preview_clean.png</field>
+            <fieldname="pdf">/web/static/pdf/preview_clean.pdf</field>
         </record>
 
-        <record id="asset_styles_company_report" model="ir.attachment">
-            <field name="datas" model="res.company" eval="obj()._get_asset_style_b64()"/>
-            <field name="mimetype">text/scss</field>
-            <field name="name">res.company.scss</field>
-            <field name="type">binary</field>
-            <field name="url">/web/static/src/scss/asset_styles_company_report.scss</field>
+        <recordid="asset_styles_company_report"model="ir.attachment">
+            <fieldname="datas"model="res.company"eval="obj()._get_asset_style_b64()"/>
+            <fieldname="mimetype">text/scss</field>
+            <fieldname="name">res.company.scss</field>
+            <fieldname="type">binary</field>
+            <fieldname="url">/web/static/src/scss/asset_styles_company_report.scss</field>
         </record>
 
     </data>

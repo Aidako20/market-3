@@ -1,698 +1,698 @@
-flectra.define('web.search_bar_tests', function (require) {
-    "use strict";
+flectra.define('web.search_bar_tests',function(require){
+    "usestrict";
 
-    const { Model } = require('web/static/src/js/model.js');
-    const Registry = require("web.Registry");
-    const SearchBar = require('web.SearchBar');
-    const testUtils = require('web.test_utils');
+    const{Model}=require('web/static/src/js/model.js');
+    constRegistry=require("web.Registry");
+    constSearchBar=require('web.SearchBar');
+    consttestUtils=require('web.test_utils');
 
-    const cpHelpers = testUtils.controlPanel;
-    const { createActionManager, createComponent } = testUtils;
+    constcpHelpers=testUtils.controlPanel;
+    const{createActionManager,createComponent}=testUtils;
 
-    QUnit.module('Components', {
-        beforeEach: function () {
-            this.data = {
-                partner: {
-                    fields: {
-                        bar: { string: "Bar", type: 'many2one', relation: 'partner' },
-                        birthday: { string: "Birthday", type: 'date' },
-                        birth_datetime: { string: "Birth DateTime", type: 'datetime' },
-                        foo: { string: "Foo", type: 'char' },
-                        bool: { string: "Bool", type: 'boolean' },
+    QUnit.module('Components',{
+        beforeEach:function(){
+            this.data={
+                partner:{
+                    fields:{
+                        bar:{string:"Bar",type:'many2one',relation:'partner'},
+                        birthday:{string:"Birthday",type:'date'},
+                        birth_datetime:{string:"BirthDateTime",type:'datetime'},
+                        foo:{string:"Foo",type:'char'},
+                        bool:{string:"Bool",type:'boolean'},
                     },
-                    records: [
-                        { id: 1, display_name: "First record", foo: "yop", bar: 2, bool: true, birthday: '1983-07-15', birth_datetime: '1983-07-15 01:00:00' },
-                        { id: 2, display_name: "Second record", foo: "blip", bar: 1, bool: false, birthday: '1982-06-04', birth_datetime: '1982-06-04 02:00:00' },
-                        { id: 3, display_name: "Third record", foo: "gnap", bar: 1, bool: false, birthday: '1985-09-13', birth_datetime: '1985-09-13 03:00:00' },
-                        { id: 4, display_name: "Fourth record", foo: "plop", bar: 2, bool: true, birthday: '1983-05-05', birth_datetime: '1983-05-05 04:00:00' },
-                        { id: 5, display_name: "Fifth record", foo: "zoup", bar: 2, bool: true, birthday: '1800-01-01', birth_datetime: '1800-01-01 05:00:00' },
+                    records:[
+                        {id:1,display_name:"Firstrecord",foo:"yop",bar:2,bool:true,birthday:'1983-07-15',birth_datetime:'1983-07-1501:00:00'},
+                        {id:2,display_name:"Secondrecord",foo:"blip",bar:1,bool:false,birthday:'1982-06-04',birth_datetime:'1982-06-0402:00:00'},
+                        {id:3,display_name:"Thirdrecord",foo:"gnap",bar:1,bool:false,birthday:'1985-09-13',birth_datetime:'1985-09-1303:00:00'},
+                        {id:4,display_name:"Fourthrecord",foo:"plop",bar:2,bool:true,birthday:'1983-05-05',birth_datetime:'1983-05-0504:00:00'},
+                        {id:5,display_name:"Fifthrecord",foo:"zoup",bar:2,bool:true,birthday:'1800-01-01',birth_datetime:'1800-01-0105:00:00'},
                     ],
                 },
             };
 
-            this.actions = [{
-                id: 1,
-                name: "Partners Action",
-                res_model: 'partner',
-                search_view_id: [false, 'search'],
-                type: 'ir.actions.act_window',
-                views: [[false, 'list']],
+            this.actions=[{
+                id:1,
+                name:"PartnersAction",
+                res_model:'partner',
+                search_view_id:[false,'search'],
+                type:'ir.actions.act_window',
+                views:[[false,'list']],
             }];
 
-            this.archs = {
-                'partner,false,list': `
+            this.archs={
+                'partner,false,list':`
                 <tree>
-                    <field name="foo"/>
+                    <fieldname="foo"/>
                 </tree>`,
-                'partner,false,search': `
+                'partner,false,search':`
                 <search>
-                    <field name="foo"/>
-                    <field name="birthday"/>
-                    <field name="birth_datetime"/>
-                    <field name="bar" context="{'bar': self}"/>
-                    <filter string="Date Field Filter" name="positive" date="birthday"/>
-                    <filter string="Date Field Groupby" name="coolName" context="{'group_by': 'birthday:day'}"/>
+                    <fieldname="foo"/>
+                    <fieldname="birthday"/>
+                    <fieldname="birth_datetime"/>
+                    <fieldname="bar"context="{'bar':self}"/>
+                    <filterstring="DateFieldFilter"name="positive"date="birthday"/>
+                    <filterstring="DateFieldGroupby"name="coolName"context="{'group_by':'birthday:day'}"/>
                 </search>`,
             };
         },
-    }, function () {
+    },function(){
 
         QUnit.module('SearchBar');
 
-        QUnit.test('basic rendering', async function (assert) {
+        QUnit.test('basicrendering',asyncfunction(assert){
             assert.expect(1);
 
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
             });
-            await actionManager.doAction(1);
+            awaitactionManager.doAction(1);
 
             assert.strictEqual(document.activeElement,
-                actionManager.el.querySelector('.o_searchview input.o_searchview_input'),
-                "searchview input should be focused");
+                actionManager.el.querySelector('.o_searchviewinput.o_searchview_input'),
+                "searchviewinputshouldbefocused");
 
             actionManager.destroy();
         });
 
-        QUnit.test('navigation with facets', async function (assert) {
+        QUnit.test('navigationwithfacets',asyncfunction(assert){
             assert.expect(4);
 
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
             });
-            await actionManager.doAction(1);
+            awaitactionManager.doAction(1);
 
-            // add a facet
-            await cpHelpers.toggleGroupByMenu(actionManager);
-            await cpHelpers.toggleMenuItem(actionManager, 0);
-            await cpHelpers.toggleMenuItemOption(actionManager, 0, 0);
-            assert.containsOnce(actionManager, '.o_searchview .o_searchview_facet',
-                "there should be one facet");
+            //addafacet
+            awaitcpHelpers.toggleGroupByMenu(actionManager);
+            awaitcpHelpers.toggleMenuItem(actionManager,0);
+            awaitcpHelpers.toggleMenuItemOption(actionManager,0,0);
+            assert.containsOnce(actionManager,'.o_searchview.o_searchview_facet',
+                "thereshouldbeonefacet");
             assert.strictEqual(document.activeElement,
-                actionManager.el.querySelector('.o_searchview input.o_searchview_input'));
+                actionManager.el.querySelector('.o_searchviewinput.o_searchview_input'));
 
-            // press left to focus the facet
-            await testUtils.dom.triggerEvent(document.activeElement, 'keydown', { key: 'ArrowLeft' });
-            assert.strictEqual(document.activeElement, actionManager.el.querySelector('.o_searchview .o_searchview_facet'));
+            //presslefttofocusthefacet
+            awaittestUtils.dom.triggerEvent(document.activeElement,'keydown',{key:'ArrowLeft'});
+            assert.strictEqual(document.activeElement,actionManager.el.querySelector('.o_searchview.o_searchview_facet'));
 
-            // press right to focus the input
-            await testUtils.dom.triggerEvent(document.activeElement, 'keydown', { key: 'ArrowRight' });
-            assert.strictEqual(document.activeElement, actionManager.el.querySelector('.o_searchview input.o_searchview_input'));
+            //pressrighttofocustheinput
+            awaittestUtils.dom.triggerEvent(document.activeElement,'keydown',{key:'ArrowRight'});
+            assert.strictEqual(document.activeElement,actionManager.el.querySelector('.o_searchviewinput.o_searchview_input'));
 
             actionManager.destroy();
         });
 
-        QUnit.test('search date and datetime fields. Support of timezones', async function (assert) {
+        QUnit.test('searchdateanddatetimefields.Supportoftimezones',asyncfunction(assert){
             assert.expect(4);
 
-            let searchReadCount = 0;
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
-                session: {
-                    getTZOffset() {
-                        return 360;
+            letsearchReadCount=0;
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
+                session:{
+                    getTZOffset(){
+                        return360;
                     }
                 },
-                async mockRPC(route, args) {
-                    if (route === '/web/dataset/search_read') {
-                        switch (searchReadCount) {
-                            case 0:
-                                // Done on loading
+                asyncmockRPC(route,args){
+                    if(route==='/web/dataset/search_read'){
+                        switch(searchReadCount){
+                            case0:
+                                //Doneonloading
                                 break;
-                            case 1:
-                                assert.deepEqual(args.domain, [["birthday", "=", "1983-07-15"]],
-                                    "A date should stay what the user has input, but transmitted in server's format");
+                            case1:
+                                assert.deepEqual(args.domain,[["birthday","=","1983-07-15"]],
+                                    "Adateshouldstaywhattheuserhasinput,buttransmittedinserver'sformat");
                                 break;
-                            case 2:
-                                // Done on closing the first facet
+                            case2:
+                                //Doneonclosingthefirstfacet
                                 break;
-                            case 3:
-                                assert.deepEqual(args.domain, [["birth_datetime", "=", "1983-07-14 18:00:00"]],
-                                    "A datetime should be transformed in UTC and transmitted in server's format");
+                            case3:
+                                assert.deepEqual(args.domain,[["birth_datetime","=","1983-07-1418:00:00"]],
+                                    "AdatetimeshouldbetransformedinUTCandtransmittedinserver'sformat");
                                 break;
                         }
                         searchReadCount++;
                     }
-                    return this._super(...arguments);
+                    returnthis._super(...arguments);
                 },
             });
-            await actionManager.doAction(1);
+            awaitactionManager.doAction(1);
 
-            // Date case
-            let searchInput = actionManager.el.querySelector('.o_searchview_input');
-            await testUtils.fields.editInput(searchInput, '07/15/1983');
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowDown' });
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'Enter' });
+            //Datecase
+            letsearchInput=actionManager.el.querySelector('.o_searchview_input');
+            awaittestUtils.fields.editInput(searchInput,'07/15/1983');
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowDown'});
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'Enter'});
 
-            assert.strictEqual(actionManager.el.querySelector('.o_searchview_facet .o_facet_values').innerText.trim(),
+            assert.strictEqual(actionManager.el.querySelector('.o_searchview_facet.o_facet_values').innerText.trim(),
                 '07/15/1983',
-                'The format of the date in the facet should be in locale');
+                'Theformatofthedateinthefacetshouldbeinlocale');
 
-            // Close Facet
-            await testUtils.dom.click($('.o_searchview_facet .o_facet_remove'));
+            //CloseFacet
+            awaittestUtils.dom.click($('.o_searchview_facet.o_facet_remove'));
 
-            // DateTime case
-            searchInput = actionManager.el.querySelector('.o_searchview_input');
-            await testUtils.fields.editInput(searchInput, '07/15/1983 00:00:00');
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowDown' });
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowDown' });
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'Enter' });
+            //DateTimecase
+            searchInput=actionManager.el.querySelector('.o_searchview_input');
+            awaittestUtils.fields.editInput(searchInput,'07/15/198300:00:00');
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowDown'});
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowDown'});
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'Enter'});
 
-            assert.strictEqual(actionManager.el.querySelector('.o_searchview_facet .o_facet_values').innerText.trim(),
-                '07/15/1983 00:00:00',
-                'The format of the datetime in the facet should be in locale');
+            assert.strictEqual(actionManager.el.querySelector('.o_searchview_facet.o_facet_values').innerText.trim(),
+                '07/15/198300:00:00',
+                'Theformatofthedatetimeinthefacetshouldbeinlocale');
 
             actionManager.destroy();
         });
 
-        QUnit.test("autocomplete menu clickout interactions", async function (assert) {
+        QUnit.test("autocompletemenuclickoutinteractions",asyncfunction(assert){
             assert.expect(9);
 
-            const fields = this.data.partner.fields;
+            constfields=this.data.partner.fields;
 
-            class TestModelExtension extends Model.Extension {
-                get(property) {
-                    switch (property) {
-                        case 'facets':
-                            return [];
-                        case 'filters':
-                            return Object.keys(fields).map((fname, index) => Object.assign({
-                                description: fields[fname].string,
-                                fieldName: fname,
-                                fieldType: fields[fname].type,
-                                id: index,
-                            }, fields[fname]));
+            classTestModelExtensionextendsModel.Extension{
+                get(property){
+                    switch(property){
+                        case'facets':
+                            return[];
+                        case'filters':
+                            returnObject.keys(fields).map((fname,index)=>Object.assign({
+                                description:fields[fname].string,
+                                fieldName:fname,
+                                fieldType:fields[fname].type,
+                                id:index,
+                            },fields[fname]));
                         default:
                             break;
                     }
                 }
             }
-            class MockedModel extends Model { }
-            MockedModel.registry = new Registry({ Test: TestModelExtension, });
-            const searchModel = new MockedModel({ Test: {} });
-            const searchBar = await createComponent(SearchBar, {
-                data: this.data,
-                env: { searchModel },
-                props: { fields },
+            classMockedModelextendsModel{}
+            MockedModel.registry=newRegistry({Test:TestModelExtension,});
+            constsearchModel=newMockedModel({Test:{}});
+            constsearchBar=awaitcreateComponent(SearchBar,{
+                data:this.data,
+                env:{searchModel},
+                props:{fields},
             });
-            const input = searchBar.el.querySelector('.o_searchview_input');
+            constinput=searchBar.el.querySelector('.o_searchview_input');
 
-            assert.containsNone(searchBar, '.o_searchview_autocomplete');
+            assert.containsNone(searchBar,'.o_searchview_autocomplete');
 
-            await testUtils.controlPanel.editSearch(searchBar, "Hello there");
+            awaittestUtils.controlPanel.editSearch(searchBar,"Hellothere");
 
-            assert.strictEqual(input.value, "Hello there", "input value should be updated");
-            assert.containsOnce(searchBar, '.o_searchview_autocomplete');
+            assert.strictEqual(input.value,"Hellothere","inputvalueshouldbeupdated");
+            assert.containsOnce(searchBar,'.o_searchview_autocomplete');
 
-            await testUtils.dom.triggerEvent(input, 'keydown', { key: 'Escape' });
+            awaittestUtils.dom.triggerEvent(input,'keydown',{key:'Escape'});
 
-            assert.strictEqual(input.value, "", "input value should be empty");
-            assert.containsNone(searchBar, '.o_searchview_autocomplete');
+            assert.strictEqual(input.value,"","inputvalueshouldbeempty");
+            assert.containsNone(searchBar,'.o_searchview_autocomplete');
 
-            await testUtils.controlPanel.editSearch(searchBar, "General Kenobi");
+            awaittestUtils.controlPanel.editSearch(searchBar,"GeneralKenobi");
 
-            assert.strictEqual(input.value, "General Kenobi", "input value should be updated");
-            assert.containsOnce(searchBar, '.o_searchview_autocomplete');
+            assert.strictEqual(input.value,"GeneralKenobi","inputvalueshouldbeupdated");
+            assert.containsOnce(searchBar,'.o_searchview_autocomplete');
 
-            await testUtils.dom.click(document.body);
+            awaittestUtils.dom.click(document.body);
 
-            assert.strictEqual(input.value, "", "input value should be empty");
-            assert.containsNone(searchBar, '.o_searchview_autocomplete');
+            assert.strictEqual(input.value,"","inputvalueshouldbeempty");
+            assert.containsNone(searchBar,'.o_searchview_autocomplete');
 
             searchBar.destroy();
         });
 
-        QUnit.test('select an autocomplete field', async function (assert) {
+        QUnit.test('selectanautocompletefield',asyncfunction(assert){
             assert.expect(3);
 
-            let searchReadCount = 0;
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
-                async mockRPC(route, args) {
-                    if (route === '/web/dataset/search_read') {
-                        switch (searchReadCount) {
-                            case 0:
-                                // Done on loading
+            letsearchReadCount=0;
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
+                asyncmockRPC(route,args){
+                    if(route==='/web/dataset/search_read'){
+                        switch(searchReadCount){
+                            case0:
+                                //Doneonloading
                                 break;
-                            case 1:
-                                assert.deepEqual(args.domain, [["foo", "ilike", "a"]]);
+                            case1:
+                                assert.deepEqual(args.domain,[["foo","ilike","a"]]);
                                 break;
                         }
                         searchReadCount++;
                     }
-                    return this._super(...arguments);
+                    returnthis._super(...arguments);
                 },
             });
-            await actionManager.doAction(1);
+            awaitactionManager.doAction(1);
 
-            const searchInput = actionManager.el.querySelector('.o_searchview_input');
-            await testUtils.fields.editInput(searchInput, 'a');
-            assert.containsN(actionManager, '.o_searchview_autocomplete li', 2,
-                "there should be 2 result for 'a' in search bar autocomplete");
+            constsearchInput=actionManager.el.querySelector('.o_searchview_input');
+            awaittestUtils.fields.editInput(searchInput,'a');
+            assert.containsN(actionManager,'.o_searchview_autocompleteli',2,
+                "thereshouldbe2resultfor'a'insearchbarautocomplete");
 
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'Enter' });
-            assert.strictEqual(actionManager.el.querySelector('.o_searchview_input_container .o_facet_values').innerText.trim(),
-                "a", "There should be a field facet with label 'a'");
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'Enter'});
+            assert.strictEqual(actionManager.el.querySelector('.o_searchview_input_container.o_facet_values').innerText.trim(),
+                "a","Thereshouldbeafieldfacetwithlabel'a'");
 
             actionManager.destroy();
         });
 
-        QUnit.test('autocomplete input is trimmed', async function (assert) {
+        QUnit.test('autocompleteinputistrimmed',asyncfunction(assert){
             assert.expect(3);
 
-            let searchReadCount = 0;
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
-                async mockRPC(route, args) {
-                    if (route === '/web/dataset/search_read') {
-                        switch (searchReadCount) {
-                            case 0:
-                                // Done on loading
+            letsearchReadCount=0;
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
+                asyncmockRPC(route,args){
+                    if(route==='/web/dataset/search_read'){
+                        switch(searchReadCount){
+                            case0:
+                                //Doneonloading
                                 break;
-                            case 1:
-                                assert.deepEqual(args.domain, [["foo", "ilike", "a"]]);
+                            case1:
+                                assert.deepEqual(args.domain,[["foo","ilike","a"]]);
                                 break;
                         }
                         searchReadCount++;
                     }
-                    return this._super(...arguments);
+                    returnthis._super(...arguments);
                 },
             });
-            await actionManager.doAction(1);
+            awaitactionManager.doAction(1);
 
-            const searchInput = actionManager.el.querySelector('.o_searchview_input');
-            await testUtils.fields.editInput(searchInput, 'a ');
-            assert.containsN(actionManager, '.o_searchview_autocomplete li', 2,
-                "there should be 2 result for 'a' in search bar autocomplete");
+            constsearchInput=actionManager.el.querySelector('.o_searchview_input');
+            awaittestUtils.fields.editInput(searchInput,'a');
+            assert.containsN(actionManager,'.o_searchview_autocompleteli',2,
+                "thereshouldbe2resultfor'a'insearchbarautocomplete");
 
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', {key: 'Enter'});
-            assert.strictEqual(actionManager.el.querySelector('.o_searchview_input_container .o_facet_values').innerText.trim(),
-                "a", "There should be a field facet with label 'a'");
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'Enter'});
+            assert.strictEqual(actionManager.el.querySelector('.o_searchview_input_container.o_facet_values').innerText.trim(),
+                "a","Thereshouldbeafieldfacetwithlabel'a'");
 
             actionManager.destroy();
         });
 
-        QUnit.test('select an autocomplete field with `context` key', async function (assert) {
+        QUnit.test('selectanautocompletefieldwith`context`key',asyncfunction(assert){
             assert.expect(9);
 
-            let searchReadCount = 0;
-            const firstLoading = testUtils.makeTestPromise();
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
-                async mockRPC(route, args) {
-                    if (route === '/web/dataset/search_read') {
-                        switch (searchReadCount) {
-                            case 0:
+            letsearchReadCount=0;
+            constfirstLoading=testUtils.makeTestPromise();
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
+                asyncmockRPC(route,args){
+                    if(route==='/web/dataset/search_read'){
+                        switch(searchReadCount){
+                            case0:
                                 firstLoading.resolve();
                                 break;
-                            case 1:
-                                assert.deepEqual(args.domain, [["bar", "=", 1]]);
-                                assert.deepEqual(args.context.bar, [1]);
+                            case1:
+                                assert.deepEqual(args.domain,[["bar","=",1]]);
+                                assert.deepEqual(args.context.bar,[1]);
                                 break;
-                            case 2:
-                                assert.deepEqual(args.domain, ["|", ["bar", "=", 1], ["bar", "=", 2]]);
-                                assert.deepEqual(args.context.bar, [1, 2]);
+                            case2:
+                                assert.deepEqual(args.domain,["|",["bar","=",1],["bar","=",2]]);
+                                assert.deepEqual(args.context.bar,[1,2]);
                                 break;
                         }
                         searchReadCount++;
                     }
-                    return this._super(...arguments);
+                    returnthis._super(...arguments);
                 },
             });
-            await actionManager.doAction(1);
-            await firstLoading;
-            assert.strictEqual(searchReadCount, 1, "there should be 1 search_read");
-            const searchInput = actionManager.el.querySelector('.o_searchview_input');
+            awaitactionManager.doAction(1);
+            awaitfirstLoading;
+            assert.strictEqual(searchReadCount,1,"thereshouldbe1search_read");
+            constsearchInput=actionManager.el.querySelector('.o_searchview_input');
 
-            // 'r' key to filter on bar "First Record"
-            await testUtils.fields.editInput(searchInput, 'record');
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowDown' });
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowRight' });
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowDown' });
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'Enter' });
+            //'r'keytofilteronbar"FirstRecord"
+            awaittestUtils.fields.editInput(searchInput,'record');
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowDown'});
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowRight'});
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowDown'});
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'Enter'});
 
-            assert.strictEqual(actionManager.el.querySelector('.o_searchview_input_container .o_facet_values').innerText.trim(),
-                "First record",
-                "the autocompletion facet should be correct");
-            assert.strictEqual(searchReadCount, 2, "there should be 2 search_read");
+            assert.strictEqual(actionManager.el.querySelector('.o_searchview_input_container.o_facet_values').innerText.trim(),
+                "Firstrecord",
+                "theautocompletionfacetshouldbecorrect");
+            assert.strictEqual(searchReadCount,2,"thereshouldbe2search_read");
 
-            // 'r' key to filter on bar "Second Record"
-            await testUtils.fields.editInput(searchInput, 'record');
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowDown' });
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowRight' });
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowDown' });
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowDown' });
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'Enter' });
+            //'r'keytofilteronbar"SecondRecord"
+            awaittestUtils.fields.editInput(searchInput,'record');
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowDown'});
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowRight'});
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowDown'});
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowDown'});
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'Enter'});
 
-            assert.strictEqual(actionManager.el.querySelector('.o_searchview_input_container .o_facet_values').innerText.trim(),
-                "First recordorSecond record",
-                "the autocompletion facet should be correct");
-            assert.strictEqual(searchReadCount, 3, "there should be 3 search_read");
+            assert.strictEqual(actionManager.el.querySelector('.o_searchview_input_container.o_facet_values').innerText.trim(),
+                "FirstrecordorSecondrecord",
+                "theautocompletionfacetshouldbecorrect");
+            assert.strictEqual(searchReadCount,3,"thereshouldbe3search_read");
 
             actionManager.destroy();
         });
 
-        QUnit.test('no search text triggers a reload', async function (assert) {
+        QUnit.test('nosearchtexttriggersareload',asyncfunction(assert){
             assert.expect(2);
 
-            // Switch to pivot to ensure that the event comes from the control panel
-            // (pivot does not have a handler on "reload" event).
-            this.actions[0].views = [[false, 'pivot']];
-            this.archs['partner,false,pivot'] = `
+            //Switchtopivottoensurethattheeventcomesfromthecontrolpanel
+            //(pivotdoesnothaveahandleron"reload"event).
+            this.actions[0].views=[[false,'pivot']];
+            this.archs['partner,false,pivot']=`
             <pivot>
-                <field name="foo" type="row"/>
+                <fieldname="foo"type="row"/>
             </pivot>`;
 
-            let rpcs;
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
-                mockRPC: function () {
+            letrpcs;
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
+                mockRPC:function(){
                     rpcs++;
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
-            await actionManager.doAction(1);
+            awaitactionManager.doAction(1);
 
-            const searchInput = actionManager.el.querySelector('.o_searchview_input');
-            rpcs = 0;
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'Enter' });
+            constsearchInput=actionManager.el.querySelector('.o_searchview_input');
+            rpcs=0;
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'Enter'});
 
-            assert.containsNone(actionManager, '.o_searchview_facet_label');
-            assert.strictEqual(rpcs, 2, "should have reloaded");
+            assert.containsNone(actionManager,'.o_searchview_facet_label');
+            assert.strictEqual(rpcs,2,"shouldhavereloaded");
 
             actionManager.destroy();
         });
 
-        QUnit.test('selecting (no result) triggers a re-render', async function (assert) {
+        QUnit.test('selecting(noresult)triggersare-render',asyncfunction(assert){
             assert.expect(3);
 
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
             });
 
-            await actionManager.doAction(1);
+            awaitactionManager.doAction(1);
 
-            const searchInput = actionManager.el.querySelector('.o_searchview_input');
+            constsearchInput=actionManager.el.querySelector('.o_searchview_input');
 
-            // 'a' key to filter nothing on bar
-            await testUtils.fields.editInput(searchInput, 'hello there');
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowDown' });
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowRight' });
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'ArrowDown' });
+            //'a'keytofilternothingonbar
+            awaittestUtils.fields.editInput(searchInput,'hellothere');
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowDown'});
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowRight'});
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'ArrowDown'});
 
-            assert.strictEqual(actionManager.el.querySelector('.o_searchview_autocomplete .o_selection_focus').innerText.trim(), "(no result)",
-                "there should be no result for 'a' in bar");
+            assert.strictEqual(actionManager.el.querySelector('.o_searchview_autocomplete.o_selection_focus').innerText.trim(),"(noresult)",
+                "thereshouldbenoresultfor'a'inbar");
 
-            await testUtils.dom.triggerEvent(searchInput, 'keydown', { key: 'Enter' });
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',{key:'Enter'});
 
-            assert.containsNone(actionManager, '.o_searchview_facet_label');
-            assert.strictEqual(actionManager.el.querySelector('.o_searchview_input').value, "",
-                "the search input should be re-rendered");
+            assert.containsNone(actionManager,'.o_searchview_facet_label');
+            assert.strictEqual(actionManager.el.querySelector('.o_searchview_input').value,"",
+                "thesearchinputshouldbere-rendered");
 
             actionManager.destroy();
         });
 
-        QUnit.test('update suggested filters in autocomplete menu with Japanese IME', async function (assert) {
+        QUnit.test('updatesuggestedfiltersinautocompletemenuwithJapaneseIME',asyncfunction(assert){
             assert.expect(4);
 
-            // The goal here is to simulate as many events happening during an IME
-            // assisted composition session as possible. Some of these events are
-            // not handled but are triggered to ensure they do not interfere.
-            const TEST = "TEST";
-            const テスト = "テスト";
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
+            //ThegoalhereistosimulateasmanyeventshappeningduringanIME
+            //assistedcompositionsessionaspossible.Someoftheseeventsare
+            //nothandledbutaretriggeredtoensuretheydonotinterfere.
+            constTEST="TEST";
+            constテスト="テスト";
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
             });
-            await actionManager.doAction(1);
-            const searchInput = actionManager.el.querySelector('.o_searchview_input');
+            awaitactionManager.doAction(1);
+            constsearchInput=actionManager.el.querySelector('.o_searchview_input');
 
-            // Simulate typing "TEST" on search view.
-            for (let i = 0; i < TEST.length; i++) {
-                const key = TEST[i].toUpperCase();
-                await testUtils.dom.triggerEvent(searchInput, 'keydown',
-                    { key, isComposing: true });
-                if (i === 0) {
-                    // Composition is initiated after the first keydown
-                    await testUtils.dom.triggerEvent(searchInput, 'compositionstart');
+            //Simulatetyping"TEST"onsearchview.
+            for(leti=0;i<TEST.length;i++){
+                constkey=TEST[i].toUpperCase();
+                awaittestUtils.dom.triggerEvent(searchInput,'keydown',
+                    {key,isComposing:true});
+                if(i===0){
+                    //Compositionisinitiatedafterthefirstkeydown
+                    awaittestUtils.dom.triggerEvent(searchInput,'compositionstart');
                 }
-                await testUtils.dom.triggerEvent(searchInput, 'keypress',
-                    { key, isComposing: true });
-                searchInput.value = TEST.slice(0, i + 1);
-                await testUtils.dom.triggerEvent(searchInput, 'keyup',
-                    { key, isComposing: true });
-                await testUtils.dom.triggerEvent(searchInput, 'input',
-                    { inputType: 'insertCompositionText', isComposing: true });
+                awaittestUtils.dom.triggerEvent(searchInput,'keypress',
+                    {key,isComposing:true});
+                searchInput.value=TEST.slice(0,i+1);
+                awaittestUtils.dom.triggerEvent(searchInput,'keyup',
+                    {key,isComposing:true});
+                awaittestUtils.dom.triggerEvent(searchInput,'input',
+                    {inputType:'insertCompositionText',isComposing:true});
             }
-            assert.containsOnce(actionManager.el, '.o_searchview_autocomplete',
-                "should display autocomplete dropdown menu on typing something in search view"
+            assert.containsOnce(actionManager.el,'.o_searchview_autocomplete',
+                "shoulddisplayautocompletedropdownmenuontypingsomethinginsearchview"
             );
             assert.strictEqual(
-                actionManager.el.querySelector('.o_searchview_autocomplete li').innerText.trim(),
-                "Search Foo for: TEST",
-                `1st filter suggestion should be based on typed word "TEST"`
+                actionManager.el.querySelector('.o_searchview_autocompleteli').innerText.trim(),
+                "SearchFoofor:TEST",
+                `1stfiltersuggestionshouldbebasedontypedword"TEST"`
             );
 
-            // Simulate soft-selection of another suggestion from IME through keyboard navigation.
-            await testUtils.dom.triggerEvent(searchInput, 'keydown',
-                { key: 'ArrowDown', isComposing: true });
-            await testUtils.dom.triggerEvent(searchInput, 'keypress',
-                { key: 'ArrowDown', isComposing: true });
-            searchInput.value = テスト;
-            await testUtils.dom.triggerEvent(searchInput, 'keyup',
-                { key: 'ArrowDown', isComposing: true });
-            await testUtils.dom.triggerEvent(searchInput, 'input',
-                { inputType: 'insertCompositionText', isComposing: true });
+            //Simulatesoft-selectionofanothersuggestionfromIMEthroughkeyboardnavigation.
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',
+                {key:'ArrowDown',isComposing:true});
+            awaittestUtils.dom.triggerEvent(searchInput,'keypress',
+                {key:'ArrowDown',isComposing:true});
+            searchInput.value=テスト;
+            awaittestUtils.dom.triggerEvent(searchInput,'keyup',
+                {key:'ArrowDown',isComposing:true});
+            awaittestUtils.dom.triggerEvent(searchInput,'input',
+                {inputType:'insertCompositionText',isComposing:true});
 
             assert.strictEqual(
-                actionManager.el.querySelector('.o_searchview_autocomplete li').innerText.trim(),
-                "Search Foo for: テスト",
-                `1st filter suggestion should be updated with soft-selection typed word "テスト"`
+                actionManager.el.querySelector('.o_searchview_autocompleteli').innerText.trim(),
+                "SearchFoofor:テスト",
+                `1stfiltersuggestionshouldbeupdatedwithsoft-selectiontypedword"テスト"`
             );
 
-            // Simulate selection on suggestion item "TEST" from IME.
-            await testUtils.dom.triggerEvent(searchInput, 'keydown',
-                { key: 'Enter', isComposing: true });
-            await testUtils.dom.triggerEvent(searchInput, 'keypress',
-                { key: 'Enter', isComposing: true });
-            searchInput.value = TEST;
-            await testUtils.dom.triggerEvent(searchInput, 'keyup',
-                { key: 'Enter', isComposing: true });
-            await testUtils.dom.triggerEvent(searchInput, 'input',
-                { inputType: 'insertCompositionText', isComposing: true });
+            //Simulateselectiononsuggestionitem"TEST"fromIME.
+            awaittestUtils.dom.triggerEvent(searchInput,'keydown',
+                {key:'Enter',isComposing:true});
+            awaittestUtils.dom.triggerEvent(searchInput,'keypress',
+                {key:'Enter',isComposing:true});
+            searchInput.value=TEST;
+            awaittestUtils.dom.triggerEvent(searchInput,'keyup',
+                {key:'Enter',isComposing:true});
+            awaittestUtils.dom.triggerEvent(searchInput,'input',
+                {inputType:'insertCompositionText',isComposing:true});
 
-            // End of the composition
-            await testUtils.dom.triggerEvent(searchInput, 'compositionend');
+            //Endofthecomposition
+            awaittestUtils.dom.triggerEvent(searchInput,'compositionend');
 
             assert.strictEqual(
-                actionManager.el.querySelector('.o_searchview_autocomplete li').innerText.trim(),
-                "Search Foo for: TEST",
-                `1st filter suggestion should finally be updated with click selection on word "TEST" from IME`
+                actionManager.el.querySelector('.o_searchview_autocompleteli').innerText.trim(),
+                "SearchFoofor:TEST",
+                `1stfiltersuggestionshouldfinallybeupdatedwithclickselectiononword"TEST"fromIME`
             );
 
             actionManager.destroy();
         });
 
-        QUnit.test('open search view autocomplete on paste value using mouse', async function (assert) {
+        QUnit.test('opensearchviewautocompleteonpastevalueusingmouse',asyncfunction(assert){
             assert.expect(1);
 
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
             });
 
-            await actionManager.doAction(1);
-            // Simulate paste text through the mouse.
-            const searchInput = actionManager.el.querySelector('.o_searchview_input');
-            searchInput.value = "ABC";
-            await testUtils.dom.triggerEvent(searchInput, 'input',
-                { inputType: 'insertFromPaste' });
-            await testUtils.nextTick();
-            assert.containsOnce(actionManager, '.o_searchview_autocomplete',
-                "should display autocomplete dropdown menu on paste in search view");
+            awaitactionManager.doAction(1);
+            //Simulatepastetextthroughthemouse.
+            constsearchInput=actionManager.el.querySelector('.o_searchview_input');
+            searchInput.value="ABC";
+            awaittestUtils.dom.triggerEvent(searchInput,'input',
+                {inputType:'insertFromPaste'});
+            awaittestUtils.nextTick();
+            assert.containsOnce(actionManager,'.o_searchview_autocomplete',
+                "shoulddisplayautocompletedropdownmenuonpasteinsearchview");
 
             actionManager.destroy();
         });
 
-        QUnit.test('select autocompleted many2one', async function (assert) {
+        QUnit.test('selectautocompletedmany2one',asyncfunction(assert){
             assert.expect(5);
 
-            const archs = Object.assign({}, this.archs, {
-                'partner,false,search': `
+            constarchs=Object.assign({},this.archs,{
+                'partner,false,search':`
                     <search>
-                        <field name="foo"/>
-                        <field name="birthday"/>
-                        <field name="birth_datetime"/>
-                        <field name="bar" operator="child_of"/>
+                        <fieldname="foo"/>
+                        <fieldname="birthday"/>
+                        <fieldname="birth_datetime"/>
+                        <fieldname="bar"operator="child_of"/>
                     </search>`,
             });
-            const actionManager = await createActionManager({
-                actions: this.actions,
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
                 archs,
-                data: this.data,
-                async mockRPC(route, { domain }) {
-                    if (route === '/web/dataset/search_read') {
+                data:this.data,
+                asyncmockRPC(route,{domain}){
+                    if(route==='/web/dataset/search_read'){
                         assert.step(JSON.stringify(domain));
                     }
-                    return this._super(...arguments);
+                    returnthis._super(...arguments);
                 },
             });
-            await actionManager.doAction(1);
+            awaitactionManager.doAction(1);
 
-            await cpHelpers.editSearch(actionManager, "rec");
-            await testUtils.dom.click(actionManager.el.querySelector('.o_searchview_autocomplete li:last-child'));
+            awaitcpHelpers.editSearch(actionManager,"rec");
+            awaittestUtils.dom.click(actionManager.el.querySelector('.o_searchview_autocompleteli:last-child'));
 
-            await cpHelpers.removeFacet(actionManager, 0);
+            awaitcpHelpers.removeFacet(actionManager,0);
 
-            await cpHelpers.editSearch(actionManager, "rec");
-            await testUtils.dom.click(actionManager.el.querySelector('.o_expand'));
-            await testUtils.dom.click(actionManager.el.querySelector('.o_searchview_autocomplete li.o_menu_item.o_indent'));
+            awaitcpHelpers.editSearch(actionManager,"rec");
+            awaittestUtils.dom.click(actionManager.el.querySelector('.o_expand'));
+            awaittestUtils.dom.click(actionManager.el.querySelector('.o_searchview_autocompleteli.o_menu_item.o_indent'));
 
             assert.verifySteps([
                 '[]',
-                '[["bar","child_of","rec"]]', // Incomplete string -> Name search
+                '[["bar","child_of","rec"]]',//Incompletestring->Namesearch
                 '[]',
-                '[["bar","child_of",1]]', // Suggestion select -> Specific ID
+                '[["bar","child_of",1]]',//Suggestionselect->SpecificID
             ]);
 
             actionManager.destroy();
         });
 
-        QUnit.test('"null" as autocomplete value', async function (assert) {
+        QUnit.test('"null"asautocompletevalue',asyncfunction(assert){
             assert.expect(4);
 
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
-                mockRPC(route, args) {
-                    if (route === '/web/dataset/search_read') {
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
+                mockRPC(route,args){
+                    if(route==='/web/dataset/search_read'){
                         assert.step(JSON.stringify(args.domain));
                     }
-                    return this._super(...arguments);
+                    returnthis._super(...arguments);
                 },
             });
 
-            await actionManager.doAction(1);
+            awaitactionManager.doAction(1);
 
-            await cpHelpers.editSearch(actionManager, "null");
+            awaitcpHelpers.editSearch(actionManager,"null");
 
-            assert.strictEqual(actionManager.$('.o_searchview_autocomplete .o_selection_focus').text(),
-                "Search Foo for: null");
+            assert.strictEqual(actionManager.$('.o_searchview_autocomplete.o_selection_focus').text(),
+                "SearchFoofor:null");
 
-            await testUtils.dom.click(actionManager.el.querySelector('.o_searchview_autocomplete li.o_selection_focus a'));
+            awaittestUtils.dom.click(actionManager.el.querySelector('.o_searchview_autocompleteli.o_selection_focusa'));
 
             assert.verifySteps([
-                JSON.stringify([]), // initial search
-                JSON.stringify([["foo", "ilike", "null"]]),
+                JSON.stringify([]),//initialsearch
+                JSON.stringify([["foo","ilike","null"]]),
             ]);
 
             actionManager.destroy();
         });
 
-        QUnit.test('autocompletion with a boolean field', async function (assert) {
+        QUnit.test('autocompletionwithabooleanfield',asyncfunction(assert){
             assert.expect(9);
 
-            this.archs['partner,false,search'] = '<search><field name="bool"/></search>';
+            this.archs['partner,false,search']='<search><fieldname="bool"/></search>';
 
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
-                mockRPC(route, args) {
-                    if (route === '/web/dataset/search_read') {
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
+                mockRPC(route,args){
+                    if(route==='/web/dataset/search_read'){
                         assert.step(JSON.stringify(args.domain));
                     }
-                    return this._super(...arguments);
+                    returnthis._super(...arguments);
                 },
             });
 
-            await actionManager.doAction(1);
+            awaitactionManager.doAction(1);
 
-            await cpHelpers.editSearch(actionManager, "y");
+            awaitcpHelpers.editSearch(actionManager,"y");
 
-            assert.containsN(actionManager, '.o_searchview_autocomplete li', 2);
-            assert.strictEqual(actionManager.$('.o_searchview_autocomplete li:last-child').text(), "Yes");
+            assert.containsN(actionManager,'.o_searchview_autocompleteli',2);
+            assert.strictEqual(actionManager.$('.o_searchview_autocompleteli:last-child').text(),"Yes");
 
-            // select "Yes"
-            await testUtils.dom.click(actionManager.el.querySelector('.o_searchview_autocomplete li:last-child'));
+            //select"Yes"
+            awaittestUtils.dom.click(actionManager.el.querySelector('.o_searchview_autocompleteli:last-child'));
 
-            await cpHelpers.removeFacet(actionManager, 0);
+            awaitcpHelpers.removeFacet(actionManager,0);
 
-            await cpHelpers.editSearch(actionManager, "No");
+            awaitcpHelpers.editSearch(actionManager,"No");
 
-            assert.containsN(actionManager, '.o_searchview_autocomplete li', 2);
-            assert.strictEqual(actionManager.$('.o_searchview_autocomplete li:last-child').text(), "No");
+            assert.containsN(actionManager,'.o_searchview_autocompleteli',2);
+            assert.strictEqual(actionManager.$('.o_searchview_autocompleteli:last-child').text(),"No");
 
-            // select "No"
-            await testUtils.dom.click(actionManager.el.querySelector('.o_searchview_autocomplete li:last-child'));
+            //select"No"
+            awaittestUtils.dom.click(actionManager.el.querySelector('.o_searchview_autocompleteli:last-child'));
 
 
             assert.verifySteps([
-                JSON.stringify([]), // initial search
-                JSON.stringify([["bool", "=", true]]),
+                JSON.stringify([]),//initialsearch
+                JSON.stringify([["bool","=",true]]),
                 JSON.stringify([]),
-                JSON.stringify([["bool", "=", false]]),
+                JSON.stringify([["bool","=",false]]),
             ]);
 
             actionManager.destroy();
         });
 
-        QUnit.test("reference fields are supported in search view", async function (assert) {
+        QUnit.test("referencefieldsaresupportedinsearchview",asyncfunction(assert){
             assert.expect(7);
 
-            this.data.partner.fields.ref = { type: 'reference', string: "Reference" };
-            this.data.partner.records.forEach((record, i) => {
-                record.ref = `ref${String(i).padStart(3, "0")}`;
+            this.data.partner.fields.ref={type:'reference',string:"Reference"};
+            this.data.partner.records.forEach((record,i)=>{
+                record.ref=`ref${String(i).padStart(3,"0")}`;
             });
-            const archs = Object.assign({}, this.archs, {
-                'partner,false,search': `
+            constarchs=Object.assign({},this.archs,{
+                'partner,false,search':`
                     <search>
-                        <field name="ref"/>
+                        <fieldname="ref"/>
                     </search>`,
             });
-            const actionManager = await createActionManager({
-                actions: this.actions,
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
                 archs,
-                data: this.data,
-                async mockRPC(route, { domain }) {
-                    if (route === '/web/dataset/search_read') {
+                data:this.data,
+                asyncmockRPC(route,{domain}){
+                    if(route==='/web/dataset/search_read'){
                         assert.step(JSON.stringify(domain));
                     }
-                    return this._super(...arguments);
+                    returnthis._super(...arguments);
 
                 }
             });
-            await actionManager.doAction(1);
+            awaitactionManager.doAction(1);
 
-            await cpHelpers.editSearch(actionManager, "ref");
-            await cpHelpers.validateSearch(actionManager);
+            awaitcpHelpers.editSearch(actionManager,"ref");
+            awaitcpHelpers.validateSearch(actionManager);
 
-            assert.containsN(actionManager, ".o_data_row", 5);
+            assert.containsN(actionManager,".o_data_row",5);
 
-            await cpHelpers.removeFacet(actionManager, 0);
-            await cpHelpers.editSearch(actionManager, "ref002");
-            await cpHelpers.validateSearch(actionManager);
+            awaitcpHelpers.removeFacet(actionManager,0);
+            awaitcpHelpers.editSearch(actionManager,"ref002");
+            awaitcpHelpers.validateSearch(actionManager);
 
-            assert.containsOnce(actionManager, ".o_data_row");
+            assert.containsOnce(actionManager,".o_data_row");
 
             assert.verifySteps([
                 '[]',
@@ -704,34 +704,34 @@ flectra.define('web.search_bar_tests', function (require) {
             actionManager.destroy();
         });
 
-        QUnit.test('focus should be on search bar when switching between views', async function (assert) {
+        QUnit.test('focusshouldbeonsearchbarwhenswitchingbetweenviews',asyncfunction(assert){
             assert.expect(4);
 
-            this.actions[0].views = [[false, 'list'], [false, 'form']];
-            this.archs['partner,false,form'] = `
+            this.actions[0].views=[[false,'list'],[false,'form']];
+            this.archs['partner,false,form']=`
             <form>
                 <group>
-                    <field name="display_name"/>
+                    <fieldname="display_name"/>
                 </group>
             </form>`;
 
-            const actionManager = await createActionManager({
-                actions: this.actions,
-                archs: this.archs,
-                data: this.data,
+            constactionManager=awaitcreateActionManager({
+                actions:this.actions,
+                archs:this.archs,
+                data:this.data,
             });
 
-            await actionManager.doAction(1);
+            awaitactionManager.doAction(1);
 
-            assert.containsOnce(actionManager, '.o_list_view');
-            assert.strictEqual(document.activeElement, actionManager.el.querySelector('.o_searchview input.o_searchview_input'),
-                "searchview should have focus");
+            assert.containsOnce(actionManager,'.o_list_view');
+            assert.strictEqual(document.activeElement,actionManager.el.querySelector('.o_searchviewinput.o_searchview_input'),
+                "searchviewshouldhavefocus");
 
-            await testUtils.dom.click(actionManager.$('.o_list_view .o_data_cell:first'));
-            assert.containsOnce(actionManager, '.o_form_view');
-            await testUtils.dom.click(actionManager.$('.o_back_button'));
-            assert.strictEqual(document.activeElement, actionManager.el.querySelector('.o_searchview input.o_searchview_input'),
-                "searchview should have focus");
+            awaittestUtils.dom.click(actionManager.$('.o_list_view.o_data_cell:first'));
+            assert.containsOnce(actionManager,'.o_form_view');
+            awaittestUtils.dom.click(actionManager.$('.o_back_button'));
+            assert.strictEqual(document.activeElement,actionManager.el.querySelector('.o_searchviewinput.o_searchview_input'),
+                "searchviewshouldhavefocus");
 
             actionManager.destroy();
         });

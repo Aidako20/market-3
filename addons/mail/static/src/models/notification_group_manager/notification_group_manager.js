@@ -1,58 +1,58 @@
-flectra.define('mail/static/src/models/notification_group_manager/notification_group_manager.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/notification_group_manager/notification_group_manager.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { one2many } = require('mail/static/src/model/model_field.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{one2many}=require('mail/static/src/model/model_field.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class NotificationGroupManager extends dependencies['mail.model'] {
+    classNotificationGroupManagerextendsdependencies['mail.model']{
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
-        computeGroups() {
-            for (const group of this.groups) {
+        computeGroups(){
+            for(constgroupofthis.groups){
                 group.delete();
             }
-            const groups = [];
-            // TODO batch insert, better logic task-2258605
-            this.env.messaging.currentPartner.failureNotifications.forEach(notification => {
-                const thread = notification.message.originThread;
-                // Notifications are grouped by model and notification_type.
-                // Except for channel where they are also grouped by id because
-                // we want to open the actual channel in discuss or chat window
-                // and not its kanban/list/form view.
-                const channelId = thread.model === 'mail.channel' ? thread.id : null;
-                const id = `${thread.model}/${channelId}/${notification.notification_type}`;
-                const group = this.env.models['mail.notification_group'].insert({
+            constgroups=[];
+            //TODObatchinsert,betterlogictask-2258605
+            this.env.messaging.currentPartner.failureNotifications.forEach(notification=>{
+                constthread=notification.message.originThread;
+                //Notificationsaregroupedbymodelandnotification_type.
+                //Exceptforchannelwheretheyarealsogroupedbyidbecause
+                //wewanttoopentheactualchannelindiscussorchatwindow
+                //andnotitskanban/list/formview.
+                constchannelId=thread.model==='mail.channel'?thread.id:null;
+                constid=`${thread.model}/${channelId}/${notification.notification_type}`;
+                constgroup=this.env.models['mail.notification_group'].insert({
                     id,
-                    notification_type: notification.notification_type,
-                    res_model: thread.model,
-                    res_model_name: thread.model_name,
+                    notification_type:notification.notification_type,
+                    res_model:thread.model,
+                    res_model_name:thread.model_name,
                 });
-                group.update({ notifications: [['link', notification]] });
-                // avoid linking the same group twice when adding a notification
-                // to an existing group
-                if (!groups.includes(group)) {
+                group.update({notifications:[['link',notification]]});
+                //avoidlinkingthesamegrouptwicewhenaddinganotification
+                //toanexistinggroup
+                if(!groups.includes(group)){
                     groups.push(group);
                 }
             });
-            this.update({ groups: [['link', groups]] });
+            this.update({groups:[['link',groups]]});
         }
 
     }
 
-    NotificationGroupManager.fields = {
-        groups: one2many('mail.notification_group'),
+    NotificationGroupManager.fields={
+        groups:one2many('mail.notification_group'),
     };
 
-    NotificationGroupManager.modelName = 'mail.notification_group_manager';
+    NotificationGroupManager.modelName='mail.notification_group_manager';
 
-    return NotificationGroupManager;
+    returnNotificationGroupManager;
 }
 
-registerNewModel('mail.notification_group_manager', factory);
+registerNewModel('mail.notification_group_manager',factory);
 
 });

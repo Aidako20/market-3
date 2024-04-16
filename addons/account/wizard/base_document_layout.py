@@ -1,11 +1,11 @@
-from flectra import models
+fromflectraimportmodels
 
 
-class BaseDocumentLayout(models.TransientModel):
-    _inherit = 'base.document.layout'
+classBaseDocumentLayout(models.TransientModel):
+    _inherit='base.document.layout'
 
-    def document_layout_save(self):
-        res = super(BaseDocumentLayout, self).document_layout_save()
-        for wizard in self:
+    defdocument_layout_save(self):
+        res=super(BaseDocumentLayout,self).document_layout_save()
+        forwizardinself:
             wizard.company_id.action_save_onboarding_invoice_layout()
-        return res
+        returnres

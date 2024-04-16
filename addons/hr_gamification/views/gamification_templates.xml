@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-        <template id="assets_backend" name="hr_gamification assets" inherit_id="web.assets_backend">
-            <xpath expr="." position="inside">
-                <script type="text/javascript" src="/hr_gamification/static/src/js/gamification.js"></script>
+        <templateid="assets_backend"name="hr_gamificationassets"inherit_id="web.assets_backend">
+            <xpathexpr="."position="inside">
+                <scripttype="text/javascript"src="/hr_gamification/static/src/js/gamification.js"></script>
             </xpath>
         </template>
 

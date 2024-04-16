@@ -1,58 +1,58 @@
-//! moment.js locale configuration
-//! locale : Central Atlas Tamazight Latin [tzm-latn]
-//! author : Abdel Said : https://github.com/abdelsaid
+//!moment.jslocaleconfiguration
+//!locale:CentralAtlasTamazightLatin[tzm-latn]
+//!author:AbdelSaid:https://github.com/abdelsaid
 
-;(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined'
-       && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+;(function(global,factory){
+   typeofexports==='object'&&typeofmodule!=='undefined'
+       &&typeofrequire==='function'?factory(require('../moment')):
+   typeofdefine==='function'&&define.amd?define(['../moment'],factory):
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this,(function(moment){'usestrict';
 
 
-var tzmLatn = moment.defineLocale('tzm-latn', {
-    months : 'innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir'.split('_'),
-    monthsShort : 'innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir'.split('_'),
-    weekdays : 'asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas'.split('_'),
-    weekdaysShort : 'asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas'.split('_'),
-    weekdaysMin : 'asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas'.split('_'),
-    longDateFormat : {
-        LT : 'HH:mm',
-        LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
-        LL : 'D MMMM YYYY',
-        LLL : 'D MMMM YYYY HH:mm',
-        LLLL : 'dddd D MMMM YYYY HH:mm'
+vartzmLatn=moment.defineLocale('tzm-latn',{
+    months:'innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir'.split('_'),
+    monthsShort:'innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir'.split('_'),
+    weekdays:'asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas'.split('_'),
+    weekdaysShort:'asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas'.split('_'),
+    weekdaysMin:'asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas'.split('_'),
+    longDateFormat:{
+        LT:'HH:mm',
+        LTS:'HH:mm:ss',
+        L:'DD/MM/YYYY',
+        LL:'DMMMMYYYY',
+        LLL:'DMMMMYYYYHH:mm',
+        LLLL:'ddddDMMMMYYYYHH:mm'
     },
-    calendar : {
-        sameDay: '[asdkh g] LT',
-        nextDay: '[aska g] LT',
-        nextWeek: 'dddd [g] LT',
-        lastDay: '[assant g] LT',
-        lastWeek: 'dddd [g] LT',
-        sameElse: 'L'
+    calendar:{
+        sameDay:'[asdkhg]LT',
+        nextDay:'[askag]LT',
+        nextWeek:'dddd[g]LT',
+        lastDay:'[assantg]LT',
+        lastWeek:'dddd[g]LT',
+        sameElse:'L'
     },
-    relativeTime : {
-        future : 'dadkh s yan %s',
-        past : 'yan %s',
-        s : 'imik',
-        m : 'minuḍ',
-        mm : '%d minuḍ',
-        h : 'saɛa',
-        hh : '%d tassaɛin',
-        d : 'ass',
-        dd : '%d ossan',
-        M : 'ayowr',
-        MM : '%d iyyirn',
-        y : 'asgas',
-        yy : '%d isgasn'
+    relativeTime:{
+        future:'dadkhsyan%s',
+        past:'yan%s',
+        s:'imik',
+        m:'minuḍ',
+        mm:'%dminuḍ',
+        h:'saɛa',
+        hh:'%dtassaɛin',
+        d:'ass',
+        dd:'%dossan',
+        M:'ayowr',
+        MM:'%diyyirn',
+        y:'asgas',
+        yy:'%disgasn'
     },
-    week : {
-        dow : 6, // Saturday is the first day of the week.
-        doy : 12  // The week that contains Jan 1st is the first week of the year.
+    week:{
+        dow:6,//Saturdayisthefirstdayoftheweek.
+        doy:12 //TheweekthatcontainsJan1stisthefirstweekoftheyear.
     }
 });
 
-return tzmLatn;
+returntzmLatn;
 
 })));

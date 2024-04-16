@@ -1,29 +1,29 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from datetime import timedelta
+fromdatetimeimporttimedelta
 
-from flectra.fields import Datetime
-from flectra.tests import HttpCase, tagged
+fromflectra.fieldsimportDatetime
+fromflectra.testsimportHttpCase,tagged
 
 
-@tagged('post_install', '-at_install')
-class TestUi(HttpCase):
+@tagged('post_install','-at_install')
+classTestUi(HttpCase):
 
-    def test_event_configurator(self):
+    deftest_event_configurator(self):
 
-        event = self.env['event.event'].create({
-            'name': 'Design Fair Los Angeles',
-            'date_begin': Datetime.now() + timedelta(days=1),
-            'date_end': Datetime.now() + timedelta(days=5),
+        event=self.env['event.event'].create({
+            'name':'DesignFairLosAngeles',
+            'date_begin':Datetime.now()+timedelta(days=1),
+            'date_end':Datetime.now()+timedelta(days=5),
         })
 
         self.env['event.event.ticket'].create([{
-            'name': 'Standard',
-            'event_id': event.id,
-            'product_id': self.env.ref('event_sale.product_product_event').id,
-        }, {
-            'name': 'VIP',
-            'event_id': event.id,
-            'product_id': self.env.ref('event_sale.product_product_event').id,
+            'name':'Standard',
+            'event_id':event.id,
+            'product_id':self.env.ref('event_sale.product_product_event').id,
+        },{
+            'name':'VIP',
+            'event_id':event.id,
+            'product_id':self.env.ref('event_sale.product_product_event').id,
         }])
-        self.start_tour("/web", 'event_configurator_tour', login="admin")
+        self.start_tour("/web",'event_configurator_tour',login="admin")

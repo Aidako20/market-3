@@ -1,33 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="mail_test_ticket_tracking_tpl" model="mail.template">
-        <field name="name">Mail Test Full: Tracking Template</field>
-        <field name="subject">Test Template</field>
-        <field name="partner_to">${object.customer_id.id | safe}</field>
-        <field name="body_html" type="xml"><p>Hello ${object.name}</p></field>
-        <field name="model_id" ref="test_mail.model_mail_test_ticket"/>
-        <field name="auto_delete" eval="True"/>
+    <recordid="mail_test_ticket_tracking_tpl"model="mail.template">
+        <fieldname="name">MailTestFull:TrackingTemplate</field>
+        <fieldname="subject">TestTemplate</field>
+        <fieldname="partner_to">${object.customer_id.id|safe}</field>
+        <fieldname="body_html"type="xml"><p>Hello${object.name}</p></field>
+        <fieldname="model_id"ref="test_mail.model_mail_test_ticket"/>
+        <fieldname="auto_delete"eval="True"/>
     </record>
 
-    <record id="mail_test_container_tpl" model="mail.template">
-        <field name="name">Mail Test: Template</field>
-        <field name="subject">Post on ${object.name}</field>
-        <field name="partner_to">${object.customer_id.id}</field>
-        <field name="body_html" type="xml"><p>Adding stuff on ${object.name}</p></field>
-        <field name="model_id" ref="test_mail.model_mail_test_container"/>
-        <field name="auto_delete" eval="True"/>
+    <recordid="mail_test_container_tpl"model="mail.template">
+        <fieldname="name">MailTest:Template</field>
+        <fieldname="subject">Poston${object.name}</field>
+        <fieldname="partner_to">${object.customer_id.id}</field>
+        <fieldname="body_html"type="xml"><p>Addingstuffon${object.name}</p></field>
+        <fieldname="model_id"ref="test_mail.model_mail_test_container"/>
+        <fieldname="auto_delete"eval="True"/>
     </record>
 
-    <template id="mail_test_ticket_tracking_view">
-    	<p><span t-esc="object.name"/> datetime has been updated to <span t-esc="object.datetime"/></p>
+    <templateid="mail_test_ticket_tracking_view">
+    	<p><spant-esc="object.name"/>datetimehasbeenupdatedto<spant-esc="object.datetime"/></p>
     </template>
 
-    <template id="mail_test_ticket_test_template">
-        <t t-call="web.html_container">
-            <t t-set="o" t-value="res_company"/>
-            <t t-call="web.external_layout">
-                <div class="page">
-                    <p>This is a sample of an external report.</p>
+    <templateid="mail_test_ticket_test_template">
+        <tt-call="web.html_container">
+            <tt-set="o"t-value="res_company"/>
+            <tt-call="web.external_layout">
+                <divclass="page">
+                    <p>Thisisasampleofanexternalreport.</p>
                 </div>
             </t>
         </t>

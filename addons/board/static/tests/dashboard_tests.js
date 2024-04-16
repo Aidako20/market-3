@@ -1,692 +1,692 @@
-flectra.define('board.dashboard_tests', function (require) {
-"use strict";
+flectra.define('board.dashboard_tests',function(require){
+"usestrict";
 
-var BoardView = require('board.BoardView');
+varBoardView=require('board.BoardView');
 
-var ListController = require('web.ListController');
-var testUtils = require('web.test_utils');
-var ListRenderer = require('web.ListRenderer');
-var pyUtils = require('web.py_utils');
+varListController=require('web.ListController');
+vartestUtils=require('web.test_utils');
+varListRenderer=require('web.ListRenderer');
+varpyUtils=require('web.py_utils');
 
-const cpHelpers = testUtils.controlPanel;
-var createActionManager = testUtils.createActionManager;
-var createView = testUtils.createView;
+constcpHelpers=testUtils.controlPanel;
+varcreateActionManager=testUtils.createActionManager;
+varcreateView=testUtils.createView;
 
-const patchDate = testUtils.mock.patchDate;
+constpatchDate=testUtils.mock.patchDate;
 
-QUnit.module('Dashboard', {
-    beforeEach: function () {
-        this.data = {
-            board: {
-                fields: {
+QUnit.module('Dashboard',{
+    beforeEach:function(){
+        this.data={
+            board:{
+                fields:{
                 },
-                records: [
+                records:[
                 ]
             },
-            partner: {
-                fields: {
-                    display_name: {string: "Displayed name", type: "char", searchable: true},
-                    foo: {string: "Foo", type: "char", default: "My little Foo Value", searchable: true},
-                    bar: {string: "Bar", type: "boolean"},
-                    int_field: {string: "Integer field", type: "integer", group_operator: 'sum'},
+            partner:{
+                fields:{
+                    display_name:{string:"Displayedname",type:"char",searchable:true},
+                    foo:{string:"Foo",type:"char",default:"MylittleFooValue",searchable:true},
+                    bar:{string:"Bar",type:"boolean"},
+                    int_field:{string:"Integerfield",type:"integer",group_operator:'sum'},
                 },
-                records: [{
-                    id: 1,
-                    display_name: "first record",
-                    foo: "yop",
-                    int_field: 3,
-                }, {
-                    id: 2,
-                    display_name: "second record",
-                    foo: "lalala",
-                    int_field: 5,
-                }, {
-                    id: 4,
-                    display_name: "aaa",
-                    foo: "abc",
-                    int_field: 2,
+                records:[{
+                    id:1,
+                    display_name:"firstrecord",
+                    foo:"yop",
+                    int_field:3,
+                },{
+                    id:2,
+                    display_name:"secondrecord",
+                    foo:"lalala",
+                    int_field:5,
+                },{
+                    id:4,
+                    display_name:"aaa",
+                    foo:"abc",
+                    int_field:2,
                 }],
             },
         };
     },
 });
 
-QUnit.test('dashboard basic rendering', async function (assert) {
+QUnit.test('dashboardbasicrendering',asyncfunction(assert){
     assert.expect(4);
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
             '</form>',
     });
 
-    assert.doesNotHaveClass(form.renderer.$el, 'o_dashboard',
-        "should not have the o_dashboard css class");
+    assert.doesNotHaveClass(form.renderer.$el,'o_dashboard',
+        "shouldnothavetheo_dashboardcssclass");
 
     form.destroy();
 
-    form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column></column>' +
-                '</board>' +
+    form=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column></column>'+
+                '</board>'+
             '</form>',
     });
 
     assert.hasClass(form.renderer.$el,'o_dashboard',
-        "with a dashboard, the renderer should have the proper css class");
-    assert.containsOnce(form, '.o_dashboard .o_view_nocontent',
-        "should have a no content helper");
-    assert.strictEqual(form.$('.o_control_panel .breadcrumb-item').text(), "My Dashboard",
-        "should have the correct title");
+        "withadashboard,therenderershouldhavethepropercssclass");
+    assert.containsOnce(form,'.o_dashboard.o_view_nocontent',
+        "shouldhaveanocontenthelper");
+    assert.strictEqual(form.$('.o_control_panel.breadcrumb-item').text(),"MyDashboard",
+        "shouldhavethecorrecttitle");
     form.destroy();
 });
 
-QUnit.test('display the no content helper', async function (assert) {
+QUnit.test('displaythenocontenthelper',asyncfunction(assert){
     assert.expect(1);
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column></column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column></column>'+
+                '</board>'+
             '</form>',
-        viewOptions: {
-            action: {
-                help: '<p class="hello">click to add a partner</p>'
+        viewOptions:{
+            action:{
+                help:'<pclass="hello">clicktoaddapartner</p>'
             }
         },
     });
 
-    assert.containsOnce(form, '.o_dashboard .o_view_nocontent',
-        "should have a no content helper with action help");
+    assert.containsOnce(form,'.o_dashboard.o_view_nocontent',
+        "shouldhaveanocontenthelperwithactionhelp");
     form.destroy();
 });
 
-QUnit.test('basic functionality, with one sub action', async function (assert) {
+QUnit.test('basicfunctionality,withonesubaction',asyncfunction(assert){
     assert.expect(26);
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{&quot;orderedBy&quot;: [{&quot;name&quot;: &quot;foo&quot;, &quot;asc&quot;: True}]}" view_mode="list" string="ABC" name="51" domain="[[\'foo\', \'!=\', \'False\']]"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{&quot;orderedBy&quot;:[{&quot;name&quot;:&quot;foo&quot;,&quot;asc&quot;:True}]}"view_mode="list"string="ABC"name="51"domain="[[\'foo\',\'!=\',\'False\']]"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route, args) {
-            if (route === '/web/action/load') {
-                assert.step('load action');
-                return Promise.resolve({
-                    res_model: 'partner',
-                    views: [[4, 'list']],
+        mockRPC:function(route,args){
+            if(route==='/web/action/load'){
+                assert.step('loadaction');
+                returnPromise.resolve({
+                    res_model:'partner',
+                    views:[[4,'list']],
                 });
             }
-            if (route === '/web/dataset/search_read') {
-                assert.deepEqual(args.domain, [['foo', '!=', 'False']], "the domain should be passed");
-                assert.deepEqual(args.context.orderedBy, [{
-                        'name': 'foo',
-                        'asc': true,
+            if(route==='/web/dataset/search_read'){
+                assert.deepEqual(args.domain,[['foo','!=','False']],"thedomainshouldbepassed");
+                assert.deepEqual(args.context.orderedBy,[{
+                        'name':'foo',
+                        'asc':true,
                     }],
-                    'orderedBy is present in the search read when specified on the custom action'
+                    'orderedByispresentinthesearchreadwhenspecifiedonthecustomaction'
                 );
             }
-            if (route === '/web/view/edit_custom') {
-                assert.step('edit custom');
-                return Promise.resolve(true);
+            if(route==='/web/view/edit_custom'){
+                assert.step('editcustom');
+                returnPromise.resolve(true);
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
+        archs:{
             'partner,4,list':
-                '<tree string="Partner"><field name="foo"/></tree>',
+                '<treestring="Partner"><fieldname="foo"/></tree>',
         },
     });
 
-    assert.containsOnce(form, '.oe_dashboard_links',
-        "should have rendered a link div");
-    assert.containsOnce(form, 'table.oe_dashboard[data-layout="2-1"]',
-        "should have rendered a table");
-    assert.containsNone(form, 'td.o_list_record_selector',
-        "td should not have a list selector");
-    assert.strictEqual(form.$('h2 span.oe_header_txt:contains(ABC)').length, 1,
-        "should have rendered a header with action string");
-    assert.containsN(form, 'tr.o_data_row', 3,
-        "should have rendered 3 data rows");
+    assert.containsOnce(form,'.oe_dashboard_links',
+        "shouldhaverenderedalinkdiv");
+    assert.containsOnce(form,'table.oe_dashboard[data-layout="2-1"]',
+        "shouldhaverenderedatable");
+    assert.containsNone(form,'td.o_list_record_selector',
+        "tdshouldnothavealistselector");
+    assert.strictEqual(form.$('h2span.oe_header_txt:contains(ABC)').length,1,
+        "shouldhaverenderedaheaderwithactionstring");
+    assert.containsN(form,'tr.o_data_row',3,
+        "shouldhaverendered3datarows");
 
-    assert.ok(form.$('.oe_content').is(':visible'), "content is visible");
+    assert.ok(form.$('.oe_content').is(':visible'),"contentisvisible");
 
-    await testUtils.dom.click(form.$('.oe_fold'));
+    awaittestUtils.dom.click(form.$('.oe_fold'));
 
-    assert.notOk(form.$('.oe_content').is(':visible'), "content is no longer visible");
+    assert.notOk(form.$('.oe_content').is(':visible'),"contentisnolongervisible");
 
-    await testUtils.dom.click(form.$('.oe_fold'));
+    awaittestUtils.dom.click(form.$('.oe_fold'));
 
-    assert.ok(form.$('.oe_content').is(':visible'), "content is visible again");
-    assert.verifySteps(['load action', 'edit custom', 'edit custom']);
+    assert.ok(form.$('.oe_content').is(':visible'),"contentisvisibleagain");
+    assert.verifySteps(['loadaction','editcustom','editcustom']);
 
-    assert.strictEqual($('.modal').length, 0, "should have no modal open");
+    assert.strictEqual($('.modal').length,0,"shouldhavenomodalopen");
 
-    await testUtils.dom.click(form.$('button.oe_dashboard_link_change_layout'));
+    awaittestUtils.dom.click(form.$('button.oe_dashboard_link_change_layout'));
 
-    assert.strictEqual($('.modal').length, 1, "should have opened a modal");
-    assert.strictEqual($('.modal li[data-layout="2-1"] i.oe_dashboard_selected_layout').length, 1,
-        "should mark currently selected layout");
+    assert.strictEqual($('.modal').length,1,"shouldhaveopenedamodal");
+    assert.strictEqual($('.modalli[data-layout="2-1"]i.oe_dashboard_selected_layout').length,1,
+        "shouldmarkcurrentlyselectedlayout");
 
-    await testUtils.dom.click($('.modal .oe_dashboard_layout_selector li[data-layout="1-1"]'));
+    awaittestUtils.dom.click($('.modal.oe_dashboard_layout_selectorli[data-layout="1-1"]'));
 
-    assert.strictEqual($('.modal').length, 0, "should have no modal open");
-    assert.containsOnce(form, 'table.oe_dashboard[data-layout="1-1"]',
-        "should have rendered a table with correct layout");
+    assert.strictEqual($('.modal').length,0,"shouldhavenomodalopen");
+    assert.containsOnce(form,'table.oe_dashboard[data-layout="1-1"]',
+        "shouldhaverenderedatablewithcorrectlayout");
 
 
-    assert.containsOnce(form, '.oe_action', "should have one displayed action");
-    await testUtils.dom.click(form.$('span.oe_close'));
+    assert.containsOnce(form,'.oe_action',"shouldhaveonedisplayedaction");
+    awaittestUtils.dom.click(form.$('span.oe_close'));
 
-    assert.strictEqual($('.modal').length, 1, "should have opened a modal");
+    assert.strictEqual($('.modal').length,1,"shouldhaveopenedamodal");
 
-    // confirm the close operation
-    await testUtils.dom.click($('.modal button.btn-primary'));
+    //confirmthecloseoperation
+    awaittestUtils.dom.click($('.modalbutton.btn-primary'));
 
-    assert.strictEqual($('.modal').length, 0, "should have no modal open");
-    assert.containsNone(form, '.oe_action', "should have no displayed action");
+    assert.strictEqual($('.modal').length,0,"shouldhavenomodalopen");
+    assert.containsNone(form,'.oe_action',"shouldhavenodisplayedaction");
 
-    assert.verifySteps(['edit custom', 'edit custom']);
+    assert.verifySteps(['editcustom','editcustom']);
     form.destroy();
 });
 
-QUnit.test('views in the dashboard do not have a control panel', async function (assert) {
+QUnit.test('viewsinthedashboarddonothaveacontrolpanel',asyncfunction(assert){
     assert.expect(2);
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form>' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{}" view_mode="list" string="ABC" name="51" domain="[]"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<form>'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{}"view_mode="list"string="ABC"name="51"domain="[]"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route) {
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    res_model: 'partner',
-                    views: [[4, 'list'], [5, 'form']],
+        mockRPC:function(route){
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    res_model:'partner',
+                    views:[[4,'list'],[5,'form']],
                 });
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
+        archs:{
             'partner,4,list':
-                '<tree string="Partner"><field name="foo"/></tree>',
+                '<treestring="Partner"><fieldname="foo"/></tree>',
         },
     });
 
-    assert.containsOnce(form, '.o_action .o_list_view');
-    assert.containsNone(form, '.o_action .o_control_panel');
+    assert.containsOnce(form,'.o_action.o_list_view');
+    assert.containsNone(form,'.o_action.o_control_panel');
 
     form.destroy();
 });
 
-QUnit.test('can render an action without view_mode attribute', async function (assert) {
-    // The view_mode attribute is automatically set to the 'action' nodes when
-    // the action is added to the dashboard using the 'Add to dashboard' button
-    // in the searchview. However, other dashboard views can be written by hand
-    // (see openacademy tutorial), and in this case, we don't want hardcode
-    // action's params (like context or domain), as the dashboard can directly
-    // retrieve them from the action. Same applies for the view_type, as the
-    // first view of the action can be used, by default.
+QUnit.test('canrenderanactionwithoutview_modeattribute',asyncfunction(assert){
+    //Theview_modeattributeisautomaticallysettothe'action'nodeswhen
+    //theactionisaddedtothedashboardusingthe'Addtodashboard'button
+    //inthesearchview.However,otherdashboardviewscanbewrittenbyhand
+    //(seeopenacademytutorial),andinthiscase,wedon'twanthardcode
+    //action'sparams(likecontextordomain),asthedashboardcandirectly
+    //retrievethemfromtheaction.Sameappliesfortheview_type,asthe
+    //firstviewoftheactioncanbeused,bydefault.
     assert.expect(3);
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action string="ABC" name="51" context="{\'a\': 1}"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actionstring="ABC"name="51"context="{\'a\':1}"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        archs: {
+        archs:{
             'partner,4,list':
-                '<tree string="Partner"><field name="foo"/></tree>',
+                '<treestring="Partner"><fieldname="foo"/></tree>',
         },
-        mockRPC: function (route, args) {
-            if (route === '/board/static/src/img/layout_1-1-1.png') {
-                return Promise.resolve();
+        mockRPC:function(route,args){
+            if(route==='/board/static/src/img/layout_1-1-1.png'){
+                returnPromise.resolve();
             }
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    context: '{"b": 2}',
-                    domain: '[["foo", "=", "yop"]]',
-                    res_model: 'partner',
-                    views: [[4, 'list'], [false, 'form']],
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    context:'{"b":2}',
+                    domain:'[["foo","=","yop"]]',
+                    res_model:'partner',
+                    views:[[4,'list'],[false,'form']],
                 });
             }
-            if (args.method === 'load_views') {
-                assert.deepEqual(args.kwargs.context, {a: 1, b: 2},
-                    "should have mixed both contexts");
+            if(args.method==='load_views'){
+                assert.deepEqual(args.kwargs.context,{a:1,b:2},
+                    "shouldhavemixedbothcontexts");
             }
-            if (route === '/web/dataset/search_read') {
-                assert.deepEqual(args.domain, [['foo', '=', 'yop']],
-                    "should use the domain of the action");
+            if(route==='/web/dataset/search_read'){
+                assert.deepEqual(args.domain,[['foo','=','yop']],
+                    "shouldusethedomainoftheaction");
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
     });
 
-    assert.strictEqual(form.$('.oe_action:contains(ABC) .o_list_view').length, 1,
-        "the list view (first view of action) should have been rendered correctly");
+    assert.strictEqual(form.$('.oe_action:contains(ABC).o_list_view').length,1,
+        "thelistview(firstviewofaction)shouldhavebeenrenderedcorrectly");
 
     form.destroy();
 });
 
-QUnit.test('can sort a sub list', async function (assert) {
+QUnit.test('cansortasublist',asyncfunction(assert){
     assert.expect(2);
 
-    this.data.partner.fields.foo.sortable = true;
+    this.data.partner.fields.foo.sortable=true;
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{}" view_mode="list" string="ABC" name="51" domain="[]"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{}"view_mode="list"string="ABC"name="51"domain="[]"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route) {
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    res_model: 'partner',
-                    views: [[4, 'list']],
+        mockRPC:function(route){
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    res_model:'partner',
+                    views:[[4,'list']],
                 });
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
+        archs:{
             'partner,4,list':
-                '<tree string="Partner"><field name="foo"/></tree>',
+                '<treestring="Partner"><fieldname="foo"/></tree>',
         },
     });
 
-    assert.strictEqual($('tr.o_data_row').text(), 'yoplalalaabc',
-        "should have correct initial data");
+    assert.strictEqual($('tr.o_data_row').text(),'yoplalalaabc',
+        "shouldhavecorrectinitialdata");
 
-    await testUtils.dom.click(form.$('th.o_column_sortable:contains(Foo)'));
+    awaittestUtils.dom.click(form.$('th.o_column_sortable:contains(Foo)'));
 
-    assert.strictEqual($('tr.o_data_row').text(), 'abclalalayop',
-        "data should have been sorted");
+    assert.strictEqual($('tr.o_data_row').text(),'abclalalayop',
+        "datashouldhavebeensorted");
     form.destroy();
 });
 
-QUnit.test('can open a record', async function (assert) {
+QUnit.test('canopenarecord',asyncfunction(assert){
     assert.expect(1);
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{}" view_mode="list" string="ABC" name="51" domain="[]"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{}"view_mode="list"string="ABC"name="51"domain="[]"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route) {
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    res_model: 'partner',
-                    views: [[4, 'list']],
+        mockRPC:function(route){
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    res_model:'partner',
+                    views:[[4,'list']],
                 });
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
+        archs:{
             'partner,4,list':
-                '<tree string="Partner"><field name="foo"/></tree>',
+                '<treestring="Partner"><fieldname="foo"/></tree>',
         },
-        intercepts: {
-            do_action: function (event) {
-                assert.deepEqual(event.data.action, {
-                    res_id: 1,
-                    res_model: 'partner',
-                    type: 'ir.actions.act_window',
-                    views: [[false, 'form']],
-                }, "should do a do_action with correct parameters");
+        intercepts:{
+            do_action:function(event){
+                assert.deepEqual(event.data.action,{
+                    res_id:1,
+                    res_model:'partner',
+                    type:'ir.actions.act_window',
+                    views:[[false,'form']],
+                },"shoulddoado_actionwithcorrectparameters");
             },
         },
     });
 
-    await testUtils.dom.click(form.$('tr.o_data_row td:contains(yop)'));
+    awaittestUtils.dom.click(form.$('tr.o_data_rowtd:contains(yop)'));
     form.destroy();
 });
 
-QUnit.test('can open record using action form view', async function (assert) {
+QUnit.test('canopenrecordusingactionformview',asyncfunction(assert){
     assert.expect(1);
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{}" view_mode="list" string="ABC" name="51" domain="[]"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{}"view_mode="list"string="ABC"name="51"domain="[]"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route) {
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    res_model: 'partner',
-                    views: [[4, 'list'], [5, 'form']],
+        mockRPC:function(route){
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    res_model:'partner',
+                    views:[[4,'list'],[5,'form']],
                 });
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
+        archs:{
             'partner,4,list':
-                '<tree string="Partner"><field name="foo"/></tree>',
+                '<treestring="Partner"><fieldname="foo"/></tree>',
             'partner,5,form':
-                '<form string="Partner"><field name="display_name"/></form>',
+                '<formstring="Partner"><fieldname="display_name"/></form>',
         },
-        intercepts: {
-            do_action: function (event) {
-                assert.deepEqual(event.data.action, {
-                    res_id: 1,
-                    res_model: 'partner',
-                    type: 'ir.actions.act_window',
-                    views: [[5, 'form']],
-                }, "should do a do_action with correct parameters");
+        intercepts:{
+            do_action:function(event){
+                assert.deepEqual(event.data.action,{
+                    res_id:1,
+                    res_model:'partner',
+                    type:'ir.actions.act_window',
+                    views:[[5,'form']],
+                },"shoulddoado_actionwithcorrectparameters");
             },
         },
     });
 
-    await testUtils.dom.click(form.$('tr.o_data_row td:contains(yop)'));
+    awaittestUtils.dom.click(form.$('tr.o_data_rowtd:contains(yop)'));
     form.destroy();
 });
 
-QUnit.test('can drag and drop a view', async function (assert) {
+QUnit.test('candraganddropaview',asyncfunction(assert){
     assert.expect(5);
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{}" view_mode="list" string="ABC" name="51" domain="[]"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{}"view_mode="list"string="ABC"name="51"domain="[]"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route) {
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    res_model: 'partner',
-                    views: [[4, 'list']],
+        mockRPC:function(route){
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    res_model:'partner',
+                    views:[[4,'list']],
                 });
             }
-            if (route === '/web/view/edit_custom') {
-                assert.step('edit custom');
-                return Promise.resolve(true);
+            if(route==='/web/view/edit_custom'){
+                assert.step('editcustom');
+                returnPromise.resolve(true);
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
+        archs:{
             'partner,4,list':
-                '<tree string="Partner"><field name="foo"/></tree>',
+                '<treestring="Partner"><fieldname="foo"/></tree>',
         },
     });
 
-    assert.containsOnce(form, 'td.index_0 .oe_action',
-        "initial action is in column 0");
+    assert.containsOnce(form,'td.index_0.oe_action',
+        "initialactionisincolumn0");
 
-    await testUtils.dom.dragAndDrop(form.$('.oe_dashboard_column.index_0 .oe_header'),
+    awaittestUtils.dom.dragAndDrop(form.$('.oe_dashboard_column.index_0.oe_header'),
         form.$('.oe_dashboard_column.index_1'));
-    assert.containsNone(form, 'td.index_0 .oe_action',
-        "initial action is not in column 0");
-    assert.containsOnce(form, 'td.index_1 .oe_action',
-        "initial action is in in column 1");
-    assert.verifySteps(['edit custom']);
+    assert.containsNone(form,'td.index_0.oe_action',
+        "initialactionisnotincolumn0");
+    assert.containsOnce(form,'td.index_1.oe_action',
+        "initialactionisinincolumn1");
+    assert.verifySteps(['editcustom']);
 
     form.destroy();
 });
 
-QUnit.test('twice the same action in a dashboard', async function (assert) {
+QUnit.test('twicethesameactioninadashboard',asyncfunction(assert){
     assert.expect(2);
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{}" view_mode="list" string="ABC" name="51" domain="[]"></action>' +
-                        '<action context="{}" view_mode="kanban" string="DEF" name="51" domain="[]"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{}"view_mode="list"string="ABC"name="51"domain="[]"></action>'+
+                        '<actioncontext="{}"view_mode="kanban"string="DEF"name="51"domain="[]"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route) {
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    res_model: 'partner',
-                    views: [[4, 'list'],[5, 'kanban']],
+        mockRPC:function(route){
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    res_model:'partner',
+                    views:[[4,'list'],[5,'kanban']],
                 });
             }
-            if (route === '/web/view/edit_custom') {
-                assert.step('edit custom');
-                return Promise.resolve(true);
+            if(route==='/web/view/edit_custom'){
+                assert.step('editcustom');
+                returnPromise.resolve(true);
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
+        archs:{
             'partner,4,list':
-                '<tree string="Partner"><field name="foo"/></tree>',
+                '<treestring="Partner"><fieldname="foo"/></tree>',
             'partner,5,kanban':
-                '<kanban><templates><t t-name="kanban-box">' +
-                    '<div><field name="foo"/></div>' +
+                '<kanban><templates><tt-name="kanban-box">'+
+                    '<div><fieldname="foo"/></div>'+
                 '</t></templates></kanban>',
         },
     });
 
-    var $firstAction = form.$('.oe_action:contains(ABC)');
-    assert.strictEqual($firstAction.find('.o_list_view').length, 1,
-        "list view should be displayed in 'ABC' block");
-    var $secondAction = form.$('.oe_action:contains(DEF)');
-    assert.strictEqual($secondAction.find('.o_kanban_view').length, 1,
-        "kanban view should be displayed in 'DEF' block");
+    var$firstAction=form.$('.oe_action:contains(ABC)');
+    assert.strictEqual($firstAction.find('.o_list_view').length,1,
+        "listviewshouldbedisplayedin'ABC'block");
+    var$secondAction=form.$('.oe_action:contains(DEF)');
+    assert.strictEqual($secondAction.find('.o_kanban_view').length,1,
+        "kanbanviewshouldbedisplayedin'DEF'block");
 
     form.destroy();
 });
 
-QUnit.test('non-existing action in a dashboard', async function (assert) {
+QUnit.test('non-existingactioninadashboard',asyncfunction(assert){
     assert.expect(1);
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{}" view_mode="kanban" string="ABC" name="51" domain="[]"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{}"view_mode="kanban"string="ABC"name="51"domain="[]"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        intercepts: {
-            load_views: function () {
-                throw new Error('load_views should not be called');
+        intercepts:{
+            load_views:function(){
+                thrownewError('load_viewsshouldnotbecalled');
             }
         },
-        mockRPC: function (route) {
-            if (route === '/board/static/src/img/layout_1-1-1.png') {
-                return Promise.resolve();
+        mockRPC:function(route){
+            if(route==='/board/static/src/img/layout_1-1-1.png'){
+                returnPromise.resolve();
             }
-            if (route === '/web/action/load') {
-                // server answer if the action doesn't exist anymore
-                return Promise.resolve(false);
+            if(route==='/web/action/load'){
+                //serveransweriftheactiondoesn'texistanymore
+                returnPromise.resolve(false);
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
     });
 
-    assert.strictEqual(form.$('.oe_action:contains(ABC)').length, 1,
-        "there should be a box for the non-existing action");
+    assert.strictEqual(form.$('.oe_action:contains(ABC)').length,1,
+        "thereshouldbeaboxforthenon-existingaction");
 
     form.destroy();
 });
 
-QUnit.test('clicking on a kanban\'s button should trigger the action', async function (assert) {
+QUnit.test('clickingonakanban\'sbuttonshouldtriggertheaction',asyncfunction(assert){
     assert.expect(2);
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action name="149" string="Partner" view_mode="kanban" id="action_0_1"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actionname="149"string="Partner"view_mode="kanban"id="action_0_1"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        archs: {
+        archs:{
             'partner,false,kanban':
-                '<kanban class="o_kanban_test"><templates><t t-name="kanban-box">' +
-                    '<div>' +
-                    '<field name="foo"/>' +
-                    '</div>' +
-                    '<div><button name="sitting_on_a_park_bench" type="object">Eying little girls with bad intent</button>' +
-                    '</div>' +
+                '<kanbanclass="o_kanban_test"><templates><tt-name="kanban-box">'+
+                    '<div>'+
+                    '<fieldname="foo"/>'+
+                    '</div>'+
+                    '<div><buttonname="sitting_on_a_park_bench"type="object">Eyinglittlegirlswithbadintent</button>'+
+                    '</div>'+
                 '</t></templates></kanban>',
         },
-        intercepts: {
-            execute_action: function (event) {
-                var data = event.data;
-                assert.strictEqual(data.env.model, 'partner', "should have correct model");
-                assert.strictEqual(data.action_data.name, 'sitting_on_a_park_bench',
-                    "should call correct method");
+        intercepts:{
+            execute_action:function(event){
+                vardata=event.data;
+                assert.strictEqual(data.env.model,'partner',"shouldhavecorrectmodel");
+                assert.strictEqual(data.action_data.name,'sitting_on_a_park_bench',
+                    "shouldcallcorrectmethod");
             }
         },
 
-        mockRPC: function (route) {
-            if (route === '/board/static/src/img/layout_1-1-1.png') {
-                return Promise.resolve();
+        mockRPC:function(route){
+            if(route==='/board/static/src/img/layout_1-1-1.png'){
+                returnPromise.resolve();
             }
-            if (route === '/web/action/load') {
-                return Promise.resolve({res_model: 'partner', view_mode: 'kanban', views: [[false, 'kanban']]});
+            if(route==='/web/action/load'){
+                returnPromise.resolve({res_model:'partner',view_mode:'kanban',views:[[false,'kanban']]});
             }
-            if (route === '/web/dataset/search_read') {
-                return Promise.resolve({records: [{foo: 'aqualung'}]});
+            if(route==='/web/dataset/search_read'){
+                returnPromise.resolve({records:[{foo:'aqualung'}]});
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         }
     });
 
-    await testUtils.dom.click(form.$('.o_kanban_test').find('button:first'));
+    awaittestUtils.dom.click(form.$('.o_kanban_test').find('button:first'));
 
     form.destroy();
 });
 
-QUnit.test('subviews are aware of attach in or detach from the DOM', async function (assert) {
+QUnit.test('subviewsareawareofattachinordetachfromtheDOM',asyncfunction(assert){
     assert.expect(2);
 
-    // patch list renderer `on_attach_callback` for the test only
-    testUtils.mock.patch(ListRenderer, {
-        on_attach_callback: function () {
-            assert.step('subview on_attach_callback');
+    //patchlistrenderer`on_attach_callback`forthetestonly
+    testUtils.mock.patch(ListRenderer,{
+        on_attach_callback:function(){
+            assert.step('subviewon_attach_callback');
         }
     });
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{}" view_mode="list" string="ABC" name="51" domain="[]"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{}"view_mode="list"string="ABC"name="51"domain="[]"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route) {
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    res_model: 'partner',
-                    views: [[4, 'list']],
+        mockRPC:function(route){
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    res_model:'partner',
+                    views:[[4,'list']],
                 });
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
+        archs:{
             'partner,4,list':
-                '<list string="Partner"><field name="foo"/></list>',
+                '<liststring="Partner"><fieldname="foo"/></list>',
         },
     });
 
-    assert.verifySteps(['subview on_attach_callback']);
+    assert.verifySteps(['subviewon_attach_callback']);
 
-    // restore on_attach_callback of ListRenderer
+    //restoreon_attach_callbackofListRenderer
     testUtils.mock.unpatch(ListRenderer);
 
     form.destroy();
 });
 
-QUnit.test('dashboard intercepts custom events triggered by sub controllers', async function (assert) {
+QUnit.test('dashboardinterceptscustomeventstriggeredbysubcontrollers',asyncfunction(assert){
     assert.expect(1);
 
-    // we patch the ListController to force it to trigger the custom events that
-    // we want the dashboard to intercept (to stop them or to tweak their data)
-    testUtils.mock.patch(ListController, {
-        start: function () {
+    //wepatchtheListControllertoforceittotriggerthecustomeventsthat
+    //wewantthedashboardtointercept(tostopthemortotweaktheirdata)
+    testUtils.mock.patch(ListController,{
+        start:function(){
             this.trigger_up('update_filters');
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
     });
 
-    var board = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{}" view_mode="list" string="ABC" name="51" domain="[]"></action>' +
-                    '</column>' +
-                '</board>' +
+    varboard=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{}"view_mode="list"string="ABC"name="51"domain="[]"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route) {
-            if (route === '/web/action/load') {
-                return Promise.resolve({res_model: 'partner', views: [[false, 'list']]});
+        mockRPC:function(route){
+            if(route==='/web/action/load'){
+                returnPromise.resolve({res_model:'partner',views:[[false,'list']]});
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
-            'partner,false,list': '<tree string="Partner"/>',
+        archs:{
+            'partner,false,list':'<treestring="Partner"/>',
         },
-        intercepts: {
-            update_filters: assert.step.bind(assert, 'update_filters'),
+        intercepts:{
+            update_filters:assert.step.bind(assert,'update_filters'),
         },
     });
 
@@ -696,456 +696,456 @@ QUnit.test('dashboard intercepts custom events triggered by sub controllers', as
     board.destroy();
 });
 
-QUnit.test('save actions to dashboard', async function (assert) {
+QUnit.test('saveactionstodashboard',asyncfunction(assert){
     assert.expect(6);
 
-    testUtils.patch(ListController, {
-        getOwnedQueryParams: function () {
-            var result = this._super.apply(this, arguments);
-            result.context = {
-                'fire': 'on the bayou',
+    testUtils.patch(ListController,{
+        getOwnedQueryParams:function(){
+            varresult=this._super.apply(this,arguments);
+            result.context={
+                'fire':'onthebayou',
             };
-            return result;
+            returnresult;
         }
     });
 
-    this.data['partner'].fields.foo.sortable = true;
+    this.data['partner'].fields.foo.sortable=true;
 
-    var actionManager = await createActionManager({
-        data: this.data,
-        archs: {
-            'partner,false,list': '<list><field name="foo"/></list>',
-            'partner,false,search': '<search></search>',
+    varactionManager=awaitcreateActionManager({
+        data:this.data,
+        archs:{
+            'partner,false,list':'<list><fieldname="foo"/></list>',
+            'partner,false,search':'<search></search>',
         },
-        mockRPC: function (route, args) {
-            if (route === '/board/add_to_dashboard') {
-                assert.deepEqual(args.context_to_save.group_by, ['foo'],
-                    'The group_by should have been saved');
+        mockRPC:function(route,args){
+            if(route==='/board/add_to_dashboard'){
+                assert.deepEqual(args.context_to_save.group_by,['foo'],
+                    'Thegroup_byshouldhavebeensaved');
                 assert.deepEqual(args.context_to_save.orderedBy,
                     [{
-                        name: 'foo',
-                        asc: true,
+                        name:'foo',
+                        asc:true,
                     }],
-                    'The orderedBy should have been saved');
-                assert.strictEqual(args.context_to_save.fire, 'on the bayou',
-                    'The context of a controller should be passed and flattened');
-                assert.strictEqual(args.action_id, 1,
-                    "should save the correct action");
-                assert.strictEqual(args.view_mode, 'list',
-                    "should save the correct view type");
-                return Promise.resolve(true);
+                    'TheorderedByshouldhavebeensaved');
+                assert.strictEqual(args.context_to_save.fire,'onthebayou',
+                    'Thecontextofacontrollershouldbepassedandflattened');
+                assert.strictEqual(args.action_id,1,
+                    "shouldsavethecorrectaction");
+                assert.strictEqual(args.view_mode,'list',
+                    "shouldsavethecorrectviewtype");
+                returnPromise.resolve(true);
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         }
     });
 
-    await actionManager.doAction({
-        id: 1,
-        res_model: 'partner',
-        type: 'ir.actions.act_window',
-        views: [[false, 'list']],
+    awaitactionManager.doAction({
+        id:1,
+        res_model:'partner',
+        type:'ir.actions.act_window',
+        views:[[false,'list']],
     });
 
-    assert.containsOnce(actionManager, '.o_list_view',
-        "should display the list view");
+    assert.containsOnce(actionManager,'.o_list_view',
+        "shoulddisplaythelistview");
 
-    // Sort the list
-    await testUtils.dom.click($('.o_column_sortable'));
+    //Sortthelist
+    awaittestUtils.dom.click($('.o_column_sortable'));
 
-    // Group It
-    await cpHelpers.toggleGroupByMenu(actionManager);
-    await cpHelpers.toggleAddCustomGroup(actionManager);
-    await cpHelpers.applyGroup(actionManager);
+    //GroupIt
+    awaitcpHelpers.toggleGroupByMenu(actionManager);
+    awaitcpHelpers.toggleAddCustomGroup(actionManager);
+    awaitcpHelpers.applyGroup(actionManager);
 
-    // add this action to dashboard
-    await cpHelpers.toggleFavoriteMenu(actionManager);
+    //addthisactiontodashboard
+    awaitcpHelpers.toggleFavoriteMenu(actionManager);
 
-    await testUtils.dom.click($('.o_add_to_board > button'));
-    await testUtils.fields.editInput($('.o_add_to_board input'), 'a name');
-    await testUtils.dom.click($('.o_add_to_board div button'));
+    awaittestUtils.dom.click($('.o_add_to_board>button'));
+    awaittestUtils.fields.editInput($('.o_add_to_boardinput'),'aname');
+    awaittestUtils.dom.click($('.o_add_to_boarddivbutton'));
 
     testUtils.unpatch(ListController);
 
     actionManager.destroy();
 });
 
-QUnit.test('save two searches to dashboard', async function (assert) {
-    // the second search saved should not be influenced by the first
+QUnit.test('savetwosearchestodashboard',asyncfunction(assert){
+    //thesecondsearchsavedshouldnotbeinfluencedbythefirst
     assert.expect(2);
 
-    var actionManager = await createActionManager({
-        data: this.data,
-        archs: {
-            'partner,false,list': '<list><field name="foo"/></list>',
-            'partner,false,search': '<search></search>',
+    varactionManager=awaitcreateActionManager({
+        data:this.data,
+        archs:{
+            'partner,false,list':'<list><fieldname="foo"/></list>',
+            'partner,false,search':'<search></search>',
         },
-        mockRPC: function (route, args) {
-            if (route === '/board/add_to_dashboard') {
-                if (filter_count === 0) {
-                    assert.deepEqual(args.domain, [["display_name", "ilike", "a"]],
-                        "the correct domain should be sent");
+        mockRPC:function(route,args){
+            if(route==='/board/add_to_dashboard'){
+                if(filter_count===0){
+                    assert.deepEqual(args.domain,[["display_name","ilike","a"]],
+                        "thecorrectdomainshouldbesent");
                 }
-                if (filter_count === 1) {
-                    assert.deepEqual(args.domain, [["display_name", "ilike", "b"]],
-                        "the correct domain should be sent");
+                if(filter_count===1){
+                    assert.deepEqual(args.domain,[["display_name","ilike","b"]],
+                        "thecorrectdomainshouldbesent");
                 }
 
-                filter_count += 1;
-                return Promise.resolve(true);
+                filter_count+=1;
+                returnPromise.resolve(true);
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
     });
 
-    await actionManager.doAction({
-        id: 1,
-        res_model: 'partner',
-        type: 'ir.actions.act_window',
-        views: [[false, 'list']],
+    awaitactionManager.doAction({
+        id:1,
+        res_model:'partner',
+        type:'ir.actions.act_window',
+        views:[[false,'list']],
     });
 
-    var filter_count = 0;
-    // Add a first filter
-    await cpHelpers.toggleFilterMenu(actionManager);
-    await cpHelpers.toggleAddCustomFilter(actionManager);
-    await testUtils.fields.editInput(actionManager.el.querySelector('.o_generator_menu_value .o_input'), 'a');
-    await cpHelpers.applyFilter(actionManager);
+    varfilter_count=0;
+    //Addafirstfilter
+    awaitcpHelpers.toggleFilterMenu(actionManager);
+    awaitcpHelpers.toggleAddCustomFilter(actionManager);
+    awaittestUtils.fields.editInput(actionManager.el.querySelector('.o_generator_menu_value.o_input'),'a');
+    awaitcpHelpers.applyFilter(actionManager);
 
-    // Add it to dashboard
-    await cpHelpers.toggleFavoriteMenu(actionManager);
-    await testUtils.dom.click($('.o_add_to_board > button'));
-    await testUtils.dom.click($('.o_add_to_board div button'));
+    //Addittodashboard
+    awaitcpHelpers.toggleFavoriteMenu(actionManager);
+    awaittestUtils.dom.click($('.o_add_to_board>button'));
+    awaittestUtils.dom.click($('.o_add_to_boarddivbutton'));
 
-    // Remove it
-    await testUtils.dom.click(actionManager.el.querySelector('.o_facet_remove'));
+    //Removeit
+    awaittestUtils.dom.click(actionManager.el.querySelector('.o_facet_remove'));
 
-    // Add the second filter
-    await cpHelpers.toggleFilterMenu(actionManager);
-    await cpHelpers.toggleAddCustomFilter(actionManager);
-    await testUtils.fields.editInput(actionManager.el.querySelector('.o_generator_menu_value .o_input'), "b");
-    await cpHelpers.applyFilter(actionManager);
-    // Add it to dashboard
-    await cpHelpers.toggleFavoriteMenu(actionManager);
-    await testUtils.dom.click(actionManager.el.querySelector('.o_add_to_board > button'));
-    await testUtils.dom.click(actionManager.el.querySelector('.o_add_to_board div button'));
+    //Addthesecondfilter
+    awaitcpHelpers.toggleFilterMenu(actionManager);
+    awaitcpHelpers.toggleAddCustomFilter(actionManager);
+    awaittestUtils.fields.editInput(actionManager.el.querySelector('.o_generator_menu_value.o_input'),"b");
+    awaitcpHelpers.applyFilter(actionManager);
+    //Addittodashboard
+    awaitcpHelpers.toggleFavoriteMenu(actionManager);
+    awaittestUtils.dom.click(actionManager.el.querySelector('.o_add_to_board>button'));
+    awaittestUtils.dom.click(actionManager.el.querySelector('.o_add_to_boarddivbutton'));
 
     actionManager.destroy();
 });
 
-QUnit.test('save a action domain to dashboard', async function (assert) {
-    // View domains are to be added to the dashboard domain
+QUnit.test('saveaactiondomaintodashboard',asyncfunction(assert){
+    //Viewdomainsaretobeaddedtothedashboarddomain
     assert.expect(1);
 
-    var view_domain = ["display_name", "ilike", "a"];
-    var filter_domain = ["display_name", "ilike", "b"];
+    varview_domain=["display_name","ilike","a"];
+    varfilter_domain=["display_name","ilike","b"];
 
-    // The filter domain already contains the view domain, but is always added by dashboard..,
-    var expected_domain = ['&', view_domain, '&', view_domain, filter_domain];
+    //Thefilterdomainalreadycontainstheviewdomain,butisalwaysaddedbydashboard..,
+    varexpected_domain=['&',view_domain,'&',view_domain,filter_domain];
 
-    var actionManager = await createActionManager({
-        data: this.data,
-        archs: {
-            'partner,false,list': '<list><field name="foo"/></list>',
-            'partner,false,search': '<search></search>',
+    varactionManager=awaitcreateActionManager({
+        data:this.data,
+        archs:{
+            'partner,false,list':'<list><fieldname="foo"/></list>',
+            'partner,false,search':'<search></search>',
         },
-        mockRPC: function (route, args) {
-            if (route === '/board/add_to_dashboard') {
-                assert.deepEqual(args.domain, expected_domain,
-                    "the correct domain should be sent");
-                return Promise.resolve(true);
+        mockRPC:function(route,args){
+            if(route==='/board/add_to_dashboard'){
+                assert.deepEqual(args.domain,expected_domain,
+                    "thecorrectdomainshouldbesent");
+                returnPromise.resolve(true);
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
     });
 
-    await actionManager.doAction({
-        id: 1,
-        res_model: 'partner',
-        type: 'ir.actions.act_window',
-        views: [[false, 'list']],
-        domain: [view_domain],
+    awaitactionManager.doAction({
+        id:1,
+        res_model:'partner',
+        type:'ir.actions.act_window',
+        views:[[false,'list']],
+        domain:[view_domain],
     });
 
-    // Add a filter
-    await cpHelpers.toggleFilterMenu(actionManager);
-    await cpHelpers.toggleAddCustomFilter(actionManager);
-    await testUtils.fields.editInput(
-        actionManager.el.querySelector('.o_generator_menu_value .o_input'),
+    //Addafilter
+    awaitcpHelpers.toggleFilterMenu(actionManager);
+    awaitcpHelpers.toggleAddCustomFilter(actionManager);
+    awaittestUtils.fields.editInput(
+        actionManager.el.querySelector('.o_generator_menu_value.o_input'),
         "b"
     );
-    await cpHelpers.applyFilter(actionManager);
-    // Add it to dashboard
-    await cpHelpers.toggleFavoriteMenu(actionManager);
-    await testUtils.dom.click(actionManager.el.querySelector('.o_add_to_board > button'));
-    // add
-    await testUtils.dom.click(actionManager.el.querySelector('.o_add_to_board div button'));
+    awaitcpHelpers.applyFilter(actionManager);
+    //Addittodashboard
+    awaitcpHelpers.toggleFavoriteMenu(actionManager);
+    awaittestUtils.dom.click(actionManager.el.querySelector('.o_add_to_board>button'));
+    //add
+    awaittestUtils.dom.click(actionManager.el.querySelector('.o_add_to_boarddivbutton'));
 
     actionManager.destroy();
 });
 
-QUnit.test("Views should be loaded in the user's language", async function (assert) {
+QUnit.test("Viewsshouldbeloadedintheuser'slanguage",asyncfunction(assert){
     assert.expect(2);
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        session: {user_context: {lang: 'fr_FR'}},
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{\'lang\': \'en_US\'}" view_mode="list" string="ABC" name="51" domain="[]"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        session:{user_context:{lang:'fr_FR'}},
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{\'lang\':\'en_US\'}"view_mode="list"string="ABC"name="51"domain="[]"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route, args) {
-            if (args.method === 'load_views') {
-                assert.deepEqual(pyUtils.eval('context', args.kwargs.context), {lang: 'fr_FR'},
-                    'The views should be loaded with the correct context');
+        mockRPC:function(route,args){
+            if(args.method==='load_views'){
+                assert.deepEqual(pyUtils.eval('context',args.kwargs.context),{lang:'fr_FR'},
+                    'Theviewsshouldbeloadedwiththecorrectcontext');
             }
-            if (route === "/web/dataset/search_read") {
-                assert.equal(args.context.lang, 'fr_FR',
-                    'The data should be loaded with the correct context');
+            if(route==="/web/dataset/search_read"){
+                assert.equal(args.context.lang,'fr_FR',
+                    'Thedatashouldbeloadedwiththecorrectcontext');
             }
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    res_model: 'partner',
-                    views: [[4, 'list']],
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    res_model:'partner',
+                    views:[[4,'list']],
                 });
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
+        archs:{
             'partner,4,list':
-                '<list string="Partner"><field name="foo"/></list>',
+                '<liststring="Partner"><fieldname="foo"/></list>',
         },
     });
 
     form.destroy();
 });
 
-QUnit.test("Dashboard should use correct groupby", async function (assert) {
+QUnit.test("Dashboardshouldusecorrectgroupby",asyncfunction(assert){
     assert.expect(1);
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{\'group_by\': [\'bar\']}" string="ABC" name="51"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{\'group_by\':[\'bar\']}"string="ABC"name="51"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route, args) {
-            if (args.method === 'web_read_group') {
-                assert.deepEqual(args.kwargs.groupby, ['bar'],
-                    'user defined groupby should have precedence on action groupby');
+        mockRPC:function(route,args){
+            if(args.method==='web_read_group'){
+                assert.deepEqual(args.kwargs.groupby,['bar'],
+                    'userdefinedgroupbyshouldhaveprecedenceonactiongroupby');
             }
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    res_model: 'partner',
-                    context: {
-                        group_by: 'some_field',
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    res_model:'partner',
+                    context:{
+                        group_by:'some_field',
                     },
-                    views: [[4, 'list']],
+                    views:[[4,'list']],
                 });
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
+        archs:{
             'partner,4,list':
-                '<list string="Partner"><field name="foo"/></list>',
+                '<liststring="Partner"><fieldname="foo"/></list>',
         },
     });
 
     form.destroy();
 });
 
-QUnit.test("Dashboard should use correct groupby when defined as a string of one field", async function (assert) {
+QUnit.test("Dashboardshouldusecorrectgroupbywhendefinedasastringofonefield",asyncfunction(assert){
     assert.expect(1);
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form string="My Dashboard">' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action context="{\'group_by\': \'bar\'}" string="ABC" name="51"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<formstring="MyDashboard">'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actioncontext="{\'group_by\':\'bar\'}"string="ABC"name="51"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route, args) {
-            if (args.method === 'web_read_group') {
-                assert.deepEqual(args.kwargs.groupby, ['bar'],
-                    'user defined groupby should have precedence on action groupby');
+        mockRPC:function(route,args){
+            if(args.method==='web_read_group'){
+                assert.deepEqual(args.kwargs.groupby,['bar'],
+                    'userdefinedgroupbyshouldhaveprecedenceonactiongroupby');
             }
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    res_model: 'partner',
-                    context: {
-                        group_by: 'some_field',
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    res_model:'partner',
+                    context:{
+                        group_by:'some_field',
                     },
-                    views: [[4, 'list']],
+                    views:[[4,'list']],
                 });
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
+        archs:{
             'partner,4,list':
-                '<list string="Partner"><field name="foo"/></list>',
+                '<liststring="Partner"><fieldname="foo"/></list>',
         },
     });
 
     form.destroy();
 });
 
-QUnit.test('click on a cell of pivot view inside dashboard', async function (assert) {
+QUnit.test('clickonacellofpivotviewinsidedashboard',asyncfunction(assert){
     assert.expect(3);
 
-    var form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: '<form>' +
-                '<board style="2-1">' +
-                    '<column>' +
-                        '<action view_mode="pivot" string="ABC" name="51"></action>' +
-                    '</column>' +
-                '</board>' +
+    varform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:'<form>'+
+                '<boardstyle="2-1">'+
+                    '<column>'+
+                        '<actionview_mode="pivot"string="ABC"name="51"></action>'+
+                    '</column>'+
+                '</board>'+
             '</form>',
-        mockRPC: function (route) {
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    res_model: 'partner',
-                    views: [[4, 'pivot']],
+        mockRPC:function(route){
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    res_model:'partner',
+                    views:[[4,'pivot']],
                 });
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
-        archs: {
-            'partner,4,pivot': '<pivot><field name="int_field" type="measure"/></pivot>',
+        archs:{
+            'partner,4,pivot':'<pivot><fieldname="int_field"type="measure"/></pivot>',
         },
-        intercepts: {
-            do_action: function () {
-                assert.step('do action');
+        intercepts:{
+            do_action:function(){
+                assert.step('doaction');
             },
         },
     });
 
     assert.verifySteps([]);
 
-    await testUtils.dom.click(form.$('.o_pivot .o_pivot_cell_value'));
+    awaittestUtils.dom.click(form.$('.o_pivot.o_pivot_cell_value'));
 
-    assert.verifySteps(['do action']);
+    assert.verifySteps(['doaction']);
 
     form.destroy();
 });
 
-QUnit.test('correctly save the time ranges of a reporting view in comparison mode', async function (assert) {
+QUnit.test('correctlysavethetimerangesofareportingviewincomparisonmode',asyncfunction(assert){
     assert.expect(1);
 
-    const unpatchDate = patchDate(2020, 6, 1, 11, 0, 0);
+    constunpatchDate=patchDate(2020,6,1,11,0,0);
 
-    this.data.partner.fields.date = { string: 'Date', type: 'date', sortable: true };
+    this.data.partner.fields.date={string:'Date',type:'date',sortable:true};
 
-    const actionManager = await createActionManager({
-        data: this.data,
-        archs: {
-            'partner,false,pivot': '<pivot><field name="foo"/></pivot>',
-            'partner,false,search': '<search><filter name="Date" date="date"/></search>',
+    constactionManager=awaitcreateActionManager({
+        data:this.data,
+        archs:{
+            'partner,false,pivot':'<pivot><fieldname="foo"/></pivot>',
+            'partner,false,search':'<search><filtername="Date"date="date"/></search>',
         },
-        mockRPC: function (route, args) {
-            if (route === '/board/add_to_dashboard') {
-                assert.deepEqual(args.context_to_save.comparison, {
-                    comparisonId: "previous_period",
-                    fieldName: "date",
-                    fieldDescription: "Date",
-                    rangeDescription: "July 2020",
-                    range: ["&",["date", ">=", "2020-07-01"], ["date", "<=", "2020-07-31"]],
-                    comparisonRange: ["&", ["date", ">=", "2020-06-01"], ["date", "<=", "2020-06-30"]],
-                    comparisonRangeDescription: "June 2020",
+        mockRPC:function(route,args){
+            if(route==='/board/add_to_dashboard'){
+                assert.deepEqual(args.context_to_save.comparison,{
+                    comparisonId:"previous_period",
+                    fieldName:"date",
+                    fieldDescription:"Date",
+                    rangeDescription:"July2020",
+                    range:["&",["date",">=","2020-07-01"],["date","<=","2020-07-31"]],
+                    comparisonRange:["&",["date",">=","2020-06-01"],["date","<=","2020-06-30"]],
+                    comparisonRangeDescription:"June2020",
                 });
-                return Promise.resolve(true);
+                returnPromise.resolve(true);
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
     });
 
-    await actionManager.doAction({
-        id: 1,
-        res_model: 'partner',
-        type: 'ir.actions.act_window',
-        views: [[false, 'pivot']],
+    awaitactionManager.doAction({
+        id:1,
+        res_model:'partner',
+        type:'ir.actions.act_window',
+        views:[[false,'pivot']],
     });
 
-    // filter on July 2020
-    await cpHelpers.toggleFilterMenu(actionManager);
-    await cpHelpers.toggleMenuItem(actionManager, 'Date');
-    await cpHelpers.toggleMenuItemOption(actionManager, 'Date', 'July');
+    //filteronJuly2020
+    awaitcpHelpers.toggleFilterMenu(actionManager);
+    awaitcpHelpers.toggleMenuItem(actionManager,'Date');
+    awaitcpHelpers.toggleMenuItemOption(actionManager,'Date','July');
 
-    // compare July 2020 to June 2020
-    await cpHelpers.toggleComparisonMenu(actionManager);
-    await cpHelpers.toggleMenuItem(actionManager, 0);
+    //compareJuly2020toJune2020
+    awaitcpHelpers.toggleComparisonMenu(actionManager);
+    awaitcpHelpers.toggleMenuItem(actionManager,0);
 
-    // add the view to the dashboard
-    await cpHelpers.toggleFavoriteMenu(actionManager);
+    //addtheviewtothedashboard
+    awaitcpHelpers.toggleFavoriteMenu(actionManager);
 
-    await testUtils.dom.click($('.o_add_to_board > button'));
-    await testUtils.fields.editInput($('.o_add_to_board input'), 'a name');
-    await testUtils.dom.click($('.o_add_to_board div button'));
+    awaittestUtils.dom.click($('.o_add_to_board>button'));
+    awaittestUtils.fields.editInput($('.o_add_to_boardinput'),'aname');
+    awaittestUtils.dom.click($('.o_add_to_boarddivbutton'));
 
     unpatchDate();
     actionManager.destroy();
 });
 
-QUnit.test('correctly display the time range descriptions of a reporting view in comparison mode', async function (assert) {
+QUnit.test('correctlydisplaythetimerangedescriptionsofareportingviewincomparisonmode',asyncfunction(assert){
     assert.expect(1);
 
-    this.data.partner.fields.date = { string: 'Date', type: 'date', sortable: true };
-    this.data.partner.records[0].date = '2020-07-15';
+    this.data.partner.fields.date={string:'Date',type:'date',sortable:true};
+    this.data.partner.records[0].date='2020-07-15';
 
-    const form = await createView({
-        View: BoardView,
-        model: 'board',
-        data: this.data,
-        arch: `<form string="My Dashboard">
-                <board style="2-1">
+    constform=awaitcreateView({
+        View:BoardView,
+        model:'board',
+        data:this.data,
+        arch:`<formstring="MyDashboard">
+                <boardstyle="2-1">
                     <column>
-                        <action string="ABC" name="51"></action>
+                        <actionstring="ABC"name="51"></action>
                     </column>
                 </board>
             </form>`,
-        archs: {
+        archs:{
             'partner,1,pivot':
-                '<pivot string="Partner"></pivot>',
+                '<pivotstring="Partner"></pivot>',
         },
-        mockRPC: function (route, args) {
-            if (route === '/board/static/src/img/layout_1-1-1.png') {
-                return Promise.resolve();
+        mockRPC:function(route,args){
+            if(route==='/board/static/src/img/layout_1-1-1.png'){
+                returnPromise.resolve();
             }
-            if (route === '/web/action/load') {
-                return Promise.resolve({
-                    context: JSON.stringify({ comparison: {
-                        comparisonId: "previous_period",
-                        fieldName: "date",
-                        fieldDescription: "Date",
-                        rangeDescription: "July 2020",
-                        range: ["&",["date", ">=", "2020-07-01"], ["date", "<=", "2020-07-31"]],
-                        comparisonRange: ["&", ["date", ">=", "2020-06-01"], ["date", "<=", "2020-06-30"]],
-                        comparisonRangeDescription: "June 2020",
+            if(route==='/web/action/load'){
+                returnPromise.resolve({
+                    context:JSON.stringify({comparison:{
+                        comparisonId:"previous_period",
+                        fieldName:"date",
+                        fieldDescription:"Date",
+                        rangeDescription:"July2020",
+                        range:["&",["date",">=","2020-07-01"],["date","<=","2020-07-31"]],
+                        comparisonRange:["&",["date",">=","2020-06-01"],["date","<=","2020-06-30"]],
+                        comparisonRangeDescription:"June2020",
                     }}),
-                    domain: '[]',
-                    res_model: 'partner',
-                    views: [[1, 'pivot']],
+                    domain:'[]',
+                    res_model:'partner',
+                    views:[[1,'pivot']],
                 });
             }
-            return this._super.apply(this, arguments);
+            returnthis._super.apply(this,arguments);
         },
     });
 
     assert.deepEqual(
-        [...form.el.querySelectorAll('div.o_pivot th.o_pivot_origin_row')].map(el => el.innerText),
-        ['June 2020', 'July 2020', 'Variation']
+        [...form.el.querySelectorAll('div.o_pivotth.o_pivot_origin_row')].map(el=>el.innerText),
+        ['June2020','July2020','Variation']
     );
 
     form.destroy();

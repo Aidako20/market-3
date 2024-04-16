@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class Registration(models.Model):
-    _inherit = 'event.registration'
+classRegistration(models.Model):
+    _inherit='event.registration'
 
-    def _sms_get_number_fields(self):
-        """ This method returns the fields to use to find the number to use to
-        send an SMS on a record. """
-        return ['mobile', 'phone']
+    def_sms_get_number_fields(self):
+        """Thismethodreturnsthefieldstousetofindthenumbertouseto
+        sendanSMSonarecord."""
+        return['mobile','phone']

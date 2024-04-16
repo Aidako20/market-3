@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class Notification(models.Model):
-    _inherit = 'mail.notification'
+classNotification(models.Model):
+    _inherit='mail.notification'
 
-    notification_type = fields.Selection(selection_add=[('snail', 'Snailmail')], ondelete={'snail': 'cascade'})
-    letter_id = fields.Many2one('snailmail.letter', string="Snailmail Letter", index=True, ondelete='cascade')
-    failure_type = fields.Selection(selection_add=[
-        ('sn_credit', "Snailmail Credit Error"),
-        ('sn_trial', "Snailmail Trial Error"),
-        ('sn_price', "Snailmail No Price Available"),
-        ('sn_fields', "Snailmail Missing Required Fields"),
-        ('sn_format', "Snailmail Format Error"),
-        ('sn_error', "Snailmail Unknown Error"),
+    notification_type=fields.Selection(selection_add=[('snail','Snailmail')],ondelete={'snail':'cascade'})
+    letter_id=fields.Many2one('snailmail.letter',string="SnailmailLetter",index=True,ondelete='cascade')
+    failure_type=fields.Selection(selection_add=[
+        ('sn_credit',"SnailmailCreditError"),
+        ('sn_trial',"SnailmailTrialError"),
+        ('sn_price',"SnailmailNoPriceAvailable"),
+        ('sn_fields',"SnailmailMissingRequiredFields"),
+        ('sn_format',"SnailmailFormatError"),
+        ('sn_error',"SnailmailUnknownError"),
     ])

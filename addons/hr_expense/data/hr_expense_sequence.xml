@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <record id="seq_hr_expense_invoice" model="ir.sequence">
-            <field name="name">Expense invoice</field>
-            <field name="code">hr.expense.invoice</field>
-            <field name="prefix">EXP/</field>
-            <field name="padding">3</field>
+        <recordid="seq_hr_expense_invoice"model="ir.sequence">
+            <fieldname="name">Expenseinvoice</field>
+            <fieldname="code">hr.expense.invoice</field>
+            <fieldname="prefix">EXP/</field>
+            <fieldname="padding">3</field>
         </record>
 
     </data>

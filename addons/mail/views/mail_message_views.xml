@@ -1,89 +1,89 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
     <data>
-        <!-- mail.message tree: short view !-->
-        <record model="ir.ui.view" id="view_message_tree">
-            <field name="name">mail.message.tree</field>
-            <field name="model">mail.message</field>
-            <field name="priority">20</field>
-            <field name="arch" type="xml">
-                <tree string="Messages">
-                    <field name="date"/>
-                    <field name="subject"/>
-                    <field name="author_id"/>
-                    <field name="model"/>
-                    <field name="res_id" widget="integer"/>
+        <!--mail.messagetree:shortview!-->
+        <recordmodel="ir.ui.view"id="view_message_tree">
+            <fieldname="name">mail.message.tree</field>
+            <fieldname="model">mail.message</field>
+            <fieldname="priority">20</field>
+            <fieldname="arch"type="xml">
+                <treestring="Messages">
+                    <fieldname="date"/>
+                    <fieldname="subject"/>
+                    <fieldname="author_id"/>
+                    <fieldname="model"/>
+                    <fieldname="res_id"widget="integer"/>
                 </tree>
             </field>
         </record>
 
-        <!-- mail.message form: short view !-->
-        <record id="mail_message_view_form" model="ir.ui.view">
-            <field name="name">mail.message.view.form</field>
-            <field name="model">mail.message</field>
-            <field name="priority">20</field>
-            <field name="arch" type="xml">
-                <form string="Message" duplicate="0">
+        <!--mail.messageform:shortview!-->
+        <recordid="mail_message_view_form"model="ir.ui.view">
+            <fieldname="name">mail.message.view.form</field>
+            <fieldname="model">mail.message</field>
+            <fieldname="priority">20</field>
+            <fieldname="arch"type="xml">
+                <formstring="Message"duplicate="0">
                     <sheet>
                         <group>
                             <group>
-                                <field name="subject"/>
-                                <field name="date"/>
-                                <field name="email_from"/>
-                                <field name="author_id"/>
-                                <field name="message_type"/>
-                                <field name="subtype_id"/>
-                                <field name="is_internal"/>
+                                <fieldname="subject"/>
+                                <fieldname="date"/>
+                                <fieldname="email_from"/>
+                                <fieldname="author_id"/>
+                                <fieldname="message_type"/>
+                                <fieldname="subtype_id"/>
+                                <fieldname="is_internal"/>
                             </group>
                             <group>
-                                <field name="model"/>
-                                <field name="res_id" widget="integer"/>
-                                <field name="record_name"/>
-                                <field name="parent_id"/>
-                                <field name="moderation_status"/>
-                                <field name="moderator_id"/>
+                                <fieldname="model"/>
+                                <fieldname="res_id"widget="integer"/>
+                                <fieldname="record_name"/>
+                                <fieldname="parent_id"/>
+                                <fieldname="moderation_status"/>
+                                <fieldname="moderator_id"/>
                             </group>
                         </group>
                         <notebook>
-                            <page string="Body" name="body">
-                                <field name="body" options="{'style-inline': true}"/>
+                            <pagestring="Body"name="body">
+                                <fieldname="body"options="{'style-inline':true}"/>
                             </page>
-                            <page string="Gateway" name="gateway">
+                            <pagestring="Gateway"name="gateway">
                                 <group>
                                     <group>
-                                        <field name="reply_to"/>
-                                        <field name="no_auto_thread"/>
+                                        <fieldname="reply_to"/>
+                                        <fieldname="no_auto_thread"/>
                                     </group>
                                     <group>
-                                        <field name="message_id"/>
-                                        <field name="mail_server_id"/>
+                                        <fieldname="message_id"/>
+                                        <fieldname="mail_server_id"/>
                                     </group>
                                 </group>
                             </page>
-                            <page string="Recipients" name="recipients">
+                            <pagestring="Recipients"name="recipients">
                                 <group>
                                     <group>
-                                        <field name="partner_ids" widget="many2many_tags"/>
-                                        <field name="channel_ids" widget="many2many_tags"/>
+                                        <fieldname="partner_ids"widget="many2many_tags"/>
+                                        <fieldname="channel_ids"widget="many2many_tags"/>
                                     </group>
                                     <group>
-                                        <field name="notified_partner_ids" widget="many2many_tags"/>
-                                        <field name="starred_partner_ids" widget="many2many_tags"/>
+                                        <fieldname="notified_partner_ids"widget="many2many_tags"/>
+                                        <fieldname="starred_partner_ids"widget="many2many_tags"/>
                                     </group>
                                 </group>
                                 <group>
-                                    <field name="notification_ids">
+                                    <fieldname="notification_ids">
                                         <tree>
-                                            <field name="res_partner_id"/>
-                                            <field name="is_read"/>
-                                            <field name="notification_type"/>
-                                            <field name="notification_status"/>
+                                            <fieldname="res_partner_id"/>
+                                            <fieldname="is_read"/>
+                                            <fieldname="notification_type"/>
+                                            <fieldname="notification_status"/>
                                         </tree>
                                     </field>
                                 </group>
                             </page>
-                            <page string="Tracking" name="page_tracking">
-                                <field name="tracking_value_ids"/>
+                            <pagestring="Tracking"name="page_tracking">
+                                <fieldname="tracking_value_ids"/>
                             </page>
                         </notebook>
                     </sheet>
@@ -91,99 +91,99 @@
             </field>
         </record>
 
-        <!-- mail.message search: wall view !-->
-        <record model="ir.ui.view" id="view_message_search">
-            <field name="name">mail.message.search</field>
-            <field name="model">mail.message</field>
-            <field name="priority">25</field>
-            <field name="arch" type="xml">
-                <search string="Messages Search">
-                    <field name="body" string="Content" filter_domain="['|', ('subject', 'ilike', self), ('body', 'ilike', self)]" />
-                    <field name="subject"/>
-                    <field name="message_type"/>
-                    <field name="author_id"/>
-                    <field name="partner_ids"/>
-                    <field name="model"/>
-                    <field name="res_id"/>
-                    <field name="parent_id"/>
-                    <filter string="Has Mentions"
+        <!--mail.messagesearch:wallview!-->
+        <recordmodel="ir.ui.view"id="view_message_search">
+            <fieldname="name">mail.message.search</field>
+            <fieldname="model">mail.message</field>
+            <fieldname="priority">25</field>
+            <fieldname="arch"type="xml">
+                <searchstring="MessagesSearch">
+                    <fieldname="body"string="Content"filter_domain="['|',('subject','ilike',self),('body','ilike',self)]"/>
+                    <fieldname="subject"/>
+                    <fieldname="message_type"/>
+                    <fieldname="author_id"/>
+                    <fieldname="partner_ids"/>
+                    <fieldname="model"/>
+                    <fieldname="res_id"/>
+                    <fieldname="parent_id"/>
+                    <filterstring="HasMentions"
                             name="filter_has_mentions"
-                            domain="[('partner_ids.user_ids', 'in', [uid])]"/>
+                            domain="[('partner_ids.user_ids','in',[uid])]"/>
                     <separator/>
-                    <filter string="Need Action"
-                            name="message_needaction" help="Unread messages"
-                            domain="[('needaction', '=', True)]"/>
+                    <filterstring="NeedAction"
+                            name="message_needaction"help="Unreadmessages"
+                            domain="[('needaction','=',True)]"/>
                     <separator/>
                 </search>
             </field>
         </record>
 
-        <record id="action_view_mail_message" model="ir.actions.act_window">
-            <field name="name">Messages</field>
-            <field name="res_model">mail.message</field>
-            <field name="view_mode">tree,form</field>
-            <field name="search_view_id" ref="view_message_search"/>
+        <recordid="action_view_mail_message"model="ir.actions.act_window">
+            <fieldname="name">Messages</field>
+            <fieldname="res_model">mail.message</field>
+            <fieldname="view_mode">tree,form</field>
+            <fieldname="search_view_id"ref="view_message_search"/>
         </record>
 
-        <!-- Add menu entry in Settings/Email -->
-        <menuitem name="Messages"
+        <!--AddmenuentryinSettings/Email-->
+        <menuitemname="Messages"
             id="menu_mail_message"
             parent="mail.mail_menu_technical"
             action="action_view_mail_message"
             sequence="1"/>
 
-        <record model="ir.ui.view" id="view_document_file_kanban">
-            <field name="name">ir.attachment kanban</field>
-            <field name="model">ir.attachment</field>
-            <field name="arch" type="xml">
-                <kanban edit="false" import="false">
-                    <field name="id"/>
-                    <field name="mimetype"/>
-                    <field name="type"/>
-                    <field name="create_uid"/>
-                    <field name="url"/>
-                    <field name="create_date"/>
-                    <field name="name"/>
+        <recordmodel="ir.ui.view"id="view_document_file_kanban">
+            <fieldname="name">ir.attachmentkanban</field>
+            <fieldname="model">ir.attachment</field>
+            <fieldname="arch"type="xml">
+                <kanbanedit="false"import="false">
+                    <fieldname="id"/>
+                    <fieldname="mimetype"/>
+                    <fieldname="type"/>
+                    <fieldname="create_uid"/>
+                    <fieldname="url"/>
+                    <fieldname="create_date"/>
+                    <fieldname="name"/>
                     <templates>
-                        <t t-name="kanban-box">
-                            <div class="oe_kanban_global_area oe_kanban_global_click o_kanban_attachment">
-                                <div class="row">
-                                    <div class="offset-10">
-                                        <div class="o_dropdown_kanban dropdown" groups="base.group_user">
-                                            <a role="button" class="dropdown-toggle o-no-caret btn" data-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Dropdown menu">
-                                                <span class="fa fa-ellipsis-v"/>
+                        <tt-name="kanban-box">
+                            <divclass="oe_kanban_global_areaoe_kanban_global_clicko_kanban_attachment">
+                                <divclass="row">
+                                    <divclass="offset-10">
+                                        <divclass="o_dropdown_kanbandropdown"groups="base.group_user">
+                                            <arole="button"class="dropdown-toggleo-no-caretbtn"data-toggle="dropdown"href="#"aria-label="Dropdownmenu"title="Dropdownmenu">
+                                                <spanclass="fafa-ellipsis-v"/>
                                             </a>
-                                            <div class="dropdown-menu" role="menu">
-                                                <a t-if="widget.deletable" role="menuitem" type="delete" class="dropdown-item">Delete</a>
+                                            <divclass="dropdown-menu"role="menu">
+                                                <at-if="widget.deletable"role="menuitem"type="delete"class="dropdown-item">Delete</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="o_kanban_image">
-                                    <div class="o_kanban_image_wrapper">
-                                        <t t-set="webimage" t-value="new RegExp('image.*(gif|jpeg|jpg|png)').test(record.mimetype.value)"/>
-                                        <div t-if="record.type.raw_value == 'url'" class="o_url_image fa fa-link fa-3x text-muted" aria-label="Image is a link"/>
-                                        <img t-elif="webimage" t-attf-src="/web/image/#{record.id.raw_value}" width="100" height="100" alt="Document" class="o_attachment_image"/>
-                                        <div t-else="!webimage" class="o_image o_image_thumbnail" t-att-data-mimetype="record.mimetype.value"/>
+                                <divclass="o_kanban_image">
+                                    <divclass="o_kanban_image_wrapper">
+                                        <tt-set="webimage"t-value="newRegExp('image.*(gif|jpeg|jpg|png)').test(record.mimetype.value)"/>
+                                        <divt-if="record.type.raw_value=='url'"class="o_url_imagefafa-linkfa-3xtext-muted"aria-label="Imageisalink"/>
+                                        <imgt-elif="webimage"t-attf-src="/web/image/#{record.id.raw_value}"width="100"height="100"alt="Document"class="o_attachment_image"/>
+                                        <divt-else="!webimage"class="o_imageo_image_thumbnail"t-att-data-mimetype="record.mimetype.value"/>
                                     </div>
                                 </div>
-                                <div class="o_kanban_details">
-                                    <div class="o_kanban_details_wrapper">
-                                        <div t-att-title="record.name.raw_value" class="o_kanban_record_title">
-                                            <field name="name" class="o_text_overflow"/>
+                                <divclass="o_kanban_details">
+                                    <divclass="o_kanban_details_wrapper">
+                                        <divt-att-title="record.name.raw_value"class="o_kanban_record_title">
+                                            <fieldname="name"class="o_text_overflow"/>
                                         </div>
-                                        <div class="o_kanban_record_body">
-                                            <t t-if="record.type.raw_value == 'url'">
-                                                <span class="o_document_url"><i class="fa fa-globe" aria-label="Document url"/> <field name="url" widget="url"/></span>
+                                        <divclass="o_kanban_record_body">
+                                            <tt-if="record.type.raw_value=='url'">
+                                                <spanclass="o_document_url"><iclass="fafa-globe"aria-label="Documenturl"/><fieldname="url"widget="url"/></span>
                                             </t>
-                                            <samp t-else="" class="text-muted"> </samp>
+                                            <sampt-else=""class="text-muted"></samp>
                                         </div>
-                                        <div class="o_kanban_record_bottom">
-                                            <time class="oe_kanban_bottom_left">
-                                                <field name="create_date" widget="date"/>
+                                        <divclass="o_kanban_record_bottom">
+                                            <timeclass="oe_kanban_bottom_left">
+                                                <fieldname="create_date"widget="date"/>
                                             </time>
-                                            <div class="oe_kanban_bottom_right">
-                                                <field name="create_uid" widget="many2one_avatar_user"/>
+                                            <divclass="oe_kanban_bottom_right">
+                                                <fieldname="create_uid"widget="many2one_avatar_user"/>
                                             </div>
                                         </div>
                                     </div>
@@ -194,11 +194,11 @@
                 </kanban>
             </field>
         </record>
-        <record id="base.action_attachment" model="ir.actions.act_window">
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                Attach a new document
+        <recordid="base.action_attachment"model="ir.actions.act_window">
+            <fieldname="view_mode">kanban,tree,form</field>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                Attachanewdocument
               </p>
             </field>
         </record>

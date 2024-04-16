@@ -1,68 +1,68 @@
-flectra.define('survey.quick.access', function (require) {
-'use strict';
+flectra.define('survey.quick.access',function(require){
+'usestrict';
 
-var publicWidget = require('web.public.widget');
+varpublicWidget=require('web.public.widget');
 
-publicWidget.registry.SurveyQuickAccessWidget = publicWidget.Widget.extend({
-    selector: '.o_survey_quick_access',
-    events: {
-        'click button[type="submit"]': '_onSubmit',
+publicWidget.registry.SurveyQuickAccessWidget=publicWidget.Widget.extend({
+    selector:'.o_survey_quick_access',
+    events:{
+        'clickbutton[type="submit"]':'_onSubmit',
     },
 
         //--------------------------------------------------------------------------
-    // Widget
+    //Widget
     //--------------------------------------------------------------------------
 
     /**
-    * @override
+    *@override
     */
-    start: function () {
-        var self = this;
-        return this._super.apply(this, arguments).then(function () {
-            // Init event listener
-            if (!self.readonly) {
-                $(document).on('keypress', self._onKeyPress.bind(self));
+    start:function(){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(function(){
+            //Initeventlistener
+            if(!self.readonly){
+                $(document).on('keypress',self._onKeyPress.bind(self));
             }
 
             self.$('input').focus();
         });
     },
 
-    // -------------------------------------------------------------------------
-    // Private
-    // -------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //Private
+    //-------------------------------------------------------------------------
 
-    // Handlers
-    // -------------------------------------------------------------------------
+    //Handlers
+    //-------------------------------------------------------------------------
 
-    _onKeyPress: function (event) {
-        if (event.keyCode === 13) {  // Enter
+    _onKeyPress:function(event){
+        if(event.keyCode===13){ //Enter
             event.preventDefault();
             this._submitCode();
         }
     },
 
-    _onSubmit: function (event) {
+    _onSubmit:function(event){
         event.preventDefault();
         this._submitCode();
     },
 
-    _submitCode: function () {
-        var self = this;
+    _submitCode:function(){
+        varself=this;
         this.$('.o_survey_error').addClass("d-none");
-        var $sessionCodeInput = this.$('input#session_code');
+        var$sessionCodeInput=this.$('input#session_code');
         this._rpc({
-            route: `/survey/check_session_code/${$sessionCodeInput.val()}`,
-        }).then(function (response) {
-            if (response.survey_url) {
-                window.location = response.survey_url;
-            } else {
+            route:`/survey/check_session_code/${$sessionCodeInput.val()}`,
+        }).then(function(response){
+            if(response.survey_url){
+                window.location=response.survey_url;
+            }else{
                 self.$('.o_survey_error').removeClass("d-none");
             }
         });
     },
 });
 
-return publicWidget.registry.SurveyQuickAccessWidget;
+returnpublicWidget.registry.SurveyQuickAccessWidget;
 
 });

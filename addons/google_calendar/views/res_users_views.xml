@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-        <record id="view_users_form" model="ir.ui.view">
-            <field name="name">res.users.form</field>
-            <field name="model">res.users</field>
-            <field name="inherit_id" ref="base.view_users_form"/>
-            <field name="arch" type="xml">
-                <notebook colspan="4" position="inside">
-                    <page string="Google Calendar" name="calendar" groups="base.group_system">
-                        <group class="text-break">
-                            <field name="google_calendar_rtoken" readonly="1"/>
-                            <field name="google_calendar_token" readonly="1"/>
-                            <field name="google_calendar_token_validity" readonly="1"/>
-                            <field name="google_calendar_sync_token" readonly="1"/>
-                            <field name="google_calendar_cal_id" readonly="1"/>
+        <recordid="view_users_form"model="ir.ui.view">
+            <fieldname="name">res.users.form</field>
+            <fieldname="model">res.users</field>
+            <fieldname="inherit_id"ref="base.view_users_form"/>
+            <fieldname="arch"type="xml">
+                <notebookcolspan="4"position="inside">
+                    <pagestring="GoogleCalendar"name="calendar"groups="base.group_system">
+                        <groupclass="text-break">
+                            <fieldname="google_calendar_rtoken"readonly="1"/>
+                            <fieldname="google_calendar_token"readonly="1"/>
+                            <fieldname="google_calendar_token_validity"readonly="1"/>
+                            <fieldname="google_calendar_sync_token"readonly="1"/>
+                            <fieldname="google_calendar_cal_id"readonly="1"/>
                         </group>
                         <button
-                            string="Reset Account" class="btn btn-secondary"
-                            type="action" name="%(google_calendar_reset_account_action)d"
-                            context="{'default_user_id': id}"/>
+                            string="ResetAccount"class="btnbtn-secondary"
+                            type="action"name="%(google_calendar_reset_account_action)d"
+                            context="{'default_user_id':id}"/>
                     </page>
                 </notebook>
             </field>

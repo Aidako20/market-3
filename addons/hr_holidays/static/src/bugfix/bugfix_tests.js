@@ -1,15 +1,15 @@
-flectra.define('hr_holidays/static/src/bugfix/bugfix_tests.js', function (require) {
-'use strict';
+flectra.define('hr_holidays/static/src/bugfix/bugfix_tests.js',function(require){
+'usestrict';
 
 /**
- * This file allows introducing new QUnit test modules without contaminating
- * other test files. This is useful when bug fixing requires adding new
- * components for instance in stable versions of Flectra. Any test that is defined
- * in this file should be isolated in its own file in master.
+ *ThisfileallowsintroducingnewQUnittestmoduleswithoutcontaminating
+ *othertestfiles.Thisisusefulwhenbugfixingrequiresaddingnew
+ *componentsforinstanceinstableversionsofFlectra.Anytestthatisdefined
+ *inthisfileshouldbeisolatedinitsownfileinmaster.
  */
-QUnit.module('hr_holidays', {}, function () {
-QUnit.module('bugfix', {}, function () {
-QUnit.module('bugfix_tests.js', {
+QUnit.module('hr_holidays',{},function(){
+QUnit.module('bugfix',{},function(){
+QUnit.module('bugfix_tests.js',{
 
 });
 });
@@ -17,89 +17,89 @@ QUnit.module('bugfix_tests.js', {
 
 });
 
-// FIXME move me in hr_holidays/static/src/components/thread_view/thread_view_tests.js
-flectra.define('hr_holidays/static/src/components/thread_view/thread_view_tests.js', function (require) {
-'use strict';
+//FIXMEmovemeinhr_holidays/static/src/components/thread_view/thread_view_tests.js
+flectra.define('hr_holidays/static/src/components/thread_view/thread_view_tests.js',function(require){
+'usestrict';
 
-const components = {
-    ThreadView: require('mail/static/src/components/thread_view/thread_view.js'),
+constcomponents={
+    ThreadView:require('mail/static/src/components/thread_view/thread_view.js'),
 };
-const {
+const{
     afterEach,
     beforeEach,
     createRootComponent,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-QUnit.module('hr_holidays', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('thread_view', {}, function () {
-QUnit.module('thread_view_tests.js', {
-    beforeEach() {
+QUnit.module('hr_holidays',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('thread_view',{},function(){
+QUnit.module('thread_view_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
         /**
-         * @param {mail.thread_view} threadView
-         * @param {Object} [otherProps={}]
+         *@param{mail.thread_view}threadView
+         *@param{Object}[otherProps={}]
          */
-        this.createThreadViewComponent = async (threadView, otherProps = {}) => {
-            const target = this.widget.el;
-            const props = Object.assign({ threadViewLocalId: threadView.localId }, otherProps);
-            await createRootComponent(this, components.ThreadView, { props, target });
+        this.createThreadViewComponent=async(threadView,otherProps={})=>{
+            consttarget=this.widget.el;
+            constprops=Object.assign({threadViewLocalId:threadView.localId},otherProps);
+            awaitcreateRootComponent(this,components.ThreadView,{props,target});
         };
 
-        this.start = async params => {
-            const { afterEvent, env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
+        this.start=asyncparams=>{
+            const{afterEvent,env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
             }));
-            this.afterEvent = afterEvent;
-            this.env = env;
-            this.widget = widget;
+            this.afterEvent=afterEvent;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('out of office message on direct chat with out of office partner', async function (assert) {
+QUnit.test('outofofficemessageondirectchatwithoutofofficepartner',asyncfunction(assert){
     assert.expect(2);
 
-    // Returning date of the out of office partner, simulates he'll be back in a month
-    const returningDate = moment.utc().add(1, 'month');
-    // Needed partner & user to allow simulation of message reception
+    //Returningdateoftheoutofofficepartner,simulateshe'llbebackinamonth
+    constreturningDate=moment.utc().add(1,'month');
+    //Neededpartner&usertoallowsimulationofmessagereception
     this.data['res.partner'].records.push({
-        id: 11,
-        name: "Foreigner partner",
-        out_of_office_date_end: returningDate.format("YYYY-MM-DD HH:mm:ss"),
+        id:11,
+        name:"Foreignerpartner",
+        out_of_office_date_end:returningDate.format("YYYY-MM-DDHH:mm:ss"),
     });
-    this.data['mail.channel'].records = [{
-        channel_type: 'chat',
-        id: 20,
-        members: [this.data.currentPartnerId, 11],
+    this.data['mail.channel'].records=[{
+        channel_type:'chat',
+        id:20,
+        members:[this.data.currentPartnerId,11],
     }];
-    await this.start();
-    const thread = this.env.models['mail.thread'].findFromIdentifyingData({
-        id: 20,
-        model: 'mail.channel'
+    awaitthis.start();
+    constthread=this.env.models['mail.thread'].findFromIdentifyingData({
+        id:20,
+        model:'mail.channel'
     });
-    const threadViewer = this.env.models['mail.thread_viewer'].create({
-        hasThreadView: true,
-        thread: [['link', thread]],
+    constthreadViewer=this.env.models['mail.thread_viewer'].create({
+        hasThreadView:true,
+        thread:[['link',thread]],
     });
-    await this.createThreadViewComponent(threadViewer.threadView, { hasComposer: true });
+    awaitthis.createThreadViewComponent(threadViewer.threadView,{hasComposer:true});
     assert.containsOnce(
         document.body,
         '.o_ThreadView_outOfOffice',
-        "should have an out of office alert on thread view"
+        "shouldhaveanoutofofficealertonthreadview"
     );
-    const formattedDate = returningDate.toDate().toLocaleDateString(
+    constformattedDate=returningDate.toDate().toLocaleDateString(
         this.env.messaging.locale.language.replace(/_/g,'-'),
-        { day: 'numeric', month: 'short' }
+        {day:'numeric',month:'short'}
     );
     assert.ok(
         document.querySelector('.o_ThreadView_outOfOffice').textContent.includes(formattedDate),
-        "out of office message should mention the returning date"
+        "outofofficemessageshouldmentionthereturningdate"
     );
 });
 

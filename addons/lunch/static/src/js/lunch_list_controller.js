@@ -1,18 +1,18 @@
-flectra.define('lunch.LunchListController', function (require) {
-"use strict";
+flectra.define('lunch.LunchListController',function(require){
+"usestrict";
 
 /**
- * This file defines the Controller for the Lunch List view, which is an
- * override of the ListController.
+ *ThisfiledefinestheControllerfortheLunchListview,whichisan
+ *overrideoftheListController.
  */
 
-var ListController = require('web.ListController');
-var LunchControllerCommon = require('lunch.LunchControllerCommon');
+varListController=require('web.ListController');
+varLunchControllerCommon=require('lunch.LunchControllerCommon');
 
-var LunchListController = ListController.extend(LunchControllerCommon, {
-    custom_events: _.extend({}, ListController.prototype.custom_events, LunchControllerCommon.custom_events),
+varLunchListController=ListController.extend(LunchControllerCommon,{
+    custom_events:_.extend({},ListController.prototype.custom_events,LunchControllerCommon.custom_events),
 });
 
-return LunchListController;
+returnLunchListController;
 
 });

@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-	<data noupdate="1">
-		<record id="base.AUD" model="res.currency">
-			<field name="active" eval="True"/>
+	<datanoupdate="1">
+		<recordid="base.AUD"model="res.currency">
+			<fieldname="active"eval="True"/>
 		</record>
 
-		<!-- Common trading partner currencies, and especially for NZ, subsidiaries and branches -->
+		<!--Commontradingpartnercurrencies,andespeciallyforNZ,subsidiariesandbranches-->
 
-		<record id="base.NZD" model="res.currency">
-			<field name="active" eval="True"/>
+		<recordid="base.NZD"model="res.currency">
+			<fieldname="active"eval="True"/>
 		</record>
 
-		<record id="base.JPY" model="res.currency">
-			<field name="active" eval="True"/>
+		<recordid="base.JPY"model="res.currency">
+			<fieldname="active"eval="True"/>
 		</record>
 
-		<record id="base.INR" model="res.currency">
-			<field name="active" eval="True"/>
+		<recordid="base.INR"model="res.currency">
+			<fieldname="active"eval="True"/>
 		</record>
 
-		<record id="base.GBP" model="res.currency">
-			<field name="active" eval="True"/>
+		<recordid="base.GBP"model="res.currency">
+			<fieldname="active"eval="True"/>
 		</record>
 	</data>
 </flectra>

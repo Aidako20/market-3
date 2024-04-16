@@ -1,30 +1,30 @@
-flectra.define('pos_restaurant.tour.BillScreenTourMethods', function (require) {
-    'use strict';
+flectra.define('pos_restaurant.tour.BillScreenTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        clickBack() {
-            return [
+    classDo{
+        clickBack(){
+            return[
                 {
-                    content: `go back`,
-                    trigger: `.receipt-screen .back`,
+                    content:`goback`,
+                    trigger:`.receipt-screen.back`,
                 },
             ];
         }
     }
 
-    class Check {
-        isShown() {
-            return [
+    classCheck{
+        isShown(){
+            return[
                 {
-                    content: 'Bill screen is shown',
-                    trigger: '.receipt-screen h1:contains("Bill Printing")',
-                    run: () => {},
+                    content:'Billscreenisshown',
+                    trigger:'.receipt-screenh1:contains("BillPrinting")',
+                    run:()=>{},
                 },
             ];
         }
     }
 
-    return createTourMethods('BillScreen', Do, Check);
+    returncreateTourMethods('BillScreen',Do,Check);
 });

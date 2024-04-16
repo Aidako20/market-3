@@ -1,37 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra><data>
 
-    <!-- ============================================================ -->
-    <!--                Errors / Corner case management               -->
-    <!-- ============================================================ -->
+    <!--============================================================-->
+    <!--               Errors/Cornercasemanagement              -->
+    <!--============================================================-->
 
-    <!-- Forbidden error messages-->
-    <template id="survey_403_page" name="Survey: custom 403 page">
-        <t t-call="survey.layout">
-            <div id="wrap">
-                <div class="container">
-                    <h1 class="mt32">403: Forbidden</h1>
-                    <p>The page you were looking for could not be authorized.</p>
-                    <p>Maybe you were looking for
-                        <a t-attf-href="/web#view_type=form&amp;model=survey.survey&amp;id=#{survey.id}&amp;action=survey.action_survey_form">this page</a> ?
+    <!--Forbiddenerrormessages-->
+    <templateid="survey_403_page"name="Survey:custom403page">
+        <tt-call="survey.layout">
+            <divid="wrap">
+                <divclass="container">
+                    <h1class="mt32">403:Forbidden</h1>
+                    <p>Thepageyouwerelookingforcouldnotbeauthorized.</p>
+                    <p>Maybeyouwerelookingfor
+                        <at-attf-href="/web#view_type=form&amp;model=survey.survey&amp;id=#{survey.id}&amp;action=survey.action_survey_form">thispage</a>?
                     </p>
                 </div>
             </div>
         </t>
     </template>
 
-    <!-- Error: void survey -->
-    <template id="survey_void_content" name="Survey: void content">
-        <t t-call="survey.layout">
-            <t t-if="answer.test_entry" t-call="survey.survey_button_form_view" />
-            <div class="wrap">
-                <div class="container">
-                    <div class="jumbotron mt32">
-                        <h1><span t-field="survey.title"/> survey is void</h1>
-                        <p>Please make sure you have at least one question in your survey. You also need at least one section if you chose the "Page per section" layout.<br />
-                            <a t-att-href="'/web#view_type=form&amp;model=survey.survey&amp;id=%s&amp;action=survey.action_survey_form' % survey.id"
-                                class="btn btn-secondary"
-                                groups="survey.group_survey_manager">Edit in backend</a>
+    <!--Error:voidsurvey-->
+    <templateid="survey_void_content"name="Survey:voidcontent">
+        <tt-call="survey.layout">
+            <tt-if="answer.test_entry"t-call="survey.survey_button_form_view"/>
+            <divclass="wrap">
+                <divclass="container">
+                    <divclass="jumbotronmt32">
+                        <h1><spant-field="survey.title"/>surveyisvoid</h1>
+                        <p>Pleasemakesureyouhaveatleastonequestioninyoursurvey.Youalsoneedatleastonesectionifyouchosethe"Pagepersection"layout.<br/>
+                            <at-att-href="'/web#view_type=form&amp;model=survey.survey&amp;id=%s&amp;action=survey.action_survey_form'%survey.id"
+                                class="btnbtn-secondary"
+                                groups="survey.group_survey_manager">Editinbackend</a>
                         </p>
                     </div>
                 </div>
@@ -39,15 +39,15 @@
         </t>
     </template>
 
-    <!-- Error: auth required  -->
-    <template id="survey_auth_required" name="Survey: login required">
-        <t t-call="survey.layout">
-            <div class="wrap">
-                <div class="container">
-                    <div class="jumbotron mt32">
-                        <h1>Login required</h1>
-                        <p>This survey is open only to registered people. Please
-                            <a t-att-href="redirect_url">log in</a>.
+    <!--Error:authrequired -->
+    <templateid="survey_auth_required"name="Survey:loginrequired">
+        <tt-call="survey.layout">
+            <divclass="wrap">
+                <divclass="container">
+                    <divclass="jumbotronmt32">
+                        <h1>Loginrequired</h1>
+                        <p>Thissurveyisopenonlytoregisteredpeople.Please
+                            <at-att-href="redirect_url">login</a>.
                         </p>
                     </div>
                 </div>
@@ -55,77 +55,77 @@
         </t>
     </template>
 
-    <!-- Expired (closed) survey page -->
-    <template id="survey_closed_expired" name="Survey: expired">
-        <t t-call="survey.layout">
-            <div class="wrap">
-                <div class="container">
-                    <div class="jumbotron mt32">
-                        <h1><span t-field="survey.title"/> survey expired</h1>
-                        <p>This survey is now closed. Thank you for your interest !</p>
+    <!--Expired(closed)surveypage-->
+    <templateid="survey_closed_expired"name="Survey:expired">
+        <tt-call="survey.layout">
+            <divclass="wrap">
+                <divclass="container">
+                    <divclass="jumbotronmt32">
+                        <h1><spant-field="survey.title"/>surveyexpired</h1>
+                        <p>Thissurveyisnowclosed.Thankyouforyourinterest!</p>
                     </div>
                 </div>
             </div>
         </t>
     </template>
 
-    <!-- ============================================================ -->
-    <!--                       Tools / Utilities                      -->
-    <!-- ============================================================ -->
+    <!--============================================================-->
+    <!--                      Tools/Utilities                     -->
+    <!--============================================================-->
 
-    <template id="survey_button_form_view" name="Survey: back to form view">
-        <div groups="survey.group_survey_manager" t-ignore="true" class="alert alert-info alert-dismissible rounded-0 fade show d-print-none css_editable_mode_hidden mb-0">
-            <div t-ignore="true" class="text-center">
-                <a t-attf-href="/web#view_type=form&amp;model=survey.survey&amp;id=#{survey.id}&amp;action=survey.action_survey_form"><i class="fa fa-fw fa-arrow-right"/><span t-if="answer and answer.test_entry">This is a test survey. </span>Edit Survey</a>
+    <templateid="survey_button_form_view"name="Survey:backtoformview">
+        <divgroups="survey.group_survey_manager"t-ignore="true"class="alertalert-infoalert-dismissiblerounded-0fadeshowd-print-nonecss_editable_mode_hiddenmb-0">
+            <divt-ignore="true"class="text-center">
+                <at-attf-href="/web#view_type=form&amp;model=survey.survey&amp;id=#{survey.id}&amp;action=survey.action_survey_form"><iclass="fafa-fwfa-arrow-right"/><spant-if="answerandanswer.test_entry">Thisisatestsurvey.</span>EditSurvey</a>
             </div>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> &#215; </button>
+            <buttontype="button"class="close"data-dismiss="alert"aria-label="Close">&#215;</button>
         </div>
     </template>
 
-    <template id="survey_button_retake" name="Survey: retake button">
+    <templateid="survey_button_retake"name="Survey:retakebutton">
         <div>
-            <t t-if="not answer.scoring_success and not answer.is_session_answer">
-                <t t-if="survey.is_attempts_limited">
-                    <t t-set="attempts_left" t-value="survey._get_number_of_attempts_lefts(answer.partner_id, answer.email, answer.invite_token)" />
-                    <t t-if="attempts_left > 0">
-                        <p><span>Number of attemps left</span>: <span t-esc="attempts_left"></span></p>
-                        <p><a role="button" class="btn btn-primary btn-lg" t-att-href="'/survey/retry/%s/%s' % (survey.access_token, answer.access_token)">
+            <tt-if="notanswer.scoring_successandnotanswer.is_session_answer">
+                <tt-if="survey.is_attempts_limited">
+                    <tt-set="attempts_left"t-value="survey._get_number_of_attempts_lefts(answer.partner_id,answer.email,answer.invite_token)"/>
+                    <tt-if="attempts_left>0">
+                        <p><span>Numberofattempsleft</span>:<spant-esc="attempts_left"></span></p>
+                        <p><arole="button"class="btnbtn-primarybtn-lg"t-att-href="'/survey/retry/%s/%s'%(survey.access_token,answer.access_token)">
                         Retry</a></p>
                     </t>
                 </t>
-                <t t-else="">
-                    <p><a role="button" class="btn btn-primary btn-lg" t-att-href="'/survey/retry/%s/%s' % (survey.access_token, answer.access_token)">
+                <tt-else="">
+                    <p><arole="button"class="btnbtn-primarybtn-lg"t-att-href="'/survey/retry/%s/%s'%(survey.access_token,answer.access_token)">
                         Retry</a></p>
                 </t>
             </t>
         </div>
     </template>
 
-    <!-- Survey Home page - Session Code
-    Used in 'session mode' to give an easy access to the survey through the '/s' route. -->
-    <template id="survey_session_code" name="Survey: Access Code page">
-        <t t-call="survey.layout">
-            <div class="wrap o_survey_wrap pb16 d-flex">
-                <div class="container o_survey_quick_access d-flex flex-column">
-                    <div class="d-flex flex-grow-1 align-items-center">
-                        <div class="col-lg-12">
-                            <div class="text-center mb32">
-                                <h3>Please enter the code</h3>
+    <!--SurveyHomepage-SessionCode
+    Usedin'sessionmode'togiveaneasyaccesstothesurveythroughthe'/s'route.-->
+    <templateid="survey_session_code"name="Survey:AccessCodepage">
+        <tt-call="survey.layout">
+            <divclass="wrapo_survey_wrappb16d-flex">
+                <divclass="containero_survey_quick_accessd-flexflex-column">
+                    <divclass="d-flexflex-grow-1align-items-center">
+                        <divclass="col-lg-12">
+                            <divclass="text-centermb32">
+                                <h3>Pleaseenterthecode</h3>
                             </div>
-                            <div class="row">
-                            <div class="offset-md-4 col-md-4 text-center">
-                                <input id="session_code" type="text" placeholder="4812"
-                                       class="form-control o_survey_question_text_box font-weight-bold bg-transparent text-primary text-center rounded-0 p-2 w-100"/>
+                            <divclass="row">
+                            <divclass="offset-md-4col-md-4text-center">
+                                <inputid="session_code"type="text"placeholder="4812"
+                                       class="form-controlo_survey_question_text_boxfont-weight-boldbg-transparenttext-primarytext-centerrounded-0p-2w-100"/>
                             </div>
-                            <div class="col-3 text-center o_survey_error text-danger d-none pt-2" role="alert">
-                                <span>Code is incorrect. Please try again.</span>
+                            <divclass="col-3text-centero_survey_errortext-dangerd-nonept-2"role="alert">
+                                <span>Codeisincorrect.Pleasetryagain.</span>
                             </div>
                             </div>
-                            <div class="text-center mt32 p-2">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                            <divclass="text-centermt32p-2">
+                                <buttontype="submit"class="btnbtn-primary">Submit</button>
                             </div>
-                            <div class="text-center p-2">
-                                <span class="text-muted">The code is found on the screen in front of you</span>
+                            <divclass="text-centerp-2">
+                                <spanclass="text-muted">Thecodeisfoundonthescreeninfrontofyou</span>
                             </div>
                         </div>
                     </div>
@@ -134,14 +134,14 @@
         </t>
     </template>
 
-    <template id="survey_navigation" name="Survey: Navigation">
-        <button t-if="can_go_back"
-            type="submit" class="btn p-0 shadow-none o_survey_navigation_submit" name="button_submit" value="previous" t-att-data-previous-page-id="previous_page_id">
-            <i class="border-left fa fa-chevron-left p-2" />
+    <templateid="survey_navigation"name="Survey:Navigation">
+        <buttont-if="can_go_back"
+            type="submit"class="btnp-0shadow-noneo_survey_navigation_submit"name="button_submit"value="previous"t-att-data-previous-page-id="previous_page_id">
+            <iclass="border-leftfafa-chevron-leftp-2"/>
         </button>
-        <button t-if="survey and survey.questions_layout in ['page_per_question', 'page_per_section'] and answer and answer.state != 'done' and not answer.is_session_answer"
-            type="submit" class="btn p-0 shadow-none o_survey_navigation_submit" t-att-value="'next' if not survey_last else 'finish'">
-            <i class="border-left fa fa-chevron-right p-2" />
+        <buttont-if="surveyandsurvey.questions_layoutin['page_per_question','page_per_section']andanswerandanswer.state!='done'andnotanswer.is_session_answer"
+            type="submit"class="btnp-0shadow-noneo_survey_navigation_submit"t-att-value="'next'ifnotsurvey_lastelse'finish'">
+            <iclass="border-leftfafa-chevron-rightp-2"/>
         </button>
     </template>
 

@@ -1,26 +1,26 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
-from flectra.http import request
+fromflectraimportmodels
+fromflectra.httpimportrequest
 
 
-class IrHttp(models.AbstractModel):
-    _inherit = 'ir.http'
-
-    @classmethod
-    def _dispatch(cls):
-        context = dict(request.context)
-        if 'editable' in request.httprequest.args and 'editable' not in context:
-            context['editable'] = True
-        if 'edit_translations' in request.httprequest.args and 'edit_translations' not in context:
-            context['edit_translations'] = True
-        if context.get('edit_translations') and 'translatable' not in context:
-            context['translatable'] = True
-        request.context = context
-        return super(IrHttp, cls)._dispatch()
+classIrHttp(models.AbstractModel):
+    _inherit='ir.http'
 
     @classmethod
-    def _get_translation_frontend_modules_name(cls):
-        mods = super(IrHttp, cls)._get_translation_frontend_modules_name()
-        return mods + ['web_editor']
+    def_dispatch(cls):
+        context=dict(request.context)
+        if'editable'inrequest.httprequest.argsand'editable'notincontext:
+            context['editable']=True
+        if'edit_translations'inrequest.httprequest.argsand'edit_translations'notincontext:
+            context['edit_translations']=True
+        ifcontext.get('edit_translations')and'translatable'notincontext:
+            context['translatable']=True
+        request.context=context
+        returnsuper(IrHttp,cls)._dispatch()
+
+    @classmethod
+    def_get_translation_frontend_modules_name(cls):
+        mods=super(IrHttp,cls)._get_translation_frontend_modules_name()
+        returnmods+['web_editor']

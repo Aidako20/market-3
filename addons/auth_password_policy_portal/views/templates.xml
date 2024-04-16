@@ -1,17 +1,17 @@
 <flectra>
-    <template id="assets_frontend" inherit_id="web.assets_frontend" name="Portal Password Policy Assets">
-        <xpath expr="." position="inside">
-            <link rel="stylesheet" type="text/scss" href="/auth_password_policy_portal/static/src/scss/portal_policy.scss"/>
+    <templateid="assets_frontend"inherit_id="web.assets_frontend"name="PortalPasswordPolicyAssets">
+        <xpathexpr="."position="inside">
+            <linkrel="stylesheet"type="text/scss"href="/auth_password_policy_portal/static/src/scss/portal_policy.scss"/>
         </xpath>
     </template>
-    <template id="portal_my_security" inherit_id="portal.portal_my_security"
-              name="Password policy data for portal">
-        <xpath expr="//div[hasclass('form-group')][input[@name='new1']]" position="attributes">
-            <attribute name="id">new-password-group</attribute>
+    <templateid="portal_my_security"inherit_id="portal.portal_my_security"
+              name="Passwordpolicydataforportal">
+        <xpathexpr="//div[hasclass('form-group')][input[@name='new1']]"position="attributes">
+            <attributename="id">new-password-group</attribute>
         </xpath>
-        <!-- only put meter on first "new password" field since both must be identical -->
-        <xpath expr="//input[@name='new1']" position="attributes">
-            <attribute name="t-att-minlength">password_minimum_length</attribute>
+        <!--onlyputmeteronfirst"newpassword"fieldsincebothmustbeidentical-->
+        <xpathexpr="//input[@name='new1']"position="attributes">
+            <attributename="t-att-minlength">password_minimum_length</attribute>
         </xpath>
     </template>
 </flectra>

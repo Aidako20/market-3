@@ -1,178 +1,178 @@
-flectra.define('web.special_fields', function (require) {
-"use strict";
+flectra.define('web.special_fields',function(require){
+"usestrict";
 
-var core = require('web.core');
-var field_utils = require('web.field_utils');
-var relational_fields = require('web.relational_fields');
-var AbstractField = require('web.AbstractField');
+varcore=require('web.core');
+varfield_utils=require('web.field_utils');
+varrelational_fields=require('web.relational_fields');
+varAbstractField=require('web.AbstractField');
 
-var FieldSelection = relational_fields.FieldSelection;
-var _t = core._t;
-var _lt = core._lt;
+varFieldSelection=relational_fields.FieldSelection;
+var_t=core._t;
+var_lt=core._lt;
 
 
 /**
- * This widget is intended to display a warning near a label of a 'timezone' field
- * indicating if the browser timezone is identical (or not) to the selected timezone.
- * This widget depends on a field given with the param 'tz_offset_field', which contains
- * the time difference between UTC time and local time, in minutes.
+ *Thiswidgetisintendedtodisplayawarningnearalabelofa'timezone'field
+ *indicatingifthebrowsertimezoneisidentical(ornot)totheselectedtimezone.
+ *Thiswidgetdependsonafieldgivenwiththeparam'tz_offset_field',whichcontains
+ *thetimedifferencebetweenUTCtimeandlocaltime,inminutes.
  */
-var FieldTimezoneMismatch = FieldSelection.extend({
+varFieldTimezoneMismatch=FieldSelection.extend({
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var interval = navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 60000 : 1000;
-        this._datetime = setInterval(this._renderDateTimeTimezone.bind(this), interval);
-        return this._super.apply(this, arguments);
+    start:function(){
+        varinterval=navigator.platform.toUpperCase().indexOf('MAC')>=0?60000:1000;
+        this._datetime=setInterval(this._renderDateTimeTimezone.bind(this),interval);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
+    destroy:function(){
         clearInterval(this._datetime);
-        return this._super();
+        returnthis._super();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _render: function () {
-        this._super.apply(this, arguments);
+    _render:function(){
+        this._super.apply(this,arguments);
         this._renderTimezoneMismatch();
     },
     /**
-     * Display the time in the user timezone (reload each second)
+     *Displaythetimeintheusertimezone(reloadeachsecond)
      *
-     * @private
+     *@private
      */
-    _renderDateTimeTimezone: function () {
-        if (!this.mismatch || !this.$option.html()) {
+    _renderDateTimeTimezone:function(){
+        if(!this.mismatch||!this.$option.html()){
             return;
         }
-        var offset = this.recordData.tz_offset.match(/([+-])([0-9]{2})([0-9]{2})/);
-        offset = (offset[1] === '-' ? -1 : 1) * (parseInt(offset[2])*60 + parseInt(offset[3]));
-        var datetime = field_utils.format.datetime(moment.utc().add(offset, 'minutes'), this.field, {timezone: false});
-        var content = this.$option.html().split(' ')[0];
-        content += '    ('+ datetime + ')';
+        varoffset=this.recordData.tz_offset.match(/([+-])([0-9]{2})([0-9]{2})/);
+        offset=(offset[1]==='-'?-1:1)*(parseInt(offset[2])*60+parseInt(offset[3]));
+        vardatetime=field_utils.format.datetime(moment.utc().add(offset,'minutes'),this.field,{timezone:false});
+        varcontent=this.$option.html().split('')[0];
+        content+='   ('+datetime+')';
         this.$option.html(content);
     },
     /**
-     * Display the timezone alert
+     *Displaythetimezonealert
      *
-     * Note: timezone alert is a span that is added after $el, and $el is now a
-     * set of two elements
+     *Note:timezonealertisaspanthatisaddedafter$el,and$elisnowa
+     *setoftwoelements
      *
-     * @private
+     *@private
      */
-    _renderTimezoneMismatch: function () {
-        // we need to clean the warning to have maximum one alert
+    _renderTimezoneMismatch:function(){
+        //weneedtocleanthewarningtohavemaximumonealert
         this.$el.last().filter('.o_tz_warning').remove();
-        this.$el = this.$el.first();
-        var value = this.$el.val();
-        var $span = $('<span class="fa fa-exclamation-triangle o_tz_warning"/>');
+        this.$el=this.$el.first();
+        varvalue=this.$el.val();
+        var$span=$('<spanclass="fafa-exclamation-triangleo_tz_warning"/>');
 
-        if (this.$option && this.$option.html()) {
-            this.$option.html(this.$option.html().split(' ')[0]);
+        if(this.$option&&this.$option.html()){
+            this.$option.html(this.$option.html().split('')[0]);
         }
 
-        var userOffset = this.recordData.tz_offset;
-        this.mismatch = false;
-        if (userOffset && value !== "" && value !== "false") {
-            var offset = -(new Date().getTimezoneOffset());
-            var browserOffset = (offset < 0) ? "-" : "+";
-            browserOffset += _.str.sprintf("%02d", Math.abs(offset / 60));
-            browserOffset += _.str.sprintf("%02d", Math.abs(offset % 60));
-            this.mismatch = (browserOffset !== userOffset);
+        varuserOffset=this.recordData.tz_offset;
+        this.mismatch=false;
+        if(userOffset&&value!==""&&value!=="false"){
+            varoffset=-(newDate().getTimezoneOffset());
+            varbrowserOffset=(offset<0)?"-":"+";
+            browserOffset+=_.str.sprintf("%02d",Math.abs(offset/60));
+            browserOffset+=_.str.sprintf("%02d",Math.abs(offset%60));
+            this.mismatch=(browserOffset!==userOffset);
         }
 
-        if (this.mismatch){
+        if(this.mismatch){
             $span.insertAfter(this.$el);
-            $span.attr('title', _t("Timezone Mismatch : This timezone is different from that of your browser.\nPlease, set the same timezone as your browser's to avoid time discrepancies in your system."));
-            this.$el = this.$el.add($span);
+            $span.attr('title',_t("TimezoneMismatch:Thistimezoneisdifferentfromthatofyourbrowser.\nPlease,setthesametimezoneasyourbrowser'stoavoidtimediscrepanciesinyoursystem."));
+            this.$el=this.$el.add($span);
 
-            this.$option = this.$('option').filter(function () {
-                return $(this).attr('value') === value;
+            this.$option=this.$('option').filter(function(){
+                return$(this).attr('value')===value;
             });
             this._renderDateTimeTimezone();
-        } else if (value == "false") {
+        }elseif(value=="false"){
             $span.insertAfter(this.$el);
-            $span.attr('title', _t("Set a timezone on your user"));
-            this.$el = this.$el.add($span);
+            $span.attr('title',_t("Setatimezoneonyouruser"));
+            this.$el=this.$el.add($span);
         }
     },
     /**
-     * @override
-     * @private
-     * this.$el can have other elements than select
-     * that should not be touched
+     *@override
+     *@private
+     *this.$elcanhaveotherelementsthanselect
+     *thatshouldnotbetouched
      */
-    _renderEdit: function () {
-        // FIXME: hack to handle multiple root elements
-        // in this.$el , which is a bad idea
-        // In master we should make this.$el a wrapper
-        // around multiple subelements
-        var $otherEl = this.$el.not('select');
-        this.$el = this.$el.first();
+    _renderEdit:function(){
+        //FIXME:hacktohandlemultiplerootelements
+        //inthis.$el,whichisabadidea
+        //Inmasterweshouldmakethis.$elawrapper
+        //aroundmultiplesubelements
+        var$otherEl=this.$el.not('select');
+        this.$el=this.$el.first();
 
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
 
         $otherEl.insertAfter(this.$el);
-        this.$el = this.$el.add($otherEl);
+        this.$el=this.$el.add($otherEl);
     },
 });
 
-var FieldReportLayout = relational_fields.FieldMany2One.extend({
-    // this widget is not generic, so we disable its studio use
-    // supportedFieldTypes: ['many2one', 'selection'],
-    events: _.extend({}, relational_fields.FieldMany2One.prototype.events, {
-        'click img': '_onImgClicked',
+varFieldReportLayout=relational_fields.FieldMany2One.extend({
+    //thiswidgetisnotgeneric,sowedisableitsstudiouse
+    //supportedFieldTypes:['many2one','selection'],
+    events:_.extend({},relational_fields.FieldMany2One.prototype.events,{
+        'clickimg':'_onImgClicked',
     }),
 
-    willStart: function () {
-        var self = this;
-        this.previews = {};
-        return this._super()
-            .then(function () {
-                return self._rpc({
-                    model: 'report.layout',
-                    method: "search_read"
-                }).then(function (values) {
-                    self.previews = values;
+    willStart:function(){
+        varself=this;
+        this.previews={};
+        returnthis._super()
+            .then(function(){
+                returnself._rpc({
+                    model:'report.layout',
+                    method:"search_read"
+                }).then(function(values){
+                    self.previews=values;
                 });
             });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _render: function () {
-        var self = this;
+    _render:function(){
+        varself=this;
         this.$el.empty();
-        var value = _.isObject(this.value) ? this.value.data.id : this.value;
-        _.each(this.previews, function (val) {
-            var $container = $('<div>').addClass('col-3 text-center');
-            var $img = $('<img>')
-                .addClass('img img-fluid img-thumbnail ml16')
-                .toggleClass('btn-info', val.view_id[0] === value)
-                .attr('src', val.image)
-                .data('key', val.view_id[0]);
+        varvalue=_.isObject(this.value)?this.value.data.id:this.value;
+        _.each(this.previews,function(val){
+            var$container=$('<div>').addClass('col-3text-center');
+            var$img=$('<img>')
+                .addClass('imgimg-fluidimg-thumbnailml16')
+                .toggleClass('btn-info',val.view_id[0]===value)
+                .attr('src',val.image)
+                .data('key',val.view_id[0]);
             $container.append($img);
-            if (val.pdf) {
-                var $previewLink = $('<a>')
+            if(val.pdf){
+                var$previewLink=$('<a>')
                     .text('Example')
-                    .attr('href', val.pdf)
-                    .attr('target', '_blank');
+                    .attr('href',val.pdf)
+                    .attr('target','_blank');
                 $container.append($previewLink);
             }
             self.$el.append($container);
@@ -180,82 +180,82 @@ var FieldReportLayout = relational_fields.FieldMany2One.extend({
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
-     * @param {MouseEvent} event
+     *@override
+     *@private
+     *@param{MouseEvent}event
      */
-    _onImgClicked: function (event) {
+    _onImgClicked:function(event){
         this._setValue($(event.currentTarget).data('key'));
     },
 });
 
 
-const IframeWrapper = AbstractField.extend({
-    description: _lt("Wrap raw html within an iframe"),
+constIframeWrapper=AbstractField.extend({
+    description:_lt("Wraprawhtmlwithinaniframe"),
 
-    // If HTML, don't forget to adjust the sanitize options to avoid stripping most of the metadata
-    supportedFieldTypes: ['text', 'html'],
+    //IfHTML,don'tforgettoadjustthesanitizeoptionstoavoidstrippingmostofthemetadata
+    supportedFieldTypes:['text','html'],
 
-    template: "web.IframeWrapper",
+    template:"web.IframeWrapper",
 
-    _render() {
+    _render(){
 
-        const spinner = this.el.querySelector('.o_iframe_wrapper_spinner');
-        const iframe = this.el.querySelector('.o_preview_iframe');
+        constspinner=this.el.querySelector('.o_iframe_wrapper_spinner');
+        constiframe=this.el.querySelector('.o_preview_iframe');
 
-        iframe.style.display = 'none';
-        spinner.style.display = 'block';
+        iframe.style.display='none';
+        spinner.style.display='block';
 
-        // Promise for tests
-        let resolver;
-        $(iframe).data('ready', new Promise((resolve) => {
-            resolver = resolve;
+        //Promisefortests
+        letresolver;
+        $(iframe).data('ready',newPromise((resolve)=>{
+            resolver=resolve;
         }));
 
         /**
-         * Certain browser don't trigger onload events of iframe for particular cases.
-         * In our case, chrome and safari could be problematic depending on version and environment.
-         * This rather unorthodox solution replace the onload event handler. (jquery on('load') doesn't fix it)
+         *Certainbrowserdon'ttriggeronloadeventsofiframeforparticularcases.
+         *Inourcase,chromeandsafaricouldbeproblematicdependingonversionandenvironment.
+         *Thisratherunorthodoxsolutionreplacetheonloadeventhandler.(jqueryon('load')doesn'tfixit)
          */
-        const onloadReplacement = setInterval(() => {
-            const iframeDoc = iframe.contentDocument;
-            if (iframeDoc && (iframeDoc.readyState === 'complete' || iframeDoc.readyState === 'interactive')) {
+        constonloadReplacement=setInterval(()=>{
+            constiframeDoc=iframe.contentDocument;
+            if(iframeDoc&&(iframeDoc.readyState==='complete'||iframeDoc.readyState==='interactive')){
 
                 /**
-                 * The document.write is not recommended. It is better to manipulate the DOM through $.appendChild and
-                 * others. In our case though, we deal with an iframe without src attribute and with metadata to put in
-                 * head tag. If we use the usual dom methods, the iframe is automatically created with its document
-                 * component containing html > head & body. Therefore, if we want to make it work that way, we would
-                 * need to receive each piece at a time to  append it to this document (with this.record.data and extra
-                 * model fields or with an rpc). It also cause other difficulties getting attribute on the most parent
-                 * nodes, parsing to HTML complex elements, etc.
-                 * Therefore, document.write makes it much more trivial in our situation.
+                 *Thedocument.writeisnotrecommended.ItisbettertomanipulatetheDOMthrough$.appendChildand
+                 *others.Inourcasethough,wedealwithaniframewithoutsrcattributeandwithmetadatatoputin
+                 *headtag.Ifweusetheusualdommethods,theiframeisautomaticallycreatedwithitsdocument
+                 *componentcontaininghtml>head&body.Therefore,ifwewanttomakeitworkthatway,wewould
+                 *needtoreceiveeachpieceatatimeto appendittothisdocument(withthis.record.dataandextra
+                 *modelfieldsorwithanrpc).Italsocauseotherdifficultiesgettingattributeonthemostparent
+                 *nodes,parsingtoHTMLcomplexelements,etc.
+                 *Therefore,document.writemakesitmuchmoretrivialinoursituation.
                  */
                 iframeDoc.open();
                 iframeDoc.write(this.value);
                 iframeDoc.close();
 
-                iframe.style.display = 'block';
-                spinner.style.display = 'none';
+                iframe.style.display='block';
+                spinner.style.display='none';
 
                 resolver();
 
                 clearInterval(onloadReplacement);
             }
-        }, 100);
+        },100);
 
     }
 
 });
 
 
-return {
-    FieldTimezoneMismatch: FieldTimezoneMismatch,
-    FieldReportLayout: FieldReportLayout,
+return{
+    FieldTimezoneMismatch:FieldTimezoneMismatch,
+    FieldReportLayout:FieldReportLayout,
     IframeWrapper,
 };
 

@@ -1,20 +1,20 @@
-flectra.define('lunch.LunchPaymentDialog', function (require) {
-"use strict";
+flectra.define('lunch.LunchPaymentDialog',function(require){
+"usestrict";
 
-var Dialog = require('web.Dialog');
+varDialog=require('web.Dialog');
 
-var LunchPaymentDialog = Dialog.extend({
-    template: 'lunch.LunchPaymentDialog',
+varLunchPaymentDialog=Dialog.extend({
+    template:'lunch.LunchPaymentDialog',
 
-    init: function (parent, options) {
-        this._super.apply(this, arguments);
+    init:function(parent,options){
+        this._super.apply(this,arguments);
 
-        options = options || {};
+        options=options||{};
 
-        this.message = options.message || '';
+        this.message=options.message||'';
     },
 });
 
-return LunchPaymentDialog;
+returnLunchPaymentDialog;
 
 });

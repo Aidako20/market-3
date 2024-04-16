@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 <data>
-<template id="report_lot_label">
-    <t t-call="web.basic_layout">
-        <t t-foreach="docs" t-as="o">
+<templateid="report_lot_label">
+    <tt-call="web.basic_layout">
+        <tt-foreach="docs"t-as="o">
             <t>
-                <div class="page">
-                    <div class="oe_structure"/>
-                    <div class="row">
-                        <div class="col-8">
-                            <table class="table table-condensed" style="border-bottom: 0px solid white !important;width: 3in;">
+                <divclass="page">
+                    <divclass="oe_structure"/>
+                    <divclass="row">
+                        <divclass="col-8">
+                            <tableclass="tabletable-condensed"style="border-bottom:0pxsolidwhite!important;width:3in;">
                                 <tr>
-                                  <th style="text-align: left;">
-                                    <span t-field="o.product_id.display_name"/>
+                                  <thstyle="text-align:left;">
+                                    <spant-field="o.product_id.display_name"/>
                                   </th>
                                 </tr>
-                                <tr name="lot_name">
+                                <trname="lot_name">
                                     <td>
                                         <span>LN/SN:</span>
-                                        <span t-field="o.name"/>
+                                        <spant-field="o.name"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align: center; vertical-align: middle;" class="col-5">
-                                        <img t-if="o.name" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 150)" style="width:100%;height:20%;"/>
+                                    <tdstyle="text-align:center;vertical-align:middle;"class="col-5">
+                                        <imgt-if="o.name"t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('Code128',o.name,600,150)"style="width:100%;height:20%;"/>
                                     </td>
                                 </tr>
                             </table>

@@ -1,9 +1,9 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import models, fields
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportmodels,fields
 
 
-class L10nLatamIdentificationType(models.Model):
+classL10nLatamIdentificationType(models.Model):
 
-    _inherit = "l10n_latam.identification.type"
+    _inherit="l10n_latam.identification.type"
 
-    l10n_pe_vat_code = fields.Char()
+    l10n_pe_vat_code=fields.Char()

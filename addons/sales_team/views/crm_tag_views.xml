@@ -1,25 +1,25 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
     <!--
-        crm.tag views
+        crm.tagviews
     -->
-    <record id="sales_team_crm_tag_view_form" model="ir.ui.view">
-        <field name="name">sales.team.crm.tag.view.form</field>
-        <field name="model">crm.tag</field>
-        <field name="arch" type="xml">
-            <form string="Tags">
+    <recordid="sales_team_crm_tag_view_form"model="ir.ui.view">
+        <fieldname="name">sales.team.crm.tag.view.form</field>
+        <fieldname="model">crm.tag</field>
+        <fieldname="arch"type="xml">
+            <formstring="Tags">
                 <sheet>
-                    <div class="oe_title">
-                        <div class="oe_edit_only">
-                            <label for="name"/>
+                    <divclass="oe_title">
+                        <divclass="oe_edit_only">
+                            <labelfor="name"/>
                         </div>
                         <h1>
-                            <field name="name"/>
+                            <fieldname="name"/>
                         </h1>
                     </div>
                     <group>
                         <group>
-                            <field name="color" required="True"/>
+                            <fieldname="color"required="True"/>
                         </group>
                     </group>
                 </sheet>
@@ -27,27 +27,27 @@
         </field>
     </record>
 
-    <record id="sales_team_crm_tag_view_tree" model="ir.ui.view">
-        <field name="name">sales.team.crm.tag.view.tree</field>
-        <field name="model">crm.tag</field>
-        <field name="arch" type="xml">
-            <tree string="Tags" editable="bottom">
-                <field name="name"/>
-                <field name="color" widget="color_picker" />
+    <recordid="sales_team_crm_tag_view_tree"model="ir.ui.view">
+        <fieldname="name">sales.team.crm.tag.view.tree</field>
+        <fieldname="model">crm.tag</field>
+        <fieldname="arch"type="xml">
+            <treestring="Tags"editable="bottom">
+                <fieldname="name"/>
+                <fieldname="color"widget="color_picker"/>
             </tree>
         </field>
     </record>
 
-    <!-- Tags Configuration -->
-    <record id="sales_team_crm_tag_action" model="ir.actions.act_window">
-        <field name="name">Tags</field>
-        <field name="res_model">crm.tag</field>
-        <field name="view_id" ref="sales_team_crm_tag_view_tree"/>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-            Create new tags for your opportunities
+    <!--TagsConfiguration-->
+    <recordid="sales_team_crm_tag_action"model="ir.actions.act_window">
+        <fieldname="name">Tags</field>
+        <fieldname="res_model">crm.tag</field>
+        <fieldname="view_id"ref="sales_team_crm_tag_view_tree"/>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+            Createnewtagsforyouropportunities
             </p><p>
-            Create tags that fit your business (product structure, sales type, etc.) to better manage and track your opportunities.
+            Createtagsthatfityourbusiness(productstructure,salestype,etc.)tobettermanageandtrackyouropportunities.
             </p>
         </field>
     </record>

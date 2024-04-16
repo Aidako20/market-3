@@ -1,59 +1,59 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from werkzeug.exceptions import NotFound
+fromwerkzeug.exceptionsimportNotFound
 
-from flectra import http
-from flectra.http import request
+fromflectraimporthttp
+fromflectra.httpimportrequest
 
 
-class WebsiteJitsiController(http.Controller):
+classWebsiteJitsiController(http.Controller):
 
-    @http.route(["/jitsi/update_status"], type="json", auth="public")
-    def jitsi_update_status(self, room_name, participant_count, joined):
-        """ Update room status: participant count, max reached
+    @http.route(["/jitsi/update_status"],type="json",auth="public")
+    defjitsi_update_status(self,room_name,participant_count,joined):
+        """Updateroomstatus:participantcount,maxreached
 
-        Use the SQL keywords "FOR UPDATE SKIP LOCKED" in order to skip if the row
-        is locked (instead of raising an exception, wait for a moment and retry).
-        This endpoint may be called multiple times and we don't care having small
-        errors in participant count compared to performance issues.
+        UsetheSQLkeywords"FORUPDATESKIPLOCKED"inordertoskipiftherow
+        islocked(insteadofraisinganexception,waitforamomentandretry).
+        Thisendpointmaybecalledmultipletimesandwedon'tcarehavingsmall
+        errorsinparticipantcountcomparedtoperformanceissues.
 
-        :raise ValueError: wrong participant count
-        :raise NotFound: wrong room name
+        :raiseValueError:wrongparticipantcount
+        :raiseNotFound:wrongroomname
         """
-        if participant_count < 0:
-            raise ValueError()
+        ifparticipant_count<0:
+            raiseValueError()
 
-        chat_room = self._chat_room_exists(room_name)
-        if not chat_room:
-            raise NotFound()
+        chat_room=self._chat_room_exists(room_name)
+        ifnotchat_room:
+            raiseNotFound()
 
         request.env.cr.execute(
             """
-            WITH req AS (
-                SELECT id
-                  FROM chat_room
-                  -- Can not update the chat room if we do not have its name
-                 WHERE name = %s
-                   FOR UPDATE SKIP LOCKED
+            WITHreqAS(
+                SELECTid
+                  FROMchat_room
+                  --Cannotupdatethechatroomifwedonothaveitsname
+                 WHEREname=%s
+                   FORUPDATESKIPLOCKED
             )
-            UPDATE chat_room AS wcr
-               SET participant_count = %s,
-                   last_activity = NOW(),
-                   max_participant_reached = GREATEST(max_participant_reached, %s)
-              FROM req
-             WHERE wcr.id = req.id;
+            UPDATEchat_roomASwcr
+               SETparticipant_count=%s,
+                   last_activity=NOW(),
+                   max_participant_reached=GREATEST(max_participant_reached,%s)
+              FROMreq
+             WHEREwcr.id=req.id;
             """,
-            [room_name, participant_count, participant_count]
+            [room_name,participant_count,participant_count]
         )
 
-    @http.route(["/jitsi/is_full"], type="json", auth="public")
-    def jitsi_is_full(self, room_name):
-        return self._chat_room_exists(room_name).is_full
+    @http.route(["/jitsi/is_full"],type="json",auth="public")
+    defjitsi_is_full(self,room_name):
+        returnself._chat_room_exists(room_name).is_full
 
-    # ------------------------------------------------------------
-    # TOOLS
-    # ------------------------------------------------------------
+    #------------------------------------------------------------
+    #TOOLS
+    #------------------------------------------------------------
 
-    def _chat_room_exists(self, room_name):
-        return request.env["chat.room"].sudo().search([("name", "=", room_name)], limit=1)
+    def_chat_room_exists(self,room_name):
+        returnrequest.env["chat.room"].sudo().search([("name","=",room_name)],limit=1)

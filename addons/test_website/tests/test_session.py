@@ -1,9 +1,9 @@
-import flectra.tests
-from flectra.tools import mute_logger
+importflectra.tests
+fromflectra.toolsimportmute_logger
 
 
-@flectra.tests.common.tagged('post_install', '-at_install')
-class TestWebsiteSession(flectra.tests.HttpCase):
+@flectra.tests.common.tagged('post_install','-at_install')
+classTestWebsiteSession(flectra.tests.HttpCase):
 
-    def test_01_run_test(self):
-        self.start_tour('/', 'test_json_auth')
+    deftest_01_run_test(self):
+        self.start_tour('/','test_json_auth')

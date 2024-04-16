@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="product_category_deliveries" model="product.category">
-            <field name="parent_id" ref="product.product_category_all"/>
-            <field name="name">Deliveries</field>
+    <datanoupdate="1">
+        <recordid="product_category_deliveries"model="product.category">
+            <fieldname="parent_id"ref="product.product_category_all"/>
+            <fieldname="name">Deliveries</field>
         </record>
-        <record id="product_product_delivery" model="product.product">
-            <field name="name">Free delivery charges</field>
-            <field name="default_code">Delivery_007</field>
-            <field name="type">service</field>
-            <field name="categ_id" ref="delivery.product_category_deliveries"/>
-            <field name="sale_ok" eval="False"/>
-            <field name="purchase_ok" eval="False"/>
-            <field name="list_price">0.0</field>
-            <field name="invoice_policy">order</field>
+        <recordid="product_product_delivery"model="product.product">
+            <fieldname="name">Freedeliverycharges</field>
+            <fieldname="default_code">Delivery_007</field>
+            <fieldname="type">service</field>
+            <fieldname="categ_id"ref="delivery.product_category_deliveries"/>
+            <fieldname="sale_ok"eval="False"/>
+            <fieldname="purchase_ok"eval="False"/>
+            <fieldname="list_price">0.0</field>
+            <fieldname="invoice_policy">order</field>
         </record>
-        <record id="free_delivery_carrier" model="delivery.carrier">
-            <field name="name">Free delivery charges</field>
-            <field name="fixed_price">0.0</field>
-            <field name="free_over" eval="True"/>
-            <field name="amount">1000</field>
-            <field name="sequence">1</field>
-            <field name="delivery_type">fixed</field>
-            <field name="product_id" ref="delivery.product_product_delivery"/>
+        <recordid="free_delivery_carrier"model="delivery.carrier">
+            <fieldname="name">Freedeliverycharges</field>
+            <fieldname="fixed_price">0.0</field>
+            <fieldname="free_over"eval="True"/>
+            <fieldname="amount">1000</field>
+            <fieldname="sequence">1</field>
+            <fieldname="delivery_type">fixed</field>
+            <fieldname="product_id"ref="delivery.product_product_delivery"/>
         </record>
     </data>
 </flectra>

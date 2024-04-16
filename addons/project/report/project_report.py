@@ -1,70 +1,70 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, tools
+fromflectraimportfields,models,tools
 
 
-class ReportProjectTaskUser(models.Model):
-    _name = "report.project.task.user"
-    _description = "Tasks Analysis"
-    _order = 'name desc, project_id'
-    _auto = False
+classReportProjectTaskUser(models.Model):
+    _name="report.project.task.user"
+    _description="TasksAnalysis"
+    _order='namedesc,project_id'
+    _auto=False
 
-    name = fields.Char(string='Task Title', readonly=True)
-    user_id = fields.Many2one('res.users', string='Assigned To', readonly=True)
-    date_assign = fields.Datetime(string='Assignment Date', readonly=True)
-    date_end = fields.Datetime(string='Ending Date', readonly=True)
-    date_deadline = fields.Date(string='Deadline', readonly=True)
-    date_last_stage_update = fields.Datetime(string='Last Stage Update', readonly=True)
-    project_id = fields.Many2one('project.project', string='Project', readonly=True)
-    working_days_close = fields.Float(string='# Working Days to Close',
-        digits=(16,2), readonly=True, group_operator="avg",
-        help="Number of Working Days to close the task")
-    working_days_open = fields.Float(string='# Working Days to Assign',
-        digits=(16,2), readonly=True, group_operator="avg",
-        help="Number of Working Days to Open the task")
-    delay_endings_days = fields.Float(string='# Days to Deadline', digits=(16,2), readonly=True)
-    nbr = fields.Integer('# of Tasks', readonly=True)  # TDE FIXME master: rename into nbr_tasks
-    priority = fields.Selection([
-        ('0', 'Low'),
-        ('1', 'Normal'),
-        ('2', 'High')
-        ], readonly=True, string="Priority")
-    state = fields.Selection([
-            ('normal', 'In Progress'),
-            ('blocked', 'Blocked'),
-            ('done', 'Ready for next stage')
-        ], string='Kanban State', readonly=True)
-    company_id = fields.Many2one('res.company', string='Company', readonly=True)
-    partner_id = fields.Many2one('res.partner', string='Customer', readonly=True)
-    stage_id = fields.Many2one('project.task.type', string='Stage', readonly=True)
+    name=fields.Char(string='TaskTitle',readonly=True)
+    user_id=fields.Many2one('res.users',string='AssignedTo',readonly=True)
+    date_assign=fields.Datetime(string='AssignmentDate',readonly=True)
+    date_end=fields.Datetime(string='EndingDate',readonly=True)
+    date_deadline=fields.Date(string='Deadline',readonly=True)
+    date_last_stage_update=fields.Datetime(string='LastStageUpdate',readonly=True)
+    project_id=fields.Many2one('project.project',string='Project',readonly=True)
+    working_days_close=fields.Float(string='#WorkingDaystoClose',
+        digits=(16,2),readonly=True,group_operator="avg",
+        help="NumberofWorkingDaystoclosethetask")
+    working_days_open=fields.Float(string='#WorkingDaystoAssign',
+        digits=(16,2),readonly=True,group_operator="avg",
+        help="NumberofWorkingDaystoOpenthetask")
+    delay_endings_days=fields.Float(string='#DaystoDeadline',digits=(16,2),readonly=True)
+    nbr=fields.Integer('#ofTasks',readonly=True) #TDEFIXMEmaster:renameintonbr_tasks
+    priority=fields.Selection([
+        ('0','Low'),
+        ('1','Normal'),
+        ('2','High')
+        ],readonly=True,string="Priority")
+    state=fields.Selection([
+            ('normal','InProgress'),
+            ('blocked','Blocked'),
+            ('done','Readyfornextstage')
+        ],string='KanbanState',readonly=True)
+    company_id=fields.Many2one('res.company',string='Company',readonly=True)
+    partner_id=fields.Many2one('res.partner',string='Customer',readonly=True)
+    stage_id=fields.Many2one('project.task.type',string='Stage',readonly=True)
 
-    def _select(self):
-        select_str = """
+    def_select(self):
+        select_str="""
              SELECT
-                    (select 1 ) AS nbr,
-                    t.id as id,
-                    t.date_assign as date_assign,
-                    t.date_end as date_end,
-                    t.date_last_stage_update as date_last_stage_update,
-                    t.date_deadline as date_deadline,
+                    (select1)ASnbr,
+                    t.idasid,
+                    t.date_assignasdate_assign,
+                    t.date_endasdate_end,
+                    t.date_last_stage_updateasdate_last_stage_update,
+                    t.date_deadlineasdate_deadline,
                     t.user_id,
                     t.project_id,
                     t.priority,
-                    t.name as name,
+                    t.nameasname,
                     t.company_id,
                     t.partner_id,
-                    t.stage_id as stage_id,
-                    t.kanban_state as state,
-                    t.working_days_close as working_days_close,
-                    t.working_days_open  as working_days_open,
-                    (extract('epoch' from (t.date_deadline-(now() at time zone 'UTC'))))/(3600*24)  as delay_endings_days
+                    t.stage_idasstage_id,
+                    t.kanban_stateasstate,
+                    t.working_days_closeasworking_days_close,
+                    t.working_days_open asworking_days_open,
+                    (extract('epoch'from(t.date_deadline-(now()attimezone'UTC'))))/(3600*24) asdelay_endings_days
         """
-        return select_str
+        returnselect_str
 
-    def _group_by(self):
-        group_by_str = """
-                GROUP BY
+    def_group_by(self):
+        group_by_str="""
+                GROUPBY
                     t.id,
                     t.create_date,
                     t.write_date,
@@ -80,15 +80,15 @@ class ReportProjectTaskUser(models.Model):
                     t.partner_id,
                     t.stage_id
         """
-        return group_by_str
+        returngroup_by_str
 
-    def init(self):
-        tools.drop_view_if_exists(self._cr, self._table)
+    definit(self):
+        tools.drop_view_if_exists(self._cr,self._table)
         self._cr.execute("""
-            CREATE view %s as
+            CREATEview%sas
               %s
-              FROM project_task t
-                WHERE t.active = 'true'
-                AND t.project_id IS NOT NULL
+              FROMproject_taskt
+                WHEREt.active='true'
+                ANDt.project_idISNOTNULL
                 %s
-        """ % (self._table, self._select(), self._group_by()))
+        """%(self._table,self._select(),self._group_by()))

@@ -1,80 +1,80 @@
-flectra.define('point_of_sale.SetFiscalPositionButton', function(require) {
-    'use strict';
+flectra.define('point_of_sale.SetFiscalPositionButton',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const ProductScreen = require('point_of_sale.ProductScreen');
-    const { useListener } = require('web.custom_hooks');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constProductScreen=require('point_of_sale.ProductScreen');
+    const{useListener}=require('web.custom_hooks');
+    constRegistries=require('point_of_sale.Registries');
 
-    class SetFiscalPositionButton extends PosComponent {
-        constructor() {
+    classSetFiscalPositionButtonextendsPosComponent{
+        constructor(){
             super(...arguments);
-            useListener('click', this.onClick);
+            useListener('click',this.onClick);
         }
-        mounted() {
-            this.env.pos.get('orders').on('add remove change', () => this.render(), this);
-            this.env.pos.on('change:selectedOrder', () => this.render(), this);
+        mounted(){
+            this.env.pos.get('orders').on('addremovechange',()=>this.render(),this);
+            this.env.pos.on('change:selectedOrder',()=>this.render(),this);
         }
-        willUnmount() {
-            this.env.pos.get('orders').off('add remove change', null, this);
-            this.env.pos.off('change:selectedOrder', null, this);
+        willUnmount(){
+            this.env.pos.get('orders').off('addremovechange',null,this);
+            this.env.pos.off('change:selectedOrder',null,this);
         }
-        get currentOrder() {
-            return this.env.pos.get_order();
+        getcurrentOrder(){
+            returnthis.env.pos.get_order();
         }
-        get currentFiscalPositionName() {
-            return this.currentOrder && this.currentOrder.fiscal_position
-                ? this.currentOrder.fiscal_position.display_name
-                : this.env._t('Tax');
+        getcurrentFiscalPositionName(){
+            returnthis.currentOrder&&this.currentOrder.fiscal_position
+                ?this.currentOrder.fiscal_position.display_name
+                :this.env._t('Tax');
         }
-        async onClick() {
-            const currentFiscalPosition = this.currentOrder.fiscal_position;
-            const fiscalPosList = [
+        asynconClick(){
+            constcurrentFiscalPosition=this.currentOrder.fiscal_position;
+            constfiscalPosList=[
                 {
-                    id: -1,
-                    label: this.env._t('None'),
-                    isSelected: !currentFiscalPosition,
+                    id:-1,
+                    label:this.env._t('None'),
+                    isSelected:!currentFiscalPosition,
                 },
             ];
-            for (let fiscalPos of this.env.pos.fiscal_positions) {
+            for(letfiscalPosofthis.env.pos.fiscal_positions){
                 fiscalPosList.push({
-                    id: fiscalPos.id,
-                    label: fiscalPos.name,
-                    isSelected: currentFiscalPosition
-                        ? fiscalPos.id === currentFiscalPosition.id
-                        : false,
-                    item: fiscalPos,
+                    id:fiscalPos.id,
+                    label:fiscalPos.name,
+                    isSelected:currentFiscalPosition
+                        ?fiscalPos.id===currentFiscalPosition.id
+                        :false,
+                    item:fiscalPos,
                 });
             }
-            const { confirmed, payload: selectedFiscalPosition } = await this.showPopup(
+            const{confirmed,payload:selectedFiscalPosition}=awaitthis.showPopup(
                 'SelectionPopup',
                 {
-                    title: this.env._t('Select Fiscal Position'),
-                    list: fiscalPosList,
+                    title:this.env._t('SelectFiscalPosition'),
+                    list:fiscalPosList,
                 }
             );
-            if (confirmed) {
-                this.currentOrder.fiscal_position = selectedFiscalPosition;
-                // IMPROVEMENT: The following is the old implementation and I believe
-                // there could be a better way of doing it.
-                for (let line of this.currentOrder.orderlines.models) {
+            if(confirmed){
+                this.currentOrder.fiscal_position=selectedFiscalPosition;
+                //IMPROVEMENT:ThefollowingistheoldimplementationandIbelieve
+                //therecouldbeabetterwayofdoingit.
+                for(letlineofthis.currentOrder.orderlines.models){
                     line.set_quantity(line.quantity);
                 }
                 this.currentOrder.trigger('change');
             }
         }
     }
-    SetFiscalPositionButton.template = 'SetFiscalPositionButton';
+    SetFiscalPositionButton.template='SetFiscalPositionButton';
 
     ProductScreen.addControlButton({
-        component: SetFiscalPositionButton,
-        condition: function() {
-            return this.env.pos.fiscal_positions.length > 0;
+        component:SetFiscalPositionButton,
+        condition:function(){
+            returnthis.env.pos.fiscal_positions.length>0;
         },
-        position: ['before', 'SetPricelistButton'],
+        position:['before','SetPricelistButton'],
     });
 
     Registries.Component.add(SetFiscalPositionButton);
 
-    return SetFiscalPositionButton;
+    returnSetFiscalPositionButton;
 });

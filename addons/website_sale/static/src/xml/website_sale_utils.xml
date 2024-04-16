@@ -1,51 +1,51 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-<!-- Products Search Bar autocomplete item -->
-<div t-name="website_sale.productsSearchBar.autocomplete"
-    class="dropdown-menu show w-100">
-    <t t-if="!products.length">
-        <!-- TODO adapt in master, this is patched in JS so that text-muted -->
-        <!-- is not on the same element as dropdown-item-text -->
-        <span class="dropdown-item-text text-muted">No results found. Please try another search.</span>
+<!--ProductsSearchBarautocompleteitem-->
+<divt-name="website_sale.productsSearchBar.autocomplete"
+    class="dropdown-menushoww-100">
+    <tt-if="!products.length">
+        <!--TODOadaptinmaster,thisispatchedinJSsothattext-muted-->
+        <!--isnotonthesameelementasdropdown-item-text-->
+        <spanclass="dropdown-item-texttext-muted">Noresultsfound.Pleasetryanothersearch.</span>
     </t>
-    <a t-foreach="products" t-as="product"
-        t-att-href="product['website_url']" class="dropdown-item p-2 text-wrap">
-        <div class="media align-items-center o_search_product_item">
-            <t t-if="widget.displayImage">
-                <img t-attf-src="/web/image/product.template/#{product['id']}/image_128"
-                    class="flex-shrink-0 o_image_64_contain"/>
+    <at-foreach="products"t-as="product"
+        t-att-href="product['website_url']"class="dropdown-itemp-2text-wrap">
+        <divclass="mediaalign-items-centero_search_product_item">
+            <tt-if="widget.displayImage">
+                <imgt-attf-src="/web/image/product.template/#{product['id']}/image_128"
+                    class="flex-shrink-0o_image_64_contain"/>
             </t>
-            <div class="media-body px-3">
-                <t t-set="description" t-value="widget.displayDescription and product['description_sale']"/>
-                <h6 t-attf-class="font-weight-bold #{description ? '' : 'mb-0'}" t-esc="product['name']"/>
-                <p t-if="description" class="mb-0" t-esc="description"/>
+            <divclass="media-bodypx-3">
+                <tt-set="description"t-value="widget.displayDescriptionandproduct['description_sale']"/>
+                <h6t-attf-class="font-weight-bold#{description?'':'mb-0'}"t-esc="product['name']"/>
+                <pt-if="description"class="mb-0"t-esc="description"/>
             </div>
-            <div t-if="widget.displayPrice" class="flex-shrink-0">
-                <t t-if="product['has_discounted_price']">
-                    <span class="text-danger text-nowrap" style="text-decoration: line-through;">
-                        <t t-raw="product['list_price']"/>
+            <divt-if="widget.displayPrice"class="flex-shrink-0">
+                <tt-if="product['has_discounted_price']">
+                    <spanclass="text-dangertext-nowrap"style="text-decoration:line-through;">
+                        <tt-raw="product['list_price']"/>
                     </span>
                     <br/>
                 </t>
-                <b class="text-nowrap">
-                    <t t-raw="product['price']"/>
+                <bclass="text-nowrap">
+                    <tt-raw="product['price']"/>
                 </b>
             </div>
         </div>
     </a>
-    <t t-if="hasMoreProducts">
-        <button type="submit" class="dropdown-item text-center text-primary">All results</button>
+    <tt-if="hasMoreProducts">
+        <buttontype="submit"class="dropdown-itemtext-centertext-primary">Allresults</button>
     </t>
 </div>
 
-<!-- Products Search Bar autocomplete item -->
-<we-button t-name="website_sale.ribbonSelectItem" t-att-data-set-ribbon="ribbon.id">
-    <t t-raw="ribbon.html"/>
-    <span t-attf-class="fa fa-#{isTag ? 'tag' : 'bookmark'} ml-auto"></span>
-    <span t-attf-class="fa fa-arrow-#{isLeft ? 'left' : 'right'} ml-1"></span>
-    <span t-attf-class="o_wsale_color_preview #{colorClasses} ml-1" t-attf-style="background-color: #{ribbon.bg_color}"></span>
-    <span t-attf-class="o_wsale_color_preview #{colorClasses} ml-1" t-attf-style="background-color: #{textColor} !important;"></span>
+<!--ProductsSearchBarautocompleteitem-->
+<we-buttont-name="website_sale.ribbonSelectItem"t-att-data-set-ribbon="ribbon.id">
+    <tt-raw="ribbon.html"/>
+    <spant-attf-class="fafa-#{isTag?'tag':'bookmark'}ml-auto"></span>
+    <spant-attf-class="fafa-arrow-#{isLeft?'left':'right'}ml-1"></span>
+    <spant-attf-class="o_wsale_color_preview#{colorClasses}ml-1"t-attf-style="background-color:#{ribbon.bg_color}"></span>
+    <spant-attf-class="o_wsale_color_preview#{colorClasses}ml-1"t-attf-style="background-color:#{textColor}!important;"></span>
 </we-button>
 
 </templates>

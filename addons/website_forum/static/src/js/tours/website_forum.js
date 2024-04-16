@@ -1,67 +1,67 @@
-flectra.define("website_forum.tour_forum", function (require) {
-    "use strict";
+flectra.define("website_forum.tour_forum",function(require){
+    "usestrict";
 
-    var core = require("web.core");
-    var tour = require("web_tour.tour");
+    varcore=require("web.core");
+    vartour=require("web_tour.tour");
 
-    var _t = core._t;
+    var_t=core._t;
 
-    tour.register("question", {
-        url: "/forum/1",
-    }, [{
-        trigger: ".o_forum_ask_btn",
-        position: "left",
-        content: _t("Create a new post in this forum by clicking on the button."),
-    }, {
-        trigger: "input[name=post_name]",
-        position: "top",
-        content: _t("Give your post title."),
-    }, {
-        trigger: ".note-editable p",
-        extra_trigger: "input[name=post_name]:not(:propValue(\"\"))",
-        content: _t("Put your question here."),
-        position: "bottom",
-        run: "text",
-    }, {
-        trigger: ".select2-choices",
-        extra_trigger: ".note-editable p:not(:containsExact(\"<br>\"))",
-        content: _t("Insert tags related to your question."),
-        position: "top",
-        run: function (actions) {
+    tour.register("question",{
+        url:"/forum/1",
+    },[{
+        trigger:".o_forum_ask_btn",
+        position:"left",
+        content:_t("Createanewpostinthisforumbyclickingonthebutton."),
+    },{
+        trigger:"input[name=post_name]",
+        position:"top",
+        content:_t("Giveyourposttitle."),
+    },{
+        trigger:".note-editablep",
+        extra_trigger:"input[name=post_name]:not(:propValue(\"\"))",
+        content:_t("Putyourquestionhere."),
+        position:"bottom",
+        run:"text",
+    },{
+        trigger:".select2-choices",
+        extra_trigger:".note-editablep:not(:containsExact(\"<br>\"))",
+        content:_t("Inserttagsrelatedtoyourquestion."),
+        position:"top",
+        run:function(actions){
             actions.auto("input[id=s2id_autogen2]");
         },
-    }, {
-        trigger: "button:contains(\"Post\")",
-        extra_trigger: "input[id=s2id_autogen2]:not(:propValue(\"Tags\"))",
-        content: _t("Click to post your question."),
-        position: "bottom",
-    }, {
-        extra_trigger: 'div.modal.modal_shown',
-        trigger: ".modal-header button.close",
-        auto: true,
+    },{
+        trigger:"button:contains(\"Post\")",
+        extra_trigger:"input[id=s2id_autogen2]:not(:propValue(\"Tags\"))",
+        content:_t("Clicktopostyourquestion."),
+        position:"bottom",
+    },{
+        extra_trigger:'div.modal.modal_shown',
+        trigger:".modal-headerbutton.close",
+        auto:true,
     },
     {
-        trigger: "a:contains(\"Answer\").collapsed",
-        content: _t("Click to answer."),
-        position: "bottom",
+        trigger:"a:contains(\"Answer\").collapsed",
+        content:_t("Clicktoanswer."),
+        position:"bottom",
     },
     {
-        trigger: ".note-editable p",
-        content: _t("Put your answer here."),
-        position: "bottom",
-        run: "text",
-    }, {
-        trigger: "button:contains(\"Post Answer\")",
-        extra_trigger: ".note-editable p:not(:containsExact(\"<br>\"))",
-        content: _t("Click to post your answer."),
-        position: "bottom",
-    }, {
-        extra_trigger: 'div.modal.modal_shown',
-        trigger: ".modal-header button.close",
-        auto: true,
-    }, {
-        trigger: ".o_wforum_validate_toggler[data-karma=\"20\"]:first",
-        content: _t("Click here to accept this answer."),
-        position: "right",
+        trigger:".note-editablep",
+        content:_t("Putyouranswerhere."),
+        position:"bottom",
+        run:"text",
+    },{
+        trigger:"button:contains(\"PostAnswer\")",
+        extra_trigger:".note-editablep:not(:containsExact(\"<br>\"))",
+        content:_t("Clicktopostyouranswer."),
+        position:"bottom",
+    },{
+        extra_trigger:'div.modal.modal_shown',
+        trigger:".modal-headerbutton.close",
+        auto:true,
+    },{
+        trigger:".o_wforum_validate_toggler[data-karma=\"20\"]:first",
+        content:_t("Clickheretoacceptthisanswer."),
+        position:"right",
     }]);
 });

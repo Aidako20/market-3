@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResPartner(models.Model):
-    _inherit = 'res.partner'
+classResPartner(models.Model):
+    _inherit='res.partner'
 
-    country_code = fields.Char(related='country_id.code')
-    l10n_lu_peppol_identifier = fields.Char("Peppol Unique Identifier")
+    country_code=fields.Char(related='country_id.code')
+    l10n_lu_peppol_identifier=fields.Char("PeppolUniqueIdentifier")

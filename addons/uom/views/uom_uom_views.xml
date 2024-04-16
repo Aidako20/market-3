@@ -1,52 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="product_uom_tree_view" model="ir.ui.view">
-        <field name="name">uom.uom.tree</field>
-        <field name="model">uom.uom</field>
-        <field name="arch" type="xml">
-            <tree string="Units of Measure">
-                <field name="name"/>
-                <field name="category_id"/>
-                <field name="uom_type"/>
+    <recordid="product_uom_tree_view"model="ir.ui.view">
+        <fieldname="name">uom.uom.tree</field>
+        <fieldname="model">uom.uom</field>
+        <fieldname="arch"type="xml">
+            <treestring="UnitsofMeasure">
+                <fieldname="name"/>
+                <fieldname="category_id"/>
+                <fieldname="uom_type"/>
             </tree>
         </field>
     </record>
 
-    <record id="product_uom_form_view" model="ir.ui.view">
-        <field name="name">uom.uom.form</field>
-        <field name="model">uom.uom</field>
-        <field name="arch" type="xml">
-            <form string="Units of Measure">
+    <recordid="product_uom_form_view"model="ir.ui.view">
+        <fieldname="name">uom.uom.form</field>
+        <fieldname="model">uom.uom</field>
+        <fieldname="arch"type="xml">
+            <formstring="UnitsofMeasure">
                 <sheet>
                     <group>
-                         <group name="uom_details">
-                             <field name="name"/>
-                             <field name="category_id"/>
-                             <field name="uom_type"/>
-                             <label for="factor"
+                         <groupname="uom_details">
+                             <fieldname="name"/>
+                             <fieldname="category_id"/>
+                             <fieldname="uom_type"/>
+                             <labelfor="factor"
                                 attrs="{'invisible':[('uom_type','!=','smaller')]}"/>
-                            <div attrs="{'invisible':[('uom_type','!=','smaller')]}">
-                                <field name="factor"
+                            <divattrs="{'invisible':[('uom_type','!=','smaller')]}">
+                                <fieldname="factor"
                                     digits="[42,5]"
                                     attrs="{'readonly':[('uom_type','=','bigger')]}"/>
-                                <span class="oe_grey oe_inline">
-                                    e.g: 1*(reference unit)=ratio*(this unit)
+                                <spanclass="oe_greyoe_inline">
+                                    e.g:1*(referenceunit)=ratio*(thisunit)
                                 </span>
                             </div>
-                            <label for="factor_inv" 
-                                attrs="{'invisible':[('uom_type','!=','bigger')]}"/>                           
-                            <div attrs="{'invisible':[('uom_type','!=','bigger')]}">
-                                <field name="factor_inv"
+                            <labelfor="factor_inv"
+                                attrs="{'invisible':[('uom_type','!=','bigger')]}"/>                          
+                            <divattrs="{'invisible':[('uom_type','!=','bigger')]}">
+                                <fieldname="factor_inv"
                                     digits="[42,5]"
                                     attrs="{'readonly':[('uom_type','!=','bigger')]}"/>
-                                <span class="oe_grey oe_inline">
-                                    e.g: 1*(this unit)=ratio*(reference unit)
+                                <spanclass="oe_greyoe_inline">
+                                    e.g:1*(thisunit)=ratio*(referenceunit)
                                 </span>
                             </div>
                          </group>
-                         <group name="active_rounding">
-                             <field name="active" widget="boolean_toggle"/>
-                             <field name="rounding" digits="[42, 5]"/>
+                         <groupname="active_rounding">
+                             <fieldname="active"widget="boolean_toggle"/>
+                             <fieldname="rounding"digits="[42,5]"/>
                          </group>
                      </group>
                 </sheet>
@@ -54,74 +54,74 @@
         </field>
     </record>
 
-    <record id="uom_uom_view_search" model="ir.ui.view">
-        <field name="name">uom.uom.view.search</field>
-        <field name="model">uom.uom</field>
-        <field name="arch" type="xml">
-            <search string="Search UOM">
-                <field name="name"/>
+    <recordid="uom_uom_view_search"model="ir.ui.view">
+        <fieldname="name">uom.uom.view.search</field>
+        <fieldname="model">uom.uom</field>
+        <fieldname="arch"type="xml">
+            <searchstring="SearchUOM">
+                <fieldname="name"/>
                 <separator/>
-                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
-                <group string="Group By">
-                  <filter string="Category" name="group_by_category" context="{'group_by': 'category_id'}"/>
+                <filterstring="Archived"name="inactive"domain="[('active','=',False)]"/>
+                <groupstring="GroupBy">
+                  <filterstring="Category"name="group_by_category"context="{'group_by':'category_id'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <record id="product_uom_form_action" model="ir.actions.act_window">
-        <field name="name">Units of Measure</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">uom.uom</field>
-        <field name="view_id" ref="product_uom_tree_view"/>
-        <field name="search_view_id" ref="uom_uom_view_search"/>
-        <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            Add a new unit of measure
+    <recordid="product_uom_form_action"model="ir.actions.act_window">
+        <fieldname="name">UnitsofMeasure</field>
+        <fieldname="type">ir.actions.act_window</field>
+        <fieldname="res_model">uom.uom</field>
+        <fieldname="view_id"ref="product_uom_tree_view"/>
+        <fieldname="search_view_id"ref="uom_uom_view_search"/>
+        <fieldname="help"type="html">
+          <pclass="o_view_nocontent_smiling_face">
+            Addanewunitofmeasure
           </p><p>
-            You must define a conversion rate between several Units of
-            Measure within the same category.
+            YoumustdefineaconversionratebetweenseveralUnitsof
+            Measurewithinthesamecategory.
           </p>
         </field>
     </record>
 
-    <record id="product_uom_categ_form_view" model="ir.ui.view">
-        <field name="name">uom.category.form</field>
-        <field name="model">uom.category</field>
-        <field name="arch" type="xml">
-            <form string="Units of Measure categories">
+    <recordid="product_uom_categ_form_view"model="ir.ui.view">
+        <fieldname="name">uom.category.form</field>
+        <fieldname="model">uom.category</field>
+        <fieldname="arch"type="xml">
+            <formstring="UnitsofMeasurecategories">
                 <sheet>
                     <group>
-                        <field name="name"/>
+                        <fieldname="name"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="product_uom_categ_tree_view" model="ir.ui.view">
-        <field name="name">uom.category.tree</field>
-        <field name="model">uom.category</field>
-        <field name="arch" type="xml">
-            <tree string="Units of Measure categories" editable="bottom">
-                <field name="name"/>
+    <recordid="product_uom_categ_tree_view"model="ir.ui.view">
+        <fieldname="name">uom.category.tree</field>
+        <fieldname="model">uom.category</field>
+        <fieldname="arch"type="xml">
+            <treestring="UnitsofMeasurecategories"editable="bottom">
+                <fieldname="name"/>
             </tree>
         </field>
     </record>
 
-    <record id="product_uom_categ_form_action" model="ir.actions.act_window">
-        <field name="name">Units of Measure Categories</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">uom.category</field>
-        <field name="view_mode">tree,form</field>
-        <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            Add a new unit of measure category
+    <recordid="product_uom_categ_form_action"model="ir.actions.act_window">
+        <fieldname="name">UnitsofMeasureCategories</field>
+        <fieldname="type">ir.actions.act_window</field>
+        <fieldname="res_model">uom.category</field>
+        <fieldname="view_mode">tree,form</field>
+        <fieldname="help"type="html">
+          <pclass="o_view_nocontent_smiling_face">
+            Addanewunitofmeasurecategory
           </p><p>
-            Units of measure belonging to the same category can be
-            converted between each others. For example, in the category
-            <i>'Time'</i>, you will have the following units of measure:
-            Hours, Days.
+            Unitsofmeasurebelongingtothesamecategorycanbe
+            convertedbetweeneachothers.Forexample,inthecategory
+            <i>'Time'</i>,youwillhavethefollowingunitsofmeasure:
+            Hours,Days.
           </p>
         </field>
     </record>

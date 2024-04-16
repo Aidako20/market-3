@@ -1,269 +1,269 @@
-# coding: utf-8
+#coding:utf-8
 
-import base64
-import json
-import binascii
-from collections import OrderedDict
-import hashlib
-import hmac
-import logging
-from itertools import chain
+importbase64
+importjson
+importbinascii
+fromcollectionsimportOrderedDict
+importhashlib
+importhmac
+importlogging
+fromitertoolsimportchain
 
-from werkzeug import urls
+fromwerkzeugimporturls
 
-from flectra import api, fields, models, tools, _
-from flectra.addons.payment.models.payment_acquirer import ValidationError
-from flectra.addons.payment_adyen.controllers.main import AdyenController
-from flectra.tools.pycompat import to_text
+fromflectraimportapi,fields,models,tools,_
+fromflectra.addons.payment.models.payment_acquirerimportValidationError
+fromflectra.addons.payment_adyen.controllers.mainimportAdyenController
+fromflectra.tools.pycompatimportto_text
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
-# https://docs.adyen.com/developers/development-resources/currency-codes
-CURRENCY_CODE_MAPS = {
-    "BHD": 3,
-    "CVE": 0,
-    "DJF": 0,
-    "GNF": 0,
-    "IDR": 0,
-    "JOD": 3,
-    "JPY": 0,
-    "KMF": 0,
-    "KRW": 0,
-    "KWD": 3,
-    "LYD": 3,
-    "OMR": 3,
-    "PYG": 0,
-    "RWF": 0,
-    "TND": 3,
-    "UGX": 0,
-    "VND": 0,
-    "VUV": 0,
-    "XAF": 0,
-    "XOF": 0,
-    "XPF": 0,
+#https://docs.adyen.com/developers/development-resources/currency-codes
+CURRENCY_CODE_MAPS={
+    "BHD":3,
+    "CVE":0,
+    "DJF":0,
+    "GNF":0,
+    "IDR":0,
+    "JOD":3,
+    "JPY":0,
+    "KMF":0,
+    "KRW":0,
+    "KWD":3,
+    "LYD":3,
+    "OMR":3,
+    "PYG":0,
+    "RWF":0,
+    "TND":3,
+    "UGX":0,
+    "VND":0,
+    "VUV":0,
+    "XAF":0,
+    "XOF":0,
+    "XPF":0,
 }
 
 
-class AcquirerAdyen(models.Model):
-    _inherit = 'payment.acquirer'
+classAcquirerAdyen(models.Model):
+    _inherit='payment.acquirer'
 
-    provider = fields.Selection(selection_add=[
-        ('adyen', 'Adyen')
-    ], ondelete={'adyen': 'set default'})
-    adyen_merchant_account = fields.Char('Merchant Account', required_if_provider='adyen', groups='base.group_user')
-    adyen_skin_code = fields.Char('Skin Code', required_if_provider='adyen', groups='base.group_user')
-    adyen_skin_hmac_key = fields.Char('Skin HMAC Key', required_if_provider='adyen', groups='base.group_user')
-
-    @api.model
-    def _adyen_convert_amount(self, amount, currency):
-        """
-        Adyen requires the amount to be multiplied by 10^k,
-        where k depends on the currency code.
-        """
-        k = CURRENCY_CODE_MAPS.get(currency.name, 2)
-        paymentAmount = int(tools.float_round(amount, k) * (10**k))
-        return paymentAmount
+    provider=fields.Selection(selection_add=[
+        ('adyen','Adyen')
+    ],ondelete={'adyen':'setdefault'})
+    adyen_merchant_account=fields.Char('MerchantAccount',required_if_provider='adyen',groups='base.group_user')
+    adyen_skin_code=fields.Char('SkinCode',required_if_provider='adyen',groups='base.group_user')
+    adyen_skin_hmac_key=fields.Char('SkinHMACKey',required_if_provider='adyen',groups='base.group_user')
 
     @api.model
-    def _get_adyen_urls(self, environment):
-        """ Adyen URLs: yhpp: hosted payment page: pay.shtml for single, select.shtml for multiple """
-        return {
-            'adyen_form_url': 'https://%s.adyen.com/hpp/pay.shtml' % ('live' if environment == 'prod' else environment),
+    def_adyen_convert_amount(self,amount,currency):
+        """
+        Adyenrequirestheamounttobemultipliedby10^k,
+        wherekdependsonthecurrencycode.
+        """
+        k=CURRENCY_CODE_MAPS.get(currency.name,2)
+        paymentAmount=int(tools.float_round(amount,k)*(10**k))
+        returnpaymentAmount
+
+    @api.model
+    def_get_adyen_urls(self,environment):
+        """AdyenURLs:yhpp:hostedpaymentpage:pay.shtmlforsingle,select.shtmlformultiple"""
+        return{
+            'adyen_form_url':'https://%s.adyen.com/hpp/pay.shtml'%('live'ifenvironment=='prod'elseenvironment),
         }
 
-    def _adyen_generate_merchant_sig_sha256(self, inout, values):
-        """ Generate the shasign for incoming or outgoing communications., when using the SHA-256
+    def_adyen_generate_merchant_sig_sha256(self,inout,values):
+        """Generatetheshasignforincomingoroutgoingcommunications.,whenusingtheSHA-256
         signature.
 
-        :param string inout: 'in' (flectra contacting adyen) or 'out' (adyen
-                             contacting flectra). In this last case only some
-                             fields should be contained (see e-Commerce basic)
-        :param dict values: transaction values
-        :return string: shasign
+        :paramstringinout:'in'(flectracontactingadyen)or'out'(adyen
+                             contactingflectra).Inthislastcaseonlysome
+                             fieldsshouldbecontained(seee-Commercebasic)
+        :paramdictvalues:transactionvalues
+        :returnstring:shasign
         """
-        def escapeVal(val):
-            return val.replace('\\', '\\\\').replace(':', '\\:')
+        defescapeVal(val):
+            returnval.replace('\\','\\\\').replace(':','\\:')
 
-        def signParams(parms):
-            signing_string = ':'.join(
+        defsignParams(parms):
+            signing_string=':'.join(
                 escapeVal(v)
-                for v in chain(parms.keys(), parms.values())
+                forvinchain(parms.keys(),parms.values())
             )
-            hm = hmac.new(hmac_key, signing_string.encode('utf-8'), hashlib.sha256)
-            return base64.b64encode(hm.digest())
+            hm=hmac.new(hmac_key,signing_string.encode('utf-8'),hashlib.sha256)
+            returnbase64.b64encode(hm.digest())
 
-        assert inout in ('in', 'out')
-        assert self.provider == 'adyen'
+        assertinoutin('in','out')
+        assertself.provider=='adyen'
 
-        if inout == 'in':
-            # All the fields sent to Adyen must be included in the signature. ALL the fucking
-            # fields, despite what is claimed in the documentation. For example, in
-            # https://docs.adyen.com/developers/hpp-manual, it is stated: "The resURL parameter does
-            # not need to be included in the signature." It's a trap, it must be included as well!
-            keys = [
-                'merchantReference', 'paymentAmount', 'currencyCode', 'shipBeforeDate', 'skinCode',
-                'merchantAccount', 'sessionValidity', 'merchantReturnData', 'shopperEmail',
-                'shopperReference', 'allowedMethods', 'blockedMethods', 'offset',
-                'shopperStatement', 'recurringContract', 'billingAddressType',
-                'deliveryAddressType', 'brandCode', 'countryCode', 'shopperLocale', 'orderData',
-                'offerEmail', 'resURL',
+        ifinout=='in':
+            #AllthefieldssenttoAdyenmustbeincludedinthesignature.ALLthefucking
+            #fields,despitewhatisclaimedinthedocumentation.Forexample,in
+            #https://docs.adyen.com/developers/hpp-manual,itisstated:"TheresURLparameterdoes
+            #notneedtobeincludedinthesignature."It'satrap,itmustbeincludedaswell!
+            keys=[
+                'merchantReference','paymentAmount','currencyCode','shipBeforeDate','skinCode',
+                'merchantAccount','sessionValidity','merchantReturnData','shopperEmail',
+                'shopperReference','allowedMethods','blockedMethods','offset',
+                'shopperStatement','recurringContract','billingAddressType',
+                'deliveryAddressType','brandCode','countryCode','shopperLocale','orderData',
+                'offerEmail','resURL',
             ]
         else:
-            keys = [
-                'authResult', 'merchantReference', 'merchantReturnData', 'paymentMethod',
-                'pspReference', 'shopperLocale', 'skinCode',
+            keys=[
+                'authResult','merchantReference','merchantReturnData','paymentMethod',
+                'pspReference','shopperLocale','skinCode',
             ]
 
-        hmac_key = binascii.a2b_hex(self.adyen_skin_hmac_key.encode('ascii'))
-        raw_values = {k: values.get(k, '') for k in keys if k in values}
-        raw_values_ordered = OrderedDict(sorted(raw_values.items(), key=lambda t: t[0]))
+        hmac_key=binascii.a2b_hex(self.adyen_skin_hmac_key.encode('ascii'))
+        raw_values={k:values.get(k,'')forkinkeysifkinvalues}
+        raw_values_ordered=OrderedDict(sorted(raw_values.items(),key=lambdat:t[0]))
 
-        return signParams(raw_values_ordered)
+        returnsignParams(raw_values_ordered)
 
-    def _adyen_generate_merchant_sig(self, inout, values):
-        """ Generate the shasign for incoming or outgoing communications, when using the SHA-1
-        signature (deprecated by Adyen).
+    def_adyen_generate_merchant_sig(self,inout,values):
+        """Generatetheshasignforincomingoroutgoingcommunications,whenusingtheSHA-1
+        signature(deprecatedbyAdyen).
 
-        :param string inout: 'in' (flectra contacting adyen) or 'out' (adyen
-                             contacting flectra). In this last case only some
-                             fields should be contained (see e-Commerce basic)
-        :param dict values: transaction values
+        :paramstringinout:'in'(flectracontactingadyen)or'out'(adyen
+                             contactingflectra).Inthislastcaseonlysome
+                             fieldsshouldbecontained(seee-Commercebasic)
+        :paramdictvalues:transactionvalues
 
-        :return string: shasign
+        :returnstring:shasign
         """
-        assert inout in ('in', 'out')
-        assert self.provider == 'adyen'
+        assertinoutin('in','out')
+        assertself.provider=='adyen'
 
-        if inout == 'in':
-            keys = "paymentAmount currencyCode shipBeforeDate merchantReference skinCode merchantAccount sessionValidity shopperEmail shopperReference recurringContract allowedMethods blockedMethods shopperStatement merchantReturnData billingAddressType deliveryAddressType offset".split()
+        ifinout=='in':
+            keys="paymentAmountcurrencyCodeshipBeforeDatemerchantReferenceskinCodemerchantAccountsessionValidityshopperEmailshopperReferencerecurringContractallowedMethodsblockedMethodsshopperStatementmerchantReturnDatabillingAddressTypedeliveryAddressTypeoffset".split()
         else:
-            keys = "authResult pspReference merchantReference skinCode merchantReturnData".split()
+            keys="authResultpspReferencemerchantReferenceskinCodemerchantReturnData".split()
 
-        def get_value(key):
-            if values.get(key):
-                return values[key]
-            return ''
+        defget_value(key):
+            ifvalues.get(key):
+                returnvalues[key]
+            return''
 
-        sign = ''.join('%s' % get_value(k) for k in keys).encode('ascii')
-        key = self.adyen_skin_hmac_key.encode('ascii')
-        return base64.b64encode(hmac.new(key, sign, hashlib.sha1).digest())
+        sign=''.join('%s'%get_value(k)forkinkeys).encode('ascii')
+        key=self.adyen_skin_hmac_key.encode('ascii')
+        returnbase64.b64encode(hmac.new(key,sign,hashlib.sha1).digest())
 
-    def adyen_form_generate_values(self, values):
-        base_url = self.get_base_url()
-        # tmp
-        import datetime
-        from dateutil import relativedelta
+    defadyen_form_generate_values(self,values):
+        base_url=self.get_base_url()
+        #tmp
+        importdatetime
+        fromdateutilimportrelativedelta
 
-        paymentAmount = self._adyen_convert_amount(values['amount'], values['currency'])
-        if self.provider == 'adyen' and len(self.adyen_skin_hmac_key) == 64:
-            tmp_date = datetime.datetime.today() + relativedelta.relativedelta(days=1)
+        paymentAmount=self._adyen_convert_amount(values['amount'],values['currency'])
+        ifself.provider=='adyen'andlen(self.adyen_skin_hmac_key)==64:
+            tmp_date=datetime.datetime.today()+relativedelta.relativedelta(days=1)
 
             values.update({
-                'merchantReference': values['reference'],
-                'paymentAmount': '%d' % paymentAmount,
-                'currencyCode': values['currency'] and values['currency'].name or '',
-                'shipBeforeDate': tmp_date.strftime('%Y-%m-%d'),
-                'skinCode': self.adyen_skin_code,
-                'merchantAccount': self.adyen_merchant_account,
-                'shopperLocale': values.get('partner_lang', ''),
-                'sessionValidity': tmp_date.isoformat('T')[:19] + "Z",
-                'resURL': urls.url_join(base_url, AdyenController._return_url),
-                'merchantReturnData': json.dumps({'return_url': '%s' % values.pop('return_url')}) if values.get('return_url', '') else False,
-                'shopperEmail': values.get('partner_email') or values.get('billing_partner_email') or '',
+                'merchantReference':values['reference'],
+                'paymentAmount':'%d'%paymentAmount,
+                'currencyCode':values['currency']andvalues['currency'].nameor'',
+                'shipBeforeDate':tmp_date.strftime('%Y-%m-%d'),
+                'skinCode':self.adyen_skin_code,
+                'merchantAccount':self.adyen_merchant_account,
+                'shopperLocale':values.get('partner_lang',''),
+                'sessionValidity':tmp_date.isoformat('T')[:19]+"Z",
+                'resURL':urls.url_join(base_url,AdyenController._return_url),
+                'merchantReturnData':json.dumps({'return_url':'%s'%values.pop('return_url')})ifvalues.get('return_url','')elseFalse,
+                'shopperEmail':values.get('partner_email')orvalues.get('billing_partner_email')or'',
             })
-            values['merchantSig'] = self._adyen_generate_merchant_sig_sha256('in', values)
+            values['merchantSig']=self._adyen_generate_merchant_sig_sha256('in',values)
 
         else:
-            tmp_date = datetime.date.today() + relativedelta.relativedelta(days=1)
+            tmp_date=datetime.date.today()+relativedelta.relativedelta(days=1)
 
             values.update({
-                'merchantReference': values['reference'],
-                'paymentAmount': '%d' % paymentAmount,
-                'currencyCode': values['currency'] and values['currency'].name or '',
-                'shipBeforeDate': tmp_date,
-                'skinCode': self.adyen_skin_code,
-                'merchantAccount': self.adyen_merchant_account,
-                'shopperLocale': values.get('partner_lang'),
-                'sessionValidity': tmp_date,
-                'resURL': urls.url_join(base_url, AdyenController._return_url),
-                'merchantReturnData': json.dumps({'return_url': '%s' % values.pop('return_url')}) if values.get('return_url') else False,
+                'merchantReference':values['reference'],
+                'paymentAmount':'%d'%paymentAmount,
+                'currencyCode':values['currency']andvalues['currency'].nameor'',
+                'shipBeforeDate':tmp_date,
+                'skinCode':self.adyen_skin_code,
+                'merchantAccount':self.adyen_merchant_account,
+                'shopperLocale':values.get('partner_lang'),
+                'sessionValidity':tmp_date,
+                'resURL':urls.url_join(base_url,AdyenController._return_url),
+                'merchantReturnData':json.dumps({'return_url':'%s'%values.pop('return_url')})ifvalues.get('return_url')elseFalse,
             })
-            values['merchantSig'] = self._adyen_generate_merchant_sig('in', values)
+            values['merchantSig']=self._adyen_generate_merchant_sig('in',values)
 
-        return values
+        returnvalues
 
-    def adyen_get_form_action_url(self):
+    defadyen_get_form_action_url(self):
         self.ensure_one()
-        environment = 'prod' if self.state == 'enabled' else 'test'
-        return self._get_adyen_urls(environment)['adyen_form_url']
+        environment='prod'ifself.state=='enabled'else'test'
+        returnself._get_adyen_urls(environment)['adyen_form_url']
 
 
-class TxAdyen(models.Model):
-    _inherit = 'payment.transaction'
+classTxAdyen(models.Model):
+    _inherit='payment.transaction'
 
-    # --------------------------------------------------
-    # FORM RELATED METHODS
-    # --------------------------------------------------
+    #--------------------------------------------------
+    #FORMRELATEDMETHODS
+    #--------------------------------------------------
 
     @api.model
-    def _adyen_form_get_tx_from_data(self, data):
-        reference, pspReference = data.get('merchantReference'), data.get('pspReference')
-        if not reference or not pspReference:
-            error_msg = _('Adyen: received data with missing reference (%s) or missing pspReference (%s)') % (reference, pspReference)
+    def_adyen_form_get_tx_from_data(self,data):
+        reference,pspReference=data.get('merchantReference'),data.get('pspReference')
+        ifnotreferenceornotpspReference:
+            error_msg=_('Adyen:receiveddatawithmissingreference(%s)ormissingpspReference(%s)')%(reference,pspReference)
             _logger.info(error_msg)
-            raise ValidationError(error_msg)
+            raiseValidationError(error_msg)
 
-        # find tx -> @TDENOTE use pspReference ?
-        tx = self.env['payment.transaction'].search([('reference', '=', reference)])
-        if not tx or len(tx) > 1:
-            error_msg = _('Adyen: received data for reference %s') % (reference)
-            if not tx:
-                error_msg += _('; no order found')
+        #findtx->@TDENOTEusepspReference?
+        tx=self.env['payment.transaction'].search([('reference','=',reference)])
+        ifnottxorlen(tx)>1:
+            error_msg=_('Adyen:receiveddataforreference%s')%(reference)
+            ifnottx:
+                error_msg+=_(';noorderfound')
             else:
-                error_msg += _('; multiple order found')
+                error_msg+=_(';multipleorderfound')
             _logger.info(error_msg)
-            raise ValidationError(error_msg)
+            raiseValidationError(error_msg)
 
-        # verify shasign
-        if len(tx.acquirer_id.adyen_skin_hmac_key) == 64:
-            shasign_check = tx.acquirer_id._adyen_generate_merchant_sig_sha256('out', data)
+        #verifyshasign
+        iflen(tx.acquirer_id.adyen_skin_hmac_key)==64:
+            shasign_check=tx.acquirer_id._adyen_generate_merchant_sig_sha256('out',data)
         else:
-            shasign_check = tx.acquirer_id._adyen_generate_merchant_sig('out', data)
-        if to_text(shasign_check) != to_text(data.get('merchantSig')):
-            error_msg = _('Adyen: invalid merchantSig, received %s, computed %s') % (data.get('merchantSig'), shasign_check)
+            shasign_check=tx.acquirer_id._adyen_generate_merchant_sig('out',data)
+        ifto_text(shasign_check)!=to_text(data.get('merchantSig')):
+            error_msg=_('Adyen:invalidmerchantSig,received%s,computed%s')%(data.get('merchantSig'),shasign_check)
             _logger.warning(error_msg)
-            raise ValidationError(error_msg)
+            raiseValidationError(error_msg)
 
-        return tx
+        returntx
 
-    def _adyen_form_get_invalid_parameters(self, data):
-        invalid_parameters = []
+    def_adyen_form_get_invalid_parameters(self,data):
+        invalid_parameters=[]
 
-        # reference at acquirer: pspReference
-        if self.acquirer_reference and data.get('pspReference') != self.acquirer_reference:
-            invalid_parameters.append(('pspReference', data.get('pspReference'), self.acquirer_reference))
-        # seller
-        if data.get('skinCode') != self.acquirer_id.adyen_skin_code:
-            invalid_parameters.append(('skinCode', data.get('skinCode'), self.acquirer_id.adyen_skin_code))
-        # result
-        if not data.get('authResult'):
-            invalid_parameters.append(('authResult', data.get('authResult'), 'something'))
+        #referenceatacquirer:pspReference
+        ifself.acquirer_referenceanddata.get('pspReference')!=self.acquirer_reference:
+            invalid_parameters.append(('pspReference',data.get('pspReference'),self.acquirer_reference))
+        #seller
+        ifdata.get('skinCode')!=self.acquirer_id.adyen_skin_code:
+            invalid_parameters.append(('skinCode',data.get('skinCode'),self.acquirer_id.adyen_skin_code))
+        #result
+        ifnotdata.get('authResult'):
+            invalid_parameters.append(('authResult',data.get('authResult'),'something'))
 
-        return invalid_parameters
+        returninvalid_parameters
 
-    def _adyen_form_validate(self, data):
-        status = data.get('authResult', 'PENDING')
-        if status == 'AUTHORISED':
-            self.write({'acquirer_reference': data.get('pspReference')})
+    def_adyen_form_validate(self,data):
+        status=data.get('authResult','PENDING')
+        ifstatus=='AUTHORISED':
+            self.write({'acquirer_reference':data.get('pspReference')})
             self._set_transaction_done()
-            return True
-        elif status == 'PENDING':
-            self.write({'acquirer_reference': data.get('pspReference')})
+            returnTrue
+        elifstatus=='PENDING':
+            self.write({'acquirer_reference':data.get('pspReference')})
             self._set_transaction_pending()
-            return True
+            returnTrue
         else:
-            error = _('Adyen: feedback error')
+            error=_('Adyen:feedbackerror')
             _logger.info(error)
-            self.write({'state_message': error})
+            self.write({'state_message':error})
             self._set_transaction_cancel()
-            return False
+            returnFalse

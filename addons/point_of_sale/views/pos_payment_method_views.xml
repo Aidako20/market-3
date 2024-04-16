@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="pos_payment_method_view_form" model="ir.ui.view">
-        <field name="name">pos.payment.method.form</field>
-        <field name="model">pos.payment.method</field>
-        <field name="arch" type="xml">
-            <form string="Payment Methods">
+    <recordid="pos_payment_method_view_form"model="ir.ui.view">
+        <fieldname="name">pos.payment.method.form</field>
+        <fieldname="model">pos.payment.method</field>
+        <fieldname="arch"type="xml">
+            <formstring="PaymentMethods">
                 <sheet>
-                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
-                    <field name="active" invisible="1"/>
-                    <div class="oe_title">
-                        <label for="name" class="oe_edit_only"/>
-                        <h1><field name="name" class="oe_inline"/></h1>
+                    <widgetname="web_ribbon"title="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
+                    <fieldname="active"invisible="1"/>
+                    <divclass="oe_title">
+                        <labelfor="name"class="oe_edit_only"/>
+                        <h1><fieldname="name"class="oe_inline"/></h1>
                     </div>
-                    <group name="Payment methods">
+                    <groupname="Paymentmethods">
                         <group>
-                            <field name="hide_use_payment_terminal" invisible="1"/>
-                            <field name="receivable_account_id" groups="account.group_account_readonly" />
-                            <field name="is_cash_count" />
-                            <field name="cash_journal_id" attrs="{'invisible': [('is_cash_count', '=', False)], 'required': [('is_cash_count', '=', True)]}" />
-                            <field name="split_transactions" groups="base.group_no_one" />
-                            <field name="company_id" readonly="1" groups="base.group_multi_company" />
+                            <fieldname="hide_use_payment_terminal"invisible="1"/>
+                            <fieldname="receivable_account_id"groups="account.group_account_readonly"/>
+                            <fieldname="is_cash_count"/>
+                            <fieldname="cash_journal_id"attrs="{'invisible':[('is_cash_count','=',False)],'required':[('is_cash_count','=',True)]}"/>
+                            <fieldname="split_transactions"groups="base.group_no_one"/>
+                            <fieldname="company_id"readonly="1"groups="base.group_multi_company"/>
                         </group>
                         <group>
-                            <field name="use_payment_terminal" attrs="{'invisible': [('hide_use_payment_terminal', '=', True)]}" />
+                            <fieldname="use_payment_terminal"attrs="{'invisible':[('hide_use_payment_terminal','=',True)]}"/>
                         </group>
                     </group>
                 </sheet>
@@ -30,64 +30,64 @@
         </field>
     </record>
 
-    <record id="pos_payment_method_view_tree" model="ir.ui.view">
-        <field name="name">pos.payment.method.tree</field>
-        <field name="model">pos.payment.method</field>
-        <field name="arch" type="xml">
-            <tree string="Payment Methods">
-                <field name="hide_use_payment_terminal" invisible="1"/>
-                <field name="name" />
-                <field name="receivable_account_id" groups="account.group_account_readonly"/>
-                <field name="is_cash_count" />
-                <field name="split_transactions" groups="base.group_no_one" />
-                <field name="use_payment_terminal" attrs="{'invisible': [('hide_use_payment_terminal', '=', True)]}" />
-                <field name="company_id" groups="base.group_multi_company" />
+    <recordid="pos_payment_method_view_tree"model="ir.ui.view">
+        <fieldname="name">pos.payment.method.tree</field>
+        <fieldname="model">pos.payment.method</field>
+        <fieldname="arch"type="xml">
+            <treestring="PaymentMethods">
+                <fieldname="hide_use_payment_terminal"invisible="1"/>
+                <fieldname="name"/>
+                <fieldname="receivable_account_id"groups="account.group_account_readonly"/>
+                <fieldname="is_cash_count"/>
+                <fieldname="split_transactions"groups="base.group_no_one"/>
+                <fieldname="use_payment_terminal"attrs="{'invisible':[('hide_use_payment_terminal','=',True)]}"/>
+                <fieldname="company_id"groups="base.group_multi_company"/>
             </tree>
         </field>
     </record>
 
-    <record id="pos_payment_method_view_search" model="ir.ui.view">
-        <field name="name">pos.payment.search.view</field>
-        <field name="model">pos.payment.method</field>
-        <field name="arch" type="xml">
-            <search string="Payment Methods">
-                <field name="name"/>
-                <field name="receivable_account_id" groups="account.group_account_readonly" />
-                <group expand="1" string="Group By">
-                    <filter name="group_by_receivable_account" string="Account" domain="[]"  context="{'group_by':'receivable_account_id'}"/>
+    <recordid="pos_payment_method_view_search"model="ir.ui.view">
+        <fieldname="name">pos.payment.search.view</field>
+        <fieldname="model">pos.payment.method</field>
+        <fieldname="arch"type="xml">
+            <searchstring="PaymentMethods">
+                <fieldname="name"/>
+                <fieldname="receivable_account_id"groups="account.group_account_readonly"/>
+                <groupexpand="1"string="GroupBy">
+                    <filtername="group_by_receivable_account"string="Account"domain="[]" context="{'group_by':'receivable_account_id'}"/>
                 </group>
-                <filter string="Archived" name="active" domain="[('active', '=', False)]"/>
+                <filterstring="Archived"name="active"domain="[('active','=',False)]"/>
             </search>
         </field>
     </record>
 
-    <record id="action_pos_payment_method_form" model="ir.actions.act_window">
-        <field name="name">Payment Methods</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">pos.payment.method</field>
-        <field name="view_mode">tree,kanban,form</field>
-        <field name="view_id" eval="False"/>
-        <field name="domain">[]</field>
-        <field name="context">{'search_default_group_by_account': 1}</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Add a new payment method
+    <recordid="action_pos_payment_method_form"model="ir.actions.act_window">
+        <fieldname="name">PaymentMethods</field>
+        <fieldname="type">ir.actions.act_window</field>
+        <fieldname="res_model">pos.payment.method</field>
+        <fieldname="view_mode">tree,kanban,form</field>
+        <fieldname="view_id"eval="False"/>
+        <fieldname="domain">[]</field>
+        <fieldname="context">{'search_default_group_by_account':1}</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+                Addanewpaymentmethod
             </p>
             <p>
-                Installing chart of accounts from the General Settings of
-                Invocing/Accounting app will create Bank and Cash payment
-                methods automatically.
+                InstallingchartofaccountsfromtheGeneralSettingsof
+                Invocing/AccountingappwillcreateBankandCashpayment
+                methodsautomatically.
             </p>
         </field>
     </record>
 
-    <menuitem id="menu_pos_payment_method" parent="menu_point_config_product" action="action_pos_payment_method_form" sequence="3" groups="group_pos_manager,group_pos_user"/>
+    <menuitemid="menu_pos_payment_method"parent="menu_point_config_product"action="action_pos_payment_method_form"sequence="3"groups="group_pos_manager,group_pos_user"/>
 
-    <record id="action_payment_methods_tree" model="ir.actions.act_window">
-        <field name="context">{}</field>
-        <field name="name">Payments Methods</field>
-        <field name="res_model">pos.payment.method</field>
-        <field name="view_id" ref="pos_payment_method_view_tree"/>
-        <field name="view_mode">tree,form,kanban</field>
+    <recordid="action_payment_methods_tree"model="ir.actions.act_window">
+        <fieldname="context">{}</field>
+        <fieldname="name">PaymentsMethods</field>
+        <fieldname="res_model">pos.payment.method</field>
+        <fieldname="view_id"ref="pos_payment_method_view_tree"/>
+        <fieldname="view_mode">tree,form,kanban</field>
     </record>
 </flectra>

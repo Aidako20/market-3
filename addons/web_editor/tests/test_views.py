@@ -1,64 +1,64 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.tests import TransactionCase
+fromflectra.testsimportTransactionCase
 
 
-class TestViews(TransactionCase):
+classTestViews(TransactionCase):
 
-    def setUp(self):
+    defsetUp(self):
         super().setUp()
-        View = self.env['ir.ui.view']
-        self.first_view = View.create({
-            'name': 'Test View 1',
-            'type': 'qweb',
-            'arch': '<div>Hello World</div>',
-            'key': 'web_editor.test_first_view',
+        View=self.env['ir.ui.view']
+        self.first_view=View.create({
+            'name':'TestView1',
+            'type':'qweb',
+            'arch':'<div>HelloWorld</div>',
+            'key':'web_editor.test_first_view',
         })
-        self.second_view = View.create({
-            'name': 'Test View 2',
-            'type': 'qweb',
-            'arch': '<div><t t-call="web_editor.test_first_view"/></div>',
-            'key': 'web_editor.test_second_view',
+        self.second_view=View.create({
+            'name':'TestView2',
+            'type':'qweb',
+            'arch':'<div><tt-call="web_editor.test_first_view"/></div>',
+            'key':'web_editor.test_second_view',
         })
 
-    def test_infinite_inherit_loop(self):
-        # Creates an infinite loop: A t-call B and A inherit from B
-        View = self.env['ir.ui.view']
+    deftest_infinite_inherit_loop(self):
+        #Createsaninfiniteloop:At-callBandAinheritfromB
+        View=self.env['ir.ui.view']
 
         self.second_view.write({
-            'inherit_id': self.first_view.id,
+            'inherit_id':self.first_view.id,
         })
-        # Test for RecursionError: maximum recursion depth exceeded in this function
+        #TestforRecursionError:maximumrecursiondepthexceededinthisfunction
         View._views_get(self.first_view)
 
-    def test_oe_structure_as_inherited_view(self):
-        View = self.env['ir.ui.view']
+    deftest_oe_structure_as_inherited_view(self):
+        View=self.env['ir.ui.view']
 
-        base = View.create({
-            'name': 'Test View oe_structure',
-            'type': 'qweb',
-            'arch': """<xpath expr='//t[@t-call="web_editor.test_first_view"]' position='after'>
-                        <div class="oe_structure" id='oe_structure_test_view_oe_structure'/>
+        base=View.create({
+            'name':'TestViewoe_structure',
+            'type':'qweb',
+            'arch':"""<xpathexpr='//t[@t-call="web_editor.test_first_view"]'position='after'>
+                        <divclass="oe_structure"id='oe_structure_test_view_oe_structure'/>
                     </xpath>""",
-            'key': 'web_editor.oe_structure_view',
-            'inherit_id': self.second_view.id
+            'key':'web_editor.oe_structure_view',
+            'inherit_id':self.second_view.id
         })
 
-        # check view mode
-        self.assertEqual(base.mode, 'extension')
+        #checkviewmode
+        self.assertEqual(base.mode,'extension')
 
-        # update content of the oe_structure
-        value = '''<div class="oe_structure" id="oe_structure_test_view_oe_structure" data-oe-id="%s"
-                         data-oe-xpath="/div" data-oe-model="ir.ui.view" data-oe-field="arch">
-                        <p>Hello World!</p>
-                   </div>''' % base.id
+        #updatecontentoftheoe_structure
+        value='''<divclass="oe_structure"id="oe_structure_test_view_oe_structure"data-oe-id="%s"
+                         data-oe-xpath="/div"data-oe-model="ir.ui.view"data-oe-field="arch">
+                        <p>HelloWorld!</p>
+                   </div>'''%base.id
 
-        base.save(value=value, xpath='/xpath/div')
+        base.save(value=value,xpath='/xpath/div')
 
-        self.assertEqual(len(base.inherit_children_ids), 1)
-        self.assertEqual(base.inherit_children_ids.mode, 'extension')
+        self.assertEqual(len(base.inherit_children_ids),1)
+        self.assertEqual(base.inherit_children_ids.mode,'extension')
         self.assertIn(
-            '<p>Hello World!</p>',
+            '<p>HelloWorld!</p>',
             base.inherit_children_ids.read_combined(['arch'])['arch'],
         )

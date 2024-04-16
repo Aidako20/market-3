@@ -1,145 +1,145 @@
-flectra.define('bus.BusService', function (require) {
-"use strict";
+flectra.define('bus.BusService',function(require){
+"usestrict";
 
-var CrossTab = require('bus.CrossTab');
-var core = require('web.core');
-var ServicesMixin = require('web.ServicesMixin');
-const session = require('web.session');
+varCrossTab=require('bus.CrossTab');
+varcore=require('web.core');
+varServicesMixin=require('web.ServicesMixin');
+constsession=require('web.session');
 
-var BusService =  CrossTab.extend(ServicesMixin, {
-    dependencies : ['local_storage'],
+varBusService= CrossTab.extend(ServicesMixin,{
+    dependencies:['local_storage'],
 
-    // properties
-    _audio: null,
+    //properties
+    _audio:null,
 
     /**
-     * As the BusService doesn't extend AbstractService, we have to replicate
-     * here what is done in AbstractService
+     *AstheBusServicedoesn'textendAbstractService,wehavetoreplicate
+     *herewhatisdoneinAbstractService
      *
-     * @param {Object} env
+     *@param{Object}env
      */
-    init: function (env) {
-        this.env = env;
+    init:function(env){
+        this.env=env;
         this._super();
     },
 
     /**
-     * Replicate the behavior of AbstractService:
+     *ReplicatethebehaviorofAbstractService:
      *
-     * Directly calls the requested service, instead of triggering a
-     * 'call_service' event up, which wouldn't work as services have no parent.
+     *Directlycallstherequestedservice,insteadoftriggeringa
+     *'call_service'eventup,whichwouldn'tworkasserviceshavenoparent.
      *
-     * @param {FlectraEvent} ev
+     *@param{FlectraEvent}ev
      */
-    _trigger_up: function (ev) {
-        if (ev.name === 'call_service') {
-            const payload = ev.data;
-            let args = payload.args || [];
-            if (payload.service === 'ajax' && payload.method === 'rpc') {
-                // ajax service uses an extra 'target' argument for rpc
-                args = args.concat(ev.target);
+    _trigger_up:function(ev){
+        if(ev.name==='call_service'){
+            constpayload=ev.data;
+            letargs=payload.args||[];
+            if(payload.service==='ajax'&&payload.method==='rpc'){
+                //ajaxserviceusesanextra'target'argumentforrpc
+                args=args.concat(ev.target);
             }
-            const service = this.env.services[payload.service];
-            const result = service[payload.method].apply(service, args);
+            constservice=this.env.services[payload.service];
+            constresult=service[payload.method].apply(service,args);
             payload.callback(result);
         }
     },
     /**
-     * This method is necessary in order for this Class to be used to instantiate services
+     *ThismethodisnecessaryinorderforthisClasstobeusedtoinstantiateservices
      *
-     * @abstract
+     *@abstract
      */
-    start: function () {},
+    start:function(){},
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Send a notification, and notify once per browser's tab
+     *Sendanotification,andnotifyonceperbrowser'stab
      *
-     * @param {string} title
-     * @param {string} content
-     * @param {function} [callback] if given callback will be called when user clicks on notification
+     *@param{string}title
+     *@param{string}content
+     *@param{function}[callback]ifgivencallbackwillbecalledwhenuserclicksonnotification
      */
-    sendNotification: function (title, content, callback) {
-        if (window.Notification && Notification.permission === "granted") {
-            if (this.isMasterTab()) {
-                try {
-                    this._sendNativeNotification(title, content, callback);
-                } catch (error) {
-                    // Notification without Serviceworker in Chrome Android doesn't works anymore
-                    // So we fallback to do_notify() in this case
-                    // https://bugs.chromium.org/p/chromium/issues/detail?id=481856
-                    if (error.message.indexOf('ServiceWorkerRegistration') > -1) {
-                        this.do_notify(title, content);
+    sendNotification:function(title,content,callback){
+        if(window.Notification&&Notification.permission==="granted"){
+            if(this.isMasterTab()){
+                try{
+                    this._sendNativeNotification(title,content,callback);
+                }catch(error){
+                    //NotificationwithoutServiceworkerinChromeAndroiddoesn'tworksanymore
+                    //Sowefallbacktodo_notify()inthiscase
+                    //https://bugs.chromium.org/p/chromium/issues/detail?id=481856
+                    if(error.message.indexOf('ServiceWorkerRegistration')>-1){
+                        this.do_notify(title,content);
                         this._beep();
-                    } else {
-                        throw error;
+                    }else{
+                        throwerror;
                     }
                 }
             }
-        } else {
-            this.do_notify(title, content);
-            if (this.isMasterTab()) {
+        }else{
+            this.do_notify(title,content);
+            if(this.isMasterTab()){
                 this._beep();
             }
         }
     },
     /**
-     * Register listeners on notifications received on this bus service
+     *Registerlistenersonnotificationsreceivedonthisbusservice
      *
-     * @param {Object} receiver
-     * @param {function} func
+     *@param{Object}receiver
+     *@param{function}func
      */
-    onNotification: function () {
-        this.on.apply(this, ["notification"].concat(Array.prototype.slice.call(arguments)));
+    onNotification:function(){
+        this.on.apply(this,["notification"].concat(Array.prototype.slice.call(arguments)));
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Lazily play the 'beep' audio on sent notification
+     *Lazilyplaythe'beep'audioonsentnotification
      *
-     * @private
+     *@private
      */
-    _beep: function () {
-        if (typeof(Audio) !== "undefined") {
-            if (!this._audio) {
-                this._audio = new Audio();
-                var ext = this._audio.canPlayType("audio/ogg; codecs=vorbis") ? ".ogg" : ".mp3";
-                this._audio.src = session.url("/mail/static/src/audio/ting" + ext);
+    _beep:function(){
+        if(typeof(Audio)!=="undefined"){
+            if(!this._audio){
+                this._audio=newAudio();
+                varext=this._audio.canPlayType("audio/ogg;codecs=vorbis")?".ogg":".mp3";
+                this._audio.src=session.url("/mail/static/src/audio/ting"+ext);
             }
             Promise.resolve(this._audio.play()).catch(_.noop);
         }
     },
     /**
-     * Show a browser notification
+     *Showabrowsernotification
      *
-     * @private
-     * @param {string} title
-     * @param {string} content
-     * @param {function} [callback] if given callback will be called when user clicks on notification
+     *@private
+     *@param{string}title
+     *@param{string}content
+     *@param{function}[callback]ifgivencallbackwillbecalledwhenuserclicksonnotification
      */
-    _sendNativeNotification: function (title, content, callback) {
-        var notification = new Notification(
-            // The native Notification API works with plain text and not HTML
-            // unescaping is safe because done only at the **last** step
+    _sendNativeNotification:function(title,content,callback){
+        varnotification=newNotification(
+            //ThenativeNotificationAPIworkswithplaintextandnotHTML
+            //unescapingissafebecausedoneonlyatthe**last**step
             _.unescape(title),
             {
-                body: _.unescape(content),
-                icon: "/mail/static/src/img/flectrabot_transparent.png"
+                body:_.unescape(content),
+                icon:"/mail/static/src/img/flectrabot_transparent.png"
             });
-        notification.onclick = function () {
+        notification.onclick=function(){
             window.focus();
-            if (this.cancel) {
+            if(this.cancel){
                 this.cancel();
-            } else if (this.close) {
+            }elseif(this.close){
                 this.close();
             }
-            if (callback) {
+            if(callback){
                 callback();
             }
         };
@@ -147,8 +147,8 @@ var BusService =  CrossTab.extend(ServicesMixin, {
 
 });
 
-core.serviceRegistry.add('bus_service', BusService);
+core.serviceRegistry.add('bus_service',BusService);
 
-return BusService;
+returnBusService;
 
 });

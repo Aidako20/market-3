@@ -1,51 +1,51 @@
-# -*- coding:utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from stdnum.it import codicefiscale, iva
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromstdnum.itimportcodicefiscale,iva
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError, ValidationError
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportUserError,ValidationError
 
-import re
+importre
 
 
-class ResPartner(models.Model):
-    _name = 'res.partner'
-    _inherit = 'res.partner'
+classResPartner(models.Model):
+    _name='res.partner'
+    _inherit='res.partner'
 
-    l10n_it_pec_email = fields.Char(string="PEC e-mail")
-    l10n_it_codice_fiscale = fields.Char(string="Codice Fiscale", size=16)
-    l10n_it_pa_index = fields.Char(string="PA index",
+    l10n_it_pec_email=fields.Char(string="PECe-mail")
+    l10n_it_codice_fiscale=fields.Char(string="CodiceFiscale",size=16)
+    l10n_it_pa_index=fields.Char(string="PAindex",
         size=7,
-        help="Must contain the 6-character (or 7) code, present in the PA\
-              Index in the information relative to the electronic invoicing service,\
-              associated with the office which, within the addressee administration, deals\
-              with receiving (and processing) the invoice.")
+        help="Mustcontainthe6-character(or7)code,presentinthePA\
+              Indexintheinformationrelativetotheelectronicinvoicingservice,\
+              associatedwiththeofficewhich,withintheaddresseeadministration,deals\
+              withreceiving(andprocessing)theinvoice.")
 
-    _sql_constraints = [
+    _sql_constraints=[
         ('l10n_it_codice_fiscale',
-            "CHECK(l10n_it_codice_fiscale IS NULL OR l10n_it_codice_fiscale = '' OR LENGTH(l10n_it_codice_fiscale) >= 11)",
-            "Codice fiscale must have between 11 and 16 characters."),
+            "CHECK(l10n_it_codice_fiscaleISNULLORl10n_it_codice_fiscale=''ORLENGTH(l10n_it_codice_fiscale)>=11)",
+            "Codicefiscalemusthavebetween11and16characters."),
 
         ('l10n_it_pa_index',
-            "CHECK(l10n_it_pa_index IS NULL OR l10n_it_pa_index = '' OR LENGTH(l10n_it_pa_index) >= 6)",
-            "PA index must have between 6 and 7 characters."),
+            "CHECK(l10n_it_pa_indexISNULLORl10n_it_pa_index=''ORLENGTH(l10n_it_pa_index)>=6)",
+            "PAindexmusthavebetween6and7characters."),
     ]
 
     @api.model
-    def _l10n_it_normalize_codice_fiscale(self, codice):
-        if codice and re.match(r'^IT[0-9]{11}$', codice):
-            return codice[2:13]
-        return codice
+    def_l10n_it_normalize_codice_fiscale(self,codice):
+        ifcodiceandre.match(r'^IT[0-9]{11}$',codice):
+            returncodice[2:13]
+        returncodice
 
-    @api.onchange('vat', 'country_id')
-    def _l10n_it_onchange_vat(self):
-        if not self.l10n_it_codice_fiscale and self.vat and (self.country_id.code == "IT" or self.vat.startswith("IT")):
-            self.l10n_it_codice_fiscale = self._l10n_it_normalize_codice_fiscale(self.vat)
-        elif self.country_id.code not in [False, "IT"]:
-            self.l10n_it_codice_fiscale = ""
+    @api.onchange('vat','country_id')
+    def_l10n_it_onchange_vat(self):
+        ifnotself.l10n_it_codice_fiscaleandself.vatand(self.country_id.code=="IT"orself.vat.startswith("IT")):
+            self.l10n_it_codice_fiscale=self._l10n_it_normalize_codice_fiscale(self.vat)
+        elifself.country_id.codenotin[False,"IT"]:
+            self.l10n_it_codice_fiscale=""
 
     @api.constrains('l10n_it_codice_fiscale')
-    def validate_codice_fiscale(self):
-        for record in self:
-            if record.l10n_it_codice_fiscale and (not codicefiscale.is_valid(record.l10n_it_codice_fiscale) and not iva.is_valid(record.l10n_it_codice_fiscale)):
-                raise UserError(_("Invalid Codice Fiscale '%s': should be like 'MRTMTT91D08F205J' for physical person and '12345670546' or 'IT12345670546' for businesses.", record.l10n_it_codice_fiscale))
+    defvalidate_codice_fiscale(self):
+        forrecordinself:
+            ifrecord.l10n_it_codice_fiscaleand(notcodicefiscale.is_valid(record.l10n_it_codice_fiscale)andnotiva.is_valid(record.l10n_it_codice_fiscale)):
+                raiseUserError(_("InvalidCodiceFiscale'%s':shouldbelike'MRTMTT91D08F205J'forphysicalpersonand'12345670546'or'IT12345670546'forbusinesses.",record.l10n_it_codice_fiscale))

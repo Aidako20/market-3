@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <!-- Account Tax Group -->
-        <record id="tax_group_vat_23" model="account.tax.group">
-            <field name="name">VAT 23%</field>
+        <!--AccountTaxGroup-->
+        <recordid="tax_group_vat_23"model="account.tax.group">
+            <fieldname="name">VAT23%</field>
         </record>
-        <record id="tax_group_vat_22" model="account.tax.group">
-            <field name="name">VAT 22%</field>
+        <recordid="tax_group_vat_22"model="account.tax.group">
+            <fieldname="name">VAT22%</field>
         </record>
-        <record id="tax_group_vat_8" model="account.tax.group">
-            <field name="name">VAT 8%</field>
+        <recordid="tax_group_vat_8"model="account.tax.group">
+            <fieldname="name">VAT8%</field>
         </record>
-        <record id="tax_group_vat_7" model="account.tax.group">
-            <field name="name">VAT 7%</field>
+        <recordid="tax_group_vat_7"model="account.tax.group">
+            <fieldname="name">VAT7%</field>
         </record>
-        <record id="tax_group_vat_5" model="account.tax.group">
-            <field name="name">VAT 5%</field>
+        <recordid="tax_group_vat_5"model="account.tax.group">
+            <fieldname="name">VAT5%</field>
         </record>
-        <record id="tax_group_vat_3" model="account.tax.group">
-            <field name="name">VAT 3%</field>
+        <recordid="tax_group_vat_3"model="account.tax.group">
+            <fieldname="name">VAT3%</field>
         </record>
-        <record id="tax_group_vat_0" model="account.tax.group">
-            <field name="name">VAT 0%</field>
+        <recordid="tax_group_vat_0"model="account.tax.group">
+            <fieldname="name">VAT0%</field>
         </record>
     </data>
 </flectra>

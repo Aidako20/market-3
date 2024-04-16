@@ -1,43 +1,43 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, tools
+fromflectraimportfields,models,tools
 
 
-class ProfitabilityAnalysis(models.Model):
+classProfitabilityAnalysis(models.Model):
 
-    _name = "project.profitability.report"
-    _description = "Project Profitability Report"
-    _order = 'project_id, sale_line_id'
-    _auto = False
+    _name="project.profitability.report"
+    _description="ProjectProfitabilityReport"
+    _order='project_id,sale_line_id'
+    _auto=False
 
-    analytic_account_id = fields.Many2one('account.analytic.account', string='Analytic Account', readonly=True)
-    project_id = fields.Many2one('project.project', string='Project', readonly=True)
-    currency_id = fields.Many2one('res.currency', string='Project Currency', readonly=True)
-    company_id = fields.Many2one('res.company', string='Project Company', readonly=True)
-    user_id = fields.Many2one('res.users', string='Project Manager', readonly=True)
-    partner_id = fields.Many2one('res.partner', string='Customer', readonly=True)
-    line_date = fields.Date("Date", readonly=True)
-    # cost
-    timesheet_unit_amount = fields.Float("Timesheet Duration", digits=(16, 2), readonly=True, group_operator="sum")
-    timesheet_cost = fields.Float("Timesheet Cost", digits=(16, 2), readonly=True, group_operator="sum")
-    expense_cost = fields.Float("Other Costs", digits=(16, 2), readonly=True, group_operator="sum")
-    # sale revenue
-    order_confirmation_date = fields.Datetime('Sales Order Confirmation Date', readonly=True)
-    sale_line_id = fields.Many2one('sale.order.line', string='Sale Order Line', readonly=True)
-    sale_order_id = fields.Many2one('sale.order', string='Sale Order', readonly=True)
-    product_id = fields.Many2one('product.product', string='Product', readonly=True)
+    analytic_account_id=fields.Many2one('account.analytic.account',string='AnalyticAccount',readonly=True)
+    project_id=fields.Many2one('project.project',string='Project',readonly=True)
+    currency_id=fields.Many2one('res.currency',string='ProjectCurrency',readonly=True)
+    company_id=fields.Many2one('res.company',string='ProjectCompany',readonly=True)
+    user_id=fields.Many2one('res.users',string='ProjectManager',readonly=True)
+    partner_id=fields.Many2one('res.partner',string='Customer',readonly=True)
+    line_date=fields.Date("Date",readonly=True)
+    #cost
+    timesheet_unit_amount=fields.Float("TimesheetDuration",digits=(16,2),readonly=True,group_operator="sum")
+    timesheet_cost=fields.Float("TimesheetCost",digits=(16,2),readonly=True,group_operator="sum")
+    expense_cost=fields.Float("OtherCosts",digits=(16,2),readonly=True,group_operator="sum")
+    #salerevenue
+    order_confirmation_date=fields.Datetime('SalesOrderConfirmationDate',readonly=True)
+    sale_line_id=fields.Many2one('sale.order.line',string='SaleOrderLine',readonly=True)
+    sale_order_id=fields.Many2one('sale.order',string='SaleOrder',readonly=True)
+    product_id=fields.Many2one('product.product',string='Product',readonly=True)
 
-    amount_untaxed_to_invoice = fields.Float("Untaxed Amount to Invoice", digits=(16, 2), readonly=True, group_operator="sum")
-    amount_untaxed_invoiced = fields.Float("Untaxed Amount Invoiced", digits=(16, 2), readonly=True, group_operator="sum")
-    expense_amount_untaxed_to_invoice = fields.Float("Untaxed Amount to Re-invoice", digits=(16, 2), readonly=True, group_operator="sum")
-    expense_amount_untaxed_invoiced = fields.Float("Untaxed Amount Re-invoiced", digits=(16, 2), readonly=True, group_operator="sum")
-    other_revenues = fields.Float("Other Revenues", digits=(16, 2), readonly=True, group_operator="sum",
-                                  help="All revenues that are not from timesheets and that are linked to the analytic account of the project.")
-    margin = fields.Float("Margin", digits=(16, 2), readonly=True, group_operator="sum")
+    amount_untaxed_to_invoice=fields.Float("UntaxedAmounttoInvoice",digits=(16,2),readonly=True,group_operator="sum")
+    amount_untaxed_invoiced=fields.Float("UntaxedAmountInvoiced",digits=(16,2),readonly=True,group_operator="sum")
+    expense_amount_untaxed_to_invoice=fields.Float("UntaxedAmounttoRe-invoice",digits=(16,2),readonly=True,group_operator="sum")
+    expense_amount_untaxed_invoiced=fields.Float("UntaxedAmountRe-invoiced",digits=(16,2),readonly=True,group_operator="sum")
+    other_revenues=fields.Float("OtherRevenues",digits=(16,2),readonly=True,group_operator="sum",
+                                  help="Allrevenuesthatarenotfromtimesheetsandthatarelinkedtotheanalyticaccountoftheproject.")
+    margin=fields.Float("Margin",digits=(16,2),readonly=True,group_operator="sum")
 
-    _depends = {
-        'sale.order.line': [
+    _depends={
+        'sale.order.line':[
             'order_id',
             'invoice_status',
             'price_reduce',
@@ -52,7 +52,7 @@ class ProfitabilityAnalysis(models.Model):
             'task_id',
             'qty_delivered_method',
         ],
-        'sale.order': [
+        'sale.order':[
             'date_order',
             'user_id',
             'partner_id',
@@ -67,356 +67,356 @@ class ProfitabilityAnalysis(models.Model):
         ],
     }
 
-    def init(self):
-        tools.drop_view_if_exists(self._cr, self._table)
-        query = """
-            CREATE VIEW %s AS (
+    definit(self):
+        tools.drop_view_if_exists(self._cr,self._table)
+        query="""
+            CREATEVIEW%sAS(
                 SELECT
-                    sub.id as id,
-                    sub.project_id as project_id,
-                    sub.user_id as user_id,
-                    sub.sale_line_id as sale_line_id,
-                    sub.analytic_account_id as analytic_account_id,
-                    sub.partner_id as partner_id,
-                    sub.company_id as company_id,
-                    sub.currency_id as currency_id,
-                    sub.sale_order_id as sale_order_id,
-                    sub.order_confirmation_date as order_confirmation_date,
-                    sub.product_id as product_id,
-                    sub.sale_qty_delivered_method as sale_qty_delivered_method,
-                    sub.expense_amount_untaxed_to_invoice as expense_amount_untaxed_to_invoice,
-                    sub.expense_amount_untaxed_invoiced as expense_amount_untaxed_invoiced,
-                    sub.amount_untaxed_to_invoice as amount_untaxed_to_invoice,
-                    sub.amount_untaxed_invoiced as amount_untaxed_invoiced,
-                    sub.timesheet_unit_amount as timesheet_unit_amount,
-                    sub.timesheet_cost as timesheet_cost,
-                    sub.expense_cost as expense_cost,
-                    sub.other_revenues as other_revenues,
-                    sub.line_date as line_date,
-                    (sub.expense_amount_untaxed_to_invoice + sub.expense_amount_untaxed_invoiced + sub.amount_untaxed_to_invoice +
-                        sub.amount_untaxed_invoiced + sub.other_revenues + sub.timesheet_cost + sub.expense_cost)
-                        as margin
-                FROM (
+                    sub.idasid,
+                    sub.project_idasproject_id,
+                    sub.user_idasuser_id,
+                    sub.sale_line_idassale_line_id,
+                    sub.analytic_account_idasanalytic_account_id,
+                    sub.partner_idaspartner_id,
+                    sub.company_idascompany_id,
+                    sub.currency_idascurrency_id,
+                    sub.sale_order_idassale_order_id,
+                    sub.order_confirmation_dateasorder_confirmation_date,
+                    sub.product_idasproduct_id,
+                    sub.sale_qty_delivered_methodassale_qty_delivered_method,
+                    sub.expense_amount_untaxed_to_invoiceasexpense_amount_untaxed_to_invoice,
+                    sub.expense_amount_untaxed_invoicedasexpense_amount_untaxed_invoiced,
+                    sub.amount_untaxed_to_invoiceasamount_untaxed_to_invoice,
+                    sub.amount_untaxed_invoicedasamount_untaxed_invoiced,
+                    sub.timesheet_unit_amountastimesheet_unit_amount,
+                    sub.timesheet_costastimesheet_cost,
+                    sub.expense_costasexpense_cost,
+                    sub.other_revenuesasother_revenues,
+                    sub.line_dateasline_date,
+                    (sub.expense_amount_untaxed_to_invoice+sub.expense_amount_untaxed_invoiced+sub.amount_untaxed_to_invoice+
+                        sub.amount_untaxed_invoiced+sub.other_revenues+sub.timesheet_cost+sub.expense_cost)
+                        asmargin
+                FROM(
                     SELECT
-                        ROW_NUMBER() OVER (ORDER BY P.id, SOL.id) AS id,
-                        P.id AS project_id,
-                        P.user_id AS user_id,
-                        SOL.id AS sale_line_id,
-                        P.analytic_account_id AS analytic_account_id,
-                        P.partner_id AS partner_id,
-                        C.id AS company_id,
-                        C.currency_id AS currency_id,
-                        S.id AS sale_order_id,
-                        S.date_order AS order_confirmation_date,
-                        SOL.product_id AS product_id,
-                        SOL.qty_delivered_method AS sale_qty_delivered_method,
-                        COST_SUMMARY.expense_amount_untaxed_to_invoice AS expense_amount_untaxed_to_invoice,
-                        COST_SUMMARY.expense_amount_untaxed_invoiced AS expense_amount_untaxed_invoiced,
-                        COST_SUMMARY.amount_untaxed_to_invoice AS amount_untaxed_to_invoice,
-                        COST_SUMMARY.amount_untaxed_invoiced AS amount_untaxed_invoiced,
-                        COST_SUMMARY.timesheet_unit_amount AS timesheet_unit_amount,
-                        COST_SUMMARY.timesheet_cost AS timesheet_cost,
-                        COST_SUMMARY.expense_cost AS expense_cost,
-                        COST_SUMMARY.other_revenues AS other_revenues,
-                        COST_SUMMARY.line_date::date AS line_date
-                    FROM project_project P
-                        JOIN res_company C ON C.id = P.company_id
-                        LEFT JOIN (
-                            -- Each costs and revenues will be retrieved individually by sub-requests
-                            -- This is required to able to get the date
+                        ROW_NUMBER()OVER(ORDERBYP.id,SOL.id)ASid,
+                        P.idASproject_id,
+                        P.user_idASuser_id,
+                        SOL.idASsale_line_id,
+                        P.analytic_account_idASanalytic_account_id,
+                        P.partner_idASpartner_id,
+                        C.idAScompany_id,
+                        C.currency_idAScurrency_id,
+                        S.idASsale_order_id,
+                        S.date_orderASorder_confirmation_date,
+                        SOL.product_idASproduct_id,
+                        SOL.qty_delivered_methodASsale_qty_delivered_method,
+                        COST_SUMMARY.expense_amount_untaxed_to_invoiceASexpense_amount_untaxed_to_invoice,
+                        COST_SUMMARY.expense_amount_untaxed_invoicedASexpense_amount_untaxed_invoiced,
+                        COST_SUMMARY.amount_untaxed_to_invoiceASamount_untaxed_to_invoice,
+                        COST_SUMMARY.amount_untaxed_invoicedASamount_untaxed_invoiced,
+                        COST_SUMMARY.timesheet_unit_amountAStimesheet_unit_amount,
+                        COST_SUMMARY.timesheet_costAStimesheet_cost,
+                        COST_SUMMARY.expense_costASexpense_cost,
+                        COST_SUMMARY.other_revenuesASother_revenues,
+                        COST_SUMMARY.line_date::dateASline_date
+                    FROMproject_projectP
+                        JOINres_companyCONC.id=P.company_id
+                        LEFTJOIN(
+                            --Eachcostsandrevenueswillberetrievedindividuallybysub-requests
+                            --Thisisrequiredtoabletogetthedate
                             SELECT
                                 project_id,
                                 analytic_account_id,
                                 sale_line_id,
-                                SUM(timesheet_unit_amount) AS timesheet_unit_amount,
-                                SUM(timesheet_cost) AS timesheet_cost,
-                                SUM(expense_cost) AS expense_cost,
-                                SUM(other_revenues) AS other_revenues,
-                                SUM(expense_amount_untaxed_to_invoice) AS expense_amount_untaxed_to_invoice,
-                                SUM(expense_amount_untaxed_invoiced) AS expense_amount_untaxed_invoiced,
-                                SUM(amount_untaxed_to_invoice) AS amount_untaxed_to_invoice,
-                                SUM(amount_untaxed_invoiced) AS amount_untaxed_invoiced,
-                                line_date AS line_date
-                            FROM (
-                                -- Get the timesheet costs
+                                SUM(timesheet_unit_amount)AStimesheet_unit_amount,
+                                SUM(timesheet_cost)AStimesheet_cost,
+                                SUM(expense_cost)ASexpense_cost,
+                                SUM(other_revenues)ASother_revenues,
+                                SUM(expense_amount_untaxed_to_invoice)ASexpense_amount_untaxed_to_invoice,
+                                SUM(expense_amount_untaxed_invoiced)ASexpense_amount_untaxed_invoiced,
+                                SUM(amount_untaxed_to_invoice)ASamount_untaxed_to_invoice,
+                                SUM(amount_untaxed_invoiced)ASamount_untaxed_invoiced,
+                                line_dateASline_date
+                            FROM(
+                                --Getthetimesheetcosts
                                 SELECT
-                                    P.id AS project_id,
-                                    P.analytic_account_id AS analytic_account_id,
-                                    TS.so_line AS sale_line_id,
-                                    TS.unit_amount AS timesheet_unit_amount,
-                                    TS.amount AS timesheet_cost,
-                                    0.0 AS other_revenues,
-                                    0.0 AS expense_cost,
-                                    0.0 AS expense_amount_untaxed_to_invoice,
-                                    0.0 AS expense_amount_untaxed_invoiced,
-                                    0.0 AS amount_untaxed_to_invoice,
-                                    0.0 AS amount_untaxed_invoiced,
-                                    TS.date AS line_date
-                                FROM account_analytic_line TS, project_project P
-                                WHERE TS.project_id IS NOT NULL AND P.id = TS.project_id AND P.active = 't' AND P.allow_timesheets = 't'
+                                    P.idASproject_id,
+                                    P.analytic_account_idASanalytic_account_id,
+                                    TS.so_lineASsale_line_id,
+                                    TS.unit_amountAStimesheet_unit_amount,
+                                    TS.amountAStimesheet_cost,
+                                    0.0ASother_revenues,
+                                    0.0ASexpense_cost,
+                                    0.0ASexpense_amount_untaxed_to_invoice,
+                                    0.0ASexpense_amount_untaxed_invoiced,
+                                    0.0ASamount_untaxed_to_invoice,
+                                    0.0ASamount_untaxed_invoiced,
+                                    TS.dateASline_date
+                                FROMaccount_analytic_lineTS,project_projectP
+                                WHERETS.project_idISNOTNULLANDP.id=TS.project_idANDP.active='t'ANDP.allow_timesheets='t'
 
-                                UNION ALL
+                                UNIONALL
 
-                                -- Get the other revenues (products that are not services)
+                                --Gettheotherrevenues(productsthatarenotservices)
                                 SELECT
-                                    P.id AS project_id,
-                                    P.analytic_account_id AS analytic_account_id,
-                                    AAL.so_line AS sale_line_id,
-                                    0.0 AS timesheet_unit_amount,
-                                    0.0 AS timesheet_cost,
-                                    AAL.amount + COALESCE(AAL_RINV.amount, 0) AS other_revenues,
-                                    0.0 AS expense_cost,
-                                    0.0 AS expense_amount_untaxed_to_invoice,
-                                    0.0 AS expense_amount_untaxed_invoiced,
-                                    0.0 AS amount_untaxed_to_invoice,
-                                    0.0 AS amount_untaxed_invoiced,
-                                    AAL.date AS line_date
-                                FROM project_project P
-                                    JOIN account_analytic_account AA ON P.analytic_account_id = AA.id
-                                    JOIN account_analytic_line AAL ON AAL.account_id = AA.id
-                                    LEFT JOIN sale_order_line_invoice_rel SOINV ON SOINV.invoice_line_id = AAL.move_id
-                                    LEFT JOIN sale_order_line SOL ON SOINV.order_line_id = SOL.id
-                                    LEFT JOIN account_move_line AML ON AAL.move_id = AML.id
-                                                                   AND AML.parent_state = 'posted'
-                                                                   AND AML.exclude_from_invoice_tab = 'f'
-                                    -- Check if it's not a Credit Note for a Vendor Bill
-                                    LEFT JOIN account_move RBILL ON RBILL.id = AML.move_id
-                                    LEFT JOIN account_move_line BILLL ON BILLL.move_id = RBILL.reversed_entry_id
-                                                                  AND BILLL.parent_state = 'posted'
-                                                                  AND BILLL.exclude_from_invoice_tab = 'f'
-                                                                  AND BILLL.product_id = AML.product_id
-                                    -- Check if it's not an Invoice reversed by a Credit Note
-                                    LEFT JOIN account_move RINV ON RINV.reversed_entry_id = AML.move_id
-                                    LEFT JOIN account_move_line RINVL ON RINVL.move_id = RINV.id
-                                                                  AND RINVL.parent_state = 'posted'
-                                                                  AND RINVL.exclude_from_invoice_tab = 'f'
-                                                                  AND RINVL.product_id = AML.product_id
-                                    LEFT JOIN account_analytic_line AAL_RINV ON RINVL.id = AAL_RINV.move_id
-                                WHERE AAL.amount > 0.0 AND AAL.project_id IS NULL AND P.active = 't'
-                                    AND P.allow_timesheets = 't'
-                                    AND BILLL.id IS NULL
-                                    AND (SOL.id IS NULL
-                                        OR (SOL.is_expense IS NOT TRUE AND SOL.is_downpayment IS NOT TRUE AND SOL.is_service IS NOT TRUE))
+                                    P.idASproject_id,
+                                    P.analytic_account_idASanalytic_account_id,
+                                    AAL.so_lineASsale_line_id,
+                                    0.0AStimesheet_unit_amount,
+                                    0.0AStimesheet_cost,
+                                    AAL.amount+COALESCE(AAL_RINV.amount,0)ASother_revenues,
+                                    0.0ASexpense_cost,
+                                    0.0ASexpense_amount_untaxed_to_invoice,
+                                    0.0ASexpense_amount_untaxed_invoiced,
+                                    0.0ASamount_untaxed_to_invoice,
+                                    0.0ASamount_untaxed_invoiced,
+                                    AAL.dateASline_date
+                                FROMproject_projectP
+                                    JOINaccount_analytic_accountAAONP.analytic_account_id=AA.id
+                                    JOINaccount_analytic_lineAALONAAL.account_id=AA.id
+                                    LEFTJOINsale_order_line_invoice_relSOINVONSOINV.invoice_line_id=AAL.move_id
+                                    LEFTJOINsale_order_lineSOLONSOINV.order_line_id=SOL.id
+                                    LEFTJOINaccount_move_lineAMLONAAL.move_id=AML.id
+                                                                   ANDAML.parent_state='posted'
+                                                                   ANDAML.exclude_from_invoice_tab='f'
+                                    --Checkifit'snotaCreditNoteforaVendorBill
+                                    LEFTJOINaccount_moveRBILLONRBILL.id=AML.move_id
+                                    LEFTJOINaccount_move_lineBILLLONBILLL.move_id=RBILL.reversed_entry_id
+                                                                  ANDBILLL.parent_state='posted'
+                                                                  ANDBILLL.exclude_from_invoice_tab='f'
+                                                                  ANDBILLL.product_id=AML.product_id
+                                    --Checkifit'snotanInvoicereversedbyaCreditNote
+                                    LEFTJOINaccount_moveRINVONRINV.reversed_entry_id=AML.move_id
+                                    LEFTJOINaccount_move_lineRINVLONRINVL.move_id=RINV.id
+                                                                  ANDRINVL.parent_state='posted'
+                                                                  ANDRINVL.exclude_from_invoice_tab='f'
+                                                                  ANDRINVL.product_id=AML.product_id
+                                    LEFTJOINaccount_analytic_lineAAL_RINVONRINVL.id=AAL_RINV.move_id
+                                WHEREAAL.amount>0.0ANDAAL.project_idISNULLANDP.active='t'
+                                    ANDP.allow_timesheets='t'
+                                    ANDBILLL.idISNULL
+                                    AND(SOL.idISNULL
+                                        OR(SOL.is_expenseISNOTTRUEANDSOL.is_downpaymentISNOTTRUEANDSOL.is_serviceISNOTTRUE))
 
-                                UNION ALL
+                                UNIONALL
 
-                                -- Get the expense costs from account analytic line
+                                --Gettheexpensecostsfromaccountanalyticline
                                 SELECT
-                                    P.id AS project_id,
-                                    P.analytic_account_id AS analytic_account_id,
-                                    AAL.so_line AS sale_line_id,
-                                    0.0 AS timesheet_unit_amount,
-                                    0.0 AS timesheet_cost,
-                                    0.0 AS other_revenues,
-                                    AAL.amount + COALESCE(AML_RBILLL.amount, 0) AS expense_cost,
-                                    0.0 AS expense_amount_untaxed_to_invoice,
-                                    0.0 AS expense_amount_untaxed_invoiced,
-                                    0.0 AS amount_untaxed_to_invoice,
-                                    0.0 AS amount_untaxed_invoiced,
-                                    AAL.date AS line_date
-                                FROM project_project P
-                                    JOIN account_analytic_account AA ON P.analytic_account_id = AA.id
-                                    JOIN account_analytic_line AAL ON AAL.account_id = AA.id
-                                    LEFT JOIN account_move_line AML ON AAL.move_id = AML.id
-                                                                   AND AML.parent_state = 'posted'
-                                                                   AND AML.exclude_from_invoice_tab = 'f'
-                                    -- Check if it's not a Credit Note for an Invoice
-                                    LEFT JOIN account_move RINV ON RINV.id = AML.move_id
-                                    LEFT JOIN account_move_line INVL ON INVL.move_id = RINV.reversed_entry_id
-                                                                    AND INVL.parent_state = 'posted'
-                                                                    AND INVL.exclude_from_invoice_tab = 'f'
-                                                                    AND INVL.product_id = AML.product_id
-                                    -- Check if it's not a Bill reversed by a Credit Note
-                                    LEFT JOIN account_move RBILL ON RBILL.reversed_entry_id = AML.move_id
-                                    LEFT JOIN account_move_line RBILLL ON RBILLL.move_id = RBILL.id
-                                                                      AND RBILLL.parent_state = 'posted'
-                                                                      AND RBILLL.exclude_from_invoice_tab = 'f'
-                                                                      AND RBILLL.product_id = AML.product_id
-                                    LEFT JOIN account_analytic_line AML_RBILLL ON RBILLL.id = AML_RBILLL.move_id
-                                    -- Check if the AAL is not related to a consumed downpayment (when the SOL is fully invoiced - with downpayment discounted.)
-                                    LEFT JOIN sale_order_line_invoice_rel SOINVDOWN ON SOINVDOWN.invoice_line_id = AML.id
-                                    LEFT JOIN sale_order_line SOLDOWN on SOINVDOWN.order_line_id = SOLDOWN.id AND SOLDOWN.is_downpayment = 't'
-                                WHERE AAL.amount < 0.0 AND AAL.project_id IS NULL
-                                  AND INVL.id IS NULL
-                                  AND SOLDOWN.id IS NULL
-                                  AND P.active = 't' AND P.allow_timesheets = 't'
+                                    P.idASproject_id,
+                                    P.analytic_account_idASanalytic_account_id,
+                                    AAL.so_lineASsale_line_id,
+                                    0.0AStimesheet_unit_amount,
+                                    0.0AStimesheet_cost,
+                                    0.0ASother_revenues,
+                                    AAL.amount+COALESCE(AML_RBILLL.amount,0)ASexpense_cost,
+                                    0.0ASexpense_amount_untaxed_to_invoice,
+                                    0.0ASexpense_amount_untaxed_invoiced,
+                                    0.0ASamount_untaxed_to_invoice,
+                                    0.0ASamount_untaxed_invoiced,
+                                    AAL.dateASline_date
+                                FROMproject_projectP
+                                    JOINaccount_analytic_accountAAONP.analytic_account_id=AA.id
+                                    JOINaccount_analytic_lineAALONAAL.account_id=AA.id
+                                    LEFTJOINaccount_move_lineAMLONAAL.move_id=AML.id
+                                                                   ANDAML.parent_state='posted'
+                                                                   ANDAML.exclude_from_invoice_tab='f'
+                                    --Checkifit'snotaCreditNoteforanInvoice
+                                    LEFTJOINaccount_moveRINVONRINV.id=AML.move_id
+                                    LEFTJOINaccount_move_lineINVLONINVL.move_id=RINV.reversed_entry_id
+                                                                    ANDINVL.parent_state='posted'
+                                                                    ANDINVL.exclude_from_invoice_tab='f'
+                                                                    ANDINVL.product_id=AML.product_id
+                                    --Checkifit'snotaBillreversedbyaCreditNote
+                                    LEFTJOINaccount_moveRBILLONRBILL.reversed_entry_id=AML.move_id
+                                    LEFTJOINaccount_move_lineRBILLLONRBILLL.move_id=RBILL.id
+                                                                      ANDRBILLL.parent_state='posted'
+                                                                      ANDRBILLL.exclude_from_invoice_tab='f'
+                                                                      ANDRBILLL.product_id=AML.product_id
+                                    LEFTJOINaccount_analytic_lineAML_RBILLLONRBILLL.id=AML_RBILLL.move_id
+                                    --CheckiftheAALisnotrelatedtoaconsumeddownpayment(whentheSOLisfullyinvoiced-withdownpaymentdiscounted.)
+                                    LEFTJOINsale_order_line_invoice_relSOINVDOWNONSOINVDOWN.invoice_line_id=AML.id
+                                    LEFTJOINsale_order_lineSOLDOWNonSOINVDOWN.order_line_id=SOLDOWN.idANDSOLDOWN.is_downpayment='t'
+                                WHEREAAL.amount<0.0ANDAAL.project_idISNULL
+                                  ANDINVL.idISNULL
+                                  ANDSOLDOWN.idISNULL
+                                  ANDP.active='t'ANDP.allow_timesheets='t'
 
-                                UNION ALL
+                                UNIONALL
 
-                                -- Get the following values: expense amount untaxed to invoice/invoiced, amount untaxed to invoice/invoiced
-                                -- These values have to be computed from all the records retrieved just above but grouped by project and sale order line
+                                --Getthefollowingvalues:expenseamountuntaxedtoinvoice/invoiced,amountuntaxedtoinvoice/invoiced
+                                --Thesevalueshavetobecomputedfromalltherecordsretrievedjustabovebutgroupedbyprojectandsaleorderline
                                 SELECT
-                                    AMOUNT_UNTAXED.project_id AS project_id,
-                                    AMOUNT_UNTAXED.analytic_account_id AS analytic_account_id,
-                                    AMOUNT_UNTAXED.sale_line_id AS sale_line_id,
-                                    0.0 AS timesheet_unit_amount,
-                                    0.0 AS timesheet_cost,
-                                    0.0 AS other_revenues,
-                                    0.0 AS expense_cost,
+                                    AMOUNT_UNTAXED.project_idASproject_id,
+                                    AMOUNT_UNTAXED.analytic_account_idASanalytic_account_id,
+                                    AMOUNT_UNTAXED.sale_line_idASsale_line_id,
+                                    0.0AStimesheet_unit_amount,
+                                    0.0AStimesheet_cost,
+                                    0.0ASother_revenues,
+                                    0.0ASexpense_cost,
                                     CASE
-                                        WHEN SOL.qty_delivered_method = 'analytic' THEN (SOL.untaxed_amount_to_invoice / CASE COALESCE(S.currency_rate, 0) WHEN 0 THEN 1.0 ELSE S.currency_rate END)
-                                        ELSE 0.0
-                                    END AS expense_amount_untaxed_to_invoice,
+                                        WHENSOL.qty_delivered_method='analytic'THEN(SOL.untaxed_amount_to_invoice/CASECOALESCE(S.currency_rate,0)WHEN0THEN1.0ELSES.currency_rateEND)
+                                        ELSE0.0
+                                    ENDASexpense_amount_untaxed_to_invoice,
                                     CASE
-                                        WHEN SOL.qty_delivered_method = 'analytic' AND SOL.invoice_status = 'invoiced'
+                                        WHENSOL.qty_delivered_method='analytic'ANDSOL.invoice_status='invoiced'
                                         THEN
                                             CASE
-                                                WHEN T.expense_policy = 'sales_price'
-                                                THEN (SOL.untaxed_amount_invoiced / CASE COALESCE(S.currency_rate, 0) WHEN 0 THEN 1.0 ELSE S.currency_rate END)
-                                                ELSE -AMOUNT_UNTAXED.expense_cost
+                                                WHENT.expense_policy='sales_price'
+                                                THEN(SOL.untaxed_amount_invoiced/CASECOALESCE(S.currency_rate,0)WHEN0THEN1.0ELSES.currency_rateEND)
+                                                ELSE-AMOUNT_UNTAXED.expense_cost
                                             END
-                                        ELSE 0.0
-                                    END AS expense_amount_untaxed_invoiced,
+                                        ELSE0.0
+                                    ENDASexpense_amount_untaxed_invoiced,
                                     CASE
-                                        WHEN SOL.qty_delivered_method IN ('timesheet', 'manual') THEN (SOL.untaxed_amount_to_invoice / CASE COALESCE(S.currency_rate, 0) WHEN 0 THEN 1.0 ELSE S.currency_rate END)
-                                        ELSE 0.0
-                                    END AS amount_untaxed_to_invoice,
+                                        WHENSOL.qty_delivered_methodIN('timesheet','manual')THEN(SOL.untaxed_amount_to_invoice/CASECOALESCE(S.currency_rate,0)WHEN0THEN1.0ELSES.currency_rateEND)
+                                        ELSE0.0
+                                    ENDASamount_untaxed_to_invoice,
                                     CASE
-                                        WHEN SOL.qty_delivered_method IN ('timesheet', 'manual') THEN (SOL.untaxed_amount_invoiced / CASE COALESCE(S.currency_rate, 0) WHEN 0 THEN 1.0 ELSE S.currency_rate END)
-                                        ELSE 0.0
-                                    END AS amount_untaxed_invoiced,
-                                    S.date_order AS line_date
-                                FROM project_project P
-                                    JOIN res_company C ON C.id = P.company_id
-                                    LEFT JOIN (
-                                        -- Gets SOL linked to timesheets
+                                        WHENSOL.qty_delivered_methodIN('timesheet','manual')THEN(SOL.untaxed_amount_invoiced/CASECOALESCE(S.currency_rate,0)WHEN0THEN1.0ELSES.currency_rateEND)
+                                        ELSE0.0
+                                    ENDASamount_untaxed_invoiced,
+                                    S.date_orderASline_date
+                                FROMproject_projectP
+                                    JOINres_companyCONC.id=P.company_id
+                                    LEFTJOIN(
+                                        --GetsSOLlinkedtotimesheets
                                         SELECT
-                                            P.id AS project_id,
-                                            P.analytic_account_id AS analytic_account_id,
-                                            AAL.so_line AS sale_line_id,
-                                            0.0 AS expense_cost
-                                        FROM account_analytic_line AAL, project_project P
-                                        WHERE AAL.project_id IS NOT NULL AND P.id = AAL.project_id AND P.active = 't'
-                                        GROUP BY P.id, AAL.so_line
+                                            P.idASproject_id,
+                                            P.analytic_account_idASanalytic_account_id,
+                                            AAL.so_lineASsale_line_id,
+                                            0.0ASexpense_cost
+                                        FROMaccount_analytic_lineAAL,project_projectP
+                                        WHEREAAL.project_idISNOTNULLANDP.id=AAL.project_idANDP.active='t'
+                                        GROUPBYP.id,AAL.so_line
                                         UNION
-                                        -- Service SOL linked to a project task AND not yet timesheeted
+                                        --ServiceSOLlinkedtoaprojecttaskANDnotyettimesheeted
                                         SELECT
-                                            P.id AS project_id,
-                                            P.analytic_account_id AS analytic_account_id,
-                                            SOL.id AS sale_line_id,
-                                            0.0 AS expense_cost
-                                        FROM sale_order_line SOL
-                                        JOIN project_task T ON T.sale_line_id = SOL.id
-                                        JOIN project_project P ON T.project_id = P.id
-                                        LEFT JOIN account_analytic_line AAL ON AAL.task_id = T.id
-                                        WHERE SOL.is_service = 't'
-                                          AND AAL.id IS NULL -- not timesheeted
-                                          AND P.active = 't' AND P.allow_timesheets = 't'
-                                        GROUP BY P.id, SOL.id
+                                            P.idASproject_id,
+                                            P.analytic_account_idASanalytic_account_id,
+                                            SOL.idASsale_line_id,
+                                            0.0ASexpense_cost
+                                        FROMsale_order_lineSOL
+                                        JOINproject_taskTONT.sale_line_id=SOL.id
+                                        JOINproject_projectPONT.project_id=P.id
+                                        LEFTJOINaccount_analytic_lineAALONAAL.task_id=T.id
+                                        WHERESOL.is_service='t'
+                                          ANDAAL.idISNULL--nottimesheeted
+                                          ANDP.active='t'ANDP.allow_timesheets='t'
+                                        GROUPBYP.id,SOL.id
                                         UNION
-                                        -- Service SOL linked to project AND not yet timesheeted
+                                        --ServiceSOLlinkedtoprojectANDnotyettimesheeted
                                         SELECT
-                                            P.id AS project_id,
-                                            P.analytic_account_id AS analytic_account_id,
-                                            SOL.id AS sale_line_id,
-                                            0.0 AS expense_cost
-                                        FROM sale_order_line SOL
-                                        JOIN project_project P ON P.sale_line_id = SOL.id
-                                        LEFT JOIN account_analytic_line AAL ON AAL.project_id = P.id
-                                        LEFT JOIN project_task T ON T.sale_line_id = SOL.id
-                                        WHERE SOL.is_service = 't'
-                                          AND AAL.id IS NULL -- not timesheeted
-                                          AND (T.id IS NULL OR T.project_id != P.id) -- not linked to a task in this project
-                                          AND P.active = 't' AND P.allow_timesheets = 't'
-                                        GROUP BY P.id, SOL.id
+                                            P.idASproject_id,
+                                            P.analytic_account_idASanalytic_account_id,
+                                            SOL.idASsale_line_id,
+                                            0.0ASexpense_cost
+                                        FROMsale_order_lineSOL
+                                        JOINproject_projectPONP.sale_line_id=SOL.id
+                                        LEFTJOINaccount_analytic_lineAALONAAL.project_id=P.id
+                                        LEFTJOINproject_taskTONT.sale_line_id=SOL.id
+                                        WHERESOL.is_service='t'
+                                          ANDAAL.idISNULL--nottimesheeted
+                                          AND(T.idISNULLORT.project_id!=P.id)--notlinkedtoataskinthisproject
+                                          ANDP.active='t'ANDP.allow_timesheets='t'
+                                        GROUPBYP.id,SOL.id
                                         UNION
-                                        -- Service SOL linked to analytic account AND not yet timesheeted
+                                        --ServiceSOLlinkedtoanalyticaccountANDnotyettimesheeted
                                         SELECT
-                                            P.id AS project_id,
-                                            P.analytic_account_id AS analytic_account_id,
-                                            SOL.id AS sale_line_id,
-                                            0.0 AS expense_cost
-                                        FROM sale_order_line SOL
-                                        JOIN sale_order SO ON SO.id = SOL.order_id
-                                        JOIN account_analytic_account AA ON AA.id = SO.analytic_account_id
-                                        JOIN project_project P ON P.analytic_account_id = AA.id
-                                        LEFT JOIN project_project PSOL ON PSOL.sale_line_id = SOL.id
-                                        LEFT JOIN project_task TSOL ON TSOL.sale_line_id = SOL.id
-                                        LEFT JOIN account_analytic_line AAL ON AAL.so_line = SOL.id
-                                        WHERE SOL.is_service = 't'
-                                          AND AAL.id IS NULL -- not timesheeted
-                                          AND TSOL.id IS NULL -- not linked to a task
-                                          AND PSOL.id IS NULL -- not linked to a project
-                                          AND P.active = 't' AND P.allow_timesheets = 't'
-                                        GROUP BY P.id, SOL.id
+                                            P.idASproject_id,
+                                            P.analytic_account_idASanalytic_account_id,
+                                            SOL.idASsale_line_id,
+                                            0.0ASexpense_cost
+                                        FROMsale_order_lineSOL
+                                        JOINsale_orderSOONSO.id=SOL.order_id
+                                        JOINaccount_analytic_accountAAONAA.id=SO.analytic_account_id
+                                        JOINproject_projectPONP.analytic_account_id=AA.id
+                                        LEFTJOINproject_projectPSOLONPSOL.sale_line_id=SOL.id
+                                        LEFTJOINproject_taskTSOLONTSOL.sale_line_id=SOL.id
+                                        LEFTJOINaccount_analytic_lineAALONAAL.so_line=SOL.id
+                                        WHERESOL.is_service='t'
+                                          ANDAAL.idISNULL--nottimesheeted
+                                          ANDTSOL.idISNULL--notlinkedtoatask
+                                          ANDPSOL.idISNULL--notlinkedtoaproject
+                                          ANDP.active='t'ANDP.allow_timesheets='t'
+                                        GROUPBYP.id,SOL.id
                                         UNION
 
                                         SELECT
-                                            P.id AS project_id,
-                                            P.analytic_account_id AS analytic_account_id,
-                                            AAL.so_line AS sale_line_id,
-                                            0.0 AS expense_cost
-                                        FROM project_project P
-                                            LEFT JOIN account_analytic_account AA ON P.analytic_account_id = AA.id
-                                            LEFT JOIN account_analytic_line AAL ON AAL.account_id = AA.id
-                                        WHERE AAL.amount > 0.0 AND AAL.project_id IS NULL AND P.active = 't' AND P.allow_timesheets = 't'
-                                        GROUP BY P.id, AA.id, AAL.so_line
+                                            P.idASproject_id,
+                                            P.analytic_account_idASanalytic_account_id,
+                                            AAL.so_lineASsale_line_id,
+                                            0.0ASexpense_cost
+                                        FROMproject_projectP
+                                            LEFTJOINaccount_analytic_accountAAONP.analytic_account_id=AA.id
+                                            LEFTJOINaccount_analytic_lineAALONAAL.account_id=AA.id
+                                        WHEREAAL.amount>0.0ANDAAL.project_idISNULLANDP.active='t'ANDP.allow_timesheets='t'
+                                        GROUPBYP.id,AA.id,AAL.so_line
                                         UNION
                                         SELECT
-                                            P.id AS project_id,
-                                            P.analytic_account_id AS analytic_account_id,
-                                            AAL.so_line AS sale_line_id,
-                                            SUM(AAL.amount) AS expense_cost
-                                        FROM project_project P
-                                            LEFT JOIN account_analytic_account AA ON P.analytic_account_id = AA.id
-                                            LEFT JOIN account_analytic_line AAL ON AAL.account_id = AA.id
-                                        WHERE AAL.amount < 0.0 AND AAL.project_id IS NULL AND P.active = 't' AND P.allow_timesheets = 't'
-                                        GROUP BY P.id, AA.id, AAL.so_line
+                                            P.idASproject_id,
+                                            P.analytic_account_idASanalytic_account_id,
+                                            AAL.so_lineASsale_line_id,
+                                            SUM(AAL.amount)ASexpense_cost
+                                        FROMproject_projectP
+                                            LEFTJOINaccount_analytic_accountAAONP.analytic_account_id=AA.id
+                                            LEFTJOINaccount_analytic_lineAALONAAL.account_id=AA.id
+                                        WHEREAAL.amount<0.0ANDAAL.project_idISNULLANDP.active='t'ANDP.allow_timesheets='t'
+                                        GROUPBYP.id,AA.id,AAL.so_line
                                         UNION
                                         SELECT
-                                            P.id AS project_id,
-                                            P.analytic_account_id AS analytic_account_id,
-                                            SOLDOWN.id AS sale_line_id,
-                                            0.0 AS expense_cost
-                                        FROM project_project P
-                                            LEFT JOIN sale_order_line SOL ON P.sale_line_id = SOL.id
-                                            LEFT JOIN sale_order SO ON SO.id = SOL.order_id OR SO.analytic_account_id = P.analytic_account_id
-                                            LEFT JOIN sale_order_line SOLDOWN ON SOLDOWN.order_id = SO.id AND SOLDOWN.is_downpayment = 't'
-                                            LEFT JOIN sale_order_line_invoice_rel SOINV ON SOINV.order_line_id = SOLDOWN.id
-                                            LEFT JOIN account_move_line INVL ON SOINV.invoice_line_id = INVL.id
-                                                                            AND INVL.parent_state = 'posted'
-                                                                            AND INVL.exclude_from_invoice_tab = 'f'
-                                            LEFT JOIN account_move RINV ON INVL.move_id = RINV.reversed_entry_id
-                                            LEFT JOIN account_move_line RINVL ON RINV.id = RINVL.move_id
-                                                                            AND RINVL.parent_state = 'posted'
-                                                                            AND RINVL.exclude_from_invoice_tab = 'f'
-                                                                            AND RINVL.product_id = SOLDOWN.product_id
-                                            LEFT JOIN account_analytic_line ANLI ON ANLI.move_id = RINVL.id AND ANLI.amount < 0.0
-                                        WHERE ANLI.id IS NULL -- there are no credit note for this downpayment
-                                          AND P.active = 't' AND P.allow_timesheets = 't'
-                                        GROUP BY P.id, SOLDOWN.id
+                                            P.idASproject_id,
+                                            P.analytic_account_idASanalytic_account_id,
+                                            SOLDOWN.idASsale_line_id,
+                                            0.0ASexpense_cost
+                                        FROMproject_projectP
+                                            LEFTJOINsale_order_lineSOLONP.sale_line_id=SOL.id
+                                            LEFTJOINsale_orderSOONSO.id=SOL.order_idORSO.analytic_account_id=P.analytic_account_id
+                                            LEFTJOINsale_order_lineSOLDOWNONSOLDOWN.order_id=SO.idANDSOLDOWN.is_downpayment='t'
+                                            LEFTJOINsale_order_line_invoice_relSOINVONSOINV.order_line_id=SOLDOWN.id
+                                            LEFTJOINaccount_move_lineINVLONSOINV.invoice_line_id=INVL.id
+                                                                            ANDINVL.parent_state='posted'
+                                                                            ANDINVL.exclude_from_invoice_tab='f'
+                                            LEFTJOINaccount_moveRINVONINVL.move_id=RINV.reversed_entry_id
+                                            LEFTJOINaccount_move_lineRINVLONRINV.id=RINVL.move_id
+                                                                            ANDRINVL.parent_state='posted'
+                                                                            ANDRINVL.exclude_from_invoice_tab='f'
+                                                                            ANDRINVL.product_id=SOLDOWN.product_id
+                                            LEFTJOINaccount_analytic_lineANLIONANLI.move_id=RINVL.idANDANLI.amount<0.0
+                                        WHEREANLI.idISNULL--therearenocreditnoteforthisdownpayment
+                                          ANDP.active='t'ANDP.allow_timesheets='t'
+                                        GROUPBYP.id,SOLDOWN.id
                                         UNION
                                         SELECT
-                                            P.id AS project_id,
-                                            P.analytic_account_id AS analytic_account_id,
-                                            SOL.id AS sale_line_id,
-                                            0.0 AS expense_cost
-                                        FROM sale_order_line SOL
-                                            INNER JOIN project_project P ON SOL.project_id = P.id
-                                        WHERE P.active = 't' AND P.allow_timesheets = 't'
+                                            P.idASproject_id,
+                                            P.analytic_account_idASanalytic_account_id,
+                                            SOL.idASsale_line_id,
+                                            0.0ASexpense_cost
+                                        FROMsale_order_lineSOL
+                                            INNERJOINproject_projectPONSOL.project_id=P.id
+                                        WHEREP.active='t'ANDP.allow_timesheets='t'
                                         UNION
                                         SELECT
-                                            P.id AS project_id,
-                                            P.analytic_account_id AS analytic_account_id,
-                                            SOL.id AS sale_line_id,
-                                            0.0 AS expense_cost
-                                        FROM sale_order_line SOL
-                                            INNER JOIN project_task T ON SOL.task_id = T.id
-                                            INNER JOIN project_project P ON P.id = T.project_id
-                                        WHERE P.active = 't' AND P.allow_timesheets = 't'
-                                    ) AMOUNT_UNTAXED ON AMOUNT_UNTAXED.project_id = P.id
-                                    LEFT JOIN sale_order_line SOL ON AMOUNT_UNTAXED.sale_line_id = SOL.id
-                                    LEFT JOIN sale_order S ON SOL.order_id = S.id
-                                    LEFT JOIN product_product PP on (SOL.product_id = PP.id)
-                                    LEFT JOIN product_template T on (PP.product_tmpl_id = T.id)
-                                    WHERE P.active = 't' AND P.analytic_account_id IS NOT NULL
-                            ) SUB_COST_SUMMARY
-                            GROUP BY project_id, analytic_account_id, sale_line_id, line_date
-                        ) COST_SUMMARY ON COST_SUMMARY.project_id = P.id
-                        LEFT JOIN sale_order_line SOL ON COST_SUMMARY.sale_line_id = SOL.id
-                        LEFT JOIN sale_order S ON SOL.order_id = S.id
-                        WHERE P.active = 't' AND P.analytic_account_id IS NOT NULL
-                    ) AS sub
+                                            P.idASproject_id,
+                                            P.analytic_account_idASanalytic_account_id,
+                                            SOL.idASsale_line_id,
+                                            0.0ASexpense_cost
+                                        FROMsale_order_lineSOL
+                                            INNERJOINproject_taskTONSOL.task_id=T.id
+                                            INNERJOINproject_projectPONP.id=T.project_id
+                                        WHEREP.active='t'ANDP.allow_timesheets='t'
+                                    )AMOUNT_UNTAXEDONAMOUNT_UNTAXED.project_id=P.id
+                                    LEFTJOINsale_order_lineSOLONAMOUNT_UNTAXED.sale_line_id=SOL.id
+                                    LEFTJOINsale_orderSONSOL.order_id=S.id
+                                    LEFTJOINproduct_productPPon(SOL.product_id=PP.id)
+                                    LEFTJOINproduct_templateTon(PP.product_tmpl_id=T.id)
+                                    WHEREP.active='t'ANDP.analytic_account_idISNOTNULL
+                            )SUB_COST_SUMMARY
+                            GROUPBYproject_id,analytic_account_id,sale_line_id,line_date
+                        )COST_SUMMARYONCOST_SUMMARY.project_id=P.id
+                        LEFTJOINsale_order_lineSOLONCOST_SUMMARY.sale_line_id=SOL.id
+                        LEFTJOINsale_orderSONSOL.order_id=S.id
+                        WHEREP.active='t'ANDP.analytic_account_idISNOTNULL
+                    )ASsub
             )
-        """ % self._table
+        """%self._table
         self._cr.execute(query)

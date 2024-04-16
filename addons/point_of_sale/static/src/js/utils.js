@@ -1,49 +1,49 @@
-flectra.define('point_of_sale.utils', function (require) {
-    'use strict';
+flectra.define('point_of_sale.utils',function(require){
+    'usestrict';
 
-    const { EventBus } = owl.core;
+    const{EventBus}=owl.core;
 
-    function getFileAsText(file) {
-        return new Promise((resolve, reject) => {
-            if (!file) {
+    functiongetFileAsText(file){
+        returnnewPromise((resolve,reject)=>{
+            if(!file){
                 reject();
-            } else {
-                const reader = new FileReader();
-                reader.addEventListener('load', function () {
+            }else{
+                constreader=newFileReader();
+                reader.addEventListener('load',function(){
                     resolve(reader.result);
                 });
-                reader.addEventListener('abort', reject);
-                reader.addEventListener('error', reject);
+                reader.addEventListener('abort',reject);
+                reader.addEventListener('error',reject);
                 reader.readAsText(file);
             }
         });
     }
 
     /**
-     * This global variable is used by nextFrame to store the timer and
-     * be able to cancel it before another request for animation frame.
+     *ThisglobalvariableisusedbynextFrametostorethetimerand
+     *beabletocancelitbeforeanotherrequestforanimationframe.
      */
-    let timer = null;
+    lettimer=null;
 
     /**
-     * Wait for the next animation frame to finish.
+     *Waitforthenextanimationframetofinish.
      */
-    const nextFrame = () => {
-        return new Promise((resolve) => {
+    constnextFrame=()=>{
+        returnnewPromise((resolve)=>{
             cancelAnimationFrame(timer);
-            timer = requestAnimationFrame(() => {
+            timer=requestAnimationFrame(()=>{
                 resolve();
             });
         });
     };
 
-    function isRpcError(error) {
-        return (
-            !(error instanceof Error) &&
-            error.message &&
-            [100, 200, 404, -32098].includes(error.message.code)
+    functionisRpcError(error){
+        return(
+            !(errorinstanceofError)&&
+            error.message&&
+            [100,200,404,-32098].includes(error.message.code)
         );
     }
 
-    return { getFileAsText, nextFrame, isRpcError, posbus: new EventBus() };
+    return{getFileAsText,nextFrame,isRpcError,posbus:newEventBus()};
 });

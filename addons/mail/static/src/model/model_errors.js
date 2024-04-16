@@ -1,21 +1,21 @@
-flectra.define('mail/static/src/model/model_errors.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/model/model_errors.js',function(require){
+'usestrict';
 
-class RecordDeletedError extends Error {
+classRecordDeletedErrorextendsError{
 
     /**
-     * @override
-     * @param {string} recordLocalId local id of record that has been deleted
-     * @param  {...any} args
+     *@override
+     *@param{string}recordLocalIdlocalidofrecordthathasbeendeleted
+     *@param {...any}args
      */
-    constructor(recordLocalId, ...args) {
+    constructor(recordLocalId,...args){
         super(...args);
-        this.recordLocalId = recordLocalId;
-        this.name = 'RecordDeletedError';
+        this.recordLocalId=recordLocalId;
+        this.name='RecordDeletedError';
     }
 }
 
-return {
+return{
     RecordDeletedError,
 };
 

@@ -1,96 +1,96 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra noupdate="1">
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectranoupdate="1">
 
-        <record id="ir_cron_rating_project" model="ir.cron">
-            <field name="name">Project: Send rating</field>
-            <field name="model_id" ref="project.model_project_project"/>
-            <field name="state">code</field>
-            <field name="code">model._send_rating_all()</field>
-            <field name="interval_type">days</field>
-            <field name="numbercall">-1</field>
-        </record>
-
-        <record id="ir_cron_recurring_tasks" model="ir.cron">
-            <field name="name">Project: Create Recurring Tasks</field>
-            <field name="model_id" ref="project.model_project_task_recurrence"/>
-            <field name="state">code</field>
-            <field name="code">model._cron_create_recurring_tasks()</field>
-            <field name="interval_type">days</field>
-            <field name="numbercall">-1</field>
-            <field name="nextcall" eval="(DateTime.now().replace(hour=3, minute=0) + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')" />
+        <recordid="ir_cron_rating_project"model="ir.cron">
+            <fieldname="name">Project:Sendrating</field>
+            <fieldname="model_id"ref="project.model_project_project"/>
+            <fieldname="state">code</field>
+            <fieldname="code">model._send_rating_all()</field>
+            <fieldname="interval_type">days</field>
+            <fieldname="numbercall">-1</field>
         </record>
 
-        <!-- Task-related subtypes for messaging / Chatter -->
-        <record id="mt_task_new" model="mail.message.subtype">
-            <field name="name">Task Created</field>
-            <field name="res_model">project.task</field>
-            <field name="default" eval="False"/>
-            <field name="hidden" eval="True"/>
-            <field name="description">Task Created</field>
+        <recordid="ir_cron_recurring_tasks"model="ir.cron">
+            <fieldname="name">Project:CreateRecurringTasks</field>
+            <fieldname="model_id"ref="project.model_project_task_recurrence"/>
+            <fieldname="state">code</field>
+            <fieldname="code">model._cron_create_recurring_tasks()</field>
+            <fieldname="interval_type">days</field>
+            <fieldname="numbercall">-1</field>
+            <fieldname="nextcall"eval="(DateTime.now().replace(hour=3,minute=0)+timedelta(days=1)).strftime('%Y-%m-%d%H:%M:%S')"/>
         </record>
-        <record id="mt_task_blocked" model="mail.message.subtype">
-            <field name="name">Task Blocked</field>
-            <field name="res_model">project.task</field>
-            <field name="default" eval="False"/>
-            <field name="description">Task blocked</field>
+
+        <!--Task-relatedsubtypesformessaging/Chatter-->
+        <recordid="mt_task_new"model="mail.message.subtype">
+            <fieldname="name">TaskCreated</field>
+            <fieldname="res_model">project.task</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="hidden"eval="True"/>
+            <fieldname="description">TaskCreated</field>
         </record>
-        <record id="mt_task_ready" model="mail.message.subtype">
-            <field name="name">Task Ready</field>
-            <field name="res_model">project.task</field>
-            <field name="default" eval="False"/>
-            <field name="description">Task ready for Next Stage</field>
+        <recordid="mt_task_blocked"model="mail.message.subtype">
+            <fieldname="name">TaskBlocked</field>
+            <fieldname="res_model">project.task</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">Taskblocked</field>
         </record>
-        <record id="mt_task_stage" model="mail.message.subtype">
-            <field name="name">Stage Changed</field>
-            <field name="res_model">project.task</field>
-            <field name="default" eval="False"/>
-            <field name="description">Stage changed</field>
+        <recordid="mt_task_ready"model="mail.message.subtype">
+            <fieldname="name">TaskReady</field>
+            <fieldname="res_model">project.task</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">TaskreadyforNextStage</field>
         </record>
-        <record id="mt_task_rating" model="mail.message.subtype">
-            <field name="name">Task Rating</field>
-            <field name="res_model">project.task</field>
-            <field name="default" eval="False"/>
-            <field name="description">Ratings</field>
+        <recordid="mt_task_stage"model="mail.message.subtype">
+            <fieldname="name">StageChanged</field>
+            <fieldname="res_model">project.task</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">Stagechanged</field>
         </record>
-        <!-- Project-related subtypes for messaging / Chatter -->
-        <record id="mt_project_task_new" model="mail.message.subtype">
-            <field name="name">Task Created</field>
-            <field name="sequence">10</field>
-            <field name="res_model">project.project</field>
-            <field name="default" eval="False"/>
-            <field name="parent_id" ref="mt_task_new"/>
-            <field name="relation_field">project_id</field>
+        <recordid="mt_task_rating"model="mail.message.subtype">
+            <fieldname="name">TaskRating</field>
+            <fieldname="res_model">project.task</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">Ratings</field>
         </record>
-        <record id="mt_project_task_blocked" model="mail.message.subtype">
-            <field name="name">Task Blocked</field>
-            <field name="sequence">11</field>
-            <field name="res_model">project.project</field>
-            <field name="default" eval="False"/>
-            <field name="parent_id" ref="mt_task_blocked"/>
-            <field name="relation_field">project_id</field>
+        <!--Project-relatedsubtypesformessaging/Chatter-->
+        <recordid="mt_project_task_new"model="mail.message.subtype">
+            <fieldname="name">TaskCreated</field>
+            <fieldname="sequence">10</field>
+            <fieldname="res_model">project.project</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="parent_id"ref="mt_task_new"/>
+            <fieldname="relation_field">project_id</field>
         </record>
-        <record id="mt_project_task_ready" model="mail.message.subtype">
-            <field name="name">Task Ready</field>
-            <field name="sequence">12</field>
-            <field name="res_model">project.project</field>
-            <field name="default" eval="False"/>
-            <field name="parent_id" ref="mt_task_ready"/>
-            <field name="relation_field">project_id</field>
+        <recordid="mt_project_task_blocked"model="mail.message.subtype">
+            <fieldname="name">TaskBlocked</field>
+            <fieldname="sequence">11</field>
+            <fieldname="res_model">project.project</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="parent_id"ref="mt_task_blocked"/>
+            <fieldname="relation_field">project_id</field>
         </record>
-        <record id="mt_project_task_stage" model="mail.message.subtype">
-            <field name="name">Task Stage Changed</field>
-            <field name="sequence">13</field>
-            <field name="res_model">project.project</field>
-            <field name="default" eval="False"/>
-            <field name="parent_id" ref="mt_task_stage"/>
-            <field name="relation_field">project_id</field>
+        <recordid="mt_project_task_ready"model="mail.message.subtype">
+            <fieldname="name">TaskReady</field>
+            <fieldname="sequence">12</field>
+            <fieldname="res_model">project.project</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="parent_id"ref="mt_task_ready"/>
+            <fieldname="relation_field">project_id</field>
         </record>
-        <record id="mt_project_task_rating" model="mail.message.subtype">
-            <field name="name">Task Rating</field>
-            <field name="sequence">14</field>
-            <field name="res_model">project.project</field>
-            <field name="default" eval="True"/>
-            <field name="parent_id" ref="mt_task_rating"/>
-            <field name="relation_field">project_id</field>
+        <recordid="mt_project_task_stage"model="mail.message.subtype">
+            <fieldname="name">TaskStageChanged</field>
+            <fieldname="sequence">13</field>
+            <fieldname="res_model">project.project</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="parent_id"ref="mt_task_stage"/>
+            <fieldname="relation_field">project_id</field>
+        </record>
+        <recordid="mt_project_task_rating"model="mail.message.subtype">
+            <fieldname="name">TaskRating</field>
+            <fieldname="sequence">14</field>
+            <fieldname="res_model">project.project</field>
+            <fieldname="default"eval="True"/>
+            <fieldname="parent_id"ref="mt_task_rating"/>
+            <fieldname="relation_field">project_id</field>
         </record>
 </flectra>

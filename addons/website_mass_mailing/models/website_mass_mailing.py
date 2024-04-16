@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class MassMailingPopup(models.Model):
-    _name = 'website.mass_mailing.popup'
-    _description = "Mailing list popup"
+classMassMailingPopup(models.Model):
+    _name='website.mass_mailing.popup'
+    _description="Mailinglistpopup"
 
-    def _default_popup_content(self):
-        return self.env['ir.ui.view']._render_template('website_mass_mailing.s_newsletter_subscribe_popup_content')
+    def_default_popup_content(self):
+        returnself.env['ir.ui.view']._render_template('website_mass_mailing.s_newsletter_subscribe_popup_content')
 
-    mailing_list_id = fields.Many2one('mailing.list')
-    website_id = fields.Many2one('website')
-    popup_content = fields.Html(string="Website Popup Content", default=_default_popup_content, translate=True, sanitize=False)
+    mailing_list_id=fields.Many2one('mailing.list')
+    website_id=fields.Many2one('website')
+    popup_content=fields.Html(string="WebsitePopupContent",default=_default_popup_content,translate=True,sanitize=False)

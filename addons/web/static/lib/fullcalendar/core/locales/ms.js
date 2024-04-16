@@ -1,32 +1,32 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.ms = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.ms=factory()));
+}(this,function(){'usestrict';
 
-    var ms = {
-        code: "ms",
-        week: {
-            dow: 1,
-            doy: 7 // The week that contains Jan 1st is the first week of the year.
+    varms={
+        code:"ms",
+        week:{
+            dow:1,
+            doy:7//TheweekthatcontainsJan1stisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "Sebelum",
-            next: "Selepas",
-            today: "hari ini",
-            month: "Bulan",
-            week: "Minggu",
-            day: "Hari",
-            list: "Agenda"
+        buttonText:{
+            prev:"Sebelum",
+            next:"Selepas",
+            today:"hariini",
+            month:"Bulan",
+            week:"Minggu",
+            day:"Hari",
+            list:"Agenda"
         },
-        weekLabel: "Mg",
-        allDayText: "Sepanjang hari",
-        eventLimitText: function (n) {
-            return "masih ada " + n + " acara";
+        weekLabel:"Mg",
+        allDayText:"Sepanjanghari",
+        eventLimitText:function(n){
+            return"masihada"+n+"acara";
         },
-        noEventsMessage: "Tiada peristiwa untuk dipaparkan"
+        noEventsMessage:"Tiadaperistiwauntukdipaparkan"
     };
 
-    return ms;
+    returnms;
 
 }));

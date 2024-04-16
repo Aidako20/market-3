@@ -1,38 +1,38 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-        <!--     BARCODE NOMENCLATURES     -->
-        <record model="ir.ui.view" id="view_barcode_nomenclature_form">
-            <field name="name">Barcode Nomenclatures</field>
-            <field name="model">barcode.nomenclature</field>
-            <field name="arch" type="xml">
-                <form string="Barcode Nomenclature">
+        <!--    BARCODENOMENCLATURES    -->
+        <recordmodel="ir.ui.view"id="view_barcode_nomenclature_form">
+            <fieldname="name">BarcodeNomenclatures</field>
+            <fieldname="model">barcode.nomenclature</field>
+            <fieldname="arch"type="xml">
+                <formstring="BarcodeNomenclature">
                     <sheet>
-                        <group col="4">
-                            <field name="name" />
-                            <field name="upc_ean_conv"/>
+                        <groupcol="4">
+                            <fieldname="name"/>
+                            <fieldname="upc_ean_conv"/>
                         </group>
                         <div>
                             <p>
-                                <i>Barcodes Nomenclatures</i> define how barcodes are recognized and categorized.
-                                When a barcode is scanned it is associated to the <i>first</i> rule with a matching
-                                pattern. The pattern syntax is that of regular expression, and a barcode is matched
-                                if the regular expression matches a prefix of the barcode. 
+                                <i>BarcodesNomenclatures</i>definehowbarcodesarerecognizedandcategorized.
+                                Whenabarcodeisscanneditisassociatedtothe<i>first</i>rulewithamatching
+                                pattern.Thepatternsyntaxisthatofregularexpression,andabarcodeismatched
+                                iftheregularexpressionmatchesaprefixofthebarcode.
                             </p><p>
-                                Patterns can also define how numerical values, such as weight or price, can be
-                                encoded into the barcode. They are indicated by <code>{NNN}</code> where the N's
-                                define where the number's digits are encoded. Floats are also supported with the 
-                                decimals indicated with D's, such as <code>{NNNDD}</code>. In these cases, 
-                                the barcode field on the associated records <i>must</i> show these digits as 
-                                zeroes. 
+                                Patternscanalsodefinehownumericalvalues,suchasweightorprice,canbe
+                                encodedintothebarcode.Theyareindicatedby<code>{NNN}</code>wheretheN's
+                                definewherethenumber'sdigitsareencoded.Floatsarealsosupportedwiththe
+                                decimalsindicatedwithD's,suchas<code>{NNNDD}</code>.Inthesecases,
+                                thebarcodefieldontheassociatedrecords<i>must</i>showthesedigitsas
+                                zeroes.
                             </p>
                         </div>
-                        <field name="rule_ids">
-                            <tree string='Tables'>
-                                <field name="sequence" widget="handle"/>
-                                <field name="name" />
-                                <field name="type" />
-                                <field name="encoding" />
-                                <field name="pattern" />
+                        <fieldname="rule_ids">
+                            <treestring='Tables'>
+                                <fieldname="sequence"widget="handle"/>
+                                <fieldname="name"/>
+                                <fieldname="type"/>
+                                <fieldname="encoding"/>
+                                <fieldname="pattern"/>
                             </tree>
                         </field>
                     </sheet>
@@ -40,42 +40,42 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="view_barcode_nomenclature_tree">
-            <field name="name">Barcode Nomenclatures</field>
-            <field name="model">barcode.nomenclature</field>
-            <field name="arch" type="xml">
-                <tree string="Barcode Nomenclatures">
-                    <field name="name" />
+        <recordmodel="ir.ui.view"id="view_barcode_nomenclature_tree">
+            <fieldname="name">BarcodeNomenclatures</field>
+            <fieldname="model">barcode.nomenclature</field>
+            <fieldname="arch"type="xml">
+                <treestring="BarcodeNomenclatures">
+                    <fieldname="name"/>
                 </tree>
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="action_barcode_nomenclature_form">
-            <field name="name">Barcode Nomenclatures</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">barcode.nomenclature</field>
-            <field name="view_mode">tree,kanban,form</field>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                Add a new barcode nomenclature
+        <recordmodel="ir.actions.act_window"id="action_barcode_nomenclature_form">
+            <fieldname="name">BarcodeNomenclatures</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">barcode.nomenclature</field>
+            <fieldname="view_mode">tree,kanban,form</field>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                Addanewbarcodenomenclature
               </p><p>
-                A barcode nomenclature defines how the point of sale identify and interprets barcodes
+                Abarcodenomenclaturedefineshowthepointofsaleidentifyandinterpretsbarcodes
               </p>
             </field>
         </record>
 
-        <record model="ir.ui.view" id="view_barcode_rule_form">
-            <field name="name">Barcode Rule</field>
-            <field name="model">barcode.rule</field>
-            <field name="arch" type="xml">
-                <form string="Barcode Rule">
-                    <group col="4">
-                        <field name="name" />
-                        <field name="sequence" />
-                        <field name="type"/>  
-                        <field name="encoding" attrs="{'invisible': [('type','=', 'alias')]}"/> 
-                        <field name="pattern" />
-                        <field name="alias" attrs="{'invisible': [('type','!=', 'alias')]}"/>   
+        <recordmodel="ir.ui.view"id="view_barcode_rule_form">
+            <fieldname="name">BarcodeRule</field>
+            <fieldname="model">barcode.rule</field>
+            <fieldname="arch"type="xml">
+                <formstring="BarcodeRule">
+                    <groupcol="4">
+                        <fieldname="name"/>
+                        <fieldname="sequence"/>
+                        <fieldname="type"/> 
+                        <fieldname="encoding"attrs="{'invisible':[('type','=','alias')]}"/>
+                        <fieldname="pattern"/>
+                        <fieldname="alias"attrs="{'invisible':[('type','!=','alias')]}"/>  
                     </group>
                 </form>
             </field>

@@ -1,176 +1,176 @@
-flectra.define('web.Notification', function (require) {
-'use strict';
+flectra.define('web.Notification',function(require){
+'usestrict';
 
-var Widget = require('web.Widget');
+varWidget=require('web.Widget');
 
 /**
- * Widget which is used to display a warning/information message on the top
- * right of the screen.
+ *Widgetwhichisusedtodisplayawarning/informationmessageonthetop
+ *rightofthescreen.
  *
- * If you want to display such a notification, you probably do not want to do it
- * by importing this file. The proper way is to use the do_warn or do_notify
- * methods on the Widget class.
+ *Ifyouwanttodisplaysuchanotification,youprobablydonotwanttodoit
+ *byimportingthisfile.Theproperwayistousethedo_warnordo_notify
+ *methodsontheWidgetclass.
  */
-var Notification = Widget.extend({
-    template: 'Notification',
-    events: {
-        'hidden.bs.toast': '_onClose',
-        'click .o_notification_buttons button': '_onClickButton',
-        'mouseenter': '_onMouseEnter',
-        'mouseleave': '_onMouseLeave',
+varNotification=Widget.extend({
+    template:'Notification',
+    events:{
+        'hidden.bs.toast':'_onClose',
+        'click.o_notification_buttonsbutton':'_onClickButton',
+        'mouseenter':'_onMouseEnter',
+        'mouseleave':'_onMouseLeave',
     },
-    _autoCloseDelay: 4000,
-    _animation: true,
+    _autoCloseDelay:4000,
+    _animation:true,
 
     /**
-     * @override
-     * @param {Widget} parent
-     * @param {Object} params
-     * @param {string} params.title
-     * @param {string} params.subtitle
-     * @param {string} [params.message]
-     * @param {string} [params.type='warning'] 'info', 'success', 'warning', 'danger' or ''
-     * @param {boolean} [params.sticky=false] if true, the notification will
-     *      stay visible until the user clicks on it.
-     * @param {string} [params.className]
-     * @param {function} [params.onClose] callback when the user click on the x
-     *      or when the notification is auto close (no sticky)
-     * @param {Object[]} params.buttons
-     * @param {function} params.buttons[0].click callback on click
-     * @param {boolean} [params.buttons[0].primary] display the button as primary
-     * @param {string} [params.buttons[0].text] button label
-     * @param {string} [params.buttons[0].icon] font-awsome className or image src
+     *@override
+     *@param{Widget}parent
+     *@param{Object}params
+     *@param{string}params.title
+     *@param{string}params.subtitle
+     *@param{string}[params.message]
+     *@param{string}[params.type='warning']'info','success','warning','danger'or''
+     *@param{boolean}[params.sticky=false]iftrue,thenotificationwill
+     *     stayvisibleuntiltheuserclicksonit.
+     *@param{string}[params.className]
+     *@param{function}[params.onClose]callbackwhentheuserclickonthex
+     *     orwhenthenotificationisautoclose(nosticky)
+     *@param{Object[]}params.buttons
+     *@param{function}params.buttons[0].clickcallbackonclick
+     *@param{boolean}[params.buttons[0].primary]displaythebuttonasprimary
+     *@param{string}[params.buttons[0].text]buttonlabel
+     *@param{string}[params.buttons[0].icon]font-awsomeclassNameorimagesrc
      */
-    init: function (parent, params) {
-        this._super.apply(this, arguments);
-        this.title = params.title;
-        this.subtitle = params.subtitle;
-        this.message = params.message;
-        this.buttons = params.buttons || [];
-        this.sticky = !!this.buttons.length || !!params.sticky;
-        this.type = params.type === undefined ? 'warning' : params.type;
-        this.className = params.className || '';
-        this._closeCallback = params.onClose;
+    init:function(parent,params){
+        this._super.apply(this,arguments);
+        this.title=params.title;
+        this.subtitle=params.subtitle;
+        this.message=params.message;
+        this.buttons=params.buttons||[];
+        this.sticky=!!this.buttons.length||!!params.sticky;
+        this.type=params.type===undefined?'warning':params.type;
+        this.className=params.className||'';
+        this._closeCallback=params.onClose;
 
-        if (this.type === 'danger') {
-            this.icon = 'fa-exclamation';
-            this.className += ' bg-danger';
-        } else if (this.type === 'warning') {
-            this.icon = 'fa-lightbulb-o';
-            this.className += ' bg-warning';
-        } else if (this.type === 'success') {
-            this.icon = 'fa-check';
-            this.className += ' bg-success';
-        } else if (this.type === 'info') {
-            this.icon = 'fa-info';
-            this.className += ' bg-info';
+        if(this.type==='danger'){
+            this.icon='fa-exclamation';
+            this.className+='bg-danger';
+        }elseif(this.type==='warning'){
+            this.icon='fa-lightbulb-o';
+            this.className+='bg-warning';
+        }elseif(this.type==='success'){
+            this.icon='fa-check';
+            this.className+='bg-success';
+        }elseif(this.type==='info'){
+            this.icon='fa-info';
+            this.className+='bg-info';
         }
 
-        if (this.buttons && this.buttons.length) {
-            this.icon = 'fa-question-circle-o';
+        if(this.buttons&&this.buttons.length){
+            this.icon='fa-question-circle-o';
         }
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
+    start:function(){
         this.$el.toast({
-            animation: this._animation,
-            autohide: false,
+            animation:this._animation,
+            autohide:false,
         });
-        void this.$el[0].offsetWidth; // Force a paint refresh before showing the toast
-        if (!this.sticky) {
-            this.autohide = _.cancellableThrottleRemoveMeSoon(this.close, this._autoCloseDelay, {leading: false});
-            this.$el.on('shown.bs.toast', () => {
+        voidthis.$el[0].offsetWidth;//Forceapaintrefreshbeforeshowingthetoast
+        if(!this.sticky){
+            this.autohide=_.cancellableThrottleRemoveMeSoon(this.close,this._autoCloseDelay,{leading:false});
+            this.$el.on('shown.bs.toast',()=>{
                 this.autohide();
             });
         }
         this.$el.toast('show');
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
+    destroy:function(){
         this.$el.toast('dispose');
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Destroys the widget with a nice animation.
+     *Destroysthewidgetwithaniceanimation.
      *
-     * @private
-     * @param {boolean} [silent=false] if true, the notification does not call
-     *   _closeCallback method
+     *@private
+     *@param{boolean}[silent=false]iftrue,thenotificationdoesnotcall
+     *  _closeCallbackmethod
      */
-    close: function (silent) {
-        this.silent = silent;
+    close:function(silent){
+        this.silent=silent;
         this.$el.toast('hide');
 
-        // Make 'close' work if the notification is not shown yet but will be.
-        // Should not be needed but the calendar notification system is an
-        // example of feature that does not work without this yet.
-        var self = this;
-        this.$el.one('shown.bs.toast', function () {
+        //Make'close'workifthenotificationisnotshownyetbutwillbe.
+        //Shouldnotbeneededbutthecalendarnotificationsystemisan
+        //exampleoffeaturethatdoesnotworkwithoutthisyet.
+        varself=this;
+        this.$el.one('shown.bs.toast',function(){
             self.$el.toast('hide');
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickButton: function (ev) {
+    _onClickButton:function(ev){
         ev.preventDefault();
-        if (this._buttonClicked) {
+        if(this._buttonClicked){
             return;
         }
-        this._buttonClicked = true;
-        var index = $(ev.currentTarget).index();
-        var button = this.buttons[index];
-        if (button.click) {
+        this._buttonClicked=true;
+        varindex=$(ev.currentTarget).index();
+        varbutton=this.buttons[index];
+        if(button.click){
             button.click();
         }
         this.close(true);
     },
     /**
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onClose: function (ev) {
+    _onClose:function(ev){
         this.trigger_up('close');
-        if (!this.silent && !this._buttonClicked) {
-            if (this._closeCallback) {
+        if(!this.silent&&!this._buttonClicked){
+            if(this._closeCallback){
                 this._closeCallback();
             }
         }
         this.destroy();
     },
     /**
-     * @private
+     *@private
      */
-    _onMouseEnter: function () {
-        if (!this.sticky) {
+    _onMouseEnter:function(){
+        if(!this.sticky){
             this.autohide.cancel();
         }
     },
     /**
-     * @private
+     *@private
      */
-    _onMouseLeave: function () {
-        if (!this.sticky) {
+    _onMouseLeave:function(){
+        if(!this.sticky){
             this.autohide();
         }
     },
 });
 
-return Notification;
+returnNotification;
 });

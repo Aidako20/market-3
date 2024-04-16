@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class Attachment(models.Model):
+classAttachment(models.Model):
 
-    _inherit = ['ir.attachment']
+    _inherit=['ir.attachment']
 
-    product_downloadable = fields.Boolean("Downloadable from product portal", default=False)
+    product_downloadable=fields.Boolean("Downloadablefromproductportal",default=False)

@@ -1,27 +1,27 @@
-flectra.define('pos_adyen.PaymentScreen', function(require) {
-    "use strict";
+flectra.define('pos_adyen.PaymentScreen',function(require){
+    "usestrict";
 
-    const PaymentScreen = require('point_of_sale.PaymentScreen');
-    const Registries = require('point_of_sale.Registries');
-    const { onMounted } = owl.hooks;
+    constPaymentScreen=require('point_of_sale.PaymentScreen');
+    constRegistries=require('point_of_sale.Registries');
+    const{onMounted}=owl.hooks;
 
-    const PosAdyenPaymentScreen = PaymentScreen => class extends PaymentScreen {
-        constructor() {
+    constPosAdyenPaymentScreen=PaymentScreen=>classextendsPaymentScreen{
+        constructor(){
             super(...arguments);
-            onMounted(() => {
-                const pendingPaymentLine = this.currentOrder.paymentlines.find(
-                    paymentLine => paymentLine.payment_method.use_payment_terminal === 'adyen' &&
-                        (!paymentLine.is_done() && paymentLine.get_payment_status() !== 'pending')
+            onMounted(()=>{
+                constpendingPaymentLine=this.currentOrder.paymentlines.find(
+                    paymentLine=>paymentLine.payment_method.use_payment_terminal==='adyen'&&
+                        (!paymentLine.is_done()&&paymentLine.get_payment_status()!=='pending')
                 );
-                if (pendingPaymentLine) {
-                    const paymentTerminal = pendingPaymentLine.payment_method.payment_terminal;
+                if(pendingPaymentLine){
+                    constpaymentTerminal=pendingPaymentLine.payment_method.payment_terminal;
                     paymentTerminal.set_most_recent_service_id(pendingPaymentLine.terminalServiceId);
                     pendingPaymentLine.set_payment_status('waiting');
-                    paymentTerminal.start_get_status_polling().then(isPaymentSuccessful => {
-                        if (isPaymentSuccessful) {
+                    paymentTerminal.start_get_status_polling().then(isPaymentSuccessful=>{
+                        if(isPaymentSuccessful){
                             pendingPaymentLine.set_payment_status('done');
-                            pendingPaymentLine.can_be_reversed = paymentTerminal.supports_reversals;
-                        } else {
+                            pendingPaymentLine.can_be_reversed=paymentTerminal.supports_reversals;
+                        }else{
                             pendingPaymentLine.set_payment_status('retry');
                         }
                     });
@@ -30,7 +30,7 @@ flectra.define('pos_adyen.PaymentScreen', function(require) {
         }
     };
 
-    Registries.Component.extend(PaymentScreen, PosAdyenPaymentScreen);
+    Registries.Component.extend(PaymentScreen,PosAdyenPaymentScreen);
 
-    return PaymentScreen;
+    returnPaymentScreen;
 });

@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class TrackLocation(models.Model):
-    _name = "event.track.location"
-    _description = 'Event Track Location'
+classTrackLocation(models.Model):
+    _name="event.track.location"
+    _description='EventTrackLocation'
 
-    name = fields.Char('Location', required=True)
+    name=fields.Char('Location',required=True)

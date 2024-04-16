@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields, api
+fromflectraimportmodels,fields,api
 
 
-class SaleOrder(models.Model):
-    _inherit = "sale.order"
+classSaleOrder(models.Model):
+    _inherit="sale.order"
 
     @api.depends('company_id','warehouse_id')
-    def _compute_l10n_in_journal_id(self):
+    def_compute_l10n_in_journal_id(self):
         super()._compute_l10n_in_journal_id()
-        for order in self:
-            if order.l10n_in_company_country_code == 'IN':
-                if order.warehouse_id.l10n_in_sale_journal_id:
-                    order.l10n_in_journal_id = order.warehouse_id.l10n_in_sale_journal_id.id
+        fororderinself:
+            iforder.l10n_in_company_country_code=='IN':
+                iforder.warehouse_id.l10n_in_sale_journal_id:
+                    order.l10n_in_journal_id=order.warehouse_id.l10n_in_sale_journal_id.id

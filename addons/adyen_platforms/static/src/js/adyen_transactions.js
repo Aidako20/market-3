@@ -1,33 +1,33 @@
-flectra.define('adyen_platforms.transactions', function (require) {
-"use strict";
+flectra.define('adyen_platforms.transactions',function(require){
+"usestrict";
 
-var ListController = require('web.ListController');
-var ListView = require('web.ListView');
-var viewRegistry = require('web.view_registry');
+varListController=require('web.ListController');
+varListView=require('web.ListView');
+varviewRegistry=require('web.view_registry');
 
-var TransactionsListController = ListController.extend({
-    buttons_template: 'AdyenTransactionsListView.buttons',
-    events: _.extend({}, ListController.prototype.events, {
-        'click .o_button_sync_transactions': '_onTransactionsSync',
+varTransactionsListController=ListController.extend({
+    buttons_template:'AdyenTransactionsListView.buttons',
+    events:_.extend({},ListController.prototype.events,{
+        'click.o_button_sync_transactions':'_onTransactionsSync',
     }),
 
-    _onTransactionsSync: function () {
-        var self = this;
+    _onTransactionsSync:function(){
+        varself=this;
         this._rpc({
-            model: 'adyen.transaction',
-            method: 'sync_adyen_transactions',
-            args: [],
-        }).then(function () {
+            model:'adyen.transaction',
+            method:'sync_adyen_transactions',
+            args:[],
+        }).then(function(){
             self.trigger_up('reload');
         });
     }
 });
 
-var TransactionsListView = ListView.extend({
-    config: _.extend({}, ListView.prototype.config, {
-        Controller: TransactionsListController,
+varTransactionsListView=ListView.extend({
+    config:_.extend({},ListView.prototype.config,{
+        Controller:TransactionsListController,
     }),
 });
 
-viewRegistry.add('adyen_transactions_tree', TransactionsListView);
+viewRegistry.add('adyen_transactions_tree',TransactionsListView);
 });

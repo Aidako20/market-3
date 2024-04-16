@@ -1,25 +1,25 @@
-<?xml version="1.0"?>
-<flectra noupdate="1">
-    <record id="note_note_rule_global" model="ir.rule">
-        <field name="name">Only followers can access a sticky notes</field>
-        <field name="model_id" ref="model_note_note"/>
-        <field name="domain_force">['|', ('user_id', '=', user.id), ('message_partner_ids', '=', user.partner_id.id)]</field>
-        <field name="perm_create" eval="False"/>
-        <field name="perm_unlink" eval="False"/>
+<?xmlversion="1.0"?>
+<flectranoupdate="1">
+    <recordid="note_note_rule_global"model="ir.rule">
+        <fieldname="name">Onlyfollowerscanaccessastickynotes</field>
+        <fieldname="model_id"ref="model_note_note"/>
+        <fieldname="domain_force">['|',('user_id','=',user.id),('message_partner_ids','=',user.partner_id.id)]</field>
+        <fieldname="perm_create"eval="False"/>
+        <fieldname="perm_unlink"eval="False"/>
     </record>
 
-    <record id="note_note_create_unlink_global" model="ir.rule">
-        <field name="name">note: create / unlink: responsible</field>
-        <field name="model_id" ref="model_note_note"/>
-        <field name="domain_force">[('user_id', '=', user.id)]</field>
-        <field name="perm_write" eval="False"/>
-        <field name="perm_read" eval="False"/>
+    <recordid="note_note_create_unlink_global"model="ir.rule">
+        <fieldname="name">note:create/unlink:responsible</field>
+        <fieldname="model_id"ref="model_note_note"/>
+        <fieldname="domain_force">[('user_id','=',user.id)]</field>
+        <fieldname="perm_write"eval="False"/>
+        <fieldname="perm_read"eval="False"/>
     </record>
 
-    <record id="note_stage_rule_global" model="ir.rule">
-        <field name="name">Each user have his stage name</field>
-        <field name="model_id" ref="model_note_stage"/>
-        <field name="domain_force">['|',('user_id','=',False),('user_id','=',user.id)]</field>
+    <recordid="note_stage_rule_global"model="ir.rule">
+        <fieldname="name">Eachuserhavehisstagename</field>
+        <fieldname="model_id"ref="model_note_stage"/>
+        <fieldname="domain_force">['|',('user_id','=',False),('user_id','=',user.id)]</field>
     </record>
 
 </flectra>

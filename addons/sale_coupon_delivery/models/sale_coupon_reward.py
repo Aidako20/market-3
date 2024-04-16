@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, _
+fromflectraimportfields,models,_
 
 
-class CouponReward(models.Model):
-    _inherit = 'coupon.reward'
-    _description = "Coupon Reward"
+classCouponReward(models.Model):
+    _inherit='coupon.reward'
+    _description="CouponReward"
 
-    reward_type = fields.Selection(selection_add=[('free_shipping', 'Free Shipping')])
+    reward_type=fields.Selection(selection_add=[('free_shipping','FreeShipping')])
 
-    def name_get(self):
-        result = []
-        reward_names = super(CouponReward, self).name_get()
-        free_shipping_reward_ids = self.filtered(lambda reward: reward.reward_type == 'free_shipping').ids
-        for res in reward_names:
-            result.append((res[0], res[0] in free_shipping_reward_ids and _("Free Shipping") or res[1]))
-        return result
+    defname_get(self):
+        result=[]
+        reward_names=super(CouponReward,self).name_get()
+        free_shipping_reward_ids=self.filtered(lambdareward:reward.reward_type=='free_shipping').ids
+        forresinreward_names:
+            result.append((res[0],res[0]infree_shipping_reward_idsand_("FreeShipping")orres[1]))
+        returnresult

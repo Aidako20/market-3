@@ -1,79 +1,79 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="crm_lead_stage_search" model="ir.ui.view">
-        <field name="name">Stage - Search</field>
-        <field name="model">crm.stage</field>
-        <field name="arch" type="xml">
-            <search string="Stage Search">
-                <field name="name"/>
-                <field name="sequence"/>
-                <field name="is_won"/>
-                <field name="team_id"/>
+    <recordid="crm_lead_stage_search"model="ir.ui.view">
+        <fieldname="name">Stage-Search</field>
+        <fieldname="model">crm.stage</field>
+        <fieldname="arch"type="xml">
+            <searchstring="StageSearch">
+                <fieldname="name"/>
+                <fieldname="sequence"/>
+                <fieldname="is_won"/>
+                <fieldname="team_id"/>
             </search>
         </field>
     </record>
 
-    <!-- STAGES TREE VIEW + MUTI_EDIT -->
-    <record id="crm_stage_tree" model="ir.ui.view">
-        <field name="name">crm.stage.tree</field>
-        <field name="model">crm.stage</field>
-        <field name="arch" type="xml">
-            <tree string="Stages" multi_edit="1">
-                <field name="sequence" widget="handle"/>
-                <field name="name" readonly="1"/>
-                <field name="is_won"/>
-                <field name="team_id"/>
+    <!--STAGESTREEVIEW+MUTI_EDIT-->
+    <recordid="crm_stage_tree"model="ir.ui.view">
+        <fieldname="name">crm.stage.tree</field>
+        <fieldname="model">crm.stage</field>
+        <fieldname="arch"type="xml">
+            <treestring="Stages"multi_edit="1">
+                <fieldname="sequence"widget="handle"/>
+                <fieldname="name"readonly="1"/>
+                <fieldname="is_won"/>
+                <fieldname="team_id"/>
             </tree>
         </field>
     </record>
 
-    <record id="crm_stage_form" model="ir.ui.view">
-        <field name="name">crm.stage.form</field>
-        <field name="model">crm.stage</field>
-        <field name="priority" eval="1"/>
-        <field name="arch" type="xml">
-            <form string="Stage">
+    <recordid="crm_stage_form"model="ir.ui.view">
+        <fieldname="name">crm.stage.form</field>
+        <fieldname="model">crm.stage</field>
+        <fieldname="priority"eval="1"/>
+        <fieldname="arch"type="xml">
+            <formstring="Stage">
                 <sheet>
-                    <div class="oe_title">
-                        <div class="oe_edit_only">
-                            <label for="name"/>
+                    <divclass="oe_title">
+                        <divclass="oe_edit_only">
+                            <labelfor="name"/>
                         </div>
                         <h1>
-                            <field name="name"/>
+                            <fieldname="name"/>
                         </h1>
                     </div>
                     <group>
                         <group>
-                            <field name="is_won"/>
-                            <field name="fold"/>
-                            <field name="team_id" options='{"no_open": True, "no_create": True}' attrs="{'invisible': [('team_count', '&lt;=', 1)]}" kanban_view_ref="%(sales_team.crm_team_view_kanban)s"/>
+                            <fieldname="is_won"/>
+                            <fieldname="fold"/>
+                            <fieldname="team_id"options='{"no_open":True,"no_create":True}'attrs="{'invisible':[('team_count','&lt;=',1)]}"kanban_view_ref="%(sales_team.crm_team_view_kanban)s"/>
                         </group>
-                        <field name="team_count" invisible="1"/>
+                        <fieldname="team_count"invisible="1"/>
                     </group>
-                    <separator string="Requirements"/>
-                    <field name="requirements" nolabel="1" placeholder="Give your team the requirements to move an opportunity to this stage."/>
+                    <separatorstring="Requirements"/>
+                    <fieldname="requirements"nolabel="1"placeholder="Giveyourteamtherequirementstomoveanopportunitytothisstage."/>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="crm_stage_action" model="ir.actions.act_window">
-        <field name="name">Stages</field>
-        <field name="res_model">crm.stage</field>
-        <field name="view_id" ref="crm.crm_stage_tree"/>
-        <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            Set a new stage in your opportunity pipeline
+    <recordid="crm_stage_action"model="ir.actions.act_window">
+        <fieldname="name">Stages</field>
+        <fieldname="res_model">crm.stage</field>
+        <fieldname="view_id"ref="crm.crm_stage_tree"/>
+        <fieldname="help"type="html">
+          <pclass="o_view_nocontent_smiling_face">
+            Setanewstageinyouropportunitypipeline
           </p><p>
-            Stages allow salespersons to easily track how a specific opportunity
-            is positioned in the sales cycle.
+            Stagesallowsalespersonstoeasilytrackhowaspecificopportunity
+            ispositionedinthesalescycle.
           </p>
         </field>
     </record>
 
-    <record id="menu_crm_lead_stage_act" model="ir.ui.menu">
-        <field name="action" ref="crm.crm_stage_action"/>
+    <recordid="menu_crm_lead_stage_act"model="ir.ui.menu">
+        <fieldname="action"ref="crm.crm_stage_action"/>
     </record>
 
 </flectra>

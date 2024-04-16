@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'
+classResCompany(models.Model):
+    _inherit='res.company'
 
-    days_to_purchase = fields.Float(
-        string='Days to Purchase',
-        help="Days needed to confirm a PO, define when a PO should be validated")
+    days_to_purchase=fields.Float(
+        string='DaystoPurchase',
+        help="DaysneededtoconfirmaPO,definewhenaPOshouldbevalidated")

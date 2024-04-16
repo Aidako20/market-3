@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class CouponReport(models.AbstractModel):
-    _name = 'report.coupon.report_coupon'
-    _description = 'Sales Coupon Report'
+classCouponReport(models.AbstractModel):
+    _name='report.coupon.report_coupon'
+    _description='SalesCouponReport'
 
     @api.model
-    def _get_report_values(self, docids, data=None):
-        docs = self.env['coupon.coupon'].browse(docids)
-        return {
-            'doc_ids': docs.ids,
-            'doc_model': 'coupon.coupon',
-            'data': data,
-            'docs': docs,
+    def_get_report_values(self,docids,data=None):
+        docs=self.env['coupon.coupon'].browse(docids)
+        return{
+            'doc_ids':docs.ids,
+            'doc_model':'coupon.coupon',
+            'data':data,
+            'docs':docs,
         }

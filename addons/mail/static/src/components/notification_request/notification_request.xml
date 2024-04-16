@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.NotificationRequest" owl="1">
-        <div class="o_NotificationRequest" t-on-click="_onClick">
-            <div class="o_NotificationRequest_sidebar">
-                <div class="o_NotificationRequest_imageContainer o_NotificationRequest_sidebarItem">
-                    <img class="o_NotificationRequest_image rounded-circle" t-att-src="env.messaging.partnerRoot.avatarUrl" alt="Avatar of FlectraBot"/>
+    <tt-name="mail.NotificationRequest"owl="1">
+        <divclass="o_NotificationRequest"t-on-click="_onClick">
+            <divclass="o_NotificationRequest_sidebar">
+                <divclass="o_NotificationRequest_imageContainero_NotificationRequest_sidebarItem">
+                    <imgclass="o_NotificationRequest_imagerounded-circle"t-att-src="env.messaging.partnerRoot.avatarUrl"alt="AvatarofFlectraBot"/>
                     <PartnerImStatusIcon
                         class="o_NotificationRequest_partnerImStatusIcon"
-                        t-att-class="{ 'o-mobile': env.messaging.device.isMobile }"
+                        t-att-class="{'o-mobile':env.messaging.device.isMobile}"
                         partnerLocalId="env.messaging.partnerRoot.localId"
                     />
                 </div>
             </div>
-            <div class="o_NotificationRequest_content">
-                <div class="o_NotificationRequest_header">
-                    <span class="o_NotificationRequest_name" t-att-class="{ 'o-mobile': env.messaging.device.isMobile }">
-                        <t t-esc="getHeaderText()"/>
+            <divclass="o_NotificationRequest_content">
+                <divclass="o_NotificationRequest_header">
+                    <spanclass="o_NotificationRequest_name"t-att-class="{'o-mobile':env.messaging.device.isMobile}">
+                        <tt-esc="getHeaderText()"/>
                     </span>
                 </div>
-                <div class="o_NotificationRequest_core">
-                    <span class="o_NotificationRequest_coreItem o_NotificationRequest_inlineText">
-                        Enable desktop notifications to chat.
+                <divclass="o_NotificationRequest_core">
+                    <spanclass="o_NotificationRequest_coreItemo_NotificationRequest_inlineText">
+                        Enabledesktopnotificationstochat.
                     </span>
                 </div>
             </div>

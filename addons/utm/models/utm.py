@@ -1,80 +1,80 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from random import randint
+fromrandomimportrandint
 
-from flectra import fields, models, api, SUPERUSER_ID
-
-
-class UtmStage(models.Model):
-
-    """Stage for utm campaigns. """
-    _name = 'utm.stage'
-    _description = 'Campaign Stage'
-    _order = 'sequence'
-
-    name = fields.Char(required=True, translate=True)
-    sequence = fields.Integer()
+fromflectraimportfields,models,api,SUPERUSER_ID
 
 
-class UtmMedium(models.Model):
-    # OLD crm.case.channel
-    _name = 'utm.medium'
-    _description = 'UTM Medium'
-    _order = 'name'
+classUtmStage(models.Model):
 
-    name = fields.Char(string='Medium Name', required=True)
-    active = fields.Boolean(default=True)
+    """Stageforutmcampaigns."""
+    _name='utm.stage'
+    _description='CampaignStage'
+    _order='sequence'
+
+    name=fields.Char(required=True,translate=True)
+    sequence=fields.Integer()
 
 
-class UtmCampaign(models.Model):
-    # OLD crm.case.resource.type
-    _name = 'utm.campaign'
-    _description = 'UTM Campaign'
+classUtmMedium(models.Model):
+    #OLDcrm.case.channel
+    _name='utm.medium'
+    _description='UTMMedium'
+    _order='name'
 
-    name = fields.Char(string='Campaign Name', required=True, translate=True)
+    name=fields.Char(string='MediumName',required=True)
+    active=fields.Boolean(default=True)
 
-    user_id = fields.Many2one(
-        'res.users', string='Responsible',
-        required=True, default=lambda self: self.env.uid)
-    stage_id = fields.Many2one('utm.stage', string='Stage', ondelete='restrict', required=True,
-        default=lambda self: self.env['utm.stage'].search([], limit=1),
+
+classUtmCampaign(models.Model):
+    #OLDcrm.case.resource.type
+    _name='utm.campaign'
+    _description='UTMCampaign'
+
+    name=fields.Char(string='CampaignName',required=True,translate=True)
+
+    user_id=fields.Many2one(
+        'res.users',string='Responsible',
+        required=True,default=lambdaself:self.env.uid)
+    stage_id=fields.Many2one('utm.stage',string='Stage',ondelete='restrict',required=True,
+        default=lambdaself:self.env['utm.stage'].search([],limit=1),
         group_expand='_group_expand_stage_ids')
-    tag_ids = fields.Many2many(
-        'utm.tag', 'utm_tag_rel',
-        'tag_id', 'campaign_id', string='Tags')
+    tag_ids=fields.Many2many(
+        'utm.tag','utm_tag_rel',
+        'tag_id','campaign_id',string='Tags')
 
-    is_website = fields.Boolean(default=False, help="Allows us to filter relevant Campaign")
-    color = fields.Integer(string='Color Index')
+    is_website=fields.Boolean(default=False,help="AllowsustofilterrelevantCampaign")
+    color=fields.Integer(string='ColorIndex')
 
     @api.model
-    def _group_expand_stage_ids(self, stages, domain, order):
-        """ Read group customization in order to display all the stages in the
-            kanban view, even if they are empty
+    def_group_expand_stage_ids(self,stages,domain,order):
+        """Readgroupcustomizationinordertodisplayallthestagesinthe
+            kanbanview,eveniftheyareempty
         """
-        stage_ids = stages._search([], order=order, access_rights_uid=SUPERUSER_ID)
-        return stages.browse(stage_ids)
+        stage_ids=stages._search([],order=order,access_rights_uid=SUPERUSER_ID)
+        returnstages.browse(stage_ids)
 
-class UtmSource(models.Model):
-    _name = 'utm.source'
-    _description = 'UTM Source'
+classUtmSource(models.Model):
+    _name='utm.source'
+    _description='UTMSource'
 
-    name = fields.Char(string='Source Name', required=True, translate=True)
+    name=fields.Char(string='SourceName',required=True,translate=True)
 
-class UtmTag(models.Model):
-    """Model of categories of utm campaigns, i.e. marketing, newsletter, ... """
-    _name = 'utm.tag'
-    _description = 'UTM Tag'
-    _order = 'name'
+classUtmTag(models.Model):
+    """Modelofcategoriesofutmcampaigns,i.e.marketing,newsletter,..."""
+    _name='utm.tag'
+    _description='UTMTag'
+    _order='name'
 
-    def _default_color(self):
-        return randint(1, 11)
+    def_default_color(self):
+        returnrandint(1,11)
 
-    name = fields.Char(required=True, translate=True)
-    color = fields.Integer(
-        string='Color Index', default=lambda self: self._default_color(),
-        help='Tag color. No color means no display in kanban to distinguish internal tags from public categorization tags.')
+    name=fields.Char(required=True,translate=True)
+    color=fields.Integer(
+        string='ColorIndex',default=lambdaself:self._default_color(),
+        help='Tagcolor.Nocolormeansnodisplayinkanbantodistinguishinternaltagsfrompubliccategorizationtags.')
 
-    _sql_constraints = [
-        ('name_uniq', 'unique (name)', "Tag name already exists !"),
+    _sql_constraints=[
+        ('name_uniq','unique(name)',"Tagnamealreadyexists!"),
     ]

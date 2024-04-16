@@ -1,54 +1,54 @@
-flectra.define('web.local_storage', function (require) {
-'use strict';
+flectra.define('web.local_storage',function(require){
+'usestrict';
 
-var RamStorage = require('web.RamStorage');
-var mixins = require('web.mixins');
+varRamStorage=require('web.RamStorage');
+varmixins=require('web.mixins');
 
-// use a fake localStorage in RAM if the native localStorage is unavailable
-// (e.g. private browsing in Safari)
-var storage;
-var localStorage = window.localStorage;
-try {
-    var uid = new Date();
-    localStorage.setItem(uid, uid);
+//useafakelocalStorageinRAMifthenativelocalStorageisunavailable
+//(e.g.privatebrowsinginSafari)
+varstorage;
+varlocalStorage=window.localStorage;
+try{
+    varuid=newDate();
+    localStorage.setItem(uid,uid);
     localStorage.removeItem(uid);
 
     /*
-     * We create an intermediate object in order to triggered the storage on
-     * this object. the localStorage. This simplifies testing and usage as 
-     * starages are commutable in services without change. Also, objects
-     * that use storage do not have to know that events go through window,
-     * it's not up to them to handle these cases.
+     *Wecreateanintermediateobjectinordertotriggeredthestorageon
+     *thisobject.thelocalStorage.Thissimplifiestestingandusageas
+     *staragesarecommutableinserviceswithoutchange.Also,objects
+     *thatusestoragedonothavetoknowthateventsgothroughwindow,
+     *it'snotuptothemtohandlethesecases.
      */
-    storage = (function () {
-        var storage = Object.create(_.extend({
-                getItem: localStorage.getItem.bind(localStorage),
-                setItem: localStorage.setItem.bind(localStorage),
-                removeItem: localStorage.removeItem.bind(localStorage),
-                clear: localStorage.clear.bind(localStorage),
+    storage=(function(){
+        varstorage=Object.create(_.extend({
+                getItem:localStorage.getItem.bind(localStorage),
+                setItem:localStorage.setItem.bind(localStorage),
+                removeItem:localStorage.removeItem.bind(localStorage),
+                clear:localStorage.clear.bind(localStorage),
             },
             mixins.EventDispatcherMixin
         ));
         storage.init();
-        $(window).on('storage', function (e) {
-            var key = e.originalEvent.key;
-            var newValue = e.originalEvent.newValue;
-            try {
+        $(window).on('storage',function(e){
+            varkey=e.originalEvent.key;
+            varnewValue=e.originalEvent.newValue;
+            try{
                 JSON.parse(newValue);
-                storage.trigger('storage', {
-                    key: key,
-                    newValue: newValue,
+                storage.trigger('storage',{
+                    key:key,
+                    newValue:newValue,
                 });
-            } catch (error) {}
+            }catch(error){}
         });
-        return storage;
+        returnstorage;
     })();
 
-} catch (exception) {
-	console.warn('Fail to load localStorage');
-    storage = new RamStorage();
+}catch(exception){
+	console.warn('FailtoloadlocalStorage');
+    storage=newRamStorage();
 }
 
-return storage;
+returnstorage;
 
 });

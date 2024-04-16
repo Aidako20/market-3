@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.ThreadView" owl="1">
-        <div class="o_ThreadView" t-att-data-correspondent-id="threadView and threadView.thread and threadView.thread.correspondent and threadView.thread.correspondent.id" t-att-data-thread-local-id="threadView and threadView.thread and threadView.thread.localId">
-            <t t-if="threadView">
-                <t t-if="threadView.isLoading and !threadView.threadCache.isLoaded" name="loadingCondition">
-                    <div class="o_ThreadView_loading">
-                        <span><i class="o_ThreadView_loadingIcon fa fa-spinner fa-spin" title="Loading..." role="img"/>Loading...</span>
+    <tt-name="mail.ThreadView"owl="1">
+        <divclass="o_ThreadView"t-att-data-correspondent-id="threadViewandthreadView.threadandthreadView.thread.correspondentandthreadView.thread.correspondent.id"t-att-data-thread-local-id="threadViewandthreadView.threadandthreadView.thread.localId">
+            <tt-if="threadView">
+                <tt-if="threadView.isLoadingand!threadView.threadCache.isLoaded"name="loadingCondition">
+                    <divclass="o_ThreadView_loading">
+                        <span><iclass="o_ThreadView_loadingIconfafa-spinnerfa-spin"title="Loading..."role="img"/>Loading...</span>
                     </div>
                 </t>
-                <t t-elif="threadView.threadCache.isLoaded or threadView.thread.isTemporary">
+                <tt-elif="threadView.threadCache.isLoadedorthreadView.thread.isTemporary">
                     <MessageList
                         class="o_ThreadView_messageList"
-                        getScrollableElement= "props.getScrollableElement"
+                        getScrollableElement="props.getScrollableElement"
                         hasMessageCheckbox="props.hasMessageCheckbox"
                         hasScrollAdjust="props.hasScrollAdjust"
                         hasSquashCloseMessages="props.hasSquashCloseMessages"
@@ -24,10 +24,10 @@
                         t-ref="messageList"
                     />
                 </t>
-                <t t-elif="props.hasComposer">
-                    <div class="o-autogrow"/>
+                <tt-elif="props.hasComposer">
+                    <divclass="o-autogrow"/>
                 </t>
-                <t t-if="props.hasComposer">
+                <tt-if="props.hasComposer">
                     <Composer
                         class="o_ThreadView_composer"
                         attachmentsDetailsMode="props.composerAttachmentsDetailsMode"
@@ -35,7 +35,7 @@
                         hasCurrentPartnerAvatar="props.hasComposerCurrentPartnerAvatar"
                         hasSendButton="props.hasComposerSendButton"
                         hasThreadTyping="props.hasComposerThreadTyping"
-                        isCompact="(threadView.thread.model === 'mail.channel' and threadView.thread.mass_mailing) ? false : undefined"
+                        isCompact="(threadView.thread.model==='mail.channel'andthreadView.thread.mass_mailing)?false:undefined"
                         isDoFocus="props.isDoFocus"
                         showAttachmentsExtensions="props.showComposerAttachmentsExtensions"
                         showAttachmentsFilenames="props.showComposerAttachmentsFilenames"

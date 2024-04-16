@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="0">
+    <datanoupdate="0">
 
-        <!-- Work Entry Type -->
-        <record id="work_entry_type_attendance" model="hr.work.entry.type">
-            <field name="name">Attendance</field>
-            <field name="color">0</field>
-            <field name="code">WORK100</field>
+        <!--WorkEntryType-->
+        <recordid="work_entry_type_attendance"model="hr.work.entry.type">
+            <fieldname="name">Attendance</field>
+            <fieldname="color">0</field>
+            <fieldname="code">WORK100</field>
         </record>
 
     </data>

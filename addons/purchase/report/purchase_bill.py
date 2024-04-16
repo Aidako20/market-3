@@ -1,64 +1,64 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, tools
-from flectra.osv import expression
-from flectra.tools import formatLang
+fromflectraimportapi,fields,models,tools
+fromflectra.osvimportexpression
+fromflectra.toolsimportformatLang
 
-class PurchaseBillUnion(models.Model):
-    _name = 'purchase.bill.union'
-    _auto = False
-    _description = 'Purchases & Bills Union'
-    _order = "date desc, name desc"
+classPurchaseBillUnion(models.Model):
+    _name='purchase.bill.union'
+    _auto=False
+    _description='Purchases&BillsUnion'
+    _order="datedesc,namedesc"
 
-    name = fields.Char(string='Reference', readonly=True)
-    reference = fields.Char(string='Source', readonly=True)
-    partner_id = fields.Many2one('res.partner', string='Vendor', readonly=True)
-    date = fields.Date(string='Date', readonly=True)
-    amount = fields.Float(string='Amount', readonly=True)
-    currency_id = fields.Many2one('res.currency', string='Currency', readonly=True)
-    company_id = fields.Many2one('res.company', 'Company', readonly=True)
-    vendor_bill_id = fields.Many2one('account.move', string='Vendor Bill', readonly=True)
-    purchase_order_id = fields.Many2one('purchase.order', string='Purchase Order', readonly=True)
+    name=fields.Char(string='Reference',readonly=True)
+    reference=fields.Char(string='Source',readonly=True)
+    partner_id=fields.Many2one('res.partner',string='Vendor',readonly=True)
+    date=fields.Date(string='Date',readonly=True)
+    amount=fields.Float(string='Amount',readonly=True)
+    currency_id=fields.Many2one('res.currency',string='Currency',readonly=True)
+    company_id=fields.Many2one('res.company','Company',readonly=True)
+    vendor_bill_id=fields.Many2one('account.move',string='VendorBill',readonly=True)
+    purchase_order_id=fields.Many2one('purchase.order',string='PurchaseOrder',readonly=True)
 
-    def init(self):
-        tools.drop_view_if_exists(self.env.cr, 'purchase_bill_union')
+    definit(self):
+        tools.drop_view_if_exists(self.env.cr,'purchase_bill_union')
         self.env.cr.execute("""
-            CREATE OR REPLACE VIEW purchase_bill_union AS (
+            CREATEORREPLACEVIEWpurchase_bill_unionAS(
                 SELECT
-                    id, name, ref as reference, partner_id, date, amount_untaxed as amount, currency_id, company_id,
-                    id as vendor_bill_id, NULL as purchase_order_id
-                FROM account_move
+                    id,name,refasreference,partner_id,date,amount_untaxedasamount,currency_id,company_id,
+                    idasvendor_bill_id,NULLaspurchase_order_id
+                FROMaccount_move
                 WHERE
-                    move_type='in_invoice' and state = 'posted'
+                    move_type='in_invoice'andstate='posted'
             UNION
                 SELECT
-                    -id, name, partner_ref as reference, partner_id, date_order::date as date, amount_untaxed as amount, currency_id, company_id,
-                    NULL as vendor_bill_id, id as purchase_order_id
-                FROM purchase_order
+                    -id,name,partner_refasreference,partner_id,date_order::dateasdate,amount_untaxedasamount,currency_id,company_id,
+                    NULLasvendor_bill_id,idaspurchase_order_id
+                FROMpurchase_order
                 WHERE
-                    state in ('purchase', 'done') AND
-                    invoice_status in ('to invoice', 'no')
+                    statein('purchase','done')AND
+                    invoice_statusin('toinvoice','no')
             )""")
 
-    def name_get(self):
-        result = []
-        for doc in self:
-            name = doc.name or ''
-            if doc.reference:
-                name += ' - ' + doc.reference
-            amount = doc.amount
-            if doc.purchase_order_id and doc.purchase_order_id.invoice_status == 'no':
-                amount = 0.0
-            name += ': ' + formatLang(self.env, amount, monetary=True, currency_obj=doc.currency_id)
-            result.append((doc.id, name))
-        return result
+    defname_get(self):
+        result=[]
+        fordocinself:
+            name=doc.nameor''
+            ifdoc.reference:
+                name+='-'+doc.reference
+            amount=doc.amount
+            ifdoc.purchase_order_idanddoc.purchase_order_id.invoice_status=='no':
+                amount=0.0
+            name+=':'+formatLang(self.env,amount,monetary=True,currency_obj=doc.currency_id)
+            result.append((doc.id,name))
+        returnresult
 
     @api.model
-    def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
-        args = args or []
-        domain = []
-        if name:
-            domain = ['|', ('name', operator, name), ('reference', operator, name)]
-        purchase_bills_union_ids = self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
-        return purchase_bills_union_ids
+    def_name_search(self,name,args=None,operator='ilike',limit=100,name_get_uid=None):
+        args=argsor[]
+        domain=[]
+        ifname:
+            domain=['|',('name',operator,name),('reference',operator,name)]
+        purchase_bills_union_ids=self._search(expression.AND([domain,args]),limit=limit,access_rights_uid=name_get_uid)
+        returnpurchase_bills_union_ids

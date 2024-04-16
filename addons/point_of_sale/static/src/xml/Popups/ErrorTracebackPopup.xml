@@ -1,32 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="ErrorTracebackPopup" owl="1">
-        <div role="dialog" class="modal-dialog">
-            <div class="popup popup-error">
-                <header class="title">
-                    <t t-esc="props.title" />
+    <tt-name="ErrorTracebackPopup"owl="1">
+        <divrole="dialog"class="modal-dialog">
+            <divclass="popuppopup-error">
+                <headerclass="title">
+                    <tt-esc="props.title"/>
                 </header>
-                <main class="body traceback">
-                    <t t-esc="props.body" />
+                <mainclass="bodytraceback">
+                    <tt-esc="props.body"/>
                 </main>
-                <footer class="footer">
-                    <div t-if="!props.exitButtonIsShown" class="button cancel" t-on-click="confirm">
-                        <t t-esc="props.confirmText" />
+                <footerclass="footer">
+                    <divt-if="!props.exitButtonIsShown"class="buttoncancel"t-on-click="confirm">
+                        <tt-esc="props.confirmText"/>
                     </div>
-                    <div t-if="props.exitButtonIsShown" class="button cancel" t-on-click="trigger(props.exitButtonTrigger)">
-                        <t t-esc="props.exitButtonText" />
+                    <divt-if="props.exitButtonIsShown"class="buttoncancel"t-on-click="trigger(props.exitButtonTrigger)">
+                        <tt-esc="props.exitButtonText"/>
                     </div>
-                    <a t-att-download="tracebackFilename" t-att-href="tracebackUrl">
-                        <div class="button icon download">
-                            <i class="fa fa-download" role="img"
-                               aria-label="Download error traceback"
-                               title="Download error traceback"></i>
+                    <at-att-download="tracebackFilename"t-att-href="tracebackUrl">
+                        <divclass="buttonicondownload">
+                            <iclass="fafa-download"role="img"
+                               aria-label="Downloaderrortraceback"
+                               title="Downloaderrortraceback"></i>
                         </div>
                     </a>
-                    <div class="button icon email" t-on-click="emailTraceback">
-                        <i class="fa fa-paper-plane" role="img" aria-label="Send by email"
-                           title="Send by email"></i>
+                    <divclass="buttoniconemail"t-on-click="emailTraceback">
+                        <iclass="fafa-paper-plane"role="img"aria-label="Sendbyemail"
+                           title="Sendbyemail"></i>
                     </div>
                 </footer>
             </div>

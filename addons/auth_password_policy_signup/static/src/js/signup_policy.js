@@ -1,23 +1,23 @@
-flectra.define('auth_password_policy_signup.policy', function (require) {
-"use strict";
+flectra.define('auth_password_policy_signup.policy',function(require){
+"usestrict";
 
 require('web.dom_ready');
-var policy = require('auth_password_policy');
-var PasswordMeter = require('auth_password_policy.Meter');
+varpolicy=require('auth_password_policy');
+varPasswordMeter=require('auth_password_policy.Meter');
 
-var $signupForm = $('.oe_signup_form, .oe_reset_password_form');
-if (!$signupForm.length) { return; }
+var$signupForm=$('.oe_signup_form,.oe_reset_password_form');
+if(!$signupForm.length){return;}
 
-// hook in password strength meter
-// * requirement is the password field's minlength
-// * recommendations are from the module
-var $password = $('[type=password][minlength]');
-var minlength = Number($password.attr('minlength'));
-if (isNaN(minlength)) { return; }
+//hookinpasswordstrengthmeter
+//*requirementisthepasswordfield'sminlength
+//*recommendationsarefromthemodule
+var$password=$('[type=password][minlength]');
+varminlength=Number($password.attr('minlength'));
+if(isNaN(minlength)){return;}
 
-var meter = new PasswordMeter(null, new policy.Policy({minlength: minlength}), policy.recommendations);
+varmeter=newPasswordMeter(null,newpolicy.Policy({minlength:minlength}),policy.recommendations);
 meter.insertAfter($password);
-$password.on('input', function () {
+$password.on('input',function(){
     meter.update($password.val());
 });
 });

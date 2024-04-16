@@ -1,192 +1,192 @@
-flectra.define('web.AbstractAction', function (require) {
-"use strict";
+flectra.define('web.AbstractAction',function(require){
+"usestrict";
 
 /**
- * We define here the AbstractAction widget, which implements the ActionMixin.
- * All client actions must extend this widget.
+ *WedefineheretheAbstractActionwidget,whichimplementstheActionMixin.
+ *Allclientactionsmustextendthiswidget.
  *
- * @module web.AbstractAction
+ *@moduleweb.AbstractAction
  */
 
-var ActionMixin = require('web.ActionMixin');
-const ActionModel = require('web/static/src/js/views/action_model.js');
-var ControlPanel = require('web.ControlPanel');
-var Widget = require('web.Widget');
-const { ComponentWrapper } = require('web.OwlCompatibility');
+varActionMixin=require('web.ActionMixin');
+constActionModel=require('web/static/src/js/views/action_model.js');
+varControlPanel=require('web.ControlPanel');
+varWidget=require('web.Widget');
+const{ComponentWrapper}=require('web.OwlCompatibility');
 
-var AbstractAction = Widget.extend(ActionMixin, {
-    config: {
-        ControlPanel: ControlPanel,
+varAbstractAction=Widget.extend(ActionMixin,{
+    config:{
+        ControlPanel:ControlPanel,
     },
 
     /**
-     * If this flag is set to true, the client action will create a control
-     * panel whenever it is created.
+     *Ifthisflagissettotrue,theclientactionwillcreateacontrol
+     *panelwheneveritiscreated.
      *
-     * @type boolean
+     *@typeboolean
      */
-    hasControlPanel: false,
+    hasControlPanel:false,
 
     /**
-     * If true, this flag indicates that the client action should automatically
-     * fetch the <arch> of a search view (or control panel view).  Note that
-     * to do that, it also needs a specific modelName.
+     *Iftrue,thisflagindicatesthattheclientactionshouldautomatically
+     *fetchthe<arch>ofasearchview(orcontrolpanelview). Notethat
+     *todothat,italsoneedsaspecificmodelName.
      *
-     * For example, the Discuss application adds the following line in its
-     * constructor::
+     *Forexample,theDiscussapplicationaddsthefollowinglineinits
+     *constructor::
      *
-     *      this.searchModelConfig.modelName = 'mail.message';
+     *     this.searchModelConfig.modelName='mail.message';
      *
-     * @type boolean
+     *@typeboolean
      */
-    loadControlPanel: false,
+    loadControlPanel:false,
 
     /**
-     * A client action might want to use a search bar in its control panel, or
-     * it could choose not to use it.
+     *Aclientactionmightwanttouseasearchbarinitscontrolpanel,or
+     *itcouldchoosenottouseit.
      *
-     * Note that it only makes sense if hasControlPanel is set to true.
+     *NotethatitonlymakessenseifhasControlPanelissettotrue.
      *
-     * @type boolean
+     *@typeboolean
      */
-    withSearchBar: false,
+    withSearchBar:false,
 
     /**
-     * This parameter can be set to customize the available sub menus in the
-     * controlpanel (Filters/Group By/Favorites).  This is basically a list of
-     * the sub menus that we want to use.
+     *Thisparametercanbesettocustomizetheavailablesubmenusinthe
+     *controlpanel(Filters/GroupBy/Favorites). Thisisbasicallyalistof
+     *thesubmenusthatwewanttouse.
      *
-     * Note that it only makes sense if hasControlPanel is set to true.
+     *NotethatitonlymakessenseifhasControlPanelissettotrue.
      *
-     * For example, set ['filter', 'favorite'] to enable the Filters and
-     * Favorites menus.
+     *Forexample,set['filter','favorite']toenabletheFiltersand
+     *Favoritesmenus.
      *
-     * @type string[]
+     *@typestring[]
      */
-    searchMenuTypes: [],
+    searchMenuTypes:[],
 
     /**
-     * @override
+     *@override
      *
-     * @param {Widget} parent
-     * @param {Object} action
-     * @param {Object} [options]
+     *@param{Widget}parent
+     *@param{Object}action
+     *@param{Object}[options]
      */
-    init: function (parent, action, options) {
+    init:function(parent,action,options){
         this._super(parent);
-        this._title = action.display_name || action.name;
+        this._title=action.display_name||action.name;
 
-        this.searchModelConfig = {
-            context: Object.assign({}, action.context),
-            domain: action.domain || [],
-            env: owl.Component.env,
-            searchMenuTypes: this.searchMenuTypes,
+        this.searchModelConfig={
+            context:Object.assign({},action.context),
+            domain:action.domain||[],
+            env:owl.Component.env,
+            searchMenuTypes:this.searchMenuTypes,
         };
-        this.extensions = {};
-        if (this.hasControlPanel) {
-            this.extensions.ControlPanel = {
-                actionId: action.id,
-                withSearchBar: this.withSearchBar,
+        this.extensions={};
+        if(this.hasControlPanel){
+            this.extensions.ControlPanel={
+                actionId:action.id,
+                withSearchBar:this.withSearchBar,
             };
 
-            this.viewId = action.search_view_id && action.search_view_id[0];
+            this.viewId=action.search_view_id&&action.search_view_id[0];
 
-            this.controlPanelProps = {
+            this.controlPanelProps={
                 action,
-                breadcrumbs: options && options.breadcrumbs,
-                withSearchBar: this.withSearchBar,
-                searchMenuTypes: this.searchMenuTypes,
+                breadcrumbs:options&&options.breadcrumbs,
+                withSearchBar:this.withSearchBar,
+                searchMenuTypes:this.searchMenuTypes,
             };
         }
     },
     /**
-     * The willStart method is actually quite complicated if the client action
-     * has a controlPanel, because it needs to prepare it.
+     *ThewillStartmethodisactuallyquitecomplicatediftheclientaction
+     *hasacontrolPanel,becauseitneedstoprepareit.
      *
-     * @override
+     *@override
      */
-    willStart: async function () {
-        const superPromise = this._super(...arguments);
-        if (this.hasControlPanel) {
-            if (this.loadControlPanel) {
-                const { context, modelName } = this.searchModelConfig;
-                const options = { load_filters: this.searchMenuTypes.includes('favorite') };
-                const { arch, fields, favoriteFilters } = await this.loadFieldView(
+    willStart:asyncfunction(){
+        constsuperPromise=this._super(...arguments);
+        if(this.hasControlPanel){
+            if(this.loadControlPanel){
+                const{context,modelName}=this.searchModelConfig;
+                constoptions={load_filters:this.searchMenuTypes.includes('favorite')};
+                const{arch,fields,favoriteFilters}=awaitthis.loadFieldView(
                     modelName,
-                    context || {},
+                    context||{},
                     this.viewId,
                     'search',
                     options
                 );
-                const archs = { search: arch };
-                const { ControlPanel: controlPanelInfo } = ActionModel.extractArchInfo(archs);
-                Object.assign(this.extensions.ControlPanel, {
-                    archNodes: controlPanelInfo.children,
+                constarchs={search:arch};
+                const{ControlPanel:controlPanelInfo}=ActionModel.extractArchInfo(archs);
+                Object.assign(this.extensions.ControlPanel,{
+                    archNodes:controlPanelInfo.children,
                     favoriteFilters,
                     fields,
                 });
-                this.controlPanelProps.fields = fields;
+                this.controlPanelProps.fields=fields;
             }
         }
-        this.searchModel = new ActionModel(this.extensions, this.searchModelConfig);
-        if (this.hasControlPanel) {
-            this.controlPanelProps.searchModel = this.searchModel;
+        this.searchModel=newActionModel(this.extensions,this.searchModelConfig);
+        if(this.hasControlPanel){
+            this.controlPanelProps.searchModel=this.searchModel;
         }
-        return Promise.all([
+        returnPromise.all([
             superPromise,
             this.searchModel.load(),
         ]);
     },
     /**
-     * @override
+     *@override
      */
-    start: async function () {
-        await this._super(...arguments);
-        if (this.hasControlPanel) {
-            if ('title' in this.controlPanelProps) {
+    start:asyncfunction(){
+        awaitthis._super(...arguments);
+        if(this.hasControlPanel){
+            if('title'inthis.controlPanelProps){
                 this._setTitle(this.controlPanelProps.title);
             }
-            this.controlPanelProps.title = this.getTitle();
-            this._controlPanelWrapper = new ComponentWrapper(this, this.config.ControlPanel, this.controlPanelProps);
-            await this._controlPanelWrapper.mount(this.el, { position: 'first-child' });
+            this.controlPanelProps.title=this.getTitle();
+            this._controlPanelWrapper=newComponentWrapper(this,this.config.ControlPanel,this.controlPanelProps);
+            awaitthis._controlPanelWrapper.mount(this.el,{position:'first-child'});
 
         }
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function() {
-        this._super.apply(this, arguments);
+    destroy:function(){
+        this._super.apply(this,arguments);
         ActionMixin.destroy.call(this);
     },
     /**
-     * @override
+     *@override
      */
-    on_attach_callback: function () {
+    on_attach_callback:function(){
         ActionMixin.on_attach_callback.call(this);
-        this.searchModel.on('search', this, this._onSearch);
-        if (this.hasControlPanel) {
-            this.searchModel.on('get-controller-query-params', this, this._onGetOwnedQueryParams);
+        this.searchModel.on('search',this,this._onSearch);
+        if(this.hasControlPanel){
+            this.searchModel.on('get-controller-query-params',this,this._onGetOwnedQueryParams);
         }
     },
     /**
-     * @override
+     *@override
      */
-    on_detach_callback: function () {
+    on_detach_callback:function(){
         ActionMixin.on_detach_callback.call(this);
-        this.searchModel.off('search', this);
-        if (this.hasControlPanel) {
-            this.searchModel.off('get-controller-query-params', this);
+        this.searchModel.off('search',this);
+        if(this.hasControlPanel){
+            this.searchModel.off('get-controller-query-params',this);
         }
     },
 
     /**
-     * @private
-     * @param {Object} [searchQuery]
+     *@private
+     *@param{Object}[searchQuery]
      */
-    _onSearch: function () {},
+    _onSearch:function(){},
 });
 
-return AbstractAction;
+returnAbstractAction;
 
 });

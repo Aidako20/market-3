@@ -1,51 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="partner_exento" model="res.partner">
-        <field name='name'>(AR) Exento</field>
-        <field name='l10n_ar_afip_responsibility_type_id' ref="res_IVAE"/>
-        <field name='l10n_latam_identification_type_id' ref="l10n_ar.it_cuit"/>
-        <field name='vat'>30999999995</field>
-        <field name="street">Soyexento 123</field>
-        <field name="city">Rosario</field>
-        <field name="country_id" ref="base.ar"/>
-        <field name="state_id" ref="base.state_ar_s"/>
-        <field name="zip">2000</field>
-        <field name="phone">+1 555 123 8069</field>
-        <field name="email">info@exento.example.com</field>
-        <field name="website">www.exento.com</field>
+    <recordid="partner_exento"model="res.partner">
+        <fieldname='name'>(AR)Exento</field>
+        <fieldname='l10n_ar_afip_responsibility_type_id'ref="res_IVAE"/>
+        <fieldname='l10n_latam_identification_type_id'ref="l10n_ar.it_cuit"/>
+        <fieldname='vat'>30999999995</field>
+        <fieldname="street">Soyexento123</field>
+        <fieldname="city">Rosario</field>
+        <fieldname="country_id"ref="base.ar"/>
+        <fieldname="state_id"ref="base.state_ar_s"/>
+        <fieldname="zip">2000</field>
+        <fieldname="phone">+15551238069</field>
+        <fieldname="email">info@exento.example.com</field>
+        <fieldname="website">www.exento.com</field>
     </record>
 
-    <record id="company_exento" model="res.company">
-        <field name='parent_id' ref='base.main_company'/>
-        <field name='currency_id' ref='base.ARS'/>
-        <field name='partner_id' ref='partner_exento'/>
-        <field name='name'>(AR) Exento</field>
-        <field name='l10n_ar_gross_income_type'>exempt</field>
-        <field name="l10n_ar_afip_start_date" eval="time.strftime('%Y-%m')+'-1'"/>
+    <recordid="company_exento"model="res.company">
+        <fieldname='parent_id'ref='base.main_company'/>
+        <fieldname='currency_id'ref='base.ARS'/>
+        <fieldname='partner_id'ref='partner_exento'/>
+        <fieldname='name'>(AR)Exento</field>
+        <fieldname='l10n_ar_gross_income_type'>exempt</field>
+        <fieldname="l10n_ar_afip_start_date"eval="time.strftime('%Y-%m')+'-1'"/>
     </record>
 
-    <function model="res.users" name="write">
-        <value eval="[ref('base.user_root'), ref('base.user_admin'), ref('base.user_demo')]"/>
-        <value eval="{'company_ids': [(4, ref('l10n_ar.company_exento'))]}"/>
+    <functionmodel="res.users"name="write">
+        <valueeval="[ref('base.user_root'),ref('base.user_admin'),ref('base.user_demo')]"/>
+        <valueeval="{'company_ids':[(4,ref('l10n_ar.company_exento'))]}"/>
     </function>
 
-    <function model="account.chart.template" name="try_loading">
-        <value eval="[ref('l10n_ar.l10nar_ex_chart_template')]"/>
-        <value model="res.company" eval="obj().env.ref('l10n_ar.company_exento')"/>
+    <functionmodel="account.chart.template"name="try_loading">
+        <valueeval="[ref('l10n_ar.l10nar_ex_chart_template')]"/>
+        <valuemodel="res.company"eval="obj().env.ref('l10n_ar.company_exento')"/>
     </function>
 
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <record id="sale_expo_journal_exento" model="account.journal">
-            <field name='name'>Expo Sales Journal</field>
-            <field name='company_id' ref="l10n_ar.company_exento"/>
-            <field name='type'>sale</field>
-            <field name='code'>S0002</field>
-            <field name='l10n_latam_use_documents' eval="True"/>
-            <field name='l10n_ar_afip_pos_number'>2</field>
-            <field name='l10n_ar_afip_pos_partner_id' ref="l10n_ar.partner_exento"/>
-            <field name='l10n_ar_afip_pos_system'>FEERCEL</field>
+        <recordid="sale_expo_journal_exento"model="account.journal">
+            <fieldname='name'>ExpoSalesJournal</field>
+            <fieldname='company_id'ref="l10n_ar.company_exento"/>
+            <fieldname='type'>sale</field>
+            <fieldname='code'>S0002</field>
+            <fieldname='l10n_latam_use_documents'eval="True"/>
+            <fieldname='l10n_ar_afip_pos_number'>2</field>
+            <fieldname='l10n_ar_afip_pos_partner_id'ref="l10n_ar.partner_exento"/>
+            <fieldname='l10n_ar_afip_pos_system'>FEERCEL</field>
         </record>
 
     </data>

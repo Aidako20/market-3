@@ -1,53 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra noupdate="1">
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectranoupdate="1">
 
-    <record id="hr_resume_rule_employee" model="ir.rule">
-        <field name="name">Resumé: employee: read all</field>
-        <field name="model_id" ref="model_hr_resume_line"/>
-        <field name="domain_force">[(1, '=', 1)]</field>
-        <field name="perm_create" eval="False"/>
-        <field name="perm_write" eval="False"/>
-        <field name="perm_unlink" eval="False"/>
-        <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+    <recordid="hr_resume_rule_employee"model="ir.rule">
+        <fieldname="name">Resumé:employee:readall</field>
+        <fieldname="model_id"ref="model_hr_resume_line"/>
+        <fieldname="domain_force">[(1,'=',1)]</field>
+        <fieldname="perm_create"eval="False"/>
+        <fieldname="perm_write"eval="False"/>
+        <fieldname="perm_unlink"eval="False"/>
+        <fieldname="groups"eval="[(4,ref('base.group_user'))]"/>
     </record>
 
-    <record id="hr_resume_rule_employee_hr_user" model="ir.rule">
-        <field name="name">Resumé: HR user: all</field>
-        <field name="model_id" ref="model_hr_resume_line"/>
-        <field name="domain_force">[(1, '=', 1)]</field>
-        <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+    <recordid="hr_resume_rule_employee_hr_user"model="ir.rule">
+        <fieldname="name">Resumé:HRuser:all</field>
+        <fieldname="model_id"ref="model_hr_resume_line"/>
+        <fieldname="domain_force">[(1,'=',1)]</field>
+        <fieldname="groups"eval="[(4,ref('hr.group_hr_user'))]"/>
     </record>
 
-    <record id="hr_skills_rule_employee_update" model="ir.rule">
-        <field name="name">Resumé: employee: create/write/unlink own</field>
-        <field name="model_id" ref="model_hr_resume_line"/>
-        <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
-        <field name="perm_read" eval="False"/>
-        <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+    <recordid="hr_skills_rule_employee_update"model="ir.rule">
+        <fieldname="name">Resumé:employee:create/write/unlinkown</field>
+        <fieldname="model_id"ref="model_hr_resume_line"/>
+        <fieldname="domain_force">[('employee_id.user_id','=',user.id)]</field>
+        <fieldname="perm_read"eval="False"/>
+        <fieldname="groups"eval="[(4,ref('base.group_user'))]"/>
     </record>
 
-    <record id="hr_skill_rule_employee" model="ir.rule">
-        <field name="name">Employee skill: employee: read all</field>
-        <field name="model_id" ref="model_hr_employee_skill"/>
-        <field name="domain_force">[(1, '=', 1)]</field>
-        <field name="perm_create" eval="False"/>
-        <field name="perm_write" eval="False"/>
-        <field name="perm_unlink" eval="False"/>
-        <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+    <recordid="hr_skill_rule_employee"model="ir.rule">
+        <fieldname="name">Employeeskill:employee:readall</field>
+        <fieldname="model_id"ref="model_hr_employee_skill"/>
+        <fieldname="domain_force">[(1,'=',1)]</field>
+        <fieldname="perm_create"eval="False"/>
+        <fieldname="perm_write"eval="False"/>
+        <fieldname="perm_unlink"eval="False"/>
+        <fieldname="groups"eval="[(4,ref('base.group_user'))]"/>
     </record>
 
-    <record id="hr_skill_rule_hr_user" model="ir.rule">
-        <field name="name">Employee skill: HR user: read all</field>
-        <field name="model_id" ref="model_hr_employee_skill"/>
-        <field name="domain_force">[(1, '=', 1)]</field>
-        <field name="groups" eval="[(4,ref('hr.group_hr_user'))]"/>
+    <recordid="hr_skill_rule_hr_user"model="ir.rule">
+        <fieldname="name">Employeeskill:HRuser:readall</field>
+        <fieldname="model_id"ref="model_hr_employee_skill"/>
+        <fieldname="domain_force">[(1,'=',1)]</field>
+        <fieldname="groups"eval="[(4,ref('hr.group_hr_user'))]"/>
     </record>
 
-    <record id="hr_skill_rule_employee_update" model="ir.rule">
-        <field name="name">Employee skill: employee: create/write/unlink own</field>
-        <field name="model_id" ref="model_hr_employee_skill"/>
-        <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
-        <field name="perm_read" eval="False"/>
-        <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+    <recordid="hr_skill_rule_employee_update"model="ir.rule">
+        <fieldname="name">Employeeskill:employee:create/write/unlinkown</field>
+        <fieldname="model_id"ref="model_hr_employee_skill"/>
+        <fieldname="domain_force">[('employee_id.user_id','=',user.id)]</field>
+        <fieldname="perm_read"eval="False"/>
+        <fieldname="groups"eval="[(4,ref('base.group_user'))]"/>
     </record>
 </flectra>

@@ -1,107 +1,107 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import ValidationError
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportValidationError
 
 
-class HolidaysType(models.Model):
-    _inherit = "hr.leave.type"
+classHolidaysType(models.Model):
+    _inherit="hr.leave.type"
 
-    def _default_project_id(self):
-        company = self.company_id if self.company_id else self.env.company
-        return company.leave_timesheet_project_id.id
+    def_default_project_id(self):
+        company=self.company_idifself.company_idelseself.env.company
+        returncompany.leave_timesheet_project_id.id
 
-    def _default_task_id(self):
-        company = self.company_id if self.company_id else self.env.company
-        return company.leave_timesheet_task_id.id
+    def_default_task_id(self):
+        company=self.company_idifself.company_idelseself.env.company
+        returncompany.leave_timesheet_task_id.id
 
-    timesheet_generate = fields.Boolean(
-        'Generate Timesheet', compute='_compute_timesheet_generate', store=True, readonly=False,
-        help="If checked, when validating a time off, timesheet will be generated in the Vacation Project of the company.")
-    timesheet_project_id = fields.Many2one('project.project', string="Project", default=_default_project_id, domain="[('company_id', '=', company_id)]", help="The project will contain the timesheet generated when a time off is validated.")
-    timesheet_task_id = fields.Many2one(
-        'project.task', string="Task for timesheet", compute='_compute_timesheet_task_id',
-        store=True, readonly=False, default=_default_task_id,
-        domain="[('project_id', '=', timesheet_project_id),"
-                "('company_id', '=', company_id)]")
+    timesheet_generate=fields.Boolean(
+        'GenerateTimesheet',compute='_compute_timesheet_generate',store=True,readonly=False,
+        help="Ifchecked,whenvalidatingatimeoff,timesheetwillbegeneratedintheVacationProjectofthecompany.")
+    timesheet_project_id=fields.Many2one('project.project',string="Project",default=_default_project_id,domain="[('company_id','=',company_id)]",help="Theprojectwillcontainthetimesheetgeneratedwhenatimeoffisvalidated.")
+    timesheet_task_id=fields.Many2one(
+        'project.task',string="Taskfortimesheet",compute='_compute_timesheet_task_id',
+        store=True,readonly=False,default=_default_task_id,
+        domain="[('project_id','=',timesheet_project_id),"
+                "('company_id','=',company_id)]")
 
-    @api.depends('timesheet_task_id', 'timesheet_project_id')
-    def _compute_timesheet_generate(self):
-        for leave_type in self:
-            leave_type.timesheet_generate = leave_type.timesheet_task_id and leave_type.timesheet_project_id
+    @api.depends('timesheet_task_id','timesheet_project_id')
+    def_compute_timesheet_generate(self):
+        forleave_typeinself:
+            leave_type.timesheet_generate=leave_type.timesheet_task_idandleave_type.timesheet_project_id
 
     @api.depends('timesheet_project_id')
-    def _compute_timesheet_task_id(self):
-        for leave_type in self:
-            company = leave_type.company_id if leave_type.company_id else self.env.company
-            default_task_id = company.leave_timesheet_task_id
+    def_compute_timesheet_task_id(self):
+        forleave_typeinself:
+            company=leave_type.company_idifleave_type.company_idelseself.env.company
+            default_task_id=company.leave_timesheet_task_id
 
-            if default_task_id and default_task_id.project_id == leave_type.timesheet_project_id:
-                leave_type.timesheet_task_id = default_task_id
+            ifdefault_task_idanddefault_task_id.project_id==leave_type.timesheet_project_id:
+                leave_type.timesheet_task_id=default_task_id
             else:
-                leave_type.timesheet_task_id = False
+                leave_type.timesheet_task_id=False
 
-    @api.constrains('timesheet_generate', 'timesheet_project_id', 'timesheet_task_id')
-    def _check_timesheet_generate(self):
-        for holiday_status in self:
-            if holiday_status.timesheet_generate:
-                if not holiday_status.timesheet_project_id or not holiday_status.timesheet_task_id:
-                    raise ValidationError(_("Both the internal project and task are required to "
-                    "generate a timesheet for the time off %s. If you don't want a timesheet, you should "
-                    "leave the internal project and task empty.") % (holiday_status.name))
+    @api.constrains('timesheet_generate','timesheet_project_id','timesheet_task_id')
+    def_check_timesheet_generate(self):
+        forholiday_statusinself:
+            ifholiday_status.timesheet_generate:
+                ifnotholiday_status.timesheet_project_idornotholiday_status.timesheet_task_id:
+                    raiseValidationError(_("Boththeinternalprojectandtaskarerequiredto"
+                    "generateatimesheetforthetimeoff%s.Ifyoudon'twantatimesheet,youshould"
+                    "leavetheinternalprojectandtaskempty.")%(holiday_status.name))
 
 
-class Holidays(models.Model):
-    _inherit = "hr.leave"
+classHolidays(models.Model):
+    _inherit="hr.leave"
 
-    timesheet_ids = fields.One2many('account.analytic.line', 'holiday_id', string="Analytic Lines")
+    timesheet_ids=fields.One2many('account.analytic.line','holiday_id',string="AnalyticLines")
 
-    def _validate_leave_request(self):
-        """ Timesheet will be generated on leave validation only if a timesheet_project_id and a
-            timesheet_task_id are set on the corresponding leave type. The generated timesheet will
-            be attached to this project/task.
+    def_validate_leave_request(self):
+        """Timesheetwillbegeneratedonleavevalidationonlyifatimesheet_project_idanda
+            timesheet_task_idaresetonthecorrespondingleavetype.Thegeneratedtimesheetwill
+            beattachedtothisproject/task.
         """
-        # create the timesheet on the vacation project
-        for holiday in self.filtered(
-                lambda request: request.holiday_type == 'employee' and
-                                request.holiday_status_id.timesheet_project_id and
+        #createthetimesheetonthevacationproject
+        forholidayinself.filtered(
+                lambdarequest:request.holiday_type=='employee'and
+                                request.holiday_status_id.timesheet_project_idand
                                 request.holiday_status_id.timesheet_task_id):
             holiday._timesheet_create_lines()
 
-        return super(Holidays, self)._validate_leave_request()
+        returnsuper(Holidays,self)._validate_leave_request()
 
-    def _timesheet_create_lines(self):
+    def_timesheet_create_lines(self):
         self.ensure_one()
-        vals_list = []
-        work_hours_data = self.employee_id.list_work_time_per_day(
+        vals_list=[]
+        work_hours_data=self.employee_id.list_work_time_per_day(
             self.date_from,
             self.date_to,
         )
-        for index, (day_date, work_hours_count) in enumerate(work_hours_data):
-            vals_list.append(self._timesheet_prepare_line_values(index, work_hours_data, day_date, work_hours_count))
-        timesheets = self.env['account.analytic.line'].sudo().create(vals_list)
-        return timesheets
+        forindex,(day_date,work_hours_count)inenumerate(work_hours_data):
+            vals_list.append(self._timesheet_prepare_line_values(index,work_hours_data,day_date,work_hours_count))
+        timesheets=self.env['account.analytic.line'].sudo().create(vals_list)
+        returntimesheets
 
-    def _timesheet_prepare_line_values(self, index, work_hours_data, day_date, work_hours_count):
+    def_timesheet_prepare_line_values(self,index,work_hours_data,day_date,work_hours_count):
         self.ensure_one()
-        return {
-            'name': "%s (%s/%s)" % (self.holiday_status_id.name or '', index + 1, len(work_hours_data)),
-            'project_id': self.holiday_status_id.timesheet_project_id.id,
-            'task_id': self.holiday_status_id.timesheet_task_id.id,
-            'account_id': self.holiday_status_id.timesheet_project_id.analytic_account_id.id,
-            'unit_amount': work_hours_count,
-            'user_id': self.employee_id.user_id.id,
-            'date': day_date,
-            'holiday_id': self.id,
-            'employee_id': self.employee_id.id,
-            'company_id': self.holiday_status_id.timesheet_task_id.company_id.id or self.holiday_status_id.timesheet_project_id.company_id.id,
+        return{
+            'name':"%s(%s/%s)"%(self.holiday_status_id.nameor'',index+1,len(work_hours_data)),
+            'project_id':self.holiday_status_id.timesheet_project_id.id,
+            'task_id':self.holiday_status_id.timesheet_task_id.id,
+            'account_id':self.holiday_status_id.timesheet_project_id.analytic_account_id.id,
+            'unit_amount':work_hours_count,
+            'user_id':self.employee_id.user_id.id,
+            'date':day_date,
+            'holiday_id':self.id,
+            'employee_id':self.employee_id.id,
+            'company_id':self.holiday_status_id.timesheet_task_id.company_id.idorself.holiday_status_id.timesheet_project_id.company_id.id,
         }
 
-    def action_refuse(self):
-        """ Remove the timesheets linked to the refused holidays """
-        result = super(Holidays, self).action_refuse()
-        timesheets = self.sudo().mapped('timesheet_ids')
-        timesheets.write({'holiday_id': False})
+    defaction_refuse(self):
+        """Removethetimesheetslinkedtotherefusedholidays"""
+        result=super(Holidays,self).action_refuse()
+        timesheets=self.sudo().mapped('timesheet_ids')
+        timesheets.write({'holiday_id':False})
         timesheets.unlink()
-        return result
+        returnresult

@@ -1,13 +1,13 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
 
-    <record id="view_crm_meeting_search" model="ir.ui.view">
-        <field name="name">calendar.event.form.inherit</field>
-        <field name="model">calendar.event</field>
-        <field name="inherit_id" ref="calendar.view_calendar_event_search"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='user_id']" position="after">
-                <field name="opportunity_id"/>
+    <recordid="view_crm_meeting_search"model="ir.ui.view">
+        <fieldname="name">calendar.event.form.inherit</field>
+        <fieldname="model">calendar.event</field>
+        <fieldname="inherit_id"ref="calendar.view_calendar_event_search"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='user_id']"position="after">
+                <fieldname="opportunity_id"/>
             </xpath>
         </field>
     </record>

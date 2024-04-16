@@ -1,109 +1,109 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from psycopg2 import sql
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+frompsycopg2importsql
 
-from flectra import tools
-from flectra import api, fields, models
+fromflectraimporttools
+fromflectraimportapi,fields,models
 
 
-class FleetReport(models.Model):
-    _name = "fleet.vehicle.cost.report"
-    _description = "Fleet Analysis Report"
-    _auto = False
-    _order = 'date_start desc'
+classFleetReport(models.Model):
+    _name="fleet.vehicle.cost.report"
+    _description="FleetAnalysisReport"
+    _auto=False
+    _order='date_startdesc'
 
-    company_id = fields.Many2one('res.company', 'Company', readonly=True)
-    vehicle_id = fields.Many2one('fleet.vehicle', 'Vehicle', readonly=True)
-    name = fields.Char('Vehicle Name', readonly=True)
-    driver_id = fields.Many2one('res.partner', 'Driver', readonly=True)
-    fuel_type = fields.Char('Fuel', readonly=True)
-    date_start = fields.Date('Date', readonly=True)
+    company_id=fields.Many2one('res.company','Company',readonly=True)
+    vehicle_id=fields.Many2one('fleet.vehicle','Vehicle',readonly=True)
+    name=fields.Char('VehicleName',readonly=True)
+    driver_id=fields.Many2one('res.partner','Driver',readonly=True)
+    fuel_type=fields.Char('Fuel',readonly=True)
+    date_start=fields.Date('Date',readonly=True)
 
-    cost = fields.Float('Cost', readonly=True)
-    cost_type = fields.Selection(string='Cost Type', selection=[
-        ('contract', 'Contract'),
-        ('service', 'Service')
-    ], readonly=True)
+    cost=fields.Float('Cost',readonly=True)
+    cost_type=fields.Selection(string='CostType',selection=[
+        ('contract','Contract'),
+        ('service','Service')
+    ],readonly=True)
 
-    def init(self):
-        query = """
-WITH service_costs AS (
+    definit(self):
+        query="""
+WITHservice_costsAS(
     SELECT
-        ve.id AS vehicle_id,
-        ve.company_id AS company_id,
-        ve.name AS name,
-        ve.driver_id AS driver_id,
-        ve.fuel_type AS fuel_type,
-        date(date_trunc('month', d)) AS date_start,
-        COALESCE(sum(se.amount), 0) AS
+        ve.idASvehicle_id,
+        ve.company_idAScompany_id,
+        ve.nameASname,
+        ve.driver_idASdriver_id,
+        ve.fuel_typeASfuel_type,
+        date(date_trunc('month',d))ASdate_start,
+        COALESCE(sum(se.amount),0)AS
         COST,
-        'service' AS cost_type
+        'service'AScost_type
     FROM
-        fleet_vehicle ve
-    CROSS JOIN generate_series((
+        fleet_vehicleve
+    CROSSJOINgenerate_series((
             SELECT
                 min(date)
-                FROM fleet_vehicle_log_services), CURRENT_DATE + '1 month'::interval, '1 month') d
-        LEFT JOIN fleet_vehicle_log_services se ON se.vehicle_id = ve.id
-            AND date_trunc('month', se.date) = date_trunc('month', d)
+                FROMfleet_vehicle_log_services),CURRENT_DATE+'1month'::interval,'1month')d
+        LEFTJOINfleet_vehicle_log_servicesseONse.vehicle_id=ve.id
+            ANDdate_trunc('month',se.date)=date_trunc('month',d)
     WHERE
-        ve.active AND se.active AND se.state != 'cancelled'
-    GROUP BY
+        ve.activeANDse.activeANDse.state!='cancelled'
+    GROUPBY
         ve.id,
         ve.company_id,
         ve.name,
         date_start,
         d
-    ORDER BY
+    ORDERBY
         ve.id,
         date_start
 ),
-contract_costs AS (
+contract_costsAS(
     SELECT
-        ve.id AS vehicle_id,
-        ve.company_id AS company_id,
-        ve.name AS name,
-        ve.driver_id AS driver_id,
-        ve.fuel_type AS fuel_type,
-        date(date_trunc('month', d)) AS date_start,
-        (COALESCE(sum(co.amount), 0) + COALESCE(sum(cod.cost_generated * extract(day FROM least (date_trunc('month', d) + interval '1 month', cod.expiration_date) - greatest (date_trunc('month', d), cod.start_date))), 0) + COALESCE(sum(com.cost_generated), 0) + COALESCE(sum(coy.cost_generated), 0)) AS
+        ve.idASvehicle_id,
+        ve.company_idAScompany_id,
+        ve.nameASname,
+        ve.driver_idASdriver_id,
+        ve.fuel_typeASfuel_type,
+        date(date_trunc('month',d))ASdate_start,
+        (COALESCE(sum(co.amount),0)+COALESCE(sum(cod.cost_generated*extract(dayFROMleast(date_trunc('month',d)+interval'1month',cod.expiration_date)-greatest(date_trunc('month',d),cod.start_date))),0)+COALESCE(sum(com.cost_generated),0)+COALESCE(sum(coy.cost_generated),0))AS
         COST,
-        'contract' AS cost_type
+        'contract'AScost_type
     FROM
-        fleet_vehicle ve
-    CROSS JOIN generate_series((
+        fleet_vehicleve
+    CROSSJOINgenerate_series((
             SELECT
                 min(acquisition_date)
-                FROM fleet_vehicle), CURRENT_DATE + '1 month'::interval, '1 month') d
-        LEFT JOIN fleet_vehicle_log_contract co ON co.vehicle_id = ve.id
-            AND date_trunc('month', co.date) = date_trunc('month', d)
-        LEFT JOIN fleet_vehicle_log_contract cod ON cod.vehicle_id = ve.id
-            AND date_trunc('month', cod.start_date) <= date_trunc('month', d)
-            AND date_trunc('month', cod.expiration_date) >= date_trunc('month', d)
-            AND cod.cost_frequency = 'daily'
-    LEFT JOIN fleet_vehicle_log_contract com ON com.vehicle_id = ve.id
-        AND date_trunc('month', com.start_date) <= date_trunc('month', d)
-        AND date_trunc('month', com.expiration_date) >= date_trunc('month', d)
-        AND com.cost_frequency = 'monthly'
-    LEFT JOIN fleet_vehicle_log_contract coy ON coy.vehicle_id = ve.id
-        AND date_trunc('month', coy.date) = date_trunc('month', d)
-        AND date_trunc('month', coy.start_date) <= date_trunc('month', d)
-        AND date_trunc('month', coy.expiration_date) >= date_trunc('month', d)
-        AND coy.cost_frequency = 'yearly'
+                FROMfleet_vehicle),CURRENT_DATE+'1month'::interval,'1month')d
+        LEFTJOINfleet_vehicle_log_contractcoONco.vehicle_id=ve.id
+            ANDdate_trunc('month',co.date)=date_trunc('month',d)
+        LEFTJOINfleet_vehicle_log_contractcodONcod.vehicle_id=ve.id
+            ANDdate_trunc('month',cod.start_date)<=date_trunc('month',d)
+            ANDdate_trunc('month',cod.expiration_date)>=date_trunc('month',d)
+            ANDcod.cost_frequency='daily'
+    LEFTJOINfleet_vehicle_log_contractcomONcom.vehicle_id=ve.id
+        ANDdate_trunc('month',com.start_date)<=date_trunc('month',d)
+        ANDdate_trunc('month',com.expiration_date)>=date_trunc('month',d)
+        ANDcom.cost_frequency='monthly'
+    LEFTJOINfleet_vehicle_log_contractcoyONcoy.vehicle_id=ve.id
+        ANDdate_trunc('month',coy.date)=date_trunc('month',d)
+        ANDdate_trunc('month',coy.start_date)<=date_trunc('month',d)
+        ANDdate_trunc('month',coy.expiration_date)>=date_trunc('month',d)
+        ANDcoy.cost_frequency='yearly'
 WHERE
     ve.active
-GROUP BY
+GROUPBY
     ve.id,
     ve.company_id,
     ve.name,
     date_start,
     d
-ORDER BY
+ORDERBY
     ve.id,
     date_start
 )
 SELECT
-    vehicle_id AS id,
+    vehicle_idASid,
     company_id,
     vehicle_id,
     name,
@@ -111,12 +111,12 @@ SELECT
     fuel_type,
     date_start,
     COST,
-    'service' as cost_type
+    'service'ascost_type
 FROM
-    service_costs sc
-UNION ALL (
+    service_costssc
+UNIONALL(
     SELECT
-        vehicle_id AS id,
+        vehicle_idASid,
         company_id,
         vehicle_id,
         name,
@@ -124,13 +124,13 @@ UNION ALL (
         fuel_type,
         date_start,
         COST,
-        'contract' as cost_type
+        'contract'ascost_type
     FROM
-        contract_costs cc)
+        contract_costscc)
 """
-        tools.drop_view_if_exists(self.env.cr, self._table)
+        tools.drop_view_if_exists(self.env.cr,self._table)
         self.env.cr.execute(
-            sql.SQL("""CREATE or REPLACE VIEW {} as ({})""").format(
+            sql.SQL("""CREATEorREPLACEVIEW{}as({})""").format(
                 sql.Identifier(self._table),
                 sql.SQL(query)
             ))

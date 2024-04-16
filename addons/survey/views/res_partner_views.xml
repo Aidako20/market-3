@@ -1,36 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra><data>
 
-    <record id="res_partner_action_certifications" model="ir.actions.act_window">
-        <field name="name">Certifications Succeeded</field>
-        <field name="res_model">survey.user_input</field>
-        <field name="view_mode">tree</field>
-        <field name="context">{'search_default_scoring_success': 1}</field>
+    <recordid="res_partner_action_certifications"model="ir.actions.act_window">
+        <fieldname="name">CertificationsSucceeded</field>
+        <fieldname="res_model">survey.user_input</field>
+        <fieldname="view_mode">tree</field>
+        <fieldname="context">{'search_default_scoring_success':1}</field>
     </record>
 
-    <record id="res_partner_view_form" model="ir.ui.view">
-        <field name="name">res.partner.view.form.inherit.survey</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="groups_id" eval="[(4, ref('survey.group_survey_user'))]"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <button class="oe_stat_button" type="object"
-                    icon="fa-trophy" name="action_view_certifications"
-                    attrs="{'invisible': ['|', ('certifications_count', '=', 0), ('is_company', '=', True)]}">
-                    <div class="o_field_widget o_stat_info">
-                        <span class="o_stat_value"><field name="certifications_count" /></span>
-                        <span class="o_stat_text" attrs="{'invisible': [('certifications_count', '&lt;', 2)]}">Certifications</span>
-                        <span class="o_stat_text" attrs="{'invisible': [('certifications_count', '&gt;', 1)]}">Certification</span>
+    <recordid="res_partner_view_form"model="ir.ui.view">
+        <fieldname="name">res.partner.view.form.inherit.survey</field>
+        <fieldname="model">res.partner</field>
+        <fieldname="inherit_id"ref="base.view_partner_form"/>
+        <fieldname="groups_id"eval="[(4,ref('survey.group_survey_user'))]"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[@name='button_box']"position="inside">
+                <buttonclass="oe_stat_button"type="object"
+                    icon="fa-trophy"name="action_view_certifications"
+                    attrs="{'invisible':['|',('certifications_count','=',0),('is_company','=',True)]}">
+                    <divclass="o_field_widgeto_stat_info">
+                        <spanclass="o_stat_value"><fieldname="certifications_count"/></span>
+                        <spanclass="o_stat_text"attrs="{'invisible':[('certifications_count','&lt;',2)]}">Certifications</span>
+                        <spanclass="o_stat_text"attrs="{'invisible':[('certifications_count','&gt;',1)]}">Certification</span>
                     </div>
                 </button>
-                <button class="oe_stat_button" type="object"
-                    icon="fa-trophy" name="action_view_certifications"
-                    attrs="{'invisible': ['|', ('certifications_company_count', '=', 0), ('is_company', '=', False)]}">
-                    <div class="o_field_widget o_stat_info">
-                        <span class="o_stat_value"><field name="certifications_company_count" /></span>
-                        <span class="o_stat_text" attrs="{'invisible': [('certifications_company_count', '&lt;', 2)]}">Certifications</span>
-                        <span class="o_stat_text" attrs="{'invisible': [('certifications_company_count', '&gt;', 1)]}">Certification</span>
+                <buttonclass="oe_stat_button"type="object"
+                    icon="fa-trophy"name="action_view_certifications"
+                    attrs="{'invisible':['|',('certifications_company_count','=',0),('is_company','=',False)]}">
+                    <divclass="o_field_widgeto_stat_info">
+                        <spanclass="o_stat_value"><fieldname="certifications_company_count"/></span>
+                        <spanclass="o_stat_text"attrs="{'invisible':[('certifications_company_count','&lt;',2)]}">Certifications</span>
+                        <spanclass="o_stat_text"attrs="{'invisible':[('certifications_company_count','&gt;',1)]}">Certification</span>
                     </div>
                 </button>
             </xpath>

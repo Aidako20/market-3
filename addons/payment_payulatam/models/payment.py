@@ -1,159 +1,159 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import decimal
-import logging
-import uuid
+importdecimal
+importlogging
+importuuid
 
-from hashlib import md5
-from werkzeug import urls
+fromhashlibimportmd5
+fromwerkzeugimporturls
 
-from flectra import api, fields, models, _
-from flectra.addons.payment.models.payment_acquirer import ValidationError
-from flectra.tools.float_utils import float_compare, float_round, float_split
-
-
-_logger = logging.getLogger(__name__)
+fromflectraimportapi,fields,models,_
+fromflectra.addons.payment.models.payment_acquirerimportValidationError
+fromflectra.tools.float_utilsimportfloat_compare,float_round,float_split
 
 
-class PaymentAcquirerPayulatam(models.Model):
-    _inherit = 'payment.acquirer'
+_logger=logging.getLogger(__name__)
 
-    provider = fields.Selection(selection_add=[
-        ('payulatam', 'PayU Latam')
-    ], ondelete={'payulatam': 'set default'})
-    payulatam_merchant_id = fields.Char(string="PayU Latam Merchant ID", required_if_provider='payulatam', groups='base.group_user')
-    payulatam_account_id = fields.Char(string="PayU Latam Account ID", required_if_provider='payulatam', groups='base.group_user')
-    payulatam_api_key = fields.Char(string="PayU Latam API Key", required_if_provider='payulatam', groups='base.group_user')
 
-    def _get_payulatam_urls(self, environment):
-        """ PayUlatam URLs"""
-        if environment == 'prod':
-            return 'https://checkout.payulatam.com/ppp-web-gateway-payu/'
-        return 'https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/'
+classPaymentAcquirerPayulatam(models.Model):
+    _inherit='payment.acquirer'
 
-    def _payulatam_generate_sign(self, inout, values):
-        if inout not in ('in', 'out'):
-            raise Exception("Type must be 'in' or 'out'")
+    provider=fields.Selection(selection_add=[
+        ('payulatam','PayULatam')
+    ],ondelete={'payulatam':'setdefault'})
+    payulatam_merchant_id=fields.Char(string="PayULatamMerchantID",required_if_provider='payulatam',groups='base.group_user')
+    payulatam_account_id=fields.Char(string="PayULatamAccountID",required_if_provider='payulatam',groups='base.group_user')
+    payulatam_api_key=fields.Char(string="PayULatamAPIKey",required_if_provider='payulatam',groups='base.group_user')
 
-        if inout == 'in':
-            data_string = ('~').join((self.payulatam_api_key, self.payulatam_merchant_id, values['referenceCode'],
-                                      str(values['amount']), values['currency']))
+    def_get_payulatam_urls(self,environment):
+        """PayUlatamURLs"""
+        ifenvironment=='prod':
+            return'https://checkout.payulatam.com/ppp-web-gateway-payu/'
+        return'https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/'
+
+    def_payulatam_generate_sign(self,inout,values):
+        ifinoutnotin('in','out'):
+            raiseException("Typemustbe'in'or'out'")
+
+        ifinout=='in':
+            data_string=('~').join((self.payulatam_api_key,self.payulatam_merchant_id,values['referenceCode'],
+                                      str(values['amount']),values['currency']))
         else:
-            # "Confirmation" and "Response" pages have a different way to calculate what they call the `new_value`
-            if self.env.context.get('payulatam_is_confirmation_page'):
-                # https://developers.payulatam.com/latam/en/docs/integrations/webcheckout-integration/confirmation-page.html#signature-validation
-                # For confirmation page, PayU Latam round to the first digit if the second one is a zero
-                # to generate their signature.
-                # e.g:
-                #  150.00 -> 150.0
-                #  150.26 -> 150.26
-                # This happens to be Python 3's default behavior when casting to `float`.
-                new_value = "%d.%d" % float_split(float(values.get('TX_VALUE')), 2)
+            #"Confirmation"and"Response"pageshaveadifferentwaytocalculatewhattheycallthe`new_value`
+            ifself.env.context.get('payulatam_is_confirmation_page'):
+                #https://developers.payulatam.com/latam/en/docs/integrations/webcheckout-integration/confirmation-page.html#signature-validation
+                #Forconfirmationpage,PayULatamroundtothefirstdigitifthesecondoneisazero
+                #togeneratetheirsignature.
+                #e.g:
+                # 150.00->150.0
+                # 150.26->150.26
+                #ThishappenstobePython3'sdefaultbehaviorwhencastingto`float`.
+                new_value="%d.%d"%float_split(float(values.get('TX_VALUE')),2)
             else:
-                # https://developers.payulatam.com/latam/en/docs/integrations/webcheckout-integration/response-page.html#signature-validation
-                # PayU Latam use the "Round half to even" rounding method to generate their signature.
-                new_value = decimal.Decimal(values.get('TX_VALUE')).quantize(
-                    decimal.Decimal('0.1'), decimal.ROUND_HALF_EVEN)
-            data_string = ('~').join((self.payulatam_api_key, self.payulatam_merchant_id, values['referenceCode'],
-                                      str(new_value), values['currency'], values.get('transactionState')))
-        return md5(data_string.encode('utf-8')).hexdigest()
+                #https://developers.payulatam.com/latam/en/docs/integrations/webcheckout-integration/response-page.html#signature-validation
+                #PayULatamusethe"Roundhalftoeven"roundingmethodtogeneratetheirsignature.
+                new_value=decimal.Decimal(values.get('TX_VALUE')).quantize(
+                    decimal.Decimal('0.1'),decimal.ROUND_HALF_EVEN)
+            data_string=('~').join((self.payulatam_api_key,self.payulatam_merchant_id,values['referenceCode'],
+                                      str(new_value),values['currency'],values.get('transactionState')))
+        returnmd5(data_string.encode('utf-8')).hexdigest()
 
-    def payulatam_form_generate_values(self, values):
-        tx = self.env['payment.transaction'].search([('reference', '=', values.get('reference'))])
-        # payulatam will not allow any payment twise even if payment was failed last time.
-        # so, replace reference code if payment is not done or pending.
-        if tx.state not in ['done', 'pending']:
-            tx.reference = str(uuid.uuid4())
-        payulatam_values = dict(
+    defpayulatam_form_generate_values(self,values):
+        tx=self.env['payment.transaction'].search([('reference','=',values.get('reference'))])
+        #payulatamwillnotallowanypaymenttwiseevenifpaymentwasfailedlasttime.
+        #so,replacereferencecodeifpaymentisnotdoneorpending.
+        iftx.statenotin['done','pending']:
+            tx.reference=str(uuid.uuid4())
+        payulatam_values=dict(
             values,
             merchantId=self.payulatam_merchant_id,
             accountId=self.payulatam_account_id,
             description=values.get('reference'),
             referenceCode=tx.reference,
-            amount=float_round(values['amount'], 2),
-            tax='0',  # This is the transaction VAT. If VAT zero is sent the system, 19% will be applied automatically. It can contain two decimals. Eg 19000.00. In the where you do not charge VAT, it should should be set as 0.
+            amount=float_round(values['amount'],2),
+            tax='0', #ThisisthetransactionVAT.IfVATzeroissentthesystem,19%willbeappliedautomatically.Itcancontaintwodecimals.Eg19000.00.InthewhereyoudonotchargeVAT,itshouldshouldbesetas0.
             taxReturnBase='0',
             currency=values['currency'].name,
             buyerEmail=values['partner_email'],
-            responseUrl=urls.url_join(self.get_base_url(), '/payment/payulatam/response'),
-            confirmationUrl=urls.url_join(self.get_base_url(), '/payment/payulatam/webhook'),
+            responseUrl=urls.url_join(self.get_base_url(),'/payment/payulatam/response'),
+            confirmationUrl=urls.url_join(self.get_base_url(),'/payment/payulatam/webhook'),
         )
-        payulatam_values['signature'] = self._payulatam_generate_sign("in", payulatam_values)
-        return payulatam_values
+        payulatam_values['signature']=self._payulatam_generate_sign("in",payulatam_values)
+        returnpayulatam_values
 
-    def payulatam_get_form_action_url(self):
+    defpayulatam_get_form_action_url(self):
         self.ensure_one()
-        environment = 'prod' if self.state == 'enabled' else 'test'
-        return self._get_payulatam_urls(environment)
+        environment='prod'ifself.state=='enabled'else'test'
+        returnself._get_payulatam_urls(environment)
 
 
-class PaymentTransactionPayulatam(models.Model):
-    _inherit = 'payment.transaction'
+classPaymentTransactionPayulatam(models.Model):
+    _inherit='payment.transaction'
 
     @api.model
-    def _payulatam_form_get_tx_from_data(self, data):
-        """ Given a data dict coming from payulatam, verify it and find the related
-        transaction record. """
-        reference, txnid, sign = data.get('referenceCode'), data.get('transactionId'), data.get('signature')
-        if not reference or not txnid or not sign:
-            raise ValidationError(_('PayU Latam: received data with missing reference (%s) or transaction id (%s) or sign (%s)') % (reference, txnid, sign))
+    def_payulatam_form_get_tx_from_data(self,data):
+        """Givenadatadictcomingfrompayulatam,verifyitandfindtherelated
+        transactionrecord."""
+        reference,txnid,sign=data.get('referenceCode'),data.get('transactionId'),data.get('signature')
+        ifnotreferenceornottxnidornotsign:
+            raiseValidationError(_('PayULatam:receiveddatawithmissingreference(%s)ortransactionid(%s)orsign(%s)')%(reference,txnid,sign))
 
-        transaction = self.search([('reference', '=', reference)])
+        transaction=self.search([('reference','=',reference)])
 
-        if not transaction:
-            error_msg = (_('PayU Latam: received data for reference %s; no order found') % (reference))
-            raise ValidationError(error_msg)
-        elif len(transaction) > 1:
-            error_msg = (_('PayU Latam: received data for reference %s; multiple orders found') % (reference))
-            raise ValidationError(error_msg)
+        ifnottransaction:
+            error_msg=(_('PayULatam:receiveddataforreference%s;noorderfound')%(reference))
+            raiseValidationError(error_msg)
+        eliflen(transaction)>1:
+            error_msg=(_('PayULatam:receiveddataforreference%s;multipleordersfound')%(reference))
+            raiseValidationError(error_msg)
 
-        # verify shasign
-        sign_check = transaction.acquirer_id._payulatam_generate_sign('out', data)
-        if sign_check.upper() != sign.upper():
-            raise ValidationError(('PayU Latam: invalid sign, received %s, computed %s, for data %s') % (sign, sign_check, data))
-        return transaction
+        #verifyshasign
+        sign_check=transaction.acquirer_id._payulatam_generate_sign('out',data)
+        ifsign_check.upper()!=sign.upper():
+            raiseValidationError(('PayULatam:invalidsign,received%s,computed%s,fordata%s')%(sign,sign_check,data))
+        returntransaction
 
-    def _payulatam_form_get_invalid_parameters(self, data):
-        invalid_parameters = []
+    def_payulatam_form_get_invalid_parameters(self,data):
+        invalid_parameters=[]
 
-        if self.acquirer_reference and data.get('transactionId') != self.acquirer_reference:
-            invalid_parameters.append(('Reference code', data.get('transactionId'), self.acquirer_reference))
-        if float_compare(float(data.get('TX_VALUE', '0.0')), self.amount, 2) != 0:
-            invalid_parameters.append(('Amount', data.get('TX_VALUE'), '%.2f' % self.amount))
-        if data.get('merchantId') != self.acquirer_id.payulatam_merchant_id:
-            invalid_parameters.append(('Merchant Id', data.get('merchantId'), self.acquirer_id.payulatam_merchant_id))
-        return invalid_parameters
+        ifself.acquirer_referenceanddata.get('transactionId')!=self.acquirer_reference:
+            invalid_parameters.append(('Referencecode',data.get('transactionId'),self.acquirer_reference))
+        iffloat_compare(float(data.get('TX_VALUE','0.0')),self.amount,2)!=0:
+            invalid_parameters.append(('Amount',data.get('TX_VALUE'),'%.2f'%self.amount))
+        ifdata.get('merchantId')!=self.acquirer_id.payulatam_merchant_id:
+            invalid_parameters.append(('MerchantId',data.get('merchantId'),self.acquirer_id.payulatam_merchant_id))
+        returninvalid_parameters
 
-    def _payulatam_form_validate(self, data):
+    def_payulatam_form_validate(self,data):
         self.ensure_one()
 
-        status = data.get('lapTransactionState') or data.find('transactionResponse').find('state').text
-        res = {
-            'acquirer_reference': data.get('transactionId') or data.find('transactionResponse').find('transactionId').text,
-            'state_message': data.get('message') or ""
+        status=data.get('lapTransactionState')ordata.find('transactionResponse').find('state').text
+        res={
+            'acquirer_reference':data.get('transactionId')ordata.find('transactionResponse').find('transactionId').text,
+            'state_message':data.get('message')or""
         }
 
-        if status == 'APPROVED':
-            _logger.info('Validated PayU Latam payment for tx %s: set as done' % (self.reference))
-            res.update(state='done', date=fields.Datetime.now())
+        ifstatus=='APPROVED':
+            _logger.info('ValidatedPayULatampaymentfortx%s:setasdone'%(self.reference))
+            res.update(state='done',date=fields.Datetime.now())
             self._set_transaction_done()
             self.write(res)
             self.execute_callback()
-            return True
-        elif status == 'PENDING':
-            _logger.info('Received notification for PayU Latam payment %s: set as pending' % (self.reference))
+            returnTrue
+        elifstatus=='PENDING':
+            _logger.info('ReceivednotificationforPayULatampayment%s:setaspending'%(self.reference))
             res.update(state='pending')
             self._set_transaction_pending()
-            return self.write(res)
-        elif status in ['EXPIRED', 'DECLINED']:
-            _logger.info('Received notification for PayU Latam payment %s: set as Cancel' % (self.reference))
+            returnself.write(res)
+        elifstatusin['EXPIRED','DECLINED']:
+            _logger.info('ReceivednotificationforPayULatampayment%s:setasCancel'%(self.reference))
             res.update(state='cancel')
             self._set_transaction_cancel()
-            return self.write(res)
+            returnself.write(res)
         else:
-            error = 'Received unrecognized status for PayU Latam payment %s: %s, set as error' % (self.reference, status)
+            error='ReceivedunrecognizedstatusforPayULatampayment%s:%s,setaserror'%(self.reference,status)
             _logger.info(error)
-            res.update(state='cancel', state_message=error)
+            res.update(state='cancel',state_message=error)
             self._set_transaction_cancel()
-            return self.write(res)
+            returnself.write(res)

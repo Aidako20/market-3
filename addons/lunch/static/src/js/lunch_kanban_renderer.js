@@ -1,29 +1,29 @@
-flectra.define('lunch.LunchKanbanRenderer', function (require) {
-"use strict";
+flectra.define('lunch.LunchKanbanRenderer',function(require){
+"usestrict";
 
 /**
- * This file defines the Renderer for the Lunch Kanban view, which is an
- * override of the KanbanRenderer.
+ *ThisfiledefinestheRendererfortheLunchKanbanview,whichisan
+ *overrideoftheKanbanRenderer.
  */
 
-var LunchKanbanRecord = require('lunch.LunchKanbanRecord');
+varLunchKanbanRecord=require('lunch.LunchKanbanRecord');
 
-var KanbanRenderer = require('web.KanbanRenderer');
+varKanbanRenderer=require('web.KanbanRenderer');
 
-var LunchKanbanRenderer = KanbanRenderer.extend({
-    config: _.extend({}, KanbanRenderer.prototype.config, {
-        KanbanRecord: LunchKanbanRecord,
+varLunchKanbanRenderer=KanbanRenderer.extend({
+    config:_.extend({},KanbanRenderer.prototype.config,{
+        KanbanRecord:LunchKanbanRecord,
     }),
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this.$el.addClass('o_lunch_view o_lunch_kanban_view position-relative align-content-start flex-grow-1 flex-shrink-1');
-        return this._super.apply(this, arguments);
+    start:function(){
+        this.$el.addClass('o_lunch_viewo_lunch_kanban_viewposition-relativealign-content-startflex-grow-1flex-shrink-1');
+        returnthis._super.apply(this,arguments);
     },
 });
 
-return LunchKanbanRenderer;
+returnLunchKanbanRenderer;
 
 });

@@ -1,22 +1,22 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import models, fields
-
-
-class AccountMove(models.Model):
-    _inherit = 'account.move'
-
-    repair_ids = fields.One2many('repair.order', 'invoice_id', readonly=True, copy=False)
-
-    def unlink(self):
-        repairs = self.sudo().repair_ids.filtered(lambda repair: repair.state != 'cancel')
-        if repairs:
-            repairs.sudo(False).state = '2binvoiced'
-        return super().unlink()
+fromflectraimportmodels,fields
 
 
-class AccountMoveLine(models.Model):
-    _inherit = 'account.move.line'
+classAccountMove(models.Model):
+    _inherit='account.move'
 
-    repair_line_ids = fields.One2many('repair.line', 'invoice_line_id', readonly=True, copy=False)
-    repair_fee_ids = fields.One2many('repair.fee', 'invoice_line_id', readonly=True, copy=False)
+    repair_ids=fields.One2many('repair.order','invoice_id',readonly=True,copy=False)
+
+    defunlink(self):
+        repairs=self.sudo().repair_ids.filtered(lambdarepair:repair.state!='cancel')
+        ifrepairs:
+            repairs.sudo(False).state='2binvoiced'
+        returnsuper().unlink()
+
+
+classAccountMoveLine(models.Model):
+    _inherit='account.move.line'
+
+    repair_line_ids=fields.One2many('repair.line','invoice_line_id',readonly=True,copy=False)
+    repair_fee_ids=fields.One2many('repair.fee','invoice_line_id',readonly=True,copy=False)

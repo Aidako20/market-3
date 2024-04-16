@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class Company(models.Model):
-    _inherit = "res.company"
+classCompany(models.Model):
+    _inherit="res.company"
 
-    invoice_is_snailmail = fields.Boolean(string='Send by Post', default=False)
+    invoice_is_snailmail=fields.Boolean(string='SendbyPost',default=False)

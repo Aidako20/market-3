@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class LunchLocation(models.Model):
-    _name = 'lunch.location'
-    _description = 'Lunch Locations'
+classLunchLocation(models.Model):
+    _name='lunch.location'
+    _description='LunchLocations'
 
-    name = fields.Char('Location Name', required=True)
-    address = fields.Text('Address')
-    company_id = fields.Many2one('res.company', default=lambda self: self.env.company)
+    name=fields.Char('LocationName',required=True)
+    address=fields.Text('Address')
+    company_id=fields.Many2one('res.company',default=lambdaself:self.env.company)

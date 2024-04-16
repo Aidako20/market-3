@@ -1,155 +1,155 @@
-flectra.define('web.Class', function () {
-"use strict";
+flectra.define('web.Class',function(){
+"usestrict";
 /**
- * Improved John Resig's inheritance, based on:
+ *ImprovedJohnResig'sinheritance,basedon:
  *
- * Simple JavaScript Inheritance
- * By John Resig http://ejohn.org/
- * MIT Licensed.
+ *SimpleJavaScriptInheritance
+ *ByJohnResighttp://ejohn.org/
+ *MITLicensed.
  *
- * Adds "include()"
+ *Adds"include()"
  *
- * Defines The Class object. That object can be used to define and inherit classes using
- * the extend() method.
+ *DefinesTheClassobject.Thatobjectcanbeusedtodefineandinheritclassesusing
+ *theextend()method.
  *
- * Example::
+ *Example::
  *
- *     var Person = Class.extend({
- *      init: function(isDancing){
- *         this.dancing = isDancing;
- *       },
- *       dance: function(){
- *         return this.dancing;
- *       }
- *     });
+ *    varPerson=Class.extend({
+ *     init:function(isDancing){
+ *        this.dancing=isDancing;
+ *      },
+ *      dance:function(){
+ *        returnthis.dancing;
+ *      }
+ *    });
  *
- * The init() method act as a constructor. This class can be instanced this way::
+ *Theinit()methodactasaconstructor.Thisclasscanbeinstancedthisway::
  *
- *     var person = new Person(true);
- *     person.dance();
+ *    varperson=newPerson(true);
+ *    person.dance();
  *
- *     The Person class can also be extended again:
+ *    ThePersonclasscanalsobeextendedagain:
  *
- *     var Ninja = Person.extend({
- *       init: function(){
- *         this._super( false );
- *       },
- *       dance: function(){
- *         // Call the inherited version of dance()
- *         return this._super();
- *       },
- *       swingSword: function(){
- *         return true;
- *       }
- *     });
+ *    varNinja=Person.extend({
+ *      init:function(){
+ *        this._super(false);
+ *      },
+ *      dance:function(){
+ *        //Calltheinheritedversionofdance()
+ *        returnthis._super();
+ *      },
+ *      swingSword:function(){
+ *        returntrue;
+ *      }
+ *    });
  *
- * When extending a class, each re-defined method can use this._super() to call the previous
- * implementation of that method.
+ *Whenextendingaclass,eachre-definedmethodcanusethis._super()tocalltheprevious
+ *implementationofthatmethod.
  *
- * @class Class
+ *@classClass
  */
-function FlectraClass(){}
+functionFlectraClass(){}
 
-var initializing = false;
-var fnTest = /xyz/.test(function(){xyz();}) ? /\b_super\b/ : /.*/;
+varinitializing=false;
+varfnTest=/xyz/.test(function(){xyz();})?/\b_super\b/:/.*/;
 
 /**
- * Subclass an existing class
+ *Subclassanexistingclass
  *
- * @param {Object} prop class-level properties (class attributes and instance methods) to set on the new class
+ *@param{Object}propclass-levelproperties(classattributesandinstancemethods)tosetonthenewclass
  */
-FlectraClass.extend = function() {
-    var _super = this.prototype;
-    // Support mixins arguments
-    var args = _.toArray(arguments);
+FlectraClass.extend=function(){
+    var_super=this.prototype;
+    //Supportmixinsarguments
+    varargs=_.toArray(arguments);
     args.unshift({});
-    var prop = _.extend.apply(_,args);
+    varprop=_.extend.apply(_,args);
 
-    // Instantiate a web class (but only create the instance,
-    // don't run the init constructor)
-    initializing = true;
-    var This = this;
-    var prototype = new This();
-    initializing = false;
+    //Instantiateawebclass(butonlycreatetheinstance,
+    //don'truntheinitconstructor)
+    initializing=true;
+    varThis=this;
+    varprototype=newThis();
+    initializing=false;
 
-    // Copy the properties over onto the new prototype
-    _.each(prop, function(val, name) {
-        // Check if we're overwriting an existing function
-        prototype[name] = typeof prop[name] == "function" &&
-                          fnTest.test(prop[name]) ?
-                (function(name, fn) {
-                    return function() {
-                        var tmp = this._super;
+    //Copythepropertiesoverontothenewprototype
+    _.each(prop,function(val,name){
+        //Checkifwe'reoverwritinganexistingfunction
+        prototype[name]=typeofprop[name]=="function"&&
+                          fnTest.test(prop[name])?
+                (function(name,fn){
+                    returnfunction(){
+                        vartmp=this._super;
 
-                        // Add a new ._super() method that is the same
-                        // method but on the super-class
-                        this._super = _super[name];
+                        //Addanew._super()methodthatisthesame
+                        //methodbutonthesuper-class
+                        this._super=_super[name];
 
-                        // The method only need to be bound temporarily, so
-                        // we remove it when we're done executing
-                        var ret = fn.apply(this, arguments);
-                        this._super = tmp;
+                        //Themethodonlyneedtobeboundtemporarily,so
+                        //weremoveitwhenwe'redoneexecuting
+                        varret=fn.apply(this,arguments);
+                        this._super=tmp;
 
-                        return ret;
+                        returnret;
                     };
-                })(name, prop[name]) :
+                })(name,prop[name]):
                 prop[name];
     });
 
-    // The dummy class constructor
-    function Class() {
-        if(this.constructor !== FlectraClass){
-            throw new Error("You can only instanciate objects with the 'new' operator");
+    //Thedummyclassconstructor
+    functionClass(){
+        if(this.constructor!==FlectraClass){
+            thrownewError("Youcanonlyinstanciateobjectswiththe'new'operator");
         }
-        // All construction is actually done in the init method
-        this._super = null;
-        if (!initializing && this.init) {
-            var ret = this.init.apply(this, arguments);
-            if (ret) { return ret; }
+        //Allconstructionisactuallydoneintheinitmethod
+        this._super=null;
+        if(!initializing&&this.init){
+            varret=this.init.apply(this,arguments);
+            if(ret){returnret;}
         }
-        return this;
+        returnthis;
     }
-    Class.include = function (properties) {
-        _.each(properties, function(val, name) {
-            if (typeof properties[name] !== 'function'
-                    || !fnTest.test(properties[name])) {
-                prototype[name] = properties[name];
-            } else if (typeof prototype[name] === 'function'
-                       && prototype.hasOwnProperty(name)) {
-                prototype[name] = (function (name, fn, previous) {
-                    return function () {
-                        var tmp = this._super;
-                        this._super = previous;
-                        var ret = fn.apply(this, arguments);
-                        this._super = tmp;
-                        return ret;
+    Class.include=function(properties){
+        _.each(properties,function(val,name){
+            if(typeofproperties[name]!=='function'
+                    ||!fnTest.test(properties[name])){
+                prototype[name]=properties[name];
+            }elseif(typeofprototype[name]==='function'
+                       &&prototype.hasOwnProperty(name)){
+                prototype[name]=(function(name,fn,previous){
+                    returnfunction(){
+                        vartmp=this._super;
+                        this._super=previous;
+                        varret=fn.apply(this,arguments);
+                        this._super=tmp;
+                        returnret;
                     };
-                })(name, properties[name], prototype[name]);
-            } else if (typeof _super[name] === 'function') {
-                prototype[name] = (function (name, fn) {
-                    return function () {
-                        var tmp = this._super;
-                        this._super = _super[name];
-                        var ret = fn.apply(this, arguments);
-                        this._super = tmp;
-                        return ret;
+                })(name,properties[name],prototype[name]);
+            }elseif(typeof_super[name]==='function'){
+                prototype[name]=(function(name,fn){
+                    returnfunction(){
+                        vartmp=this._super;
+                        this._super=_super[name];
+                        varret=fn.apply(this,arguments);
+                        this._super=tmp;
+                        returnret;
                     };
-                })(name, properties[name]);
+                })(name,properties[name]);
             }
         });
     };
 
-    // Populate our constructed prototype object
-    Class.prototype = prototype;
+    //Populateourconstructedprototypeobject
+    Class.prototype=prototype;
 
-    // Enforce the constructor to be what we expect
-    Class.constructor = Class;
+    //Enforcetheconstructortobewhatweexpect
+    Class.constructor=Class;
 
-    // And make this class extendable
-    Class.extend = this.extend;
+    //Andmakethisclassextendable
+    Class.extend=this.extend;
 
-    return Class;
+    returnClass;
 };
 
-return FlectraClass;
+returnFlectraClass;
 });

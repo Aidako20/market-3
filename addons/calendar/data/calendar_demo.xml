@@ -1,123 +1,123 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <record id="cal_contact_1" model="calendar.contacts">
-            <field name="active" eval="True"/>
-            <field name="user_id" ref="base.user_admin"/>
-            <field name="partner_id" ref="base.res_partner_1"/>
+        <recordid="cal_contact_1"model="calendar.contacts">
+            <fieldname="active"eval="True"/>
+            <fieldname="user_id"ref="base.user_admin"/>
+            <fieldname="partner_id"ref="base.res_partner_1"/>
         </record>
 
-        <record id="cal_contact_2" model="calendar.contacts">
-            <field name="active" eval="True"/>
-            <field name="user_id" ref="base.user_admin"/>
-            <field name="partner_id" ref="base.partner_demo"/>
+        <recordid="cal_contact_2"model="calendar.contacts">
+            <fieldname="active"eval="True"/>
+            <fieldname="user_id"ref="base.user_admin"/>
+            <fieldname="partner_id"ref="base.partner_demo"/>
         </record>
 
-        <record id="categ_meet1" model="calendar.event.type">
-            <field name="name">Customer Meeting</field>
+        <recordid="categ_meet1"model="calendar.event.type">
+            <fieldname="name">CustomerMeeting</field>
         </record>
 
-        <record id="categ_meet2" model="calendar.event.type">
-            <field name="name">Internal Meeting</field>
+        <recordid="categ_meet2"model="calendar.event.type">
+            <fieldname="name">InternalMeeting</field>
         </record>
 
-        <record id="categ_meet3" model="calendar.event.type">
-            <field name="name">Off-site Meeting</field>
+        <recordid="categ_meet3"model="calendar.event.type">
+            <fieldname="name">Off-siteMeeting</field>
         </record>
 
-        <record id="categ_meet4" model="calendar.event.type">
-            <field name="name">Open Discussion</field>
+        <recordid="categ_meet4"model="calendar.event.type">
+            <fieldname="name">OpenDiscussion</field>
         </record>
 
-        <record id="categ_meet5" model="calendar.event.type">
-            <field name="name">Feedback Meeting</field>
+        <recordid="categ_meet5"model="calendar.event.type">
+            <fieldname="name">FeedbackMeeting</field>
         </record>
 
-        <record id="calendar_event_1" model="calendar.event">
-            <field name="active" eval="True"/>
-            <field name="user_id" ref="base.user_admin"/>
-            <field name="partner_ids" eval="[(6,0,[ref('base.res_partner_1')])]"/>
-            <field name="name">Follow-up for Project proposal</field>
-            <field name="description">Meeting to discuss project plan and hash out the details of implementation.</field>
-            <field name="start" eval="time.strftime('%Y-%m-03 10:20:00')"/>
-            <field name="categ_ids" eval="[(6,0,[ref('categ_meet1')])]"/>
-            <field name="stop" eval="time.strftime('%Y-%m-03 16:30:00')"/>
-            <field name="duration" eval="6.3"/>
-            <field name="allday" eval="False"/>
+        <recordid="calendar_event_1"model="calendar.event">
+            <fieldname="active"eval="True"/>
+            <fieldname="user_id"ref="base.user_admin"/>
+            <fieldname="partner_ids"eval="[(6,0,[ref('base.res_partner_1')])]"/>
+            <fieldname="name">Follow-upforProjectproposal</field>
+            <fieldname="description">Meetingtodiscussprojectplanandhashoutthedetailsofimplementation.</field>
+            <fieldname="start"eval="time.strftime('%Y-%m-0310:20:00')"/>
+            <fieldname="categ_ids"eval="[(6,0,[ref('categ_meet1')])]"/>
+            <fieldname="stop"eval="time.strftime('%Y-%m-0316:30:00')"/>
+            <fieldname="duration"eval="6.3"/>
+            <fieldname="allday"eval="False"/>
         </record>
 
-        <record id="calendar_event_2" model="calendar.event">
-            <field name="active" eval="True"/>
-            <field name="user_id" ref="base.user_demo"/>
-            <field name="partner_ids" eval="[(6,0,[ref('base.partner_root'),ref('base.res_partner_4'),ref('base.res_partner_3')])]"/>
-            <field name="name">Initial discussion</field>
-            <field name="description">Discussion with partner for product.</field>
-            <field name="categ_ids" eval="[(6,0,[ref('categ_meet3')])]"/>
-            <field name="start" eval="time.strftime('%Y-%m-05 12:00:00')"/>
-            <field name="stop" eval="time.strftime('%Y-%m-05 19:00:00')"/>
-            <field name="allday" eval="False"/>
-            <field name="duration" eval="7.0"/>
+        <recordid="calendar_event_2"model="calendar.event">
+            <fieldname="active"eval="True"/>
+            <fieldname="user_id"ref="base.user_demo"/>
+            <fieldname="partner_ids"eval="[(6,0,[ref('base.partner_root'),ref('base.res_partner_4'),ref('base.res_partner_3')])]"/>
+            <fieldname="name">Initialdiscussion</field>
+            <fieldname="description">Discussionwithpartnerforproduct.</field>
+            <fieldname="categ_ids"eval="[(6,0,[ref('categ_meet3')])]"/>
+            <fieldname="start"eval="time.strftime('%Y-%m-0512:00:00')"/>
+            <fieldname="stop"eval="time.strftime('%Y-%m-0519:00:00')"/>
+            <fieldname="allday"eval="False"/>
+            <fieldname="duration"eval="7.0"/>
         </record>
 
-        <record id="calendar_event_3" model="calendar.event">
-            <field name="active" eval="True"/>
-            <field name="partner_ids" eval="[(6,0,[ref('base.partner_admin')])]"/>
-            <field name="user_id" ref="base.user_admin"/>
-            <field name="name">Pricing Discussion</field>
-            <field name="description">Internal meeting for discussion for new pricing for product and services.</field>
-            <field name="categ_ids" eval="[(6,0,[ref('categ_meet1'), ref('categ_meet2')])]"/>
-            <field name="start" eval="time.strftime('%Y-%m-12 15:55:05')"/>
-            <field name="stop" eval="time.strftime('%Y-%m-12 18:55:05')"/>
-            <field name="duration" eval="3.0"/>
-            <field name="allday" eval="False"/>
+        <recordid="calendar_event_3"model="calendar.event">
+            <fieldname="active"eval="True"/>
+            <fieldname="partner_ids"eval="[(6,0,[ref('base.partner_admin')])]"/>
+            <fieldname="user_id"ref="base.user_admin"/>
+            <fieldname="name">PricingDiscussion</field>
+            <fieldname="description">Internalmeetingfordiscussionfornewpricingforproductandservices.</field>
+            <fieldname="categ_ids"eval="[(6,0,[ref('categ_meet1'),ref('categ_meet2')])]"/>
+            <fieldname="start"eval="time.strftime('%Y-%m-1215:55:05')"/>
+            <fieldname="stop"eval="time.strftime('%Y-%m-1218:55:05')"/>
+            <fieldname="duration"eval="3.0"/>
+            <fieldname="allday"eval="False"/>
         </record>
 
-        <record id="calendar_event_4" model="calendar.event">
-            <field name="active" eval="True"/>
-            <field name="user_id" ref="base.user_demo"/>
-            <field name="partner_ids" eval="[(6,0,[ref('base.partner_demo'),ref('base.res_partner_1')])]"/>
-            <field name="name">Requirements review</field>
-            <field name="categ_ids" eval="[(6,0,[ref('categ_meet3')])]"/>
-            <field name="start" eval="time.strftime('%Y-%m-20 08:00:00')"/>
-            <field name="stop" eval="time.strftime('%Y-%m-20 10:30:00')"/>
-            <field name="duration" eval="2.5"/>
-            <field name="allday" eval="False"/>
+        <recordid="calendar_event_4"model="calendar.event">
+            <fieldname="active"eval="True"/>
+            <fieldname="user_id"ref="base.user_demo"/>
+            <fieldname="partner_ids"eval="[(6,0,[ref('base.partner_demo'),ref('base.res_partner_1')])]"/>
+            <fieldname="name">Requirementsreview</field>
+            <fieldname="categ_ids"eval="[(6,0,[ref('categ_meet3')])]"/>
+            <fieldname="start"eval="time.strftime('%Y-%m-2008:00:00')"/>
+            <fieldname="stop"eval="time.strftime('%Y-%m-2010:30:00')"/>
+            <fieldname="duration"eval="2.5"/>
+            <fieldname="allday"eval="False"/>
         </record>
 
-        <record id="calendar_event_5" model="calendar.event">
-            <field name="active" eval="True"/>
-            <field name="partner_ids" eval="[(6,0,[ref('base.partner_admin'),ref('base.res_partner_12')])]"/>
-            <field name="user_id" ref="base.user_admin"/>
-            <field name="name">Changes in Designing</field>
-            <field name="categ_ids" eval="[(6,0,[ref('categ_meet1')])]"/>
-            <field name="start" eval="time.strftime('%Y-%m-22')"/>
-            <field name="stop" eval="time.strftime('%Y-%m-22')"/>
-            <field name="allday" eval="True"/>
+        <recordid="calendar_event_5"model="calendar.event">
+            <fieldname="active"eval="True"/>
+            <fieldname="partner_ids"eval="[(6,0,[ref('base.partner_admin'),ref('base.res_partner_12')])]"/>
+            <fieldname="user_id"ref="base.user_admin"/>
+            <fieldname="name">ChangesinDesigning</field>
+            <fieldname="categ_ids"eval="[(6,0,[ref('categ_meet1')])]"/>
+            <fieldname="start"eval="time.strftime('%Y-%m-22')"/>
+            <fieldname="stop"eval="time.strftime('%Y-%m-22')"/>
+            <fieldname="allday"eval="True"/>
         </record>
 
-        <record id="calendar_event_6" model="calendar.event">
-            <field name="active" eval="True"/>
-            <field name="user_id" ref="base.user_demo"/>
-            <field name="partner_ids" eval="[(6,0,[ref('base.partner_root'),ref('base.res_partner_4'),ref('base.res_partner_1'),ref('base.res_partner_12')])]"/>
-            <field name="name">Presentation for new Services</field>
-            <field name="categ_ids" eval="[(6,0,[ref('categ_meet1'), ref('categ_meet2')])]"/>
-            <field name="start" eval="time.strftime('%Y-%m-18 02:00:00')"/>
-            <field name="stop" eval="time.strftime('%Y-%m-18 10:30:00')"/>
-            <field name="duration" eval="8.5"/>
-            <field name="allday" eval="False"/>
+        <recordid="calendar_event_6"model="calendar.event">
+            <fieldname="active"eval="True"/>
+            <fieldname="user_id"ref="base.user_demo"/>
+            <fieldname="partner_ids"eval="[(6,0,[ref('base.partner_root'),ref('base.res_partner_4'),ref('base.res_partner_1'),ref('base.res_partner_12')])]"/>
+            <fieldname="name">PresentationfornewServices</field>
+            <fieldname="categ_ids"eval="[(6,0,[ref('categ_meet1'),ref('categ_meet2')])]"/>
+            <fieldname="start"eval="time.strftime('%Y-%m-1802:00:00')"/>
+            <fieldname="stop"eval="time.strftime('%Y-%m-1810:30:00')"/>
+            <fieldname="duration"eval="8.5"/>
+            <fieldname="allday"eval="False"/>
         </record>
 
-        <record id="calendar_event_7" model="calendar.event">
-            <field name="active" eval="True"/>
-            <field name="user_id" ref="base.user_demo"/>
-            <field name="partner_ids" eval="[(6,0,[ref('base.res_partner_4')])]"/>
-            <field name="name">Presentation of the new Calendar</field>
-            <field name="categ_ids" eval="[(6,0,[ref('categ_meet1'), ref('categ_meet2')])]"/>
-            <field name="start" eval="time.strftime('%Y-%m-16')"/>
-            <field name="stop" eval="time.strftime('%Y-%m-16')"/>
-            <field name="duration" eval="8.5"/>
-            <field name="allday" eval="True"/>
+        <recordid="calendar_event_7"model="calendar.event">
+            <fieldname="active"eval="True"/>
+            <fieldname="user_id"ref="base.user_demo"/>
+            <fieldname="partner_ids"eval="[(6,0,[ref('base.res_partner_4')])]"/>
+            <fieldname="name">PresentationofthenewCalendar</field>
+            <fieldname="categ_ids"eval="[(6,0,[ref('categ_meet1'),ref('categ_meet2')])]"/>
+            <fieldname="start"eval="time.strftime('%Y-%m-16')"/>
+            <fieldname="stop"eval="time.strftime('%Y-%m-16')"/>
+            <fieldname="duration"eval="8.5"/>
+            <fieldname="allday"eval="True"/>
         </record>
 
 

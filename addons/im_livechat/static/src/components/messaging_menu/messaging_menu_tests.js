@@ -1,95 +1,95 @@
-flectra.define('im_livechat/static/src/components/messaging_menu/messaging_menu_tests.js', function (require) {
-'use strict';
+flectra.define('im_livechat/static/src/components/messaging_menu/messaging_menu_tests.js',function(require){
+'usestrict';
 
-const {
+const{
     afterEach,
     afterNextRender,
     beforeEach,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-QUnit.module('im_livechat', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('messaging_menu', {}, function () {
-QUnit.module('messaging_menu_tests.js', {
-    beforeEach() {
+QUnit.module('im_livechat',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('messaging_menu',{},function(){
+QUnit.module('messaging_menu_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.start = async params => {
-            let { env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
-                hasMessagingMenu: true,
+        this.start=asyncparams=>{
+            let{env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
+                hasMessagingMenu:true,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('livechats should be in "chat" filter', async function (assert) {
+QUnit.test('livechatsshouldbein"chat"filter',asyncfunction(assert){
     assert.expect(7);
 
     this.data['mail.channel'].records.push({
-        anonymous_name: "Visitor 11",
-        channel_type: 'livechat',
-        id: 11,
-        livechat_operator_id: this.data.currentPartnerId,
-        members: [this.data.currentPartnerId, this.data.publicPartnerId],
+        anonymous_name:"Visitor11",
+        channel_type:'livechat',
+        id:11,
+        livechat_operator_id:this.data.currentPartnerId,
+        members:[this.data.currentPartnerId,this.data.publicPartnerId],
     });
-    await this.start();
+    awaitthis.start();
     assert.containsOnce(
         document.body,
         '.o_MessagingMenu',
-        "should have messaging menu"
+        "shouldhavemessagingmenu"
     );
 
-    await afterNextRender(() => document.querySelector('.o_MessagingMenu_toggler').click());
+    awaitafterNextRender(()=>document.querySelector('.o_MessagingMenu_toggler').click());
     assert.containsOnce(
         document.body,
         '.o_MessagingMenu_tabButton[data-tab-id="all"]',
-        "should have a tab/filter 'all' in messaging menu"
+        "shouldhaveatab/filter'all'inmessagingmenu"
     );
     assert.containsOnce(
         document.body,
         '.o_MessagingMenu_tabButton[data-tab-id="chat"]',
-        "should have a tab/filter 'chat' in messaging menu"
+        "shouldhaveatab/filter'chat'inmessagingmenu"
     );
     assert.hasClass(
         document.querySelector('.o_MessagingMenu_tabButton[data-tab-id="all"]'),
         'o-active',
-        "tab/filter 'all' of messaging menu should be active initially"
+        "tab/filter'all'ofmessagingmenushouldbeactiveinitially"
     );
     assert.containsOnce(
         document.body,
         `.o_ThreadPreview[data-thread-local-id="${
             this.env.models['mail.thread'].findFromIdentifyingData({
-                id: 11,
-                model: 'mail.channel',
+                id:11,
+                model:'mail.channel',
             }).localId
         }"]`,
-        "livechat should be listed in 'all' tab/filter of messaging menu"
+        "livechatshouldbelistedin'all'tab/filterofmessagingmenu"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_MessagingMenu_tabButton[data-tab-id="chat"]').click()
     );
     assert.hasClass(
         document.querySelector('.o_MessagingMenu_tabButton[data-tab-id="chat"]'),
         'o-active',
-        "tab/filter 'chat' of messaging menu should become active after click"
+        "tab/filter'chat'ofmessagingmenushouldbecomeactiveafterclick"
     );
     assert.containsOnce(
         document.body,
         `.o_ThreadPreview[data-thread-local-id="${
             this.env.models['mail.thread'].findFromIdentifyingData({
-                id: 11,
-                model: 'mail.channel',
+                id:11,
+                model:'mail.channel',
             }).localId
         }"]`,
-        "livechat should be listed in 'chat' tab/filter of messaging menu"
+        "livechatshouldbelistedin'chat'tab/filterofmessagingmenu"
     );
 });
 

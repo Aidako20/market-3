@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="ir_cron_auth_signup_send_pending_user_reminder" model="ir.cron">
-        <field name="name">Users: Notify About Unregistered Users</field>
-        <field name="model_id" ref="model_res_users"/>
-        <field name="state">code</field>
-        <field name="code">model.send_unregistered_user_reminder()</field>
-        <field name="user_id" ref="base.user_root" />
-        <field name="interval_number">1</field>
-        <field name="interval_type">days</field>
-        <field name="numbercall">-1</field>
+    <recordid="ir_cron_auth_signup_send_pending_user_reminder"model="ir.cron">
+        <fieldname="name">Users:NotifyAboutUnregisteredUsers</field>
+        <fieldname="model_id"ref="model_res_users"/>
+        <fieldname="state">code</field>
+        <fieldname="code">model.send_unregistered_user_reminder()</field>
+        <fieldname="user_id"ref="base.user_root"/>
+        <fieldname="interval_number">1</field>
+        <fieldname="interval_type">days</field>
+        <fieldname="numbercall">-1</field>
     </record>
 </flectra>

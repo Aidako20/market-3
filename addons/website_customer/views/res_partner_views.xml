@@ -1,71 +1,71 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-        <record id="view_partners_form_website" model="ir.ui.view">
-            <field name="name">view.res.partner.form.website.tags</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="website_partner.view_partners_form_website" />
-            <field name="arch" type="xml">
+        <recordid="view_partners_form_website"model="ir.ui.view">
+            <fieldname="name">view.res.partner.form.website.tags</field>
+            <fieldname="model">res.partner</field>
+            <fieldname="inherit_id"ref="website_partner.view_partners_form_website"/>
+            <fieldname="arch"type="xml">
                 <data>
-                    <xpath expr="//field[@name='website_id']" position="after">
-                        <field name="website_tag_ids" widget="many2many_tags" string="Website Tags"/>
+                    <xpathexpr="//field[@name='website_id']"position="after">
+                        <fieldname="website_tag_ids"widget="many2many_tags"string="WebsiteTags"/>
                     </xpath>
                 </data>
             </field>
         </record>
 
-        <record id="view_partner_tag_form" model="ir.ui.view">
-            <field name="name">Website Tags</field>
-            <field name="model">res.partner.tag</field>
-            <field name="arch" type="xml">
-                <form string="Partner Tag">
+        <recordid="view_partner_tag_form"model="ir.ui.view">
+            <fieldname="name">WebsiteTags</field>
+            <fieldname="model">res.partner.tag</field>
+            <fieldname="arch"type="xml">
+                <formstring="PartnerTag">
                 <sheet>
-                    <group col="4">
-                        <field name="name"/>
-                        <field name="classname"/>
-                        <field name="is_published"/>
-                        <field name="active" widget="boolean_toggle"/>
+                    <groupcol="4">
+                        <fieldname="name"/>
+                        <fieldname="classname"/>
+                        <fieldname="is_published"/>
+                        <fieldname="active"widget="boolean_toggle"/>
                     </group>
                 </sheet>
                 </form>
             </field>
         </record>
 
-        <record id="view_partner_tag_list" model="ir.ui.view">
-            <field name="name">Website Tags</field>
-            <field name="model">res.partner.tag</field>
-            <field eval="6" name="priority"/>
-            <field name="arch" type="xml">
-                <tree string="Website Tags" editable="bottom">
-                    <field name="name"/>
-                    <field name="classname"/>
-                    <field name="is_published"/>
-                    <field name="active" invisible="1"/>
+        <recordid="view_partner_tag_list"model="ir.ui.view">
+            <fieldname="name">WebsiteTags</field>
+            <fieldname="model">res.partner.tag</field>
+            <fieldeval="6"name="priority"/>
+            <fieldname="arch"type="xml">
+                <treestring="WebsiteTags"editable="bottom">
+                    <fieldname="name"/>
+                    <fieldname="classname"/>
+                    <fieldname="is_published"/>
+                    <fieldname="active"invisible="1"/>
                 </tree>
             </field>
         </record>
 
-        <record id="res_partner_tag_view_search" model="ir.ui.view">
-            <field name="name">res.partner.tag.view.search</field>
-            <field name="model">res.partner.tag</field>
-            <field name="arch" type="xml">
-                <search string="Search Partner Tag">
-                    <field name="name"/>
+        <recordid="res_partner_tag_view_search"model="ir.ui.view">
+            <fieldname="name">res.partner.tag.view.search</field>
+            <fieldname="model">res.partner.tag</field>
+            <fieldname="arch"type="xml">
+                <searchstring="SearchPartnerTag">
+                    <fieldname="name"/>
                     <separator/>
-                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <filterstring="Archived"name="inactive"domain="[('active','=',False)]"/>
                 </search>
             </field>
         </record>
 
-        <record id="action_partner_tag_form" model="ir.actions.act_window">
-            <field name="name">Website Tags</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">res.partner.tag</field>
-            <field name="search_view_id" ref="res_partner_tag_view_search"/>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                Create a new contact tag
+        <recordid="action_partner_tag_form"model="ir.actions.act_window">
+            <fieldname="name">WebsiteTags</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">res.partner.tag</field>
+            <fieldname="search_view_id"ref="res_partner_tag_view_search"/>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                Createanewcontacttag
               </p><p>
-                Manage contact tags to better classify them for tracking and analysis purposes.
+                Managecontacttagstobetterclassifythemfortrackingandanalysispurposes.
               </p>
             </field>
         </record>
@@ -73,7 +73,7 @@
         <menuitem
             action="action_partner_tag_form"
             id="menu_partner_tag_form"
-            name="Website Tags"
+            name="WebsiteTags"
             sequence="2"
             parent="contacts.res_partner_menu_config"
         />

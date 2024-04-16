@@ -1,219 +1,219 @@
-flectra.define('website.customizeMenu', function (require) {
-'use strict';
+flectra.define('website.customizeMenu',function(require){
+'usestrict';
 
-var core = require('web.core');
-var Widget = require('web.Widget');
-var websiteNavbarData = require('website.navbar');
-var WebsiteAceEditor = require('website.ace');
+varcore=require('web.core');
+varWidget=require('web.Widget');
+varwebsiteNavbarData=require('website.navbar');
+varWebsiteAceEditor=require('website.ace');
 
-var qweb = core.qweb;
+varqweb=core.qweb;
 
-var CustomizeMenu = Widget.extend({
-    xmlDependencies: ['/website/static/src/xml/website.editor.xml'],
-    events: {
-        'show.bs.dropdown': '_onDropdownShow',
-        'click .dropdown-item[data-view-key]': '_onCustomizeOptionClick',
+varCustomizeMenu=Widget.extend({
+    xmlDependencies:['/website/static/src/xml/website.editor.xml'],
+    events:{
+        'show.bs.dropdown':'_onDropdownShow',
+        'click.dropdown-item[data-view-key]':'_onCustomizeOptionClick',
     },
 
     /**
-     * @override
+     *@override
      */
-    willStart: function () {
-        this.viewName = $(document.documentElement).data('view-xmlid');
-        return this._super.apply(this, arguments);
+    willStart:function(){
+        this.viewName=$(document.documentElement).data('view-xmlid');
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        if (!this.viewName) {
+    start:function(){
+        if(!this.viewName){
             _.defer(this.destroy.bind(this));
         }
 
-        if (this.$el.is('.show')) {
+        if(this.$el.is('.show')){
             this._loadCustomizeOptions();
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Enables/Disables a view customization whose id is given.
+     *Enables/Disablesaviewcustomizationwhoseidisgiven.
      *
-     * @private
-     * @param {string} viewKey
-     * @returns {Promise}
-     *          Unresolved if the customization succeeded as the page will be
-     *          reloaded.
-     *          Rejected otherwise.
+     *@private
+     *@param{string}viewKey
+     *@returns{Promise}
+     *         Unresolvedifthecustomizationsucceededasthepagewillbe
+     *         reloaded.
+     *         Rejectedotherwise.
      */
-    _doCustomize: function (viewKey) {
-        return this._rpc({
-            route: '/website/toggle_switchable_view',
-            params: {
-                'view_key': viewKey,
+    _doCustomize:function(viewKey){
+        returnthis._rpc({
+            route:'/website/toggle_switchable_view',
+            params:{
+                'view_key':viewKey,
             },
-        }).then(function () {
+        }).then(function(){
             window.location.reload();
-            return new Promise(function () {});
+            returnnewPromise(function(){});
         });
     },
     /**
-     * Loads the information about the views which can be enabled/disabled on
-     * the current page and shows them as switchable elements in the menu.
+     *Loadstheinformationabouttheviewswhichcanbeenabled/disabledon
+     *thecurrentpageandshowsthemasswitchableelementsinthemenu.
      *
-     * @private
-     * @return {Promise}
+     *@private
+     *@return{Promise}
      */
-    _loadCustomizeOptions: function () {
-        if (this.__customizeOptionsLoaded) {
-            return Promise.resolve();
+    _loadCustomizeOptions:function(){
+        if(this.__customizeOptionsLoaded){
+            returnPromise.resolve();
         }
-        this.__customizeOptionsLoaded = true;
+        this.__customizeOptionsLoaded=true;
 
-        var $menu = this.$el.children('.dropdown-menu');
-        return this._rpc({
-            route: '/website/get_switchable_related_views',
-            params: {
-                key: this.viewName,
+        var$menu=this.$el.children('.dropdown-menu');
+        returnthis._rpc({
+            route:'/website/get_switchable_related_views',
+            params:{
+                key:this.viewName,
             },
-        }).then(function (result) {
-            var currentGroup = '';
-            if (result.length) {
-                $menu.append($('<div/>', {
-                    class: 'dropdown-divider',
-                    role: 'separator',
+        }).then(function(result){
+            varcurrentGroup='';
+            if(result.length){
+                $menu.append($('<div/>',{
+                    class:'dropdown-divider',
+                    role:'separator',
                 }));
             }
-            _.each(result, function (item) {
-                if (currentGroup !== item.inherit_id[1]) {
-                    currentGroup = item.inherit_id[1];
-                    $menu.append('<li class="dropdown-header">' + currentGroup + '</li>');
+            _.each(result,function(item){
+                if(currentGroup!==item.inherit_id[1]){
+                    currentGroup=item.inherit_id[1];
+                    $menu.append('<liclass="dropdown-header">'+currentGroup+'</li>');
                 }
-                var $a = $('<a/>', {href: '#', class: 'dropdown-item', 'data-view-key': item.key, role: 'menuitem'})
-                            .append(qweb.render('website.components.switch', {id: 'switch-' + item.id, label: item.name}));
-                $a.find('input').prop('checked', !!item.active);
+                var$a=$('<a/>',{href:'#',class:'dropdown-item','data-view-key':item.key,role:'menuitem'})
+                            .append(qweb.render('website.components.switch',{id:'switch-'+item.id,label:item.name}));
+                $a.find('input').prop('checked',!!item.active);
                 $menu.append($a);
             });
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when a view's related switchable element is clicked -> enable /
-     * disable the related view.
+     *Calledwhenaview'srelatedswitchableelementisclicked->enable/
+     *disabletherelatedview.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onCustomizeOptionClick: function (ev) {
+    _onCustomizeOptionClick:function(ev){
         ev.preventDefault();
-        var viewKey = $(ev.currentTarget).data('viewKey');
+        varviewKey=$(ev.currentTarget).data('viewKey');
         this._doCustomize(viewKey);
     },
     /**
-     * @private
+     *@private
      */
-    _onDropdownShow: function () {
+    _onDropdownShow:function(){
         this._loadCustomizeOptions();
     },
 });
 
-var AceEditorMenu = websiteNavbarData.WebsiteNavbarActionWidget.extend({
-    actions: _.extend({}, websiteNavbarData.WebsiteNavbarActionWidget.prototype.actions || {}, {
-        close_all_widgets: '_hideEditor',
-        edit: '_enterEditMode',
-        ace: '_launchAce',
+varAceEditorMenu=websiteNavbarData.WebsiteNavbarActionWidget.extend({
+    actions:_.extend({},websiteNavbarData.WebsiteNavbarActionWidget.prototype.actions||{},{
+        close_all_widgets:'_hideEditor',
+        edit:'_enterEditMode',
+        ace:'_launchAce',
     }),
 
     /**
-     * Launches the ace editor automatically when the corresponding hash is in
-     * the page URL.
+     *Launchestheaceeditorautomaticallywhenthecorrespondinghashisin
+     *thepageURL.
      *
-     * @override
+     *@override
      */
-    start: function () {
-        if (window.location.hash.substr(0, WebsiteAceEditor.prototype.hash.length) === WebsiteAceEditor.prototype.hash) {
+    start:function(){
+        if(window.location.hash.substr(0,WebsiteAceEditor.prototype.hash.length)===WebsiteAceEditor.prototype.hash){
             this._launchAce();
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Actions
+    //Actions
     //--------------------------------------------------------------------------
 
     /**
-     * When handling the "edit" website action, the ace editor has to be closed.
+     *Whenhandlingthe"edit"websiteaction,theaceeditorhastobeclosed.
      *
-     * @private
+     *@private
      */
-    _enterEditMode: function () {
+    _enterEditMode:function(){
         this._hideEditor();
     },
     /**
-     * @private
+     *@private
      */
-    _hideEditor: function () {
-        if (this.globalEditor) {
+    _hideEditor:function(){
+        if(this.globalEditor){
             this.globalEditor.do_hide();
         }
     },
     /**
-     * Launches the ace editor to be able to edit the templates and scss files
-     * which are used by the current page.
+     *Launchestheaceeditortobeabletoeditthetemplatesandscssfiles
+     *whichareusedbythecurrentpage.
      *
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    _launchAce: function () {
-        var self = this;
-        var prom = new Promise(function (resolve, reject) {
-            self.trigger_up('action_demand', {
-                actionName: 'close_all_widgets',
-                onSuccess: resolve,
+    _launchAce:function(){
+        varself=this;
+        varprom=newPromise(function(resolve,reject){
+            self.trigger_up('action_demand',{
+                actionName:'close_all_widgets',
+                onSuccess:resolve,
             });
         });
-        prom.then(function () {
-            if (self.globalEditor) {
+        prom.then(function(){
+            if(self.globalEditor){
                 self.globalEditor.do_show();
-                return Promise.resolve();
-            } else {
-                var currentHash = window.location.hash;
-                var indexOfView = currentHash.indexOf("?res=");
-                var initialResID = undefined;
-                if (indexOfView >= 0) {
-                    initialResID = currentHash.substr(indexOfView + ("?res=".length));
-                    var parsedResID = parseInt(initialResID, 10);
-                    if (parsedResID) {
-                        initialResID = parsedResID;
+                returnPromise.resolve();
+            }else{
+                varcurrentHash=window.location.hash;
+                varindexOfView=currentHash.indexOf("?res=");
+                varinitialResID=undefined;
+                if(indexOfView>=0){
+                    initialResID=currentHash.substr(indexOfView+("?res=".length));
+                    varparsedResID=parseInt(initialResID,10);
+                    if(parsedResID){
+                        initialResID=parsedResID;
                     }
                 }
 
-                self.globalEditor = new WebsiteAceEditor(self, $(document.documentElement).data('view-xmlid'), {
-                    initialResID: initialResID,
-                    defaultBundlesRestriction: [
+                self.globalEditor=newWebsiteAceEditor(self,$(document.documentElement).data('view-xmlid'),{
+                    initialResID:initialResID,
+                    defaultBundlesRestriction:[
                         'web.assets_frontend',
                         'web.assets_frontend_minimal',
                         'web.assets_frontend_lazy',
                     ],
                 });
-                return self.globalEditor.appendTo(document.body);
+                returnself.globalEditor.appendTo(document.body);
             }
         });
 
-        return prom;
+        returnprom;
     },
 });
 
-websiteNavbarData.websiteNavbarRegistry.add(CustomizeMenu, '#customize-menu');
-websiteNavbarData.websiteNavbarRegistry.add(AceEditorMenu, '#html_editor');
+websiteNavbarData.websiteNavbarRegistry.add(CustomizeMenu,'#customize-menu');
+websiteNavbarData.websiteNavbarRegistry.add(AceEditorMenu,'#html_editor');
 
-return CustomizeMenu;
+returnCustomizeMenu;
 });

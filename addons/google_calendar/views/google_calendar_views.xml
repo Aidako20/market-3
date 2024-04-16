@@ -1,12 +1,12 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-    <record id="view_google_calendar_event" model="ir.ui.view">
-        <field name="name">google_calendar.event.calendar</field>
-        <field name="model">calendar.event</field>
-        <field name="inherit_id" ref="calendar.view_calendar_event_calendar"/>
-        <field name="arch" type="xml">
-            <field name="attendee_status" position="after">
-                <field name="google_id" invisible="1"/>
+    <recordid="view_google_calendar_event"model="ir.ui.view">
+        <fieldname="name">google_calendar.event.calendar</field>
+        <fieldname="model">calendar.event</field>
+        <fieldname="inherit_id"ref="calendar.view_calendar_event_calendar"/>
+        <fieldname="arch"type="xml">
+            <fieldname="attendee_status"position="after">
+                <fieldname="google_id"invisible="1"/>
             </field>
         </field>
     </record>

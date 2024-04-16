@@ -1,58 +1,58 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
-from flectra.addons.iap.tools import iap_tools
+fromflectraimportapi,models
+fromflectra.addons.iap.toolsimportiap_tools
 
-DEFAULT_ENDPOINT = 'https://iap-sms.flectrahq.com'
+DEFAULT_ENDPOINT='https://iap-sms.flectrahq.com'
 
 
-class SmsApi(models.AbstractModel):
-    _name = 'sms.api'
-    _description = 'SMS API'
-
-    @api.model
-    def _contact_iap(self, local_endpoint, params):
-        account = self.env['iap.account'].get('sms')
-        params['account_token'] = account.account_token
-        endpoint = self.env['ir.config_parameter'].sudo().get_param('sms.endpoint', DEFAULT_ENDPOINT)
-        # TODO PRO, the default timeout is 15, do we have to increase it ?
-        return iap_tools.iap_jsonrpc(endpoint + local_endpoint, params=params)
+classSmsApi(models.AbstractModel):
+    _name='sms.api'
+    _description='SMSAPI'
 
     @api.model
-    def _send_sms(self, numbers, message):
-        """ Send a single message to several numbers
+    def_contact_iap(self,local_endpoint,params):
+        account=self.env['iap.account'].get('sms')
+        params['account_token']=account.account_token
+        endpoint=self.env['ir.config_parameter'].sudo().get_param('sms.endpoint',DEFAULT_ENDPOINT)
+        #TODOPRO,thedefaulttimeoutis15,dowehavetoincreaseit?
+        returniap_tools.iap_jsonrpc(endpoint+local_endpoint,params=params)
 
-        :param numbers: list of E164 formatted phone numbers
-        :param message: content to send
+    @api.model
+    def_send_sms(self,numbers,message):
+        """Sendasinglemessagetoseveralnumbers
 
-        :raises ? TDE FIXME
+        :paramnumbers:listofE164formattedphonenumbers
+        :parammessage:contenttosend
+
+        :raises?TDEFIXME
         """
-        params = {
-            'numbers': numbers,
-            'message': message,
+        params={
+            'numbers':numbers,
+            'message':message,
         }
-        return self._contact_iap('/iap/message_send', params)
+        returnself._contact_iap('/iap/message_send',params)
 
     @api.model
-    def _send_sms_batch(self, messages):
-        """ Send SMS using IAP in batch mode
+    def_send_sms_batch(self,messages):
+        """SendSMSusingIAPinbatchmode
 
-        :param messages: list of SMS to send, structured as dict [{
-            'res_id':  integer: ID of sms.sms,
-            'number':  string: E164 formatted phone number,
-            'content': string: content to send
+        :parammessages:listofSMStosend,structuredasdict[{
+            'res_id': integer:IDofsms.sms,
+            'number': string:E164formattedphonenumber,
+            'content':string:contenttosend
         }]
 
-        :return: return of /iap/sms/1/send controller which is a list of dict [{
-            'res_id': integer: ID of sms.sms,
-            'state':  string: 'insufficient_credit' or 'wrong_number_format' or 'success',
-            'credit': integer: number of credits spent to send this SMS,
+        :return:returnof/iap/sms/1/sendcontrollerwhichisalistofdict[{
+            'res_id':integer:IDofsms.sms,
+            'state': string:'insufficient_credit'or'wrong_number_format'or'success',
+            'credit':integer:numberofcreditsspenttosendthisSMS,
         }]
 
-        :raises: normally none
+        :raises:normallynone
         """
-        params = {
-            'messages': messages
+        params={
+            'messages':messages
         }
-        return self._contact_iap('/iap/sms/2/send', params)
+        returnself._contact_iap('/iap/sms/2/send',params)

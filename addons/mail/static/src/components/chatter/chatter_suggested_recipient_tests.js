@@ -1,454 +1,454 @@
-flectra.define('mail/static/src/components/chatter/chatter_suggested_recipient_tests', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/chatter/chatter_suggested_recipient_tests',function(require){
+'usestrict';
 
-const components = {
-    Chatter: require('mail/static/src/components/chatter/chatter.js'),
-    Composer: require('mail/static/src/components/composer/composer.js'),
+constcomponents={
+    Chatter:require('mail/static/src/components/chatter/chatter.js'),
+    Composer:require('mail/static/src/components/composer/composer.js'),
 };
-const {
+const{
     afterEach,
     afterNextRender,
     beforeEach,
     createRootComponent,
     nextTick,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-QUnit.module('mail', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('chatter', {}, function () {
-QUnit.module('chatter_suggested_recipients_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('chatter',{},function(){
+QUnit.module('chatter_suggested_recipients_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.createChatterComponent = async ({ chatter }, otherProps) => {
-            const props = Object.assign({ chatterLocalId: chatter.localId }, otherProps);
-            await createRootComponent(this, components.Chatter, {
+        this.createChatterComponent=async({chatter},otherProps)=>{
+            constprops=Object.assign({chatterLocalId:chatter.localId},otherProps);
+            awaitcreateRootComponent(this,components.Chatter,{
                 props,
-                target: this.widget.el,
+                target:this.widget.el,
             });
         };
 
-        this.start = async params => {
-            const { env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
+        this.start=asyncparams=>{
+            const{env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test("suggest recipient on 'Send message' composer", async function (assert) {
+QUnit.test("suggestrecipienton'Sendmessage'composer",asyncfunction(assert){
     assert.expect(1);
 
     this.data['res.partner'].records.push({
-        display_name: "John Jane",
-        email: "john@jane.be",
-        id: 100,
+        display_name:"JohnJane",
+        email:"john@jane.be",
+        id:100,
     });
     this.data['res.fake'].records.push({
-        id: 10,
-        email_cc: "john@test.be",
-        partner_ids: [100],
+        id:10,
+        email_cc:"john@test.be",
+        partner_ids:[100],
     });
-    await this.start ();
-    const chatter = this.env.models['mail.chatter'].create({
-        threadId: 10,
-        threadModel: 'res.fake',
+    awaitthis.start();
+    constchatter=this.env.models['mail.chatter'].create({
+        threadId:10,
+        threadModel:'res.fake',
     });
-    await this.createChatterComponent({ chatter });
-    await afterNextRender(() =>
+    awaitthis.createChatterComponent({chatter});
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ChatterTopbar_buttonSendMessage`).click()
     );
     assert.containsOnce(
         document.body,
         '.o_ComposerSuggestedRecipientList',
-        "Should display a list of suggested recipients after opening the composer from 'Send message' button"
+        "Shoulddisplayalistofsuggestedrecipientsafteropeningthecomposerfrom'Sendmessage'button"
     );
 });
 
-QUnit.test("with 3 or less suggested recipients: no 'show more' button", async function (assert) {
+QUnit.test("with3orlesssuggestedrecipients:no'showmore'button",asyncfunction(assert){
     assert.expect(1);
 
     this.data['res.partner'].records.push({
-        display_name: "John Jane",
-        email: "john@jane.be",
-        id: 100,
+        display_name:"JohnJane",
+        email:"john@jane.be",
+        id:100,
     });
     this.data['res.fake'].records.push({
-        id: 10,
-        email_cc: "john@test.be",
-        partner_ids: [100],
+        id:10,
+        email_cc:"john@test.be",
+        partner_ids:[100],
     });
-    await this.start ();
-    const chatter = this.env.models['mail.chatter'].create({
-        threadId: 10,
-        threadModel: 'res.fake',
+    awaitthis.start();
+    constchatter=this.env.models['mail.chatter'].create({
+        threadId:10,
+        threadModel:'res.fake',
     });
-    await this.createChatterComponent({ chatter });
-    await afterNextRender(() =>
+    awaitthis.createChatterComponent({chatter});
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ChatterTopbar_buttonSendMessage`).click()
     );
     assert.containsNone(
         document.body,
         '.o_ComposerSuggestedRecipientList_showMore',
-        "should not display 'show more' button with 3 or less suggested recipients"
+        "shouldnotdisplay'showmore'buttonwith3orlesssuggestedrecipients"
     );
 });
 
-QUnit.test("display reason for suggested recipient on mouse over", async function (assert) {
+QUnit.test("displayreasonforsuggestedrecipientonmouseover",asyncfunction(assert){
     assert.expect(1);
 
     this.data['res.partner'].records.push({
-        display_name: "John Jane",
-        email: "john@jane.be",
-        id: 100,
+        display_name:"JohnJane",
+        email:"john@jane.be",
+        id:100,
     });
     this.data['res.fake'].records.push({
-        id: 10,
-        partner_ids: [100],
+        id:10,
+        partner_ids:[100],
     });
-    await this.start();
-    const chatter = this.env.models['mail.chatter'].create({
-        threadId: 10,
-        threadModel: 'res.fake',
+    awaitthis.start();
+    constchatter=this.env.models['mail.chatter'].create({
+        threadId:10,
+        threadModel:'res.fake',
     });
-    await this.createChatterComponent({ chatter });
-    await afterNextRender(() =>
+    awaitthis.createChatterComponent({chatter});
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ChatterTopbar_buttonSendMessage`).click()
     );
-    const partnerTitle = document.querySelector('.o_ComposerSuggestedRecipient[data-partner-id="100"]').getAttribute('title');
+    constpartnerTitle=document.querySelector('.o_ComposerSuggestedRecipient[data-partner-id="100"]').getAttribute('title');
     assert.strictEqual(
         partnerTitle,
-        "Add as recipient and follower (reason: Email partner)",
-        "must display reason for suggested recipient on mouse over",
+        "Addasrecipientandfollower(reason:Emailpartner)",
+        "mustdisplayreasonforsuggestedrecipientonmouseover",
     );
 });
 
-QUnit.test("suggested recipient without partner are unchecked by default", async function (assert) {
+QUnit.test("suggestedrecipientwithoutpartnerareuncheckedbydefault",asyncfunction(assert){
     assert.expect(1);
 
     this.data['res.fake'].records.push({
-        id: 10,
-        email_cc: "john@test.be",
+        id:10,
+        email_cc:"john@test.be",
     });
-    await this.start();
-    const chatter = this.env.models['mail.chatter'].create({
-        threadId: 10,
-        threadModel: 'res.fake',
+    awaitthis.start();
+    constchatter=this.env.models['mail.chatter'].create({
+        threadId:10,
+        threadModel:'res.fake',
     });
-    await this.createChatterComponent({ chatter });
-    await afterNextRender(() =>
+    awaitthis.createChatterComponent({chatter});
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ChatterTopbar_buttonSendMessage`).click()
     );
-    const checkboxUnchecked = document.querySelector('.o_ComposerSuggestedRecipient:not([data-partner-id]) input[type=checkbox]');
+    constcheckboxUnchecked=document.querySelector('.o_ComposerSuggestedRecipient:not([data-partner-id])input[type=checkbox]');
     assert.notOk(
         checkboxUnchecked.checked,
-        "suggested recipient without partner must be unchecked by default",
+        "suggestedrecipientwithoutpartnermustbeuncheckedbydefault",
     );
 });
 
-QUnit.test("suggested recipient without partner are unchecked when closing the dialog without creating partner", async function (assert) {
+QUnit.test("suggestedrecipientwithoutpartnerareuncheckedwhenclosingthedialogwithoutcreatingpartner",asyncfunction(assert){
     assert.expect(1);
 
     this.data['res.fake'].records.push({
-        id: 10,
-        email_cc: "john@test.be",
+        id:10,
+        email_cc:"john@test.be",
     });
 
-    const params = {
-        archs: {},
+    constparams={
+        archs:{},
 
     };
-    params.archs["res.partner,false,form"] = `
+    params.archs["res.partner,false,form"]=`
         <form>
-            <field name="name"/>
+            <fieldname="name"/>
         </form>
     `;
 
-    await this.start(params);
-    const chatter = this.env.models['mail.chatter'].create({
-        threadId: 10,
-        threadModel: 'res.fake',
+    awaitthis.start(params);
+    constchatter=this.env.models['mail.chatter'].create({
+        threadId:10,
+        threadModel:'res.fake',
     });
-    await this.createChatterComponent({ chatter });
-    await afterNextRender(() =>
+    awaitthis.createChatterComponent({chatter});
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ChatterTopbar_buttonSendMessage`).click()
     );
-    // click on checkbox to open dialog
-    document.querySelector('.o_ComposerSuggestedRecipient:not([data-partner-id]) input[type=checkbox]').click();
-    await nextTick();
-    // close dialog without changing anything
-    document.querySelector('.modal-dialog .close').click();
+    //clickoncheckboxtoopendialog
+    document.querySelector('.o_ComposerSuggestedRecipient:not([data-partner-id])input[type=checkbox]').click();
+    awaitnextTick();
+    //closedialogwithoutchanginganything
+    document.querySelector('.modal-dialog.close').click();
 
     assert.notOk(
-        document.querySelector('.o_ComposerSuggestedRecipient:not([data-partner-id]) input[type=checkbox]').checked,
-        "suggested recipient without partner must be unchecked",
+        document.querySelector('.o_ComposerSuggestedRecipient:not([data-partner-id])input[type=checkbox]').checked,
+        "suggestedrecipientwithoutpartnermustbeunchecked",
     );
 });
 
-QUnit.test("suggested recipient with partner are checked by default", async function (assert) {
+QUnit.test("suggestedrecipientwithpartnerarecheckedbydefault",asyncfunction(assert){
     assert.expect(1);
 
     this.data['res.partner'].records.push({
-        display_name: "John Jane",
-        email: "john@jane.be",
-        id: 100,
+        display_name:"JohnJane",
+        email:"john@jane.be",
+        id:100,
     });
     this.data['res.fake'].records.push({
-        id: 10,
-        partner_ids: [100],
+        id:10,
+        partner_ids:[100],
     });
-    await this.start();
-    const chatter = this.env.models['mail.chatter'].create({
-        threadId: 10,
-        threadModel: 'res.fake',
+    awaitthis.start();
+    constchatter=this.env.models['mail.chatter'].create({
+        threadId:10,
+        threadModel:'res.fake',
     });
-    await this.createChatterComponent({ chatter });
-    await afterNextRender(() =>
+    awaitthis.createChatterComponent({chatter});
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ChatterTopbar_buttonSendMessage`).click()
     );
-    const checkboxChecked = document.querySelector('.o_ComposerSuggestedRecipient[data-partner-id="100"] input[type=checkbox]');
+    constcheckboxChecked=document.querySelector('.o_ComposerSuggestedRecipient[data-partner-id="100"]input[type=checkbox]');
     assert.ok(
         checkboxChecked.checked,
-        "suggested recipient with partner must be checked by default",
+        "suggestedrecipientwithpartnermustbecheckedbydefault",
     );
 });
 
-QUnit.test("more than 3 suggested recipients: display only 3 and 'show more' button", async function (assert) {
+QUnit.test("morethan3suggestedrecipients:displayonly3and'showmore'button",asyncfunction(assert){
     assert.expect(1);
 
     this.data['res.partner'].records.push({
-        display_name: "John Jane",
-        email: "john@jane.be",
-        id: 100,
+        display_name:"JohnJane",
+        email:"john@jane.be",
+        id:100,
     });
     this.data['res.partner'].records.push({
-        display_name: "Jack Jone",
-        email: "jack@jone.be",
-        id: 1000,
+        display_name:"JackJone",
+        email:"jack@jone.be",
+        id:1000,
     });
     this.data['res.partner'].records.push({
-        display_name: "jolly Roger",
-        email: "Roger@skullflag.com",
-        id: 1001,
+        display_name:"jollyRoger",
+        email:"Roger@skullflag.com",
+        id:1001,
     });
     this.data['res.partner'].records.push({
-        display_name: "jack sparrow",
-        email: "jsparrow@blackpearl.bb",
-        id: 1002,
+        display_name:"jacksparrow",
+        email:"jsparrow@blackpearl.bb",
+        id:1002,
     });
     this.data['res.fake'].records.push({
-        id: 10,
-        partner_ids: [100, 1000, 1001, 1002],
+        id:10,
+        partner_ids:[100,1000,1001,1002],
     });
-    await this.start ();
-    const chatter = this.env.models['mail.chatter'].create({
-        threadId: 10,
-        threadModel: 'res.fake',
+    awaitthis.start();
+    constchatter=this.env.models['mail.chatter'].create({
+        threadId:10,
+        threadModel:'res.fake',
     });
-    await this.createChatterComponent({ chatter });
+    awaitthis.createChatterComponent({chatter});
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ChatterTopbar_buttonSendMessage`).click()
     );
     assert.containsOnce(
         document.body,
         '.o_ComposerSuggestedRecipientList_showMore',
-        "more than 3 suggested recipients display 'show more' button"
+        "morethan3suggestedrecipientsdisplay'showmore'button"
     );
 });
 
-QUnit.test("more than 3 suggested recipients: show all of them on click 'show more' button", async function (assert) {
+QUnit.test("morethan3suggestedrecipients:showallofthemonclick'showmore'button",asyncfunction(assert){
     assert.expect(1);
 
     this.data['res.partner'].records.push({
-        display_name: "John Jane",
-        email: "john@jane.be",
-        id: 100,
+        display_name:"JohnJane",
+        email:"john@jane.be",
+        id:100,
     });
     this.data['res.partner'].records.push({
-        display_name: "Jack Jone",
-        email: "jack@jone.be",
-        id: 1000,
+        display_name:"JackJone",
+        email:"jack@jone.be",
+        id:1000,
     });
     this.data['res.partner'].records.push({
-        display_name: "jolly Roger",
-        email: "Roger@skullflag.com",
-        id: 1001,
+        display_name:"jollyRoger",
+        email:"Roger@skullflag.com",
+        id:1001,
     });
     this.data['res.partner'].records.push({
-        display_name: "jack sparrow",
-        email: "jsparrow@blackpearl.bb",
-        id: 1002,
+        display_name:"jacksparrow",
+        email:"jsparrow@blackpearl.bb",
+        id:1002,
     });
     this.data['res.fake'].records.push({
-        id: 10,
-        partner_ids: [100, 1000, 1001, 1002],
+        id:10,
+        partner_ids:[100,1000,1001,1002],
     });
-    await this.start ();
-    const chatter = this.env.models['mail.chatter'].create({
-        threadId: 10,
-        threadModel: 'res.fake',
+    awaitthis.start();
+    constchatter=this.env.models['mail.chatter'].create({
+        threadId:10,
+        threadModel:'res.fake',
     });
-    await this.createChatterComponent({ chatter });
+    awaitthis.createChatterComponent({chatter});
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ChatterTopbar_buttonSendMessage`).click()
     );
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ComposerSuggestedRecipientList_showMore`).click()
     );
     assert.containsN(
         document.body,
         '.o_ComposerSuggestedRecipient',
         4,
-        "more than 3 suggested recipients: show all of them on click 'show more' button"
+        "morethan3suggestedrecipients:showallofthemonclick'showmore'button"
     );
 });
 
-QUnit.test("more than 3 suggested recipients -> click 'show more' -> 'show less' button", async function (assert) {
+QUnit.test("morethan3suggestedrecipients->click'showmore'->'showless'button",asyncfunction(assert){
     assert.expect(1);
 
     this.data['res.partner'].records.push({
-        display_name: "John Jane",
-        email: "john@jane.be",
-        id: 100,
+        display_name:"JohnJane",
+        email:"john@jane.be",
+        id:100,
     });
     this.data['res.partner'].records.push({
-        display_name: "Jack Jone",
-        email: "jack@jone.be",
-        id: 1000,
+        display_name:"JackJone",
+        email:"jack@jone.be",
+        id:1000,
     });
     this.data['res.partner'].records.push({
-        display_name: "jolly Roger",
-        email: "Roger@skullflag.com",
-        id: 1001,
+        display_name:"jollyRoger",
+        email:"Roger@skullflag.com",
+        id:1001,
     });
     this.data['res.partner'].records.push({
-        display_name: "jack sparrow",
-        email: "jsparrow@blackpearl.bb",
-        id: 1002,
+        display_name:"jacksparrow",
+        email:"jsparrow@blackpearl.bb",
+        id:1002,
     });
     this.data['res.fake'].records.push({
-        id: 10,
-        partner_ids: [100, 1000, 1001, 1002],
+        id:10,
+        partner_ids:[100,1000,1001,1002],
     });
-    await this.start ();
-    const chatter = this.env.models['mail.chatter'].create({
-        threadId: 10,
-        threadModel: 'res.fake',
+    awaitthis.start();
+    constchatter=this.env.models['mail.chatter'].create({
+        threadId:10,
+        threadModel:'res.fake',
     });
-    await this.createChatterComponent({ chatter });
+    awaitthis.createChatterComponent({chatter});
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ChatterTopbar_buttonSendMessage`).click()
     );
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ComposerSuggestedRecipientList_showMore`).click()
     );
     assert.containsOnce(
         document.body,
         '.o_ComposerSuggestedRecipientList_showLess',
-        "more than 3 suggested recipients -> click 'show more' -> 'show less' button"
+        "morethan3suggestedrecipients->click'showmore'->'showless'button"
     );
 });
 
-QUnit.test("suggested recipients list display 3 suggested recipient and 'show more' button when 'show less' button is clicked", async function (assert) {
+QUnit.test("suggestedrecipientslistdisplay3suggestedrecipientand'showmore'buttonwhen'showless'buttonisclicked",asyncfunction(assert){
     assert.expect(2);
 
     this.data['res.partner'].records.push({
-        display_name: "John Jane",
-        email: "john@jane.be",
-        id: 100,
+        display_name:"JohnJane",
+        email:"john@jane.be",
+        id:100,
     });
     this.data['res.partner'].records.push({
-        display_name: "Jack Jone",
-        email: "jack@jone.be",
-        id: 1000,
+        display_name:"JackJone",
+        email:"jack@jone.be",
+        id:1000,
     });
     this.data['res.partner'].records.push({
-        display_name: "jolly Roger",
-        email: "Roger@skullflag.com",
-        id: 1001,
+        display_name:"jollyRoger",
+        email:"Roger@skullflag.com",
+        id:1001,
     });
     this.data['res.partner'].records.push({
-        display_name: "jack sparrow",
-        email: "jsparrow@blackpearl.bb",
-        id: 1002,
+        display_name:"jacksparrow",
+        email:"jsparrow@blackpearl.bb",
+        id:1002,
     });
     this.data['res.fake'].records.push({
-        id: 10,
-        partner_ids: [100, 1000, 1001, 1002],
+        id:10,
+        partner_ids:[100,1000,1001,1002],
     });
-    await this.start ();
-    const chatter = this.env.models['mail.chatter'].create({
-        threadId: 10,
-        threadModel: 'res.fake',
+    awaitthis.start();
+    constchatter=this.env.models['mail.chatter'].create({
+        threadId:10,
+        threadModel:'res.fake',
     });
-    await this.createChatterComponent({ chatter });
+    awaitthis.createChatterComponent({chatter});
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ChatterTopbar_buttonSendMessage`).click()
     );
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ComposerSuggestedRecipientList_showMore`).click()
     );
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ComposerSuggestedRecipientList_showLess`).click()
     );
     assert.containsN(
         document.body,
         '.o_ComposerSuggestedRecipient',
         3,
-        "suggested recipient list should display 3 suggested recipients after clicking on 'show less'."
+        "suggestedrecipientlistshoulddisplay3suggestedrecipientsafterclickingon'showless'."
     );
     assert.containsOnce(
         document.body,
         '.o_ComposerSuggestedRecipientList_showMore',
-        "suggested recipient list should containt a 'show More' button after clicking on 'show less'."
+        "suggestedrecipientlistshouldcontainta'showMore'buttonafterclickingon'showless'."
     );
 });
 
-QUnit.test("suggested recipients should not be notified when posting an internal note", async function (assert) {
+QUnit.test("suggestedrecipientsshouldnotbenotifiedwhenpostinganinternalnote",asyncfunction(assert){
     assert.expect(1);
 
     this.data['res.partner'].records.push({
-        display_name: "John Jane",
-        email: "john@jane.be",
-        id: 100,
+        display_name:"JohnJane",
+        email:"john@jane.be",
+        id:100,
     });
     this.data['res.fake'].records.push({
-        id: 10,
-        partner_ids: [100],
+        id:10,
+        partner_ids:[100],
     });
-    await this.start({
-        async mockRPC(route, args) {
-            if (args.model === 'res.fake' && args.method === 'message_post') {
+    awaitthis.start({
+        asyncmockRPC(route,args){
+            if(args.model==='res.fake'&&args.method==='message_post'){
                 assert.strictEqual(
                     args.kwargs.partner_ids.length,
                     0,
-                    "message_post should not contain suggested recipients when posting an internal note"
+                    "message_postshouldnotcontainsuggestedrecipientswhenpostinganinternalnote"
                 );
             }
-            return this._super(...arguments);
+            returnthis._super(...arguments);
         },
     });
-    const chatter = this.env.models['mail.chatter'].create({
-        threadId: 10,
-        threadModel: 'res.fake',
+    constchatter=this.env.models['mail.chatter'].create({
+        threadId:10,
+        threadModel:'res.fake',
     });
-    await this.createChatterComponent({ chatter });
-    await afterNextRender(() =>
+    awaitthis.createChatterComponent({chatter});
+    awaitafterNextRender(()=>
         document.querySelector(`.o_ChatterTopbar_buttonLogNote`).click()
     );
     document.querySelector('.o_ComposerTextInput_textarea').focus();
-    await afterNextRender(() => document.execCommand('insertText', false, "Dummy Message"));
-    await afterNextRender(() => {
+    awaitafterNextRender(()=>document.execCommand('insertText',false,"DummyMessage"));
+    awaitafterNextRender(()=>{
         document.querySelector('.o_Composer_buttonSend').click();
     });
 });

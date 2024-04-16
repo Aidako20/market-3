@@ -1,29 +1,29 @@
-flectra.define('website_forum.test_error', function (require) {
-'use strict';
+flectra.define('website_forum.test_error',function(require){
+'usestrict';
 
-var publicWidget = require('web.public.widget');
+varpublicWidget=require('web.public.widget');
 
-publicWidget.registry.testError = publicWidget.Widget.extend({
-    selector: '.rpc_error',
-    events: {
-        'click a': '_onRpcErrorClick',
+publicWidget.registry.testError=publicWidget.Widget.extend({
+    selector:'.rpc_error',
+    events:{
+        'clicka':'_onRpcErrorClick',
     },
 
     //----------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //----------------------------------------------------------------------
 
     /**
-     * make a rpc call with the href of the DOM element clicked
-     * @private
-     * @param {Event} ev
-     * @returns {Promise}
+     *makearpccallwiththehrefoftheDOMelementclicked
+     *@private
+     *@param{Event}ev
+     *@returns{Promise}
      */
-    _onRpcErrorClick: function (ev) {
+    _onRpcErrorClick:function(ev){
         ev.preventDefault();
-        var $link = $(ev.currentTarget);
-        return this._rpc({
-            route: $link.attr('href'),
+        var$link=$(ev.currentTarget);
+        returnthis._rpc({
+            route:$link.attr('href'),
         });
     }
 });

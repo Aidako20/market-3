@@ -1,139 +1,139 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <!--  MAILING CONTACT SUBSCRIPTION -->
-    <record model="ir.ui.view" id="mailing_contact_subscription_view_form">
-        <field name="name">mailing.contact.subscription.view.form</field>
-        <field name="model">mailing.contact.subscription</field>
-        <field name="priority">10</field>
-        <field name="arch" type="xml">
-            <form string="Mailing List Subscription">
+    <!-- MAILINGCONTACTSUBSCRIPTION-->
+    <recordmodel="ir.ui.view"id="mailing_contact_subscription_view_form">
+        <fieldname="name">mailing.contact.subscription.view.form</field>
+        <fieldname="model">mailing.contact.subscription</field>
+        <fieldname="priority">10</field>
+        <fieldname="arch"type="xml">
+            <formstring="MailingListSubscription">
                 <sheet>
                     <group>
-                        <field name="list_id"/>
-                        <field name="is_blacklisted" invisible="1"/>
-                        <label for="contact_id" class="oe_inline"/>
-                        <div class="o_row o_row_readonly">
-                            <i class="fa fa-ban text-danger" role="img" title="This email is blacklisted for mass mailings"
-                                aria-label="Blacklisted" attrs="{'invisible': [('is_blacklisted', '=', False)]}" groups="base.group_user"></i>
-                            <field name="contact_id"/>
+                        <fieldname="list_id"/>
+                        <fieldname="is_blacklisted"invisible="1"/>
+                        <labelfor="contact_id"class="oe_inline"/>
+                        <divclass="o_rowo_row_readonly">
+                            <iclass="fafa-bantext-danger"role="img"title="Thisemailisblacklistedformassmailings"
+                                aria-label="Blacklisted"attrs="{'invisible':[('is_blacklisted','=',False)]}"groups="base.group_user"></i>
+                            <fieldname="contact_id"/>
                         </div>
-                        <field name="unsubscription_date" readonly="1"/>
-                        <field name="opt_out"/>
-                        <field name="message_bounce" readonly="1"/>
+                        <fieldname="unsubscription_date"readonly="1"/>
+                        <fieldname="opt_out"/>
+                        <fieldname="message_bounce"readonly="1"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record model="ir.ui.view" id="mailing_contact_subscription_view_tree">
-        <field name="name">mailing.contact.subscription.view.tree</field>
-        <field name="model">mailing.contact.subscription</field>
-        <field name="arch" type="xml">
-            <tree string="Mailing List Subscriptions">
-                <field name="contact_id"/>
-                <field name="unsubscription_date"/>
-                <field name="opt_out"/>
-                <field name="message_bounce"/>
-                <field name="is_blacklisted"/>
+    <recordmodel="ir.ui.view"id="mailing_contact_subscription_view_tree">
+        <fieldname="name">mailing.contact.subscription.view.tree</field>
+        <fieldname="model">mailing.contact.subscription</field>
+        <fieldname="arch"type="xml">
+            <treestring="MailingListSubscriptions">
+                <fieldname="contact_id"/>
+                <fieldname="unsubscription_date"/>
+                <fieldname="opt_out"/>
+                <fieldname="message_bounce"/>
+                <fieldname="is_blacklisted"/>
             </tree>
         </field>
     </record>
 
-    <record model="ir.ui.view" id="mailing_contact_subscription_view_search">
-        <field name="name">mailing.contact.subscription.view.search</field>
-        <field name="model">mailing.contact.subscription</field>
-        <field name="arch" type="xml">
-           <search string="Mailing List Subscriptions">
-                <field name="contact_id"/>
-                <field name="opt_out"/>
-                <field name="list_id"/>
+    <recordmodel="ir.ui.view"id="mailing_contact_subscription_view_search">
+        <fieldname="name">mailing.contact.subscription.view.search</field>
+        <fieldname="model">mailing.contact.subscription</field>
+        <fieldname="arch"type="xml">
+           <searchstring="MailingListSubscriptions">
+                <fieldname="contact_id"/>
+                <fieldname="opt_out"/>
+                <fieldname="list_id"/>
             </search>
         </field>
     </record>
 
-    <record id="mailing_contact_view_search" model="ir.ui.view">
-        <field name="name">mailing.contact.view.search</field>
-        <field name="model">mailing.contact</field>
-        <field name="arch" type="xml">
-           <search string="Mailing List Contacts">
-                <field name="name"
-                    filter_domain="['|', '|', ('name','ilike',self), ('company_name','ilike',self), ('email_normalized','ilike',self)]"
-                    string="Name / Email"/>
-                <field name="tag_ids"/>
-                <field name="list_ids"/>
+    <recordid="mailing_contact_view_search"model="ir.ui.view">
+        <fieldname="name">mailing.contact.view.search</field>
+        <fieldname="model">mailing.contact</field>
+        <fieldname="arch"type="xml">
+           <searchstring="MailingListContacts">
+                <fieldname="name"
+                    filter_domain="['|','|',('name','ilike',self),('company_name','ilike',self),('email_normalized','ilike',self)]"
+                    string="Name/Email"/>
+                <fieldname="tag_ids"/>
+                <fieldname="list_ids"/>
                 <separator/>
-                <filter string="Valid Email Recipients"
+                <filterstring="ValidEmailRecipients"
                     name="filter_valid_email_recipient"
-                    domain="[('opt_out', '=', False), ('is_blacklisted', '=', False), ('email_normalized', '!=', False)]"
-                    invisible="not context.get('default_list_ids')"/>
+                    domain="[('opt_out','=',False),('is_blacklisted','=',False),('email_normalized','!=',False)]"
+                    invisible="notcontext.get('default_list_ids')"/>
                 <separator/>
-                <filter string="Exclude Blacklisted Emails"
+                <filterstring="ExcludeBlacklistedEmails"
                     name="filter_not_email_bl"
-                    domain="[('is_blacklisted', '=', False)]"/>
+                    domain="[('is_blacklisted','=',False)]"/>
                 <separator/>
-                <filter string="Exclude Opt Out"
+                <filterstring="ExcludeOptOut"
                     name="filter_not_optout"
-                    domain="[('opt_out', '=', False)]"
-                    invisible="not context.get('default_list_ids')"/>
-                <group expand="0" string="Group By">
-                    <filter string="Creation Date" name="group_create_date"
-                        context="{'group_by': 'create_date'}"/>
+                    domain="[('opt_out','=',False)]"
+                    invisible="notcontext.get('default_list_ids')"/>
+                <groupexpand="0"string="GroupBy">
+                    <filterstring="CreationDate"name="group_create_date"
+                        context="{'group_by':'create_date'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <record id="mailing_contact_view_tree" model="ir.ui.view">
-        <field name="name">mailing.contact.view.tree</field>
-        <field name="model">mailing.contact</field>
-        <field name="priority">10</field>
-        <field name="arch" type="xml">
-            <tree string="Mailing List Contacts" sample="1">
-                <field name="create_date"/>
-                <field name="name"/>
-                <field name="company_name"/>
-                <field name="email"/>
-                <field name="is_blacklisted" string="Email Blacklisted"/>
-                <field name="message_bounce" sum="Total Bounces"/>
-                <field name="opt_out" invisible="'default_list_ids' not in context"/>
+    <recordid="mailing_contact_view_tree"model="ir.ui.view">
+        <fieldname="name">mailing.contact.view.tree</field>
+        <fieldname="model">mailing.contact</field>
+        <fieldname="priority">10</field>
+        <fieldname="arch"type="xml">
+            <treestring="MailingListContacts"sample="1">
+                <fieldname="create_date"/>
+                <fieldname="name"/>
+                <fieldname="company_name"/>
+                <fieldname="email"/>
+                <fieldname="is_blacklisted"string="EmailBlacklisted"/>
+                <fieldname="message_bounce"sum="TotalBounces"/>
+                <fieldname="opt_out"invisible="'default_list_ids'notincontext"/>
             </tree>
         </field>
     </record>
 
-    <record id="mailing_contact_view_kanban" model="ir.ui.view">
-        <field name="name">mailing.contact.view.kanban</field>
-        <field name="model">mailing.contact</field>
-        <field name="arch" type="xml">
-            <kanban sample="1">
-                <field name="name"/>
-                <field name="company_name"/>
-                <field name="email"/>
-                <field name="message_bounce"/>
+    <recordid="mailing_contact_view_kanban"model="ir.ui.view">
+        <fieldname="name">mailing.contact.view.kanban</field>
+        <fieldname="model">mailing.contact</field>
+        <fieldname="arch"type="xml">
+            <kanbansample="1">
+                <fieldname="name"/>
+                <fieldname="company_name"/>
+                <fieldname="email"/>
+                <fieldname="message_bounce"/>
                 <templates>
-                    <t t-name="kanban-box">
-                        <div t-attf-class="oe_kanban_global_click">
-                            <div class="o_kanban_record_top">
-                                <div class="o_kanban_record_headings">
-                                    <strong class="o_kanban_record_title">
-                                        <t t-esc="record.name.value"/>
+                    <tt-name="kanban-box">
+                        <divt-attf-class="oe_kanban_global_click">
+                            <divclass="o_kanban_record_top">
+                                <divclass="o_kanban_record_headings">
+                                    <strongclass="o_kanban_record_title">
+                                        <tt-esc="record.name.value"/>
                                     </strong>
                                 </div>
-                                <span class="badge badge-pill" title="Number of bounced email.">
-                                    <i class="fa fa-exclamation-triangle" role="img" aria-label="Warning" title="Warning"/> <t t-esc="record.message_bounce.value" title=""/>
+                                <spanclass="badgebadge-pill"title="Numberofbouncedemail.">
+                                    <iclass="fafa-exclamation-triangle"role="img"aria-label="Warning"title="Warning"/><tt-esc="record.message_bounce.value"title=""/>
                                 </span>
                             </div>
-                            <div class="o_kanban_record_body">
-                                <field name="tag_ids"/>
+                            <divclass="o_kanban_record_body">
+                                <fieldname="tag_ids"/>
                             </div>
-                            <div class="o_kanban_record_bottom">
-                                <div class="oe_kanban_bottom_left">
+                            <divclass="o_kanban_record_bottom">
+                                <divclass="oe_kanban_bottom_left">
                                     <strong>
-                                        <t t-esc="record.email.value"/>
+                                        <tt-esc="record.email.value"/>
                                     </strong>
                                 </div>
-                                <div class="oe_kanban_bottom_right">
-                                    <t t-esc="record.company_name.value"/>
+                                <divclass="oe_kanban_bottom_right">
+                                    <tt-esc="record.company_name.value"/>
                                 </div>
                             </div>
                         </div>
@@ -143,96 +143,96 @@
         </field>
     </record>
 
-    <record id="mailing_contact_view_form" model="ir.ui.view">
-        <field name="name">mailing.contact.view.form</field>
-        <field name="model">mailing.contact</field>
-        <field name="priority">10</field>
-        <field name="arch" type="xml">
-            <form string="Mailing List Contacts">
+    <recordid="mailing_contact_view_form"model="ir.ui.view">
+        <fieldname="name">mailing.contact.view.form</field>
+        <fieldname="model">mailing.contact</field>
+        <fieldname="priority">10</field>
+        <fieldname="arch"type="xml">
+            <formstring="MailingListContacts">
                 <sheet>
-                    <div class="oe_title">
-                        <label for="name" class="oe_edit_only"/>
+                    <divclass="oe_title">
+                        <labelfor="name"class="oe_edit_only"/>
                         <h1>
-                            <field name="name" placeholder="e.g. John Smith"/>
+                            <fieldname="name"placeholder="e.g.JohnSmith"/>
                         </h1>
-                        <label for="tag_ids" class="oe_edit_only"/>
+                        <labelfor="tag_ids"class="oe_edit_only"/>
                         <div>
-                            <field name="tag_ids" widget="many2many_tags" style="width: 100%%"/>
+                            <fieldname="tag_ids"widget="many2many_tags"style="width:100%%"/>
                         </div>
                     </div>
                     <group>
                         <group>
-                            <label for="email" class="oe_inline"/>
-                            <div class="o_row o_row_readonly" name="email_details">
-                                 <button name="mail_action_blacklist_remove" class="fa fa-ban text-danger"
-                                    title="This email is blacklisted for mass mailings. Click to unblacklist."
-                                    type="object" context="{'default_email': email}" groups="base.group_user"
-                                    attrs="{'invisible': [('is_blacklisted', '=', False)]}"/>
-                                <field name="email" widget="email"/>
-                                <field name="is_blacklisted" invisible="1"/>
+                            <labelfor="email"class="oe_inline"/>
+                            <divclass="o_rowo_row_readonly"name="email_details">
+                                 <buttonname="mail_action_blacklist_remove"class="fafa-bantext-danger"
+                                    title="Thisemailisblacklistedformassmailings.Clicktounblacklist."
+                                    type="object"context="{'default_email':email}"groups="base.group_user"
+                                    attrs="{'invisible':[('is_blacklisted','=',False)]}"/>
+                                <fieldname="email"widget="email"/>
+                                <fieldname="is_blacklisted"invisible="1"/>
                             </div>
-                            <field name="title_id"/>
-                            <field name="company_name"/>
-                            <field name="country_id"/>
+                            <fieldname="title_id"/>
+                            <fieldname="company_name"/>
+                            <fieldname="country_id"/>
                         </group>
                         <group>
-                            <field name="create_date" readonly="1"/>
-                            <field name="message_bounce"/>
+                            <fieldname="create_date"readonly="1"/>
+                            <fieldname="message_bounce"/>
                         </group>
                     </group>
-                    <field name="subscription_list_ids">
-                        <tree editable="bottom">
-                           <field name="list_id"/>
-                           <field name="unsubscription_date"/>
-                           <field name="opt_out"/>
+                    <fieldname="subscription_list_ids">
+                        <treeeditable="bottom">
+                           <fieldname="list_id"/>
+                           <fieldname="unsubscription_date"/>
+                           <fieldname="opt_out"/>
                         </tree>
                     </field>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="message_ids"/>
+                <divclass="oe_chatter">
+                    <fieldname="message_follower_ids"/>
+                    <fieldname="message_ids"/>
                 </div>
             </form>
         </field>
     </record>
 
-    <record id="mailing_contact_view_pivot" model="ir.ui.view">
-        <field name="name">mailing.contact.pivot</field>
-        <field name="model">mailing.contact</field>
-        <field name="priority">10</field>
-        <field name="arch" type="xml">
-            <pivot string="Mailing List Contacts" stacked="True" sample="1">
-                <field name="create_date" type="row"/>
+    <recordid="mailing_contact_view_pivot"model="ir.ui.view">
+        <fieldname="name">mailing.contact.pivot</field>
+        <fieldname="model">mailing.contact</field>
+        <fieldname="priority">10</field>
+        <fieldname="arch"type="xml">
+            <pivotstring="MailingListContacts"stacked="True"sample="1">
+                <fieldname="create_date"type="row"/>
             </pivot>
         </field>
     </record>
 
-    <record id="mailing_contact_view_graph" model="ir.ui.view">
-        <field name="name">mailing.contact.view.graph</field>
-        <field name="model">mailing.contact</field>
-        <field name="priority">10</field>
-        <field name="arch" type="xml">
-            <graph string="Mailing List Contacts" stacked="True" sample="1">
-                <field name="create_date" type="row"/>
+    <recordid="mailing_contact_view_graph"model="ir.ui.view">
+        <fieldname="name">mailing.contact.view.graph</field>
+        <fieldname="model">mailing.contact</field>
+        <fieldname="priority">10</field>
+        <fieldname="arch"type="xml">
+            <graphstring="MailingListContacts"stacked="True"sample="1">
+                <fieldname="create_date"type="row"/>
             </graph>
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="action_view_mass_mailing_contacts">
-        <field name="name">Mailing List Contacts</field>
-        <field name="res_model">mailing.contact</field>
-        <field name="view_mode">tree,kanban,form,graph,pivot</field>
-        <field name="context">{'search_default_filter_not_email_bl': 1}</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create a mailing contact
+    <recordmodel="ir.actions.act_window"id="action_view_mass_mailing_contacts">
+        <fieldname="name">MailingListContacts</field>
+        <fieldname="res_model">mailing.contact</field>
+        <fieldname="view_mode">tree,kanban,form,graph,pivot</field>
+        <fieldname="context">{'search_default_filter_not_email_bl':1}</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+                Createamailingcontact
             </p><p>
-                Mailing contacts allow you to separate your marketing audience from your business contact directory.
+                Mailingcontactsallowyoutoseparateyourmarketingaudiencefromyourbusinesscontactdirectory.
             </p>
         </field>
     </record>
 
-    <menuitem name="Mailing List Contacts" id="menu_email_mass_mailing_contacts"
-        parent="mass_mailing_mailing_list_menu" sequence="4"
+    <menuitemname="MailingListContacts"id="menu_email_mass_mailing_contacts"
+        parent="mass_mailing_mailing_list_menu"sequence="4"
         action="action_view_mass_mailing_contacts"/>
 </flectra>

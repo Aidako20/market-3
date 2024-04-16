@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, _
+fromflectraimportmodels,_
 
 
-class Course(models.Model):
-    _inherit = "slide.channel"
+classCourse(models.Model):
+    _inherit="slide.channel"
 
-    def action_mass_mailing_attendees(self):
-        domain = repr([('slide_channel_ids', 'in', self.ids)])
-        mass_mailing_action = dict(
-            name=_('Mass Mail Course Members'),
+    defaction_mass_mailing_attendees(self):
+        domain=repr([('slide_channel_ids','in',self.ids)])
+        mass_mailing_action=dict(
+            name=_('MassMailCourseMembers'),
             type='ir.actions.act_window',
             res_model='mailing.mailing',
             view_mode='form',
@@ -20,4 +20,4 @@ class Course(models.Model):
                 default_mailing_domain=domain,
             ),
         )
-        return mass_mailing_action
+        returnmass_mailing_action

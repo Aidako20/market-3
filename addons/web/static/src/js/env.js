@@ -1,16 +1,16 @@
-flectra.define("web.env", function (require) {
-    "use strict";
+flectra.define("web.env",function(require){
+    "usestrict";
 
     /**
-     * This file defines the env to use in the webclient.
+     *Thisfiledefinestheenvtouseinthewebclient.
      */
 
-    const commonEnv = require('web.commonEnv');
-    const dataManager = require('web.data_manager');
-    const { blockUI, unblockUI } = require("web.framework");
+    constcommonEnv=require('web.commonEnv');
+    constdataManager=require('web.data_manager');
+    const{blockUI,unblockUI}=require("web.framework");
 
-    const env = Object.assign(commonEnv, { dataManager });
-    env.services = Object.assign(env.services, { blockUI, unblockUI });
+    constenv=Object.assign(commonEnv,{dataManager});
+    env.services=Object.assign(env.services,{blockUI,unblockUI});
 
-    return env;
+    returnenv;
 });

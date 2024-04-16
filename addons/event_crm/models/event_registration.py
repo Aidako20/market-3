@@ -1,361 +1,361 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from collections import defaultdict
+fromcollectionsimportdefaultdict
 
-from flectra import api, fields, models, tools, _
-from flectra.addons.phone_validation.tools import phone_validation
+fromflectraimportapi,fields,models,tools,_
+fromflectra.addons.phone_validation.toolsimportphone_validation
 
 
-class EventRegistration(models.Model):
-    _inherit = 'event.registration'
+classEventRegistration(models.Model):
+    _inherit='event.registration'
 
-    lead_ids = fields.Many2many(
-        'crm.lead', string='Leads', copy=False, readonly=True,
+    lead_ids=fields.Many2many(
+        'crm.lead',string='Leads',copy=False,readonly=True,
         groups='sales_team.group_sale_salesman',
-        help="Leads generated from the registration.")
-    lead_count = fields.Integer(
-        '# Leads', compute='_compute_lead_count', groups='sales_team.group_sale_salesman',
-        help="Counter for the leads linked to this registration")
+        help="Leadsgeneratedfromtheregistration.")
+    lead_count=fields.Integer(
+        '#Leads',compute='_compute_lead_count',groups='sales_team.group_sale_salesman',
+        help="Counterfortheleadslinkedtothisregistration")
 
     @api.depends('lead_ids')
-    def _compute_lead_count(self):
-        for record in self:
-            record.lead_count = len(record.lead_ids)
+    def_compute_lead_count(self):
+        forrecordinself:
+            record.lead_count=len(record.lead_ids)
 
     @api.model_create_multi
-    def create(self, vals_list):
-        """ Trigger rules based on registration creation, and check state for
-        rules based on confirmed / done attendees. """
-        registrations = super(EventRegistration, self).create(vals_list)
+    defcreate(self,vals_list):
+        """Triggerrulesbasedonregistrationcreation,andcheckstatefor
+        rulesbasedonconfirmed/doneattendees."""
+        registrations=super(EventRegistration,self).create(vals_list)
 
-        # handle triggers based on creation, then those based on confirm and done
-        # as registrations can be automatically confirmed, or even created directly
-        # with a state given in values
-        if not self.env.context.get('event_lead_rule_skip'):
-            self.env['event.lead.rule'].search([('lead_creation_trigger', '=', 'create')]).sudo()._run_on_registrations(registrations)
-            open_registrations = registrations.filtered(lambda reg: reg.state == 'open')
-            if open_registrations:
-                self.env['event.lead.rule'].search([('lead_creation_trigger', '=', 'confirm')]).sudo()._run_on_registrations(open_registrations)
-            done_registrations = registrations.filtered(lambda reg: reg.state == 'done')
-            if done_registrations:
-                self.env['event.lead.rule'].search([('lead_creation_trigger', '=', 'done')]).sudo()._run_on_registrations(done_registrations)
+        #handletriggersbasedoncreation,thenthosebasedonconfirmanddone
+        #asregistrationscanbeautomaticallyconfirmed,orevencreateddirectly
+        #withastategiveninvalues
+        ifnotself.env.context.get('event_lead_rule_skip'):
+            self.env['event.lead.rule'].search([('lead_creation_trigger','=','create')]).sudo()._run_on_registrations(registrations)
+            open_registrations=registrations.filtered(lambdareg:reg.state=='open')
+            ifopen_registrations:
+                self.env['event.lead.rule'].search([('lead_creation_trigger','=','confirm')]).sudo()._run_on_registrations(open_registrations)
+            done_registrations=registrations.filtered(lambdareg:reg.state=='done')
+            ifdone_registrations:
+                self.env['event.lead.rule'].search([('lead_creation_trigger','=','done')]).sudo()._run_on_registrations(done_registrations)
 
-        return registrations
+        returnregistrations
 
-    def write(self, vals):
-        """ Update the lead values depending on fields updated in registrations.
-        There are 2 main use cases
+    defwrite(self,vals):
+        """Updatetheleadvaluesdependingonfieldsupdatedinregistrations.
+        Thereare2mainusecases
 
-          * first is when we update the partner_id of multiple registrations. It
-            happens when a public user fill its information when he register to
-            an event;
-          * second is when we update specific values of one registration like
-            updating question answers or a contact information (email, phone);
+          *firstiswhenweupdatethepartner_idofmultipleregistrations.It
+            happenswhenapublicuserfillitsinformationwhenheregisterto
+            anevent;
+          *secondiswhenweupdatespecificvaluesofoneregistrationlike
+            updatingquestionanswersoracontactinformation(email,phone);
 
-        Also trigger rules based on confirmed and done attendees (state written
-        to open and done).
+        Alsotriggerrulesbasedonconfirmedanddoneattendees(statewritten
+        toopenanddone).
         """
-        to_update, event_lead_rule_skip = False, self.env.context.get('event_lead_rule_skip')
-        if not event_lead_rule_skip:
-            to_update = self.filtered(lambda reg: reg.lead_ids)
-        if to_update:
-            lead_tracked_vals = to_update._get_lead_tracked_values()
+        to_update,event_lead_rule_skip=False,self.env.context.get('event_lead_rule_skip')
+        ifnotevent_lead_rule_skip:
+            to_update=self.filtered(lambdareg:reg.lead_ids)
+        ifto_update:
+            lead_tracked_vals=to_update._get_lead_tracked_values()
 
-        res = super(EventRegistration, self).write(vals)
+        res=super(EventRegistration,self).write(vals)
 
-        if not event_lead_rule_skip and to_update:
-            to_update.flush()  # compute notably partner-based fields if necessary
-            to_update.sudo()._update_leads(vals, lead_tracked_vals)
+        ifnotevent_lead_rule_skipandto_update:
+            to_update.flush() #computenotablypartner-basedfieldsifnecessary
+            to_update.sudo()._update_leads(vals,lead_tracked_vals)
 
-        # handle triggers based on state
-        if not event_lead_rule_skip:
-            if vals.get('state') == 'open':
-                self.env['event.lead.rule'].search([('lead_creation_trigger', '=', 'confirm')]).sudo()._run_on_registrations(self)
-            elif vals.get('state') == 'done':
-                self.env['event.lead.rule'].search([('lead_creation_trigger', '=', 'done')]).sudo()._run_on_registrations(self)
+        #handletriggersbasedonstate
+        ifnotevent_lead_rule_skip:
+            ifvals.get('state')=='open':
+                self.env['event.lead.rule'].search([('lead_creation_trigger','=','confirm')]).sudo()._run_on_registrations(self)
+            elifvals.get('state')=='done':
+                self.env['event.lead.rule'].search([('lead_creation_trigger','=','done')]).sudo()._run_on_registrations(self)
 
-        return res
+        returnres
 
-    def _load_records_create(self, values):
-        """ In import mode: do not run rules those are intended to run when customers
-        buy tickets, not when bootstrapping a database. """
-        return super(EventRegistration, self.with_context(event_lead_rule_skip=True))._load_records_create(values)
+    def_load_records_create(self,values):
+        """Inimportmode:donotrunrulesthoseareintendedtorunwhencustomers
+        buytickets,notwhenbootstrappingadatabase."""
+        returnsuper(EventRegistration,self.with_context(event_lead_rule_skip=True))._load_records_create(values)
 
-    def _load_records_write(self, values):
-        """ In import mode: do not run rules those are intended to run when customers
-        buy tickets, not when bootstrapping a database. """
-        return super(EventRegistration, self.with_context(event_lead_rule_skip=True))._load_records_write(values)
+    def_load_records_write(self,values):
+        """Inimportmode:donotrunrulesthoseareintendedtorunwhencustomers
+        buytickets,notwhenbootstrappingadatabase."""
+        returnsuper(EventRegistration,self.with_context(event_lead_rule_skip=True))._load_records_write(values)
 
-    def _update_leads(self, new_vals, lead_tracked_vals):
-        """ Update leads linked to some registrations. Update is based depending
-        on updated fields, see ``_get_lead_contact_fields()`` and ``_get_lead_
-        description_fields()``. Main heuristic is
+    def_update_leads(self,new_vals,lead_tracked_vals):
+        """Updateleadslinkedtosomeregistrations.Updateisbaseddepending
+        onupdatedfields,see``_get_lead_contact_fields()``and``_get_lead_
+        description_fields()``.Mainheuristicis
 
-          * check attendee-based leads, for each registration recompute contact
-            information if necessary (changing partner triggers the whole contact
-            computation); update description if necessary;
-          * check order-based leads, for each existing group-based lead, only
-            partner change triggers a contact and description update. We consider
-            that group-based rule works mainly with the main contact and less
-            with further details of registrations. Those can be found in stat
-            button if necessary.
+          *checkattendee-basedleads,foreachregistrationrecomputecontact
+            informationifnecessary(changingpartnertriggersthewholecontact
+            computation);updatedescriptionifnecessary;
+          *checkorder-basedleads,foreachexistinggroup-basedlead,only
+            partnerchangetriggersacontactanddescriptionupdate.Weconsider
+            thatgroup-basedruleworksmainlywiththemaincontactandless
+            withfurtherdetailsofregistrations.Thosecanbefoundinstat
+            buttonifnecessary.
 
-        :param new_vals: values given to write. Used to determine updated fields;
-        :param lead_tracked_vals: dict(registration_id, registration previous values)
-          based on new_vals;
+        :paramnew_vals:valuesgiventowrite.Usedtodetermineupdatedfields;
+        :paramlead_tracked_vals:dict(registration_id,registrationpreviousvalues)
+          basedonnew_vals;
         """
-        for registration in self:
-            leads_attendee = registration.lead_ids.filtered(
-                lambda lead: lead.event_lead_rule_id.lead_creation_basis == 'attendee'
+        forregistrationinself:
+            leads_attendee=registration.lead_ids.filtered(
+                lambdalead:lead.event_lead_rule_id.lead_creation_basis=='attendee'
             )
-            if not leads_attendee:
+            ifnotleads_attendee:
                 continue
 
-            old_vals = lead_tracked_vals[registration.id]
-            # if partner has been updated -> update registration contact information
-            # as they are computed (and therefore not given to write values)
-            if 'partner_id' in new_vals:
+            old_vals=lead_tracked_vals[registration.id]
+            #ifpartnerhasbeenupdated->updateregistrationcontactinformation
+            #astheyarecomputed(andthereforenotgiventowritevalues)
+            if'partner_id'innew_vals:
                 new_vals.update(**dict(
-                    (field, registration[field])
-                    for field in self._get_lead_contact_fields()
-                    if field != 'partner_id')
+                    (field,registration[field])
+                    forfieldinself._get_lead_contact_fields()
+                    iffield!='partner_id')
                 )
 
-            lead_values = {}
-            # update contact fields: valid for all leads of registration
-            upd_contact_fields = [field for field in self._get_lead_contact_fields() if field in new_vals.keys()]
-            if any(new_vals[field] != old_vals[field] for field in upd_contact_fields):
-                lead_values = registration._get_lead_contact_values()
+            lead_values={}
+            #updatecontactfields:validforallleadsofregistration
+            upd_contact_fields=[fieldforfieldinself._get_lead_contact_fields()iffieldinnew_vals.keys()]
+            ifany(new_vals[field]!=old_vals[field]forfieldinupd_contact_fields):
+                lead_values=registration._get_lead_contact_values()
 
-            # update description fields: each lead has to be updated, otherwise
-            # update in batch
-            upd_description_fields = [field for field in self._get_lead_description_fields() if field in new_vals.keys()]
-            if any(new_vals[field] != old_vals[field] for field in upd_description_fields):
-                for lead in leads_attendee:
-                    lead_values['description'] = "%s\n%s" % (
+            #updatedescriptionfields:eachleadhastobeupdated,otherwise
+            #updateinbatch
+            upd_description_fields=[fieldforfieldinself._get_lead_description_fields()iffieldinnew_vals.keys()]
+            ifany(new_vals[field]!=old_vals[field]forfieldinupd_description_fields):
+                forleadinleads_attendee:
+                    lead_values['description']="%s\n%s"%(
                         lead.description,
-                        registration._get_lead_description(_("Updated registrations"), line_counter=True)
+                        registration._get_lead_description(_("Updatedregistrations"),line_counter=True)
                     )
                     lead.write(lead_values)
-            elif lead_values:
+            eliflead_values:
                 leads_attendee.write(lead_values)
 
-        leads_order = self.lead_ids.filtered(lambda lead: lead.event_lead_rule_id.lead_creation_basis == 'order')
-        for lead in leads_order:
-            lead_values = {}
-            if new_vals.get('partner_id'):
+        leads_order=self.lead_ids.filtered(lambdalead:lead.event_lead_rule_id.lead_creation_basis=='order')
+        forleadinleads_order:
+            lead_values={}
+            ifnew_vals.get('partner_id'):
                 lead_values.update(lead.registration_ids._get_lead_contact_values())
-                if not lead.partner_id:
-                    lead_values['description'] = lead.registration_ids._get_lead_description(_("Participants"), line_counter=True)
-                elif new_vals['partner_id'] != lead.partner_id.id:
-                    lead_values['description'] = lead.description + "\n" + lead.registration_ids._get_lead_description(_("Updated registrations"), line_counter=True, line_suffix=_("(updated)"))
-            if lead_values:
+                ifnotlead.partner_id:
+                    lead_values['description']=lead.registration_ids._get_lead_description(_("Participants"),line_counter=True)
+                elifnew_vals['partner_id']!=lead.partner_id.id:
+                    lead_values['description']=lead.description+"\n"+lead.registration_ids._get_lead_description(_("Updatedregistrations"),line_counter=True,line_suffix=_("(updated)"))
+            iflead_values:
                 lead.write(lead_values)
 
-    def _get_lead_values(self, rule):
-        """ Get lead values from registrations. Self can contain multiple records
-        in which case first found non void value is taken. Note that all
-        registrations should belong to the same event.
+    def_get_lead_values(self,rule):
+        """Getleadvaluesfromregistrations.Selfcancontainmultiplerecords
+        inwhichcasefirstfoundnonvoidvalueistaken.Notethatall
+        registrationsshouldbelongtothesameevent.
 
-        :return dict lead_values: values used for create / write on a lead
+        :returndictlead_values:valuesusedforcreate/writeonalead
         """
-        lead_values = {
-            # from rule
-            'type': rule.lead_type,
-            'user_id': rule.lead_user_id.id,
-            'team_id': rule.lead_sales_team_id.id,
-            'tag_ids': rule.lead_tag_ids.ids,
-            'event_lead_rule_id': rule.id,
-            # event and registration
-            'event_id': self.event_id.id,
-            'referred': self.event_id.name,
-            'registration_ids': self.ids,
-            'campaign_id': self._find_first_notnull('utm_campaign_id'),
-            'source_id': self._find_first_notnull('utm_source_id'),
-            'medium_id': self._find_first_notnull('utm_medium_id'),
+        lead_values={
+            #fromrule
+            'type':rule.lead_type,
+            'user_id':rule.lead_user_id.id,
+            'team_id':rule.lead_sales_team_id.id,
+            'tag_ids':rule.lead_tag_ids.ids,
+            'event_lead_rule_id':rule.id,
+            #eventandregistration
+            'event_id':self.event_id.id,
+            'referred':self.event_id.name,
+            'registration_ids':self.ids,
+            'campaign_id':self._find_first_notnull('utm_campaign_id'),
+            'source_id':self._find_first_notnull('utm_source_id'),
+            'medium_id':self._find_first_notnull('utm_medium_id'),
         }
         lead_values.update(self._get_lead_contact_values())
-        lead_values['description'] = self._get_lead_description(_("Participants"), line_counter=True)
-        return lead_values
+        lead_values['description']=self._get_lead_description(_("Participants"),line_counter=True)
+        returnlead_values
 
-    def _get_lead_contact_values(self):
-        """ Specific management of contact values. Rule creation basis has some
-        effect on contact management
+    def_get_lead_contact_values(self):
+        """Specificmanagementofcontactvalues.Rulecreationbasishassome
+        effectoncontactmanagement
 
-          * in attendee mode: keep registration partner only if partner phone and
-            email match. Indeed lead are synchronized with their contact and it
-            would imply rewriting on partner, and therefore on other documents;
-          * in batch mode: if a customer is found use it as main contact. Registrations
-            details are included in lead description;
+          *inattendeemode:keepregistrationpartneronlyifpartnerphoneand
+            emailmatch.Indeedleadaresynchronizedwiththeircontactandit
+            wouldimplyrewritingonpartner,andthereforeonotherdocuments;
+          *inbatchmode:ifacustomerisfounduseitasmaincontact.Registrations
+            detailsareincludedinleaddescription;
 
-        :return dict: values used for create / write on a lead
+        :returndict:valuesusedforcreate/writeonalead
         """
-        valid_partner = next(
-            (reg.partner_id for reg in self if reg.partner_id != self.env.ref('base.public_partner')),
+        valid_partner=next(
+            (reg.partner_idforreginselfifreg.partner_id!=self.env.ref('base.public_partner')),
             self.env['res.partner']
-        )  # CHECKME: broader than just public partner
+        ) #CHECKME:broaderthanjustpublicpartner
 
-        # mono registration mode: keep partner only if email and phone matches;
-        # otherwise registration > partner. Note that email format and phone
-        # formatting have to taken into account in comparison
-        if len(self) == 1 and valid_partner:
-            # compare emails: email_normalized or raw
-            if self.email and valid_partner.email:
-                if valid_partner.email_normalized and tools.email_normalize(self.email) != valid_partner.email_normalized:
-                    valid_partner = self.env['res.partner']
-                elif not valid_partner.email_normalized and valid_partner.email != self.email:
-                    valid_partner = self.env['res.partner']
+        #monoregistrationmode:keeppartneronlyifemailandphonematches;
+        #otherwiseregistration>partner.Notethatemailformatandphone
+        #formattinghavetotakenintoaccountincomparison
+        iflen(self)==1andvalid_partner:
+            #compareemails:email_normalizedorraw
+            ifself.emailandvalid_partner.email:
+                ifvalid_partner.email_normalizedandtools.email_normalize(self.email)!=valid_partner.email_normalized:
+                    valid_partner=self.env['res.partner']
+                elifnotvalid_partner.email_normalizedandvalid_partner.email!=self.email:
+                    valid_partner=self.env['res.partner']
 
-            # compare phone, taking into account formatting
-            if valid_partner and self.phone and valid_partner.phone:
-                phone_formatted = phone_validation.phone_format(
+            #comparephone,takingintoaccountformatting
+            ifvalid_partnerandself.phoneandvalid_partner.phone:
+                phone_formatted=phone_validation.phone_format(
                     self.phone,
-                    valid_partner.country_id.code or None,
-                    valid_partner.country_id.phone_code or None,
+                    valid_partner.country_id.codeorNone,
+                    valid_partner.country_id.phone_codeorNone,
                     force_format='E164',
                     raise_exception=False
                 )
-                partner_phone_formatted = phone_validation.phone_format(
+                partner_phone_formatted=phone_validation.phone_format(
                     valid_partner.phone,
-                    valid_partner.country_id.code or None,
-                    valid_partner.country_id.phone_code or None,
+                    valid_partner.country_id.codeorNone,
+                    valid_partner.country_id.phone_codeorNone,
                     force_format='E164',
                     raise_exception=False
                 )
-                if phone_formatted and partner_phone_formatted and phone_formatted != partner_phone_formatted:
-                    valid_partner = self.env['res.partner']
-                if (not phone_formatted or not partner_phone_formatted) and self.phone != valid_partner.phone:
-                    valid_partner = self.env['res.partner']
+                ifphone_formattedandpartner_phone_formattedandphone_formatted!=partner_phone_formatted:
+                    valid_partner=self.env['res.partner']
+                if(notphone_formattedornotpartner_phone_formatted)andself.phone!=valid_partner.phone:
+                    valid_partner=self.env['res.partner']
 
-        if valid_partner:
-            contact_vals = self.env['crm.lead']._prepare_values_from_partner(valid_partner)
-            # force email_from / phone only if not set on partner because those fields are now synchronized automatically
-            if not valid_partner.email:
-                contact_vals['email_from'] = self._find_first_notnull('email')
-            if not valid_partner.phone:
-                contact_vals['phone'] = self._find_first_notnull('phone')
+        ifvalid_partner:
+            contact_vals=self.env['crm.lead']._prepare_values_from_partner(valid_partner)
+            #forceemail_from/phoneonlyifnotsetonpartnerbecausethosefieldsarenowsynchronizedautomatically
+            ifnotvalid_partner.email:
+                contact_vals['email_from']=self._find_first_notnull('email')
+            ifnotvalid_partner.phone:
+                contact_vals['phone']=self._find_first_notnull('phone')
         else:
-            # don't force email_from + partner_id because those fields are now synchronized automatically
-            contact_vals = {
-                'contact_name': self._find_first_notnull('name'),
-                'email_from': self._find_first_notnull('email'),
-                'phone': self._find_first_notnull('phone'),
+            #don'tforceemail_from+partner_idbecausethosefieldsarenowsynchronizedautomatically
+            contact_vals={
+                'contact_name':self._find_first_notnull('name'),
+                'email_from':self._find_first_notnull('email'),
+                'phone':self._find_first_notnull('phone'),
             }
         contact_vals.update({
-            'name': "%s - %s" % (self.event_id.name, valid_partner.name or self._find_first_notnull('name') or self._find_first_notnull('email')),
-            'partner_id': valid_partner.id,
-            'mobile': valid_partner.mobile or self._find_first_notnull('mobile'),
+            'name':"%s-%s"%(self.event_id.name,valid_partner.nameorself._find_first_notnull('name')orself._find_first_notnull('email')),
+            'partner_id':valid_partner.id,
+            'mobile':valid_partner.mobileorself._find_first_notnull('mobile'),
         })
-        return contact_vals
+        returncontact_vals
 
-    def _get_lead_description(self, prefix='', line_counter=True, line_suffix=''):
-        """ Build the description for the lead using a prefix for all generated
-        lines. For example to enumerate participants or inform of an update in
-        the information of a participant.
+    def_get_lead_description(self,prefix='',line_counter=True,line_suffix=''):
+        """Buildthedescriptionfortheleadusingaprefixforallgenerated
+        lines.Forexampletoenumerateparticipantsorinformofanupdatein
+        theinformationofaparticipant.
 
-        :return string description: complete description for a lead taking into
-          account all registrations contained in self
+        :returnstringdescription:completedescriptionforaleadtakinginto
+          accountallregistrationscontainedinself
         """
-        reg_lines = [
+        reg_lines=[
             registration._get_lead_description_registration(
-                prefix="%s. " % (index + 1) if line_counter else "",
+                prefix="%s."%(index+1)ifline_counterelse"",
                 line_suffix=line_suffix
-            ) for index, registration in enumerate(self)
+            )forindex,registrationinenumerate(self)
         ]
-        return ("%s\n" % prefix if prefix else "") + ("\n".join(reg_lines))
+        return("%s\n"%prefixifprefixelse"")+("\n".join(reg_lines))
 
-    def _get_lead_description_registration(self, prefix='', line_suffix=''):
-        """ Build the description line specific to a given registration. """
+    def_get_lead_description_registration(self,prefix='',line_suffix=''):
+        """Buildthedescriptionlinespecifictoagivenregistration."""
         self.ensure_one()
-        return "%s%s (%s)%s" % (
-            prefix or "",
-            self.name or self.partner_id.name or self.email,
-            " - ".join(self[field] for field in ('email', 'phone') if self[field]),
-            " %s" % line_suffix if line_suffix else "",
+        return"%s%s(%s)%s"%(
+            prefixor"",
+            self.nameorself.partner_id.nameorself.email,
+            "-".join(self[field]forfieldin('email','phone')ifself[field]),
+            "%s"%line_suffixifline_suffixelse"",
         )
 
-    def _get_lead_tracked_values(self):
-        """ Tracked values are based on two subset of fields to track in order
-        to fill or update leads. Two main use cases are
+    def_get_lead_tracked_values(self):
+        """Trackedvaluesarebasedontwosubsetoffieldstotrackinorder
+        tofillorupdateleads.Twomainusecasesare
 
-          * description fields: registration contact fields: email, phone, ...
-            on registration. Other fields are added by inheritance like
-            question answers;
-          * contact fields: registration contact fields + partner_id field as
-            contact of a lead is managed specifically. Indeed email and phone
-            synchronization of lead / partner_id implies paying attention to
-            not rewrite partner values from registration values.
+          *descriptionfields:registrationcontactfields:email,phone,...
+            onregistration.Otherfieldsareaddedbyinheritancelike
+            questionanswers;
+          *contactfields:registrationcontactfields+partner_idfieldas
+            contactofaleadismanagedspecifically.Indeedemailandphone
+            synchronizationoflead/partner_idimpliespayingattentionto
+            notrewritepartnervaluesfromregistrationvalues.
 
-        Tracked values are therefore the union of those two field sets. """
-        tracked_fields = list(set(self._get_lead_contact_fields()) or set(self._get_lead_description_fields()))
-        return dict(
+        Trackedvaluesarethereforetheunionofthosetwofieldsets."""
+        tracked_fields=list(set(self._get_lead_contact_fields())orset(self._get_lead_description_fields()))
+        returndict(
             (registration.id,
-             dict((field, self._convert_value(registration[field], field)) for field in tracked_fields)
-            ) for registration in self
+             dict((field,self._convert_value(registration[field],field))forfieldintracked_fields)
+            )forregistrationinself
         )
 
-    def _get_lead_grouping(self, rules, rule_to_new_regs):
-        """ Perform grouping of registrations in order to enable order-based
-        lead creation and update existing groups with new registrations.
+    def_get_lead_grouping(self,rules,rule_to_new_regs):
+        """Performgroupingofregistrationsinordertoenableorder-based
+        leadcreationandupdateexistinggroupswithnewregistrations.
 
-        Heuristic in event is the following. Registrations created in multi-mode
-        are grouped by event. Customer use case: website_event flow creates
-        several registrations in a create-multi.
+        Heuristicineventisthefollowing.Registrationscreatedinmulti-mode
+        aregroupedbyevent.Customerusecase:website_eventflowcreates
+        severalregistrationsinacreate-multi.
 
-        Update is not supported as there is no way to determine if a registration
-        is part of an existing batch.
+        Updateisnotsupportedasthereisnowaytodetermineifaregistration
+        ispartofanexistingbatch.
 
-        :param rules: lead creation rules to run on registrations given by self;
-        :param rule_to_new_regs: dict: for each rule, subset of self matching
-          rule conditions. Used to speedup batch computation;
+        :paramrules:leadcreationrulestorunonregistrationsgivenbyself;
+        :paramrule_to_new_regs:dict:foreachrule,subsetofselfmatching
+          ruleconditions.Usedtospeedupbatchcomputation;
 
-        :return dict: for each rule, rule (key of dict) gives a list of groups.
-          Each group is a tuple (
-            existing_lead: existing lead to update;
-            group_record: record used to group;
-            registrations: sub record set of self, containing registrations
-                           belonging to the same group;
+        :returndict:foreachrule,rule(keyofdict)givesalistofgroups.
+          Eachgroupisatuple(
+            existing_lead:existingleadtoupdate;
+            group_record:recordusedtogroup;
+            registrations:subrecordsetofself,containingregistrations
+                           belongingtothesamegroup;
           )
         """
-        event_to_reg_ids = defaultdict(lambda: self.env['event.registration'])
-        for registration in self:
-            event_to_reg_ids[registration.event_id] += registration
+        event_to_reg_ids=defaultdict(lambda:self.env['event.registration'])
+        forregistrationinself:
+            event_to_reg_ids[registration.event_id]+=registration
 
-        return dict(
-            (rule, [(False, event, (registrations & rule_to_new_regs[rule]).sorted('id'))
-                    for event, registrations in event_to_reg_ids.items()])
-            for rule in rules
+        returndict(
+            (rule,[(False,event,(registrations&rule_to_new_regs[rule]).sorted('id'))
+                    forevent,registrationsinevent_to_reg_ids.items()])
+            forruleinrules
         )
 
-    # ------------------------------------------------------------
-    # TOOLS
-    # ------------------------------------------------------------
+    #------------------------------------------------------------
+    #TOOLS
+    #------------------------------------------------------------
 
     @api.model
-    def _get_lead_contact_fields(self):
-        """ Get registration fields linked to lead contact. Those are used notably
-        to see if an update of lead is necessary or to fill contact values
-        in ``_get_lead_contact_values())`` """
-        return ['name', 'email', 'phone', 'mobile', 'partner_id']
+    def_get_lead_contact_fields(self):
+        """Getregistrationfieldslinkedtoleadcontact.Thoseareusednotably
+        toseeifanupdateofleadisnecessaryortofillcontactvalues
+        in``_get_lead_contact_values())``"""
+        return['name','email','phone','mobile','partner_id']
 
     @api.model
-    def _get_lead_description_fields(self):
-        """ Get registration fields linked to lead description. Those are used
-        notablyto see if an update of lead is necessary or to fill description
-        in ``_get_lead_description())`` """
-        return ['name', 'email', 'phone']
+    def_get_lead_description_fields(self):
+        """Getregistrationfieldslinkedtoleaddescription.Thoseareused
+        notablytoseeifanupdateofleadisnecessaryortofilldescription
+        in``_get_lead_description())``"""
+        return['name','email','phone']
 
-    def _find_first_notnull(self, field_name):
-        """ Small tool to extract the first not nullvalue of a field: its value
-        or the ids if this is a relational field. """
-        value = next((reg[field_name] for reg in self if reg[field_name]), False)
-        return self._convert_value(value, field_name)
+    def_find_first_notnull(self,field_name):
+        """Smalltooltoextractthefirstnotnullvalueofafield:itsvalue
+        ortheidsifthisisarelationalfield."""
+        value=next((reg[field_name]forreginselfifreg[field_name]),False)
+        returnself._convert_value(value,field_name)
 
-    def _convert_value(self, value, field_name):
-        """ Small tool because convert_to_write is touchy """
-        if isinstance(value, models.BaseModel) and self._fields[field_name].type in ['many2many', 'one2many']:
-            return value.ids
-        if isinstance(value, models.BaseModel) and self._fields[field_name].type == 'many2one':
-            return value.id
-        return value
+    def_convert_value(self,value,field_name):
+        """Smalltoolbecauseconvert_to_writeistouchy"""
+        ifisinstance(value,models.BaseModel)andself._fields[field_name].typein['many2many','one2many']:
+            returnvalue.ids
+        ifisinstance(value,models.BaseModel)andself._fields[field_name].type=='many2one':
+            returnvalue.id
+        returnvalue

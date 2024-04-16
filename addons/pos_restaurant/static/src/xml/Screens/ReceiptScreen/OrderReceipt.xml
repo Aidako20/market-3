@@ -1,44 +1,44 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
-        <xpath expr="//div[hasclass('pos-receipt-order-data')]" position="inside">
-            <t t-if="props.isBill">
-                <div>PRO FORMA</div>
+    <tt-name="OrderReceipt"t-inherit="point_of_sale.OrderReceipt"t-inherit-mode="extension"owl="1">
+        <xpathexpr="//div[hasclass('pos-receipt-order-data')]"position="inside">
+            <tt-if="props.isBill">
+                <div>PROFORMA</div>
             </t>
         </xpath>
-        <xpath expr="//div[hasclass('receipt-change')]" position="attributes">
-            <attribute name="t-if">!props.isBill</attribute>
+        <xpathexpr="//div[hasclass('receipt-change')]"position="attributes">
+            <attributename="t-if">!props.isBill</attribute>
         </xpath>
-        <xpath expr="//div[hasclass('cashier')]" position="after">
-            <t t-if="receipt.table">
-                at table <t t-esc="receipt.table" />
+        <xpathexpr="//div[hasclass('cashier')]"position="after">
+            <tt-if="receipt.table">
+                attable<tt-esc="receipt.table"/>
             </t>
-            <t t-if="receipt.table and receipt.customer_count">
-                <div>Guests: <t t-esc="receipt.customer_count" /></div>
+            <tt-if="receipt.tableandreceipt.customer_count">
+                <div>Guests:<tt-esc="receipt.customer_count"/></div>
             </t>
         </xpath>
-        <xpath expr="//div[hasclass('before-footer')]" position="after">
-            <t t-if="props.isBill and env.pos.config.set_tip_after_payment">
-                <div class="tip-form">
-                    <div class="title">For convenience, we are providing the following gratuity calculations:</div>
-                    <div class="percentage-options">
-                        <div class="option">
+        <xpathexpr="//div[hasclass('before-footer')]"position="after">
+            <tt-if="props.isBillandenv.pos.config.set_tip_after_payment">
+                <divclass="tip-form">
+                    <divclass="title">Forconvenience,weareprovidingthefollowinggratuitycalculations:</div>
+                    <divclass="percentage-options">
+                        <divclass="option">
                             <div>15%</div>
-                            <div class="amount">
-                                <t t-esc="env.pos.format_currency(receipt.total_with_tax * 0.15)"></t>
+                            <divclass="amount">
+                                <tt-esc="env.pos.format_currency(receipt.total_with_tax*0.15)"></t>
                             </div>
                         </div>
-                        <div class="option">
+                        <divclass="option">
                             <div>20%</div>
-                            <div class="amount">
-                                <t t-esc="env.pos.format_currency(receipt.total_with_tax * 0.20)"></t>
+                            <divclass="amount">
+                                <tt-esc="env.pos.format_currency(receipt.total_with_tax*0.20)"></t>
                             </div>
                         </div>
-                        <div class="option">
+                        <divclass="option">
                             <div>25%</div>
-                            <div class="amount">
-                                <t t-esc="env.pos.format_currency(receipt.total_with_tax * 0.25)"></t>
+                            <divclass="amount">
+                                <tt-esc="env.pos.format_currency(receipt.total_with_tax*0.25)"></t>
                             </div>
                         </div>
                     </div>

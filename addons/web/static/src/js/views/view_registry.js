@@ -1,44 +1,44 @@
-flectra.define('web.view_registry', function (require) {
-"use strict";
+flectra.define('web.view_registry',function(require){
+"usestrict";
 
 /**
- * This module defines the view_registry. Web views are added to the registry
- * in the 'web._view_registry' module to avoid cyclic dependencies.
- * Views defined in other addons should be added in this registry as well,
- * ideally in another module than the one defining the view, in order to
- * separate the declarative part of a module (the view definition) from its
- * 'side-effects' part.
+ *Thismoduledefinestheview_registry.Webviewsareaddedtotheregistry
+ *inthe'web._view_registry'moduletoavoidcyclicdependencies.
+ *Viewsdefinedinotheraddonsshouldbeaddedinthisregistryaswell,
+ *ideallyinanothermodulethantheonedefiningtheview,inorderto
+ *separatethedeclarativepartofamodule(theviewdefinition)fromits
+ *'side-effects'part.
  */
 
-var Registry = require('web.Registry');
+varRegistry=require('web.Registry');
 
-return new Registry();
+returnnewRegistry();
 
 });
 
-flectra.define('web._view_registry', function (require) {
-"use strict";
+flectra.define('web._view_registry',function(require){
+"usestrict";
 
 /**
- * The purpose of this module is to add the web views in the view_registry.
- * This can't be done directly in the module defining the view_registry as it
- * would produce cyclic dependencies.
+ *Thepurposeofthismoduleistoaddthewebviewsintheview_registry.
+ *Thiscan'tbedonedirectlyinthemoduledefiningtheview_registryasit
+ *wouldproducecyclicdependencies.
  */
 
-var FormView = require('web.FormView');
-var GraphView = require('web.GraphView');
-var KanbanView = require('web.KanbanView');
-var ListView = require('web.ListView');
-var PivotView = require('web.PivotView');
-var CalendarView = require('web.CalendarView');
-var view_registry = require('web.view_registry');
+varFormView=require('web.FormView');
+varGraphView=require('web.GraphView');
+varKanbanView=require('web.KanbanView');
+varListView=require('web.ListView');
+varPivotView=require('web.PivotView');
+varCalendarView=require('web.CalendarView');
+varview_registry=require('web.view_registry');
 
 view_registry
-    .add('form', FormView)
-    .add('list', ListView)
-    .add('kanban', KanbanView)
-    .add('graph', GraphView)
-    .add('pivot', PivotView)
-    .add('calendar', CalendarView);
+    .add('form',FormView)
+    .add('list',ListView)
+    .add('kanban',KanbanView)
+    .add('graph',GraphView)
+    .add('pivot',PivotView)
+    .add('calendar',CalendarView);
 
 });

@@ -1,98 +1,98 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-<data noupdate="0">
+<datanoupdate="0">
 
-    <record id="base.module_category_manufacturing_manufacturing" model="ir.module.category">
-        <field name="description">Helps you manage your manufacturing processes and generate reports on those processes.</field>
-        <field name="sequence">5</field>
+    <recordid="base.module_category_manufacturing_manufacturing"model="ir.module.category">
+        <fieldname="description">Helpsyoumanageyourmanufacturingprocessesandgeneratereportsonthoseprocesses.</field>
+        <fieldname="sequence">5</field>
     </record>
 
-    <record id="group_mrp_user" model="res.groups">
-        <field name="name">User</field>
-        <field name="implied_ids" eval="[(4, ref('stock.group_stock_user'))]"/>
-        <field name="category_id" ref="base.module_category_manufacturing_manufacturing"/>
+    <recordid="group_mrp_user"model="res.groups">
+        <fieldname="name">User</field>
+        <fieldname="implied_ids"eval="[(4,ref('stock.group_stock_user'))]"/>
+        <fieldname="category_id"ref="base.module_category_manufacturing_manufacturing"/>
     </record>
-    <record id="group_mrp_manager" model="res.groups">
-        <field name="name">Administrator</field>
-        <field name="category_id" ref="base.module_category_manufacturing_manufacturing"/>
-        <field name="implied_ids" eval="[(4, ref('group_mrp_user'))]"/>
-        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
-    </record>
-
-
-    <record id="group_mrp_routings" model="res.groups">
-        <field name="name">Manage Work Order Operations</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
+    <recordid="group_mrp_manager"model="res.groups">
+        <fieldname="name">Administrator</field>
+        <fieldname="category_id"ref="base.module_category_manufacturing_manufacturing"/>
+        <fieldname="implied_ids"eval="[(4,ref('group_mrp_user'))]"/>
+        <fieldname="users"eval="[(4,ref('base.user_root')),(4,ref('base.user_admin'))]"/>
     </record>
 
-    <record id="group_mrp_byproducts" model="res.groups">
-        <field name="name">Produce residual products</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
+
+    <recordid="group_mrp_routings"model="res.groups">
+        <fieldname="name">ManageWorkOrderOperations</field>
+        <fieldname="category_id"ref="base.module_category_hidden"/>
     </record>
 
-    <record id="group_locked_by_default" model="res.groups">
-        <field name="name">Locked by default</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
+    <recordid="group_mrp_byproducts"model="res.groups">
+        <fieldname="name">Produceresidualproducts</field>
+        <fieldname="category_id"ref="base.module_category_hidden"/>
+    </record>
+
+    <recordid="group_locked_by_default"model="res.groups">
+        <fieldname="name">Lockedbydefault</field>
+        <fieldname="category_id"ref="base.module_category_hidden"/>
     </record>
 
 </data>
-<data noupdate="1">
-    <record id="base.default_user" model="res.users">
-        <field name="groups_id" eval="[(4,ref('mrp.group_mrp_manager'))]"/>
+<datanoupdate="1">
+    <recordid="base.default_user"model="res.users">
+        <fieldname="groups_id"eval="[(4,ref('mrp.group_mrp_manager'))]"/>
     </record>
-<!-- Multi -->
-    <record model="ir.rule" id="mrp_production_rule">
-        <field name="name">mrp_production multi-company</field>
-        <field name="model_id" search="[('model','=','mrp.production')]" model="ir.model"/>
-        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
-    </record>
-
-    <record model="ir.rule" id="mrp_unbuild_rule">
-        <field name="name">mrp_unbuild multi-company</field>
-        <field name="model_id" search="[('model','=','mrp.unbuild')]" model="ir.model"/>
-        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+<!--Multi-->
+    <recordmodel="ir.rule"id="mrp_production_rule">
+        <fieldname="name">mrp_productionmulti-company</field>
+        <fieldname="model_id"search="[('model','=','mrp.production')]"model="ir.model"/>
+        <fieldname="domain_force">[('company_id','in',company_ids)]</field>
     </record>
 
-    <record model="ir.rule" id="mrp_workcenter_rule">
-        <field name="name">mrp_workcenter multi-company</field>
-        <field name="model_id" search="[('model','=','mrp.workcenter')]" model="ir.model"/>
-        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    <recordmodel="ir.rule"id="mrp_unbuild_rule">
+        <fieldname="name">mrp_unbuildmulti-company</field>
+        <fieldname="model_id"search="[('model','=','mrp.unbuild')]"model="ir.model"/>
+        <fieldname="domain_force">[('company_id','in',company_ids)]</field>
     </record>
 
-    <record model="ir.rule" id="mrp_workorder_rule">
-        <field name="name">mrp_workorder multi-company</field>
-        <field name="model_id" search="[('model','=','mrp.workorder')]" model="ir.model"/>
-        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    <recordmodel="ir.rule"id="mrp_workcenter_rule">
+        <fieldname="name">mrp_workcentermulti-company</field>
+        <fieldname="model_id"search="[('model','=','mrp.workcenter')]"model="ir.model"/>
+        <fieldname="domain_force">[('company_id','in',company_ids+[False])]</field>
     </record>
 
-    <record model="ir.rule" id="mrp_bom_rule">
-        <field name="name">mrp_bom multi-company</field>
-        <field name="model_id" search="[('model','=','mrp.bom')]" model="ir.model"/>
-        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    <recordmodel="ir.rule"id="mrp_workorder_rule">
+        <fieldname="name">mrp_workordermulti-company</field>
+        <fieldname="model_id"search="[('model','=','mrp.workorder')]"model="ir.model"/>
+        <fieldname="domain_force">[('company_id','in',company_ids)]</field>
     </record>
 
-    <record model="ir.rule" id="mrp_bom_line_rule">
-        <field name="name">mrp_bom_line multi-company</field>
-        <field name="model_id" search="[('model','=','mrp.bom.line')]" model="ir.model"/>
-        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    <recordmodel="ir.rule"id="mrp_bom_rule">
+        <fieldname="name">mrp_bommulti-company</field>
+        <fieldname="model_id"search="[('model','=','mrp.bom')]"model="ir.model"/>
+        <fieldname="domain_force">[('company_id','in',company_ids+[False])]</field>
     </record>
 
-    <record model="ir.rule" id="mrp_bom_byproduct_rule">
-        <field name="name">mrp_bom_byproduct multi-company</field>
-        <field name="model_id" search="[('model','=','mrp.bom.byproduct')]" model="ir.model"/>
-        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    <recordmodel="ir.rule"id="mrp_bom_line_rule">
+        <fieldname="name">mrp_bom_linemulti-company</field>
+        <fieldname="model_id"search="[('model','=','mrp.bom.line')]"model="ir.model"/>
+        <fieldname="domain_force">[('company_id','in',company_ids+[False])]</field>
     </record>
 
-    <record model="ir.rule" id="mrp_routing_workcenter_rule">
-        <field name="name">mrp_routing_workcenter multi-company</field>
-        <field name="model_id" search="[('model','=','mrp.routing.workcenter')]" model="ir.model"/>
-        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    <recordmodel="ir.rule"id="mrp_bom_byproduct_rule">
+        <fieldname="name">mrp_bom_byproductmulti-company</field>
+        <fieldname="model_id"search="[('model','=','mrp.bom.byproduct')]"model="ir.model"/>
+        <fieldname="domain_force">[('company_id','in',company_ids+[False])]</field>
     </record>
 
-    <record model="ir.rule" id="mrp_workcenter_productivity">
-        <field name="name">mrp_workcenter_productivity multi-company</field>
-        <field name="model_id" search="[('model','=','mrp.workcenter.productivity')]" model="ir.model"/>
-        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    <recordmodel="ir.rule"id="mrp_routing_workcenter_rule">
+        <fieldname="name">mrp_routing_workcentermulti-company</field>
+        <fieldname="model_id"search="[('model','=','mrp.routing.workcenter')]"model="ir.model"/>
+        <fieldname="domain_force">[('company_id','in',company_ids+[False])]</field>
+    </record>
+
+    <recordmodel="ir.rule"id="mrp_workcenter_productivity">
+        <fieldname="name">mrp_workcenter_productivitymulti-company</field>
+        <fieldname="model_id"search="[('model','=','mrp.workcenter.productivity')]"model="ir.model"/>
+        <fieldname="domain_force">[('company_id','in',company_ids)]</field>
     </record>
 
 </data>

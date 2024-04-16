@@ -1,17 +1,17 @@
-flectra.define('point_of_sale.ClientLine', function(require) {
-    'use strict';
+flectra.define('point_of_sale.ClientLine',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
-    class ClientLine extends PosComponent {
-        get highlight() {
-            return this.props.partner !== this.props.selectedClient ? '' : 'highlight';
+    classClientLineextendsPosComponent{
+        gethighlight(){
+            returnthis.props.partner!==this.props.selectedClient?'':'highlight';
         }
     }
-    ClientLine.template = 'ClientLine';
+    ClientLine.template='ClientLine';
 
     Registries.Component.add(ClientLine);
 
-    return ClientLine;
+    returnClientLine;
 });

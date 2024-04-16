@@ -1,61 +1,61 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
+importlogging
 
-from flectra import _, api, fields, models
-from flectra.exceptions import ValidationError
-
-
-_logger = logging.getLogger(__name__)
+fromflectraimport_,api,fields,models
+fromflectra.exceptionsimportValidationError
 
 
-class PaymentTransaction(models.Model):
-    _inherit = 'payment.transaction'
+_logger=logging.getLogger(__name__)
 
-    @api.model
-    def adyen_create(self, values):
-        """
-        When the customer lands on the `/payment/process` route, `/payment/process/poll` try to find
-        the transaction whose `date` field is between yesterday and now.
 
-        Since the `date` field is only set when the state of the transaction is changed, if the
-        customer comes back before the webhook, he will see a "transaction not found" page because
-        the value of the `date` field would be `False`.
-        """
-        return dict(date=fields.Datetime.now())
-
-    # --------------------------------------------------
-    # FORM RELATED METHODS
-    # --------------------------------------------------
+classPaymentTransaction(models.Model):
+    _inherit='payment.transaction'
 
     @api.model
-    def _adyen_form_get_tx_from_data(self, data):
-        """ Override of _adyen_form_get_tx_from_data """
-        reference, psp_reference = data.get('merchantReference'), data.get('pspReference')
-        if not reference or not psp_reference:
-            error_msg = _(
-                "Adyen: received data with missing reference (%s) or missing pspReference (%s)"
-            ) % (reference, psp_reference)
+    defadyen_create(self,values):
+        """
+        Whenthecustomerlandsonthe`/payment/process`route,`/payment/process/poll`trytofind
+        thetransactionwhose`date`fieldisbetweenyesterdayandnow.
+
+        Sincethe`date`fieldisonlysetwhenthestateofthetransactionischanged,ifthe
+        customercomesbackbeforethewebhook,hewillseea"transactionnotfound"pagebecause
+        thevalueofthe`date`fieldwouldbe`False`.
+        """
+        returndict(date=fields.Datetime.now())
+
+    #--------------------------------------------------
+    #FORMRELATEDMETHODS
+    #--------------------------------------------------
+
+    @api.model
+    def_adyen_form_get_tx_from_data(self,data):
+        """Overrideof_adyen_form_get_tx_from_data"""
+        reference,psp_reference=data.get('merchantReference'),data.get('pspReference')
+        ifnotreferenceornotpsp_reference:
+            error_msg=_(
+                "Adyen:receiveddatawithmissingreference(%s)ormissingpspReference(%s)"
+            )%(reference,psp_reference)
             _logger.info(error_msg)
-            raise ValidationError(error_msg)
+            raiseValidationError(error_msg)
 
-        tx = self.env['payment.transaction'].search([
-            ('reference', '=', reference), ('provider', '=', 'adyen')
+        tx=self.env['payment.transaction'].search([
+            ('reference','=',reference),('provider','=','adyen')
         ])
-        if not tx or len(tx) > 1:
-            error_msg = _("Adyen: received data for reference %s") % reference
-            if not tx:
-                error_msg += _("; no order found")
+        ifnottxorlen(tx)>1:
+            error_msg=_("Adyen:receiveddataforreference%s")%reference
+            ifnottx:
+                error_msg+=_(";noorderfound")
             else:
-                error_msg += _("; multiple order found")
+                error_msg+=_(";multipleorderfound")
             _logger.info(error_msg)
-            raise ValidationError(error_msg)
+            raiseValidationError(error_msg)
 
-        return tx
+        returntx
 
-    def _adyen_form_get_invalid_parameters(self, data):
-        """ Override of _adyen_form_get_invalid_parameters to disable this method.
+    def_adyen_form_get_invalid_parameters(self,data):
+        """Overrideof_adyen_form_get_invalid_parameterstodisablethismethod.
 
-        The pay-by-link implementation doesn't need or want to check for invalid parameters.
+        Thepay-by-linkimplementationdoesn'tneedorwanttocheckforinvalidparameters.
         """
-        return []
+        return[]

@@ -1,54 +1,54 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="pos_restaurant.TipScreen" owl="1">
-        <div class="tip-screen screen">
-            <div class="pos-receipt-container"/>
-            <div class="screen-content">
-                <div class="top-content">
-                    <span class="button back" t-on-click="showScreen('FloorScreen')">
-                        <i class="fa fa-angle-double-left"></i>
-                        <span> </span>
+    <tt-name="pos_restaurant.TipScreen"owl="1">
+        <divclass="tip-screenscreen">
+            <divclass="pos-receipt-container"/>
+            <divclass="screen-content">
+                <divclass="top-content">
+                    <spanclass="buttonback"t-on-click="showScreen('FloorScreen')">
+                        <iclass="fafa-angle-double-left"></i>
+                        <span></span>
                         <span>Back</span>
                     </span>
-                    <span class="button" t-if="env.pos.proxy.printer" t-on-click="printTipReceipt()">
-                        <i class="fa fa-print"></i>
-                        <span> </span>
-                        <span>Reprint receipts</span>
+                    <spanclass="button"t-if="env.pos.proxy.printer"t-on-click="printTipReceipt()">
+                        <iclass="fafa-print"></i>
+                        <span></span>
+                        <span>Reprintreceipts</span>
                     </span>
-                    <div class="top-content-center">
-                        <h1>Add a tip</h1>
+                    <divclass="top-content-center">
+                        <h1>Addatip</h1>
                     </div>
-                    <div class="button highlight next" t-on-click="validateTip">
-                        Settle <i class="fa fa-angle-double-right"></i>
+                    <divclass="buttonhighlightnext"t-on-click="validateTip">
+                        Settle<iclass="fafa-angle-double-right"></i>
                     </div>
                 </div>
-                <div class="tip-options">
-                    <div class="total-amount">
-                        <t t-esc="overallAmountStr" />
+                <divclass="tip-options">
+                    <divclass="total-amount">
+                        <tt-esc="overallAmountStr"/>
                     </div>
-                    <div class="tip-amount-options">
-                        <div class="percentage-amounts">
-                            <t t-foreach="percentageTips" t-as="tip" t-key="tip.percentage">
-                                <div class="button" t-on-click="state.inputTipAmount = tip.amount.toFixed(2)">
-                                    <div class="percentage">
-                                        <t t-esc="tip.percentage"></t>
+                    <divclass="tip-amount-options">
+                        <divclass="percentage-amounts">
+                            <tt-foreach="percentageTips"t-as="tip"t-key="tip.percentage">
+                                <divclass="button"t-on-click="state.inputTipAmount=tip.amount.toFixed(2)">
+                                    <divclass="percentage">
+                                        <tt-esc="tip.percentage"></t>
                                     </div>
-                                    <div class="amount">
-                                        <t t-esc="env.pos.format_currency(tip.amount)" />
+                                    <divclass="amount">
+                                        <tt-esc="env.pos.format_currency(tip.amount)"/>
                                     </div>
                                 </div>
                             </t>
                         </div>
-                        <div class="no-tip" t-on-click="state.inputTipAmount = '0'">
-                            <div class="button">No Tip</div>
+                        <divclass="no-tip"t-on-click="state.inputTipAmount='0'">
+                            <divclass="button">NoTip</div>
                         </div>
-                        <div class="custom-amount-form">
-                            <div class="item label">Amount</div>
-                            <div class="item input">
-                                <input type="text" t-model="state.inputTipAmount" t-att-data-amount="state.inputTipAmount" />
-                                <div class="currency">
-                                    <t t-esc="env.pos.getCurrencySymbol()" />
+                        <divclass="custom-amount-form">
+                            <divclass="itemlabel">Amount</div>
+                            <divclass="iteminput">
+                                <inputtype="text"t-model="state.inputTipAmount"t-att-data-amount="state.inputTipAmount"/>
+                                <divclass="currency">
+                                    <tt-esc="env.pos.getCurrencySymbol()"/>
                                 </div>
                             </div>
                         </div>

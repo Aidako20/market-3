@@ -1,168 +1,168 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import werkzeug
-import werkzeug.utils
-import werkzeug.exceptions
+importwerkzeug
+importwerkzeug.utils
+importwerkzeug.exceptions
 
-from flectra import _
-from flectra import http
-from flectra.exceptions import AccessError
-from flectra.http import request
-from flectra.osv import expression
+fromflectraimport_
+fromflectraimporthttp
+fromflectra.exceptionsimportAccessError
+fromflectra.httpimportrequest
+fromflectra.osvimportexpression
 
-from flectra.addons.website_slides.controllers.main import WebsiteSlides
+fromflectra.addons.website_slides.controllers.mainimportWebsiteSlides
 
 
-class WebsiteSlidesSurvey(WebsiteSlides):
+classWebsiteSlidesSurvey(WebsiteSlides):
 
-    @http.route(['/slides_survey/slide/get_certification_url'], type='http', auth='user', website=True)
-    def slide_get_certification_url(self, slide_id, **kw):
-        fetch_res = self._fetch_slide(slide_id)
-        if fetch_res.get('error'):
-            raise werkzeug.exceptions.NotFound()
-        slide = fetch_res['slide']
-        if slide.channel_id.is_member:
+    @http.route(['/slides_survey/slide/get_certification_url'],type='http',auth='user',website=True)
+    defslide_get_certification_url(self,slide_id,**kw):
+        fetch_res=self._fetch_slide(slide_id)
+        iffetch_res.get('error'):
+            raisewerkzeug.exceptions.NotFound()
+        slide=fetch_res['slide']
+        ifslide.channel_id.is_member:
             slide.action_set_viewed()
-        certification_url = slide._generate_certification_url().get(slide.id)
-        if not certification_url:
-            raise werkzeug.exceptions.NotFound()
-        return werkzeug.utils.redirect(certification_url)
+        certification_url=slide._generate_certification_url().get(slide.id)
+        ifnotcertification_url:
+            raisewerkzeug.exceptions.NotFound()
+        returnwerkzeug.utils.redirect(certification_url)
 
-    @http.route(['/slides_survey/certification/search_read'], type='json', auth='user', methods=['POST'], website=True)
-    def slides_certification_search_read(self, fields):
-        can_create = request.env['survey.survey'].check_access_rights('create', raise_exception=False)
-        return {
-            'read_results': request.env['survey.survey'].search_read([('certification', '=', True)], fields),
-            'can_create': can_create,
+    @http.route(['/slides_survey/certification/search_read'],type='json',auth='user',methods=['POST'],website=True)
+    defslides_certification_search_read(self,fields):
+        can_create=request.env['survey.survey'].check_access_rights('create',raise_exception=False)
+        return{
+            'read_results':request.env['survey.survey'].search_read([('certification','=',True)],fields),
+            'can_create':can_create,
         }
 
-    # ------------------------------------------------------------
-    # Overrides
-    # ------------------------------------------------------------
+    #------------------------------------------------------------
+    #Overrides
+    #------------------------------------------------------------
 
-    @http.route(['/slides/add_slide'], type='json', auth='user', methods=['POST'], website=True)
-    def create_slide(self, *args, **post):
-        create_new_survey = post['slide_type'] == "certification" and post.get('survey') and not post['survey']['id']
-        linked_survey_id = int(post.get('survey', {}).get('id') or 0)
+    @http.route(['/slides/add_slide'],type='json',auth='user',methods=['POST'],website=True)
+    defcreate_slide(self,*args,**post):
+        create_new_survey=post['slide_type']=="certification"andpost.get('survey')andnotpost['survey']['id']
+        linked_survey_id=int(post.get('survey',{}).get('id')or0)
 
-        if create_new_survey:
-            # If user cannot create a new survey, no need to create the slide either.
-            if not request.env['survey.survey'].check_access_rights('create', raise_exception=False):
-                return {'error': _('You are not allowed to create a survey.')}
+        ifcreate_new_survey:
+            #Ifusercannotcreateanewsurvey,noneedtocreatetheslideeither.
+            ifnotrequest.env['survey.survey'].check_access_rights('create',raise_exception=False):
+                return{'error':_('Youarenotallowedtocreateasurvey.')}
 
-            # Create survey first as certification slide needs a survey_id (constraint)
-            post['survey_id'] = request.env['survey.survey'].create({
-                'title': post['survey']['title'],
-                'questions_layout': 'page_per_question',
-                'is_attempts_limited': True,
-                'attempts_limit': 1,
-                'is_time_limited': False,
-                'scoring_type': 'scoring_without_answers',
-                'certification': True,
-                'scoring_success_min': 70.0,
-                'certification_mail_template_id': request.env.ref('survey.mail_template_certification').id,
+            #Createsurveyfirstascertificationslideneedsasurvey_id(constraint)
+            post['survey_id']=request.env['survey.survey'].create({
+                'title':post['survey']['title'],
+                'questions_layout':'page_per_question',
+                'is_attempts_limited':True,
+                'attempts_limit':1,
+                'is_time_limited':False,
+                'scoring_type':'scoring_without_answers',
+                'certification':True,
+                'scoring_success_min':70.0,
+                'certification_mail_template_id':request.env.ref('survey.mail_template_certification').id,
             }).id
-        elif linked_survey_id:
+        eliflinked_survey_id:
             try:
                 request.env['survey.survey'].browse([linked_survey_id]).read(['title'])
-            except AccessError:
-                return {'error': _('You are not allowed to link a certification.')}
+            exceptAccessError:
+                return{'error':_('Youarenotallowedtolinkacertification.')}
 
-            post['survey_id'] = post['survey']['id']
+            post['survey_id']=post['survey']['id']
 
-        # Then create the slide
-        result = super(WebsiteSlidesSurvey, self).create_slide(*args, **post)
+        #Thencreatetheslide
+        result=super(WebsiteSlidesSurvey,self).create_slide(*args,**post)
 
-        if create_new_survey:
-            # Set the redirect_url used in toaster
-            action_id = request.env.ref('survey.action_survey_form').id
+        ifcreate_new_survey:
+            #Settheredirect_urlusedintoaster
+            action_id=request.env.ref('survey.action_survey_form').id
             result.update({
-                'redirect_url': '/web#id=%s&action=%s&model=survey.survey&view_type=form' % (post['survey_id'], action_id),
-                'redirect_to_certification': True
+                'redirect_url':'/web#id=%s&action=%s&model=survey.survey&view_type=form'%(post['survey_id'],action_id),
+                'redirect_to_certification':True
             })
 
-        return result
+        returnresult
 
-    # Utils
-    # ---------------------------------------------------
-    def _set_completed_slide(self, slide):
-        if slide.slide_type == 'certification':
-            raise werkzeug.exceptions.Forbidden(_("Certification slides are completed when the survey is succeeded."))
-        return super(WebsiteSlidesSurvey, self)._set_completed_slide(slide)
+    #Utils
+    #---------------------------------------------------
+    def_set_completed_slide(self,slide):
+        ifslide.slide_type=='certification':
+            raisewerkzeug.exceptions.Forbidden(_("Certificationslidesarecompletedwhenthesurveyissucceeded."))
+        returnsuper(WebsiteSlidesSurvey,self)._set_completed_slide(slide)
 
-    def _get_valid_slide_post_values(self):
-        result = super(WebsiteSlidesSurvey, self)._get_valid_slide_post_values()
+    def_get_valid_slide_post_values(self):
+        result=super(WebsiteSlidesSurvey,self)._get_valid_slide_post_values()
         result.append('survey_id')
-        return result
+        returnresult
 
-    # Profile
-    # ---------------------------------------------------
-    def _prepare_user_slides_profile(self, user):
-        values = super(WebsiteSlidesSurvey, self)._prepare_user_slides_profile(user)
+    #Profile
+    #---------------------------------------------------
+    def_prepare_user_slides_profile(self,user):
+        values=super(WebsiteSlidesSurvey,self)._prepare_user_slides_profile(user)
         values.update({
-            'certificates': self._get_users_certificates(user)[user.id]
+            'certificates':self._get_users_certificates(user)[user.id]
         })
-        return values
+        returnvalues
 
-    # All Users Page
-    # ---------------------------------------------------
-    def _prepare_all_users_values(self, users):
-        result = super(WebsiteSlidesSurvey, self)._prepare_all_users_values(users)
-        certificates_per_user = self._get_users_certificates(users)
-        for index, user in enumerate(users):
+    #AllUsersPage
+    #---------------------------------------------------
+    def_prepare_all_users_values(self,users):
+        result=super(WebsiteSlidesSurvey,self)._prepare_all_users_values(users)
+        certificates_per_user=self._get_users_certificates(users)
+        forindex,userinenumerate(users):
             result[index].update({
-                'certification_count': len(certificates_per_user.get(user.id, []))
+                'certification_count':len(certificates_per_user.get(user.id,[]))
             })
-        return result
+        returnresult
 
-    def _get_users_certificates(self, users):
-        partner_ids = [user.partner_id.id for user in users]
-        domain = [
-            ('slide_partner_id.partner_id', 'in', partner_ids),
-            ('scoring_success', '=', True),
-            ('slide_partner_id.survey_scoring_success', '=', True)
+    def_get_users_certificates(self,users):
+        partner_ids=[user.partner_id.idforuserinusers]
+        domain=[
+            ('slide_partner_id.partner_id','in',partner_ids),
+            ('scoring_success','=',True),
+            ('slide_partner_id.survey_scoring_success','=',True)
         ]
-        certificates = request.env['survey.user_input'].sudo().search(domain)
-        users_certificates = {
-            user.id: [
-                certificate for certificate in certificates if certificate.partner_id == user.partner_id
-            ] for user in users
+        certificates=request.env['survey.user_input'].sudo().search(domain)
+        users_certificates={
+            user.id:[
+                certificateforcertificateincertificatesifcertificate.partner_id==user.partner_id
+            ]foruserinusers
         }
-        return users_certificates
+        returnusers_certificates
 
-    # Badges & Ranks Page
-    # ---------------------------------------------------
-    def _prepare_ranks_badges_values(self, **kwargs):
-        """ Extract certification badges, to render them in ranks/badges page in another section.
-        Order them by number of granted users desc and show only badges linked to opened certifications."""
-        values = super(WebsiteSlidesSurvey, self)._prepare_ranks_badges_values(**kwargs)
+    #Badges&RanksPage
+    #---------------------------------------------------
+    def_prepare_ranks_badges_values(self,**kwargs):
+        """Extractcertificationbadges,torendertheminranks/badgespageinanothersection.
+        Orderthembynumberofgrantedusersdescandshowonlybadgeslinkedtoopenedcertifications."""
+        values=super(WebsiteSlidesSurvey,self)._prepare_ranks_badges_values(**kwargs)
 
-        # 1. Getting all certification badges, sorted by granted user desc
-        domain = expression.AND([[('survey_id', '!=', False)], self._prepare_badges_domain(**kwargs)])
-        certification_badges = request.env['gamification.badge'].sudo().search(domain)
-        # keep only the badge with challenge category = slides (the rest will be displayed under 'normal badges' section
-        certification_badges = certification_badges.filtered(
-            lambda b: 'slides' in b.challenge_ids.mapped('challenge_category'))
+        #1.Gettingallcertificationbadges,sortedbygranteduserdesc
+        domain=expression.AND([[('survey_id','!=',False)],self._prepare_badges_domain(**kwargs)])
+        certification_badges=request.env['gamification.badge'].sudo().search(domain)
+        #keeponlythebadgewithchallengecategory=slides(therestwillbedisplayedunder'normalbadges'section
+        certification_badges=certification_badges.filtered(
+            lambdab:'slides'inb.challenge_ids.mapped('challenge_category'))
 
-        if not certification_badges:
-            return values
+        ifnotcertification_badges:
+            returnvalues
 
-        # 2. sort by granted users (done here, and not in search directly, because non stored field)
-        certification_badges = certification_badges.sorted("granted_users_count", reverse=True)
+        #2.sortbygrantedusers(donehere,andnotinsearchdirectly,becausenonstoredfield)
+        certification_badges=certification_badges.sorted("granted_users_count",reverse=True)
 
-        # 3. Remove certification badge from badges and keep only certification badge linked to opened survey
-        badges = values['badges'] - certification_badges
-        certification_badges = certification_badges.filtered(lambda b: b.survey_id.state == 'open')
+        #3.Removecertificationbadgefrombadgesandkeeponlycertificationbadgelinkedtoopenedsurvey
+        badges=values['badges']-certification_badges
+        certification_badges=certification_badges.filtered(lambdab:b.survey_id.state=='open')
 
-        # 4. Getting all course url for each badge
-        certification_slides = request.env['slide.slide'].sudo().search([('survey_id', 'in', certification_badges.mapped('survey_id').ids)])
-        certification_badge_urls = {slide.survey_id.certification_badge_id.id: slide.channel_id.website_url for slide in certification_slides}
+        #4.Gettingallcourseurlforeachbadge
+        certification_slides=request.env['slide.slide'].sudo().search([('survey_id','in',certification_badges.mapped('survey_id').ids)])
+        certification_badge_urls={slide.survey_id.certification_badge_id.id:slide.channel_id.website_urlforslideincertification_slides}
 
-        # 5. Applying changes
+        #5.Applyingchanges
         values.update({
-            'badges': badges,
-            'certification_badges': certification_badges,
-            'certification_badge_urls': certification_badge_urls
+            'badges':badges,
+            'certification_badges':certification_badges,
+            'certification_badge_urls':certification_badge_urls
         })
-        return values
+        returnvalues

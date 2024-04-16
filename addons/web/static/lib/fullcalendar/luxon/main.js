@@ -1,102 +1,102 @@
 /*!
-FullCalendar Luxon Plugin v4.4.0
-Docs & License: https://fullcalendar.io/
-(c) 2019 Adam Shaw
+FullCalendarLuxonPluginv4.4.0
+Docs&License:https://fullcalendar.io/
+(c)2019AdamShaw
 */
 
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('luxon'), require('@fullcalendar/core')) :
-    typeof define === 'function' && define.amd ? define(['exports', 'luxon', '@fullcalendar/core'], factory) :
-    (global = global || self, factory(global.FullCalendarLuxon = {}, global.luxon, global.FullCalendar));
-}(this, function (exports, luxon, core) { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?factory(exports,require('luxon'),require('@fullcalendar/core')):
+    typeofdefine==='function'&&define.amd?define(['exports','luxon','@fullcalendar/core'],factory):
+    (global=global||self,factory(global.FullCalendarLuxon={},global.luxon,global.FullCalendar));
+}(this,function(exports,luxon,core){'usestrict';
 
-    /*! *****************************************************************************
-    Copyright (c) Microsoft Corporation. All rights reserved.
-    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-    this file except in compliance with the License. You may obtain a copy of the
-    License at http://www.apache.org/licenses/LICENSE-2.0
+    /*!*****************************************************************************
+    Copyright(c)MicrosoftCorporation.Allrightsreserved.
+    LicensedundertheApacheLicense,Version2.0(the"License");youmaynotuse
+    thisfileexceptincompliancewiththeLicense.Youmayobtainacopyofthe
+    Licenseathttp://www.apache.org/licenses/LICENSE-2.0
 
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-    MERCHANTABLITY OR NON-INFRINGEMENT.
+    THISCODEISPROVIDEDONAN*ASIS*BASIS,WITHOUTWARRANTIESORCONDITIONSOFANY
+    KIND,EITHEREXPRESSORIMPLIED,INCLUDINGWITHOUTLIMITATIONANYIMPLIED
+    WARRANTIESORCONDITIONSOFTITLE,FITNESSFORAPARTICULARPURPOSE,
+    MERCHANTABLITYORNON-INFRINGEMENT.
 
-    See the Apache Version 2.0 License for specific language governing permissions
-    and limitations under the License.
-    ***************************************************************************** */
-    /* global Reflect, Promise */
+    SeetheApacheVersion2.0Licenseforspecificlanguagegoverningpermissions
+    andlimitationsundertheLicense.
+    ******************************************************************************/
+    /*globalReflect,Promise*/
 
-    var extendStatics = function(d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
+    varextendStatics=function(d,b){
+        extendStatics=Object.setPrototypeOf||
+            ({__proto__:[]}instanceofArray&&function(d,b){d.__proto__=b;})||
+            function(d,b){for(varpinb)if(b.hasOwnProperty(p))d[p]=b[p];};
+        returnextendStatics(d,b);
     };
 
-    function __extends(d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    function__extends(d,b){
+        extendStatics(d,b);
+        function__(){this.constructor=d;}
+        d.prototype=b===null?Object.create(b):(__.prototype=b.prototype,new__());
     }
 
-    var __assign = function() {
-        __assign = Object.assign || function __assign(t) {
-            for (var s, i = 1, n = arguments.length; i < n; i++) {
-                s = arguments[i];
-                for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+    var__assign=function(){
+        __assign=Object.assign||function__assign(t){
+            for(vars,i=1,n=arguments.length;i<n;i++){
+                s=arguments[i];
+                for(varpins)if(Object.prototype.hasOwnProperty.call(s,p))t[p]=s[p];
             }
-            return t;
+            returnt;
         };
-        return __assign.apply(this, arguments);
+        return__assign.apply(this,arguments);
     };
 
-    function toDateTime(date, calendar) {
-        if (!(calendar instanceof core.Calendar)) {
-            throw new Error('must supply a Calendar instance');
+    functiontoDateTime(date,calendar){
+        if(!(calendarinstanceofcore.Calendar)){
+            thrownewError('mustsupplyaCalendarinstance');
         }
-        return luxon.DateTime.fromJSDate(date, {
-            zone: calendar.dateEnv.timeZone,
-            locale: calendar.dateEnv.locale.codes[0]
+        returnluxon.DateTime.fromJSDate(date,{
+            zone:calendar.dateEnv.timeZone,
+            locale:calendar.dateEnv.locale.codes[0]
         });
     }
-    function toDuration(duration, calendar) {
-        if (!(calendar instanceof core.Calendar)) {
-            throw new Error('must supply a Calendar instance');
+    functiontoDuration(duration,calendar){
+        if(!(calendarinstanceofcore.Calendar)){
+            thrownewError('mustsupplyaCalendarinstance');
         }
-        return luxon.Duration.fromObject(__assign({}, duration, { locale: calendar.dateEnv.locale.codes[0] }));
+        returnluxon.Duration.fromObject(__assign({},duration,{locale:calendar.dateEnv.locale.codes[0]}));
     }
-    var LuxonNamedTimeZone = /** @class */ (function (_super) {
-        __extends(LuxonNamedTimeZone, _super);
-        function LuxonNamedTimeZone() {
-            return _super !== null && _super.apply(this, arguments) || this;
+    varLuxonNamedTimeZone=/**@class*/(function(_super){
+        __extends(LuxonNamedTimeZone,_super);
+        functionLuxonNamedTimeZone(){
+            return_super!==null&&_super.apply(this,arguments)||this;
         }
-        LuxonNamedTimeZone.prototype.offsetForArray = function (a) {
-            return arrayToLuxon(a, this.timeZoneName).offset;
+        LuxonNamedTimeZone.prototype.offsetForArray=function(a){
+            returnarrayToLuxon(a,this.timeZoneName).offset;
         };
-        LuxonNamedTimeZone.prototype.timestampToArray = function (ms) {
-            return luxonToArray(luxon.DateTime.fromMillis(ms, {
-                zone: this.timeZoneName
+        LuxonNamedTimeZone.prototype.timestampToArray=function(ms){
+            returnluxonToArray(luxon.DateTime.fromMillis(ms,{
+                zone:this.timeZoneName
             }));
         };
-        return LuxonNamedTimeZone;
+        returnLuxonNamedTimeZone;
     }(core.NamedTimeZoneImpl));
-    function formatWithCmdStr(cmdStr, arg) {
-        var cmd = parseCmdStr(cmdStr);
-        if (arg.end) {
-            var start = arrayToLuxon(arg.start.array, arg.timeZone, arg.localeCodes[0]);
-            var end = arrayToLuxon(arg.end.array, arg.timeZone, arg.localeCodes[0]);
-            return formatRange(cmd, start.toFormat.bind(start), end.toFormat.bind(end), arg.separator);
+    functionformatWithCmdStr(cmdStr,arg){
+        varcmd=parseCmdStr(cmdStr);
+        if(arg.end){
+            varstart=arrayToLuxon(arg.start.array,arg.timeZone,arg.localeCodes[0]);
+            varend=arrayToLuxon(arg.end.array,arg.timeZone,arg.localeCodes[0]);
+            returnformatRange(cmd,start.toFormat.bind(start),end.toFormat.bind(end),arg.separator);
         }
-        return arrayToLuxon(arg.date.array, arg.timeZone, arg.localeCodes[0]).toFormat(cmd.whole);
+        returnarrayToLuxon(arg.date.array,arg.timeZone,arg.localeCodes[0]).toFormat(cmd.whole);
     }
-    var main = core.createPlugin({
-        cmdFormatter: formatWithCmdStr,
-        namedTimeZonedImpl: LuxonNamedTimeZone
+    varmain=core.createPlugin({
+        cmdFormatter:formatWithCmdStr,
+        namedTimeZonedImpl:LuxonNamedTimeZone
     });
-    function luxonToArray(datetime) {
-        return [
+    functionluxonToArray(datetime){
+        return[
             datetime.year,
-            datetime.month - 1,
+            datetime.month-1,
             datetime.day,
             datetime.hour,
             datetime.minute,
@@ -104,67 +104,67 @@ Docs & License: https://fullcalendar.io/
             datetime.millisecond
         ];
     }
-    function arrayToLuxon(arr, timeZone, locale) {
-        return luxon.DateTime.fromObject({
-            zone: timeZone,
-            locale: locale,
-            year: arr[0],
-            month: arr[1] + 1,
-            day: arr[2],
-            hour: arr[3],
-            minute: arr[4],
-            second: arr[5],
-            millisecond: arr[6]
+    functionarrayToLuxon(arr,timeZone,locale){
+        returnluxon.DateTime.fromObject({
+            zone:timeZone,
+            locale:locale,
+            year:arr[0],
+            month:arr[1]+1,
+            day:arr[2],
+            hour:arr[3],
+            minute:arr[4],
+            second:arr[5],
+            millisecond:arr[6]
         });
     }
-    function parseCmdStr(cmdStr) {
-        var parts = cmdStr.match(/^(.*?)\{(.*)\}(.*)$/); // TODO: lookbehinds for escape characters
-        if (parts) {
-            var middle = parseCmdStr(parts[2]);
-            return {
-                head: parts[1],
-                middle: middle,
-                tail: parts[3],
-                whole: parts[1] + middle.whole + parts[3]
+    functionparseCmdStr(cmdStr){
+        varparts=cmdStr.match(/^(.*?)\{(.*)\}(.*)$/);//TODO:lookbehindsforescapecharacters
+        if(parts){
+            varmiddle=parseCmdStr(parts[2]);
+            return{
+                head:parts[1],
+                middle:middle,
+                tail:parts[3],
+                whole:parts[1]+middle.whole+parts[3]
             };
         }
-        else {
-            return {
-                head: null,
-                middle: null,
-                tail: null,
-                whole: cmdStr
+        else{
+            return{
+                head:null,
+                middle:null,
+                tail:null,
+                whole:cmdStr
             };
         }
     }
-    function formatRange(cmd, formatStart, formatEnd, separator) {
-        if (cmd.middle) {
-            var startHead = formatStart(cmd.head);
-            var startMiddle = formatRange(cmd.middle, formatStart, formatEnd, separator);
-            var startTail = formatStart(cmd.tail);
-            var endHead = formatEnd(cmd.head);
-            var endMiddle = formatRange(cmd.middle, formatStart, formatEnd, separator);
-            var endTail = formatEnd(cmd.tail);
-            if (startHead === endHead && startTail === endTail) {
-                return startHead +
-                    (startMiddle === endMiddle ? startMiddle : startMiddle + separator + endMiddle) +
+    functionformatRange(cmd,formatStart,formatEnd,separator){
+        if(cmd.middle){
+            varstartHead=formatStart(cmd.head);
+            varstartMiddle=formatRange(cmd.middle,formatStart,formatEnd,separator);
+            varstartTail=formatStart(cmd.tail);
+            varendHead=formatEnd(cmd.head);
+            varendMiddle=formatRange(cmd.middle,formatStart,formatEnd,separator);
+            varendTail=formatEnd(cmd.tail);
+            if(startHead===endHead&&startTail===endTail){
+                returnstartHead+
+                    (startMiddle===endMiddle?startMiddle:startMiddle+separator+endMiddle)+
                     startTail;
             }
         }
-        var startWhole = formatStart(cmd.whole);
-        var endWhole = formatEnd(cmd.whole);
-        if (startWhole === endWhole) {
-            return startWhole;
+        varstartWhole=formatStart(cmd.whole);
+        varendWhole=formatEnd(cmd.whole);
+        if(startWhole===endWhole){
+            returnstartWhole;
         }
-        else {
-            return startWhole + separator + endWhole;
+        else{
+            returnstartWhole+separator+endWhole;
         }
     }
 
-    exports.default = main;
-    exports.toDateTime = toDateTime;
-    exports.toDuration = toDuration;
+    exports.default=main;
+    exports.toDateTime=toDateTime;
+    exports.toDuration=toDuration;
 
-    Object.defineProperty(exports, '__esModule', { value: true });
+    Object.defineProperty(exports,'__esModule',{value:true});
 
 }));

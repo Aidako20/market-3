@@ -1,77 +1,77 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from werkzeug import urls
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromwerkzeugimporturls
 
-from flectra import api, fields, models
-from flectra.http import request
-from flectra.tools.json import scriptsafe as json_scriptsafe
+fromflectraimportapi,fields,models
+fromflectra.httpimportrequest
+fromflectra.tools.jsonimportscriptsafeasjson_scriptsafe
 
 
-class ServerAction(models.Model):
-    """ Add website option in server actions. """
+classServerAction(models.Model):
+    """Addwebsiteoptioninserveractions."""
 
-    _name = 'ir.actions.server'
-    _inherit = 'ir.actions.server'
+    _name='ir.actions.server'
+    _inherit='ir.actions.server'
 
-    xml_id = fields.Char('External ID', compute='_compute_xml_id', help="ID of the action if defined in a XML file")
-    website_path = fields.Char('Website Path')
-    website_url = fields.Char('Website Url', compute='_get_website_url', help='The full URL to access the server action through the website.')
-    website_published = fields.Boolean('Available on the Website', copy=False,
-                                       help='A code server action can be executed from the website, using a dedicated '
-                                            'controller. The address is <base>/website/action/<website_path>. '
-                                            'Set this field as True to allow users to run this action. If it '
-                                            'is set to False the action cannot be run through the website.')
+    xml_id=fields.Char('ExternalID',compute='_compute_xml_id',help="IDoftheactionifdefinedinaXMLfile")
+    website_path=fields.Char('WebsitePath')
+    website_url=fields.Char('WebsiteUrl',compute='_get_website_url',help='ThefullURLtoaccesstheserveractionthroughthewebsite.')
+    website_published=fields.Boolean('AvailableontheWebsite',copy=False,
+                                       help='Acodeserveractioncanbeexecutedfromthewebsite,usingadedicated'
+                                            'controller.Theaddressis<base>/website/action/<website_path>.'
+                                            'SetthisfieldasTruetoallowuserstorunthisaction.Ifit'
+                                            'issettoFalsetheactioncannotberunthroughthewebsite.')
 
-    def _compute_xml_id(self):
-        res = self.get_external_id()
-        for action in self:
-            action.xml_id = res.get(action.id)
+    def_compute_xml_id(self):
+        res=self.get_external_id()
+        foractioninself:
+            action.xml_id=res.get(action.id)
 
-    def _compute_website_url(self, website_path, xml_id):
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-        link = website_path or xml_id or (self.id and '%d' % self.id) or ''
-        if base_url and link:
-            path = '%s/%s' % ('/website/action', link)
-            return urls.url_join(base_url, path)
-        return ''
+    def_compute_website_url(self,website_path,xml_id):
+        base_url=self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        link=website_pathorxml_idor(self.idand'%d'%self.id)or''
+        ifbase_urlandlink:
+            path='%s/%s'%('/website/action',link)
+            returnurls.url_join(base_url,path)
+        return''
 
-    @api.depends('state', 'website_published', 'website_path', 'xml_id')
-    def _get_website_url(self):
-        for action in self:
-            if action.state == 'code' and action.website_published:
-                action.website_url = action._compute_website_url(action.website_path, action.xml_id)
+    @api.depends('state','website_published','website_path','xml_id')
+    def_get_website_url(self):
+        foractioninself:
+            ifaction.state=='code'andaction.website_published:
+                action.website_url=action._compute_website_url(action.website_path,action.xml_id)
             else:
-                action.website_url = False
+                action.website_url=False
 
     @api.model
-    def _get_eval_context(self, action):
-        """ Override to add the request object in eval_context. """
-        eval_context = super(ServerAction, self)._get_eval_context(action)
-        if action.state == 'code':
-            eval_context['request'] = request
-            eval_context['json'] = json_scriptsafe
-        return eval_context
+    def_get_eval_context(self,action):
+        """Overridetoaddtherequestobjectineval_context."""
+        eval_context=super(ServerAction,self)._get_eval_context(action)
+        ifaction.state=='code':
+            eval_context['request']=request
+            eval_context['json']=json_scriptsafe
+        returneval_context
 
     @api.model
-    def _run_action_code_multi(self, eval_context=None):
-        """ Override to allow returning response the same way action is already
-            returned by the basic server action behavior. Note that response has
-            priority over action, avoid using both.
+    def_run_action_code_multi(self,eval_context=None):
+        """Overridetoallowreturningresponsethesamewayactionisalready
+            returnedbythebasicserveractionbehavior.Notethatresponsehas
+            priorityoveraction,avoidusingboth.
         """
-        res = super(ServerAction, self)._run_action_code_multi(eval_context)
-        return eval_context.get('response', res)
+        res=super(ServerAction,self)._run_action_code_multi(eval_context)
+        returneval_context.get('response',res)
 
 
-class IrActionsTodo(models.Model):
-    _name = 'ir.actions.todo'
-    _inherit = 'ir.actions.todo'
+classIrActionsTodo(models.Model):
+    _name='ir.actions.todo'
+    _inherit='ir.actions.todo'
 
-    def action_launch(self):
-        res = super().action_launch()  # do ensure_one()
+    defaction_launch(self):
+        res=super().action_launch() #doensure_one()
 
-        if self.id == self.env.ref('website.theme_install_todo').id:
-            # Pick a theme consume all ir.actions.todo by default (due to lower sequence).
-            # Once done, we re-enable the main ir.act.todo: open_menu
+        ifself.id==self.env.ref('website.theme_install_todo').id:
+            #Pickathemeconsumeallir.actions.todobydefault(duetolowersequence).
+            #Oncedone,were-enablethemainir.act.todo:open_menu
             self.env.ref('base.open_menu').action_open()
 
-        return res
+        returnres

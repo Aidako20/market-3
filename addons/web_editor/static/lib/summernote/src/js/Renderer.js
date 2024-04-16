@@ -3,982 +3,982 @@ define([
   'summernote/core/dom',
   'summernote/core/func',
   'summernote/core/list'
-], function (agent, dom, func, list) {
+],function(agent,dom,func,list){
   /**
-   * @class Renderer
+   *@classRenderer
    *
-   * renderer
+   *renderer
    *
-   * rendering toolbar and editable
+   *renderingtoolbarandeditable
    */
-  var Renderer = function () {
+  varRenderer=function(){
 
     /**
-     * bootstrap button template
-     * @private
-     * @param {String} label button name
-     * @param {Object} [options] button options
-     * @param {String} [options.event] data-event
-     * @param {String} [options.className] button's class name
-     * @param {String} [options.value] data-value
-     * @param {String} [options.title] button's title for popup
-     * @param {String} [options.dropdown] dropdown html
-     * @param {String} [options.hide] data-hide
+     *bootstrapbuttontemplate
+     *@private
+     *@param{String}labelbuttonname
+     *@param{Object}[options]buttonoptions
+     *@param{String}[options.event]data-event
+     *@param{String}[options.className]button'sclassname
+     *@param{String}[options.value]data-value
+     *@param{String}[options.title]button'stitleforpopup
+     *@param{String}[options.dropdown]dropdownhtml
+     *@param{String}[options.hide]data-hide
      */
-    var tplButton = function (label, options) {
-      var event = options.event;
-      var value = options.value;
-      var title = options.title;
-      var className = options.className;
-      var dropdown = options.dropdown;
-      var hide = options.hide;
+    vartplButton=function(label,options){
+      varevent=options.event;
+      varvalue=options.value;
+      vartitle=options.title;
+      varclassName=options.className;
+      vardropdown=options.dropdown;
+      varhide=options.hide;
 
-      return (dropdown ? '<div class="btn-group' +
-               (className ? ' ' + className : '') + '">' : '') +
-               '<button type="button"' +
-                 ' class="btn btn-secondary btn-sm' +
-                   ((!dropdown && className) ? ' ' + className : '') +
-                   (dropdown ? ' dropdown-toggle' : '') +
-                 '"' +
-                 (dropdown ? ' data-toggle="dropdown"' : '') +
-                 (title ? ' title="' + title + '"' : '') +
-                 (event ? ' data-event="' + event + '"' : '') +
-                 (value ? ' data-value=\'' + value + '\'' : '') +
-                 (hide ? ' data-hide=\'' + hide + '\'' : '') +
-                 ' tabindex="-1">' +
-                 label +
-                 (dropdown ? ' <span class="caret"></span>' : '') +
-               '</button>' +
-               (dropdown || '') +
-             (dropdown ? '</div>' : '');
+      return(dropdown?'<divclass="btn-group'+
+               (className?''+className:'')+'">':'')+
+               '<buttontype="button"'+
+                 'class="btnbtn-secondarybtn-sm'+
+                   ((!dropdown&&className)?''+className:'')+
+                   (dropdown?'dropdown-toggle':'')+
+                 '"'+
+                 (dropdown?'data-toggle="dropdown"':'')+
+                 (title?'title="'+title+'"':'')+
+                 (event?'data-event="'+event+'"':'')+
+                 (value?'data-value=\''+value+'\'':'')+
+                 (hide?'data-hide=\''+hide+'\'':'')+
+                 'tabindex="-1">'+
+                 label+
+                 (dropdown?'<spanclass="caret"></span>':'')+
+               '</button>'+
+               (dropdown||'')+
+             (dropdown?'</div>':'');
     };
 
     /**
-     * bootstrap icon button template
-     * @private
-     * @param {String} iconClassName
-     * @param {Object} [options]
-     * @param {String} [options.event]
-     * @param {String} [options.value]
-     * @param {String} [options.title]
-     * @param {String} [options.dropdown]
+     *bootstrapiconbuttontemplate
+     *@private
+     *@param{String}iconClassName
+     *@param{Object}[options]
+     *@param{String}[options.event]
+     *@param{String}[options.value]
+     *@param{String}[options.title]
+     *@param{String}[options.dropdown]
      */
-    var tplIconButton = function (iconClassName, options) {
-      var label = '<i class="' + iconClassName + '"></i>';
-      return tplButton(label, options);
+    vartplIconButton=function(iconClassName,options){
+      varlabel='<iclass="'+iconClassName+'"></i>';
+      returntplButton(label,options);
     };
 
     /**
-     * bootstrap popover template
-     * @private
-     * @param {String} className
-     * @param {String} content
+     *bootstrappopovertemplate
+     *@private
+     *@param{String}className
+     *@param{String}content
      */
-    var tplPopover = function (className, content) {
-      var $popover = $('<div class="' + className + ' popover bottom in" style="display: none;">' +
-               '<div class="arrow"></div>' +
-               '<div class="popover-body">' +
-               '</div>' +
+    vartplPopover=function(className,content){
+      var$popover=$('<divclass="'+className+'popoverbottomin"style="display:none;">'+
+               '<divclass="arrow"></div>'+
+               '<divclass="popover-body">'+
+               '</div>'+
              '</div>');
 
       $popover.find('.popover-body').append(content);
-      return $popover;
+      return$popover;
     };
 
     /**
-     * bootstrap dialog template
+     *bootstrapdialogtemplate
      *
-     * @param {String} className
-     * @param {String} [title='']
-     * @param {String} body
-     * @param {String} [footer='']
+     *@param{String}className
+     *@param{String}[title='']
+     *@param{String}body
+     *@param{String}[footer='']
      */
-    var tplDialog = function (className, title, body, footer) {
-      return '<div class="' + className + ' modal" role="dialog" aria-hidden="false">' +
-               '<div class="modal-dialog">' +
-                 '<div class="modal-content">' +
-                   (title ?
-                   '<header class="modal-header">' +
-                     '<h4 class="modal-title">' + title + '</h4>' +
-                     '<button type="button" class="close" aria-hidden="true" tabindex="-1">&times;</button>' +
-                   '</header>' : ''
-                   ) +
-                   '<main class="modal-body">' + body + '</main>' +
-                   (footer ?
-                   '<header class="modal-footer">' + footer + '</header>' : ''
-                   ) +
-                 '</div>' +
-               '</div>' +
+    vartplDialog=function(className,title,body,footer){
+      return'<divclass="'+className+'modal"role="dialog"aria-hidden="false">'+
+               '<divclass="modal-dialog">'+
+                 '<divclass="modal-content">'+
+                   (title?
+                   '<headerclass="modal-header">'+
+                     '<h4class="modal-title">'+title+'</h4>'+
+                     '<buttontype="button"class="close"aria-hidden="true"tabindex="-1">&times;</button>'+
+                   '</header>':''
+                   )+
+                   '<mainclass="modal-body">'+body+'</main>'+
+                   (footer?
+                   '<headerclass="modal-footer">'+footer+'</header>':''
+                   )+
+                 '</div>'+
+               '</div>'+
              '</div>';
     };
 
     /**
-     * bootstrap dropdown template
+     *bootstrapdropdowntemplate
      *
-     * @param {String|String[]} contents
-     * @param {String} [className='']
-     * @param {String} [nodeName='']
+     *@param{String|String[]}contents
+     *@param{String}[className='']
+     *@param{String}[nodeName='']
      */
-    var tplDropdown = function (contents, className, nodeName) {
-      var classes = 'dropdown-menu' + (className ? ' ' + className : '');
-      nodeName = nodeName || 'ul';
-      if (contents instanceof Array) {
-        contents = contents.join('');
+    vartplDropdown=function(contents,className,nodeName){
+      varclasses='dropdown-menu'+(className?''+className:'');
+      nodeName=nodeName||'ul';
+      if(contentsinstanceofArray){
+        contents=contents.join('');
       }
 
-      return '<' + nodeName + ' class="' + classes + '">' + contents + '</' + nodeName + '>';
+      return'<'+nodeName+'class="'+classes+'">'+contents+'</'+nodeName+'>';
     };
 
-    var tplButtonInfo = {
-      picture: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.image.image, {
-          event: 'showImageDialog',
-          title: lang.image.image,
-          hide: true
+    vartplButtonInfo={
+      picture:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.image.image,{
+          event:'showImageDialog',
+          title:lang.image.image,
+          hide:true
         });
       },
-      link: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.link.link, {
-          event: 'showLinkDialog',
-          title: lang.link.link,
-          hide: true
+      link:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.link.link,{
+          event:'showLinkDialog',
+          title:lang.link.link,
+          hide:true
         });
       },
-      table: function (lang, options) {
-        var dropdown = [
-          '<div class="note-dimension-picker">',
-          '<div class="note-dimension-picker-mousecatcher" data-event="insertTable" data-value="1x1"></div>',
-          '<div class="note-dimension-picker-highlighted"></div>',
-          '<div class="note-dimension-picker-unhighlighted"></div>',
+      table:function(lang,options){
+        vardropdown=[
+          '<divclass="note-dimension-picker">',
+          '<divclass="note-dimension-picker-mousecatcher"data-event="insertTable"data-value="1x1"></div>',
+          '<divclass="note-dimension-picker-highlighted"></div>',
+          '<divclass="note-dimension-picker-unhighlighted"></div>',
           '</div>',
-          '<div class="note-dimension-display"> 1 x 1 </div>'
+          '<divclass="note-dimension-display">1x1</div>'
         ];
 
-        return tplIconButton(options.iconPrefix + options.icons.table.table, {
-          title: lang.table.table,
-          dropdown: tplDropdown(dropdown, 'note-table')
+        returntplIconButton(options.iconPrefix+options.icons.table.table,{
+          title:lang.table.table,
+          dropdown:tplDropdown(dropdown,'note-table')
         });
       },
-      style: function (lang, options) {
-        var items = options.styleTags.reduce(function (memo, v) {
-          var label = lang.style[v === 'p' ? 'normal' : v];
-          return memo + '<li><a class="dropdown-item" data-event="formatBlock" href="#" data-value="' + v + '">' +
+      style:function(lang,options){
+        varitems=options.styleTags.reduce(function(memo,v){
+          varlabel=lang.style[v==='p'?'normal':v];
+          returnmemo+'<li><aclass="dropdown-item"data-event="formatBlock"href="#"data-value="'+v+'">'+
                    (
-                     (v === 'p' || v === 'pre') ? label :
-                     '<' + v + '>' + label + '</' + v + '>'
-                   ) +
+                     (v==='p'||v==='pre')?label:
+                     '<'+v+'>'+label+'</'+v+'>'
+                   )+
                  '</a></li>';
-        }, '');
+        },'');
 
-        return tplIconButton(options.iconPrefix + options.icons.style.style, {
-          title: lang.style.style,
-          dropdown: tplDropdown(items)
+        returntplIconButton(options.iconPrefix+options.icons.style.style,{
+          title:lang.style.style,
+          dropdown:tplDropdown(items)
         });
       },
-      fontname: function (lang, options) {
-        var realFontList = [];
-        var items = options.fontNames.reduce(function (memo, v) {
-          if (!agent.isFontInstalled(v) && !list.contains(options.fontNamesIgnoreCheck, v)) {
-            return memo;
+      fontname:function(lang,options){
+        varrealFontList=[];
+        varitems=options.fontNames.reduce(function(memo,v){
+          if(!agent.isFontInstalled(v)&&!list.contains(options.fontNamesIgnoreCheck,v)){
+            returnmemo;
           }
           realFontList.push(v);
-          return memo + '<li><a data-event="fontName" href="#" data-value="' + v + '" style="font-family:\'' + v + '\'">' +
-                          '<i class="' + options.iconPrefix + options.icons.misc.check + '"></i> ' + v +
+          returnmemo+'<li><adata-event="fontName"href="#"data-value="'+v+'"style="font-family:\''+v+'\'">'+
+                          '<iclass="'+options.iconPrefix+options.icons.misc.check+'"></i>'+v+
                         '</a></li>';
-        }, '');
+        },'');
 
-        var hasDefaultFont = agent.isFontInstalled(options.defaultFontName);
-        var defaultFontName = (hasDefaultFont) ? options.defaultFontName : realFontList[0];
+        varhasDefaultFont=agent.isFontInstalled(options.defaultFontName);
+        vardefaultFontName=(hasDefaultFont)?options.defaultFontName:realFontList[0];
 
-        var label = '<span class="note-current-fontname">' +
-                        defaultFontName +
+        varlabel='<spanclass="note-current-fontname">'+
+                        defaultFontName+
                      '</span>';
-        return tplButton(label, {
-          title: lang.font.name,
-          className: 'note-fontname',
-          dropdown: tplDropdown(items, 'note-check')
+        returntplButton(label,{
+          title:lang.font.name,
+          className:'note-fontname',
+          dropdown:tplDropdown(items,'note-check')
         });
       },
-      fontsize: function (lang, options) {
-        var items = options.fontSizes.reduce(function (memo, v) {
-          return memo + '<li><a data-event="fontSize" href="#" data-value="' + v + '">' +
-                          '<i class="' + options.iconPrefix + options.icons.misc.check + '"></i> ' + v +
+      fontsize:function(lang,options){
+        varitems=options.fontSizes.reduce(function(memo,v){
+          returnmemo+'<li><adata-event="fontSize"href="#"data-value="'+v+'">'+
+                          '<iclass="'+options.iconPrefix+options.icons.misc.check+'"></i>'+v+
                         '</a></li>';
-        }, '');
+        },'');
 
-        var label = '<span class="note-current-fontsize">11</span>';
-        return tplButton(label, {
-          title: lang.font.size,
-          className: 'note-fontsize',
-          dropdown: tplDropdown(items, 'note-check')
+        varlabel='<spanclass="note-current-fontsize">11</span>';
+        returntplButton(label,{
+          title:lang.font.size,
+          className:'note-fontsize',
+          dropdown:tplDropdown(items,'note-check')
         });
       },
-      color: function (lang, options) {
-        var colorButtonLabel = '<i class="' +
-                                  options.iconPrefix + options.icons.color.recent +
-                                '" id="colors_preview" style="color:white;background-color:#B35E9B"></i>';
-        var colorButton = tplButton(colorButtonLabel, {
-          className: 'note-recent-color',
-          title: lang.color.recent,
-          event: 'color',
-          value: '{"backColor":"#B35E9B"}'
+      color:function(lang,options){
+        varcolorButtonLabel='<iclass="'+
+                                  options.iconPrefix+options.icons.color.recent+
+                                '"id="colors_preview"style="color:white;background-color:#B35E9B"></i>';
+        varcolorButton=tplButton(colorButtonLabel,{
+          className:'note-recent-color',
+          title:lang.color.recent,
+          event:'color',
+          value:'{"backColor":"#B35E9B"}'
         });
 
-        var items = [
-          '<li class="flex"><div class="btn-group flex-column">',
-          '<div class="note-palette-title">' + lang.color.background + '</div>',
-          '<div class="note-color-reset" data-event="backColor"',
-          ' data-value="inherit" title="' + lang.color.transparent + '">' + lang.color.setTransparent + '</div>',
-          '<div class="note-color-palette" data-target-event="backColor"></div>',
-          '</div><div class="btn-group flex-column">',
-          '<div class="note-palette-title">' + lang.color.foreground + '</div>',
-          '<div class="note-color-reset" data-event="foreColor" data-value="inherit" title="' + lang.color.reset + '">',
+        varitems=[
+          '<liclass="flex"><divclass="btn-groupflex-column">',
+          '<divclass="note-palette-title">'+lang.color.background+'</div>',
+          '<divclass="note-color-reset"data-event="backColor"',
+          'data-value="inherit"title="'+lang.color.transparent+'">'+lang.color.setTransparent+'</div>',
+          '<divclass="note-color-palette"data-target-event="backColor"></div>',
+          '</div><divclass="btn-groupflex-column">',
+          '<divclass="note-palette-title">'+lang.color.foreground+'</div>',
+          '<divclass="note-color-reset"data-event="foreColor"data-value="inherit"title="'+lang.color.reset+'">',
           lang.color.resetToDefault,
           '</div>',
-          '<div class="note-color-palette" data-target-event="foreColor"></div>',
+          '<divclass="note-color-palette"data-target-event="foreColor"></div>',
           '</div></li>'
         ];
 
-        var moreButton = tplButton('', {
-          title: lang.color.more,
-          dropdown: tplDropdown(items)
+        varmoreButton=tplButton('',{
+          title:lang.color.more,
+          dropdown:tplDropdown(items)
         });
 
-        return colorButton + moreButton;
+        returncolorButton+moreButton;
       },
-      bold: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.font.bold, {
-          event: 'bold',
-          title: lang.font.bold
-        });
-      },
-      italic: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.font.italic, {
-          event: 'italic',
-          title: lang.font.italic
+      bold:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.font.bold,{
+          event:'bold',
+          title:lang.font.bold
         });
       },
-      underline: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.font.underline, {
-          event: 'underline',
-          title: lang.font.underline
+      italic:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.font.italic,{
+          event:'italic',
+          title:lang.font.italic
         });
       },
-      strikethrough: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.font.strikethrough, {
-          event: 'strikethrough',
-          title: lang.font.strikethrough
+      underline:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.font.underline,{
+          event:'underline',
+          title:lang.font.underline
         });
       },
-      superscript: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.font.superscript, {
-          event: 'superscript',
-          title: lang.font.superscript
+      strikethrough:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.font.strikethrough,{
+          event:'strikethrough',
+          title:lang.font.strikethrough
         });
       },
-      subscript: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.font.subscript, {
-          event: 'subscript',
-          title: lang.font.subscript
+      superscript:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.font.superscript,{
+          event:'superscript',
+          title:lang.font.superscript
         });
       },
-      clear: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.font.clear, {
-          event: 'removeFormat',
-          title: lang.font.clear
+      subscript:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.font.subscript,{
+          event:'subscript',
+          title:lang.font.subscript
         });
       },
-      ul: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.lists.unordered, {
-          event: 'insertUnorderedList',
-          title: lang.lists.unordered
+      clear:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.font.clear,{
+          event:'removeFormat',
+          title:lang.font.clear
         });
       },
-      ol: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.lists.ordered, {
-          event: 'insertOrderedList',
-          title: lang.lists.ordered
+      ul:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.lists.unordered,{
+          event:'insertUnorderedList',
+          title:lang.lists.unordered
         });
       },
-      paragraph: function (lang, options) {
-        var leftButton = tplIconButton(options.iconPrefix + options.icons.paragraph.left, {
-          title: lang.paragraph.left,
-          event: 'justifyLeft'
+      ol:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.lists.ordered,{
+          event:'insertOrderedList',
+          title:lang.lists.ordered
         });
-        var centerButton = tplIconButton(options.iconPrefix + options.icons.paragraph.center, {
-          title: lang.paragraph.center,
-          event: 'justifyCenter'
+      },
+      paragraph:function(lang,options){
+        varleftButton=tplIconButton(options.iconPrefix+options.icons.paragraph.left,{
+          title:lang.paragraph.left,
+          event:'justifyLeft'
         });
-        var rightButton = tplIconButton(options.iconPrefix + options.icons.paragraph.right, {
-          title: lang.paragraph.right,
-          event: 'justifyRight'
+        varcenterButton=tplIconButton(options.iconPrefix+options.icons.paragraph.center,{
+          title:lang.paragraph.center,
+          event:'justifyCenter'
         });
-        var justifyButton = tplIconButton(options.iconPrefix + options.icons.paragraph.justify, {
-          title: lang.paragraph.justify,
-          event: 'justifyFull'
+        varrightButton=tplIconButton(options.iconPrefix+options.icons.paragraph.right,{
+          title:lang.paragraph.right,
+          event:'justifyRight'
+        });
+        varjustifyButton=tplIconButton(options.iconPrefix+options.icons.paragraph.justify,{
+          title:lang.paragraph.justify,
+          event:'justifyFull'
         });
 
-        var outdentButton = tplIconButton(options.iconPrefix + options.icons.paragraph.outdent, {
-          title: lang.paragraph.outdent,
-          event: 'outdent'
+        varoutdentButton=tplIconButton(options.iconPrefix+options.icons.paragraph.outdent,{
+          title:lang.paragraph.outdent,
+          event:'outdent'
         });
-        var indentButton = tplIconButton(options.iconPrefix + options.icons.paragraph.indent, {
-          title: lang.paragraph.indent,
-          event: 'indent'
+        varindentButton=tplIconButton(options.iconPrefix+options.icons.paragraph.indent,{
+          title:lang.paragraph.indent,
+          event:'indent'
         });
 
-        var dropdown = [
-          '<div class="note-align btn-group">',
-          leftButton + centerButton + rightButton + justifyButton,
-          '</div><div class="note-list btn-group">',
-          indentButton + outdentButton,
+        vardropdown=[
+          '<divclass="note-alignbtn-group">',
+          leftButton+centerButton+rightButton+justifyButton,
+          '</div><divclass="note-listbtn-group">',
+          indentButton+outdentButton,
           '</div>'
         ];
 
-        return tplIconButton(options.iconPrefix + options.icons.paragraph.paragraph, {
-          title: lang.paragraph.paragraph,
-          dropdown: tplDropdown(dropdown, '', 'div')
+        returntplIconButton(options.iconPrefix+options.icons.paragraph.paragraph,{
+          title:lang.paragraph.paragraph,
+          dropdown:tplDropdown(dropdown,'','div')
         });
       },
-      height: function (lang, options) {
-        var items = options.lineHeights.reduce(function (memo, v) {
-          return memo + '<li><a data-event="lineHeight" href="#" data-value="' + parseFloat(v) + '">' +
-                          '<i class="' + options.iconPrefix + options.icons.misc.check + '"></i> ' + v +
+      height:function(lang,options){
+        varitems=options.lineHeights.reduce(function(memo,v){
+          returnmemo+'<li><adata-event="lineHeight"href="#"data-value="'+parseFloat(v)+'">'+
+                          '<iclass="'+options.iconPrefix+options.icons.misc.check+'"></i>'+v+
                         '</a></li>';
-        }, '');
+        },'');
 
-        return tplIconButton(options.iconPrefix + options.icons.font.height, {
-          title: lang.font.height,
-          dropdown: tplDropdown(items, 'note-check')
+        returntplIconButton(options.iconPrefix+options.icons.font.height,{
+          title:lang.font.height,
+          dropdown:tplDropdown(items,'note-check')
         });
 
       },
-      help: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.options.help, {
-          event: 'showHelpDialog',
-          title: lang.options.help,
-          hide: true
+      help:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.options.help,{
+          event:'showHelpDialog',
+          title:lang.options.help,
+          hide:true
         });
       },
-      fullscreen: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.options.fullscreen, {
-          event: 'fullscreen',
-          title: lang.options.fullscreen
+      fullscreen:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.options.fullscreen,{
+          event:'fullscreen',
+          title:lang.options.fullscreen
         });
       },
-      codeview: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.options.codeview, {
-          event: 'codeview',
-          title: lang.options.codeview
+      codeview:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.options.codeview,{
+          event:'codeview',
+          title:lang.options.codeview
         });
       },
-      undo: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.history.undo, {
-          event: 'undo',
-          title: lang.history.undo
+      undo:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.history.undo,{
+          event:'undo',
+          title:lang.history.undo
         });
       },
-      redo: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.history.redo, {
-          event: 'redo',
-          title: lang.history.redo
+      redo:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.history.redo,{
+          event:'redo',
+          title:lang.history.redo
         });
       },
-      hr: function (lang, options) {
-        return tplIconButton(options.iconPrefix + options.icons.hr.insert, {
-          event: 'insertHorizontalRule',
-          title: lang.hr.insert
+      hr:function(lang,options){
+        returntplIconButton(options.iconPrefix+options.icons.hr.insert,{
+          event:'insertHorizontalRule',
+          title:lang.hr.insert
         });
       }
     };
 
-    var tplPopovers = function (lang, options) {
-      var tplLinkPopover = function () {
-        var linkButton = tplIconButton(options.iconPrefix + options.icons.link.edit, {
-          title: lang.link.edit,
-          event: 'showLinkDialog',
-          hide: true
+    vartplPopovers=function(lang,options){
+      vartplLinkPopover=function(){
+        varlinkButton=tplIconButton(options.iconPrefix+options.icons.link.edit,{
+          title:lang.link.edit,
+          event:'showLinkDialog',
+          hide:true
         });
-        var unlinkButton = tplIconButton(options.iconPrefix + options.icons.link.unlink, {
-          title: lang.link.unlink,
-          event: 'unlink'
+        varunlinkButton=tplIconButton(options.iconPrefix+options.icons.link.unlink,{
+          title:lang.link.unlink,
+          event:'unlink'
         });
-        var content = '<a href="http://www.google.com" target="_blank">www.google.com</a>&nbsp;&nbsp;' +
-                      '<div class="note-insert btn-group">' +
-                        linkButton + unlinkButton +
+        varcontent='<ahref="http://www.google.com"target="_blank">www.google.com</a>&nbsp;&nbsp;'+
+                      '<divclass="note-insertbtn-group">'+
+                        linkButton+unlinkButton+
                       '</div>';
-        return tplPopover('note-link-popover', content);
+        returntplPopover('note-link-popover',content);
       };
 
-      var tplImagePopover = function () {
-        var autoButton = tplButton('<span class="note-fontsize-10">Auto</span>', {
-          event: 'resize',
-          value: 'auto'
+      vartplImagePopover=function(){
+        varautoButton=tplButton('<spanclass="note-fontsize-10">Auto</span>',{
+          event:'resize',
+          value:'auto'
         });
-        var fullButton = tplButton('<span class="note-fontsize-10">100%</span>', {
-          title: lang.image.resizeFull,
-          event: 'resize',
-          value: '1'
+        varfullButton=tplButton('<spanclass="note-fontsize-10">100%</span>',{
+          title:lang.image.resizeFull,
+          event:'resize',
+          value:'1'
         });
-        var halfButton = tplButton('<span class="note-fontsize-10">50%</span>', {
-          title: lang.image.resizeHalf,
-          event: 'resize',
-          value: '0.5'
+        varhalfButton=tplButton('<spanclass="note-fontsize-10">50%</span>',{
+          title:lang.image.resizeHalf,
+          event:'resize',
+          value:'0.5'
         });
-        var quarterButton = tplButton('<span class="note-fontsize-10">25%</span>', {
-          title: lang.image.resizeQuarter,
-          event: 'resize',
-          value: '0.25'
-        });
-
-        var leftButton = tplIconButton(options.iconPrefix + options.icons.image.floatLeft, {
-          title: lang.image.floatLeft,
-          event: 'floatMe',
-          value: 'left'
-        });
-        var rightButton = tplIconButton(options.iconPrefix + options.icons.image.floatRight, {
-          title: lang.image.floatRight,
-          event: 'floatMe',
-          value: 'right'
-        });
-        var justifyButton = tplIconButton(options.iconPrefix + options.icons.image.floatNone, {
-          title: lang.image.floatNone,
-          event: 'floatMe',
-          value: 'none'
+        varquarterButton=tplButton('<spanclass="note-fontsize-10">25%</span>',{
+          title:lang.image.resizeQuarter,
+          event:'resize',
+          value:'0.25'
         });
 
-        var roundedButton = tplIconButton(options.iconPrefix + options.icons.image.shapeRounded, {
-          title: lang.image.shapeRounded,
-          event: 'imageShape',
-          value: 'rounded'
+        varleftButton=tplIconButton(options.iconPrefix+options.icons.image.floatLeft,{
+          title:lang.image.floatLeft,
+          event:'floatMe',
+          value:'left'
         });
-        var circleButton = tplIconButton(options.iconPrefix + options.icons.image.shapeCircle, {
-          title: lang.image.shapeCircle,
-          event: 'imageShape',
-          value: 'rounded-circle'
+        varrightButton=tplIconButton(options.iconPrefix+options.icons.image.floatRight,{
+          title:lang.image.floatRight,
+          event:'floatMe',
+          value:'right'
         });
-        var thumbnailButton = tplIconButton(options.iconPrefix + options.icons.image.shapeThumbnail, {
-          title: lang.image.shapeThumbnail,
-          event: 'imageShape',
-          value: 'img-thumbnail'
-        });
-        var noneButton = tplIconButton(options.iconPrefix + options.icons.image.shapeNone, {
-          title: lang.image.shapeNone,
-          event: 'imageShape',
-          value: ''
+        varjustifyButton=tplIconButton(options.iconPrefix+options.icons.image.floatNone,{
+          title:lang.image.floatNone,
+          event:'floatMe',
+          value:'none'
         });
 
-        var removeButton = tplIconButton(options.iconPrefix + options.icons.image.remove, {
-          title: lang.image.remove,
-          event: 'removeMedia',
-          value: 'none'
+        varroundedButton=tplIconButton(options.iconPrefix+options.icons.image.shapeRounded,{
+          title:lang.image.shapeRounded,
+          event:'imageShape',
+          value:'rounded'
+        });
+        varcircleButton=tplIconButton(options.iconPrefix+options.icons.image.shapeCircle,{
+          title:lang.image.shapeCircle,
+          event:'imageShape',
+          value:'rounded-circle'
+        });
+        varthumbnailButton=tplIconButton(options.iconPrefix+options.icons.image.shapeThumbnail,{
+          title:lang.image.shapeThumbnail,
+          event:'imageShape',
+          value:'img-thumbnail'
+        });
+        varnoneButton=tplIconButton(options.iconPrefix+options.icons.image.shapeNone,{
+          title:lang.image.shapeNone,
+          event:'imageShape',
+          value:''
         });
 
-        var content = (options.disableResizeImage ? '' : '<div class="btn-group">' + autoButton + fullButton + halfButton + quarterButton + '</div>') +
-                      '<div class="btn-group">' + leftButton + rightButton + justifyButton + '</div>' +
-                      '<div class="btn-group">' + roundedButton + circleButton + thumbnailButton + noneButton + '</div>' +
-                      '<div class="btn-group">' + removeButton + '</div>';
-        return tplPopover('note-image-popover', content);
+        varremoveButton=tplIconButton(options.iconPrefix+options.icons.image.remove,{
+          title:lang.image.remove,
+          event:'removeMedia',
+          value:'none'
+        });
+
+        varcontent=(options.disableResizeImage?'':'<divclass="btn-group">'+autoButton+fullButton+halfButton+quarterButton+'</div>')+
+                      '<divclass="btn-group">'+leftButton+rightButton+justifyButton+'</div>'+
+                      '<divclass="btn-group">'+roundedButton+circleButton+thumbnailButton+noneButton+'</div>'+
+                      '<divclass="btn-group">'+removeButton+'</div>';
+        returntplPopover('note-image-popover',content);
       };
 
-      var tplAirPopover = function () {
-        var $content = $('<div />');
-        for (var idx = 0, len = options.airPopover.length; idx < len; idx ++) {
-          var group = options.airPopover[idx];
+      vartplAirPopover=function(){
+        var$content=$('<div/>');
+        for(varidx=0,len=options.airPopover.length;idx<len;idx++){
+          vargroup=options.airPopover[idx];
 
-          var $group = $('<div class="note-' + group[0] + ' btn-group">');
-          for (var i = 0, lenGroup = group[1].length; i < lenGroup; i++) {
-            var $button = $(tplButtonInfo[group[1][i]](lang, options));
+          var$group=$('<divclass="note-'+group[0]+'btn-group">');
+          for(vari=0,lenGroup=group[1].length;i<lenGroup;i++){
+            var$button=$(tplButtonInfo[group[1][i]](lang,options));
 
-            $button.attr('data-name', group[1][i]);
+            $button.attr('data-name',group[1][i]);
 
             $group.append($button);
           }
           $content.append($group);
         }
 
-        return tplPopover('note-air-popover', $content.children());
+        returntplPopover('note-air-popover',$content.children());
       };
 
-      var $notePopover = $('<div class="note-popover" />');
+      var$notePopover=$('<divclass="note-popover"/>');
 
       $notePopover.append(tplLinkPopover());
       $notePopover.append(tplImagePopover());
 
-      if (options.airMode) {
+      if(options.airMode){
         $notePopover.append(tplAirPopover());
       }
 
-      return $notePopover;
+      return$notePopover;
     };
 
-    this.tplButtonInfo = tplButtonInfo; // FLECTRA: allow access for override
-    this.tplPopovers = tplPopovers; // FLECTRA: allow access for override
+    this.tplButtonInfo=tplButtonInfo;//FLECTRA:allowaccessforoverride
+    this.tplPopovers=tplPopovers;//FLECTRA:allowaccessforoverride
 
-    var tplHandles = function (options) {
-      return '<div class="note-handle">' +
-               '<div class="note-control-selection">' +
-                 '<div class="note-control-selection-bg"></div>' +
-                 '<div class="note-control-holder note-control-nw"></div>' +
-                 '<div class="note-control-holder note-control-ne"></div>' +
-                 '<div class="note-control-holder note-control-sw"></div>' +
-                 '<div class="' +
-                 (options.disableResizeImage ? 'note-control-holder' : 'note-control-sizing') +
-                 ' note-control-se"></div>' +
-                 (options.disableResizeImage ? '' : '<div class="note-control-selection-info"></div>') +
-               '</div>' +
+    vartplHandles=function(options){
+      return'<divclass="note-handle">'+
+               '<divclass="note-control-selection">'+
+                 '<divclass="note-control-selection-bg"></div>'+
+                 '<divclass="note-control-holdernote-control-nw"></div>'+
+                 '<divclass="note-control-holdernote-control-ne"></div>'+
+                 '<divclass="note-control-holdernote-control-sw"></div>'+
+                 '<divclass="'+
+                 (options.disableResizeImage?'note-control-holder':'note-control-sizing')+
+                 'note-control-se"></div>'+
+                 (options.disableResizeImage?'':'<divclass="note-control-selection-info"></div>')+
+               '</div>'+
              '</div>';
     };
 
     /**
-     * shortcut table template
-     * @param {String} title
-     * @param {String} body
+     *shortcuttabletemplate
+     *@param{String}title
+     *@param{String}body
      */
-    var tplShortcut = function (title, keys) {
-      var keyClass = 'note-shortcut-col col-6 note-shortcut-';
-      var body = [];
+    vartplShortcut=function(title,keys){
+      varkeyClass='note-shortcut-colcol-6note-shortcut-';
+      varbody=[];
 
-      for (var i in keys) {
-        if (keys.hasOwnProperty(i)) {
+      for(variinkeys){
+        if(keys.hasOwnProperty(i)){
           body.push(
-            '<div class="' + keyClass + 'key">' + keys[i].kbd + '</div>' +
-            '<div class="' + keyClass + 'name">' + keys[i].text + '</div>'
+            '<divclass="'+keyClass+'key">'+keys[i].kbd+'</div>'+
+            '<divclass="'+keyClass+'name">'+keys[i].text+'</div>'
             );
         }
       }
 
-      return '<div class="note-shortcut-row row"><div class="' + keyClass + 'title offset-6">' + title + '</div></div>' +
-             '<div class="note-shortcut-row row">' + body.join('</div><div class="note-shortcut-row row">') + '</div>';
+      return'<divclass="note-shortcut-rowrow"><divclass="'+keyClass+'titleoffset-6">'+title+'</div></div>'+
+             '<divclass="note-shortcut-rowrow">'+body.join('</div><divclass="note-shortcut-rowrow">')+'</div>';
     };
 
-    var tplShortcutText = function (lang) {
-      var keys = [
-        { kbd: '⌘ + B', text: lang.font.bold },
-        { kbd: '⌘ + I', text: lang.font.italic },
-        { kbd: '⌘ + U', text: lang.font.underline },
-        { kbd: '⌘ + \\', text: lang.font.clear }
+    vartplShortcutText=function(lang){
+      varkeys=[
+        {kbd:'⌘+B',text:lang.font.bold},
+        {kbd:'⌘+I',text:lang.font.italic},
+        {kbd:'⌘+U',text:lang.font.underline},
+        {kbd:'⌘+\\',text:lang.font.clear}
       ];
 
-      return tplShortcut(lang.shortcut.textFormatting, keys);
+      returntplShortcut(lang.shortcut.textFormatting,keys);
     };
 
-    var tplShortcutAction = function (lang) {
-      var keys = [
-        { kbd: '⌘ + Z', text: lang.history.undo },
-        { kbd: '⌘ + ⇧ + Z', text: lang.history.redo },
-        { kbd: '⌘ + ]', text: lang.paragraph.indent },
-        { kbd: '⌘ + [', text: lang.paragraph.outdent },
-        { kbd: '⌘ + ENTER', text: lang.hr.insert }
+    vartplShortcutAction=function(lang){
+      varkeys=[
+        {kbd:'⌘+Z',text:lang.history.undo},
+        {kbd:'⌘+⇧+Z',text:lang.history.redo},
+        {kbd:'⌘+]',text:lang.paragraph.indent},
+        {kbd:'⌘+[',text:lang.paragraph.outdent},
+        {kbd:'⌘+ENTER',text:lang.hr.insert}
       ];
 
-      return tplShortcut(lang.shortcut.action, keys);
+      returntplShortcut(lang.shortcut.action,keys);
     };
 
-    var tplShortcutPara = function (lang) {
-      var keys = [
-        { kbd: '⌘ + ⇧ + L', text: lang.paragraph.left },
-        { kbd: '⌘ + ⇧ + E', text: lang.paragraph.center },
-        { kbd: '⌘ + ⇧ + R', text: lang.paragraph.right },
-        { kbd: '⌘ + ⇧ + J', text: lang.paragraph.justify },
-        { kbd: '⌘ + ⇧ + NUM7', text: lang.lists.ordered },
-        { kbd: '⌘ + ⇧ + NUM8', text: lang.lists.unordered }
+    vartplShortcutPara=function(lang){
+      varkeys=[
+        {kbd:'⌘+⇧+L',text:lang.paragraph.left},
+        {kbd:'⌘+⇧+E',text:lang.paragraph.center},
+        {kbd:'⌘+⇧+R',text:lang.paragraph.right},
+        {kbd:'⌘+⇧+J',text:lang.paragraph.justify},
+        {kbd:'⌘+⇧+NUM7',text:lang.lists.ordered},
+        {kbd:'⌘+⇧+NUM8',text:lang.lists.unordered}
       ];
 
-      return tplShortcut(lang.shortcut.paragraphFormatting, keys);
+      returntplShortcut(lang.shortcut.paragraphFormatting,keys);
     };
 
-    var tplShortcutStyle = function (lang) {
-      var keys = [
-        { kbd: '⌘ + NUM0', text: lang.style.normal },
-        { kbd: '⌘ + NUM1', text: lang.style.h1 },
-        { kbd: '⌘ + NUM2', text: lang.style.h2 },
-        { kbd: '⌘ + NUM3', text: lang.style.h3 },
-        { kbd: '⌘ + NUM4', text: lang.style.h4 },
-        { kbd: '⌘ + NUM5', text: lang.style.h5 },
-        { kbd: '⌘ + NUM6', text: lang.style.h6 }
+    vartplShortcutStyle=function(lang){
+      varkeys=[
+        {kbd:'⌘+NUM0',text:lang.style.normal},
+        {kbd:'⌘+NUM1',text:lang.style.h1},
+        {kbd:'⌘+NUM2',text:lang.style.h2},
+        {kbd:'⌘+NUM3',text:lang.style.h3},
+        {kbd:'⌘+NUM4',text:lang.style.h4},
+        {kbd:'⌘+NUM5',text:lang.style.h5},
+        {kbd:'⌘+NUM6',text:lang.style.h6}
       ];
 
-      return tplShortcut(lang.shortcut.documentStyle, keys);
+      returntplShortcut(lang.shortcut.documentStyle,keys);
     };
 
-    var tplExtraShortcuts = function (lang, options) {
-      var extraKeys = options.extraKeys;
-      var keys = [];
+    vartplExtraShortcuts=function(lang,options){
+      varextraKeys=options.extraKeys;
+      varkeys=[];
 
-      for (var key in extraKeys) {
-        if (extraKeys.hasOwnProperty(key)) {
-          keys.push({ kbd: key, text: extraKeys[key] });
+      for(varkeyinextraKeys){
+        if(extraKeys.hasOwnProperty(key)){
+          keys.push({kbd:key,text:extraKeys[key]});
         }
       }
 
-      return tplShortcut(lang.shortcut.extraKeys, keys);
+      returntplShortcut(lang.shortcut.extraKeys,keys);
     };
 
-    var tplShortcutTable = function (lang, options) {
-      var colClass = 'class="note-shortcut note-shortcut-col col-md-6 col-12"';
-      var template = [
-        '<div ' + colClass + '>' + tplShortcutAction(lang, options) + '</div>' +
-        '<div ' + colClass + '>' + tplShortcutText(lang, options) + '</div>',
-        '<div ' + colClass + '>' + tplShortcutStyle(lang, options) + '</div>' +
-        '<div ' + colClass + '>' + tplShortcutPara(lang, options) + '</div>'
+    vartplShortcutTable=function(lang,options){
+      varcolClass='class="note-shortcutnote-shortcut-colcol-md-6col-12"';
+      vartemplate=[
+        '<div'+colClass+'>'+tplShortcutAction(lang,options)+'</div>'+
+        '<div'+colClass+'>'+tplShortcutText(lang,options)+'</div>',
+        '<div'+colClass+'>'+tplShortcutStyle(lang,options)+'</div>'+
+        '<div'+colClass+'>'+tplShortcutPara(lang,options)+'</div>'
       ];
 
-      if (options.extraKeys) {
-        template.push('<div ' + colClass + '>' + tplExtraShortcuts(lang, options) + '</div>');
+      if(options.extraKeys){
+        template.push('<div'+colClass+'>'+tplExtraShortcuts(lang,options)+'</div>');
       }
 
-      return '<div class="note-shortcut-row row">' +
-               template.join('</div><div class="note-shortcut-row row">') +
+      return'<divclass="note-shortcut-rowrow">'+
+               template.join('</div><divclass="note-shortcut-rowrow">')+
              '</div>';
     };
 
-    var replaceMacKeys = function (sHtml) {
-      return sHtml.replace(/⌘/g, 'Ctrl').replace(/⇧/g, 'Shift');
+    varreplaceMacKeys=function(sHtml){
+      returnsHtml.replace(/⌘/g,'Ctrl').replace(/⇧/g,'Shift');
     };
 
-    var tplDialogInfo = {
-      image: function (lang, options) {
-        var imageLimitation = '';
-        if (options.maximumImageFileSize) {
-          var unit = Math.floor(Math.log(options.maximumImageFileSize) / Math.log(1024));
-          var readableSize = (options.maximumImageFileSize / Math.pow(1024, unit)).toFixed(2) * 1 +
-                             ' ' + ' KMGTP'[unit] + 'B';
-          imageLimitation = '<small>' + lang.image.maximumFileSize + ' : ' + readableSize + '</small>';
+    vartplDialogInfo={
+      image:function(lang,options){
+        varimageLimitation='';
+        if(options.maximumImageFileSize){
+          varunit=Math.floor(Math.log(options.maximumImageFileSize)/Math.log(1024));
+          varreadableSize=(options.maximumImageFileSize/Math.pow(1024,unit)).toFixed(2)*1+
+                             ''+'KMGTP'[unit]+'B';
+          imageLimitation='<small>'+lang.image.maximumFileSize+':'+readableSize+'</small>';
         }
 
-        var body = '<div class="form-group row note-group-select-from-files">' +
-                     '<label>' + lang.image.selectFromFiles + '</label>' +
-                     '<input class="note-image-input form-control" type="file" name="files" accept="image/*" multiple="multiple" />' +
-                     imageLimitation +
-                   '</div>' +
-                   '<div class="form-group row">' +
-                     '<label>' + lang.image.url + '</label>' +
-                     '<input class="note-image-url form-control col-md-12" type="text" />' +
+        varbody='<divclass="form-grouprownote-group-select-from-files">'+
+                     '<label>'+lang.image.selectFromFiles+'</label>'+
+                     '<inputclass="note-image-inputform-control"type="file"name="files"accept="image/*"multiple="multiple"/>'+
+                     imageLimitation+
+                   '</div>'+
+                   '<divclass="form-grouprow">'+
+                     '<label>'+lang.image.url+'</label>'+
+                     '<inputclass="note-image-urlform-controlcol-md-12"type="text"/>'+
                    '</div>';
-        var footer = '<button href="#" class="btn btn-primary note-image-btn disabled" disabled>' + lang.image.insert + '</button>';
-        return tplDialog('note-image-dialog', lang.image.insert, body, footer);
+        varfooter='<buttonhref="#"class="btnbtn-primarynote-image-btndisabled"disabled>'+lang.image.insert+'</button>';
+        returntplDialog('note-image-dialog',lang.image.insert,body,footer);
       },
 
-      link: function (lang, options) {
-        var body = '<div class="form-group row">' +
-                     '<label>' + lang.link.textToDisplay + '</label>' +
-                     '<input class="note-link-text form-control col-md-12" type="text" />' +
-                   '</div>' +
-                   '<div class="form-group row">' +
-                     '<label>' + lang.link.url + '</label>' +
-                     '<input class="note-link-url form-control col-md-12" type="text" value="http://" />' +
-                   '</div>' +
-                   (!options.disableLinkTarget ?
-                     '<div class="checkbox">' +
-                       '<label>' + '<input type="checkbox" checked> ' +
-                         lang.link.openInNewWindow +
-                       '</label>' +
-                     '</div>' : ''
+      link:function(lang,options){
+        varbody='<divclass="form-grouprow">'+
+                     '<label>'+lang.link.textToDisplay+'</label>'+
+                     '<inputclass="note-link-textform-controlcol-md-12"type="text"/>'+
+                   '</div>'+
+                   '<divclass="form-grouprow">'+
+                     '<label>'+lang.link.url+'</label>'+
+                     '<inputclass="note-link-urlform-controlcol-md-12"type="text"value="http://"/>'+
+                   '</div>'+
+                   (!options.disableLinkTarget?
+                     '<divclass="checkbox">'+
+                       '<label>'+'<inputtype="checkbox"checked>'+
+                         lang.link.openInNewWindow+
+                       '</label>'+
+                     '</div>':''
                    );
-        var footer = '<button href="#" class="btn btn-primary note-link-btn disabled" disabled>' + lang.link.insert + '</button>';
-        return tplDialog('note-link-dialog', lang.link.insert, body, footer);
+        varfooter='<buttonhref="#"class="btnbtn-primarynote-link-btndisabled"disabled>'+lang.link.insert+'</button>';
+        returntplDialog('note-link-dialog',lang.link.insert,body,footer);
       },
 
-      help: function (lang, options) {
-        var body = '<a class="modal-close float-right" aria-hidden="true" tabindex="-1">' + lang.shortcut.close + '</a>' +
-                   '<div class="title">' + lang.shortcut.shortcuts + '</div>' +
-                   (agent.isMac ? tplShortcutTable(lang, options) : replaceMacKeys(tplShortcutTable(lang, options))) +
-                   '<p class="text-center">' +
-                     '<a href="//summernote.org/" target="_blank">Summernote @VERSION</a> · ' +
-                     '<a href="//github.com/summernote/summernote" target="_blank">Project</a> · ' +
-                     '<a href="//github.com/summernote/summernote/issues" target="_blank">Issues</a>' +
+      help:function(lang,options){
+        varbody='<aclass="modal-closefloat-right"aria-hidden="true"tabindex="-1">'+lang.shortcut.close+'</a>'+
+                   '<divclass="title">'+lang.shortcut.shortcuts+'</div>'+
+                   (agent.isMac?tplShortcutTable(lang,options):replaceMacKeys(tplShortcutTable(lang,options)))+
+                   '<pclass="text-center">'+
+                     '<ahref="//summernote.org/"target="_blank">Summernote@VERSION</a>·'+
+                     '<ahref="//github.com/summernote/summernote"target="_blank">Project</a>·'+
+                     '<ahref="//github.com/summernote/summernote/issues"target="_blank">Issues</a>'+
                    '</p>';
-        return tplDialog('note-help-dialog', '', body, '');
+        returntplDialog('note-help-dialog','',body,'');
       }
     };
 
-    var tplDialogs = function (lang, options) {
-      var dialogs = '';
+    vartplDialogs=function(lang,options){
+      vardialogs='';
 
-      $.each(tplDialogInfo, function (idx, tplDialog) {
-        dialogs += tplDialog(lang, options);
+      $.each(tplDialogInfo,function(idx,tplDialog){
+        dialogs+=tplDialog(lang,options);
       });
 
-      return '<div class="note-dialog">' + dialogs + '</div>';
+      return'<divclass="note-dialog">'+dialogs+'</div>';
     };
 
-    var tplStatusbar = function () {
-      return '<div class="note-resizebar">' +
-               '<div class="note-icon-bar"></div>' +
-               '<div class="note-icon-bar"></div>' +
-               '<div class="note-icon-bar"></div>' +
+    vartplStatusbar=function(){
+      return'<divclass="note-resizebar">'+
+               '<divclass="note-icon-bar"></div>'+
+               '<divclass="note-icon-bar"></div>'+
+               '<divclass="note-icon-bar"></div>'+
              '</div>';
     };
 
-    var representShortcut = function (str) {
-      if (agent.isMac) {
-        str = str.replace('CMD', '⌘').replace('SHIFT', '⇧');
+    varrepresentShortcut=function(str){
+      if(agent.isMac){
+        str=str.replace('CMD','⌘').replace('SHIFT','⇧');
       }
 
-      return str.replace('BACKSLASH', '\\')
-                .replace('SLASH', '/')
-                .replace('LEFTBRACKET', '[')
-                .replace('RIGHTBRACKET', ']');
+      returnstr.replace('BACKSLASH','\\')
+                .replace('SLASH','/')
+                .replace('LEFTBRACKET','[')
+                .replace('RIGHTBRACKET',']');
     };
 
     /**
-     * createTooltip
+     *createTooltip
      *
-     * @param {jQuery} $container
-     * @param {Object} keyMap
-     * @param {String} [sPlacement]
+     *@param{jQuery}$container
+     *@param{Object}keyMap
+     *@param{String}[sPlacement]
      */
-    var createTooltip = function ($container, keyMap, sPlacement) {
-      var invertedKeyMap = func.invertObject(keyMap);
-      var $buttons = $container.find('button');
+    varcreateTooltip=function($container,keyMap,sPlacement){
+      varinvertedKeyMap=func.invertObject(keyMap);
+      var$buttons=$container.find('button');
 
-      $buttons.each(function (i, elBtn) {
-        var $btn = $(elBtn);
-        var sShortcut = invertedKeyMap[$btn.data('event')];
-        if (sShortcut) {
-          $btn.attr('title', function (i, v) {
-            return v + ' (' + representShortcut(sShortcut) + ')';
+      $buttons.each(function(i,elBtn){
+        var$btn=$(elBtn);
+        varsShortcut=invertedKeyMap[$btn.data('event')];
+        if(sShortcut){
+          $btn.attr('title',function(i,v){
+            returnv+'('+representShortcut(sShortcut)+')';
           });
         }
-      // bootstrap tooltip on btn-group bug
-      // https://github.com/twbs/bootstrap/issues/5687
+      //bootstraptooltiponbtn-groupbug
+      //https://github.com/twbs/bootstrap/issues/5687
       }).tooltip({
-        container: 'body',
-        trigger: 'hover',
-        placement: sPlacement || 'top'
-      }).on('click', function () {
+        container:'body',
+        trigger:'hover',
+        placement:sPlacement||'top'
+      }).on('click',function(){
         $(this).tooltip('hide');
       });
     };
 
-    // createPalette
-    var createPalette = function ($container, options) {
-      var colorInfo = options.colors;
-      $container.find('.note-color-palette').each(function () {
-        var $palette = $(this), eventName = $palette.attr('data-target-event');
-        var paletteContents = [];
-        for (var row = 0, lenRow = colorInfo.length; row < lenRow; row++) {
-          var colors = colorInfo[row];
-          var buttons = [];
-          for (var col = 0, lenCol = colors.length; col < lenCol; col++) {
-            var color = colors[col];
-            buttons.push(['<button type="button" class="note-color-btn" style="background-color:', color,
-                           ';" data-event="', eventName,
-                           '" data-value="', color,
-                           '" title="', color,
-                           '" data-toggle="button" tabindex="-1"></button>'].join(''));
+    //createPalette
+    varcreatePalette=function($container,options){
+      varcolorInfo=options.colors;
+      $container.find('.note-color-palette').each(function(){
+        var$palette=$(this),eventName=$palette.attr('data-target-event');
+        varpaletteContents=[];
+        for(varrow=0,lenRow=colorInfo.length;row<lenRow;row++){
+          varcolors=colorInfo[row];
+          varbuttons=[];
+          for(varcol=0,lenCol=colors.length;col<lenCol;col++){
+            varcolor=colors[col];
+            buttons.push(['<buttontype="button"class="note-color-btn"style="background-color:',color,
+                           ';"data-event="',eventName,
+                           '"data-value="',color,
+                           '"title="',color,
+                           '"data-toggle="button"tabindex="-1"></button>'].join(''));
           }
-          paletteContents.push('<div class="note-color-row">' + buttons.join('') + '</div>');
+          paletteContents.push('<divclass="note-color-row">'+buttons.join('')+'</div>');
         }
         $palette.html(paletteContents.join(''));
       });
     };
 
-    this.createPalette = createPalette; // FLECTRA: allow access for override
+    this.createPalette=createPalette;//FLECTRA:allowaccessforoverride
 
     /**
-     * create summernote layout (air mode)
+     *createsummernotelayout(airmode)
      *
-     * @param {jQuery} $holder
-     * @param {Object} options
+     *@param{jQuery}$holder
+     *@param{Object}options
      */
-    this.createLayoutByAirMode = function ($holder, options) {
-      var langInfo = options.langInfo;
-      var keyMap = options.keyMap[agent.isMac ? 'mac' : 'pc'];
-      var id = func.uniqueId();
+    this.createLayoutByAirMode=function($holder,options){
+      varlangInfo=options.langInfo;
+      varkeyMap=options.keyMap[agent.isMac?'mac':'pc'];
+      varid=func.uniqueId();
 
-      $holder.addClass('note-air-editor note-editable'); // FLECTRA: removing panel-body class to remove unwanted style
+      $holder.addClass('note-air-editornote-editable');//FLECTRA:removingpanel-bodyclasstoremoveunwantedstyle
       $holder.attr({
-        'data-note-id': id, // FLECTRA: we use [data-note-id="{id}"] instead of [id="{id}"]
-        // 'id': 'note-editor-' + id,
-        'contentEditable': true
+        'data-note-id':id,//FLECTRA:weuse[data-note-id="{id}"]insteadof[id="{id}"]
+        //'id':'note-editor-'+id,
+        'contentEditable':true
       });
 
-      var body = document.body;
-      var $container = $('#web_editor-toolbars')
+      varbody=document.body;
+      var$container=$('#web_editor-toolbars')
 
-      // create Popover
-      var $popover = $(this.tplPopovers(langInfo, options)); // FLECTRA: user (maybe) overrided method
+      //createPopover
+      var$popover=$(this.tplPopovers(langInfo,options));//FLECTRA:user(maybe)overridedmethod
       $popover.addClass('note-air-layout');
-      $popover.attr('id', 'note-popover-' + id);
+      $popover.attr('id','note-popover-'+id);
       $popover.appendTo($container);
-      createTooltip($popover, keyMap);
-      this.createPalette($popover, options); // FLECTRA: use (maybe) overrided method
+      createTooltip($popover,keyMap);
+      this.createPalette($popover,options);//FLECTRA:use(maybe)overridedmethod
 
-      // create Handle
-      var $handle = $(tplHandles(options));
+      //createHandle
+      var$handle=$(tplHandles(options));
       $handle.addClass('note-air-layout');
-      $handle.attr('id', 'note-handle-' + id);
+      $handle.attr('id','note-handle-'+id);
       $handle.appendTo($container);
 
-      // create Dialog
-      var $dialog = $(tplDialogs(langInfo, options));
+      //createDialog
+      var$dialog=$(tplDialogs(langInfo,options));
       $dialog.addClass('note-air-layout');
-      $dialog.attr('id', 'note-dialog-' + id);
-      $dialog.find('button.close, a.modal-close').click(function () {
+      $dialog.attr('id','note-dialog-'+id);
+      $dialog.find('button.close,a.modal-close').click(function(){
         $(this).closest('.modal').modal('hide');
       });
       $dialog.appendTo($container);
     };
 
     /**
-     * create summernote layout (normal mode)
+     *createsummernotelayout(normalmode)
      *
-     * @param {jQuery} $holder
-     * @param {Object} options
+     *@param{jQuery}$holder
+     *@param{Object}options
      */
-    this.createLayoutByFrame = function ($holder, options) {
-      var langInfo = options.langInfo;
+    this.createLayoutByFrame=function($holder,options){
+      varlangInfo=options.langInfo;
 
-      //01. create Editor
-      var $editor = $('<div class="note-editor panel panel-default" />');
-      if (options.width) {
+      //01.createEditor
+      var$editor=$('<divclass="note-editorpanelpanel-default"/>');
+      if(options.width){
         $editor.width(options.width);
       }
 
-      //02. statusbar (resizebar)
-      if (options.height > 0) {
-        $('<div class="note-statusbar">' + (options.disableResizeEditor ? '' : tplStatusbar()) + '</div>').prependTo($editor);
+      //02.statusbar(resizebar)
+      if(options.height>0){
+        $('<divclass="note-statusbar">'+(options.disableResizeEditor?'':tplStatusbar())+'</div>').prependTo($editor);
       }
 
-      //03 editing area
-      var $editingArea = $('<div class="note-editing-area" />');
-      //03. create editable
-      var isContentEditable = !$holder.is(':disabled');
-      var $editable = $('<div class="note-editable panel-body" contentEditable="' + isContentEditable + '"></div>').prependTo($editingArea);
+      //03editingarea
+      var$editingArea=$('<divclass="note-editing-area"/>');
+      //03.createeditable
+      varisContentEditable=!$holder.is(':disabled');
+      var$editable=$('<divclass="note-editablepanel-body"contentEditable="'+isContentEditable+'"></div>').prependTo($editingArea);
 
-      if (options.height) {
+      if(options.height){
         $editable.height(options.height);
       }
-      if (options.direction) {
-        $editable.attr('dir', options.direction);
+      if(options.direction){
+        $editable.attr('dir',options.direction);
       }
-      var placeholder = $holder.attr('placeholder') || options.placeholder;
-      if (placeholder) {
-        $editable.attr('data-placeholder', placeholder);
+      varplaceholder=$holder.attr('placeholder')||options.placeholder;
+      if(placeholder){
+        $editable.attr('data-placeholder',placeholder);
       }
 
-      $editable.html(dom.html($holder) || dom.emptyPara);
+      $editable.html(dom.html($holder)||dom.emptyPara);
 
-      //031. create codable
-      $('<textarea class="note-codable"></textarea>').prependTo($editingArea);
+      //031.createcodable
+      $('<textareaclass="note-codable"></textarea>').prependTo($editingArea);
 
-      //04. create Popover
-      var $popover = $(this.tplPopovers(langInfo, options)).prependTo($editingArea); // FLECTRA: use (maybe) overrided method
-      this.createPalette($popover, options); // FLECTRA: use (maybe) overrided method
-      createTooltip($popover, keyMap);
+      //04.createPopover
+      var$popover=$(this.tplPopovers(langInfo,options)).prependTo($editingArea);//FLECTRA:use(maybe)overridedmethod
+      this.createPalette($popover,options);//FLECTRA:use(maybe)overridedmethod
+      createTooltip($popover,keyMap);
 
-      //05. handle(control selection, ...)
+      //05.handle(controlselection,...)
       $(tplHandles(options)).prependTo($editingArea);
 
       $editingArea.prependTo($editor);
 
-      //06. create Toolbar
-      var $toolbar = $('<div class="note-toolbar panel-heading" />');
-      for (var idx = 0, len = options.toolbar.length; idx < len; idx ++) {
-        var groupName = options.toolbar[idx][0];
-        var groupButtons = options.toolbar[idx][1];
+      //06.createToolbar
+      var$toolbar=$('<divclass="note-toolbarpanel-heading"/>');
+      for(varidx=0,len=options.toolbar.length;idx<len;idx++){
+        vargroupName=options.toolbar[idx][0];
+        vargroupButtons=options.toolbar[idx][1];
 
-        var $group = $('<div class="note-' + groupName + ' btn-group" />');
-        for (var i = 0, btnLength = groupButtons.length; i < btnLength; i++) {
-          var buttonInfo = tplButtonInfo[groupButtons[i]];
-          // continue creating toolbar even if a button doesn't exist
-          if (!$.isFunction(buttonInfo)) { continue; }
+        var$group=$('<divclass="note-'+groupName+'btn-group"/>');
+        for(vari=0,btnLength=groupButtons.length;i<btnLength;i++){
+          varbuttonInfo=tplButtonInfo[groupButtons[i]];
+          //continuecreatingtoolbarevenifabuttondoesn'texist
+          if(!$.isFunction(buttonInfo)){continue;}
 
-          var $button = $(buttonInfo(langInfo, options));
-          $button.attr('data-name', groupButtons[i]);  // set button's alias, becuase to get button element from $toolbar
+          var$button=$(buttonInfo(langInfo,options));
+          $button.attr('data-name',groupButtons[i]); //setbutton'salias,becuasetogetbuttonelementfrom$toolbar
           $group.append($button);
         }
         $toolbar.append($group);
       }
 
-      var keyMap = options.keyMap[agent.isMac ? 'mac' : 'pc'];
-      this.createPalette($toolbar, options); // FLECTRA: use (maybe) overrided method
-      createTooltip($toolbar, keyMap, 'bottom');
+      varkeyMap=options.keyMap[agent.isMac?'mac':'pc'];
+      this.createPalette($toolbar,options);//FLECTRA:use(maybe)overridedmethod
+      createTooltip($toolbar,keyMap,'bottom');
       $toolbar.prependTo($editor);
 
-      //07. create Dropzone
-      $('<div class="note-dropzone"><div class="note-dropzone-message"></div></div>').prependTo($editor);
+      //07.createDropzone
+      $('<divclass="note-dropzone"><divclass="note-dropzone-message"></div></div>').prependTo($editor);
 
-      //08. create Dialog
-      var $dialogContainer = options.dialogsInBody ? $(document.body) : $editor;
-      var $dialog = $(tplDialogs(langInfo, options)).prependTo($dialogContainer);
-      $dialog.find('button.close, a.modal-close').click(function () {
+      //08.createDialog
+      var$dialogContainer=options.dialogsInBody?$(document.body):$editor;
+      var$dialog=$(tplDialogs(langInfo,options)).prependTo($dialogContainer);
+      $dialog.find('button.close,a.modal-close').click(function(){
         $(this).closest('.modal').modal('hide');
       });
 
-      //09. Editor/Holder switch
+      //09.Editor/Holderswitch
       $editor.insertAfter($holder);
       $holder.hide();
     };
 
-    this.hasNoteEditor = function ($holder) {
-      return this.noteEditorFromHolder($holder).length > 0;
+    this.hasNoteEditor=function($holder){
+      returnthis.noteEditorFromHolder($holder).length>0;
     };
 
-    this.noteEditorFromHolder = function ($holder) {
-      if ($holder.hasClass('note-air-editor')) {
-        return $holder;
-      } else if ($holder.next().hasClass('note-editor')) {
-        return $holder.next();
-      } else {
-        return $();
+    this.noteEditorFromHolder=function($holder){
+      if($holder.hasClass('note-air-editor')){
+        return$holder;
+      }elseif($holder.next().hasClass('note-editor')){
+        return$holder.next();
+      }else{
+        return$();
       }
     };
 
     /**
-     * create summernote layout
+     *createsummernotelayout
      *
-     * @param {jQuery} $holder
-     * @param {Object} options
+     *@param{jQuery}$holder
+     *@param{Object}options
      */
-    this.createLayout = function ($holder, options) {
-      if (options.airMode) {
-        this.createLayoutByAirMode($holder, options);
-      } else {
-        this.createLayoutByFrame($holder, options);
+    this.createLayout=function($holder,options){
+      if(options.airMode){
+        this.createLayoutByAirMode($holder,options);
+      }else{
+        this.createLayoutByFrame($holder,options);
       }
     };
 
     /**
-     * returns layoutInfo from holder
+     *returnslayoutInfofromholder
      *
-     * @param {jQuery} $holder - placeholder
-     * @return {Object}
+     *@param{jQuery}$holder-placeholder
+     *@return{Object}
      */
-    this.layoutInfoFromHolder = function ($holder) {
-      var $editor = this.noteEditorFromHolder($holder);
-      if (!$editor.length) {
+    this.layoutInfoFromHolder=function($holder){
+      var$editor=this.noteEditorFromHolder($holder);
+      if(!$editor.length){
         return;
       }
 
-      // connect $holder to $editor
-      $editor.data('holder', $holder);
+      //connect$holderto$editor
+      $editor.data('holder',$holder);
 
-      return dom.buildLayoutInfo($editor);
+      returndom.buildLayoutInfo($editor);
     };
 
     /**
-     * removeLayout
+     *removeLayout
      *
-     * @param {jQuery} $holder - placeholder
-     * @param {Object} layoutInfo
-     * @param {Object} options
+     *@param{jQuery}$holder-placeholder
+     *@param{Object}layoutInfo
+     *@param{Object}options
      *
      */
-    this.removeLayout = function ($holder, layoutInfo, options) {
-      if (options.airMode) {
-        $holder.removeClass('note-air-editor note-editable')
-               .removeAttr('contentEditable'); // FLECTRA: removed id 'id contentEditable'
+    this.removeLayout=function($holder,layoutInfo,options){
+      if(options.airMode){
+        $holder.removeClass('note-air-editornote-editable')
+               .removeAttr('contentEditable');//FLECTRA:removedid'idcontentEditable'
 
         layoutInfo.popover().remove();
         layoutInfo.handle().remove();
         layoutInfo.dialog().remove();
-      } else {
+      }else{
         $holder.html(layoutInfo.editable().html());
 
-        if (options.dialogsInBody) {
+        if(options.dialogsInBody){
           layoutInfo.dialog().remove();
         }
         layoutInfo.editor().remove();
@@ -988,39 +988,39 @@ define([
 
     /**
      *
-     * @return {Object}
-     * @return {function(label, options=):string} return.button {@link #tplButton function to make text button}
-     * @return {function(iconClass, options=):string} return.iconButton {@link #tplIconButton function to make icon button}
-     * @return {function(className, title=, body=, footer=):string} return.dialog {@link #tplDialog function to make dialog}
+     *@return{Object}
+     *@return{function(label,options=):string}return.button{@link#tplButtonfunctiontomaketextbutton}
+     *@return{function(iconClass,options=):string}return.iconButton{@link#tplIconButtonfunctiontomakeiconbutton}
+     *@return{function(className,title=,body=,footer=):string}return.dialog{@link#tplDialogfunctiontomakedialog}
      */
-    this.getTemplate = function () {
-      return {
-        button: tplButton,
-        iconButton: tplIconButton,
-        dialog: tplDialog,
-        dropdown: tplDropdown // FLECTRA: suggest upstream
+    this.getTemplate=function(){
+      return{
+        button:tplButton,
+        iconButton:tplIconButton,
+        dialog:tplDialog,
+        dropdown:tplDropdown//FLECTRA:suggestupstream
       };
     };
 
     /**
-     * add button information
+     *addbuttoninformation
      *
-     * @param {String} name button name
-     * @param {Function} buttonInfo function to make button, reference to {@link #tplButton},{@link #tplIconButton}
+     *@param{String}namebuttonname
+     *@param{Function}buttonInfofunctiontomakebutton,referenceto{@link#tplButton},{@link#tplIconButton}
      */
-    this.addButtonInfo = function (name, buttonInfo) {
-      tplButtonInfo[name] = buttonInfo;
+    this.addButtonInfo=function(name,buttonInfo){
+      tplButtonInfo[name]=buttonInfo;
     };
 
     /**
      *
-     * @param {String} name
-     * @param {Function} dialogInfo function to make dialog, reference to {@link #tplDialog}
+     *@param{String}name
+     *@param{Function}dialogInfofunctiontomakedialog,referenceto{@link#tplDialog}
      */
-    this.addDialogInfo = function (name, dialogInfo) {
-      tplDialogInfo[name] = dialogInfo;
+    this.addDialogInfo=function(name,dialogInfo){
+      tplDialogInfo[name]=dialogInfo;
     };
   };
 
-  return Renderer;
+  returnRenderer;
 });

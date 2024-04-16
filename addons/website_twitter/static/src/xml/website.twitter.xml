@@ -1,43 +1,43 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
-    <t t-name="website.Twitter.Tweet">
-        <div class="tweet" t-attf-data-url="http://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id_str}" t-attf-data-tweet-id="#{tweet.id_str}">
-            <div class="left">
-                <img t-att-src="tweet.user.profile_image_url_https" alt="Twitter's user"/>
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
+    <tt-name="website.Twitter.Tweet">
+        <divclass="tweet"t-attf-data-url="http://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id_str}"t-attf-data-tweet-id="#{tweet.id_str}">
+            <divclass="left">
+                <imgt-att-src="tweet.user.profile_image_url_https"alt="Twitter'suser"/>
             </div>
-            <div class="right">
-                <div class="top">
+            <divclass="right">
+                <divclass="top">
                     <h4>
-                        <t t-esc="tweet.user.name"/>
+                        <tt-esc="tweet.user.name"/>
                         <span>
-                            <a t-att-href="'https://twitter.com/' + tweet.user.screen_name" target="_blank"><t t-esc="'@' + tweet.user.screen_name "/></a>
+                            <at-att-href="'https://twitter.com/'+tweet.user.screen_name"target="_blank"><tt-esc="'@'+tweet.user.screen_name"/></a>
                         </span>
                     </h4>
-                    <a class="date" target="_blank" t-attf-href="http://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id_str}"><t t-esc="tweet.created_at"/></a>
+                    <aclass="date"target="_blank"t-attf-href="http://twitter.com/#{tweet.user.screen_name}/status/#{tweet.id_str}"><tt-esc="tweet.created_at"/></a>
                 </div>
-                <div class="bottom">
-                    <p><t t-raw="tweet.text"/></p>
-                </div>
-            </div>
-        </div>
-    </t>
-    <t t-name="website.Twitter.Scroller">
-        <div class="wrap-row" contenteditable="false">
-            <div class="twitter-row">
-                <div class="twitter-scroller">
-                    <div id="scroller1"/>
-                    <div id="scroller2"/>
-                    <div id="scroller3"/>
+                <divclass="bottom">
+                    <p><tt-raw="tweet.text"/></p>
                 </div>
             </div>
         </div>
     </t>
-    <t t-name="website.Twitter.Error">
-        <div class="container" contenteditable="false">
-            <div class="alert alert-warning" role="alert">
-                <t t-esc="data.error"/>
-                <t t-if='!data.nodata'>
-                    <a class="lnk_configure" href="/web#action=website.action_website_configuration"><i class="fa fa-plus-circle"/> Twitter Configuration</a>
+    <tt-name="website.Twitter.Scroller">
+        <divclass="wrap-row"contenteditable="false">
+            <divclass="twitter-row">
+                <divclass="twitter-scroller">
+                    <divid="scroller1"/>
+                    <divid="scroller2"/>
+                    <divid="scroller3"/>
+                </div>
+            </div>
+        </div>
+    </t>
+    <tt-name="website.Twitter.Error">
+        <divclass="container"contenteditable="false">
+            <divclass="alertalert-warning"role="alert">
+                <tt-esc="data.error"/>
+                <tt-if='!data.nodata'>
+                    <aclass="lnk_configure"href="/web#action=website.action_website_configuration"><iclass="fafa-plus-circle"/>TwitterConfiguration</a>
                 </t>
             </div>
         </div>

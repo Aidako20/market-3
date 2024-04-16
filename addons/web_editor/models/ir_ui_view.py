@@ -1,395 +1,395 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import copy
-import logging
-import uuid
-from lxml import etree, html
+importcopy
+importlogging
+importuuid
+fromlxmlimportetree,html
 
-from flectra import api, models, _
-from flectra.exceptions import AccessError, ValidationError
+fromflectraimportapi,models,_
+fromflectra.exceptionsimportAccessError,ValidationError
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
-EDITING_ATTRIBUTES = ['data-oe-model', 'data-oe-id', 'data-oe-field', 'data-oe-xpath', 'data-note-id']
+EDITING_ATTRIBUTES=['data-oe-model','data-oe-id','data-oe-field','data-oe-xpath','data-note-id']
 
 
-class IrUiView(models.Model):
-    _inherit = 'ir.ui.view'
+classIrUiView(models.Model):
+    _inherit='ir.ui.view'
 
-    def _render(self, values=None, engine='ir.qweb', minimal_qcontext=False):
-        if values and values.get('editable'):
+    def_render(self,values=None,engine='ir.qweb',minimal_qcontext=False):
+        ifvaluesandvalues.get('editable'):
             try:
                 self.check_access_rights('write')
                 self.check_access_rule('write')
-            except AccessError:
-                values['editable'] = False
+            exceptAccessError:
+                values['editable']=False
 
-        return super(IrUiView, self)._render(values=values, engine=engine, minimal_qcontext=minimal_qcontext)
+        returnsuper(IrUiView,self)._render(values=values,engine=engine,minimal_qcontext=minimal_qcontext)
 
     @api.model
-    def read_template(self, xml_id):
-        """ This method is deprecated
+    defread_template(self,xml_id):
+        """Thismethodisdeprecated
         """
-        if xml_id == 'web_editor.colorpicker' and self.env.user.has_group('base.group_user'):
-            # TODO this should be handled another way but was required as a
-            # stable fix in 14.0. The views are now private by default: they
-            # can be read thanks to read_template provided they declare a group
-            # that the user has and that the user has read access rights.
+        ifxml_id=='web_editor.colorpicker'andself.env.user.has_group('base.group_user'):
+            #TODOthisshouldbehandledanotherwaybutwasrequiredasa
+            #stablefixin14.0.Theviewsarenowprivatebydefault:they
+            #canbereadthankstoread_templateprovidedtheydeclareagroup
+            #thattheuserhasandthattheuserhasreadaccessrights.
             #
-            # For the case 'read_template web_editor.colorpicker', it works for
-            # website editor users as the view has the base.group_user group
-            # *and they have access rights thanks to publisher/designer groups*.
-            # For mass mailing users, no such group exists though so they simply
-            # do not have the rights to read that template anymore. Seems safer
-            # to force it for this template only while waiting for a better
-            # access rights refactoring.
+            #Forthecase'read_templateweb_editor.colorpicker',itworksfor
+            #websiteeditorusersastheviewhasthebase.group_usergroup
+            #*andtheyhaveaccessrightsthankstopublisher/designergroups*.
+            #Formassmailingusers,nosuchgroupexiststhoughsotheysimply
+            #donothavetherightstoreadthattemplateanymore.Seemssafer
+            #toforceitforthistemplateonlywhilewaitingforabetter
+            #accessrightsrefactoring.
             #
-            # Note: using 'render_public_asset' which allows to bypass rights if
-            # the user has the group the view requires was also a solution.
-            # However, that would turn the 'read' into a 'render', which is
-            # a less stable change.
-            self = self.sudo()
-        return super().read_template(xml_id)
+            #Note:using'render_public_asset'whichallowstobypassrightsif
+            #theuserhasthegrouptheviewrequireswasalsoasolution.
+            #However,thatwouldturnthe'read'intoa'render',whichis
+            #alessstablechange.
+            self=self.sudo()
+        returnsuper().read_template(xml_id)
 
     #------------------------------------------------------
-    # Save from html
+    #Savefromhtml
     #------------------------------------------------------
 
     @api.model
-    def extract_embedded_fields(self, arch):
-        return arch.xpath('//*[@data-oe-model != "ir.ui.view"]')
+    defextract_embedded_fields(self,arch):
+        returnarch.xpath('//*[@data-oe-model!="ir.ui.view"]')
 
     @api.model
-    def extract_oe_structures(self, arch):
-        return arch.xpath('//*[hasclass("oe_structure")][contains(@id, "oe_structure")]')
+    defextract_oe_structures(self,arch):
+        returnarch.xpath('//*[hasclass("oe_structure")][contains(@id,"oe_structure")]')
 
     @api.model
-    def get_default_lang_code(self):
-        return False
+    defget_default_lang_code(self):
+        returnFalse
 
     @api.model
-    def save_embedded_field(self, el):
-        Model = self.env[el.get('data-oe-model')]
-        field = el.get('data-oe-field')
+    defsave_embedded_field(self,el):
+        Model=self.env[el.get('data-oe-model')]
+        field=el.get('data-oe-field')
 
-        model = 'ir.qweb.field.' + el.get('data-oe-type')
-        converter = self.env[model] if model in self.env else self.env['ir.qweb.field']
+        model='ir.qweb.field.'+el.get('data-oe-type')
+        converter=self.env[model]ifmodelinself.envelseself.env['ir.qweb.field']
 
         try:
-            value = converter.from_html(Model, Model._fields[field], el)
-        except ValueError:
-            raise ValidationError(_("Invalid field value for %s: %s", Model._fields[field].string, el.text_content().strip()))
+            value=converter.from_html(Model,Model._fields[field],el)
+        exceptValueError:
+            raiseValidationError(_("Invalidfieldvaluefor%s:%s",Model._fields[field].string,el.text_content().strip()))
 
-        if value is not None:
-            # TODO: batch writes?
-            if not self.env.context.get('lang') and self.get_default_lang_code():
-                Model.browse(int(el.get('data-oe-id'))).with_context(lang=self.get_default_lang_code()).write({field: value})
+        ifvalueisnotNone:
+            #TODO:batchwrites?
+            ifnotself.env.context.get('lang')andself.get_default_lang_code():
+                Model.browse(int(el.get('data-oe-id'))).with_context(lang=self.get_default_lang_code()).write({field:value})
             else:
-                Model.browse(int(el.get('data-oe-id'))).write({field: value})
+                Model.browse(int(el.get('data-oe-id'))).write({field:value})
 
-    def save_oe_structure(self, el):
+    defsave_oe_structure(self,el):
         self.ensure_one()
 
-        if el.get('id') in self.key:
-            # Do not inherit if the oe_structure already has its own inheriting view
-            return False
+        ifel.get('id')inself.key:
+            #Donotinheritiftheoe_structurealreadyhasitsowninheritingview
+            returnFalse
 
-        arch = etree.Element('data')
-        xpath = etree.Element('xpath', expr="//*[hasclass('oe_structure')][@id='{}']".format(el.get('id')), position="replace")
+        arch=etree.Element('data')
+        xpath=etree.Element('xpath',expr="//*[hasclass('oe_structure')][@id='{}']".format(el.get('id')),position="replace")
         arch.append(xpath)
-        attributes = {k: v for k, v in el.attrib.items() if k not in EDITING_ATTRIBUTES}
-        structure = etree.Element(el.tag, attrib=attributes)
-        structure.text = el.text
+        attributes={k:vfork,vinel.attrib.items()ifknotinEDITING_ATTRIBUTES}
+        structure=etree.Element(el.tag,attrib=attributes)
+        structure.text=el.text
         xpath.append(structure)
-        for child in el.iterchildren(tag=etree.Element):
+        forchildinel.iterchildren(tag=etree.Element):
             structure.append(copy.deepcopy(child))
 
-        vals = {
-            'inherit_id': self.id,
-            'name': '%s (%s)' % (self.name, el.get('id')),
-            'arch': self._pretty_arch(arch),
-            'key': '%s_%s' % (self.key, el.get('id')),
-            'type': 'qweb',
-            'mode': 'extension',
+        vals={
+            'inherit_id':self.id,
+            'name':'%s(%s)'%(self.name,el.get('id')),
+            'arch':self._pretty_arch(arch),
+            'key':'%s_%s'%(self.key,el.get('id')),
+            'type':'qweb',
+            'mode':'extension',
         }
         vals.update(self._save_oe_structure_hook())
         self.env['ir.ui.view'].create(vals)
 
-        return True
+        returnTrue
 
     @api.model
-    def _save_oe_structure_hook(self):
-        return {}
+    def_save_oe_structure_hook(self):
+        return{}
 
     @api.model
-    def _pretty_arch(self, arch):
-        # remove_blank_string does not seem to work on HTMLParser, and
-        # pretty-printing with lxml more or less requires stripping
-        # whitespace: http://lxml.de/FAQ.html#why-doesn-t-the-pretty-print-option-reformat-my-xml-output
-        # so serialize to XML, parse as XML (remove whitespace) then serialize
-        # as XML (pretty print)
-        arch_no_whitespace = etree.fromstring(
-            etree.tostring(arch, encoding='utf-8'),
-            parser=etree.XMLParser(encoding='utf-8', remove_blank_text=True))
-        return etree.tostring(
-            arch_no_whitespace, encoding='unicode', pretty_print=True)
+    def_pretty_arch(self,arch):
+        #remove_blank_stringdoesnotseemtoworkonHTMLParser,and
+        #pretty-printingwithlxmlmoreorlessrequiresstripping
+        #whitespace:http://lxml.de/FAQ.html#why-doesn-t-the-pretty-print-option-reformat-my-xml-output
+        #soserializetoXML,parseasXML(removewhitespace)thenserialize
+        #asXML(prettyprint)
+        arch_no_whitespace=etree.fromstring(
+            etree.tostring(arch,encoding='utf-8'),
+            parser=etree.XMLParser(encoding='utf-8',remove_blank_text=True))
+        returnetree.tostring(
+            arch_no_whitespace,encoding='unicode',pretty_print=True)
 
     @api.model
-    def _are_archs_equal(self, arch1, arch2):
-        # Note that comparing the strings would not be ok as attributes order
-        # must not be relevant
-        if arch1.tag != arch2.tag:
-            return False
-        if arch1.text != arch2.text:
-            return False
-        if arch1.tail != arch2.tail:
-            return False
-        if arch1.attrib != arch2.attrib:
-            return False
-        if len(arch1) != len(arch2):
-            return False
-        return all(self._are_archs_equal(arch1, arch2) for arch1, arch2 in zip(arch1, arch2))
+    def_are_archs_equal(self,arch1,arch2):
+        #Notethatcomparingthestringswouldnotbeokasattributesorder
+        #mustnotberelevant
+        ifarch1.tag!=arch2.tag:
+            returnFalse
+        ifarch1.text!=arch2.text:
+            returnFalse
+        ifarch1.tail!=arch2.tail:
+            returnFalse
+        ifarch1.attrib!=arch2.attrib:
+            returnFalse
+        iflen(arch1)!=len(arch2):
+            returnFalse
+        returnall(self._are_archs_equal(arch1,arch2)forarch1,arch2inzip(arch1,arch2))
 
     @api.model
-    def _get_allowed_root_attrs(self):
-        return ['style', 'class']
+    def_get_allowed_root_attrs(self):
+        return['style','class']
 
-    def replace_arch_section(self, section_xpath, replacement, replace_tail=False):
-        # the root of the arch section shouldn't actually be replaced as it's
-        # not really editable itself, only the content truly is editable.
+    defreplace_arch_section(self,section_xpath,replacement,replace_tail=False):
+        #therootofthearchsectionshouldn'tactuallybereplacedasit's
+        #notreallyeditableitself,onlythecontenttrulyiseditable.
         self.ensure_one()
-        arch = etree.fromstring(self.arch.encode('utf-8'))
-        # => get the replacement root
-        if not section_xpath:
-            root = arch
+        arch=etree.fromstring(self.arch.encode('utf-8'))
+        #=>getthereplacementroot
+        ifnotsection_xpath:
+            root=arch
         else:
-            # ensure there's only one match
-            [root] = arch.xpath(section_xpath)
+            #ensurethere'sonlyonematch
+            [root]=arch.xpath(section_xpath)
 
-        root.text = replacement.text
+        root.text=replacement.text
 
-        # We need to replace some attrib for styles changes on the root element
-        for attribute in self._get_allowed_root_attrs():
-            if attribute in replacement.attrib:
-                root.attrib[attribute] = replacement.attrib[attribute]
+        #Weneedtoreplacesomeattribforstyleschangesontherootelement
+        forattributeinself._get_allowed_root_attrs():
+            ifattributeinreplacement.attrib:
+                root.attrib[attribute]=replacement.attrib[attribute]
 
-        # Note: after a standard edition, the tail *must not* be replaced
-        if replace_tail:
-            root.tail = replacement.tail
-        # replace all children
-        del root[:]
-        for child in replacement:
+        #Note:afterastandardedition,thetail*mustnot*bereplaced
+        ifreplace_tail:
+            root.tail=replacement.tail
+        #replaceallchildren
+        delroot[:]
+        forchildinreplacement:
             root.append(copy.deepcopy(child))
 
-        return arch
+        returnarch
 
     @api.model
-    def to_field_ref(self, el):
-        # filter out meta-information inserted in the document
-        attributes = {k: v for k, v in el.attrib.items()
-                           if not k.startswith('data-oe-')}
-        attributes['t-field'] = el.get('data-oe-expression')
+    defto_field_ref(self,el):
+        #filteroutmeta-informationinsertedinthedocument
+        attributes={k:vfork,vinel.attrib.items()
+                           ifnotk.startswith('data-oe-')}
+        attributes['t-field']=el.get('data-oe-expression')
 
-        out = html.html_parser.makeelement(el.tag, attrib=attributes)
-        out.tail = el.tail
-        return out
-
-    @api.model
-    def to_empty_oe_structure(self, el):
-        out = html.html_parser.makeelement(el.tag, attrib=el.attrib)
-        out.tail = el.tail
-        return out
+        out=html.html_parser.makeelement(el.tag,attrib=attributes)
+        out.tail=el.tail
+        returnout
 
     @api.model
-    def _set_noupdate(self):
-        self.sudo().mapped('model_data_id').write({'noupdate': True})
+    defto_empty_oe_structure(self,el):
+        out=html.html_parser.makeelement(el.tag,attrib=el.attrib)
+        out.tail=el.tail
+        returnout
 
-    def save(self, value, xpath=None):
-        """ Update a view section. The view section may embed fields to write
+    @api.model
+    def_set_noupdate(self):
+        self.sudo().mapped('model_data_id').write({'noupdate':True})
 
-        Note that `self` record might not exist when saving an embed field
+    defsave(self,value,xpath=None):
+        """Updateaviewsection.Theviewsectionmayembedfieldstowrite
 
-        :param str xpath: valid xpath to the tag to replace
+        Notethat`self`recordmightnotexistwhensavinganembedfield
+
+        :paramstrxpath:validxpathtothetagtoreplace
         """
         self.ensure_one()
 
-        arch_section = html.fromstring(
-            value, parser=html.HTMLParser(encoding='utf-8'))
+        arch_section=html.fromstring(
+            value,parser=html.HTMLParser(encoding='utf-8'))
 
-        if xpath is None:
-            # value is an embedded field on its own, not a view section
+        ifxpathisNone:
+            #valueisanembeddedfieldonitsown,notaviewsection
             self.save_embedded_field(arch_section)
             return
 
-        for el in self.extract_embedded_fields(arch_section):
+        forelinself.extract_embedded_fields(arch_section):
             self.save_embedded_field(el)
 
-            # transform embedded field back to t-field
-            el.getparent().replace(el, self.to_field_ref(el))
+            #transformembeddedfieldbacktot-field
+            el.getparent().replace(el,self.to_field_ref(el))
 
-        for el in self.extract_oe_structures(arch_section):
-            if self.save_oe_structure(el):
-                # empty oe_structure in parent view
-                empty = self.to_empty_oe_structure(el)
-                if el == arch_section:
-                    arch_section = empty
+        forelinself.extract_oe_structures(arch_section):
+            ifself.save_oe_structure(el):
+                #emptyoe_structureinparentview
+                empty=self.to_empty_oe_structure(el)
+                ifel==arch_section:
+                    arch_section=empty
                 else:
-                    el.getparent().replace(el, empty)
+                    el.getparent().replace(el,empty)
 
-        new_arch = self.replace_arch_section(xpath, arch_section)
-        old_arch = etree.fromstring(self.arch.encode('utf-8'))
-        if not self._are_archs_equal(old_arch, new_arch):
+        new_arch=self.replace_arch_section(xpath,arch_section)
+        old_arch=etree.fromstring(self.arch.encode('utf-8'))
+        ifnotself._are_archs_equal(old_arch,new_arch):
             self._set_noupdate()
-            self.write({'arch': self._pretty_arch(new_arch)})
+            self.write({'arch':self._pretty_arch(new_arch)})
 
     @api.model
-    def _view_get_inherited_children(self, view):
-        if self._context.get('no_primary_children', False):
-            original_hierarchy = self._context.get('__views_get_original_hierarchy', [])
-            return view.inherit_children_ids.filtered(lambda extension: extension.mode != 'primary' or extension.id in original_hierarchy)
-        return view.inherit_children_ids
+    def_view_get_inherited_children(self,view):
+        ifself._context.get('no_primary_children',False):
+            original_hierarchy=self._context.get('__views_get_original_hierarchy',[])
+            returnview.inherit_children_ids.filtered(lambdaextension:extension.mode!='primary'orextension.idinoriginal_hierarchy)
+        returnview.inherit_children_ids
 
     @api.model
-    def _view_obj(self, view_id):
-        if isinstance(view_id, str):
-            return self.search([('key', '=', view_id)], limit=1) or self.env.ref(view_id)
-        elif isinstance(view_id, int):
-            return self.browse(view_id)
-        # It can already be a view object when called by '_views_get()' that is calling '_view_obj'
-        # for it's inherit_children_ids, passing them directly as object record.
-        return view_id
+    def_view_obj(self,view_id):
+        ifisinstance(view_id,str):
+            returnself.search([('key','=',view_id)],limit=1)orself.env.ref(view_id)
+        elifisinstance(view_id,int):
+            returnself.browse(view_id)
+        #Itcanalreadybeaviewobjectwhencalledby'_views_get()'thatiscalling'_view_obj'
+        #forit'sinherit_children_ids,passingthemdirectlyasobjectrecord.
+        returnview_id
 
-    # Returns all views (called and inherited) related to a view
-    # Used by translation mechanism, SEO and optional templates
+    #Returnsallviews(calledandinherited)relatedtoaview
+    #Usedbytranslationmechanism,SEOandoptionaltemplates
 
     @api.model
-    def _views_get(self, view_id, get_children=True, bundles=False, root=True, visited=None):
-        """ For a given view ``view_id``, should return:
-                * the view itself (starting from its top most parent)
-                * all views inheriting from it, enabled or not
-                  - but not the optional children of a non-enabled child
-                * all views called from it (via t-call)
-            :returns recordset of ir.ui.view
+    def_views_get(self,view_id,get_children=True,bundles=False,root=True,visited=None):
+        """Foragivenview``view_id``,shouldreturn:
+                *theviewitself(startingfromitstopmostparent)
+                *allviewsinheritingfromit,enabledornot
+                  -butnottheoptionalchildrenofanon-enabledchild
+                *allviewscalledfromit(viat-call)
+            :returnsrecordsetofir.ui.view
         """
         try:
-            view = self._view_obj(view_id)
-        except ValueError:
-            _logger.warning("Could not find view object with view_id '%s'", view_id)
-            return self.env['ir.ui.view']
+            view=self._view_obj(view_id)
+        exceptValueError:
+            _logger.warning("Couldnotfindviewobjectwithview_id'%s'",view_id)
+            returnself.env['ir.ui.view']
 
-        if visited is None:
-            visited = []
-        original_hierarchy = self._context.get('__views_get_original_hierarchy', [])
-        while root and view.inherit_id:
+        ifvisitedisNone:
+            visited=[]
+        original_hierarchy=self._context.get('__views_get_original_hierarchy',[])
+        whilerootandview.inherit_id:
             original_hierarchy.append(view.id)
-            view = view.inherit_id
+            view=view.inherit_id
 
-        views_to_return = view
+        views_to_return=view
 
-        node = etree.fromstring(view.arch)
-        xpath = "//t[@t-call]"
-        if bundles:
-            xpath += "| //t[@t-call-assets]"
-        for child in node.xpath(xpath):
+        node=etree.fromstring(view.arch)
+        xpath="//t[@t-call]"
+        ifbundles:
+            xpath+="|//t[@t-call-assets]"
+        forchildinnode.xpath(xpath):
             try:
-                called_view = self._view_obj(child.get('t-call', child.get('t-call-assets')))
-            except ValueError:
+                called_view=self._view_obj(child.get('t-call',child.get('t-call-assets')))
+            exceptValueError:
                 continue
-            if called_view and called_view not in views_to_return and called_view.id not in visited:
-                views_to_return += self._views_get(called_view, get_children=get_children, bundles=bundles, visited=visited + views_to_return.ids)
+            ifcalled_viewandcalled_viewnotinviews_to_returnandcalled_view.idnotinvisited:
+                views_to_return+=self._views_get(called_view,get_children=get_children,bundles=bundles,visited=visited+views_to_return.ids)
 
-        if not get_children:
-            return views_to_return
+        ifnotget_children:
+            returnviews_to_return
 
-        extensions = self._view_get_inherited_children(view)
+        extensions=self._view_get_inherited_children(view)
 
-        # Keep children in a deterministic order regardless of their applicability
-        for extension in extensions.sorted(key=lambda v: v.id):
-            # only return optional grandchildren if this child is enabled
-            if extension.id not in visited:
-                for ext_view in self._views_get(extension, get_children=extension.active, root=False, visited=visited + views_to_return.ids):
-                    if ext_view not in views_to_return:
-                        views_to_return += ext_view
-        return views_to_return
+        #Keepchildreninadeterministicorderregardlessoftheirapplicability
+        forextensioninextensions.sorted(key=lambdav:v.id):
+            #onlyreturnoptionalgrandchildrenifthischildisenabled
+            ifextension.idnotinvisited:
+                forext_viewinself._views_get(extension,get_children=extension.active,root=False,visited=visited+views_to_return.ids):
+                    ifext_viewnotinviews_to_return:
+                        views_to_return+=ext_view
+        returnviews_to_return
 
     @api.model
-    def get_related_views(self, key, bundles=False):
-        """ Get inherit view's informations of the template ``key``.
-            returns templates info (which can be active or not)
-            ``bundles=True`` returns also the asset bundles
+    defget_related_views(self,key,bundles=False):
+        """Getinheritview'sinformationsofthetemplate``key``.
+            returnstemplatesinfo(whichcanbeactiveornot)
+            ``bundles=True``returnsalsotheassetbundles
         """
-        user_groups = set(self.env.user.groups_id)
-        View = self.with_context(active_test=False, lang=None)
-        views = View._views_get(key, bundles=bundles)
-        return views.filtered(lambda v: not v.groups_id or len(user_groups.intersection(v.groups_id)))
+        user_groups=set(self.env.user.groups_id)
+        View=self.with_context(active_test=False,lang=None)
+        views=View._views_get(key,bundles=bundles)
+        returnviews.filtered(lambdav:notv.groups_idorlen(user_groups.intersection(v.groups_id)))
 
-    # --------------------------------------------------------------------------
-    # Snippet saving
-    # --------------------------------------------------------------------------
-
-    @api.model
-    def _get_snippet_addition_view_key(self, template_key, key):
-        return '%s.%s' % (template_key, key)
+    #--------------------------------------------------------------------------
+    #Snippetsaving
+    #--------------------------------------------------------------------------
 
     @api.model
-    def _snippet_save_view_values_hook(self):
-        return {}
+    def_get_snippet_addition_view_key(self,template_key,key):
+        return'%s.%s'%(template_key,key)
 
     @api.model
-    def save_snippet(self, name, arch, template_key, snippet_key, thumbnail_url):
+    def_snippet_save_view_values_hook(self):
+        return{}
+
+    @api.model
+    defsave_snippet(self,name,arch,template_key,snippet_key,thumbnail_url):
         """
-        Saves a new snippet arch so that it appears with the given name when
-        using the given snippets template.
+        Savesanewsnippetarchsothatitappearswiththegivennamewhen
+        usingthegivensnippetstemplate.
 
-        :param name: the name of the snippet to save
-        :param arch: the html structure of the snippet to save
-        :param template_key: the key of the view regrouping all snippets in
-            which the snippet to save is meant to appear
-        :param snippet_key: the key (without module part) to identify
-            the snippet from which the snippet to save originates
-        :param thumbnail_url: the url of the thumbnail to use when displaying
-            the snippet to save
+        :paramname:thenameofthesnippettosave
+        :paramarch:thehtmlstructureofthesnippettosave
+        :paramtemplate_key:thekeyoftheviewregroupingallsnippetsin
+            whichthesnippettosaveismeanttoappear
+        :paramsnippet_key:thekey(withoutmodulepart)toidentify
+            thesnippetfromwhichthesnippettosaveoriginates
+        :paramthumbnail_url:theurlofthethumbnailtousewhendisplaying
+            thesnippettosave
         """
-        app_name = template_key.split('.')[0]
-        snippet_key = '%s_%s' % (snippet_key, uuid.uuid4().hex)
-        full_snippet_key = '%s.%s' % (app_name, snippet_key)
+        app_name=template_key.split('.')[0]
+        snippet_key='%s_%s'%(snippet_key,uuid.uuid4().hex)
+        full_snippet_key='%s.%s'%(app_name,snippet_key)
 
-        # html to xml to add '/' at the end of self closing tags like br, ...
-        xml_arch = etree.tostring(html.fromstring(arch), encoding='utf-8')
-        new_snippet_view_values = {
-            'name': name,
-            'key': full_snippet_key,
-            'type': 'qweb',
-            'arch': xml_arch,
+        #htmltoxmltoadd'/'attheendofselfclosingtagslikebr,...
+        xml_arch=etree.tostring(html.fromstring(arch),encoding='utf-8')
+        new_snippet_view_values={
+            'name':name,
+            'key':full_snippet_key,
+            'type':'qweb',
+            'arch':xml_arch,
         }
         new_snippet_view_values.update(self._snippet_save_view_values_hook())
         self.create(new_snippet_view_values)
 
-        custom_section = self.search([('key', '=', template_key)])
-        snippet_addition_view_values = {
-            'name': name + ' Block',
-            'key': self._get_snippet_addition_view_key(template_key, snippet_key),
-            'inherit_id': custom_section.id,
-            'type': 'qweb',
-            'arch': """
-                <data inherit_id="%s">
-                    <xpath expr="//div[@id='snippet_custom']" position="attributes">
-                        <attribute name="class" remove="d-none" separator=" "/>
+        custom_section=self.search([('key','=',template_key)])
+        snippet_addition_view_values={
+            'name':name+'Block',
+            'key':self._get_snippet_addition_view_key(template_key,snippet_key),
+            'inherit_id':custom_section.id,
+            'type':'qweb',
+            'arch':"""
+                <datainherit_id="%s">
+                    <xpathexpr="//div[@id='snippet_custom']"position="attributes">
+                        <attributename="class"remove="d-none"separator=""/>
                     </xpath>
-                    <xpath expr="//div[@id='snippet_custom_body']" position="inside">
-                        <t t-snippet="%s" t-thumbnail="%s"/>
+                    <xpathexpr="//div[@id='snippet_custom_body']"position="inside">
+                        <tt-snippet="%s"t-thumbnail="%s"/>
                     </xpath>
                 </data>
-            """ % (template_key, full_snippet_key, thumbnail_url),
+            """%(template_key,full_snippet_key,thumbnail_url),
         }
         snippet_addition_view_values.update(self._snippet_save_view_values_hook())
         self.create(snippet_addition_view_values)
 
     @api.model
-    def delete_snippet(self, view_id, template_key):
-        snippet_view = self.browse(view_id)
-        key = snippet_view.key.split('.')[1]
-        custom_key = self._get_snippet_addition_view_key(template_key, key)
-        snippet_addition_view = self.search([('key', '=', custom_key)])
-        (snippet_addition_view | snippet_view).unlink()
+    defdelete_snippet(self,view_id,template_key):
+        snippet_view=self.browse(view_id)
+        key=snippet_view.key.split('.')[1]
+        custom_key=self._get_snippet_addition_view_key(template_key,key)
+        snippet_addition_view=self.search([('key','=',custom_key)])
+        (snippet_addition_view|snippet_view).unlink()

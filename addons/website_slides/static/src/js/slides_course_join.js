@@ -1,161 +1,161 @@
-flectra.define('website_slides.course.join.widget', function (require) {
-'use strict';
+flectra.define('website_slides.course.join.widget',function(require){
+'usestrict';
 
-var core = require('web.core');
-var publicWidget = require('web.public.widget');
+varcore=require('web.core');
+varpublicWidget=require('web.public.widget');
 
-var _t = core._t;
+var_t=core._t;
 
-var CourseJoinWidget = publicWidget.Widget.extend({
-    template: 'slide.course.join',
-    xmlDependencies: ['/website_slides/static/src/xml/slide_course_join.xml'],
-    events: {
-        'click .o_wslides_js_course_join_link': '_onClickJoin',
+varCourseJoinWidget=publicWidget.Widget.extend({
+    template:'slide.course.join',
+    xmlDependencies:['/website_slides/static/src/xml/slide_course_join.xml'],
+    events:{
+        'click.o_wslides_js_course_join_link':'_onClickJoin',
     },
 
     /**
      *
-     * Overridden to add options parameters.
+     *Overriddentoaddoptionsparameters.
      *
-     * @param {Object} parent
-     * @param {Object} options
-     * @param {Object} options.channel slide.channel information
-     * @param {boolean} options.isMember whether current user is member or not
-     * @param {boolean} options.publicUser whether current user is public or not
-     * @param {string} [options.joinMessage] the message to use for the simple join case
-     *   when the course if free and the user is logged in, defaults to "Join Course".
-     * @param {Promise} [options.beforeJoin] a promise to execute before we redirect to
-     *   another url within the join process (login / buy course / ...)
-     * @param {function} [options.afterJoin] a callback function called after the user has
-     *   joined the course
+     *@param{Object}parent
+     *@param{Object}options
+     *@param{Object}options.channelslide.channelinformation
+     *@param{boolean}options.isMemberwhethercurrentuserismemberornot
+     *@param{boolean}options.publicUserwhethercurrentuserispublicornot
+     *@param{string}[options.joinMessage]themessagetouseforthesimplejoincase
+     *  whenthecourseiffreeandtheuserisloggedin,defaultsto"JoinCourse".
+     *@param{Promise}[options.beforeJoin]apromisetoexecutebeforeweredirectto
+     *  anotherurlwithinthejoinprocess(login/buycourse/...)
+     *@param{function}[options.afterJoin]acallbackfunctioncalledaftertheuserhas
+     *  joinedthecourse
      */
-    init: function (parent, options) {
-        this._super.apply(this, arguments);
-        this.channel = options.channel;
-        this.isMember = options.isMember;
-        this.publicUser = options.publicUser;
-        this.joinMessage = options.joinMessage || _t('Join Course');
-        this.beforeJoin = options.beforeJoin || function () {return Promise.resolve();};
-        this.afterJoin = options.afterJoin || function () {document.location.reload();};
+    init:function(parent,options){
+        this._super.apply(this,arguments);
+        this.channel=options.channel;
+        this.isMember=options.isMember;
+        this.publicUser=options.publicUser;
+        this.joinMessage=options.joinMessage||_t('JoinCourse');
+        this.beforeJoin=options.beforeJoin||function(){returnPromise.resolve();};
+        this.afterJoin=options.afterJoin||function(){document.location.reload();};
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickJoin: function (ev) {
+    _onClickJoin:function(ev){
         ev.preventDefault();
 
-        if (this.channel.channelEnroll !== 'invite') {
-            if (this.publicUser) {
+        if(this.channel.channelEnroll!=='invite'){
+            if(this.publicUser){
                 this.beforeJoin().then(this._redirectToLogin.bind(this));
-            } else if (!this.isMember && this.channel.channelEnroll === 'public') {
+            }elseif(!this.isMember&&this.channel.channelEnroll==='public'){
                 this.joinChannel(this.channel.channelId);
             }
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Builds a login page that then redirects to this slide page, or the channel if the course
-     * is not configured as public enroll type.
+     *Buildsaloginpagethatthenredirectstothisslidepage,orthechannelifthecourse
+     *isnotconfiguredaspublicenrolltype.
      *
-     * @private
+     *@private
      */
-    _redirectToLogin: function () {
-        var url;
-        if (this.channel.channelEnroll === 'public') {
-            url = window.location.pathname;
-            if (document.location.href.indexOf("fullscreen") !== -1) {
-                url += '?fullscreen=1';
+    _redirectToLogin:function(){
+        varurl;
+        if(this.channel.channelEnroll==='public'){
+            url=window.location.pathname;
+            if(document.location.href.indexOf("fullscreen")!==-1){
+                url+='?fullscreen=1';
             }
-        } else {
-            url = `/slides/${this.channel.channelId}`;
+        }else{
+            url=`/slides/${this.channel.channelId}`;
         }
-        document.location = _.str.sprintf('/web/login?redirect=%s', encodeURIComponent(url));
+        document.location=_.str.sprintf('/web/login?redirect=%s',encodeURIComponent(url));
     },
 
     /**
-     * @private
-     * @param {Object} $el
-     * @param {String} message
+     *@private
+     *@param{Object}$el
+     *@param{String}message
      */
-    _popoverAlert: function ($el, message) {
+    _popoverAlert:function($el,message){
         $el.popover({
-            trigger: 'focus',
-            placement: 'bottom',
-            container: 'body',
-            html: true,
-            content: function () {
-                return message;
+            trigger:'focus',
+            placement:'bottom',
+            container:'body',
+            html:true,
+            content:function(){
+                returnmessage;
             }
         }).popover('show');
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
     /**
-     * @public
-     * @param {integer} channelId
+     *@public
+     *@param{integer}channelId
      */
-    joinChannel: function (channelId) {
-        var self = this;
+    joinChannel:function(channelId){
+        varself=this;
         this._rpc({
-            route: '/slides/channel/join',
-            params: {
-                channel_id: channelId,
+            route:'/slides/channel/join',
+            params:{
+                channel_id:channelId,
             },
-        }).then(function (data) {
-            if (!data.error) {
+        }).then(function(data){
+            if(!data.error){
                 self.afterJoin();
-            } else {
-                if (data.error === 'public_user') {
-                    var message = _t('Please <a href="/web/login?redirect=%s">login</a> to join this course');
-                    var signupAllowed = data.error_signup_allowed || false;
-                    if (signupAllowed) {
-                        message = _t('Please <a href="/web/signup?redirect=%s">create an account</a> to join this course');
+            }else{
+                if(data.error==='public_user'){
+                    varmessage=_t('Please<ahref="/web/login?redirect=%s">login</a>tojointhiscourse');
+                    varsignupAllowed=data.error_signup_allowed||false;
+                    if(signupAllowed){
+                        message=_t('Please<ahref="/web/signup?redirect=%s">createanaccount</a>tojointhiscourse');
                     }
-                    self._popoverAlert(self.$el, _.str.sprintf(message, encodeURIComponent(document.URL)));
-                } else if (data.error === 'join_done') {
-                    self._popoverAlert(self.$el, _t('You have already joined this channel'));
-                } else {
-                    self._popoverAlert(self.$el, _t('Unknown error'));
+                    self._popoverAlert(self.$el,_.str.sprintf(message,encodeURIComponent(document.URL)));
+                }elseif(data.error==='join_done'){
+                    self._popoverAlert(self.$el,_t('Youhavealreadyjoinedthischannel'));
+                }else{
+                    self._popoverAlert(self.$el,_t('Unknownerror'));
                 }
             }
         });
     },
 });
 
-publicWidget.registry.websiteSlidesCourseJoin = publicWidget.Widget.extend({
-    selector: '.o_wslides_js_course_join_link',
+publicWidget.registry.websiteSlidesCourseJoin=publicWidget.Widget.extend({
+    selector:'.o_wslides_js_course_join_link',
 
     /**
-     * @override
-     * @param {Object} parent
+     *@override
+     *@param{Object}parent
      */
-    start: function () {
-        var self = this;
-        var proms = [this._super.apply(this, arguments)];
-        var data = self.$el.data();
-        var options = {channel: {channelEnroll: data.channelEnroll, channelId: data.channelId}};
-        $('.o_wslides_js_course_join').each(function () {
-            proms.push(new CourseJoinWidget(self, options).attachTo($(this)));
+    start:function(){
+        varself=this;
+        varproms=[this._super.apply(this,arguments)];
+        vardata=self.$el.data();
+        varoptions={channel:{channelEnroll:data.channelEnroll,channelId:data.channelId}};
+        $('.o_wslides_js_course_join').each(function(){
+            proms.push(newCourseJoinWidget(self,options).attachTo($(this)));
         });
-        return Promise.all(proms);
+        returnPromise.all(proms);
     },
 });
 
-return {
-    courseJoinWidget: CourseJoinWidget,
-    websiteSlidesCourseJoin: publicWidget.registry.websiteSlidesCourseJoin
+return{
+    courseJoinWidget:CourseJoinWidget,
+    websiteSlidesCourseJoin:publicWidget.registry.websiteSlidesCourseJoin
 };
 
 });

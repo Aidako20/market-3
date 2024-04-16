@@ -1,35 +1,35 @@
-flectra.define('mail_bot/static/tests/helpers/mock_server.js', function (require) {
-"use strict";
+flectra.define('mail_bot/static/tests/helpers/mock_server.js',function(require){
+"usestrict";
 
-const MockServer = require('web.MockServer');
+constMockServer=require('web.MockServer');
 
 MockServer.include({
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    async _performRpc(route, args) {
-        if (args.model === 'mail.channel' && args.method === 'init_flectrabot') {
-            return this._mockMailChannelInitFlectraBot();
+    async_performRpc(route,args){
+        if(args.model==='mail.channel'&&args.method==='init_flectrabot'){
+            returnthis._mockMailChannelInitFlectraBot();
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private Mocked Methods
+    //PrivateMockedMethods
     //--------------------------------------------------------------------------
 
     /**
-     * Simulates `init_flectrabot` on `mail.channel`.
+     *Simulates`init_flectrabot`on`mail.channel`.
      *
-     * @private
+     *@private
      */
-    _mockMailChannelInitFlectraBot() {
-        // TODO implement this mock task-2300480
-        // and improve test "FlectraBot initialized after 2 minutes"
+    _mockMailChannelInitFlectraBot(){
+        //TODOimplementthismocktask-2300480
+        //andimprovetest"FlectraBotinitializedafter2minutes"
     },
 });
 

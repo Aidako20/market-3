@@ -1,9 +1,9 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models
 
 
-class IrSequence(models.Model):
+classIrSequence(models.Model):
 
-    _inherit = 'ir.sequence'
+    _inherit='ir.sequence'
 
-    l10n_latam_document_type_id = fields.Many2one('l10n_latam.document.type', 'Document Type') #still needed for l10n_cl until next saas
+    l10n_latam_document_type_id=fields.Many2one('l10n_latam.document.type','DocumentType')#stillneededforl10n_cluntilnextsaas

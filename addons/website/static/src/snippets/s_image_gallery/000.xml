@@ -1,65 +1,65 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
     <!--
         ========================================================================
-        Gallery Slideshow
+        GallerySlideshow
 
-        This template is used to display a slideshow of images inside a
-        bootstrap carousel.
+        Thistemplateisusedtodisplayaslideshowofimagesinsidea
+        bootstrapcarousel.
 
         ========================================================================
     -->
-    <t t-name="website.gallery.slideshow">
-        <div t-attf-id="#{id}" class="carousel slide" data-ride="carousel" t-attf-data-interval="#{interval}" style="margin: 0 12px;">
-            <div class="carousel-inner" style="padding: 0;">
-                 <t t-foreach="images" t-as="image">
-                    <div t-attf-class="carousel-item #{image_index == index and 'active' or None}">
-                        <img t-attf-class="#{attrClass || 'img img-fluid d-block'}" t-att-src="image.src" t-att-style="attrStyle" t-att-alt="image.alt" data-name="Image"/>
+    <tt-name="website.gallery.slideshow">
+        <divt-attf-id="#{id}"class="carouselslide"data-ride="carousel"t-attf-data-interval="#{interval}"style="margin:012px;">
+            <divclass="carousel-inner"style="padding:0;">
+                 <tt-foreach="images"t-as="image">
+                    <divt-attf-class="carousel-item#{image_index==indexand'active'orNone}">
+                        <imgt-attf-class="#{attrClass||'imgimg-fluidd-block'}"t-att-src="image.src"t-att-style="attrStyle"t-att-alt="image.alt"data-name="Image"/>
                     </div>
                  </t>
             </div>
 
-            <ul class="carousel-indicators">
-                <li class="o_indicators_left text-center d-none" aria-label="Previous" title="Previous">
-                    <i class="fa fa-chevron-left"/>
+            <ulclass="carousel-indicators">
+                <liclass="o_indicators_lefttext-centerd-none"aria-label="Previous"title="Previous">
+                    <iclass="fafa-chevron-left"/>
                 </li>
-                <t t-foreach="images" t-as="image">
-                    <li t-attf-data-target="##{id}" t-att-data-slide-to="image_index" t-att-class="image_index == index and 'active' or None" t-attf-style="background-image: url(#{image.src})"></li>
+                <tt-foreach="images"t-as="image">
+                    <lit-attf-data-target="##{id}"t-att-data-slide-to="image_index"t-att-class="image_index==indexand'active'orNone"t-attf-style="background-image:url(#{image.src})"></li>
                 </t>
-                <li class="o_indicators_right text-center d-none" aria-label="Next" title="Next">
-                    <i class="fa fa-chevron-right"/>
+                <liclass="o_indicators_righttext-centerd-none"aria-label="Next"title="Next">
+                    <iclass="fafa-chevron-right"/>
                 </li>
             </ul>
 
-            <a class="carousel-control-prev o_we_no_overlay" t-attf-href="##{id}" data-slide="prev" aria-label="Previous" title="Previous">
-                <span class="fa fa-chevron-left fa-2x text-white"></span>
-                <span class="sr-only">Previous</span>
+            <aclass="carousel-control-prevo_we_no_overlay"t-attf-href="##{id}"data-slide="prev"aria-label="Previous"title="Previous">
+                <spanclass="fafa-chevron-leftfa-2xtext-white"></span>
+                <spanclass="sr-only">Previous</span>
             </a>
-            <a class="carousel-control-next o_we_no_overlay" t-attf-href="##{id}" data-slide="next" aria-label="Next" title="Next">
-                <span class="fa fa-chevron-right fa-2x text-white"></span>
-                <span class="sr-only">Next</span>
+            <aclass="carousel-control-nexto_we_no_overlay"t-attf-href="##{id}"data-slide="next"aria-label="Next"title="Next">
+                <spanclass="fafa-chevron-rightfa-2xtext-white"></span>
+                <spanclass="sr-only">Next</span>
             </a>
         </div>
     </t>
 
     <!--
         ========================================================================
-        Gallery Slideshow LightBox
+        GallerySlideshowLightBox
 
-        This template is used to display a lightbox with a slideshow.
+        Thistemplateisusedtodisplayalightboxwithaslideshow.
 
-        This template wraps website.gallery.slideshow in a bootstrap modal
+        Thistemplatewrapswebsite.gallery.slideshowinabootstrapmodal
         dialog.
         ========================================================================
     -->
-    <t t-name="website.gallery.slideshow.lightbox">
-        <div role="dialog" class="modal o_technical_modal fade s_gallery_lightbox p-0" aria-labbelledby="Image Gallery Dialog">
-            <div class="modal-dialog m-0" role="Picture Gallery"
+    <tt-name="website.gallery.slideshow.lightbox">
+        <divrole="dialog"class="modalo_technical_modalfades_gallery_lightboxp-0"aria-labbelledby="ImageGalleryDialog">
+            <divclass="modal-dialogm-0"role="PictureGallery"
                 t-attf-style="">
-                <div class="modal-content bg-transparent">
-                    <main class="modal-body o_slideshow bg-transparent">
-                        <button type="button" class="close text-white" data-dismiss="modal" style="position: absolute; right: 10px; top: 10px;"><span role="img" aria-label="Close">×</span><span class="sr-only">Close</span></button>
-                        <t t-call="website.gallery.slideshow"></t>
+                <divclass="modal-contentbg-transparent">
+                    <mainclass="modal-bodyo_slideshowbg-transparent">
+                        <buttontype="button"class="closetext-white"data-dismiss="modal"style="position:absolute;right:10px;top:10px;"><spanrole="img"aria-label="Close">×</span><spanclass="sr-only">Close</span></button>
+                        <tt-call="website.gallery.slideshow"></t>
                     </main>
                 </div>
             </div>

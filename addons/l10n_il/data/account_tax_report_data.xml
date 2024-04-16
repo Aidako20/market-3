@@ -1,133 +1,133 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="vat_report" model="account.tax.report">
-        <field name="name">VAT Report (PCN874)</field>
-        <field name="country_id" ref="base.il"/>
+    <recordid="vat_report"model="account.tax.report">
+        <fieldname="name">VATReport(PCN874)</field>
+        <fieldname="country_id"ref="base.il"/>
     </record>
 
-    <!-- SALES lines -->
+    <!--SALESlines-->
 
-    <record id="account_tax_report_line_out_base_title" model="account.tax.report.line">
-        <field name="name">VAT SALES (BASE)</field>
-        <field name="sequence">1</field>
-        <field name="report_id" ref="vat_report"/>
+    <recordid="account_tax_report_line_out_base_title"model="account.tax.report.line">
+        <fieldname="name">VATSALES(BASE)</field>
+        <fieldname="sequence">1</field>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-    <record id="account_tax_report_line_out_base" model="account.tax.report.line">
-        <field name="name">VAT SALES (BASE)</field>
-        <field name="tag_name">VAT SALES (BASE)</field>
-        <field name="code">ILTAX_OUT_BASE</field>
-        <field name="sequence">1</field>
-        <field name="parent_id" ref="account_tax_report_line_out_base_title"/>
-        <field name="report_id" ref="vat_report"/>
+    <recordid="account_tax_report_line_out_base"model="account.tax.report.line">
+        <fieldname="name">VATSALES(BASE)</field>
+        <fieldname="tag_name">VATSALES(BASE)</field>
+        <fieldname="code">ILTAX_OUT_BASE</field>
+        <fieldname="sequence">1</field>
+        <fieldname="parent_id"ref="account_tax_report_line_out_base_title"/>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-	<record id="account_tax_report_line_vat_sales_tax" model="account.tax.report.line">
-        <field name="name">VAT SALES (TAX)</field>
-        <field name="formula">ILTAX_OUT_BALANCE_00+ILTAX_OUT_BALANCE_PA</field>
-        <field name="code">ILTAX_OUT_BALANCE</field>
-        <field name="sequence">2</field>
-        <field name="report_id" ref="vat_report"/>
+	<recordid="account_tax_report_line_vat_sales_tax"model="account.tax.report.line">
+        <fieldname="name">VATSALES(TAX)</field>
+        <fieldname="formula">ILTAX_OUT_BALANCE_00+ILTAX_OUT_BALANCE_PA</field>
+        <fieldname="code">ILTAX_OUT_BALANCE</field>
+        <fieldname="sequence">2</field>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-    <record id="account_tax_report_line_out_balance" model="account.tax.report.line">
-        <field name="name">VAT Sales</field>
-        <field name="tag_name">VAT Sales</field>
-        <field name="code">ILTAX_OUT_BALANCE_00</field>
-        <field name="sequence">21</field>
-        <field name="parent_id" ref="account_tax_report_line_vat_sales_tax"/>
-        <field name="report_id" ref="vat_report"/>
+    <recordid="account_tax_report_line_out_balance"model="account.tax.report.line">
+        <fieldname="name">VATSales</field>
+        <fieldname="tag_name">VATSales</field>
+        <fieldname="code">ILTAX_OUT_BALANCE_00</field>
+        <fieldname="sequence">21</field>
+        <fieldname="parent_id"ref="account_tax_report_line_vat_sales_tax"/>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-    <record id="account_tax_report_line_out_balance_pa" model="account.tax.report.line">
-        <field name="name">VAT PA Sales</field>
-        <field name="tag_name">VAT PA Sales</field>
-        <field name="code">ILTAX_OUT_BALANCE_PA</field>
-        <field name="sequence">22</field>
-        <field name="parent_id" ref="account_tax_report_line_vat_sales_tax"/>
-        <field name="report_id" ref="vat_report"/>
+    <recordid="account_tax_report_line_out_balance_pa"model="account.tax.report.line">
+        <fieldname="name">VATPASales</field>
+        <fieldname="tag_name">VATPASales</field>
+        <fieldname="code">ILTAX_OUT_BALANCE_PA</field>
+        <fieldname="sequence">22</field>
+        <fieldname="parent_id"ref="account_tax_report_line_vat_sales_tax"/>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-    <record id="account_tax_report_line_out_base_exempt_title" model="account.tax.report.line">
-        <field name="name">VAT Exempt Sales (BASE)</field>
-        <field name="sequence">3</field>
-        <field name="report_id" ref="vat_report"/>
+    <recordid="account_tax_report_line_out_base_exempt_title"model="account.tax.report.line">
+        <fieldname="name">VATExemptSales(BASE)</field>
+        <fieldname="sequence">3</field>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-    <record id="account_tax_report_line_out_base_exempt" model="account.tax.report.line">
-        <field name="name">VAT Exempt Sales (BASE)</field>
-        <field name="tag_name">VAT Exempt Sales (BASE)</field>
-        <field name="code">ILTAX_OUT_BASE_exempt</field>
-        <field name="sequence">3</field>
-        <field name="parent_id" ref="account_tax_report_line_out_base_exempt_title"/>
-        <field name="report_id" ref="vat_report"/>
+    <recordid="account_tax_report_line_out_base_exempt"model="account.tax.report.line">
+        <fieldname="name">VATExemptSales(BASE)</field>
+        <fieldname="tag_name">VATExemptSales(BASE)</field>
+        <fieldname="code">ILTAX_OUT_BASE_exempt</field>
+        <fieldname="sequence">3</field>
+        <fieldname="parent_id"ref="account_tax_report_line_out_base_exempt_title"/>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-    <!-- PURCHASE lines -->
-    <record id="account_tax_report_line_in_balance" model="account.tax.report.line">
-        <field name="name">VAT INPUTS (TAX)</field>
-        <field name="formula">ILTAX_IN_BALANCE_17+ILTAX_IN_BALANCE_2_3+ILTAX_IN_BALANCE_1_4+ILTAX_IN_BALANCE_PA</field>
-        <field name="code">ILTAX_IN_BALANCE</field>
-        <field name="sequence">5</field>
-        <field name="report_id" ref="vat_report"/>
+    <!--PURCHASElines-->
+    <recordid="account_tax_report_line_in_balance"model="account.tax.report.line">
+        <fieldname="name">VATINPUTS(TAX)</field>
+        <fieldname="formula">ILTAX_IN_BALANCE_17+ILTAX_IN_BALANCE_2_3+ILTAX_IN_BALANCE_1_4+ILTAX_IN_BALANCE_PA</field>
+        <fieldname="code">ILTAX_IN_BALANCE</field>
+        <fieldname="sequence">5</field>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-	<record id="account_tax_report_line_in_balance_17" model="account.tax.report.line">
-        <field name="name">VAT Inputs 17%</field>
-        <field name="tag_name">VAT Inputs 17%</field>
-        <field name="code">ILTAX_IN_BALANCE_17</field>
-        <field name="sequence">51</field>
-        <field name="parent_id" ref="account_tax_report_line_in_balance"/>
-        <field name="report_id" ref="vat_report"/>
+	<recordid="account_tax_report_line_in_balance_17"model="account.tax.report.line">
+        <fieldname="name">VATInputs17%</field>
+        <fieldname="tag_name">VATInputs17%</field>
+        <fieldname="code">ILTAX_IN_BALANCE_17</field>
+        <fieldname="sequence">51</field>
+        <fieldname="parent_id"ref="account_tax_report_line_in_balance"/>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-    <record id="account_tax_report_line_in_balance_pa_16" model="account.tax.report.line">
-        <field name="name">VAT Inputs PA 16%</field>
-        <field name="tag_name">VAT Inputs PA 16%</field>
-        <field name="code">ILTAX_IN_BALANCE_PA</field>
-        <field name="sequence">52</field>
-        <field name="parent_id" ref="account_tax_report_line_in_balance"/>
-        <field name="report_id" ref="vat_report"/>
+    <recordid="account_tax_report_line_in_balance_pa_16"model="account.tax.report.line">
+        <fieldname="name">VATInputsPA16%</field>
+        <fieldname="tag_name">VATInputsPA16%</field>
+        <fieldname="code">ILTAX_IN_BALANCE_PA</field>
+        <fieldname="sequence">52</field>
+        <fieldname="parent_id"ref="account_tax_report_line_in_balance"/>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-    <record id="account_tax_report_line_in_balance_2_3" model="account.tax.report.line">
-        <field name="name">VAT Inputs 2/3</field>
-        <field name="tag_name">VAT Inputs 2/3</field>
-        <field name="code">ILTAX_IN_BALANCE_2_3</field>
-        <field name="sequence">53</field>
-        <field name="parent_id" ref="account_tax_report_line_in_balance"/>
-        <field name="report_id" ref="vat_report"/>
+    <recordid="account_tax_report_line_in_balance_2_3"model="account.tax.report.line">
+        <fieldname="name">VATInputs2/3</field>
+        <fieldname="tag_name">VATInputs2/3</field>
+        <fieldname="code">ILTAX_IN_BALANCE_2_3</field>
+        <fieldname="sequence">53</field>
+        <fieldname="parent_id"ref="account_tax_report_line_in_balance"/>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-    <record id="account_tax_report_line_in_balance_1_4" model="account.tax.report.line">
-        <field name="name">VAT Inputs 1/4</field>
-        <field name="tag_name">VAT Inputs 1/4</field>
-        <field name="code">ILTAX_IN_BALANCE_1_4</field>
-        <field name="sequence">54</field>
-        <field name="parent_id" ref="account_tax_report_line_in_balance"/>
-        <field name="report_id" ref="vat_report"/>
+    <recordid="account_tax_report_line_in_balance_1_4"model="account.tax.report.line">
+        <fieldname="name">VATInputs1/4</field>
+        <fieldname="tag_name">VATInputs1/4</field>
+        <fieldname="code">ILTAX_IN_BALANCE_1_4</field>
+        <fieldname="sequence">54</field>
+        <fieldname="parent_id"ref="account_tax_report_line_in_balance"/>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-    <record id="account_tax_report_line_vat_in_fa_title" model="account.tax.report.line">
-        <field name="name">VAT INPUTS (fixed assets)</field>
-        <field name="sequence">6</field>
-        <field name="report_id" ref="vat_report"/>
+    <recordid="account_tax_report_line_vat_in_fa_title"model="account.tax.report.line">
+        <fieldname="name">VATINPUTS(fixedassets)</field>
+        <fieldname="sequence">6</field>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-    <record id="account_tax_report_line_vat_in_fa" model="account.tax.report.line">
-        <field name="name">VAT INPUTS (fixed assets)</field>
-        <field name="tag_name">VAT INPUTS (fixed assets)</field>
-        <field name="code">ILTAX_VAT_IN_FA</field>
-        <field name="sequence">6</field>
-        <field name="parent_id" ref="account_tax_report_line_vat_in_fa_title"/>
-        <field name="report_id" ref="vat_report"/>
+    <recordid="account_tax_report_line_vat_in_fa"model="account.tax.report.line">
+        <fieldname="name">VATINPUTS(fixedassets)</field>
+        <fieldname="tag_name">VATINPUTS(fixedassets)</field>
+        <fieldname="code">ILTAX_VAT_IN_FA</field>
+        <fieldname="sequence">6</field>
+        <fieldname="parent_id"ref="account_tax_report_line_vat_in_fa_title"/>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 
-    <record id="account_tax_report_line_vat_due" model="account.tax.report.line">
-        <field name="name">VAT DUE</field>
-        <field name="code">ILTAX_VAT_DUE</field>
-        <field name="formula">(ILTAX_OUT_BALANCE_00 + ILTAX_OUT_BALANCE_PA) - (ILTAX_IN_BALANCE_17 + ILTAX_IN_BALANCE_2_3 + ILTAX_IN_BALANCE_1_4 + ILTAX_IN_BALANCE_PA) - ILTAX_VAT_IN_FA</field>
-        <field name="sequence">7</field>
-        <field name="report_id" ref="vat_report"/>
+    <recordid="account_tax_report_line_vat_due"model="account.tax.report.line">
+        <fieldname="name">VATDUE</field>
+        <fieldname="code">ILTAX_VAT_DUE</field>
+        <fieldname="formula">(ILTAX_OUT_BALANCE_00+ILTAX_OUT_BALANCE_PA)-(ILTAX_IN_BALANCE_17+ILTAX_IN_BALANCE_2_3+ILTAX_IN_BALANCE_1_4+ILTAX_IN_BALANCE_PA)-ILTAX_VAT_IN_FA</field>
+        <fieldname="sequence">7</field>
+        <fieldname="report_id"ref="vat_report"/>
     </record>
 </flectra>

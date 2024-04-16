@@ -1,127 +1,127 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-<t t-name="web.SearchPanel" owl="1">
-    <div class="o_search_panel" t-att-class="props.className">
-        <section t-foreach="model.get('sections', s => !s.empty)" t-as="section" t-key="section.id"
-            t-attf-class="o_search_panel_section o_search_panel_{{ section.type }}"
+<tt-name="web.SearchPanel"owl="1">
+    <divclass="o_search_panel"t-att-class="props.className">
+        <sectiont-foreach="model.get('sections',s=>!s.empty)"t-as="section"t-key="section.id"
+            t-attf-class="o_search_panel_sectiono_search_panel_{{section.type}}"
             >
-            <header class="o_search_panel_section_header text-uppercase">
-                <i t-attf-class="fa {{ section.icon }} o_search_panel_section_icon mr-2"
-                    t-att-style="section.color and ('color: ' + section.color)"
+            <headerclass="o_search_panel_section_headertext-uppercase">
+                <it-attf-class="fa{{section.icon}}o_search_panel_section_iconmr-2"
+                    t-att-style="section.colorand('color:'+section.color)"
                 />
-                <b t-esc="section.description"/>
+                <bt-esc="section.description"/>
             </header>
-            <div t-if="section.errorMsg" class="alert alert-warning">
-                <span><t t-esc="section.errorMsg"/></span>
+            <divt-if="section.errorMsg"class="alertalert-warning">
+                <span><tt-esc="section.errorMsg"/></span>
             </div>
-            <ul t-else="" class="list-group d-block o_search_panel_field">
-                <t t-if="section.type === 'category'" t-call="web.SearchPanel.Category">
-                    <t t-set="values" t-value="section.rootIds"/>
+            <ult-else=""class="list-groupd-blocko_search_panel_field">
+                <tt-if="section.type==='category'"t-call="web.SearchPanel.Category">
+                    <tt-set="values"t-value="section.rootIds"/>
                 </t>
-                <t t-elif="section.groups">
-                    <li t-foreach="section.sortedGroupIds" t-as="groupId" t-key="groupId"
-                        class="o_search_panel_filter_group list-group-item border-0"
+                <tt-elif="section.groups">
+                    <lit-foreach="section.sortedGroupIds"t-as="groupId"t-key="groupId"
+                        class="o_search_panel_filter_grouplist-group-itemborder-0"
                         >
-                        <!-- TODO: this is a workaround for issue https://github.com/flectra/owl/issues/695 (remove when solved) -->
-                        <t t-set="_section" t-value="section"/>
-                        <t t-set="group" t-value="section.groups.get(groupId)"/>
-                        <header class="o_search_panel_group_header">
-                            <div class="custom-control custom-checkbox">
-                                <!-- TODO: "indeterminate" could not be set in the template and had to be set in
-                                     JS manually. See https://github.com/flectra/owl/issues/713 (adapt when solved)
+                        <!--TODO:thisisaworkaroundforissuehttps://github.com/flectra/owl/issues/695(removewhensolved)-->
+                        <tt-set="_section"t-value="section"/>
+                        <tt-set="group"t-value="section.groups.get(groupId)"/>
+                        <headerclass="o_search_panel_group_header">
+                            <divclass="custom-controlcustom-checkbox">
+                                <!--TODO:"indeterminate"couldnotbesetinthetemplateandhadtobesetin
+                                     JSmanually.Seehttps://github.com/flectra/owl/issues/713(adaptwhensolved)
                                 -->
-                                <input type="checkbox"
+                                <inputtype="checkbox"
                                     class="custom-control-input"
-                                    t-attf-id="{{ section.id }}_input_{{ groupId }})"
-                                    t-on-click="_toggleFilterGroup(section.id, group)"
+                                    t-attf-id="{{section.id}}_input_{{groupId}})"
+                                    t-on-click="_toggleFilterGroup(section.id,group)"
                                 />
-                                <label t-attf-for="{{ section.id }}_input_{{ groupId }})"
-                                    class="o_search_panel_label custom-control-label"
-                                    t-att-class="{ o_with_counters: group.enableCounters }"
-                                    t-att-title="group.tooltip or false"
+                                <labelt-attf-for="{{section.id}}_input_{{groupId}})"
+                                    class="o_search_panel_labelcustom-control-label"
+                                    t-att-class="{o_with_counters:group.enableCounters}"
+                                    t-att-title="group.tooltiporfalse"
                                     >
-                                    <span class="o_search_panel_label_title">
-                                        <span t-if="group.hex_color" class="mr-1" t-attf-style="color: {{ group.hex_color }};">●</span>
-                                        <t t-esc="group.name"/>
+                                    <spanclass="o_search_panel_label_title">
+                                        <spant-if="group.hex_color"class="mr-1"t-attf-style="color:{{group.hex_color}};">●</span>
+                                        <tt-esc="group.name"/>
                                     </span>
                                 </label>
                             </div>
                         </header>
-                        <ul class="list-group d-block">
-                            <t t-call="web.SearchPanel.FiltersGroup">
-                                <t t-set="values" t-value="group.values"/>
-                                <!-- TODO: this is a workaround for issue https://github.com/flectra/owl/issues/695 (remove when solved) -->
-                                <t t-set="section" t-value="_section"/>
+                        <ulclass="list-groupd-block">
+                            <tt-call="web.SearchPanel.FiltersGroup">
+                                <tt-set="values"t-value="group.values"/>
+                                <!--TODO:thisisaworkaroundforissuehttps://github.com/flectra/owl/issues/695(removewhensolved)-->
+                                <tt-set="section"t-value="_section"/>
                             </t>
                         </ul>
                     </li>
-                    <ul t-if="section.groups.get(false)" class="list-group d-block">
-                        <t t-call="web.SearchPanel.FiltersGroup">
-                            <t t-set="group" t-value="section.groups.get(false)"/>
-                            <t t-set="values" t-value="group.values"/>
-                            <!-- TODO: this is a workaround for issue https://github.com/flectra/owl/issues/695 (remove when solved) -->
-                            <t t-set="section" t-value="section"/>
+                    <ult-if="section.groups.get(false)"class="list-groupd-block">
+                        <tt-call="web.SearchPanel.FiltersGroup">
+                            <tt-set="group"t-value="section.groups.get(false)"/>
+                            <tt-set="values"t-value="group.values"/>
+                            <!--TODO:thisisaworkaroundforissuehttps://github.com/flectra/owl/issues/695(removewhensolved)-->
+                            <tt-set="section"t-value="section"/>
                         </t>
                     </ul>
                 </t>
-                <t t-else="" t-call="web.SearchPanel.FiltersGroup">
-                    <t t-set="values" t-value="section.values"/>
+                <tt-else=""t-call="web.SearchPanel.FiltersGroup">
+                    <tt-set="values"t-value="section.values"/>
                 </t>
             </ul>
         </section>
     </div>
 </t>
 
-<t t-name="web.SearchPanel.Category" owl="1">
-    <t t-foreach="values" t-as="valueId" t-key="valueId">
-        <t t-set="value" t-value="section.values.get(valueId)"/>
-        <li class="o_search_panel_category_value list-group-item border-0">
-            <header class="list-group-item-action"
-                t-att-class="{ active: state.active[section.id] === valueId }"
-                t-on-click="_toggleCategory(section, value)"
+<tt-name="web.SearchPanel.Category"owl="1">
+    <tt-foreach="values"t-as="valueId"t-key="valueId">
+        <tt-set="value"t-value="section.values.get(valueId)"/>
+        <liclass="o_search_panel_category_valuelist-group-itemborder-0">
+            <headerclass="list-group-item-action"
+                t-att-class="{active:state.active[section.id]===valueId}"
+                t-on-click="_toggleCategory(section,value)"
                 >
-                <label class="o_search_panel_label mb0" t-att-class="{ o_with_counters: section.enableCounters }">
-                    <div class="o_toggle_fold">
-                        <i t-if="value.childrenIds.length"
-                            t-attf-class="fa fa-caret-{{ state.expanded[section.id][valueId] ? 'down' : 'right' }}"
+                <labelclass="o_search_panel_labelmb0"t-att-class="{o_with_counters:section.enableCounters}">
+                    <divclass="o_toggle_fold">
+                        <it-if="value.childrenIds.length"
+                            t-attf-class="fafa-caret-{{state.expanded[section.id][valueId]?'down':'right'}}"
                         />
                     </div>
-                    <b t-if="value.bold" class="o_search_panel_label_title" t-esc="value.display_name"/>
-                    <span t-else="" class="o_search_panel_label_title" t-esc="value.display_name"/>
+                    <bt-if="value.bold"class="o_search_panel_label_title"t-esc="value.display_name"/>
+                    <spant-else=""class="o_search_panel_label_title"t-esc="value.display_name"/>
                 </label>
-                <span t-if="section.enableCounters and value.__count gt 0"
-                    class="o_search_panel_counter text-muted ml-2 small"
+                <spant-if="section.enableCountersandvalue.__countgt0"
+                    class="o_search_panel_countertext-mutedml-2small"
                     t-esc="value.__count"
                 />
             </header>
-            <ul t-if="value.childrenIds.length and state.expanded[section.id][valueId]" class="list-group d-block">
-                <t t-call="web.SearchPanel.Category">
-                    <t t-set="values" t-value="value.childrenIds"/>
+            <ult-if="value.childrenIds.lengthandstate.expanded[section.id][valueId]"class="list-groupd-block">
+                <tt-call="web.SearchPanel.Category">
+                    <tt-set="values"t-value="value.childrenIds"/>
                 </t>
             </ul>
         </li>
     </t>
 </t>
 
-<t t-name="web.SearchPanel.FiltersGroup" owl="1">
-    <li t-foreach="[...values.keys()]" t-as="valueId" t-key="valueId"
-        class="o_search_panel_filter_value list-group-item border-0"
+<tt-name="web.SearchPanel.FiltersGroup"owl="1">
+    <lit-foreach="[...values.keys()]"t-as="valueId"t-key="valueId"
+        class="o_search_panel_filter_valuelist-group-itemborder-0"
         >
-        <t t-set="value" t-value="values.get(valueId)"/>
-        <div class="custom-control custom-checkbox w-100">
-            <input type="checkbox"
-                t-attf-id="{{ section.id }}_input_{{ valueId }}"
+        <tt-set="value"t-value="values.get(valueId)"/>
+        <divclass="custom-controlcustom-checkboxw-100">
+            <inputtype="checkbox"
+                t-attf-id="{{section.id}}_input_{{valueId}}"
                 t-att-checked="state.active[section.id][valueId]"
                 class="custom-control-input"
-                t-on-click="_toggleFilterValue(section.id, valueId)"
+                t-on-click="_toggleFilterValue(section.id,valueId)"
             />
-            <label class="o_search_panel_label custom-control-label"
-                t-attf-for="{{ section.id }}_input_{{ valueId }}"
-                t-att-title="(group and group.tooltip) or false">
-                <span class="o_search_panel_label_title" t-esc="value.display_name"/>
-                <span t-if="section.enableCounters and value.__count gt 0"
-                    class="o_search_panel_counter text-muted ml-2 small"
+            <labelclass="o_search_panel_labelcustom-control-label"
+                t-attf-for="{{section.id}}_input_{{valueId}}"
+                t-att-title="(groupandgroup.tooltip)orfalse">
+                <spanclass="o_search_panel_label_title"t-esc="value.display_name"/>
+                <spant-if="section.enableCountersandvalue.__countgt0"
+                    class="o_search_panel_countertext-mutedml-2small"
                     t-esc="value.__count"
                 />
             </label>

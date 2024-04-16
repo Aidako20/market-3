@@ -1,83 +1,83 @@
-flectra.define('mail/static/src/utils/timer/timer_tests.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/utils/timer/timer_tests.js',function(require){
+'usestrict';
 
-const { afterEach, beforeEach, nextTick, start } = require('mail/static/src/utils/test_utils.js');
-const Timer = require('mail/static/src/utils/timer/timer.js');
+const{afterEach,beforeEach,nextTick,start}=require('mail/static/src/utils/test_utils.js');
+constTimer=require('mail/static/src/utils/timer/timer.js');
 
-const { TimerClearedError } = Timer;
+const{TimerClearedError}=Timer;
 
-QUnit.module('mail', {}, function () {
-QUnit.module('utils', {}, function () {
-QUnit.module('timer', {}, function () {
-QUnit.module('timer_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('utils',{},function(){
+QUnit.module('timer',{},function(){
+QUnit.module('timer_tests.js',{
+    beforeEach(){
         beforeEach(this);
-        this.timers = [];
+        this.timers=[];
 
-        this.start = async (params) => {
-            const { env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
+        this.start=async(params)=>{
+            const{env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
-        // Important: tests should cleanly intercept cancelation errors that
-        // may result from this teardown.
-        for (const timer of this.timers) {
+    afterEach(){
+        //Important:testsshouldcleanlyinterceptcancelationerrorsthat
+        //mayresultfromthisteardown.
+        for(consttimerofthis.timers){
             timer.clear();
         }
         afterEach(this);
     },
 });
 
-QUnit.test('timer does not timeout on initialization', async function (assert) {
+QUnit.test('timerdoesnottimeoutoninitialization',asyncfunction(assert){
     assert.expect(3);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    let hasTimedOut = false;
+    lethasTimedOut=false;
     this.timers.push(
-        new Timer(
+        newTimer(
             this.env,
-            () => hasTimedOut = true,
+            ()=>hasTimedOut=true,
             0
         )
     );
 
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out on immediate initialization"
+        "timershouldnothavetimedoutonimmediateinitialization"
     );
 
-    await this.env.testUtils.advanceTime(0);
+    awaitthis.env.testUtils.advanceTime(0);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out from initialization after 0ms"
+        "timershouldnothavetimedoutfrominitializationafter0ms"
     );
 
-    await this.env.testUtils.advanceTime(1000 * 1000);
+    awaitthis.env.testUtils.advanceTime(1000*1000);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out from initialization after 1000s"
+        "timershouldnothavetimedoutfrominitializationafter1000s"
     );
 });
 
-QUnit.test('timer start (duration: 0ms)', async function (assert) {
+QUnit.test('timerstart(duration:0ms)',asyncfunction(assert){
     assert.expect(2);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    let hasTimedOut = false;
+    lethasTimedOut=false;
     this.timers.push(
-        new Timer(
+        newTimer(
             this.env,
-            () => hasTimedOut = true,
+            ()=>hasTimedOut=true,
             0
         )
     );
@@ -85,124 +85,124 @@ QUnit.test('timer start (duration: 0ms)', async function (assert) {
     this.timers[0].start();
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out immediately after start"
+        "timershouldnothavetimedoutimmediatelyafterstart"
     );
 
-    await this.env.testUtils.advanceTime(0);
+    awaitthis.env.testUtils.advanceTime(0);
     assert.ok(
         hasTimedOut,
-        "timer should have timed out on start after 0ms"
+        "timershouldhavetimedoutonstartafter0ms"
     );
 });
 
-QUnit.test('timer start observe termination (duration: 0ms)', async function (assert) {
+QUnit.test('timerstartobservetermination(duration:0ms)',asyncfunction(assert){
     assert.expect(6);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    let hasTimedOut = false;
+    lethasTimedOut=false;
     this.timers.push(
-        new Timer(
+        newTimer(
             this.env,
-            () => {
-                hasTimedOut = true;
-                return 'timeout_result';
+            ()=>{
+                hasTimedOut=true;
+                return'timeout_result';
             },
             0
         )
     );
 
     this.timers[0].start()
-        .then(result => {
+        .then(result=>{
             assert.strictEqual(
                 result,
                 'timeout_result',
-                "value returned by start should be value returned by function on timeout"
+                "valuereturnedbystartshouldbevaluereturnedbyfunctionontimeout"
             );
             assert.step('timeout');
         });
-    await nextTick();
+    awaitnextTick();
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out immediately after start"
+        "timershouldnothavetimedoutimmediatelyafterstart"
     );
     assert.verifySteps(
         [],
-        "timer.start() should not have yet observed timeout"
+        "timer.start()shouldnothaveyetobservedtimeout"
     );
 
-    await this.env.testUtils.advanceTime(0);
+    awaitthis.env.testUtils.advanceTime(0);
     assert.ok(
         hasTimedOut,
-        "timer should have timed out on start after 0ms"
+        "timershouldhavetimedoutonstartafter0ms"
     );
     assert.verifySteps(
         ['timeout'],
-        "timer.start() should have observed timeout after 0ms"
+        "timer.start()shouldhaveobservedtimeoutafter0ms"
     );
 });
 
-QUnit.test('timer start (duration: 1000s)', async function (assert) {
+QUnit.test('timerstart(duration:1000s)',asyncfunction(assert){
     assert.expect(5);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    let hasTimedOut = false;
+    lethasTimedOut=false;
     this.timers.push(
-        new Timer(
+        newTimer(
             this.env,
-            () => hasTimedOut = true,
-            1000 * 1000
+            ()=>hasTimedOut=true,
+            1000*1000
         )
     );
 
     this.timers[0].start();
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out immediately after start"
+        "timershouldnothavetimedoutimmediatelyafterstart"
     );
 
-    await this.env.testUtils.advanceTime(0);
+    awaitthis.env.testUtils.advanceTime(0);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out on start after 0ms"
+        "timershouldnothavetimedoutonstartafter0ms"
     );
 
-    await this.env.testUtils.advanceTime(1000);
+    awaitthis.env.testUtils.advanceTime(1000);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out on start after 1000ms"
+        "timershouldnothavetimedoutonstartafter1000ms"
     );
 
-    await this.env.testUtils.advanceTime(998 * 1000 + 999);
+    awaitthis.env.testUtils.advanceTime(998*1000+999);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out on start after 9999ms"
+        "timershouldnothavetimedoutonstartafter9999ms"
     );
 
-    await this.env.testUtils.advanceTime(1);
+    awaitthis.env.testUtils.advanceTime(1);
     assert.ok(
         hasTimedOut,
-        "timer should have timed out on start after 10s"
+        "timershouldhavetimedoutonstartafter10s"
     );
 });
 
-QUnit.test('[no cancelation intercept] timer start then immediate clear (duration: 0ms)', async function (assert) {
+QUnit.test('[nocancelationintercept]timerstartthenimmediateclear(duration:0ms)',asyncfunction(assert){
     assert.expect(4);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    let hasTimedOut = false;
+    lethasTimedOut=false;
     this.timers.push(
-        new Timer(
+        newTimer(
             this.env,
-            () => hasTimedOut = true,
+            ()=>hasTimedOut=true,
             0
         )
     );
@@ -210,40 +210,40 @@ QUnit.test('[no cancelation intercept] timer start then immediate clear (duratio
     this.timers[0].start();
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out immediately after start"
+        "timershouldnothavetimedoutimmediatelyafterstart"
     );
 
     this.timers[0].clear();
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out immediately after start and clear"
+        "timershouldnothavetimedoutimmediatelyafterstartandclear"
     );
 
-    await this.env.testUtils.advanceTime(0);
+    awaitthis.env.testUtils.advanceTime(0);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out after 0ms of clear"
+        "timershouldnothavetimedoutafter0msofclear"
     );
 
-    await this.env.testUtils.advanceTime(1000);
+    awaitthis.env.testUtils.advanceTime(1000);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out after 1s of clear"
+        "timershouldnothavetimedoutafter1sofclear"
     );
 });
 
-QUnit.test('[no cancelation intercept] timer start then clear before timeout (duration: 1000ms)', async function (assert) {
+QUnit.test('[nocancelationintercept]timerstartthenclearbeforetimeout(duration:1000ms)',asyncfunction(assert){
     assert.expect(4);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    let hasTimedOut = false;
+    lethasTimedOut=false;
     this.timers.push(
-        new Timer(
+        newTimer(
             this.env,
-            () => hasTimedOut = true,
+            ()=>hasTimedOut=true,
             1000
         )
     );
@@ -251,41 +251,41 @@ QUnit.test('[no cancelation intercept] timer start then clear before timeout (du
     this.timers[0].start();
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out immediately after start"
+        "timershouldnothavetimedoutimmediatelyafterstart"
     );
 
-    await this.env.testUtils.advanceTime(999);
+    awaitthis.env.testUtils.advanceTime(999);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out immediately after 999ms of start"
+        "timershouldnothavetimedoutimmediatelyafter999msofstart"
     );
 
     this.timers[0].clear();
-    await this.env.testUtils.advanceTime(1);
+    awaitthis.env.testUtils.advanceTime(1);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out after 1ms of clear that happens 999ms after start (globally 1s await)"
+        "timershouldnothavetimedoutafter1msofclearthathappens999msafterstart(globally1sawait)"
     );
 
-    await this.env.testUtils.advanceTime(1000);
+    awaitthis.env.testUtils.advanceTime(1000);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out after 1001ms after clear (timer fully cleared)"
+        "timershouldnothavetimedoutafter1001msafterclear(timerfullycleared)"
     );
 });
 
-QUnit.test('[no cancelation intercept] timer start then reset before timeout (duration: 1000ms)', async function (assert) {
+QUnit.test('[nocancelationintercept]timerstartthenresetbeforetimeout(duration:1000ms)',asyncfunction(assert){
     assert.expect(5);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    let hasTimedOut = false;
+    lethasTimedOut=false;
     this.timers.push(
-        new Timer(
+        newTimer(
             this.env,
-            () => hasTimedOut = true,
+            ()=>hasTimedOut=true,
             1000
         )
     );
@@ -293,130 +293,130 @@ QUnit.test('[no cancelation intercept] timer start then reset before timeout (du
     this.timers[0].start();
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out immediately after start"
+        "timershouldnothavetimedoutimmediatelyafterstart"
     );
 
-    await this.env.testUtils.advanceTime(999);
+    awaitthis.env.testUtils.advanceTime(999);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out after 999ms of start"
+        "timershouldnothavetimedoutafter999msofstart"
     );
 
     this.timers[0].reset();
-    await this.env.testUtils.advanceTime(1);
+    awaitthis.env.testUtils.advanceTime(1);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out after 1ms of reset which happens 999ms after start"
+        "timershouldnothavetimedoutafter1msofresetwhichhappens999msafterstart"
     );
 
-    await this.env.testUtils.advanceTime(998);
+    awaitthis.env.testUtils.advanceTime(998);
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out after 999ms of reset"
+        "timershouldnothavetimedoutafter999msofreset"
     );
 
-    await this.env.testUtils.advanceTime(1);
+    awaitthis.env.testUtils.advanceTime(1);
     assert.ok(
         hasTimedOut,
-        "timer should not have timed out after 1s of reset"
+        "timershouldnothavetimedoutafter1sofreset"
     );
 });
 
-QUnit.test('[with cancelation intercept] timer start then immediate clear (duration: 0ms)', async function (assert) {
+QUnit.test('[withcancelationintercept]timerstartthenimmediateclear(duration:0ms)',asyncfunction(assert){
     assert.expect(5);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    let hasTimedOut = false;
+    lethasTimedOut=false;
     this.timers.push(
-        new Timer(
+        newTimer(
             this.env,
-            () => hasTimedOut = true,
+            ()=>hasTimedOut=true,
             0,
-            { silentCancelationErrors: false }
+            {silentCancelationErrors:false}
         )
     );
 
     this.timers[0].start()
-        .then(() => {
-            throw new Error("timer.start() should not be resolved (should have been canceled by clear)");
+        .then(()=>{
+            thrownewError("timer.start()shouldnotberesolved(shouldhavebeencanceledbyclear)");
         })
-        .catch(error => {
+        .catch(error=>{
             assert.ok(
-                error instanceof TimerClearedError,
-                "Should generate a Timer cleared error (from `.clear()`)"
+                errorinstanceofTimerClearedError,
+                "ShouldgenerateaTimerclearederror(from`.clear()`)"
             );
             assert.step('timer_cleared');
         });
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out immediately after start"
+        "timershouldnothavetimedoutimmediatelyafterstart"
     );
-    await nextTick();
-    assert.verifySteps([], "should not have observed cleared timer (timer not yet cleared)");
+    awaitnextTick();
+    assert.verifySteps([],"shouldnothaveobservedclearedtimer(timernotyetcleared)");
 
     this.timers[0].clear();
-    await nextTick();
+    awaitnextTick();
     assert.verifySteps(
         ['timer_cleared'],
-        "timer.start() should have observed it has been cleared"
+        "timer.start()shouldhaveobservedithasbeencleared"
     );
 });
 
-QUnit.test('[with cancelation intercept] timer start then immediate reset (duration: 0ms)', async function (assert) {
+QUnit.test('[withcancelationintercept]timerstartthenimmediatereset(duration:0ms)',asyncfunction(assert){
     assert.expect(9);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    let hasTimedOut = false;
+    lethasTimedOut=false;
     this.timers.push(
-        new Timer(
+        newTimer(
             this.env,
-            () => hasTimedOut = true,
+            ()=>hasTimedOut=true,
             0,
-            { silentCancelationErrors: false }
+            {silentCancelationErrors:false}
         )
     );
 
     this.timers[0].start()
-        .then(() => {
-            throw new Error("timer.start() should not observe a timeout");
+        .then(()=>{
+            thrownewError("timer.start()shouldnotobserveatimeout");
         })
-        .catch(error => {
-            assert.ok(error instanceof TimerClearedError, "Should generate a Timer cleared error (from `.reset()`)");
+        .catch(error=>{
+            assert.ok(errorinstanceofTimerClearedError,"ShouldgenerateaTimerclearederror(from`.reset()`)");
             assert.step('timer_cleared');
         });
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out immediately after start"
+        "timershouldnothavetimedoutimmediatelyafterstart"
     );
-    await nextTick();
-    assert.verifySteps([], "should not have observed cleared timer (timer not yet cleared)");
+    awaitnextTick();
+    assert.verifySteps([],"shouldnothaveobservedclearedtimer(timernotyetcleared)");
 
     this.timers[0].reset()
-        .then(() => assert.step('timer_reset_timeout'));
-    await nextTick();
+        .then(()=>assert.step('timer_reset_timeout'));
+    awaitnextTick();
     assert.verifySteps(
         ['timer_cleared'],
-        "timer.start() should have observed it has been cleared"
+        "timer.start()shouldhaveobservedithasbeencleared"
     );
     assert.notOk(
         hasTimedOut,
-        "timer should not have timed out immediately after reset"
+        "timershouldnothavetimedoutimmediatelyafterreset"
     );
 
-    await this.env.testUtils.advanceTime(0);
+    awaitthis.env.testUtils.advanceTime(0);
     assert.ok(
         hasTimedOut,
-        "timer should have timed out after reset timeout"
+        "timershouldhavetimedoutafterresettimeout"
     );
     assert.verifySteps(
         ['timer_reset_timeout'],
-        "timer.reset() should have observed it has timed out"
+        "timer.reset()shouldhaveobservedithastimedout"
     );
 });
 

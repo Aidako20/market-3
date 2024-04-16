@@ -1,99 +1,99 @@
-//! moment.js locale configuration
-//! locale : Hebrew [he]
-//! author : Tomer Cohen : https://github.com/tomer
-//! author : Moshe Simantov : https://github.com/DevelopmentIL
-//! author : Tal Ater : https://github.com/TalAter
+//!moment.jslocaleconfiguration
+//!locale:Hebrew[he]
+//!author:TomerCohen:https://github.com/tomer
+//!author:MosheSimantov:https://github.com/DevelopmentIL
+//!author:TalAter:https://github.com/TalAter
 
-;(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined'
-       && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+;(function(global,factory){
+   typeofexports==='object'&&typeofmodule!=='undefined'
+       &&typeofrequire==='function'?factory(require('../moment')):
+   typeofdefine==='function'&&define.amd?define(['../moment'],factory):
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this,(function(moment){'usestrict';
 
 
-var he = moment.defineLocale('he', {
-    months : 'ינואר_פברואר_מרץ_אפריל_מאי_יוני_יולי_אוגוסט_ספטמבר_אוקטובר_נובמבר_דצמבר'.split('_'),
-    monthsShort : 'ינו׳_פבר׳_מרץ_אפר׳_מאי_יוני_יולי_אוג׳_ספט׳_אוק׳_נוב׳_דצמ׳'.split('_'),
-    weekdays : 'ראשון_שני_שלישי_רביעי_חמישי_שישי_שבת'.split('_'),
-    weekdaysShort : 'א׳_ב׳_ג׳_ד׳_ה׳_ו׳_ש׳'.split('_'),
-    weekdaysMin : 'א_ב_ג_ד_ה_ו_ש'.split('_'),
-    longDateFormat : {
-        LT : 'HH:mm',
-        LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
-        LL : 'D [ב]MMMM YYYY',
-        LLL : 'D [ב]MMMM YYYY HH:mm',
-        LLLL : 'dddd, D [ב]MMMM YYYY HH:mm',
-        l : 'D/M/YYYY',
-        ll : 'D MMM YYYY',
-        lll : 'D MMM YYYY HH:mm',
-        llll : 'ddd, D MMM YYYY HH:mm'
+varhe=moment.defineLocale('he',{
+    months:'ינואר_פברואר_מרץ_אפריל_מאי_יוני_יולי_אוגוסט_ספטמבר_אוקטובר_נובמבר_דצמבר'.split('_'),
+    monthsShort:'ינו׳_פבר׳_מרץ_אפר׳_מאי_יוני_יולי_אוג׳_ספט׳_אוק׳_נוב׳_דצמ׳'.split('_'),
+    weekdays:'ראשון_שני_שלישי_רביעי_חמישי_שישי_שבת'.split('_'),
+    weekdaysShort:'א׳_ב׳_ג׳_ד׳_ה׳_ו׳_ש׳'.split('_'),
+    weekdaysMin:'א_ב_ג_ד_ה_ו_ש'.split('_'),
+    longDateFormat:{
+        LT:'HH:mm',
+        LTS:'HH:mm:ss',
+        L:'DD/MM/YYYY',
+        LL:'D[ב]MMMMYYYY',
+        LLL:'D[ב]MMMMYYYYHH:mm',
+        LLLL:'dddd,D[ב]MMMMYYYYHH:mm',
+        l:'D/M/YYYY',
+        ll:'DMMMYYYY',
+        lll:'DMMMYYYYHH:mm',
+        llll:'ddd,DMMMYYYYHH:mm'
     },
-    calendar : {
-        sameDay : '[היום ב־]LT',
-        nextDay : '[מחר ב־]LT',
-        nextWeek : 'dddd [בשעה] LT',
-        lastDay : '[אתמול ב־]LT',
-        lastWeek : '[ביום] dddd [האחרון בשעה] LT',
-        sameElse : 'L'
+    calendar:{
+        sameDay:'[היוםב־]LT',
+        nextDay:'[מחרב־]LT',
+        nextWeek:'dddd[בשעה]LT',
+        lastDay:'[אתמולב־]LT',
+        lastWeek:'[ביום]dddd[האחרוןבשעה]LT',
+        sameElse:'L'
     },
-    relativeTime : {
-        future : 'בעוד %s',
-        past : 'לפני %s',
-        s : 'מספר שניות',
-        m : 'דקה',
-        mm : '%d דקות',
-        h : 'שעה',
-        hh : function (number) {
-            if (number === 2) {
-                return 'שעתיים';
+    relativeTime:{
+        future:'בעוד%s',
+        past:'לפני%s',
+        s:'מספרשניות',
+        m:'דקה',
+        mm:'%dדקות',
+        h:'שעה',
+        hh:function(number){
+            if(number===2){
+                return'שעתיים';
             }
-            return number + ' שעות';
+            returnnumber+'שעות';
         },
-        d : 'יום',
-        dd : function (number) {
-            if (number === 2) {
-                return 'יומיים';
+        d:'יום',
+        dd:function(number){
+            if(number===2){
+                return'יומיים';
             }
-            return number + ' ימים';
+            returnnumber+'ימים';
         },
-        M : 'חודש',
-        MM : function (number) {
-            if (number === 2) {
-                return 'חודשיים';
+        M:'חודש',
+        MM:function(number){
+            if(number===2){
+                return'חודשיים';
             }
-            return number + ' חודשים';
+            returnnumber+'חודשים';
         },
-        y : 'שנה',
-        yy : function (number) {
-            if (number === 2) {
-                return 'שנתיים';
-            } else if (number % 10 === 0 && number !== 10) {
-                return number + ' שנה';
+        y:'שנה',
+        yy:function(number){
+            if(number===2){
+                return'שנתיים';
+            }elseif(number%10===0&&number!==10){
+                returnnumber+'שנה';
             }
-            return number + ' שנים';
+            returnnumber+'שנים';
         }
     },
-    meridiemParse: /אחה"צ|לפנה"צ|אחרי הצהריים|לפני הצהריים|לפנות בוקר|בבוקר|בערב/i,
-    isPM : function (input) {
-        return /^(אחה"צ|אחרי הצהריים|בערב)$/.test(input);
+    meridiemParse:/אחה"צ|לפנה"צ|אחריהצהריים|לפניהצהריים|לפנותבוקר|בבוקר|בערב/i,
+    isPM:function(input){
+        return/^(אחה"צ|אחריהצהריים|בערב)$/.test(input);
     },
-    meridiem : function (hour, minute, isLower) {
-        if (hour < 5) {
-            return 'לפנות בוקר';
-        } else if (hour < 10) {
-            return 'בבוקר';
-        } else if (hour < 12) {
-            return isLower ? 'לפנה"צ' : 'לפני הצהריים';
-        } else if (hour < 18) {
-            return isLower ? 'אחה"צ' : 'אחרי הצהריים';
-        } else {
-            return 'בערב';
+    meridiem:function(hour,minute,isLower){
+        if(hour<5){
+            return'לפנותבוקר';
+        }elseif(hour<10){
+            return'בבוקר';
+        }elseif(hour<12){
+            returnisLower?'לפנה"צ':'לפניהצהריים';
+        }elseif(hour<18){
+            returnisLower?'אחה"צ':'אחריהצהריים';
+        }else{
+            return'בערב';
         }
     }
 });
 
-return he;
+returnhe;
 
 })));

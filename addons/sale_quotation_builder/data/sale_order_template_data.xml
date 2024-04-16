@@ -1,81 +1,81 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <!-- no update so users can freely customize/delete the template -->
-    <data noupdate="1">
-        <record id="sale_order_template_default" model="sale.order.template">
-            <field name="name">Default Template</field>
-            <field name="number_of_days">30</field>
+    <!--noupdatesouserscanfreelycustomize/deletethetemplate-->
+    <datanoupdate="1">
+        <recordid="sale_order_template_default"model="sale.order.template">
+            <fieldname="name">DefaultTemplate</field>
+            <fieldname="number_of_days">30</field>
 
-            <field name="website_description" type="xml">
-                <section data-snippet-id="title" class="mt32">
-                    <h2 class="o_page_header">About us</h2>
+            <fieldname="website_description"type="xml">
+                <sectiondata-snippet-id="title"class="mt32">
+                    <h2class="o_page_header">Aboutus</h2>
                 </section>
-                <section data-snippet-id="text-block">
-                    <div class="row">
-                        <div class="col-lg-12">
+                <sectiondata-snippet-id="text-block">
+                    <divclass="row">
+                        <divclass="col-lg-12">
                             <p>
-                                This is a <strong>sample quotation template</strong>. You should
-                                customize it to fit your own needs from the <i>Sales</i>
-                                application, using the menu: Configuration /
-                                Quotation Templates.
+                                Thisisa<strong>samplequotationtemplate</strong>.Youshould
+                                customizeittofityourownneedsfromthe<i>Sales</i>
+                                application,usingthemenu:Configuration/
+                                QuotationTemplates.
                             </p><p>
-                                Great quotation templates will significantly
-                                <strong>boost your success rate</strong>. The
-                                first section is usually about your company,
-                                your references, your methodology or
-                                guarantees, your team, SLA, terms and conditions, etc.
+                                Greatquotationtemplateswillsignificantly
+                                <strong>boostyoursuccessrate</strong>.The
+                                firstsectionisusuallyaboutyourcompany,
+                                yourreferences,yourmethodologyor
+                                guarantees,yourteam,SLA,termsandconditions,etc.
                             </p>
                         </div>
                     </div>
                 </section>
-                <section data-snippet-id="quality">
-                    <div class="card-deck">
-                        <div class="card">
-                            <div class="card-header">Our Quality</div>
-                            <div class="card-body">
-                                Product quality is the foundation we
-                                stand on; we build it with a relentless
-                                focus on fabric, performance and craftsmanship.
+                <sectiondata-snippet-id="quality">
+                    <divclass="card-deck">
+                        <divclass="card">
+                            <divclass="card-header">OurQuality</div>
+                            <divclass="card-body">
+                                Productqualityisthefoundationwe
+                                standon;webuilditwitharelentless
+                                focusonfabric,performanceandcraftsmanship.
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-header">Our Service</div>
-                            <div class="card-body">
-                                As a leading professional services firm,
-                                we know that success is all about the
-                                commitment we put on strong services.
+                        <divclass="card">
+                            <divclass="card-header">OurService</div>
+                            <divclass="card-body">
+                                Asaleadingprofessionalservicesfirm,
+                                weknowthatsuccessisallaboutthe
+                                commitmentweputonstrongservices.
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-header">Price</div>
-                            <div class="card-body">
-                                We always ensure that our products are
-                                set at a fair price so that you will be
-                                happy to buy them.
+                        <divclass="card">
+                            <divclass="card-header">Price</div>
+                            <divclass="card-body">
+                                Wealwaysensurethatourproductsare
+                                setatafairpricesothatyouwillbe
+                                happytobuythem.
                             </div>
                         </div>
                     </div>
                 </section>
-                <section data-snippet-id="title" class="mt32">
-                    <h2 class="o_page_header">Our Offer</h2>
+                <sectiondata-snippet-id="title"class="mt32">
+                    <h2class="o_page_header">OurOffer</h2>
                 </section>
-                <section data-snippet-id="text-block">
+                <sectiondata-snippet-id="text-block">
                     <p>
-                        You can <strong>set a description per product</strong>. Flectra will
-                        automatically create a quotation using the descriptions
-                        of all products in the proposal. The table of content
-                        on the left is generated automatically using the styles you
-                        used in your description (heading 1, heading 2, ...)
+                        Youcan<strong>setadescriptionperproduct</strong>.Flectrawill
+                        automaticallycreateaquotationusingthedescriptions
+                        ofallproductsintheproposal.Thetableofcontent
+                        ontheleftisgeneratedautomaticallyusingthestylesyou
+                        usedinyourdescription(heading1,heading2,...)
                     </p><p>
-                        If you edit a quotation from the 'Preview' of a quotation, you will
-                        update that quotation only. If you edit the quotation
-                        template (from the Configuration menu), all future quotations will
-                        use this modified template.
+                        Ifyoueditaquotationfromthe'Preview'ofaquotation,youwill
+                        updatethatquotationonly.Ifyoueditthequotation
+                        template(fromtheConfigurationmenu),allfuturequotationswill
+                        usethismodifiedtemplate.
                     </p>
                 </section>
             </field>
         </record>
 
-        <function model="res.company" name="_set_default_sale_order_template_id_if_empty"/>
+        <functionmodel="res.company"name="_set_default_sale_order_template_id_if_empty"/>
     </data>
 </flectra>

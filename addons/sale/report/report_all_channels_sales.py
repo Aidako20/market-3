@@ -1,68 +1,68 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, tools
+fromflectraimportapi,fields,models,tools
 
 
-class PosSaleReport(models.Model):
-    _name = "report.all.channels.sales"
-    _description = "Sales by Channel (All in One)"
-    _auto = False
+classPosSaleReport(models.Model):
+    _name="report.all.channels.sales"
+    _description="SalesbyChannel(AllinOne)"
+    _auto=False
 
-    name = fields.Char('Order Reference', readonly=True)
-    partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
-    product_id = fields.Many2one('product.product', string='Product', readonly=True)
-    product_tmpl_id = fields.Many2one('product.template', 'Product Template', readonly=True)
-    date_order = fields.Datetime(string='Date Order', readonly=True)
-    user_id = fields.Many2one('res.users', 'Salesperson', readonly=True)
-    categ_id = fields.Many2one('product.category', 'Product Category', readonly=True)
-    company_id = fields.Many2one('res.company', 'Company', readonly=True)
-    price_total = fields.Float('Total', readonly=True)
-    pricelist_id = fields.Many2one('product.pricelist', 'Pricelist', readonly=True)
-    country_id = fields.Many2one('res.country', 'Partner Country', readonly=True)
-    price_subtotal = fields.Float(string='Price Subtotal', readonly=True)
-    product_qty = fields.Float('Product Quantity', readonly=True)
-    analytic_account_id = fields.Many2one('account.analytic.account', 'Analytic Account', readonly=True)
-    team_id = fields.Many2one('crm.team', 'Sales Team', readonly=True)
+    name=fields.Char('OrderReference',readonly=True)
+    partner_id=fields.Many2one('res.partner','Partner',readonly=True)
+    product_id=fields.Many2one('product.product',string='Product',readonly=True)
+    product_tmpl_id=fields.Many2one('product.template','ProductTemplate',readonly=True)
+    date_order=fields.Datetime(string='DateOrder',readonly=True)
+    user_id=fields.Many2one('res.users','Salesperson',readonly=True)
+    categ_id=fields.Many2one('product.category','ProductCategory',readonly=True)
+    company_id=fields.Many2one('res.company','Company',readonly=True)
+    price_total=fields.Float('Total',readonly=True)
+    pricelist_id=fields.Many2one('product.pricelist','Pricelist',readonly=True)
+    country_id=fields.Many2one('res.country','PartnerCountry',readonly=True)
+    price_subtotal=fields.Float(string='PriceSubtotal',readonly=True)
+    product_qty=fields.Float('ProductQuantity',readonly=True)
+    analytic_account_id=fields.Many2one('account.analytic.account','AnalyticAccount',readonly=True)
+    team_id=fields.Many2one('crm.team','SalesTeam',readonly=True)
 
-    def _so(self):
-        so_str = """
-                SELECT sol.id AS id,
-                    so.name AS name,
-                    so.partner_id AS partner_id,
-                    sol.product_id AS product_id,
-                    pro.product_tmpl_id AS product_tmpl_id,
-                    so.date_order AS date_order,
-                    so.user_id AS user_id,
-                    pt.categ_id AS categ_id,
-                    so.company_id AS company_id,
-                    sol.price_total / CASE COALESCE(so.currency_rate, 0) WHEN 0 THEN 1.0 ELSE so.currency_rate END AS price_total,
-                    so.pricelist_id AS pricelist_id,
-                    rp.country_id AS country_id,
-                    sol.price_subtotal / CASE COALESCE(so.currency_rate, 0) WHEN 0 THEN 1.0 ELSE so.currency_rate END AS price_subtotal,
-                    (sol.product_uom_qty / u.factor * u2.factor) as product_qty,
-                    so.analytic_account_id AS analytic_account_id,
-                    so.team_id AS team_id
+    def_so(self):
+        so_str="""
+                SELECTsol.idASid,
+                    so.nameASname,
+                    so.partner_idASpartner_id,
+                    sol.product_idASproduct_id,
+                    pro.product_tmpl_idASproduct_tmpl_id,
+                    so.date_orderASdate_order,
+                    so.user_idASuser_id,
+                    pt.categ_idAScateg_id,
+                    so.company_idAScompany_id,
+                    sol.price_total/CASECOALESCE(so.currency_rate,0)WHEN0THEN1.0ELSEso.currency_rateENDASprice_total,
+                    so.pricelist_idASpricelist_id,
+                    rp.country_idAScountry_id,
+                    sol.price_subtotal/CASECOALESCE(so.currency_rate,0)WHEN0THEN1.0ELSEso.currency_rateENDASprice_subtotal,
+                    (sol.product_uom_qty/u.factor*u2.factor)asproduct_qty,
+                    so.analytic_account_idASanalytic_account_id,
+                    so.team_idASteam_id
 
-            FROM sale_order_line sol
-                    JOIN sale_order so ON (sol.order_id = so.id)
-                    LEFT JOIN product_product pro ON (sol.product_id = pro.id)
-                    JOIN res_partner rp ON (so.partner_id = rp.id)
-                    LEFT JOIN product_template pt ON (pro.product_tmpl_id = pt.id)
-                    LEFT JOIN product_pricelist pp ON (so.pricelist_id = pp.id)
-                    LEFT JOIN uom_uom u on (u.id=sol.product_uom)
-                    LEFT JOIN uom_uom u2 on (u2.id=pt.uom_id)
-            WHERE so.state in ('sale','done')
+            FROMsale_order_linesol
+                    JOINsale_ordersoON(sol.order_id=so.id)
+                    LEFTJOINproduct_productproON(sol.product_id=pro.id)
+                    JOINres_partnerrpON(so.partner_id=rp.id)
+                    LEFTJOINproduct_templateptON(pro.product_tmpl_id=pt.id)
+                    LEFTJOINproduct_pricelistppON(so.pricelist_id=pp.id)
+                    LEFTJOINuom_uomuon(u.id=sol.product_uom)
+                    LEFTJOINuom_uomu2on(u2.id=pt.uom_id)
+            WHEREso.statein('sale','done')
         """
-        return so_str
+        returnso_str
 
-    def _from(self):
-        return """(%s)""" % (self._so())
+    def_from(self):
+        return"""(%s)"""%(self._so())
 
-    def _get_main_request(self):
-        request = """
-            CREATE or REPLACE VIEW %s AS
-                SELECT id AS id,
+    def_get_main_request(self):
+        request="""
+            CREATEorREPLACEVIEW%sAS
+                SELECTidASid,
                     name,
                     partner_id,
                     product_id,
@@ -78,10 +78,10 @@ class PosSaleReport(models.Model):
                     team_id,
                     price_subtotal,
                     product_qty
-                FROM %s
-                AS foo""" % (self._table, self._from())
-        return request
+                FROM%s
+                ASfoo"""%(self._table,self._from())
+        returnrequest
 
-    def init(self):
-        tools.drop_view_if_exists(self.env.cr, self._table)
+    definit(self):
+        tools.drop_view_if_exists(self.env.cr,self._table)
         self.env.cr.execute(self._get_main_request())

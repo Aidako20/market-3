@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
 try:
-    # import for usage in phonenumbers_patch/region_*.py files
-    from phonenumbers.phonemetadata import NumberFormat, PhoneNumberDesc, PhoneMetadata # pylint: disable=unused-import
-except ImportError:
+    #importforusageinphonenumbers_patch/region_*.pyfiles
+    fromphonenumbers.phonemetadataimportNumberFormat,PhoneNumberDesc,PhoneMetadata#pylint:disable=unused-import
+exceptImportError:
     pass

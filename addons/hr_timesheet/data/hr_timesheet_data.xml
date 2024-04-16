@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <!-- Set the JS widget -->
-    <record id="uom.product_uom_day" model="uom.uom">
-        <field name="timesheet_widget">float_toggle</field>
+    <!--SettheJSwidget-->
+    <recordid="uom.product_uom_day"model="uom.uom">
+        <fieldname="timesheet_widget">float_toggle</field>
     </record>
 
-    <record id="uom.product_uom_hour" model="uom.uom">
-        <field name="timesheet_widget">float_time</field>
+    <recordid="uom.product_uom_hour"model="uom.uom">
+        <fieldname="timesheet_widget">float_time</field>
     </record>
 
-    <!-- Force Analytic account creation for projects allowing timesheet (default is True) -->
+    <!--ForceAnalyticaccountcreationforprojectsallowingtimesheet(defaultisTrue)-->
     <function
         model="project.project"
         name="_init_data_analytic_account"
         eval="[]"/>
 
-    <data noupdate="1">
-        <record id="ir_config_parameter_timesheet_rounding" model="ir.config_parameter">
-            <field name="key">hr_timesheet.timesheet_rounding</field>
-            <field name="value">15</field>
+    <datanoupdate="1">
+        <recordid="ir_config_parameter_timesheet_rounding"model="ir.config_parameter">
+            <fieldname="key">hr_timesheet.timesheet_rounding</field>
+            <fieldname="value">15</field>
         </record>
-        <record id="ir_config_parameter_timesheet_min_duration" model="ir.config_parameter">
-            <field name="key">hr_timesheet.timesheet_min_duration</field>
-            <field name="value">15</field>
+        <recordid="ir_config_parameter_timesheet_min_duration"model="ir.config_parameter">
+            <fieldname="key">hr_timesheet.timesheet_min_duration</field>
+            <fieldname="value">15</field>
         </record>
     </data>
 

@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, _
-from flectra.addons.http_routing.models.ir_http import url_for
+fromflectraimportfields,models,_
+fromflectra.addons.http_routing.models.ir_httpimporturl_for
 
 
-class Website(models.Model):
-    _inherit = "website"
+classWebsite(models.Model):
+    _inherit="website"
 
-    website_slide_google_app_key = fields.Char('Google Doc Key', groups='base.group_system')
+    website_slide_google_app_key=fields.Char('GoogleDocKey',groups='base.group_system')
 
-    def get_suggested_controllers(self):
-        suggested_controllers = super(Website, self).get_suggested_controllers()
-        suggested_controllers.append((_('Courses'), url_for('/slides'), 'website_slides'))
-        return suggested_controllers
+    defget_suggested_controllers(self):
+        suggested_controllers=super(Website,self).get_suggested_controllers()
+        suggested_controllers.append((_('Courses'),url_for('/slides'),'website_slides'))
+        returnsuggested_controllers

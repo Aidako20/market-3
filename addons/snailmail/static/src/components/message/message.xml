@@ -1,36 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-inherit="mail.Message" t-inherit-mode="extension">
-        <xpath expr="//*[@name='failureIcon']" position="replace">
-            <t t-if="message.message_type === 'snailmail'">
-                <i class="o_Message_notificationIcon fa fa-paper-plane"/>
+    <tt-inherit="mail.Message"t-inherit-mode="extension">
+        <xpathexpr="//*[@name='failureIcon']"position="replace">
+            <tt-if="message.message_type==='snailmail'">
+                <iclass="o_Message_notificationIconfafa-paper-plane"/>
             </t>
-            <t t-else="">$0</t>
+            <tt-else="">$0</t>
         </xpath>
 
-        <xpath expr="//*[@name='notificationIcon']" position="replace">
-            <t t-if="message.message_type === 'snailmail'">
-                <i class="o_Message_notificationIcon fa fa-paper-plane"/>
+        <xpathexpr="//*[@name='notificationIcon']"position="replace">
+            <tt-if="message.message_type==='snailmail'">
+                <iclass="o_Message_notificationIconfafa-paper-plane"/>
             </t>
-            <t t-else="">$0</t>
+            <tt-else="">$0</t>
         </xpath>
 
-        <xpath expr="//*[@name='rootCondition']" position="inside">
-            <t t-if="snailmailState.hasDialog">
-                <SnailmailErrorDialog messageLocalId="message.localId" t-on-dialog-closed="_onDialogClosedSnailmailError"/>
+        <xpathexpr="//*[@name='rootCondition']"position="inside">
+            <tt-if="snailmailState.hasDialog">
+                <SnailmailErrorDialogmessageLocalId="message.localId"t-on-dialog-closed="_onDialogClosedSnailmailError"/>
             </t>
         </xpath>
 
         <!--
-            It was decided that the information displayed for snailmail messages
-            has to be different than for standard messages, see task-1907998.
+            Itwasdecidedthattheinformationdisplayedforsnailmailmessages
+            hastobedifferentthanforstandardmessages,seetask-1907998.
         -->
-        <xpath expr="//NotificationPopover" position="replace">
-            <t t-if="message.message_type === 'snailmail'">
-                <SnailmailNotificationPopover messageLocalId="message.localId"/>
+        <xpathexpr="//NotificationPopover"position="replace">
+            <tt-if="message.message_type==='snailmail'">
+                <SnailmailNotificationPopovermessageLocalId="message.localId"/>
             </t>
-            <t t-else="">$0</t>
+            <tt-else="">$0</t>
         </xpath>
     </t>
 

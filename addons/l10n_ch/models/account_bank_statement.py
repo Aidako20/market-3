@@ -1,25 +1,25 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields, api, _
-from flectra.addons.l10n_ch.models.res_bank import _is_l10n_ch_postal
+fromflectraimportmodels,fields,api,_
+fromflectra.addons.l10n_ch.models.res_bankimport_is_l10n_ch_postal
 
-class AccountBankStatementLine(models.Model):
+classAccountBankStatementLine(models.Model):
 
-    _inherit = "account.bank.statement.line"
+    _inherit="account.bank.statement.line"
 
-    def _find_or_create_bank_account(self):
-        if self.company_id.country_id.code in ('CH', 'LI') and _is_l10n_ch_postal(self.account_number):
-            bank_account = self.env['res.partner.bank'].search(
-                [('company_id', '=', self.company_id.id),
-                 ('sanitized_acc_number', 'like', self.account_number + '%'),
-                 ('partner_id', '=', self.partner_id.id)])
-            if not bank_account:
-                bank_account = self.env['res.partner.bank'].create({
-                    'company_id': self.company_id.id,
-                    'acc_number': self.account_number + " " + self.partner_id.name,
-                    'partner_id': self.partner_id.id
+    def_find_or_create_bank_account(self):
+        ifself.company_id.country_id.codein('CH','LI')and_is_l10n_ch_postal(self.account_number):
+            bank_account=self.env['res.partner.bank'].search(
+                [('company_id','=',self.company_id.id),
+                 ('sanitized_acc_number','like',self.account_number+'%'),
+                 ('partner_id','=',self.partner_id.id)])
+            ifnotbank_account:
+                bank_account=self.env['res.partner.bank'].create({
+                    'company_id':self.company_id.id,
+                    'acc_number':self.account_number+""+self.partner_id.name,
+                    'partner_id':self.partner_id.id
                 })
-            return bank_account
+            returnbank_account
         else:
-            super(AccountBankStatementLine, self)._find_or_create_bank_account() 
+            super(AccountBankStatementLine,self)._find_or_create_bank_account()

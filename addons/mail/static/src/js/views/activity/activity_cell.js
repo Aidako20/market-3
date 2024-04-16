@@ -1,42 +1,42 @@
-flectra.define("mail.ActivityCell", function (require) {
-    "use strict";
+flectra.define("mail.ActivityCell",function(require){
+    "usestrict";
 
     require("mail.Activity");
-    const field_registry = require('web.field_registry');
+    constfield_registry=require('web.field_registry');
 
-    const KanbanActivity = field_registry.get('kanban_activity');
+    constKanbanActivity=field_registry.get('kanban_activity');
 
-    const ActivityCell = KanbanActivity.extend({
+    constActivityCell=KanbanActivity.extend({
         /**
-         * @override
-         * @private
+         *@override
+         *@private
          */
-        _render() {
-            // replace clock by closest deadline
-            const $date = $('<div class="o_closest_deadline">');
-            const date = moment(this.record.data.closest_deadline).toDate();
-            // To remove year only if current year
-            if (moment().year() === moment(date).year()) {
-                $date.text(date.toLocaleDateString(moment().locale(), {
-                    day: 'numeric', month: 'short'
+        _render(){
+            //replaceclockbyclosestdeadline
+            const$date=$('<divclass="o_closest_deadline">');
+            constdate=moment(this.record.data.closest_deadline).toDate();
+            //Toremoveyearonlyifcurrentyear
+            if(moment().year()===moment(date).year()){
+                $date.text(date.toLocaleDateString(moment().locale(),{
+                    day:'numeric',month:'short'
                 }));
-            } else {
+            }else{
                 $date.text(moment(date).format('ll'));
             }
             this.$('a').html($date);
-            if (this.record.data.activity_ids.res_ids.length > 1) {
-                this.$('a').append($('<span>', {
-                    class: 'badge badge-light badge-pill border-0 ' + this.record.data.activity_state,
-                    text: this.record.data.activity_ids.res_ids.length,
+            if(this.record.data.activity_ids.res_ids.length>1){
+                this.$('a').append($('<span>',{
+                    class:'badgebadge-lightbadge-pillborder-0'+this.record.data.activity_state,
+                    text:this.record.data.activity_ids.res_ids.length,
                 }));
             }
-            if (this.$el.hasClass('show')) {
-                // note: this part of the rendering might be asynchronous
+            if(this.$el.hasClass('show')){
+                //note:thispartoftherenderingmightbeasynchronous
                 this._renderDropdown();
             }
         }
     });
 
-    return ActivityCell;
+    returnActivityCell;
 
 });

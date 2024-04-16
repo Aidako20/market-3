@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<templates id="template" xml:space="preserve">
-    <t t-name="InventoryLines.Buttons">
-        <button type="button" class='btn btn-primary o_button_validate_inventory'>
-            Validate Inventory
+<?xmlversion="1.0"encoding="utf-8"?>
+<templatesid="template"xml:space="preserve">
+    <tt-name="InventoryLines.Buttons">
+        <buttontype="button"class='btnbtn-primaryo_button_validate_inventory'>
+            ValidateInventory
         </button>
     </t>
 </templates>

@@ -1,19 +1,19 @@
-flectra.define('im_livechat.ImLivechatChannelFormView', function (require) {
-"use strict";
+flectra.define('im_livechat.ImLivechatChannelFormView',function(require){
+"usestrict";
 
-const ImLivechatChannelFormController = require('im_livechat.ImLivechatChannelFormController');
+constImLivechatChannelFormController=require('im_livechat.ImLivechatChannelFormController');
 
-const FormView = require('web.FormView');
-const viewRegistry = require('web.view_registry');
+constFormView=require('web.FormView');
+constviewRegistry=require('web.view_registry');
 
-const ImLivechatChannelFormView = FormView.extend({
-    config: Object.assign({}, FormView.prototype.config, {
-        Controller: ImLivechatChannelFormController,
+constImLivechatChannelFormView=FormView.extend({
+    config:Object.assign({},FormView.prototype.config,{
+        Controller:ImLivechatChannelFormController,
     }),
 });
 
-viewRegistry.add('im_livechat_channel_form_view_js', ImLivechatChannelFormView);
+viewRegistry.add('im_livechat_channel_form_view_js',ImLivechatChannelFormView);
 
-return ImLivechatChannelFormView;
+returnImLivechatChannelFormView;
 
 });

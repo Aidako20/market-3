@@ -1,64 +1,64 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, api, _
+fromflectraimportfields,models,api,_
 
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'
+classResCompany(models.Model):
+    _inherit='res.company'
 
-    l10n_fr_closing_sequence_id = fields.Many2one('ir.sequence', 'Sequence to use to build sale closings', readonly=True)
-    siret = fields.Char(related='partner_id.siret', string='SIRET', size=14, readonly=False)
-    ape = fields.Char(string='APE')
-
-    @api.model
-    def _get_unalterable_country(self):
-        return ['FR', 'MF', 'MQ', 'NC', 'PF', 'RE', 'GF', 'GP', 'TF'] # These codes correspond to France and DOM-TOM.
-
-    def _is_vat_french(self):
-        return self.vat and self.vat.startswith('FR') and len(self.vat) == 13
-
-    def _is_accounting_unalterable(self):
-        if not self.vat and not self.country_id:
-            return False
-        return self.country_id and self.country_id.code in self._get_unalterable_country()
+    l10n_fr_closing_sequence_id=fields.Many2one('ir.sequence','Sequencetousetobuildsaleclosings',readonly=True)
+    siret=fields.Char(related='partner_id.siret',string='SIRET',size=14,readonly=False)
+    ape=fields.Char(string='APE')
 
     @api.model
-    def create(self, vals):
-        company = super(ResCompany, self).create(vals)
-        #when creating a new french company, create the securisation sequence as well
-        if company._is_accounting_unalterable():
-            sequence_fields = ['l10n_fr_closing_sequence_id']
+    def_get_unalterable_country(self):
+        return['FR','MF','MQ','NC','PF','RE','GF','GP','TF']#ThesecodescorrespondtoFranceandDOM-TOM.
+
+    def_is_vat_french(self):
+        returnself.vatandself.vat.startswith('FR')andlen(self.vat)==13
+
+    def_is_accounting_unalterable(self):
+        ifnotself.vatandnotself.country_id:
+            returnFalse
+        returnself.country_idandself.country_id.codeinself._get_unalterable_country()
+
+    @api.model
+    defcreate(self,vals):
+        company=super(ResCompany,self).create(vals)
+        #whencreatinganewfrenchcompany,createthesecurisationsequenceaswell
+        ifcompany._is_accounting_unalterable():
+            sequence_fields=['l10n_fr_closing_sequence_id']
             company._create_secure_sequence(sequence_fields)
-        return company
+        returncompany
 
-    def write(self, vals):
-        res = super(ResCompany, self).write(vals)
-        #if country changed to fr, create the securisation sequence
-        for company in self:
-            if company._is_accounting_unalterable():
-                sequence_fields = ['l10n_fr_closing_sequence_id']
+    defwrite(self,vals):
+        res=super(ResCompany,self).write(vals)
+        #ifcountrychangedtofr,createthesecurisationsequence
+        forcompanyinself:
+            ifcompany._is_accounting_unalterable():
+                sequence_fields=['l10n_fr_closing_sequence_id']
                 company._create_secure_sequence(sequence_fields)
-        return res
+        returnres
 
-    def _create_secure_sequence(self, sequence_fields):
-        """This function creates a no_gap sequence on each company in self that will ensure
-        a unique number is given to all posted account.move in such a way that we can always
-        find the previous move of a journal entry on a specific journal.
+    def_create_secure_sequence(self,sequence_fields):
+        """Thisfunctioncreatesano_gapsequenceoneachcompanyinselfthatwillensure
+        auniquenumberisgiventoallpostedaccount.moveinsuchawaythatwecanalways
+        findthepreviousmoveofajournalentryonaspecificjournal.
         """
-        for company in self:
-            vals_write = {}
-            for seq_field in sequence_fields:
-                if not company[seq_field]:
-                    vals = {
-                        'name': _('Securisation of %s - %s') % (seq_field, company.name),
-                        'code': 'FRSECURE%s-%s' % (company.id, seq_field),
-                        'implementation': 'no_gap',
-                        'prefix': '',
-                        'suffix': '',
-                        'padding': 0,
-                        'company_id': company.id}
-                    seq = self.env['ir.sequence'].create(vals)
-                    vals_write[seq_field] = seq.id
-            if vals_write:
+        forcompanyinself:
+            vals_write={}
+            forseq_fieldinsequence_fields:
+                ifnotcompany[seq_field]:
+                    vals={
+                        'name':_('Securisationof%s-%s')%(seq_field,company.name),
+                        'code':'FRSECURE%s-%s'%(company.id,seq_field),
+                        'implementation':'no_gap',
+                        'prefix':'',
+                        'suffix':'',
+                        'padding':0,
+                        'company_id':company.id}
+                    seq=self.env['ir.sequence'].create(vals)
+                    vals_write[seq_field]=seq.id
+            ifvals_write:
                 company.write(vals_write)

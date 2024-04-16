@@ -1,17 +1,17 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class ResCompany(models.Model):
-    _inherit = "res.company"
+classResCompany(models.Model):
+    _inherit="res.company"
 
-    def _get_social_media_links(self):
+    def_get_social_media_links(self):
         self.ensure_one()
-        return {
-            'social_facebook': self.social_facebook,
-            'social_linkedin': self.social_linkedin,
-            'social_twitter': self.social_twitter,
-            'social_instagram': self.social_instagram
+        return{
+            'social_facebook':self.social_facebook,
+            'social_linkedin':self.social_linkedin,
+            'social_twitter':self.social_twitter,
+            'social_instagram':self.social_instagram
         }

@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="snippet_options" inherit_id="website.snippet_options" name="Wishlist Snippet Options">
-    <xpath expr="." position="inside">
-        <div data-selector="#wrapwrap > header"
+<templateid="snippet_options"inherit_id="website.snippet_options"name="WishlistSnippetOptions">
+    <xpathexpr="."position="inside">
+        <divdata-selector="#wrapwrap>header"
             data-no-check="true"
             groups="website.group_website_designer">
-            <we-checkbox string="Show Empty Wishlist"
+            <we-checkboxstring="ShowEmptyWishlist"
                          data-customize-website-views="website_sale_wishlist.header_hide_empty_wishlist_link|"
                          data-no-preview="true"
                          data-reload="/"/>

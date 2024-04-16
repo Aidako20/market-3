@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResCompany(models.Model):
-    _inherit = "res.company"
-    _check_company_auto = True
+classResCompany(models.Model):
+    _inherit="res.company"
+    _check_company_auto=True
 
-    sale_order_template_id = fields.Many2one(
-        "sale.order.template", string="Default Sale Template",
-        domain="['|', ('company_id', '=', False), ('company_id', '=', id)]",
+    sale_order_template_id=fields.Many2one(
+        "sale.order.template",string="DefaultSaleTemplate",
+        domain="['|',('company_id','=',False),('company_id','=',id)]",
         check_company=True,
     )

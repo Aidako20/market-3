@@ -1,12 +1,12 @@
-flectra.define('website_slides_forum.editor', function (require) {
-"use strict";
+flectra.define('website_slides_forum.editor',function(require){
+"usestrict";
 
-var core = require('web.core');
-var QWeb = core.qweb;
-var WebsiteNewMenu = require('website.newMenu');
+varcore=require('web.core');
+varQWeb=core.qweb;
+varWebsiteNewMenu=require('website.newMenu');
 
  WebsiteNewMenu.include({
-    xmlDependencies: WebsiteNewMenu.prototype.xmlDependencies.concat(
+    xmlDependencies:WebsiteNewMenu.prototype.xmlDependencies.concat(
         ['/website_slides_forum/static/src/xml/website_slides_forum_channel.xml']
     ),
 });

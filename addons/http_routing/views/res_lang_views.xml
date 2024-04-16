@@ -1,23 +1,23 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-    <record id="res_lang_form_inherit_model" model="ir.ui.view">
-        <field name="name">res.lang.form.http_routing.inherit</field>
-        <field name="model">res.lang</field>
-        <field name="inherit_id" ref="base.res_lang_form"/>
-        <field name="arch" type="xml">
-            <field name="url_code" position="attributes">
-                <attribute name="invisible">0</attribute>
+    <recordid="res_lang_form_inherit_model"model="ir.ui.view">
+        <fieldname="name">res.lang.form.http_routing.inherit</field>
+        <fieldname="model">res.lang</field>
+        <fieldname="inherit_id"ref="base.res_lang_form"/>
+        <fieldname="arch"type="xml">
+            <fieldname="url_code"position="attributes">
+                <attributename="invisible">0</attribute>
             </field>
         </field>
     </record>
 
-    <record id="res_lang_tree_inherit_model" model="ir.ui.view">
-        <field name="name">res.lang.tree.model.inherit</field>
-        <field name="model">res.lang</field>
-        <field name="inherit_id" ref="base.res_lang_tree"/>
-        <field name="arch" type="xml">
-            <field name="url_code" position="attributes">
-                <attribute name="invisible">0</attribute>
+    <recordid="res_lang_tree_inherit_model"model="ir.ui.view">
+        <fieldname="name">res.lang.tree.model.inherit</field>
+        <fieldname="model">res.lang</field>
+        <fieldname="inherit_id"ref="base.res_lang_tree"/>
+        <fieldname="arch"type="xml">
+            <fieldname="url_code"position="attributes">
+                <attributename="invisible">0</attribute>
             </field>
         </field>
     </record>

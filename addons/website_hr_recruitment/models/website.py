@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, _
-from flectra.addons.http_routing.models.ir_http import url_for
+fromflectraimportmodels,_
+fromflectra.addons.http_routing.models.ir_httpimporturl_for
 
 
-class Website(models.Model):
-    _inherit = "website"
+classWebsite(models.Model):
+    _inherit="website"
 
-    def get_suggested_controllers(self):
-        suggested_controllers = super(Website, self).get_suggested_controllers()
-        suggested_controllers.append((_('Jobs'), url_for('/jobs'), 'website_hr_recruitment'))
-        return suggested_controllers
+    defget_suggested_controllers(self):
+        suggested_controllers=super(Website,self).get_suggested_controllers()
+        suggested_controllers.append((_('Jobs'),url_for('/jobs'),'website_hr_recruitment'))
+        returnsuggested_controllers

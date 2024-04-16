@@ -1,297 +1,297 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-# Author: Leonardo Pistone
-# Copyright 2015 Camptocamp SA
+#Author:LeonardoPistone
+#Copyright2015CamptocampSA
 
-from flectra.addons.stock.tests.common2 import TestStockCommon
-from flectra.exceptions import UserError
-from flectra.tests.common import Form
+fromflectra.addons.stock.tests.common2importTestStockCommon
+fromflectra.exceptionsimportUserError
+fromflectra.tests.commonimportForm
 
 
-class TestVirtualAvailable(TestStockCommon):
-    def setUp(self):
-        super(TestVirtualAvailable, self).setUp()
+classTestVirtualAvailable(TestStockCommon):
+    defsetUp(self):
+        super(TestVirtualAvailable,self).setUp()
 
-        # Make `product3` a storable product for this test. Indeed, creating quants
-        # and playing with owners is not possible for consumables.
-        self.product_3.type = 'product'
-
-        self.env['stock.quant'].create({
-            'product_id': self.product_3.id,
-            'location_id': self.env.ref('stock.stock_location_stock').id,
-            'quantity': 30.0})
+        #Make`product3`astorableproductforthistest.Indeed,creatingquants
+        #andplayingwithownersisnotpossibleforconsumables.
+        self.product_3.type='product'
 
         self.env['stock.quant'].create({
-            'product_id': self.product_3.id,
-            'location_id': self.env.ref('stock.stock_location_stock').id,
-            'quantity': 10.0,
-            'owner_id': self.user_stock_user.partner_id.id})
+            'product_id':self.product_3.id,
+            'location_id':self.env.ref('stock.stock_location_stock').id,
+            'quantity':30.0})
 
-        self.picking_out = self.env['stock.picking'].create({
-            'picking_type_id': self.ref('stock.picking_type_out'),
-            'location_id': self.env.ref('stock.stock_location_stock').id,
-            'location_dest_id': self.env.ref('stock.stock_location_customers').id})
+        self.env['stock.quant'].create({
+            'product_id':self.product_3.id,
+            'location_id':self.env.ref('stock.stock_location_stock').id,
+            'quantity':10.0,
+            'owner_id':self.user_stock_user.partner_id.id})
+
+        self.picking_out=self.env['stock.picking'].create({
+            'picking_type_id':self.ref('stock.picking_type_out'),
+            'location_id':self.env.ref('stock.stock_location_stock').id,
+            'location_dest_id':self.env.ref('stock.stock_location_customers').id})
         self.env['stock.move'].create({
-            'name': 'a move',
-            'product_id': self.product_3.id,
-            'product_uom_qty': 3.0,
-            'product_uom': self.product_3.uom_id.id,
-            'picking_id': self.picking_out.id,
-            'location_id': self.env.ref('stock.stock_location_stock').id,
-            'location_dest_id': self.env.ref('stock.stock_location_customers').id})
+            'name':'amove',
+            'product_id':self.product_3.id,
+            'product_uom_qty':3.0,
+            'product_uom':self.product_3.uom_id.id,
+            'picking_id':self.picking_out.id,
+            'location_id':self.env.ref('stock.stock_location_stock').id,
+            'location_dest_id':self.env.ref('stock.stock_location_customers').id})
 
-        self.picking_out_2 = self.env['stock.picking'].create({
-            'picking_type_id': self.ref('stock.picking_type_out'),
-            'location_id': self.env.ref('stock.stock_location_stock').id,
-            'location_dest_id': self.env.ref('stock.stock_location_customers').id})
+        self.picking_out_2=self.env['stock.picking'].create({
+            'picking_type_id':self.ref('stock.picking_type_out'),
+            'location_id':self.env.ref('stock.stock_location_stock').id,
+            'location_dest_id':self.env.ref('stock.stock_location_customers').id})
         self.env['stock.move'].create({
-            'restrict_partner_id': self.user_stock_user.partner_id.id,
-            'name': 'another move',
-            'product_id': self.product_3.id,
-            'product_uom_qty': 5.0,
-            'product_uom': self.product_3.uom_id.id,
-            'picking_id': self.picking_out_2.id,
-            'location_id': self.env.ref('stock.stock_location_stock').id,
-            'location_dest_id': self.env.ref('stock.stock_location_customers').id})
+            'restrict_partner_id':self.user_stock_user.partner_id.id,
+            'name':'anothermove',
+            'product_id':self.product_3.id,
+            'product_uom_qty':5.0,
+            'product_uom':self.product_3.uom_id.id,
+            'picking_id':self.picking_out_2.id,
+            'location_id':self.env.ref('stock.stock_location_stock').id,
+            'location_dest_id':self.env.ref('stock.stock_location_customers').id})
 
-    def test_without_owner(self):
-        self.assertAlmostEqual(40.0, self.product_3.virtual_available)
+    deftest_without_owner(self):
+        self.assertAlmostEqual(40.0,self.product_3.virtual_available)
         self.picking_out.action_assign()
         self.picking_out_2.action_assign()
-        self.assertAlmostEqual(32.0, self.product_3.virtual_available)
+        self.assertAlmostEqual(32.0,self.product_3.virtual_available)
 
-    def test_with_owner(self):
-        prod_context = self.product_3.with_context(owner_id=self.user_stock_user.partner_id.id)
-        self.assertAlmostEqual(10.0, prod_context.virtual_available)
+    deftest_with_owner(self):
+        prod_context=self.product_3.with_context(owner_id=self.user_stock_user.partner_id.id)
+        self.assertAlmostEqual(10.0,prod_context.virtual_available)
         self.picking_out.action_assign()
         self.picking_out_2.action_assign()
-        self.assertAlmostEqual(5.0, prod_context.virtual_available)
+        self.assertAlmostEqual(5.0,prod_context.virtual_available)
 
-    def test_free_quantity(self):
-        """ Test the value of product.free_qty. Free_qty = qty_on_hand - qty_reserved"""
-        self.assertAlmostEqual(40.0, self.product_3.free_qty)
+    deftest_free_quantity(self):
+        """Testthevalueofproduct.free_qty.Free_qty=qty_on_hand-qty_reserved"""
+        self.assertAlmostEqual(40.0,self.product_3.free_qty)
         self.picking_out.action_confirm()
         self.picking_out_2.action_confirm()
-        # No reservation so free_qty is unchanged
-        self.assertAlmostEqual(40.0, self.product_3.free_qty)
+        #Noreservationsofree_qtyisunchanged
+        self.assertAlmostEqual(40.0,self.product_3.free_qty)
         self.picking_out.action_assign()
         self.picking_out_2.action_assign()
-        # 8 units are now reserved
-        self.assertAlmostEqual(32.0, self.product_3.free_qty)
+        #8unitsarenowreserved
+        self.assertAlmostEqual(32.0,self.product_3.free_qty)
         self.picking_out.do_unreserve()
         self.picking_out_2.do_unreserve()
-        # 8 units are available again
-        self.assertAlmostEqual(40.0, self.product_3.free_qty)
+        #8unitsareavailableagain
+        self.assertAlmostEqual(40.0,self.product_3.free_qty)
 
-    def test_archive_product_1(self):
-        """`qty_available` and `virtual_available` are computed on archived products"""
+    deftest_archive_product_1(self):
+        """`qty_available`and`virtual_available`arecomputedonarchivedproducts"""
         self.assertTrue(self.product_3.active)
-        self.assertAlmostEqual(40.0, self.product_3.qty_available)
-        self.assertAlmostEqual(40.0, self.product_3.virtual_available)
-        self.product_3.active = False
-        self.assertAlmostEqual(40.0, self.product_3.qty_available)
-        self.assertAlmostEqual(40.0, self.product_3.virtual_available)
+        self.assertAlmostEqual(40.0,self.product_3.qty_available)
+        self.assertAlmostEqual(40.0,self.product_3.virtual_available)
+        self.product_3.active=False
+        self.assertAlmostEqual(40.0,self.product_3.qty_available)
+        self.assertAlmostEqual(40.0,self.product_3.virtual_available)
 
-    def test_archive_product_2(self):
-        """Archiving a product should archive its reordering rules"""
+    deftest_archive_product_2(self):
+        """Archivingaproductshouldarchiveitsreorderingrules"""
         self.assertTrue(self.product_3.active)
-        orderpoint_form = Form(self.env['stock.warehouse.orderpoint'])
-        orderpoint_form.product_id = self.product_3
-        orderpoint_form.location_id = self.env.ref('stock.stock_location_stock')
-        orderpoint_form.product_min_qty = 0.0
-        orderpoint_form.product_max_qty = 5.0
-        orderpoint = orderpoint_form.save()
+        orderpoint_form=Form(self.env['stock.warehouse.orderpoint'])
+        orderpoint_form.product_id=self.product_3
+        orderpoint_form.location_id=self.env.ref('stock.stock_location_stock')
+        orderpoint_form.product_min_qty=0.0
+        orderpoint_form.product_max_qty=5.0
+        orderpoint=orderpoint_form.save()
         self.assertTrue(orderpoint.active)
-        self.product_3.active = False
+        self.product_3.active=False
         self.assertFalse(orderpoint.active)
 
-    def test_change_product_company(self):
-        """ Checks we can't change the product's company if this product has
-        quant in another company. """
-        company1 = self.env.ref('base.main_company')
-        company2 = self.env['res.company'].create({'name': 'Second Company'})
-        product = self.env['product.product'].create({
-            'name': 'Product [TEST - Change Company]',
-            'type': 'product',
+    deftest_change_product_company(self):
+        """Checkswecan'tchangetheproduct'scompanyifthisproducthas
+        quantinanothercompany."""
+        company1=self.env.ref('base.main_company')
+        company2=self.env['res.company'].create({'name':'SecondCompany'})
+        product=self.env['product.product'].create({
+            'name':'Product[TEST-ChangeCompany]',
+            'type':'product',
         })
-        # Creates a quant for productA in the first company.
+        #CreatesaquantforproductAinthefirstcompany.
         self.env['stock.quant'].create({
-            'product_id': product.id,
-            'product_uom_id': self.uom_unit.id,
-            'location_id': self.location_1.id,
-            'quantity': 7,
-            'reserved_quantity': 0,
+            'product_id':product.id,
+            'product_uom_id':self.uom_unit.id,
+            'location_id':self.location_1.id,
+            'quantity':7,
+            'reserved_quantity':0,
         })
-        # Assigns a company: should be OK for company1 but should raise an error for company2.
-        product.company_id = company1.id
-        with self.assertRaises(UserError):
-            product.company_id = company2.id
-        # Checks we can assing company2 for the product once there is no more quant for it.
-        quant = self.env['stock.quant'].search([('product_id', '=', product.id)])
-        quant.quantity = 0
+        #Assignsacompany:shouldbeOKforcompany1butshouldraiseanerrorforcompany2.
+        product.company_id=company1.id
+        withself.assertRaises(UserError):
+            product.company_id=company2.id
+        #Checkswecanassingcompany2fortheproductoncethereisnomorequantforit.
+        quant=self.env['stock.quant'].search([('product_id','=',product.id)])
+        quant.quantity=0
         self.env['stock.quant']._unlink_zero_quants()
-        product.company_id = company2.id  # Should work this time.
+        product.company_id=company2.id #Shouldworkthistime.
 
-    def test_change_product_company_02(self):
-        """ Checks we can't change the product's company if this product has
-        stock move line in another company. """
-        company1 = self.env.ref('base.main_company')
-        company2 = self.env['res.company'].create({'name': 'Second Company'})
-        product = self.env['product.product'].create({
-            'name': 'Product [TEST - Change Company]',
-            'type': 'consu',
+    deftest_change_product_company_02(self):
+        """Checkswecan'tchangetheproduct'scompanyifthisproducthas
+        stockmovelineinanothercompany."""
+        company1=self.env.ref('base.main_company')
+        company2=self.env['res.company'].create({'name':'SecondCompany'})
+        product=self.env['product.product'].create({
+            'name':'Product[TEST-ChangeCompany]',
+            'type':'consu',
         })
-        picking = self.env['stock.picking'].create({
-            'location_id': self.env.ref('stock.stock_location_customers').id,
-            'location_dest_id': self.env.ref('stock.stock_location_stock').id,
-            'picking_type_id': self.ref('stock.picking_type_in'),
+        picking=self.env['stock.picking'].create({
+            'location_id':self.env.ref('stock.stock_location_customers').id,
+            'location_dest_id':self.env.ref('stock.stock_location_stock').id,
+            'picking_type_id':self.ref('stock.picking_type_in'),
         })
         self.env['stock.move'].create({
-            'name': 'test',
-            'location_id': self.env.ref('stock.stock_location_customers').id,
-            'location_dest_id': self.env.ref('stock.stock_location_stock').id,
-            'product_id': product.id,
-            'product_uom': product.uom_id.id,
-            'product_uom_qty': 1,
-            'picking_id': picking.id,
+            'name':'test',
+            'location_id':self.env.ref('stock.stock_location_customers').id,
+            'location_dest_id':self.env.ref('stock.stock_location_stock').id,
+            'product_id':product.id,
+            'product_uom':product.uom_id.id,
+            'product_uom_qty':1,
+            'picking_id':picking.id,
         })
         picking.action_confirm()
-        wizard_data = picking.button_validate()
-        wizard = Form(self.env[wizard_data['res_model']].with_context(wizard_data['context'])).save()
+        wizard_data=picking.button_validate()
+        wizard=Form(self.env[wizard_data['res_model']].with_context(wizard_data['context'])).save()
         wizard.process()
 
-        product.company_id = company1.id
-        with self.assertRaises(UserError):
-            product.company_id = company2.id
+        product.company_id=company1.id
+        withself.assertRaises(UserError):
+            product.company_id=company2.id
 
-    def test_change_product_company_exclude_vendor_and_customer_location(self):
-        """ Checks we can change product company where only exist single company
-        and exist quant in vendor/customer location"""
-        company1 = self.env.ref('base.main_company')
-        customer_location = self.env.ref('stock.stock_location_customers')
-        supplier_location = self.env.ref('stock.stock_location_suppliers')
-        product = self.env['product.product'].create({
-            'name': 'Product Single Company',
-            'type': 'product',
+    deftest_change_product_company_exclude_vendor_and_customer_location(self):
+        """Checkswecanchangeproductcompanywhereonlyexistsinglecompany
+        andexistquantinvendor/customerlocation"""
+        company1=self.env.ref('base.main_company')
+        customer_location=self.env.ref('stock.stock_location_customers')
+        supplier_location=self.env.ref('stock.stock_location_suppliers')
+        product=self.env['product.product'].create({
+            'name':'ProductSingleCompany',
+            'type':'product',
         })
-        # Creates a quant for company 1.
+        #Createsaquantforcompany1.
         self.env['stock.quant'].create({
-            'product_id': product.id,
-            'product_uom_id': self.uom_unit.id,
-            'location_id': self.location_1.id,
-            'quantity': 5,
+            'product_id':product.id,
+            'product_uom_id':self.uom_unit.id,
+            'location_id':self.location_1.id,
+            'quantity':5,
         })
-        # Creates a quant for vendor location.
+        #Createsaquantforvendorlocation.
         self.env['stock.quant'].create({
-            'product_id': product.id,
-            'product_uom_id': self.uom_unit.id,
-            'location_id': supplier_location.id,
-            'quantity': -15,
+            'product_id':product.id,
+            'product_uom_id':self.uom_unit.id,
+            'location_id':supplier_location.id,
+            'quantity':-15,
         })
-        # Creates a quant for customer location.
+        #Createsaquantforcustomerlocation.
         self.env['stock.quant'].create({
-            'product_id': product.id,
-            'product_uom_id': self.uom_unit.id,
-            'location_id': customer_location.id,
-            'quantity': 10,
+            'product_id':product.id,
+            'product_uom_id':self.uom_unit.id,
+            'location_id':customer_location.id,
+            'quantity':10,
         })
-        # Assigns a company: should be ok because only exist one company (exclude vendor and customer location)
-        product.company_id = company1.id
+        #Assignsacompany:shouldbeokbecauseonlyexistonecompany(excludevendorandcustomerlocation)
+        product.company_id=company1.id
 
-        # Reset product company to empty
-        product.company_id = False
-        company2 = self.env['res.company'].create({'name': 'Second Company'})
-        # Assigns to another company: should be not okay because exist quants in defferent company (exclude vendor and customer location)
-        with self.assertRaises(UserError):
-            product.company_id = company2.id
+        #Resetproductcompanytoempty
+        product.company_id=False
+        company2=self.env['res.company'].create({'name':'SecondCompany'})
+        #Assignstoanothercompany:shouldbenotokaybecauseexistquantsindefferentcompany(excludevendorandcustomerlocation)
+        withself.assertRaises(UserError):
+            product.company_id=company2.id
 
-    def test_search_qty_available(self):
-        product = self.env['product.product'].create({
-            'name': 'Brand new product',
-            'type': 'product',
+    deftest_search_qty_available(self):
+        product=self.env['product.product'].create({
+            'name':'Brandnewproduct',
+            'type':'product',
         })
-        result = self.env['product.product'].search([
-            ('qty_available', '=', 0),
-            ('id', 'in', product.ids),
+        result=self.env['product.product'].search([
+            ('qty_available','=',0),
+            ('id','in',product.ids),
         ])
-        self.assertEqual(product, result)
+        self.assertEqual(product,result)
 
-    def test_search_product_template(self):
+    deftest_search_product_template(self):
         """
-        Suppose a variant V01 that can not be deleted because it is used by a
-        lot [1]. Then, the variant's template T is changed: we add a dynamic
-        attribute. Because of [1], V01 is archived. This test ensures that
-        `name_search` still finds T.
-        Then, we create a new variant V02 of T. This test also ensures that
-        calling `name_search` with a negative operator will exclude T from the
+        SupposeavariantV01thatcannotbedeletedbecauseitisusedbya
+        lot[1].Then,thevariant'stemplateTischanged:weaddadynamic
+        attribute.Becauseof[1],V01isarchived.Thistestensuresthat
+        `name_search`stillfindsT.
+        Then,wecreateanewvariantV02ofT.Thistestalsoensuresthat
+        calling`name_search`withanegativeoperatorwillexcludeTfromthe
         result.
         """
-        template = self.env['product.template'].create({
-            'name': 'Super Product',
+        template=self.env['product.template'].create({
+            'name':'SuperProduct',
         })
-        product01 = template.product_variant_id
+        product01=template.product_variant_id
 
         self.env['stock.production.lot'].create({
-            'name': 'lot1',
-            'product_id': product01.id,
-            'company_id': self.env.company.id,
+            'name':'lot1',
+            'product_id':product01.id,
+            'company_id':self.env.company.id,
         })
 
-        product_attribute = self.env['product.attribute'].create({
-            'name': 'PA',
-            'create_variant': 'dynamic'
+        product_attribute=self.env['product.attribute'].create({
+            'name':'PA',
+            'create_variant':'dynamic'
         })
 
         self.env['product.attribute.value'].create([{
-            'name': 'PAV' + str(i),
-            'attribute_id': product_attribute.id
-        } for i in range(2)])
+            'name':'PAV'+str(i),
+            'attribute_id':product_attribute.id
+        }foriinrange(2)])
 
-        tmpl_attr_lines = self.env['product.template.attribute.line'].create({
-            'attribute_id': product_attribute.id,
-            'product_tmpl_id': product01.product_tmpl_id.id,
-            'value_ids': [(6, 0, product_attribute.value_ids.ids)],
+        tmpl_attr_lines=self.env['product.template.attribute.line'].create({
+            'attribute_id':product_attribute.id,
+            'product_tmpl_id':product01.product_tmpl_id.id,
+            'value_ids':[(6,0,product_attribute.value_ids.ids)],
         })
 
         self.assertFalse(product01.active)
         self.assertTrue(template.active)
         self.assertFalse(template.product_variant_ids)
 
-        res = self.env['product.template'].name_search(name='super', operator='ilike')
-        res_ids = [r[0] for r in res]
-        self.assertIn(template.id, res_ids)
+        res=self.env['product.template'].name_search(name='super',operator='ilike')
+        res_ids=[r[0]forrinres]
+        self.assertIn(template.id,res_ids)
 
-        product02 = self.env['product.product'].create({
-            'default_code': '123',
-            'product_tmpl_id': template.id,
-            'product_template_attribute_value_ids': [(6, 0, tmpl_attr_lines.product_template_value_ids[0].ids)]
+        product02=self.env['product.product'].create({
+            'default_code':'123',
+            'product_tmpl_id':template.id,
+            'product_template_attribute_value_ids':[(6,0,tmpl_attr_lines.product_template_value_ids[0].ids)]
         })
 
         self.assertFalse(product01.active)
         self.assertTrue(product02.active)
         self.assertTrue(template)
-        self.assertEqual(template.product_variant_ids, product02)
+        self.assertEqual(template.product_variant_ids,product02)
 
-        res = self.env['product.template'].name_search(name='123', operator='not ilike')
-        res_ids = [r[0] for r in res]
-        self.assertNotIn(template.id, res_ids)
+        res=self.env['product.template'].name_search(name='123',operator='notilike')
+        res_ids=[r[0]forrinres]
+        self.assertNotIn(template.id,res_ids)
 
-    def test_change_type_tracked_product(self):
-        product = self.env['product.template'].create({
-            'name': 'Brand new product',
-            'type': 'product',
-            'tracking': 'serial',
+    deftest_change_type_tracked_product(self):
+        product=self.env['product.template'].create({
+            'name':'Brandnewproduct',
+            'type':'product',
+            'tracking':'serial',
         })
-        product_form = Form(product)
-        product_form.type = 'service'
-        product = product_form.save()
-        self.assertEqual(product.tracking, 'none')
+        product_form=Form(product)
+        product_form.type='service'
+        product=product_form.save()
+        self.assertEqual(product.tracking,'none')
 
-        product.type = 'product'
-        product.tracking = 'serial'
-        self.assertEqual(product.tracking, 'serial')
-        product_form = Form(product.product_variant_id)
-        product_form.type = 'service'
-        product = product_form.save()
-        self.assertEqual(product.tracking, 'none')
+        product.type='product'
+        product.tracking='serial'
+        self.assertEqual(product.tracking,'serial')
+        product_form=Form(product.product_variant_id)
+        product_form.type='service'
+        product=product_form.save()
+        self.assertEqual(product.tracking,'none')

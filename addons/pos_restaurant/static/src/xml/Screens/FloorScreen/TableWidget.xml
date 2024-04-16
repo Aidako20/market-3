@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="TableWidget" owl="1">
-        <div t-if="!props.isSelected" class="table" t-on-click.stop="trigger('select-table', props.table)">
-            <span class="table-cover" t-att-class="{ full: fill >= 1 }"></span>
-            <span t-att-class="orderCountClass" t-att-hidden="orderCount === 0">
-                <t t-esc="orderCount" />
+    <tt-name="TableWidget"owl="1">
+        <divt-if="!props.isSelected"class="table"t-on-click.stop="trigger('select-table',props.table)">
+            <spanclass="table-cover"t-att-class="{full:fill>=1}"></span>
+            <spant-att-class="orderCountClass"t-att-hidden="orderCount===0">
+                <tt-esc="orderCount"/>
             </span>
-            <span class="label">
-                <t t-esc="props.table.name" />
+            <spanclass="label">
+                <tt-esc="props.table.name"/>
             </span>
-            <span class="table-seats">
-                <t t-esc="props.table.seats" />
+            <spanclass="table-seats">
+                <tt-esc="props.table.seats"/>
             </span>
         </div>
     </t>

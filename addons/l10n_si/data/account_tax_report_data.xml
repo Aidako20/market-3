@@ -1,203 +1,203 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="tax_report" model="account.tax.report">
-        <field name="name">Tax Report</field>
-        <field name="country_id" ref="base.si"/>
+    <recordid="tax_report"model="account.tax.report">
+        <fieldname="name">TaxReport</field>
+        <fieldname="country_id"ref="base.si"/>
     </record>
 
-	<record id="tax_report_zo_dvd" model="account.tax.report.line">
-        <field name="name">Znesek osnov za DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
+	<recordid="tax_report_zo_dvd"model="account.tax.report.line">
+        <fieldname="name">ZnesekosnovzaDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
     </record>
 
-    <record id="tax_report_zo_dvd_neo" model="account.tax.report.line">
-        <field name="name">Neodbitni DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="tax_report_zo_dvd"/>
+    <recordid="tax_report_zo_dvd_neo"model="account.tax.report.line">
+        <fieldname="name">NeodbitniDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd"/>
     </record>
 
-    <record id="tax_report_zo_dvd_neo_sdtopni" model="account.tax.report.line">
-        <field name="name">Vstopni DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="tax_report_zo_dvd_neo"/>
+    <recordid="tax_report_zo_dvd_neo_sdtopni"model="account.tax.report.line">
+        <fieldname="name">VstopniDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd_neo"/>
     </record>
 
-    <record id="tax_report_zo_dvd_neo_sdtopni_osno" model="account.tax.report.line">
-        <field name="name">Nabave po osnovni stopnji DDV</field>
-        <field name="tag_name">Nabave po osnovni stopnji DDV (Neodbitni)</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="tax_report_zo_dvd_neo_sdtopni"/>
+    <recordid="tax_report_zo_dvd_neo_sdtopni_osno"model="account.tax.report.line">
+        <fieldname="name">NabavepoosnovnistopnjiDDV</field>
+        <fieldname="tag_name">NabavepoosnovnistopnjiDDV(Neodbitni)</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd_neo_sdtopni"/>
     </record>
 
-    <record id="tax_report_zo_dvd_neo_sdtopni_zni" model="account.tax.report.line">
-        <field name="name">Nabave po znižani stopnji DDV</field>
-        <field name="tag_name">Nabave po znižani stopnji DDV (Neodbitni)</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="2"/>
-        <field name="parent_id" ref="tax_report_zo_dvd_neo_sdtopni"/>
+    <recordid="tax_report_zo_dvd_neo_sdtopni_zni"model="account.tax.report.line">
+        <fieldname="name">NabavepoznižanistopnjiDDV</field>
+        <fieldname="tag_name">NabavepoznižanistopnjiDDV(Neodbitni)</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd_neo_sdtopni"/>
     </record>
 
-    <record id="tax_report_zo_dvd_odb" model="account.tax.report.line">
-        <field name="name">Odbitni DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="2"/>
-        <field name="parent_id" ref="tax_report_zo_dvd"/>
+    <recordid="tax_report_zo_dvd_odb"model="account.tax.report.line">
+        <fieldname="name">OdbitniDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd"/>
     </record>
 
-    <record id="tax_report_zo_dvd_odb_izstopni" model="account.tax.report.line">
-        <field name="name">Izstopni DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="tax_report_zo_dvd_odb"/>
+    <recordid="tax_report_zo_dvd_odb_izstopni"model="account.tax.report.line">
+        <fieldname="name">IzstopniDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd_odb"/>
     </record>
 
-    <record id="tax_report_zo_dvd_odb_izstopni_opr" model="account.tax.report.line">
-        <field name="name">Prodaja oproščena DDV</field>
-        <field name="tag_name">Prodaja oproščena DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="tax_report_zo_dvd_odb_izstopni"/>
+    <recordid="tax_report_zo_dvd_odb_izstopni_opr"model="account.tax.report.line">
+        <fieldname="name">ProdajaoproščenaDDV</field>
+        <fieldname="tag_name">ProdajaoproščenaDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd_odb_izstopni"/>
     </record>
 
-    <record id="tax_report_zo_dvd_odb_izstopni_osn" model="account.tax.report.line">
-        <field name="name">Prodaja po osnovni stopnji DDV</field>
-        <field name="tag_name">Prodaja po osnovni stopnji DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="2"/>
-        <field name="parent_id" ref="tax_report_zo_dvd_odb_izstopni"/>
+    <recordid="tax_report_zo_dvd_odb_izstopni_osn"model="account.tax.report.line">
+        <fieldname="name">ProdajapoosnovnistopnjiDDV</field>
+        <fieldname="tag_name">ProdajapoosnovnistopnjiDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd_odb_izstopni"/>
     </record>
 
-    <record id="tax_report_zo_dvd_odb_izstopni_zni" model="account.tax.report.line">
-        <field name="name">Prodaja po znižani stopnji DDV</field>
-        <field name="tag_name">Prodaja po znižani stopnji DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="3"/>
-        <field name="parent_id" ref="tax_report_zo_dvd_odb_izstopni"/>
+    <recordid="tax_report_zo_dvd_odb_izstopni_zni"model="account.tax.report.line">
+        <fieldname="name">ProdajapoznižanistopnjiDDV</field>
+        <fieldname="tag_name">ProdajapoznižanistopnjiDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="3"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd_odb_izstopni"/>
     </record>
 
-    <record id="tax_report_zo_dvd_odb_vstopni" model="account.tax.report.line">
-        <field name="name">Vstopni DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="2"/>
-        <field name="parent_id" ref="tax_report_zo_dvd_odb"/>
+    <recordid="tax_report_zo_dvd_odb_vstopni"model="account.tax.report.line">
+        <fieldname="name">VstopniDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd_odb"/>
     </record>
 
-    <record id="tax_report_zo_dvd_odb_vstopni_opr" model="account.tax.report.line">
-        <field name="name">Nabave oproščene DDV</field>
-        <field name="tag_name">Nabave oproščene DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="tax_report_zo_dvd_odb_vstopni"/>
+    <recordid="tax_report_zo_dvd_odb_vstopni_opr"model="account.tax.report.line">
+        <fieldname="name">NabaveoproščeneDDV</field>
+        <fieldname="tag_name">NabaveoproščeneDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd_odb_vstopni"/>
     </record>
 
-    <record id="tax_report_zo_dvd_odb_vstopni_osn" model="account.tax.report.line">
-        <field name="name">Nabave po osnovni stopnji DDV</field>
-        <field name="tag_name">Nabave po osnovni stopnji DDV (Vstopni)</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="2"/>
-        <field name="parent_id" ref="tax_report_zo_dvd_odb_vstopni"/>
+    <recordid="tax_report_zo_dvd_odb_vstopni_osn"model="account.tax.report.line">
+        <fieldname="name">NabavepoosnovnistopnjiDDV</field>
+        <fieldname="tag_name">NabavepoosnovnistopnjiDDV(Vstopni)</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd_odb_vstopni"/>
     </record>
 
-    <record id="tax_report_zo_dvd_odb_vstopni_zni" model="account.tax.report.line">
-        <field name="name">Nabave po znižani stopnji DDV</field>
-        <field name="tag_name">Nabave po znižani stopnji DDV (Vstopni)</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="3"/>
-        <field name="parent_id" ref="tax_report_zo_dvd_odb_vstopni"/>
+    <recordid="tax_report_zo_dvd_odb_vstopni_zni"model="account.tax.report.line">
+        <fieldname="name">NabavepoznižanistopnjiDDV</field>
+        <fieldname="tag_name">NabavepoznižanistopnjiDDV(Vstopni)</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="3"/>
+        <fieldname="parent_id"ref="tax_report_zo_dvd_odb_vstopni"/>
     </record>
 
-    <record id="tax_report_zn_dvd" model="account.tax.report.line">
-        <field name="name">Znesek DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="2"/>
+    <recordid="tax_report_zn_dvd"model="account.tax.report.line">
+        <fieldname="name">ZnesekDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="2"/>
     </record>
 
-    <record id="tax_report_zn_dvd_neo" model="account.tax.report.line">
-        <field name="name">Neodbitni DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="tax_report_zn_dvd"/>
+    <recordid="tax_report_zn_dvd_neo"model="account.tax.report.line">
+        <fieldname="name">NeodbitniDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="tax_report_zn_dvd"/>
     </record>
 
-    <record id="tax_report_zn_dvd_neo_vstopni" model="account.tax.report.line">
-        <field name="name">Vstopni DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="tax_report_zn_dvd_neo"/>
+    <recordid="tax_report_zn_dvd_neo_vstopni"model="account.tax.report.line">
+        <fieldname="name">VstopniDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="tax_report_zn_dvd_neo"/>
     </record>
 
-    <record id="tax_report_zn_dvd_neo_vstopni_osnnovna" model="account.tax.report.line">
-        <field name="name">Neodbitni DDV – osnovna stopnja</field>
-        <field name="tag_name">Neodbitni DDV – osnovna stopnja</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="tax_report_zn_dvd_neo_vstopni"/>
+    <recordid="tax_report_zn_dvd_neo_vstopni_osnnovna"model="account.tax.report.line">
+        <fieldname="name">NeodbitniDDV–osnovnastopnja</field>
+        <fieldname="tag_name">NeodbitniDDV–osnovnastopnja</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="tax_report_zn_dvd_neo_vstopni"/>
     </record>
 
-    <record id="tax_report_zn_dvd_neo_vstopni_zni" model="account.tax.report.line">
-        <field name="name">Neodbitni DDV – znižana stopnja</field>
-        <field name="tag_name">Neodbitni DDV – znižana stopnja</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="2"/>
-        <field name="parent_id" ref="tax_report_zn_dvd_neo_vstopni"/>
+    <recordid="tax_report_zn_dvd_neo_vstopni_zni"model="account.tax.report.line">
+        <fieldname="name">NeodbitniDDV–znižanastopnja</field>
+        <fieldname="tag_name">NeodbitniDDV–znižanastopnja</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="parent_id"ref="tax_report_zn_dvd_neo_vstopni"/>
     </record>
 
-    <record id="tax_report_zn_dvd_odb" model="account.tax.report.line">
-        <field name="name">Odbitni DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="2"/>
-        <field name="parent_id" ref="tax_report_zn_dvd"/>
+    <recordid="tax_report_zn_dvd_odb"model="account.tax.report.line">
+        <fieldname="name">OdbitniDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="parent_id"ref="tax_report_zn_dvd"/>
     </record>
 
-    <record id="tax_report_zn_dvd_odb_izstopni" model="account.tax.report.line">
-        <field name="name">Izstopni DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="tax_report_zn_dvd_odb"/>
+    <recordid="tax_report_zn_dvd_odb_izstopni"model="account.tax.report.line">
+        <fieldname="name">IzstopniDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="tax_report_zn_dvd_odb"/>
     </record>
 
-    <record id="tax_report_zn_dvd_odb_izstopni_osn" model="account.tax.report.line">
-        <field name="name">Izstopni DDV - osnovna stopnja</field>
-        <field name="tag_name">Izstopni DDV - osnovna stopnja</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="tax_report_zn_dvd_odb_izstopni"/>
+    <recordid="tax_report_zn_dvd_odb_izstopni_osn"model="account.tax.report.line">
+        <fieldname="name">IzstopniDDV-osnovnastopnja</field>
+        <fieldname="tag_name">IzstopniDDV-osnovnastopnja</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="tax_report_zn_dvd_odb_izstopni"/>
     </record>
 
-    <record id="tax_report_zn_dvd_odb_izstopni_zni" model="account.tax.report.line">
-        <field name="tag_name">Izstopni DDV - znižana stopnja</field>
-        <field name="name">Izstopni DDV - znižana stopnja</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="2"/>
-        <field name="parent_id" ref="tax_report_zn_dvd_odb_izstopni"/>
+    <recordid="tax_report_zn_dvd_odb_izstopni_zni"model="account.tax.report.line">
+        <fieldname="tag_name">IzstopniDDV-znižanastopnja</field>
+        <fieldname="name">IzstopniDDV-znižanastopnja</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="parent_id"ref="tax_report_zn_dvd_odb_izstopni"/>
     </record>
 
-    <record id="tax_report_zn_dvd_odb_vstopni" model="account.tax.report.line">
-        <field name="name">Vstopni DDV</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="2"/>
-        <field name="parent_id" ref="tax_report_zn_dvd_odb"/>
+    <recordid="tax_report_zn_dvd_odb_vstopni"model="account.tax.report.line">
+        <fieldname="name">VstopniDDV</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="parent_id"ref="tax_report_zn_dvd_odb"/>
     </record>
 
-    <record id="tax_report_zn_dvd_odb_vstopni_osn" model="account.tax.report.line">
-        <field name="name">Vstopni DDV - osnovna stopnja</field>
-        <field name="tag_name">Vstopni DDV - osnovna stopnja</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="1"/>
-        <field name="parent_id" ref="tax_report_zn_dvd_odb_vstopni"/>
+    <recordid="tax_report_zn_dvd_odb_vstopni_osn"model="account.tax.report.line">
+        <fieldname="name">VstopniDDV-osnovnastopnja</field>
+        <fieldname="tag_name">VstopniDDV-osnovnastopnja</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="parent_id"ref="tax_report_zn_dvd_odb_vstopni"/>
     </record>
 
-    <record id="tax_report_zn_dvd_odb_vstopni_zni" model="account.tax.report.line">
-        <field name="name">Vstopni DDV - znižana stopnja</field>
-        <field name="tag_name">Vstopni DDV - znižana stopnja</field>
-        <field name="report_id" ref="tax_report"/>
-        <field name="sequence" eval="2"/>
-        <field name="parent_id" ref="tax_report_zn_dvd_odb_vstopni"/>
+    <recordid="tax_report_zn_dvd_odb_vstopni_zni"model="account.tax.report.line">
+        <fieldname="name">VstopniDDV-znižanastopnja</field>
+        <fieldname="tag_name">VstopniDDV-znižanastopnja</field>
+        <fieldname="report_id"ref="tax_report"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="parent_id"ref="tax_report_zn_dvd_odb_vstopni"/>
     </record>
 
 </flectra>

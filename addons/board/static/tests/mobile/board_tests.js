@@ -1,30 +1,30 @@
-flectra.define("board.dashboard_tests", function (require) {
-    "use strict";
+flectra.define("board.dashboard_tests",function(require){
+    "usestrict";
 
-    var BoardView = require("board.BoardView");
-    var testUtils = require("web.test_utils");
-    var createView = testUtils.createView;
+    varBoardView=require("board.BoardView");
+    vartestUtils=require("web.test_utils");
+    varcreateView=testUtils.createView;
 
-    QUnit.module("Board view", {
-        beforeEach: function () {
-            this.data = {
-                board: {
-                    fields: {},
-                    records: [],
+    QUnit.module("Boardview",{
+        beforeEach:function(){
+            this.data={
+                board:{
+                    fields:{},
+                    records:[],
                 },
-                partner: {
-                    fields: {
-                        foo: {
-                            string: "Foo",
-                            type: "char",
-                            default: "My little Foo Value",
-                            searchable: true,
+                partner:{
+                    fields:{
+                        foo:{
+                            string:"Foo",
+                            type:"char",
+                            default:"MylittleFooValue",
+                            searchable:true,
                         },
                     },
-                    records: [
+                    records:[
                         {
-                            id: 1,
-                            foo: "yop",
+                            id:1,
+                            foo:"yop",
                         },
                     ],
                 },
@@ -32,114 +32,114 @@ flectra.define("board.dashboard_tests", function (require) {
         },
     });
 
-    QUnit.test("can't switch views in the dashboard", async function (assert) {
+    QUnit.test("can'tswitchviewsinthedashboard",asyncfunction(assert){
         assert.expect(3);
 
-        var target = await createView({
-            View: BoardView,
-            model: "board",
-            data: this.data,
-            arch: `<form string="My Dashboard">
-                <board style="2-1">
+        vartarget=awaitcreateView({
+            View:BoardView,
+            model:"board",
+            data:this.data,
+            arch:`<formstring="MyDashboard">
+                <boardstyle="2-1">
                     <column>
-                        <action context="{}" domain="[]" view_mode="list" string="ABC" name="51"/>
+                        <actioncontext="{}"domain="[]"view_mode="list"string="ABC"name="51"/>
                     </column>
                 </board>
             </form>`,
-            mockRPC: function (route) {
-                if (route === "/web/action/load") {
-                    return Promise.resolve({
-                        res_model: "partner",
-                        views: [
-                            [4, "list"],
-                            [5, "form"],
+            mockRPC:function(route){
+                if(route==="/web/action/load"){
+                    returnPromise.resolve({
+                        res_model:"partner",
+                        views:[
+                            [4,"list"],
+                            [5,"form"],
                         ],
                     });
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
-            archs: {
-                "partner,4,list": `<tree string="Partner"><field name="foo"/></tree>`,
+            archs:{
+                "partner,4,list":`<treestring="Partner"><fieldname="foo"/></tree>`,
             },
         });
 
-        assert.containsNone(target, ".oe_dashboard_links", "Couldn't allow user to Change layout");
-        assert.containsOnce(target, ".oe_dashboard_layout_1", "The display layout is force to 1");
+        assert.containsNone(target,".oe_dashboard_links","Couldn'tallowusertoChangelayout");
+        assert.containsOnce(target,".oe_dashboard_layout_1","Thedisplaylayoutisforceto1");
         assert.containsNone(
             target,
-            ".o_action .o_control_panel",
-            "views in the dashboard do not have a control panel"
+            ".o_action.o_control_panel",
+            "viewsinthedashboarddonothaveacontrolpanel"
         );
 
         target.destroy();
     });
 
-    QUnit.test("Correctly soft switch to '1' layout on small screen", async function (assert) {
+    QUnit.test("Correctlysoftswitchto'1'layoutonsmallscreen",asyncfunction(assert){
         assert.expect(2);
 
-        var target = await createView({
-            View: BoardView,
-            model: "board",
-            data: this.data,
-            arch: `<form>
-                <board style="2-1">
+        vartarget=awaitcreateView({
+            View:BoardView,
+            model:"board",
+            data:this.data,
+            arch:`<form>
+                <boardstyle="2-1">
                         <column>
-                            <action context="{}" domain="[]" view_mode="list" string="ABC" name="51"/>
+                            <actioncontext="{}"domain="[]"view_mode="list"string="ABC"name="51"/>
                         </column>
                         <column>
-                            <action context="{}" domain="[]" view_mode="list" string="ABC" name="51"/>
+                            <actioncontext="{}"domain="[]"view_mode="list"string="ABC"name="51"/>
                         </column>
                     </board>
             </form>`,
-            mockRPC: function (route) {
-                if (route === "/web/action/load") {
-                    return Promise.resolve({
-                        res_model: "partner",
-                        views: [
-                            [4, "list"],
-                            [5, "form"],
+            mockRPC:function(route){
+                if(route==="/web/action/load"){
+                    returnPromise.resolve({
+                        res_model:"partner",
+                        views:[
+                            [4,"list"],
+                            [5,"form"],
                         ],
                     });
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
-            archs: {
-                "partner,4,list": '<tree string="Partner"><field name="foo"/></tree>',
+            archs:{
+                "partner,4,list":'<treestring="Partner"><fieldname="foo"/></tree>',
             },
         });
 
-        assert.containsOnce(target, ".oe_dashboard_layout_1", "The display layout is force to 1");
-        assert.containsN(target, ".oe_action", 2, "The display should contains the 2 actions");
+        assert.containsOnce(target,".oe_dashboard_layout_1","Thedisplaylayoutisforceto1");
+        assert.containsN(target,".oe_action",2,"Thedisplayshouldcontainsthe2actions");
 
         target.destroy();
     });
 
-    QUnit.test("empty board view", async function (assert) {
+    QUnit.test("emptyboardview",asyncfunction(assert){
         assert.expect(2);
-        const target = await createView({
-            View: BoardView,
-            debug: 1,
-            model: "board",
-            data: this.data,
-            arch: `<form string="My Dashboard">
-                <board style="2-1">
+        consttarget=awaitcreateView({
+            View:BoardView,
+            debug:1,
+            model:"board",
+            data:this.data,
+            arch:`<formstring="MyDashboard">
+                <boardstyle="2-1">
                     <column/>
                 </board>
             </form>`,
-            archs: {
-                "partner,4,list": '<tree string="Partner"><field name="foo"/></tree>',
+            archs:{
+                "partner,4,list":'<treestring="Partner"><fieldname="foo"/></tree>',
             },
         });
 
         assert.hasClass(
             target.renderer.$el,
             "o_dashboard",
-            "with a dashboard, the renderer should have the proper css class"
+            "withadashboard,therenderershouldhavethepropercssclass"
         );
         assert.containsOnce(
             target,
-            ".o_dashboard .o_view_nocontent",
-            "should have a no content helper"
+            ".o_dashboard.o_view_nocontent",
+            "shouldhaveanocontenthelper"
         );
 
         target.destroy();

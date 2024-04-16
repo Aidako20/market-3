@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-<data noupdate="0">
-    <record id="group_expiry_date_on_delivery_slip" model="res.groups">
-        <field name="name">Include expiration dates on delivery slip</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
+<datanoupdate="0">
+    <recordid="group_expiry_date_on_delivery_slip"model="res.groups">
+        <fieldname="name">Includeexpirationdatesondeliveryslip</field>
+        <fieldname="category_id"ref="base.module_category_hidden"/>
     </record>
 </data>
 </flectra>

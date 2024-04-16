@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class Country(models.Model):
-    _inherit = 'res.country'
+classCountry(models.Model):
+    _inherit='res.country'
 
-    enforce_cities = fields.Boolean(
-        string='Enforce Cities',
-        help="Check this box to ensure every address created in that country has a 'City' chosen "
-             "in the list of the country's cities.")
+    enforce_cities=fields.Boolean(
+        string='EnforceCities',
+        help="Checkthisboxtoensureeveryaddresscreatedinthatcountryhasa'City'chosen"
+             "inthelistofthecountry'scities.")

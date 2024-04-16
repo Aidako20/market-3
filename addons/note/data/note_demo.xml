@@ -1,91 +1,91 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-  <data noupdate="1">
-    <record id="note_1" model="note.note">
-      <field name="name">Customer report #349872</field>
-      <field name="memo"><![CDATA[<p><b>Customer report #349872</b></p>
+  <datanoupdate="1">
+    <recordid="note_1"model="note.note">
+      <fieldname="name">Customerreport#349872</field>
+      <fieldname="memo"><![CDATA[<p><b>Customerreport#349872</b></p>
     <p><br/></p>
-    <p>* Calendar app in Home</p>
-    <p>*  The calendar module should create a menu in Home, like described above.</p>
-    <p>*  This module should become a main application (in the first screen at installation)</p>
-    <p>*  We should use the term Calendar, not Meeting.</p>]]>
+    <p>*CalendarappinHome</p>
+    <p>* ThecalendarmoduleshouldcreateamenuinHome,likedescribedabove.</p>
+    <p>* Thismoduleshouldbecomeamainapplication(inthefirstscreenatinstallation)</p>
+    <p>* WeshouldusethetermCalendar,notMeeting.</p>]]>
       </field>
-      <field name="user_id" ref="base.user_demo"/>
-      <field name="color">2</field>
+      <fieldname="user_id"ref="base.user_demo"/>
+      <fieldname="color">2</field>
     </record>
 
-    <record id="note_2" model="note.note">
-      <field name="memo"><![CDATA[<p><b>Call Raoulette</b></p>
+    <recordid="note_2"model="note.note">
+      <fieldname="memo"><![CDATA[<p><b>CallRaoulette</b></p>
     <p><br/></p>
-    <p>* Followed by the telephone conversation and mail about D.544.3</p>]]>
+    <p>*FollowedbythetelephoneconversationandmailaboutD.544.3</p>]]>
       </field>
-      <field name="user_id" ref="base.user_demo"/>
+      <fieldname="user_id"ref="base.user_demo"/>
     </record>
 
-    <record id="note_4" model="note.note">
-      <field name="memo"><![CDATA[<p><b>Project N.947.5</b></p>]]>
+    <recordid="note_4"model="note.note">
+      <fieldname="memo"><![CDATA[<p><b>ProjectN.947.5</b></p>]]>
       </field>
-      <field name="stage_id" ref="note_stage_02"/>
-      <field name="user_id" ref="base.user_admin"/>
+      <fieldname="stage_id"ref="note_stage_02"/>
+      <fieldname="user_id"ref="base.user_admin"/>
     </record>
 
-    <record id="note_5" model="note.note">
-      <field name="memo"><![CDATA[<p><b>Shop for family dinner</b></p>
+    <recordid="note_5"model="note.note">
+      <fieldname="memo"><![CDATA[<p><b>Shopforfamilydinner</b></p>
     <p><br/></p>
-    <ul class="o_checklist">
-     <li id="checklist-id-1"><p>stuffed turkey</p></li>
-     <li id="checklist-id-2"><p>wine</p></li>
+    <ulclass="o_checklist">
+     <liid="checklist-id-1"><p>stuffedturkey</p></li>
+     <liid="checklist-id-2"><p>wine</p></li>
     </ul>]]>
       </field>
-      <field name="user_id" ref="base.user_demo"/>
+      <fieldname="user_id"ref="base.user_demo"/>
     </record>
 
-    <record id="note_6" model="note.note">
-      <field name="memo"><![CDATA[<p><b>Idea to develop</b></p>
+    <recordid="note_6"model="note.note">
+      <fieldname="memo"><![CDATA[<p><b>Ideatodevelop</b></p>
     <p><br/></p>
-    <p>* Create a module note_pad
-    it transforms the html editable memo text field into widget='pad', similar to project_pad depends on 'memo' and 'pad' modules</p>]]>
+    <p>*Createamodulenote_pad
+    ittransformsthehtmleditablememotextfieldintowidget='pad',similartoproject_paddependson'memo'and'pad'modules</p>]]>
       </field>
-      <field name="stage_id" ref="note_stage_02"/>
-      <field name="user_id" ref="base.user_admin"/>
+      <fieldname="stage_id"ref="note_stage_02"/>
+      <fieldname="user_id"ref="base.user_admin"/>
     </record>
 
-    <record id="note_8" model="note.note">
-      <field name="memo"><![CDATA[<p><b>New computer specs</b></p>
+    <recordid="note_8"model="note.note">
+      <fieldname="memo"><![CDATA[<p><b>Newcomputerspecs</b></p>
      <p><br/></p>
-     <ul class="o_checklist">
-     <li id="checklist-id-1"><p>Motherboard according to processor </p></li>
-     <li id="checklist-id-2"><p>Processor need to decide </p></li>
-     <li id="checklist-id-3"><p>Graphic card with great performance for games ! </p></li>
-     <li id="checklist-id-4"><p>Hard drive big, for lot of internet backups </p></li>
-     <li id="checklist-id-5"><p>Tower silent, better when watching films </p></li>
-     <li id="checklist-id-6"><p>Blueray drive ? is it interesting yet ? </p></li>
-     <li id="checklist-id-7"><p>Screen a big one, full of pixels, of course !</p></li>
+     <ulclass="o_checklist">
+     <liid="checklist-id-1"><p>Motherboardaccordingtoprocessor</p></li>
+     <liid="checklist-id-2"><p>Processorneedtodecide</p></li>
+     <liid="checklist-id-3"><p>Graphiccardwithgreatperformanceforgames!</p></li>
+     <liid="checklist-id-4"><p>Harddrivebig,forlotofinternetbackups</p></li>
+     <liid="checklist-id-5"><p>Towersilent,betterwhenwatchingfilms</p></li>
+     <liid="checklist-id-6"><p>Blueraydrive?isitinterestingyet?</p></li>
+     <liid="checklist-id-7"><p>Screenabigone,fullofpixels,ofcourse!</p></li>
     </ul>]]>
       </field>
-      <field name="stage_id" ref="note_stage_03"/>
-      <field name="color">3</field>
-      <field name="user_id" ref="base.user_admin"/>
+      <fieldname="stage_id"ref="note_stage_03"/>
+      <fieldname="color">3</field>
+      <fieldname="user_id"ref="base.user_admin"/>
     </record>
 
-    <record id="note_9" model="note.note">
-      <field name="memo"><![CDATA[<p><b>Read those books</b></p>
+    <recordid="note_9"model="note.note">
+      <fieldname="memo"><![CDATA[<p><b>Readthosebooks</b></p>
       <p><br/></p>
-      <p>* Flectra: a modern approach to integrated business management</p>
-      <p>* Flectra for Retail and Industrial Management</p>]]>
+      <p>*Flectra:amodernapproachtointegratedbusinessmanagement</p>
+      <p>*FlectraforRetailandIndustrialManagement</p>]]>
       </field>
-      <field name="user_id" ref="base.user_demo"/>
+      <fieldname="user_id"ref="base.user_demo"/>
     </record>
 
-    <record id="note_12" model="note.note">
-      <field name="memo"><![CDATA[<p><b>Read some documentation about Flectra before diving into the code</b></p>
+    <recordid="note_12"model="note.note">
+      <fieldname="memo"><![CDATA[<p><b>ReadsomedocumentationaboutFlectrabeforedivingintothecode</b></p>
       <p><br/></p>
-      <p>* Flectra: a modern approach to integrated business management</p>
-      <p>* Flectra for Retail and Industrial Management</p>]]>
+      <p>*Flectra:amodernapproachtointegratedbusinessmanagement</p>
+      <p>*FlectraforRetailandIndustrialManagement</p>]]>
       </field>
-      <field name="color">7</field>
-      <field name="stage_ids" eval="[(6,0,[ref('note_stage_03')])]"/>
-      <field name="user_id" ref="base.user_admin"/>
+      <fieldname="color">7</field>
+      <fieldname="stage_ids"eval="[(6,0,[ref('note_stage_03')])]"/>
+      <fieldname="user_id"ref="base.user_admin"/>
     </record>
 
   </data>

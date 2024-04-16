@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <template id="flectra_by_adyen_form">
-            <input type="hidden" name="data_set" t-att-data-action-url="tx_url" data-remove-me=""/>
-            <input type="hidden" name="data" t-att-value="data"/>
+    <datanoupdate="1">
+        <templateid="flectra_by_adyen_form">
+            <inputtype="hidden"name="data_set"t-att-data-action-url="tx_url"data-remove-me=""/>
+            <inputtype="hidden"name="data"t-att-value="data"/>
         </template>
     </data>
 </flectra>

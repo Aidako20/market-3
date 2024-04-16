@@ -1,46 +1,46 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from lxml import etree
+fromlxmlimportetree
 
-from flectra import models, api
-from flectra.tools.translate import encode, xml_translate, html_translate
-
-
-def edit_translation_mapping(data):
-    data = dict(data, model=data['name'].partition(',')[0], value=data['value'] or data['src'])
-    return '<span data-oe-model="%(model)s" data-oe-translation-id="%(id)s" data-oe-translation-state="%(state)s">%(value)s</span>' % data
+fromflectraimportmodels,api
+fromflectra.tools.translateimportencode,xml_translate,html_translate
 
 
-class IrTranslation(models.Model):
-    _inherit = 'ir.translation'
+defedit_translation_mapping(data):
+    data=dict(data,model=data['name'].partition(',')[0],value=data['value']ordata['src'])
+    return'<spandata-oe-model="%(model)s"data-oe-translation-id="%(id)s"data-oe-translation-state="%(state)s">%(value)s</span>'%data
+
+
+classIrTranslation(models.Model):
+    _inherit='ir.translation'
 
     @api.model
-    def _get_terms_mapping(self, field, records):
-        if self._context.get('edit_translations'):
-            self.insert_missing(field, records)
-            return edit_translation_mapping
-        return super(IrTranslation, self)._get_terms_mapping(field, records)
+    def_get_terms_mapping(self,field,records):
+        ifself._context.get('edit_translations'):
+            self.insert_missing(field,records)
+            returnedit_translation_mapping
+        returnsuper(IrTranslation,self)._get_terms_mapping(field,records)
 
-    def save_html(self, value):
-        """ Convert the HTML fragment ``value`` to XML if necessary, and write
-        it as the value of translation ``self``.
+    defsave_html(self,value):
+        """ConverttheHTMLfragment``value``toXMLifnecessary,andwrite
+        itasthevalueoftranslation``self``.
         """
-        assert len(self) == 1 and self.type == 'model_terms'
-        mname, fname = self.name.split(',')
-        field = self.env[mname]._fields[fname]
-        if field.translate == xml_translate:
-            # wrap value inside a div and parse it as HTML
-            div = "<div>%s</div>" % encode(value)
-            root = etree.fromstring(div, etree.HTMLParser(encoding='utf-8'))
-            # root is html > body > div
-            # serialize div as XML and discard surrounding tags
-            value = etree.tostring(root[0][0], encoding='utf-8')[5:-6]
-        elif field.translate == html_translate:
-            # wrap value inside a div and parse it as HTML
-            div = "<div>%s</div>" % encode(value)
-            root = etree.fromstring(div, etree.HTMLParser(encoding='utf-8'))
-            # root is html > body > div
-            # serialize div as HTML and discard surrounding tags
-            value = etree.tostring(root[0][0], encoding='utf-8', method='html')[5:-6]
-        return self.write({'value': value})
+        assertlen(self)==1andself.type=='model_terms'
+        mname,fname=self.name.split(',')
+        field=self.env[mname]._fields[fname]
+        iffield.translate==xml_translate:
+            #wrapvalueinsideadivandparseitasHTML
+            div="<div>%s</div>"%encode(value)
+            root=etree.fromstring(div,etree.HTMLParser(encoding='utf-8'))
+            #rootishtml>body>div
+            #serializedivasXMLanddiscardsurroundingtags
+            value=etree.tostring(root[0][0],encoding='utf-8')[5:-6]
+        eliffield.translate==html_translate:
+            #wrapvalueinsideadivandparseitasHTML
+            div="<div>%s</div>"%encode(value)
+            root=etree.fromstring(div,etree.HTMLParser(encoding='utf-8'))
+            #rootishtml>body>div
+            #serializedivasHTMLanddiscardsurroundingtags
+            value=etree.tostring(root[0][0],encoding='utf-8',method='html')[5:-6]
+        returnself.write({'value':value})

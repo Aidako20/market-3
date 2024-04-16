@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.tests import common, tagged
+fromflectra.testsimportcommon,tagged
 
 
-@tagged('-at_install', 'post_install')
-class TestAuthSignupUninvited(common.TransactionCase):
+@tagged('-at_install','post_install')
+classTestAuthSignupUninvited(common.TransactionCase):
 
-    def test_01_auth_signup_uninvited(self):
-        self.env['website'].browse(1).auth_signup_uninvited = 'b2c'
-        config = self.env['res.config.settings'].create({})
-        self.assertEqual(config.auth_signup_uninvited, 'b2c')
+    deftest_01_auth_signup_uninvited(self):
+        self.env['website'].browse(1).auth_signup_uninvited='b2c'
+        config=self.env['res.config.settings'].create({})
+        self.assertEqual(config.auth_signup_uninvited,'b2c')

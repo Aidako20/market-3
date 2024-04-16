@@ -1,22 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <!-- Account Tax Group -->
-        <record id="tax_group_ret_8" model="account.tax.group">
-            <field name="name">Retencion 8%</field>
+        <!--AccountTaxGroup-->
+        <recordid="tax_group_ret_8"model="account.tax.group">
+            <fieldname="name">Retencion8%</field>
         </record>
-        <record id="tax_group_iva_12" model="account.tax.group">
-            <field name="name">IVA 12%</field>
+        <recordid="tax_group_iva_12"model="account.tax.group">
+            <fieldname="name">IVA12%</field>
         </record>
-        <record id="tax_group_ret_30" model="account.tax.group">
-            <field name="name">Retencion 30%</field>
+        <recordid="tax_group_ret_30"model="account.tax.group">
+            <fieldname="name">Retencion30%</field>
         </record>
-        <record id="tax_group_ret_70" model="account.tax.group">
-            <field name="name">Retencion 70%</field>
+        <recordid="tax_group_ret_70"model="account.tax.group">
+            <fieldname="name">Retencion70%</field>
         </record>
-        <record id="tax_group_ret_100" model="account.tax.group">
-            <field name="name">Retencion 100%</field>
+        <recordid="tax_group_ret_100"model="account.tax.group">
+            <fieldname="name">Retencion100%</field>
         </record>
 
     </data>

@@ -1,14 +1,14 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xmlversion='1.0'encoding='utf-8'?>
 <flectra>
     <data>
-        <record id="resume_type_experience" model="hr.resume.line.type">
-            <field name="name">Experience</field>
-            <field name="sequence">1</field>
+        <recordid="resume_type_experience"model="hr.resume.line.type">
+            <fieldname="name">Experience</field>
+            <fieldname="sequence">1</field>
         </record>
 
-        <record id="resume_type_education" model="hr.resume.line.type">
-            <field name="name">Education</field>
-            <field name="sequence">2</field>
+        <recordid="resume_type_education"model="hr.resume.line.type">
+            <fieldname="name">Education</field>
+            <fieldname="sequence">2</field>
         </record>
     </data>
 

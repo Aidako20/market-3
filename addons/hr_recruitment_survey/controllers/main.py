@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.http import request
-from flectra.addons.survey.controllers.main import Survey
+fromflectra.httpimportrequest
+fromflectra.addons.survey.controllers.mainimportSurvey
 
 
-class RecruitmentSurvey(Survey):
+classRecruitmentSurvey(Survey):
 
-    def _check_validity(self, survey_token, answer_token, ensure_token=True, check_partner=True):
-        check_partner = check_partner and not request.env.user.has_group('hr_recruitment.group_hr_recruitment_user')
-        return super(RecruitmentSurvey, self)._check_validity(survey_token, answer_token, ensure_token, check_partner)
+    def_check_validity(self,survey_token,answer_token,ensure_token=True,check_partner=True):
+        check_partner=check_partnerandnotrequest.env.user.has_group('hr_recruitment.group_hr_recruitment_user')
+        returnsuper(RecruitmentSurvey,self)._check_validity(survey_token,answer_token,ensure_token,check_partner)

@@ -1,55 +1,55 @@
-flectra.define('point_of_sale.OrderlineDetails', function (require) {
-    'use strict';
+flectra.define('point_of_sale.OrderlineDetails',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
-    const { format } = require('web.field_utils');
-    const { round_precision: round_pr } = require('web.utils');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
+    const{format}=require('web.field_utils');
+    const{round_precision:round_pr}=require('web.utils');
 
     /**
-     * @props {pos.order.line} line
+     *@props{pos.order.line}line
      */
-    class OrderlineDetails extends PosComponent {
-        get line() {
-            const line = this.props.line;
-            const formatQty = (line) => {
-                const quantity = line.get_quantity();
-                const unit = line.get_unit();
-                const decimals = this.env.pos.dp['Product Unit of Measure'];
-                const rounding = Math.max(unit.rounding, Math.pow(10, -decimals));
-                const roundedQuantity = round_pr(quantity, rounding);
-                return format.float(roundedQuantity, { digits: [69, decimals] });
+    classOrderlineDetailsextendsPosComponent{
+        getline(){
+            constline=this.props.line;
+            constformatQty=(line)=>{
+                constquantity=line.get_quantity();
+                constunit=line.get_unit();
+                constdecimals=this.env.pos.dp['ProductUnitofMeasure'];
+                constrounding=Math.max(unit.rounding,Math.pow(10,-decimals));
+                constroundedQuantity=round_pr(quantity,rounding);
+                returnformat.float(roundedQuantity,{digits:[69,decimals]});
             };
-            return {
-                productName: line.get_full_product_name(),
-                totalPrice: line.get_price_with_tax(),
-                quantity: formatQty(line),
-                unit: line.get_unit().name,
-                unitPrice: line.get_unit_price(),
+            return{
+                productName:line.get_full_product_name(),
+                totalPrice:line.get_price_with_tax(),
+                quantity:formatQty(line),
+                unit:line.get_unit().name,
+                unitPrice:line.get_unit_price(),
             };
         }
-        get productName() {
-            return this.line.productName;
+        getproductName(){
+            returnthis.line.productName;
         }
-        get totalPrice() {
-            return this.env.pos.format_currency(this.line.totalPrice);
+        gettotalPrice(){
+            returnthis.env.pos.format_currency(this.line.totalPrice);
         }
-        get quantity() {
-            return this.line.quantity;
+        getquantity(){
+            returnthis.line.quantity;
         }
-        get unitPrice() {
-            return this.line.unitPrice;
+        getunitPrice(){
+            returnthis.line.unitPrice;
         }
-        get unit() {
-            return this.line.unit;
+        getunit(){
+            returnthis.line.unit;
         }
-        get pricePerUnit() {
-            return ` ${this.unit} at ${this.unitPrice} / ${this.unit}`;
+        getpricePerUnit(){
+            return`${this.unit}at${this.unitPrice}/${this.unit}`;
         }
     }
-    OrderlineDetails.template = 'OrderlineDetails';
+    OrderlineDetails.template='OrderlineDetails';
 
     Registries.Component.add(OrderlineDetails);
 
-    return OrderlineDetails;
+    returnOrderlineDetails;
 });

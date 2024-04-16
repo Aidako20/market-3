@@ -1,46 +1,46 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-        <record id="view_oauth_provider_form" model="ir.ui.view">
-            <field name="name">auth.oauth.provider.form</field>
-            <field name="model">auth.oauth.provider</field>
-            <field name="arch" type="xml">
-                <form string="arch">
+        <recordid="view_oauth_provider_form"model="ir.ui.view">
+            <fieldname="name">auth.oauth.provider.form</field>
+            <fieldname="model">auth.oauth.provider</field>
+            <fieldname="arch"type="xml">
+                <formstring="arch">
                     <sheet>
                         <group>
-                            <field name="name" />
-                            <field name="client_id" />
-                            <field name="enabled" />
-                            <field name="body" />
-                            <field name="css_class" groups="base.group_no_one" />
+                            <fieldname="name"/>
+                            <fieldname="client_id"/>
+                            <fieldname="enabled"/>
+                            <fieldname="body"/>
+                            <fieldname="css_class"groups="base.group_no_one"/>
                         </group>
                         <group>
-                            <field name="auth_endpoint" />
-                            <field name="scope" />
-                            <field name="validation_endpoint" />
-                            <field name="data_endpoint" />
+                            <fieldname="auth_endpoint"/>
+                            <fieldname="scope"/>
+                            <fieldname="validation_endpoint"/>
+                            <fieldname="data_endpoint"/>
                         </group>
                     </sheet>
                 </form>
             </field>
-        </record>        
-        <record id="view_oauth_provider_tree" model="ir.ui.view">
-            <field name="name">auth.oauth.provider.tree</field>
-            <field name="model">auth.oauth.provider</field>
-            <field name="arch" type="xml">
-                <tree string="arch">
-                    <field name="sequence" widget="handle"/>
-                    <field name="name" />
-                    <field name="client_id" />
-                    <field name="enabled" />
+        </record>       
+        <recordid="view_oauth_provider_tree"model="ir.ui.view">
+            <fieldname="name">auth.oauth.provider.tree</field>
+            <fieldname="model">auth.oauth.provider</field>
+            <fieldname="arch"type="xml">
+                <treestring="arch">
+                    <fieldname="sequence"widget="handle"/>
+                    <fieldname="name"/>
+                    <fieldname="client_id"/>
+                    <fieldname="enabled"/>
                 </tree>
             </field>
         </record>
-        <record id="action_oauth_provider" model="ir.actions.act_window">
-            <field name="name">Providers</field>
-            <field name="res_model">auth.oauth.provider</field>
-            <field name="view_mode">tree,form</field>
+        <recordid="action_oauth_provider"model="ir.actions.act_window">
+            <fieldname="name">Providers</field>
+            <fieldname="res_model">auth.oauth.provider</field>
+            <fieldname="view_mode">tree,form</field>
         </record>
-        <menuitem id="menu_oauth_providers" name="OAuth Providers"
-            parent="base.menu_users" sequence="30"
-            action="action_oauth_provider" groups="base.group_no_one"/>
+        <menuitemid="menu_oauth_providers"name="OAuthProviders"
+            parent="base.menu_users"sequence="30"
+            action="action_oauth_provider"groups="base.group_no_one"/>
 </flectra>

@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="tracks_display_list" inherit_id="website_event_track.tracks_display_list">
-    <!-- TRACK LIST: ADD REPLAY TAG FOR FINISHED TRACKS -->
-    <xpath expr="//div[@t-foreach='tracks']//div[hasclass('col-md-7')]//span[@t-elif='not track.is_track_done and not track.is_track_soon']" position="after">
-        <a t-elif="track.youtube_video_url and (track.is_published or user_event_manager)"
-            t-att-href="track.website_url" class="badge badge-danger ml-2">Replay
+<templateid="tracks_display_list"inherit_id="website_event_track.tracks_display_list">
+    <!--TRACKLIST:ADDREPLAYTAGFORFINISHEDTRACKS-->
+    <xpathexpr="//div[@t-foreach='tracks']//div[hasclass('col-md-7')]//span[@t-elif='nottrack.is_track_doneandnottrack.is_track_soon']"position="after">
+        <at-elif="track.youtube_video_urland(track.is_publishedoruser_event_manager)"
+            t-att-href="track.website_url"class="badgebadge-dangerml-2">Replay
         </a>
     </xpath>
-    <!-- ADD YOUTUBE ICON -->
-    <xpath expr="//div[@t-foreach='tracks']//div[hasclass('col-md-7')]//a/span[@t-field='track.name']" position="before">
-        <i t-if="track.date and track.youtube_video_url and (track.is_track_soon or track.is_track_live or track.is_youtube_replay)"
-            class="fa fa-youtube-play text-danger mr-1"/>
+    <!--ADDYOUTUBEICON-->
+    <xpathexpr="//div[@t-foreach='tracks']//div[hasclass('col-md-7')]//a/span[@t-field='track.name']"position="before">
+        <it-if="track.dateandtrack.youtube_video_urland(track.is_track_soonortrack.is_track_liveortrack.is_youtube_replay)"
+            class="fafa-youtube-playtext-dangermr-1"/>
     </xpath>
-    <xpath expr="//div[@t-foreach='tracks']//div[hasclass('col-md-7')]//t/span[@t-field='track.name']" position="before">
-        <i t-if="track.date and track.youtube_video_url and (track.is_track_soon or track.is_track_live or track.is_youtube_replay)"
-            class="fa fa-youtube-play text-danger mr-1"/>
+    <xpathexpr="//div[@t-foreach='tracks']//div[hasclass('col-md-7')]//t/span[@t-field='track.name']"position="before">
+        <it-if="track.dateandtrack.youtube_video_urland(track.is_track_soonortrack.is_track_liveortrack.is_youtube_replay)"
+            class="fafa-youtube-playtext-dangermr-1"/>
     </xpath>
 </template>
 

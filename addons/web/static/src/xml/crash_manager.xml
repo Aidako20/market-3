@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-<div t-name="CrashManager.warning" class="o_dialog_warning" role="alert">
-    <p t-esc="widget.message" style="white-space: pre-wrap;"/>
+<divt-name="CrashManager.warning"class="o_dialog_warning"role="alert">
+    <pt-esc="widget.message"style="white-space:pre-wrap;"/>
 </div>
 
-<div t-name="CrashManager.error" class="o_dialog_error">
-    <div class="alert alert-warning clearfix" role="alert">
-        <div class="float-right ml8 btn-group-vertical">
-            <button class="btn btn-primary o_clipboard_button">
-                <i class="fa fa-clipboard mr8"/>Copy the full error to clipboard
+<divt-name="CrashManager.error"class="o_dialog_error">
+    <divclass="alertalert-warningclearfix"role="alert">
+        <divclass="float-rightml8btn-group-vertical">
+            <buttonclass="btnbtn-primaryo_clipboard_button">
+                <iclass="fafa-clipboardmr8"/>Copythefullerrortoclipboard
             </button>
         </div>
-        <p><b>An error occurred</b></p>
-        <p>Please use the copy button to report the error to your support service.</p>
+        <p><b>Anerroroccurred</b></p>
+        <p>Pleaseusethecopybuttontoreporttheerrortoyoursupportservice.</p>
     </div>
 
-    <t t-set="errUID" t-value="_.uniqueId()"/>
-    <button class="btn btn-link" t-att-data-target="'#o_error_detail' + errUID" data-toggle="collapse">See details</button>
-    <div t-att-id="'o_error_detail' + errUID" class="collapse alert alert-danger o_error_detail" role="alert">
-        <pre t-esc="widget.message"/>
-        <pre t-esc="widget.traceback"/>
+    <tt-set="errUID"t-value="_.uniqueId()"/>
+    <buttonclass="btnbtn-link"t-att-data-target="'#o_error_detail'+errUID"data-toggle="collapse">Seedetails</button>
+    <divt-att-id="'o_error_detail'+errUID"class="collapsealertalert-dangero_error_detail"role="alert">
+        <pret-esc="widget.message"/>
+        <pret-esc="widget.traceback"/>
     </div>
 </div>
 

@@ -1,292 +1,292 @@
-flectra.define('website.navbar', function (require) {
-'use strict';
+flectra.define('website.navbar',function(require){
+'usestrict';
 
-var core = require('web.core');
-var dom = require('web.dom');
-var publicWidget = require('web.public.widget');
-var concurrency = require('web.concurrency');
-var Widget = require('web.Widget');
-var websiteRootData = require('website.root');
+varcore=require('web.core');
+vardom=require('web.dom');
+varpublicWidget=require('web.public.widget');
+varconcurrency=require('web.concurrency');
+varWidget=require('web.Widget');
+varwebsiteRootData=require('website.root');
 
-var websiteNavbarRegistry = new publicWidget.RootWidgetRegistry();
+varwebsiteNavbarRegistry=newpublicWidget.RootWidgetRegistry();
 
-var WebsiteNavbar = publicWidget.RootWidget.extend({
-    xmlDependencies: ['/website/static/src/xml/website.xml'],
-    events: _.extend({}, publicWidget.RootWidget.prototype.events || {}, {
-        'click [data-action]': '_onActionMenuClick',
-        'mouseover > ul > li.dropdown:not(.show)': '_onMenuHovered',
-        'click .o_mobile_menu_toggle': '_onMobileMenuToggleClick',
-        'mouseenter #oe_applications:not(:has(.dropdown-item))': '_onOeApplicationsHovered',
-        'show.bs.dropdown #oe_applications:not(:has(.dropdown-item))': '_onOeApplicationsShow',
+varWebsiteNavbar=publicWidget.RootWidget.extend({
+    xmlDependencies:['/website/static/src/xml/website.xml'],
+    events:_.extend({},publicWidget.RootWidget.prototype.events||{},{
+        'click[data-action]':'_onActionMenuClick',
+        'mouseover>ul>li.dropdown:not(.show)':'_onMenuHovered',
+        'click.o_mobile_menu_toggle':'_onMobileMenuToggleClick',
+        'mouseenter#oe_applications:not(:has(.dropdown-item))':'_onOeApplicationsHovered',
+        'show.bs.dropdown#oe_applications:not(:has(.dropdown-item))':'_onOeApplicationsShow',
     }),
-    custom_events: _.extend({}, publicWidget.RootWidget.prototype.custom_events || {}, {
-        'action_demand': '_onActionDemand',
-        'edit_mode': '_onEditMode',
-        'readonly_mode': '_onReadonlyMode',
-        'ready_to_save': '_onSave',
+    custom_events:_.extend({},publicWidget.RootWidget.prototype.custom_events||{},{
+        'action_demand':'_onActionDemand',
+        'edit_mode':'_onEditMode',
+        'readonly_mode':'_onReadonlyMode',
+        'ready_to_save':'_onSave',
     }),
 
     /**
-     * @constructor
+     *@constructor
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        var self = this;
-        var initPromise = new Promise(function (resolve) {
-            self.resolveInit = resolve;
+    init:function(){
+        this._super.apply(this,arguments);
+        varself=this;
+        varinitPromise=newPromise(function(resolve){
+            self.resolveInit=resolve;
         });
-        this._widgetDefs = [initPromise];
+        this._widgetDefs=[initPromise];
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        dom.initAutoMoreMenu(this.$('ul.o_menu_sections'), {
-            maxWidth: function () {
-                // The navbar contains different elements in community and
-                // enterprise, so we check for both of them here only
-                return self.$el.width()
-                    - (self.$('.o_menu_systray').outerWidth(true) || 0)
-                    - (self.$('ul#oe_applications').outerWidth(true) || 0)
-                    - (self.$('.o_menu_toggle').outerWidth(true) || 0)
-                    - (self.$('.o_menu_brand').outerWidth(true) || 0);
+    start:function(){
+        varself=this;
+        dom.initAutoMoreMenu(this.$('ul.o_menu_sections'),{
+            maxWidth:function(){
+                //Thenavbarcontainsdifferentelementsincommunityand
+                //enterprise,sowecheckforbothofthemhereonly
+                returnself.$el.width()
+                    -(self.$('.o_menu_systray').outerWidth(true)||0)
+                    -(self.$('ul#oe_applications').outerWidth(true)||0)
+                    -(self.$('.o_menu_toggle').outerWidth(true)||0)
+                    -(self.$('.o_menu_brand').outerWidth(true)||0);
             },
         });
-        return this._super.apply(this, arguments).then(function () {
+        returnthis._super.apply(this,arguments).then(function(){
             self.resolveInit();
         });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _attachComponent: function () {
-        var def = this._super.apply(this, arguments);
+    _attachComponent:function(){
+        vardef=this._super.apply(this,arguments);
         this._widgetDefs.push(def);
-        return def;
+        returndef;
     },
     /**
-     * As the WebsiteNavbar instance is designed to be unique, the associated
-     * registry has been instantiated outside of the class and is simply
-     * returned here.
+     *AstheWebsiteNavbarinstanceisdesignedtobeunique,theassociated
+     *registryhasbeeninstantiatedoutsideoftheclassandissimply
+     *returnedhere.
      *
-     * @override
+     *@override
      */
-    _getRegistry: function () {
-        return websiteNavbarRegistry;
+    _getRegistry:function(){
+        returnwebsiteNavbarRegistry;
     },
     /**
-     * Searches for the automatic widget {@see RootWidget} which can handle that
-     * action.
+     *Searchesfortheautomaticwidget{@seeRootWidget}whichcanhandlethat
+     *action.
      *
-     * @private
-     * @param {string} actionName
-     * @param {Array} params
-     * @returns {Promise}
+     *@private
+     *@param{string}actionName
+     *@param{Array}params
+     *@returns{Promise}
      */
-    _handleAction: function (actionName, params, _i) {
-        var self = this;
-        return this._whenReadyForActions().then(function () {
-            var defs = [];
-            _.each(self._widgets, function (w) {
-                if (!w.handleAction) {
+    _handleAction:function(actionName,params,_i){
+        varself=this;
+        returnthis._whenReadyForActions().then(function(){
+            vardefs=[];
+            _.each(self._widgets,function(w){
+                if(!w.handleAction){
                     return;
                 }
 
-                var def = w.handleAction(actionName, params);
-                if (def !== null) {
+                vardef=w.handleAction(actionName,params);
+                if(def!==null){
                     defs.push(def);
                 }
             });
-            if (!defs.length) {
-                // Handle the case where all action-capable components are not
-                // instantiated yet (rare) -> retry some times to eventually abort
-                if (_i > 50) {
-                    console.warn(_.str.sprintf("Action '%s' was not able to be handled.", actionName));
-                    return Promise.reject();
+            if(!defs.length){
+                //Handlethecasewhereallaction-capablecomponentsarenot
+                //instantiatedyet(rare)->retrysometimestoeventuallyabort
+                if(_i>50){
+                    console.warn(_.str.sprintf("Action'%s'wasnotabletobehandled.",actionName));
+                    returnPromise.reject();
                 }
-                return concurrency.delay(100).then(function () {
-                    return self._handleAction(actionName, params, (_i || 0) + 1);
+                returnconcurrency.delay(100).then(function(){
+                    returnself._handleAction(actionName,params,(_i||0)+1);
                 });
             }
-            return Promise.all(defs).then(function (values) {
-                if (values.length === 1) {
-                    return values[0];
+            returnPromise.all(defs).then(function(values){
+                if(values.length===1){
+                    returnvalues[0];
                 }
-                return values;
+                returnvalues;
             });
         });
     },
     /**
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    async _loadAppMenus() {
-        if (!this._loadAppMenusProm) {
-            this._loadAppMenusProm = this._rpc({
-                model: 'ir.ui.menu',
-                method: 'load_menus_root',
-                args: [],
+    async_loadAppMenus(){
+        if(!this._loadAppMenusProm){
+            this._loadAppMenusProm=this._rpc({
+                model:'ir.ui.menu',
+                method:'load_menus_root',
+                args:[],
             });
-            const result = await this._loadAppMenusProm;
-            const menus = core.qweb.render('website.oe_applications_menu', {
-                'menu_data': result,
+            constresult=awaitthis._loadAppMenusProm;
+            constmenus=core.qweb.render('website.oe_applications_menu',{
+                'menu_data':result,
             });
-            this.$('#oe_applications .dropdown-menu').html(menus);
+            this.$('#oe_applications.dropdown-menu').html(menus);
         }
-        return this._loadAppMenusProm;
+        returnthis._loadAppMenusProm;
     },
     /**
-     * @private
+     *@private
      */
-    _whenReadyForActions: function () {
-        return Promise.all(this._widgetDefs);
+    _whenReadyForActions:function(){
+        returnPromise.all(this._widgetDefs);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the backend applications menu is hovered -> fetch the
-     * available menus and insert it in DOM.
+     *Calledwhenthebackendapplicationsmenuishovered->fetchthe
+     *availablemenusandinsertitinDOM.
      *
-     * @private
+     *@private
      */
-    _onOeApplicationsHovered: function () {
+    _onOeApplicationsHovered:function(){
         this._loadAppMenus();
     },
     /**
-     * Called when the backend applications menu is opening -> fetch the
-     * available menus and insert it in DOM. Needed on top of hovering as the
-     * dropdown could be opened via keyboard (or the user could just already
-     * be over the dropdown when the JS is fully loaded).
+     *Calledwhenthebackendapplicationsmenuisopening->fetchthe
+     *availablemenusandinsertitinDOM.Neededontopofhoveringasthe
+     *dropdowncouldbeopenedviakeyboard(ortheusercouldjustalready
+     *beoverthedropdownwhentheJSisfullyloaded).
      *
-     * @private
+     *@private
      */
-    _onOeApplicationsShow: function () {
+    _onOeApplicationsShow:function(){
         this._loadAppMenus();
     },
     /**
-     * Called when an action menu is clicked -> searches for the automatic
-     * widget {@see RootWidget} which can handle that action.
+     *Calledwhenanactionmenuisclicked->searchesfortheautomatic
+     *widget{@seeRootWidget}whichcanhandlethataction.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onActionMenuClick: function (ev) {
-        const restore = dom.addButtonLoadingEffect(ev.currentTarget);
+    _onActionMenuClick:function(ev){
+        constrestore=dom.addButtonLoadingEffect(ev.currentTarget);
         this._handleAction($(ev.currentTarget).data('action')).then(restore).guardedCatch(restore);
     },
     /**
-     * Called when an action is asked to be executed from a child widget ->
-     * searches for the automatic widget {@see RootWidget} which can handle
-     * that action.
+     *Calledwhenanactionisaskedtobeexecutedfromachildwidget->
+     *searchesfortheautomaticwidget{@seeRootWidget}whichcanhandle
+     *thataction.
      */
-    _onActionDemand: function (ev) {
-        var def = this._handleAction(ev.data.actionName, ev.data.params);
-        if (ev.data.onSuccess) {
+    _onActionDemand:function(ev){
+        vardef=this._handleAction(ev.data.actionName,ev.data.params);
+        if(ev.data.onSuccess){
             def.then(ev.data.onSuccess);
         }
-        if (ev.data.onFailure) {
+        if(ev.data.onFailure){
             def.guardedCatch(ev.data.onFailure);
         }
     },
     /**
-     * Called in response to edit mode activation -> hides the navbar.
+     *Calledinresponsetoeditmodeactivation->hidesthenavbar.
      *
-     * @private
+     *@private
      */
-    _onEditMode: function () {
+    _onEditMode:function(){
         this.$el.addClass('editing_mode');
         this.do_hide();
     },
     /**
-     * Called when a submenu is hovered -> automatically opens it if another
-     * menu was already opened.
+     *Calledwhenasubmenuishovered->automaticallyopensitifanother
+     *menuwasalreadyopened.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onMenuHovered: function (ev) {
-        var $opened = this.$('> ul > li.dropdown.show');
-        if ($opened.length) {
+    _onMenuHovered:function(ev){
+        var$opened=this.$('>ul>li.dropdown.show');
+        if($opened.length){
             $opened.find('.dropdown-toggle').dropdown('toggle');
             $(ev.currentTarget).find('.dropdown-toggle').dropdown('toggle');
         }
     },
     /**
-     * Called when the mobile menu toggle button is click -> modifies the DOM
-     * to open the mobile menu.
+     *Calledwhenthemobilemenutogglebuttonisclick->modifiestheDOM
+     *toopenthemobilemenu.
      *
-     * @private
+     *@private
      */
-    _onMobileMenuToggleClick: function () {
+    _onMobileMenuToggleClick:function(){
         this.$el.parent().toggleClass('o_mobile_menu_opened');
     },
     /**
-     * Called in response to edit mode activation -> hides the navbar.
+     *Calledinresponsetoeditmodeactivation->hidesthenavbar.
      *
-     * @private
+     *@private
      */
-    _onReadonlyMode: function () {
+    _onReadonlyMode:function(){
         this.$el.removeClass('editing_mode');
         this.do_show();
     },
     /**
-     * Called in response to edit mode saving -> checks if action-capable
-     * children have something to save.
+     *Calledinresponsetoeditmodesaving->checksifaction-capable
+     *childrenhavesomethingtosave.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onSave: function (ev) {
+    _onSave:function(ev){
         ev.data.defs.push(this._handleAction('on_save'));
     },
 });
 
-var WebsiteNavbarActionWidget = Widget.extend({
+varWebsiteNavbarActionWidget=Widget.extend({
     /**
-     * 'Action name' -> 'Handler name' object
+     *'Actionname'->'Handlername'object
      *
-     * Any [data-action="x"] element inside the website navbar will
-     * automatically trigger an action "x". This action can then be handled by
-     * any `WebsiteNavbarActionWidget` instance if the action name "x" is
-     * registered in this `actions` object.
+     *Any[data-action="x"]elementinsidethewebsitenavbarwill
+     *automaticallytriggeranaction"x".Thisactioncanthenbehandledby
+     *any`WebsiteNavbarActionWidget`instanceiftheactionname"x"is
+     *registeredinthis`actions`object.
      */
-    actions: {},
+    actions:{},
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Checks if the widget can execute an action whose name is given, with the
-     * given parameters. If it is the case, execute that action.
+     *Checksifthewidgetcanexecuteanactionwhosenameisgiven,withthe
+     *givenparameters.Ifitisthecase,executethataction.
      *
-     * @param {string} actionName
-     * @param {Array} params
-     * @returns {Promise|null} action's promise or null if no action was found
+     *@param{string}actionName
+     *@param{Array}params
+     *@returns{Promise|null}action'spromiseornullifnoactionwasfound
      */
-    handleAction: function (actionName, params) {
-        var action = this[this.actions[actionName]];
-        if (action) {
-            return Promise.resolve(action.apply(this, params || []));
+    handleAction:function(actionName,params){
+        varaction=this[this.actions[actionName]];
+        if(action){
+            returnPromise.resolve(action.apply(this,params||[]));
         }
-        return null;
+        returnnull;
     },
 });
 
-websiteRootData.websiteRootRegistry.add(WebsiteNavbar, '#oe_main_menu_navbar');
+websiteRootData.websiteRootRegistry.add(WebsiteNavbar,'#oe_main_menu_navbar');
 
-return {
-    WebsiteNavbar: WebsiteNavbar,
-    websiteNavbarRegistry: websiteNavbarRegistry,
-    WebsiteNavbarActionWidget: WebsiteNavbarActionWidget,
+return{
+    WebsiteNavbar:WebsiteNavbar,
+    websiteNavbarRegistry:websiteNavbarRegistry,
+    WebsiteNavbarActionWidget:WebsiteNavbarActionWidget,
 };
 });

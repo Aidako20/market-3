@@ -1,77 +1,77 @@
-flectra.define('website_links.website_links_tour', function (require) {
-'use strict';
+flectra.define('website_links.website_links_tour',function(require){
+'usestrict';
 
-var tour = require("web_tour.tour");
+vartour=require("web_tour.tour");
 
-tour.register('website_links_tour', {
-    test: true,
-    url: '/r',
+tour.register('website_links_tour',{
+    test:true,
+    url:'/r',
 },
     [
-        // 1. Create a tracked URL
+        //1.CreateatrackedURL
         {
-            content: "check that existing links are shown",
-            trigger: '#o_website_links_recent_links .btn_shorten_url_clipboard',
-            run: function () {}, // it's a check
+            content:"checkthatexistinglinksareshown",
+            trigger:'#o_website_links_recent_links.btn_shorten_url_clipboard',
+            run:function(){},//it'sacheck
         },
         {
-            content: "fill the form and submit it",
-            trigger: '#o_website_links_link_tracker_form input#url',
-            run: function () {
-                var url = window.location.host + '/contactus';
-                $('#o_website_links_link_tracker_form input#url').val(url);
-                $('.o_website_links_utm_forms input#campaign-select').val(1).change();
-                $('.o_website_links_utm_forms input#channel-select').val(1).change();
-                $('.o_website_links_utm_forms input#source-select').val(1).change();
+            content:"filltheformandsubmitit",
+            trigger:'#o_website_links_link_tracker_forminput#url',
+            run:function(){
+                varurl=window.location.host+'/contactus';
+                $('#o_website_links_link_tracker_forminput#url').val(url);
+                $('.o_website_links_utm_formsinput#campaign-select').val(1).change();
+                $('.o_website_links_utm_formsinput#channel-select').val(1).change();
+                $('.o_website_links_utm_formsinput#source-select').val(1).change();
                 $('#btn_shorten_url').click();
             },
         },
-        // 2. Visit it
+        //2.Visitit
         {
-            content: "check that link was created and visit it",
-            extra_trigger: '#o_website_links_recent_links .truncate_text:first():contains("Contact Us")',
-            trigger: '#o_website_links_link_tracker_form #generated_tracked_link:contains("/r/")',
-            run: function () {
-                window.location.href = $('#generated_tracked_link').text();
+            content:"checkthatlinkwascreatedandvisitit",
+            extra_trigger:'#o_website_links_recent_links.truncate_text:first():contains("ContactUs")',
+            trigger:'#o_website_links_link_tracker_form#generated_tracked_link:contains("/r/")',
+            run:function(){
+                window.location.href=$('#generated_tracked_link').text();
             },
         },
         {
-            content: "check that we landed on correct page with correct query strings",
-            trigger: '.s_title h1:containsExact("Contact us")',
-            run: function () {
-                var expectedUrl = "/contactus?utm_campaign=Sale&utm_source=Search+engine&utm_medium=Website";
-                if (window.location.pathname + window.location.search !== expectedUrl) {
-                    console.error("The link was not correctly created.");
+            content:"checkthatwelandedoncorrectpagewithcorrectquerystrings",
+            trigger:'.s_titleh1:containsExact("Contactus")',
+            run:function(){
+                varexpectedUrl="/contactus?utm_campaign=Sale&utm_source=Search+engine&utm_medium=Website";
+                if(window.location.pathname+window.location.search!==expectedUrl){
+                    console.error("Thelinkwasnotcorrectlycreated.");
                 }
-                window.location.href = '/r';
+                window.location.href='/r';
             },
         },
-        // 3. Check that counter got incremented and charts are correctly displayed
+        //3.Checkthatcountergotincrementedandchartsarecorrectlydisplayed
         {
-            content: "filter recently used links",
-            trigger: '#filter-recently-used-links',
+            content:"filterrecentlyusedlinks",
+            trigger:'#filter-recently-used-links',
         },
         {
-            content: "visit link stats page",
-            trigger: '#o_website_links_recent_links a:containsExact("Stats"):first',
+            content:"visitlinkstatspage",
+            trigger:'#o_website_links_recent_linksa:containsExact("Stats"):first',
         },
         {
-            content: "check click number and ensure graphs are initialized",
-            extra_trigger: '.website_links_click_chart .title:contains("1 clicks")',
-            trigger: 'canvas',
-            run: function () {}, // it's a check
+            content:"checkclicknumberandensuregraphsareinitialized",
+            extra_trigger:'.website_links_click_chart.title:contains("1clicks")',
+            trigger:'canvas',
+            run:function(){},//it'sacheck
         },
         {
-            content: "click on Last Month tab",
-            trigger: '.o_website_links_chart .graph-tabs a:contains("Last Month")',
+            content:"clickonLastMonthtab",
+            trigger:'.o_website_links_chart.graph-tabsa:contains("LastMonth")',
         },
         {
-            content: "ensure tab is correctly resized",
-            trigger: '#last_month_charts #last_month_clicks_chart',
-            run: function () {
-                var width = $('#last_month_charts #last_month_clicks_chart').width();
-                if (width < 50) {
-                    console.error("The graphs are probably not resized on tab change.");
+            content:"ensuretabiscorrectlyresized",
+            trigger:'#last_month_charts#last_month_clicks_chart',
+            run:function(){
+                varwidth=$('#last_month_charts#last_month_clicks_chart').width();
+                if(width<50){
+                    console.error("Thegraphsareprobablynotresizedontabchange.");
                 }
             },
         },

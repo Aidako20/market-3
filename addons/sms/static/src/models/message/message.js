@@ -1,30 +1,30 @@
-flectra.define('sms/static/src/models/message/message.js', function (require) {
-'use strict';
+flectra.define('sms/static/src/models/message/message.js',function(require){
+'usestrict';
 
-const {
+const{
     registerInstancePatchModel,
-} = require('mail/static/src/model/model_core.js');
+}=require('mail/static/src/model/model_core.js');
 
-registerInstancePatchModel('mail.message', 'sms/static/src/models/message/message.js', {
+registerInstancePatchModel('mail.message','sms/static/src/models/message/message.js',{
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    openResendAction() {
-        if (this.message_type === 'sms') {
-            this.env.bus.trigger('do-action', {
-                action: 'sms.sms_resend_action',
-                options: {
-                    additional_context: {
-                        default_mail_message_id: this.id,
+    openResendAction(){
+        if(this.message_type==='sms'){
+            this.env.bus.trigger('do-action',{
+                action:'sms.sms_resend_action',
+                options:{
+                    additional_context:{
+                        default_mail_message_id:this.id,
                     },
                 },
             });
-        } else {
+        }else{
             this._super(...arguments);
         }
     },

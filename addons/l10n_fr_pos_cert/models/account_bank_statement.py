@@ -1,26 +1,26 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import models, api
-from flectra.tools.translate import _
-from flectra.exceptions import UserError
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportmodels,api
+fromflectra.tools.translateimport_
+fromflectra.exceptionsimportUserError
 
 
-class AccountBankStatement(models.Model):
-    _inherit = 'account.bank.statement'
+classAccountBankStatement(models.Model):
+    _inherit='account.bank.statement'
 
-    def unlink(self):
-        for statement in self:
-            if not statement.company_id._is_accounting_unalterable() or not statement.journal_id.pos_payment_method_ids:
+    defunlink(self):
+        forstatementinself:
+            ifnotstatement.company_id._is_accounting_unalterable()ornotstatement.journal_id.pos_payment_method_ids:
                 continue
-            if statement.state != 'open':
-                raise UserError(_('You cannot modify anything on a bank statement (name: %s) that was created by point of sale operations.') % (statement.name))
-        return super(AccountBankStatement, self).unlink()
+            ifstatement.state!='open':
+                raiseUserError(_('Youcannotmodifyanythingonabankstatement(name:%s)thatwascreatedbypointofsaleoperations.')%(statement.name))
+        returnsuper(AccountBankStatement,self).unlink()
 
 
-class AccountBankStatementLine(models.Model):
-    _inherit = 'account.bank.statement.line'
+classAccountBankStatementLine(models.Model):
+    _inherit='account.bank.statement.line'
 
-    def unlink(self):
-        for line in self.filtered(lambda s: s.company_id._is_accounting_unalterable() and s.journal_id.pos_payment_method_ids):
-            raise UserError(_('You cannot modify anything on a bank statement line (name: %s) that was created by point of sale operations.') % (line.name,))
-        return super(AccountBankStatementLine, self).unlink()
+    defunlink(self):
+        forlineinself.filtered(lambdas:s.company_id._is_accounting_unalterable()ands.journal_id.pos_payment_method_ids):
+            raiseUserError(_('Youcannotmodifyanythingonabankstatementline(name:%s)thatwascreatedbypointofsaleoperations.')%(line.name,))
+        returnsuper(AccountBankStatementLine,self).unlink()

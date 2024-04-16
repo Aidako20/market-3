@@ -1,53 +1,53 @@
-flectra.define('web.Context', function (require) {
-"use strict";
+flectra.define('web.Context',function(require){
+"usestrict";
 
-var Class = require('web.Class');
-var pyUtils = require('web.py_utils');
+varClass=require('web.Class');
+varpyUtils=require('web.py_utils');
 
-var Context = Class.extend({
-    init: function () {
-        this.__ref = "compound_context";
-        this.__contexts = [];
-        this.__eval_context = null;
-        var self = this;
-        _.each(arguments, function (x) {
+varContext=Class.extend({
+    init:function(){
+        this.__ref="compound_context";
+        this.__contexts=[];
+        this.__eval_context=null;
+        varself=this;
+        _.each(arguments,function(x){
             self.add(x);
         });
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
-    add: function (context) {
+    add:function(context){
         this.__contexts.push(context);
-        return this;
+        returnthis;
     },
-    eval: function () {
-        return pyUtils.eval('context', this);
+    eval:function(){
+        returnpyUtils.eval('context',this);
     },
     /**
-     * Set the evaluation context to be used when we actually eval.
+     *Settheevaluationcontexttobeusedwhenweactuallyeval.
      *
-     * @param {Object} evalContext
-     * @returns {Context}
+     *@param{Object}evalContext
+     *@returns{Context}
      */
-    set_eval_context: function (evalContext) {
-        // a special case needs to be done for moment objects.  Dates are
-        // internally represented by a moment object, but they need to be
-        // converted to the server format before being sent. We call the toJSON
-        // method, because it returns the date with the format required by the
-        // server
-        for (var key in evalContext) {
-            if (evalContext[key] instanceof moment) {
-                evalContext[key] = evalContext[key].toJSON();
+    set_eval_context:function(evalContext){
+        //aspecialcaseneedstobedoneformomentobjects. Datesare
+        //internallyrepresentedbyamomentobject,buttheyneedtobe
+        //convertedtotheserverformatbeforebeingsent.WecallthetoJSON
+        //method,becauseitreturnsthedatewiththeformatrequiredbythe
+        //server
+        for(varkeyinevalContext){
+            if(evalContext[key]instanceofmoment){
+                evalContext[key]=evalContext[key].toJSON();
             }
         }
-        this.__eval_context = evalContext;
-        return this;
+        this.__eval_context=evalContext;
+        returnthis;
     },
 });
 
-return Context;
+returnContext;
 
 });

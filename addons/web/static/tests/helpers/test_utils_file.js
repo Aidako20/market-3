@@ -1,72 +1,72 @@
-flectra.define('web.test_utils_file', function () {
-"use strict";
+flectra.define('web.test_utils_file',function(){
+"usestrict";
 
 /**
- * FILE Test Utils
+ *FILETestUtils
  *
- * This module defines various utility functions to help simulate events with
- * files, such as drag-and-drop.
+ *Thismoduledefinesvariousutilityfunctionstohelpsimulateeventswith
+ *files,suchasdrag-and-drop.
  *
- * Note that all methods defined in this module are exported in the main
- * testUtils file.
+ *Notethatallmethodsdefinedinthismoduleareexportedinthemain
+ *testUtilsfile.
  */
 
 
 //------------------------------------------------------------------------------
-// Private functions
+//Privatefunctions
 //------------------------------------------------------------------------------
 
 /**
- * Create a fake object 'dataTransfer', linked to some files, which is passed to
- * drag and drop events.
+ *Createafakeobject'dataTransfer',linkedtosomefiles,whichispassedto
+ *draganddropevents.
  *
- * @param {Object[]} files
- * @returns {Object}
+ *@param{Object[]}files
+ *@returns{Object}
  */
-function _createFakeDataTransfer(files) {
-    return {
-        dropEffect: 'all',
-        effectAllowed: 'all',
+function_createFakeDataTransfer(files){
+    return{
+        dropEffect:'all',
+        effectAllowed:'all',
         files,
-        getData: function () {
-            return files;
+        getData:function(){
+            returnfiles;
         },
-        items: [],
-        types: ['Files'],
+        items:[],
+        types:['Files'],
     };
 }
 
 //------------------------------------------------------------------------------
-// Public functions
+//Publicfunctions
 //------------------------------------------------------------------------------
 
 /**
- * Create a file object, which can be used for drag-and-drop.
+ *Createafileobject,whichcanbeusedfordrag-and-drop.
  *
- * @param {Object} data
- * @param {string} data.name
- * @param {string} data.content
- * @param {string} data.contentType
- * @returns {Promise<Object>} resolved with file created
+ *@param{Object}data
+ *@param{string}data.name
+ *@param{string}data.content
+ *@param{string}data.contentType
+ *@returns{Promise<Object>}resolvedwithfilecreated
  */
-function createFile(data) {
-    // Note: this is only supported by Chrome, and does not work in Incognito mode
-    return new Promise(function (resolve, reject) {
-        var requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-        if (!requestFileSystem) {
-            throw new Error('FileSystem API is not supported');
+functioncreateFile(data){
+    //Note:thisisonlysupportedbyChrome,anddoesnotworkinIncognitomode
+    returnnewPromise(function(resolve,reject){
+        varrequestFileSystem=window.requestFileSystem||window.webkitRequestFileSystem;
+        if(!requestFileSystem){
+            thrownewError('FileSystemAPIisnotsupported');
         }
-        requestFileSystem(window.TEMPORARY, 1024 * 1024, function (fileSystem) {
-            fileSystem.root.getFile(data.name, { create: true }, function (fileEntry) {
-                fileEntry.createWriter(function (fileWriter) {
-                    fileWriter.onwriteend = function (e) {
-                        fileSystem.root.getFile(data.name, {}, function (fileEntry) {
-                            fileEntry.file(function (file) {
+        requestFileSystem(window.TEMPORARY,1024*1024,function(fileSystem){
+            fileSystem.root.getFile(data.name,{create:true},function(fileEntry){
+                fileEntry.createWriter(function(fileWriter){
+                    fileWriter.onwriteend=function(e){
+                        fileSystem.root.getFile(data.name,{},function(fileEntry){
+                            fileEntry.file(function(file){
                                 resolve(file);
                             });
                         });
                     };
-                    fileWriter.write(new Blob([ data.content ], { type: data.contentType }));
+                    fileWriter.write(newBlob([data.content],{type:data.contentType}));
                 });
             });
         });
@@ -74,83 +74,83 @@ function createFile(data) {
 }
 
 /**
- * Drag a file over a DOM element
+ *DragafileoveraDOMelement
  *
- * @param {$.Element} $el
- * @param {Object} file must have been created beforehand (@see createFile)
+ *@param{$.Element}$el
+ *@param{Object}filemusthavebeencreatedbeforehand(@seecreateFile)
  */
-function dragoverFile($el, file) {
-    var ev = new Event('dragover', { bubbles: true });
-    Object.defineProperty(ev, 'dataTransfer', {
-        value: _createFakeDataTransfer(file),
+functiondragoverFile($el,file){
+    varev=newEvent('dragover',{bubbles:true});
+    Object.defineProperty(ev,'dataTransfer',{
+        value:_createFakeDataTransfer(file),
     });
     $el[0].dispatchEvent(ev);
 }
 
 /**
- * Drop a file on a DOM element.
+ *DropafileonaDOMelement.
  *
- * @param {$.Element} $el
- * @param {Object} file must have been created beforehand (@see createFile)
+ *@param{$.Element}$el
+ *@param{Object}filemusthavebeencreatedbeforehand(@seecreateFile)
  */
-function dropFile($el, file) {
-    var ev = new Event('drop', { bubbles: true, });
-    Object.defineProperty(ev, 'dataTransfer', {
-        value: _createFakeDataTransfer([file]),
+functiondropFile($el,file){
+    varev=newEvent('drop',{bubbles:true,});
+    Object.defineProperty(ev,'dataTransfer',{
+        value:_createFakeDataTransfer([file]),
     });
     $el[0].dispatchEvent(ev);
 }
 
 /**
- * Drop some files on a DOM element.
+ *DropsomefilesonaDOMelement.
  *
- * @param {$.Element} $el
- * @param {Object[]} files must have been created beforehand (@see createFile)
+ *@param{$.Element}$el
+ *@param{Object[]}filesmusthavebeencreatedbeforehand(@seecreateFile)
  */
-function dropFiles($el, files) {
-    var ev = new Event('drop', { bubbles: true, });
-    Object.defineProperty(ev, 'dataTransfer', {
-        value: _createFakeDataTransfer(files),
+functiondropFiles($el,files){
+    varev=newEvent('drop',{bubbles:true,});
+    Object.defineProperty(ev,'dataTransfer',{
+        value:_createFakeDataTransfer(files),
     });
     $el[0].dispatchEvent(ev);
 }
 
 /**
- * Set files in a file input
+ *Setfilesinafileinput
  *
- * @param {DOM.Element} el
- * @param {Object[]} files must have been created beforehand
- *   @see testUtils.file.createFile
+ *@param{DOM.Element}el
+ *@param{Object[]}filesmusthavebeencreatedbeforehand
+ *  @seetestUtils.file.createFile
  */
-function inputFiles(el, files) {
-    // could not use _createFakeDataTransfer as el.files assignation will only
-    // work with a real FileList object.
-    const dataTransfer = new window.DataTransfer();
-    for (const file of files) {
+functioninputFiles(el,files){
+    //couldnotuse_createFakeDataTransferasel.filesassignationwillonly
+    //workwitharealFileListobject.
+    constdataTransfer=newwindow.DataTransfer();
+    for(constfileoffiles){
         dataTransfer.items.add(file);
     }
-    el.files = dataTransfer.files;
+    el.files=dataTransfer.files;
     /**
-     * Changing files programatically is not supposed to trigger the event but
-     * it does in Chrome versions before 73 (which is on runbot), so in that
-     * case there is no need to make a manual dispatch, because it would lead to
-     * the files being added twice.
+     *Changingfilesprogramaticallyisnotsupposedtotriggertheeventbut
+     *itdoesinChromeversionsbefore73(whichisonrunbot),sointhat
+     *casethereisnoneedtomakeamanualdispatch,becauseitwouldleadto
+     *thefilesbeingaddedtwice.
      */
-    const versionRaw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-    const chromeVersion = versionRaw ? parseInt(versionRaw[2], 10) : false;
-    if (!chromeVersion || chromeVersion >= 73) {
-        el.dispatchEvent(new Event('change'));
+    constversionRaw=navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+    constchromeVersion=versionRaw?parseInt(versionRaw[2],10):false;
+    if(!chromeVersion||chromeVersion>=73){
+        el.dispatchEvent(newEvent('change'));
     }
 }
 
 //------------------------------------------------------------------------------
-// Exposed API
+//ExposedAPI
 //------------------------------------------------------------------------------
 
-return {
-    createFile: createFile,
-    dragoverFile: dragoverFile,
-    dropFile: dropFile,
+return{
+    createFile:createFile,
+    dragoverFile:dragoverFile,
+    dropFile:dropFile,
     dropFiles,
     inputFiles,
 };

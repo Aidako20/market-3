@@ -1,60 +1,60 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.addons.sales_team.tests.common import TestSalesMC
+fromflectra.addons.sales_team.tests.commonimportTestSalesMC
 
 
-class TestDefaultTeam(TestSalesMC):
-    """Tests to check if correct default team is found."""
+classTestDefaultTeam(TestSalesMC):
+    """Teststocheckifcorrectdefaultteamisfound."""
 
     @classmethod
-    def setUpClass(cls):
-        """Set up data for default team tests."""
-        super(TestDefaultTeam, cls).setUpClass()
+    defsetUpClass(cls):
+        """Setupdatafordefaultteamtests."""
+        super(TestDefaultTeam,cls).setUpClass()
 
-        cls.team_sequence = cls.env['crm.team'].create({
-            'name': 'Team LowSequence',
-            'sequence': 0,
-            'company_id': False,
+        cls.team_sequence=cls.env['crm.team'].create({
+            'name':'TeamLowSequence',
+            'sequence':0,
+            'company_id':False,
         })
-        cls.team_responsible = cls.env['crm.team'].create({
-            'name': 'Team 3',
-            'user_id': cls.user_sales_manager.id,
-            'sequence': 3,
-            'company_id': cls.company_main.id
+        cls.team_responsible=cls.env['crm.team'].create({
+            'name':'Team3',
+            'user_id':cls.user_sales_manager.id,
+            'sequence':3,
+            'company_id':cls.company_main.id
         })
 
-    def test_default_team_member(self):
-        with self.with_user('user_sales_leads'):
-            team = self.env['crm.team']._get_default_team_id()
-            self.assertEqual(team, self.sales_team_1)
+    deftest_default_team_member(self):
+        withself.with_user('user_sales_leads'):
+            team=self.env['crm.team']._get_default_team_id()
+            self.assertEqual(team,self.sales_team_1)
 
-        # responsible with lower sequence better than member with higher sequence
-        self.team_responsible.user_id = self.user_sales_leads.id
-        with self.with_user('user_sales_leads'):
-            team = self.env['crm.team']._get_default_team_id()
-            self.assertEqual(team, self.team_responsible)
+        #responsiblewithlowersequencebetterthanmemberwithhighersequence
+        self.team_responsible.user_id=self.user_sales_leads.id
+        withself.with_user('user_sales_leads'):
+            team=self.env['crm.team']._get_default_team_id()
+            self.assertEqual(team,self.team_responsible)
 
-    def test_default_team_fallback(self):
-        """ Test fallback: domain, order """
-        self.sales_team_1.member_ids = [(5,)]
+    deftest_default_team_fallback(self):
+        """Testfallback:domain,order"""
+        self.sales_team_1.member_ids=[(5,)]
 
-        with self.with_user('user_sales_leads'):
-            team = self.env['crm.team']._get_default_team_id()
-            self.assertEqual(team, self.team_sequence)
+        withself.with_user('user_sales_leads'):
+            team=self.env['crm.team']._get_default_team_id()
+            self.assertEqual(team,self.team_sequence)
 
-        # next one is team_responsible with sequence = 3 (team_c2 is in another company)
-        self.team_sequence.active = False
-        with self.with_user('user_sales_leads'):
-            team = self.env['crm.team']._get_default_team_id()
-            self.assertEqual(team, self.team_responsible)
+        #nextoneisteam_responsiblewithsequence=3(team_c2isinanothercompany)
+        self.team_sequence.active=False
+        withself.with_user('user_sales_leads'):
+            team=self.env['crm.team']._get_default_team_id()
+            self.assertEqual(team,self.team_responsible)
 
         self.user_sales_leads.write({
-            'company_ids': [(4, self.company_2.id)],
-            'company_id': self.company_2.id,
+            'company_ids':[(4,self.company_2.id)],
+            'company_id':self.company_2.id,
         })
-        # multi company: switch company
-        self.user_sales_leads.write({'company_id': self.company_2.id})
-        with self.with_user('user_sales_leads'):
-            team = self.env['crm.team']._get_default_team_id()
-            self.assertEqual(team, self.team_c2)
+        #multicompany:switchcompany
+        self.user_sales_leads.write({'company_id':self.company_2.id})
+        withself.with_user('user_sales_leads'):
+            team=self.env['crm.team']._get_default_team_id()
+            self.assertEqual(team,self.team_c2)

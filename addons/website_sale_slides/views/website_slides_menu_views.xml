@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <menuitem name="Revenues"
+    <menuitemname="Revenues"
         id="website_slides_menu_report_revenues"
         parent="website_slides.website_slides_menu_report"
         sequence="3"

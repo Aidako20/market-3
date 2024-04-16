@@ -1,38 +1,38 @@
-# coding: utf-8
-from flectra import models, fields
+#coding:utf-8
+fromflectraimportmodels,fields
 
 
-class AccountTaxTemplate(models.Model):
-    _inherit = 'account.tax.template'
+classAccountTaxTemplate(models.Model):
+    _inherit='account.tax.template'
 
-    l10n_mx_tax_type = fields.Selection(
+    l10n_mx_tax_type=fields.Selection(
         selection=[
-            ('Tasa', "Tasa"),
-            ('Cuota', "Cuota"),
-            ('Exento', "Exento"),
+            ('Tasa',"Tasa"),
+            ('Cuota',"Cuota"),
+            ('Exento',"Exento"),
         ],
-        string="Factor Type",
+        string="FactorType",
         default='Tasa',
-        help="The CFDI version 3.3 have the attribute 'TipoFactor' in the tax lines. In it is indicated the factor "
-             "type that is applied to the base of the tax.")
+        help="TheCFDIversion3.3havetheattribute'TipoFactor'inthetaxlines.Initisindicatedthefactor"
+             "typethatisappliedtothebaseofthetax.")
 
-    def _get_tax_vals(self, company, tax_template_to_tax):
-        # OVERRIDE
-        res = super()._get_tax_vals(company, tax_template_to_tax)
-        res['l10n_mx_tax_type'] = self.l10n_mx_tax_type
-        return res
+    def_get_tax_vals(self,company,tax_template_to_tax):
+        #OVERRIDE
+        res=super()._get_tax_vals(company,tax_template_to_tax)
+        res['l10n_mx_tax_type']=self.l10n_mx_tax_type
+        returnres
 
 
-class AccountTax(models.Model):
-    _inherit = 'account.tax'
+classAccountTax(models.Model):
+    _inherit='account.tax'
 
-    l10n_mx_tax_type = fields.Selection(
+    l10n_mx_tax_type=fields.Selection(
         selection=[
-            ('Tasa', "Tasa"),
-            ('Cuota', "Cuota"),
-            ('Exento', "Exento"),
+            ('Tasa',"Tasa"),
+            ('Cuota',"Cuota"),
+            ('Exento',"Exento"),
         ],
-        string="Factor Type",
+        string="FactorType",
         default='Tasa',
-        help="The CFDI version 3.3 have the attribute 'TipoFactor' in the tax lines. In it is indicated the factor "
-             "type that is applied to the base of the tax.")
+        help="TheCFDIversion3.3havetheattribute'TipoFactor'inthetaxlines.Initisindicatedthefactor"
+             "typethatisappliedtothebaseofthetax.")

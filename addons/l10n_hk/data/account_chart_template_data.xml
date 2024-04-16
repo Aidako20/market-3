@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <record id="base.CNY" model="res.currency">
-        <field name="active" eval="True" />
+    <recordid="base.CNY"model="res.currency">
+        <fieldname="active"eval="True"/>
     </record>
 
-    <!-- Account Chart template -->
-    <record id="l10n_hk_chart_template" model="account.chart.template">
-        <field name="name">Hong Kong - Chart of Accounts</field>
-        <field name="bank_account_code_prefix">1200</field>
-        <field name="cash_account_code_prefix">1210</field>
-        <field name="transfer_account_code_prefix">111220</field>
-        <field name="code_digits">6</field>
-        <field name="currency_id" ref="base.HKD" />
+    <!--AccountCharttemplate-->
+    <recordid="l10n_hk_chart_template"model="account.chart.template">
+        <fieldname="name">HongKong-ChartofAccounts</field>
+        <fieldname="bank_account_code_prefix">1200</field>
+        <fieldname="cash_account_code_prefix">1210</field>
+        <fieldname="transfer_account_code_prefix">111220</field>
+        <fieldname="code_digits">6</field>
+        <fieldname="currency_id"ref="base.HKD"/>
     </record>
 </flectra>

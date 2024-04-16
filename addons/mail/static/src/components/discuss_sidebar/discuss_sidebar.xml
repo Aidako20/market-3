@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.DiscussSidebar" owl="1">
-        <div name="root" class="o_DiscussSidebar">
-            <div class="o_DiscussSidebar_group o_DiscussSidebar_groupMailbox">
-                <t t-foreach="orderedMailboxes" t-as="mailbox" t-key="mailbox.localId">
+    <tt-name="mail.DiscussSidebar"owl="1">
+        <divname="root"class="o_DiscussSidebar">
+            <divclass="o_DiscussSidebar_groupo_DiscussSidebar_groupMailbox">
+                <tt-foreach="orderedMailboxes"t-as="mailbox"t-key="mailbox.localId">
                     <DiscussSidebarItem
                         class="o_DiscussSidebar_item"
                         threadLocalId="mailbox.localId"
                     />
                 </t>
             </div>
-            <hr class="o_DiscussSidebar_separator"/>
-            <t t-if="env.models['mail.thread'].all(thread => thread.isPinned and thread.model === 'mail.channel').length > 19">
-                <input class="o_DiscussSidebar_quickSearch" t-on-input="_onInputQuickSearch" placeholder="Quick search..." t-ref="quickSearchInput" t-esc="discuss.sidebarQuickSearchValue"/>
+            <hrclass="o_DiscussSidebar_separator"/>
+            <tt-if="env.models['mail.thread'].all(thread=>thread.isPinnedandthread.model==='mail.channel').length>19">
+                <inputclass="o_DiscussSidebar_quickSearch"t-on-input="_onInputQuickSearch"placeholder="Quicksearch..."t-ref="quickSearchInput"t-esc="discuss.sidebarQuickSearchValue"/>
             </t>
-            <div class="o_DiscussSidebar_group o_DiscussSidebar_groupChannel">
-                <div class="o_DiscussSidebar_groupHeader">
-                    <div class="o_DiscussSidebar_groupHeaderItem o_DiscussSidebar_groupTitle o-clickable" t-on-click="_onClickChannelTitle">
+            <divclass="o_DiscussSidebar_groupo_DiscussSidebar_groupChannel">
+                <divclass="o_DiscussSidebar_groupHeader">
+                    <divclass="o_DiscussSidebar_groupHeaderItemo_DiscussSidebar_groupTitleo-clickable"t-on-click="_onClickChannelTitle">
                         Channels
                     </div>
-                    <div class="o-autogrow"/>
-                    <div class="o_DiscussSidebar_groupHeaderItem o_DiscussSidebar_groupHeaderItemAdd fa fa-plus" t-on-click="_onClickChannelAdd" title="Add or join a channel"/>
+                    <divclass="o-autogrow"/>
+                    <divclass="o_DiscussSidebar_groupHeaderItemo_DiscussSidebar_groupHeaderItemAddfafa-plus"t-on-click="_onClickChannelAdd"title="Addorjoinachannel"/>
                 </div>
-                <div class="o_DiscussSidebar_list">
-                    <t t-if="discuss.isAddingChannel">
-                        <div class="o_DiscussSidebar_item o_DiscussSidebar_itemNew">
+                <divclass="o_DiscussSidebar_list">
+                    <tt-if="discuss.isAddingChannel">
+                        <divclass="o_DiscussSidebar_itemo_DiscussSidebar_itemNew">
                             <AutocompleteInput
                                 class="o_DiscussSidebar_itemNewInput"
                                 customClass="'o_DiscussSidebar_newChannelAutocompleteSuggestions'"
@@ -38,7 +38,7 @@
                             />
                         </div>
                     </t>
-                    <t t-foreach="quickSearchOrderedAndPinnedMultiUserChannels" t-as="channel" t-key="channel.localId">
+                    <tt-foreach="quickSearchOrderedAndPinnedMultiUserChannels"t-as="channel"t-key="channel.localId">
                         <DiscussSidebarItem
                             class="o_DiscussSidebar_item"
                             threadLocalId="channel.localId"
@@ -46,28 +46,28 @@
                     </t>
                 </div>
             </div>
-            <div class="o_DiscussSidebar_group o_DiscussSidebar_groupChat">
-                <div class="o_DiscussSidebar_groupHeader">
-                    <div class="o_DiscussSidebar_groupHeaderItem o_DiscussSidebar_groupTitle">
-                        Direct Messages
+            <divclass="o_DiscussSidebar_groupo_DiscussSidebar_groupChat">
+                <divclass="o_DiscussSidebar_groupHeader">
+                    <divclass="o_DiscussSidebar_groupHeaderItemo_DiscussSidebar_groupTitle">
+                        DirectMessages
                     </div>
-                    <div class="o-autogrow"/>
-                    <div class="o_DiscussSidebar_groupHeaderItem o_DiscussSidebar_groupHeaderItemAdd fa fa-plus" t-on-click="_onClickChatAdd" title="Start a conversation"/>
+                    <divclass="o-autogrow"/>
+                    <divclass="o_DiscussSidebar_groupHeaderItemo_DiscussSidebar_groupHeaderItemAddfafa-plus"t-on-click="_onClickChatAdd"title="Startaconversation"/>
                 </div>
-                <div class="o_DiscussSidebar_list">
-                    <t t-if="discuss.isAddingChat">
-                        <div class="o_DiscussSidebar_item o_DiscussSidebar_itemNew">
+                <divclass="o_DiscussSidebar_list">
+                    <tt-if="discuss.isAddingChat">
+                        <divclass="o_DiscussSidebar_itemo_DiscussSidebar_itemNew">
                             <AutocompleteInput
                                 class="o_DiscussSidebar_itemNewInput"
                                 isFocusOnMount="true"
-                                placeholder="'Find or start a conversation...'"
+                                placeholder="'Findorstartaconversation...'"
                                 select="_onAddChatAutocompleteSelect"
                                 source="_onAddChatAutocompleteSource"
                                 t-on-o-hide="_onHideAddingItem"
                             />
                         </div>
                     </t>
-                    <t t-foreach="quickSearchPinnedAndOrderedChats" t-as="chat" t-key="chat.localId">
+                    <tt-foreach="quickSearchPinnedAndOrderedChats"t-as="chat"t-key="chat.localId">
                         <DiscussSidebarItem
                             class="o_DiscussSidebar_item"
                             threadLocalId="chat.localId"

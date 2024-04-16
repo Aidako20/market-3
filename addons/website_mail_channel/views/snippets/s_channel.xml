@@ -1,46 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="s_channel" name="Discussion Group">
-    <div class="s_channel"
-         data-id="0" data-object="mail.channel" data-follow="off">
-        <div class="input-group js_mg_follow_form">
-            <input type="email" name="email" placeholder="your email..."
-                   class="js_follow_email form-control"/>
-            <span class="input-group-append">
-                <button href="#" class="btn btn-primary js_follow_btn">Subscribe</button>
+<templateid="s_channel"name="DiscussionGroup">
+    <divclass="s_channel"
+         data-id="0"data-object="mail.channel"data-follow="off">
+        <divclass="input-groupjs_mg_follow_form">
+            <inputtype="email"name="email"placeholder="youremail..."
+                   class="js_follow_emailform-control"/>
+            <spanclass="input-group-append">
+                <buttonhref="#"class="btnbtn-primaryjs_follow_btn">Subscribe</button>
             </span>
         </div>
-        <p class="js_mg_details d-none">
-            <span class="js_mg_email d-none"><a href="#" class="js_mg_email"><i class="fa fa-envelope-o"/> send mail</a> - </span>
-            <a href="#" class="js_mg_link"><i class="fa fa-file-o"/> archives</a> -
-            <a role="button" href="#" class="js_unfollow_btn"><i class="fa fa-times"/> unsubscribe</a>
+        <pclass="js_mg_detailsd-none">
+            <spanclass="js_mg_emaild-none"><ahref="#"class="js_mg_email"><iclass="fafa-envelope-o"/>sendmail</a>-</span>
+            <ahref="#"class="js_mg_link"><iclass="fafa-file-o"/>archives</a>-
+            <arole="button"href="#"class="js_unfollow_btn"><iclass="fafa-times"/>unsubscribe</a>
         </p>
-        <p class="js_mg_confirmation d-none">
-            a confirmation email has been sent.
+        <pclass="js_mg_confirmationd-none">
+            aconfirmationemailhasbeensent.
         </p>
     </div>
 </template>
 
-<template id="s_channel_options" inherit_id="website.snippet_options">
-    <xpath expr="." position="inside">
-        <div data-js='Channel'
+<templateid="s_channel_options"inherit_id="website.snippet_options">
+    <xpathexpr="."position="inside">
+        <divdata-js='Channel'
              data-selector=".s_channel"
-             data-drop-near="p, h1, h2, h3, blockquote, .card">
+             data-drop-near="p,h1,h2,h3,blockquote,.card">
             <we-row>
-                <we-select class="select_discussion_list" data-attribute-name="id" data-no-preview="true">
-                    <!-- 'we-button' added programmatically with DB data -->
+                <we-selectclass="select_discussion_list"data-attribute-name="id"data-no-preview="true">
+                    <!--'we-button'addedprogrammaticallywithDBdata-->
                 </we-select>
-                <we-button class="fa fa-fw fa-plus" title="Create a public discussion group in your backend"
-                           data-create-channel="" data-no-preview="true" data-name="create_mail_channel_opt"/>
+                <we-buttonclass="fafa-fwfa-plus"title="Createapublicdiscussiongroupinyourbackend"
+                           data-create-channel=""data-no-preview="true"data-name="create_mail_channel_opt"/>
             </we-row>
         </div>
     </xpath>
 </template>
 
-<template id="assets_snippet_s_channel_js_000" inherit_id="website.assets_frontend">
-    <xpath expr="//script[last()]" position="after">
-        <script type="text/javascript" src="/website_mail_channel/static/src/snippets/s_channel/000.js"/>
+<templateid="assets_snippet_s_channel_js_000"inherit_id="website.assets_frontend">
+    <xpathexpr="//script[last()]"position="after">
+        <scripttype="text/javascript"src="/website_mail_channel/static/src/snippets/s_channel/000.js"/>
     </xpath>
 </template>
 

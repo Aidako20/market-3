@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <!--
-        Analytic Accounts with project
+        AnalyticAccountswithproject
     -->
-    <record id="account_analytic_account_view_form_inherit" model="ir.ui.view">
-        <field name="name">account.analytic.account.form.inherit</field>
-        <field name="model">account.analytic.account</field>
-        <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
-        <field eval="18" name="priority"/>
-        <field name="arch" type="xml">
-            <div name="button_box" position="inside">
-                <button class="oe_stat_button" type="object" name="action_view_projects"
-                    icon="fa-puzzle-piece" attrs="{'invisible': [('project_count', '=', 0)]}">
-                    <field string="Projects" name="project_count" widget="statinfo"/>
+    <recordid="account_analytic_account_view_form_inherit"model="ir.ui.view">
+        <fieldname="name">account.analytic.account.form.inherit</field>
+        <fieldname="model">account.analytic.account</field>
+        <fieldname="inherit_id"ref="analytic.view_account_analytic_account_form"/>
+        <fieldeval="18"name="priority"/>
+        <fieldname="arch"type="xml">
+            <divname="button_box"position="inside">
+                <buttonclass="oe_stat_button"type="object"name="action_view_projects"
+                    icon="fa-puzzle-piece"attrs="{'invisible':[('project_count','=',0)]}">
+                    <fieldstring="Projects"name="project_count"widget="statinfo"/>
                 </button>
             </div>
         </field>

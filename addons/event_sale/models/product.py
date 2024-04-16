@@ -1,27 +1,27 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import api, fields, models
-
-
-class ProductTemplate(models.Model):
-    _inherit = 'product.template'
-
-    event_ok = fields.Boolean(string='Is an Event Ticket', help="If checked this product automatically "
-      "creates an event registration at the sales order confirmation.")
-
-    @api.onchange('event_ok')
-    def _onchange_event_ok(self):
-        if self.event_ok:
-            self.type = 'service'
+fromflectraimportapi,fields,models
 
 
-class Product(models.Model):
-    _inherit = 'product.product'
+classProductTemplate(models.Model):
+    _inherit='product.template'
 
-    event_ticket_ids = fields.One2many('event.event.ticket', 'product_id', string='Event Tickets')
+    event_ok=fields.Boolean(string='IsanEventTicket',help="Ifcheckedthisproductautomatically"
+      "createsaneventregistrationatthesalesorderconfirmation.")
 
     @api.onchange('event_ok')
-    def _onchange_event_ok(self):
-        """ Redirection, inheritance mechanism hides the method on the model """
-        if self.event_ok:
-            self.type = 'service'
+    def_onchange_event_ok(self):
+        ifself.event_ok:
+            self.type='service'
+
+
+classProduct(models.Model):
+    _inherit='product.product'
+
+    event_ticket_ids=fields.One2many('event.event.ticket','product_id',string='EventTickets')
+
+    @api.onchange('event_ok')
+    def_onchange_event_ok(self):
+        """Redirection,inheritancemechanismhidesthemethodonthemodel"""
+        ifself.event_ok:
+            self.type='service'

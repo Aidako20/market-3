@@ -1,47 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-        <record id="view_base_module_import" model="ir.ui.view">
-            <field name="name">base.import.module.form</field>
-            <field name="model">base.import.module</field>
-            <field name="arch" type="xml">
-                <form string="Import module">
-                    <field name="state" invisible="1"/>
-                    <separator string="Import Module" colspan="4"/>
-                    <p class="alert alert-warning" role="alert">Note: you can only import data modules (.xml files and static assets)</p>
-                    <group states="init" col="4">
-                        <label for="module_file" string="Select module package to import (.zip file):" colspan="4"/>
-                        <field name="module_file" colspan="4"/>
+        <recordid="view_base_module_import"model="ir.ui.view">
+            <fieldname="name">base.import.module.form</field>
+            <fieldname="model">base.import.module</field>
+            <fieldname="arch"type="xml">
+                <formstring="Importmodule">
+                    <fieldname="state"invisible="1"/>
+                    <separatorstring="ImportModule"colspan="4"/>
+                    <pclass="alertalert-warning"role="alert">Note:youcanonlyimportdatamodules(.xmlfilesandstaticassets)</p>
+                    <groupstates="init"col="4">
+                        <labelfor="module_file"string="Selectmodulepackagetoimport(.zipfile):"colspan="4"/>
+                        <fieldname="module_file"colspan="4"/>
 
-                        <field name="force"/>
+                        <fieldname="force"/>
                     </group>
-                    <group states="done" col="4">
-                        <field name="import_message" colspan="4" nolabel="1" readonly="1"/>
+                    <groupstates="done"col="4">
+                        <fieldname="import_message"colspan="4"nolabel="1"readonly="1"/>
                     </group>
                     <footer>
-                        <div states="init">
-                            <button name="import_module" string="Import App" type="object" class="btn-primary"/>
-                            <button special="cancel" string="Cancel" class="btn-secondary"/>
+                        <divstates="init">
+                            <buttonname="import_module"string="ImportApp"type="object"class="btn-primary"/>
+                            <buttonspecial="cancel"string="Cancel"class="btn-secondary"/>
                         </div>
-                        <div states="done">
-                            <button name="action_module_open" string="Open Modules" type="object" class="btn-primary"/>
-                            <button special="cancel" string="Close" class="btn-secondary"/>
+                        <divstates="done">
+                            <buttonname="action_module_open"string="OpenModules"type="object"class="btn-primary"/>
+                            <buttonspecial="cancel"string="Close"class="btn-secondary"/>
                         </div>
                     </footer>
                 </form>
             </field>
         </record>
 
-        <record id="action_view_base_module_import" model="ir.actions.act_window">
-            <field name="name">Import Module</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">base.import.module</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
+        <recordid="action_view_base_module_import"model="ir.actions.act_window">
+            <fieldname="name">ImportModule</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">base.import.module</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">new</field>
         </record>
 
         <menuitem
-            name="Import Module"
+            name="ImportModule"
             action="action_view_base_module_import"
             id="menu_view_base_module_import"
             parent="base.menu_management"

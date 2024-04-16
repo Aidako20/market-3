@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class RecurringPlan(models.Model):
-    _name = "crm.recurring.plan"
-    _description = "CRM Recurring revenue plans"
-    _order = "sequence"
+classRecurringPlan(models.Model):
+    _name="crm.recurring.plan"
+    _description="CRMRecurringrevenueplans"
+    _order="sequence"
 
-    name = fields.Char('Plan Name', required=True, translate=True)
-    number_of_months = fields.Integer('# Months', required=True)
-    active = fields.Boolean('Active', default=True)
-    sequence = fields.Integer('Sequence', default=10)
+    name=fields.Char('PlanName',required=True,translate=True)
+    number_of_months=fields.Integer('#Months',required=True)
+    active=fields.Boolean('Active',default=True)
+    sequence=fields.Integer('Sequence',default=10)
 
-    _sql_constraints = [
-        ('check_number_of_months', 'CHECK(number_of_months >= 0)', 'The number of month can\'t be negative.'),
+    _sql_constraints=[
+        ('check_number_of_months','CHECK(number_of_months>=0)','Thenumberofmonthcan\'tbenegative.'),
     ]

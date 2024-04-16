@@ -1,10 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
-<flectra noupdate="1">
+<?xmlversion='1.0'encoding='utf-8'?>
+<flectranoupdate="1">
 
-    <record model="ir.rule" id="delivery_carrier_comp_rule">
-      <field name="name">Delivery Carrier multi-company</field>
-      <field name="model_id" ref="model_delivery_carrier"/>
-      <field name="domain_force"> [('company_id', 'in', company_ids + [False])]</field>
+    <recordmodel="ir.rule"id="delivery_carrier_comp_rule">
+      <fieldname="name">DeliveryCarriermulti-company</field>
+      <fieldname="model_id"ref="model_delivery_carrier"/>
+      <fieldname="domain_force">[('company_id','in',company_ids+[False])]</field>
     </record>
 
   </flectra>

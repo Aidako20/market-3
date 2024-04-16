@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class ApplicantGetRefuseReason(models.TransientModel):
-    _name = 'applicant.get.refuse.reason'
-    _description = 'Get Refuse Reason'
+classApplicantGetRefuseReason(models.TransientModel):
+    _name='applicant.get.refuse.reason'
+    _description='GetRefuseReason'
 
-    refuse_reason_id = fields.Many2one('hr.applicant.refuse.reason', 'Refuse Reason')
-    applicant_ids = fields.Many2many('hr.applicant')
+    refuse_reason_id=fields.Many2one('hr.applicant.refuse.reason','RefuseReason')
+    applicant_ids=fields.Many2many('hr.applicant')
 
-    def action_refuse_reason_apply(self):
-        return self.applicant_ids.write({'refuse_reason_id': self.refuse_reason_id.id, 'active': False})
+    defaction_refuse_reason_apply(self):
+        returnself.applicant_ids.write({'refuse_reason_id':self.refuse_reason_id.id,'active':False})

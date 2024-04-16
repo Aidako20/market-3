@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="slides.course.unsubscribe.modal">
+    <tt-name="slides.course.unsubscribe.modal">
         <div>
-            <div class="o_w_slide_unsubscribe_modal_container">
-                <t t-call="slides.course.unsubscribe.modal.subscription"/>
+            <divclass="o_w_slide_unsubscribe_modal_container">
+                <tt-call="slides.course.unsubscribe.modal.subscription"/>
             </div>
         </div>
     </t>
 
-    <t t-name="slides.course.unsubscribe.modal.subscription">
-        <form class="clearfix">
-            <div class="form-group row">
-                <div class="controls mt8 ml-3">
-                    <input id="subscribed" name="subscribed" type="checkbox"/>
-                    <label for="subscribed" class="col-form-label font-weight-normal">Be notified when a new content is added.</label>
+    <tt-name="slides.course.unsubscribe.modal.subscription">
+        <formclass="clearfix">
+            <divclass="form-grouprow">
+                <divclass="controlsmt8ml-3">
+                    <inputid="subscribed"name="subscribed"type="checkbox"/>
+                    <labelfor="subscribed"class="col-form-labelfont-weight-normal">Benotifiedwhenanewcontentisadded.</label>
                 </div>
             </div>
         </form>
     </t>
 
-    <t t-name="slides.course.unsubscribe.modal.leave">
-        <p>Do you really want to leave the course?</p>
-        <p>All completed classes and earned karma will be lost.</p>
+    <tt-name="slides.course.unsubscribe.modal.leave">
+        <p>Doyoureallywanttoleavethecourse?</p>
+        <p>Allcompletedclassesandearnedkarmawillbelost.</p>
     </t>
 
 </templates>

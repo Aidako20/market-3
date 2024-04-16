@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="portal_share_wizard" model="ir.ui.view">
-        <field name="name">portal.share.wizard</field>
-        <field name="model">portal.share</field>
-        <field name="arch" type="xml">
-            <form string="Share Document">
-                <p class="alert alert-warning" attrs="{'invisible': [('access_warning', '=', '')]}" role="alert"><field name="access_warning"/></p>
-                <group name="share_link">
-                    <field name="res_model" invisible="1"/>
-                    <field name="res_id" invisible="1"/>
-                    <field name="share_link" widget="CopyClipboardChar" options="{'string': 'Copy Link'}"/>
+    <recordid="portal_share_wizard"model="ir.ui.view">
+        <fieldname="name">portal.share.wizard</field>
+        <fieldname="model">portal.share</field>
+        <fieldname="arch"type="xml">
+            <formstring="ShareDocument">
+                <pclass="alertalert-warning"attrs="{'invisible':[('access_warning','=','')]}"role="alert"><fieldname="access_warning"/></p>
+                <groupname="share_link">
+                    <fieldname="res_model"invisible="1"/>
+                    <fieldname="res_id"invisible="1"/>
+                    <fieldname="share_link"widget="CopyClipboardChar"options="{'string':'CopyLink'}"/>
                 </group>
                 <group>
-                    <field name="partner_ids" widget="many2many_tags_email" placeholder="Add contacts to share the document..."/>
+                    <fieldname="partner_ids"widget="many2many_tags_email"placeholder="Addcontactstosharethedocument..."/>
                 </group>
                 <group>
-                    <field name="note" placeholder="Add a note"/>
+                    <fieldname="note"placeholder="Addanote"/>
                 </group>
                 <footer>
-                    <button string="Send" name="action_send_mail" attrs="{'invisible': [('access_warning', '!=', '')]}" type="object" class="btn-primary"/>
-                    <button string="Cancel" class="btn-default" special="cancel" />
+                    <buttonstring="Send"name="action_send_mail"attrs="{'invisible':[('access_warning','!=','')]}"type="object"class="btn-primary"/>
+                    <buttonstring="Cancel"class="btn-default"special="cancel"/>
                 </footer>
             </form>
         </field>
     </record>
 
-    <record id="portal_share_action" model="ir.actions.act_window">
-        <field name="name">Share Document</field>
-        <field name="res_model">portal.share</field>
-        <field name="binding_model_id" ref="model_portal_share"/>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
+    <recordid="portal_share_action"model="ir.actions.act_window">
+        <fieldname="name">ShareDocument</field>
+        <fieldname="res_model">portal.share</field>
+        <fieldname="binding_model_id"ref="model_portal_share"/>
+        <fieldname="view_mode">form</field>
+        <fieldname="target">new</field>
     </record>
 </flectra>

@@ -1,46 +1,46 @@
-flectra.define('web.CustomGroupByItem', function (require) {
-    "use strict";
+flectra.define('web.CustomGroupByItem',function(require){
+    "usestrict";
 
-    const DropdownMenuItem = require('web.DropdownMenuItem');
-    const { useModel } = require('web/static/src/js/model.js');
+    constDropdownMenuItem=require('web.DropdownMenuItem');
+    const{useModel}=require('web/static/src/js/model.js');
 
     /**
-     * Group by generator menu
+     *Groupbygeneratormenu
      *
-     * Component used to generate new filters of type 'groupBy'. It is composed
-     * of a button (used to toggle the rendering of the rest of the component) and
-     * an input (select) used to choose a new field name which will be used as a
-     * new groupBy value.
-     * @extends DropdownMenuItem
+     *Componentusedtogeneratenewfiltersoftype'groupBy'.Itiscomposed
+     *ofabutton(usedtotoggletherenderingoftherestofthecomponent)and
+     *aninput(select)usedtochooseanewfieldnamewhichwillbeusedasa
+     *newgroupByvalue.
+     *@extendsDropdownMenuItem
      */
-    class CustomGroupByItem extends DropdownMenuItem {
-        constructor() {
+    classCustomGroupByItemextendsDropdownMenuItem{
+        constructor(){
             super(...arguments);
 
-            this.canBeOpened = true;
-            this.state.fieldName = this.props.fields[0].name;
+            this.canBeOpened=true;
+            this.state.fieldName=this.props.fields[0].name;
 
-            this.model = useModel('searchModel');
+            this.model=useModel('searchModel');
         }
 
         //---------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //---------------------------------------------------------------------
 
         /**
-         * @private
+         *@private
          */
-        _onApply() {
-            const field = this.props.fields.find(f => f.name === this.state.fieldName);
-            this.model.dispatch('createNewGroupBy', field);
-            this.state.open = false;
+        _onApply(){
+            constfield=this.props.fields.find(f=>f.name===this.state.fieldName);
+            this.model.dispatch('createNewGroupBy',field);
+            this.state.open=false;
         }
     }
 
-    CustomGroupByItem.template = 'web.CustomGroupByItem';
-    CustomGroupByItem.props = {
-        fields: Array,
+    CustomGroupByItem.template='web.CustomGroupByItem';
+    CustomGroupByItem.props={
+        fields:Array,
     };
 
-    return CustomGroupByItem;
+    returnCustomGroupByItem;
 });

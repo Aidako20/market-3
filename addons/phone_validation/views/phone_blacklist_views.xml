@@ -1,80 +1,80 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <record id="phone_blacklist_view_tree" model="ir.ui.view">
-        <field name="name">phone.blacklist.view.tree</field>
-        <field name="model">phone.blacklist</field>
-        <field name="arch" type="xml">
-            <tree string="Phone Blacklist">
-                <field name="create_date" string="Blacklist Date"/>
-                <field name="number"/>
+    <recordid="phone_blacklist_view_tree"model="ir.ui.view">
+        <fieldname="name">phone.blacklist.view.tree</field>
+        <fieldname="model">phone.blacklist</field>
+        <fieldname="arch"type="xml">
+            <treestring="PhoneBlacklist">
+                <fieldname="create_date"string="BlacklistDate"/>
+                <fieldname="number"/>
             </tree>
         </field>
     </record>
 
-    <record id="phone_blacklist_view_form" model="ir.ui.view">
-        <field name="name">phone.blacklist.view.form</field>
-        <field name="model">phone.blacklist</field>
-        <field name="arch" type="xml">
-            <form string="Phone Blacklist" duplicate="false" edit="false">
+    <recordid="phone_blacklist_view_form"model="ir.ui.view">
+        <fieldname="name">phone.blacklist.view.form</field>
+        <fieldname="model">phone.blacklist</field>
+        <fieldname="arch"type="xml">
+            <formstring="PhoneBlacklist"duplicate="false"edit="false">
                 <header>
-                    <button name="phone_action_blacklist_remove" string="Unblacklist"
-                        type="object" class="oe_highlight" context="{'default_phone': number}"
-                        attrs="{'invisible': ['|', ('active', '=', False), ('number', '=', False)]}"/>
-                    <button name="action_add" string="Blacklist"
-                        type="object" class="oe_highlight"
-                        attrs="{'invisible': ['|', ('active', '=', True), ('number', '=', False)]}"/>
+                    <buttonname="phone_action_blacklist_remove"string="Unblacklist"
+                        type="object"class="oe_highlight"context="{'default_phone':number}"
+                        attrs="{'invisible':['|',('active','=',False),('number','=',False)]}"/>
+                    <buttonname="action_add"string="Blacklist"
+                        type="object"class="oe_highlight"
+                        attrs="{'invisible':['|',('active','=',True),('number','=',False)]}"/>
                 </header>
                 <sheet>
-                <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                <widgetname="web_ribbon"title="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
                     <group>
                         <group>
-                            <field name="number"/>
-                            <field name="active" readonly="1"/>
+                            <fieldname="number"/>
+                            <fieldname="active"readonly="1"/>
                             <br/>
                         </group>
                     </group>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="message_ids"/>
+                <divclass="oe_chatter">
+                    <fieldname="message_follower_ids"/>
+                    <fieldname="message_ids"/>
                 </div>
             </form>
         </field>
     </record>
 
-    <record id="phone_blacklist_view_search" model="ir.ui.view">
-        <field name="name">phone.blacklist.view.search</field>
-        <field name="model">phone.blacklist</field>
-        <field name="arch" type="xml">
+    <recordid="phone_blacklist_view_search"model="ir.ui.view">
+        <fieldname="name">phone.blacklist.view.search</field>
+        <fieldname="model">phone.blacklist</field>
+        <fieldname="arch"type="xml">
             <search>
-                <field name="number"/>
-                <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                <fieldname="number"/>
+                <filterstring="Archived"name="inactive"domain="[('active','=',False)]"/>
             </search>
         </field>
     </record>
 
-    <record id="phone_blacklist_action" model="ir.actions.act_window">
-        <field name="name">Blacklisted Phone Numbers</field>
-        <field name="res_model">phone.blacklist</field>
-        <field name="view_id" ref="phone_blacklist_view_tree"/>
-        <field name="search_view_id" ref="phone_blacklist_view_search"/>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Add a phone number in the blacklist
+    <recordid="phone_blacklist_action"model="ir.actions.act_window">
+        <fieldname="name">BlacklistedPhoneNumbers</field>
+        <fieldname="res_model">phone.blacklist</field>
+        <fieldname="view_id"ref="phone_blacklist_view_tree"/>
+        <fieldname="search_view_id"ref="phone_blacklist_view_search"/>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+                Addaphonenumberintheblacklist
             </p><p>
-                Blacklisted phone numbers means that the recipient won't receive SMS Marketing anymore.
+                Blacklistedphonenumbersmeansthattherecipientwon'treceiveSMSMarketinganymore.
             </p>
         </field>
     </record>
 
-    <!-- Technical Menu -->
-    <menuitem id="phone_menu_main"
-        name="Phone / SMS"
+    <!--TechnicalMenu-->
+    <menuitemid="phone_menu_main"
+        name="Phone/SMS"
         parent="base.menu_custom"
         sequence="3"/>
 
-    <menuitem id="phone_blacklist_menu"
-        name="Phone Blacklist"
+    <menuitemid="phone_blacklist_menu"
+        name="PhoneBlacklist"
         parent="phone_validation.phone_menu_main"
         sequence="3"
         action="phone_blacklist_action"/>

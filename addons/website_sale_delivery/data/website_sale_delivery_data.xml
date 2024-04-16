@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="delivery.free_delivery_carrier" model="delivery.carrier">
-        <field name="is_published" eval="True"/>
+    <recordid="delivery.free_delivery_carrier"model="delivery.carrier">
+        <fieldname="is_published"eval="True"/>
     </record>
 </flectra>

@@ -1,102 +1,102 @@
-flectra.define('web.AppsMenu', function (require) {
-"use strict";
+flectra.define('web.AppsMenu',function(require){
+"usestrict";
 
-var Widget = require('web.Widget');
+varWidget=require('web.Widget');
 
-var AppsMenu = Widget.extend({
-    template: 'AppsMenu',
-    events: {
-        'click .o_app': '_onAppsMenuItemClicked',
+varAppsMenu=Widget.extend({
+    template:'AppsMenu',
+    events:{
+        'click.o_app':'_onAppsMenuItemClicked',
     },
     /**
-     * @override
-     * @param {web.Widget} parent
-     * @param {Object} menuData
-     * @param {Object[]} menuData.children
+     *@override
+     *@param{web.Widget}parent
+     *@param{Object}menuData
+     *@param{Object[]}menuData.children
      */
-    init: function (parent, menuData) {
-        this._super.apply(this, arguments);
-        this._activeApp = undefined;
-        this._apps = _.map(menuData.children, function (appMenuData) {
-            return {
-                actionID: parseInt(appMenuData.action.split(',')[1]),
-                menuID: appMenuData.id,
-                name: appMenuData.name,
-                xmlID: appMenuData.xmlid,
+    init:function(parent,menuData){
+        this._super.apply(this,arguments);
+        this._activeApp=undefined;
+        this._apps=_.map(menuData.children,function(appMenuData){
+            return{
+                actionID:parseInt(appMenuData.action.split(',')[1]),
+                menuID:appMenuData.id,
+                name:appMenuData.name,
+                xmlID:appMenuData.xmlid,
             };
         });
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {Object[]}
+     *@returns{Object[]}
      */
-    getApps: function () {
-        return this._apps;
+    getApps:function(){
+        returnthis._apps;
     },
     /**
-     * Open the first app in the list of apps. Returns whether one was found.
+     *Openthefirstappinthelistofapps.Returnswhetheronewasfound.
      *
-     * @returns {Boolean}
+     *@returns{Boolean}
      */
-    openFirstApp: function () {
-        if (!this._apps.length) {
-            return false;
+    openFirstApp:function(){
+        if(!this._apps.length){
+            returnfalse;
         }
-        var firstApp = this._apps[0];
+        varfirstApp=this._apps[0];
         this._openApp(firstApp);
-        return true;
+        returntrue;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {Object} app
+     *@private
+     *@param{Object}app
      */
-    _openApp: function (app) {
+    _openApp:function(app){
         this._setActiveApp(app);
-        this.trigger_up('app_clicked', {
-            action_id: app.actionID,
-            menu_id: app.menuID,
+        this.trigger_up('app_clicked',{
+            action_id:app.actionID,
+            menu_id:app.menuID,
         });
     },
     /**
-     * @private
-     * @param {Object} app
+     *@private
+     *@param{Object}app
      */
-    _setActiveApp: function (app) {
-        var $oldActiveApp = this.$('.o_app.active');
+    _setActiveApp:function(app){
+        var$oldActiveApp=this.$('.o_app.active');
         $oldActiveApp.removeClass('active');
-        var $newActiveApp = this.$('.o_app[data-action-id="' + app.actionID + '"]');
+        var$newActiveApp=this.$('.o_app[data-action-id="'+app.actionID+'"]');
         $newActiveApp.addClass('active');
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when clicking on an item in the apps menu.
+     *Calledwhenclickingonanitemintheappsmenu.
      *
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onAppsMenuItemClicked: function (ev) {
-        var $target = $(ev.currentTarget);
-        var actionID = $target.data('action-id');
-        var menuID = $target.data('menu-id');
-        var app = _.findWhere(this._apps, { actionID: actionID, menuID: menuID });
+    _onAppsMenuItemClicked:function(ev){
+        var$target=$(ev.currentTarget);
+        varactionID=$target.data('action-id');
+        varmenuID=$target.data('menu-id');
+        varapp=_.findWhere(this._apps,{actionID:actionID,menuID:menuID});
         this._openApp(app);
     },
 
 });
 
-return AppsMenu;
+returnAppsMenu;
 
 });

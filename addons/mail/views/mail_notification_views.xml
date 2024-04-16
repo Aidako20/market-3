@@ -1,40 +1,40 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra><data>
-    <record id="mail_notification_view_tree" model="ir.ui.view">
-        <field name="name">mail.notification.view.tree</field>
-        <field name="model">mail.notification</field>
-        <field name="arch" type="xml">
-            <tree string="Notifications">
-                <field name="mail_message_id"/>
-                <field name="notification_type"/>
-                <field name="res_partner_id"/>
-                <field name="is_read"/>
-                <field name="failure_type"/>
+    <recordid="mail_notification_view_tree"model="ir.ui.view">
+        <fieldname="name">mail.notification.view.tree</field>
+        <fieldname="model">mail.notification</field>
+        <fieldname="arch"type="xml">
+            <treestring="Notifications">
+                <fieldname="mail_message_id"/>
+                <fieldname="notification_type"/>
+                <fieldname="res_partner_id"/>
+                <fieldname="is_read"/>
+                <fieldname="failure_type"/>
             </tree>
         </field>
     </record>
 
-    <record id="mail_notification_view_form" model="ir.ui.view">
-        <field name="name">mail.notification.view.form</field>
-        <field name="model">mail.notification</field>
-        <field name="arch" type="xml">
-            <form string="Notification" duplicate="0">
+    <recordid="mail_notification_view_form"model="ir.ui.view">
+        <fieldname="name">mail.notification.view.form</field>
+        <fieldname="model">mail.notification</field>
+        <fieldname="arch"type="xml">
+            <formstring="Notification"duplicate="0">
                 <header>
-                    <field name="notification_status" widget="statusbar"/>
+                    <fieldname="notification_status"widget="statusbar"/>
                 </header>
                 <sheet>
                     <group>
-                        <group string="Source">
-                            <field name="mail_message_id"/>
-                            <field name="notification_type"/>
-                            <field name="mail_id"/>
-                            <field name="res_partner_id"/>
+                        <groupstring="Source">
+                            <fieldname="mail_message_id"/>
+                            <fieldname="notification_type"/>
+                            <fieldname="mail_id"/>
+                            <fieldname="res_partner_id"/>
                         </group>
-                        <group string="Status">
-                            <field name="is_read"/>
-                            <field name="read_date"/>
-                            <field name="failure_type"/>
-                            <field name="failure_reason"/>
+                        <groupstring="Status">
+                            <fieldname="is_read"/>
+                            <fieldname="read_date"/>
+                            <fieldname="failure_type"/>
+                            <fieldname="failure_reason"/>
                         </group>
                     </group>
                 </sheet>
@@ -42,13 +42,13 @@
         </field>
     </record>
 
-    <record id="mail_notification_action" model="ir.actions.act_window">
-        <field name="name">Notifications</field>
-        <field name="res_model">mail.notification</field>
-        <field name="view_mode">tree,form</field>
+    <recordid="mail_notification_action"model="ir.actions.act_window">
+        <fieldname="name">Notifications</field>
+        <fieldname="res_model">mail.notification</field>
+        <fieldname="view_mode">tree,form</field>
     </record>
 
-    <menuitem name="Notifications"
+    <menuitemname="Notifications"
         id="mail_notification_menu"
         parent="mail.mail_menu_technical"
         action="mail_notification_action"

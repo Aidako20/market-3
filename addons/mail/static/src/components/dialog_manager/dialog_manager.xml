@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.DialogManager" owl="1">
-        <div class="o_DialogManager">
-            <t t-if="env.messaging">
-                <t t-foreach="env.messaging.dialogManager.dialogs" t-as="dialog" t-key="dialog.localId">
+    <tt-name="mail.DialogManager"owl="1">
+        <divclass="o_DialogManager">
+            <tt-if="env.messaging">
+                <tt-foreach="env.messaging.dialogManager.dialogs"t-as="dialog"t-key="dialog.localId">
                     <Dialog
                         class="o_DialogManager_dialog"
                         dialogLocalId="dialog.localId"

@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="res_config_settings_view_form" model="ir.ui.view">
-            <field name="name">res.config.settings.view.form.inherit.microsoft_outlook</field>
-            <field name="model">res.config.settings</field>
-            <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
-            <field name="arch" type="xml">
-                <div id="emails" position="inside">
-                    <div class="col-12 col-lg-6 o_setting_box" id="microsoft_outlook_setting"
-                        attrs="{'invisible': [('external_email_server_default', '=', False)]}">
-                        <div class="o_setting_right_pane">
-                            <span class="o_form_label">Outlook Credentials</span>
-                            <div class="text-muted">
-                                Send and receive email with your Outlook account.
+        <recordid="res_config_settings_view_form"model="ir.ui.view">
+            <fieldname="name">res.config.settings.view.form.inherit.microsoft_outlook</field>
+            <fieldname="model">res.config.settings</field>
+            <fieldname="inherit_id"ref="base_setup.res_config_settings_view_form"/>
+            <fieldname="arch"type="xml">
+                <divid="emails"position="inside">
+                    <divclass="col-12col-lg-6o_setting_box"id="microsoft_outlook_setting"
+                        attrs="{'invisible':[('external_email_server_default','=',False)]}">
+                        <divclass="o_setting_right_pane">
+                            <spanclass="o_form_label">OutlookCredentials</span>
+                            <divclass="text-muted">
+                                SendandreceiveemailwithyourOutlookaccount.
                             </div>
-                            <div class="content-group">
-                                <div class="row mt16" id="outlook_client_identifier">
-                                    <label string="Client ID" for="microsoft_outlook_client_identifier"
-                                        class="col-lg-3 o_light_label"/>
-                                    <field name="microsoft_outlook_client_identifier" class="ml-2"/>
+                            <divclass="content-group">
+                                <divclass="rowmt16"id="outlook_client_identifier">
+                                    <labelstring="ClientID"for="microsoft_outlook_client_identifier"
+                                        class="col-lg-3o_light_label"/>
+                                    <fieldname="microsoft_outlook_client_identifier"class="ml-2"/>
                                 </div>
-                                <div class="row mt16" id="outlook_client_secret">
-                                    <label string="Client Secret" for="microsoft_outlook_client_secret"
-                                        class="col-lg-3 o_light_label"/>
-                                    <field name="microsoft_outlook_client_secret" password="True" class="ml-2"/>
+                                <divclass="rowmt16"id="outlook_client_secret">
+                                    <labelstring="ClientSecret"for="microsoft_outlook_client_secret"
+                                        class="col-lg-3o_light_label"/>
+                                    <fieldname="microsoft_outlook_client_secret"password="True"class="ml-2"/>
                                 </div>
                             </div>
                         </div>

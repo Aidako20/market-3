@@ -1,301 +1,301 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <!-- Activities -->
-        <record id="mail_act_sale_upsell" model="mail.activity.type">
-            <field name="name">Order Upsell</field>
-            <field name="icon">fa-line-chart</field>
-            <field name="res_model_id" ref="sale.model_sale_order"/>
+    <datanoupdate="1">
+        <!--Activities-->
+        <recordid="mail_act_sale_upsell"model="mail.activity.type">
+            <fieldname="name">OrderUpsell</field>
+            <fieldname="icon">fa-line-chart</field>
+            <fieldname="res_model_id"ref="sale.model_sale_order"/>
         </record>
 
-        <!-- Sale-related subtypes for messaging / Chatter -->
-        <record id="mt_order_sent" model="mail.message.subtype">
-            <field name="name">Quotation sent</field>
-            <field name="res_model">sale.order</field>
-            <field name="default" eval="False"/>
-            <field name="description">Quotation sent</field>
+        <!--Sale-relatedsubtypesformessaging/Chatter-->
+        <recordid="mt_order_sent"model="mail.message.subtype">
+            <fieldname="name">Quotationsent</field>
+            <fieldname="res_model">sale.order</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">Quotationsent</field>
         </record>
-        <record id="mt_order_confirmed" model="mail.message.subtype">
-            <field name="name">Sales Order Confirmed</field>
-            <field name="res_model">sale.order</field>
-            <field name="default" eval="False"/>
-            <field name="description">Quotation confirmed</field>
+        <recordid="mt_order_confirmed"model="mail.message.subtype">
+            <fieldname="name">SalesOrderConfirmed</field>
+            <fieldname="res_model">sale.order</field>
+            <fieldname="default"eval="False"/>
+            <fieldname="description">Quotationconfirmed</field>
         </record>
 
-        <!-- Salesteam-related subtypes for messaging / Chatter -->
-        <record id="mt_salesteam_order_sent" model="mail.message.subtype">
-            <field name="name">Quotation sent</field>
-            <field name="sequence">20</field>
-            <field name="res_model">crm.team</field>
-            <field name="default" eval="True"/>
-            <field name="parent_id" ref="sale.mt_order_sent"/>
-            <field name="relation_field">team_id</field>
+        <!--Salesteam-relatedsubtypesformessaging/Chatter-->
+        <recordid="mt_salesteam_order_sent"model="mail.message.subtype">
+            <fieldname="name">Quotationsent</field>
+            <fieldname="sequence">20</field>
+            <fieldname="res_model">crm.team</field>
+            <fieldname="default"eval="True"/>
+            <fieldname="parent_id"ref="sale.mt_order_sent"/>
+            <fieldname="relation_field">team_id</field>
         </record>
-        <record id="mt_salesteam_order_confirmed" model="mail.message.subtype">
-            <field name="name">Sales Order Confirmed</field>
-            <field name="sequence">21</field>
-            <field name="res_model">crm.team</field>
-            <field name="default" eval="True"/>
-            <field name="parent_id" ref="sale.mt_order_confirmed"/>
-            <field name="relation_field">team_id</field>
+        <recordid="mt_salesteam_order_confirmed"model="mail.message.subtype">
+            <fieldname="name">SalesOrderConfirmed</field>
+            <fieldname="sequence">21</field>
+            <fieldname="res_model">crm.team</field>
+            <fieldname="default"eval="True"/>
+            <fieldname="parent_id"ref="sale.mt_order_confirmed"/>
+            <fieldname="relation_field">team_id</field>
         </record>
-        <record id="mt_salesteam_invoice_created" model="mail.message.subtype">
-            <field name="name">Invoice Created</field>
-            <field name="sequence">22</field>
-            <field name="res_model">crm.team</field>
-            <field name="parent_id" ref="account.mt_invoice_created"/>
-            <field name="relation_field">team_id</field>
+        <recordid="mt_salesteam_invoice_created"model="mail.message.subtype">
+            <fieldname="name">InvoiceCreated</field>
+            <fieldname="sequence">22</field>
+            <fieldname="res_model">crm.team</field>
+            <fieldname="parent_id"ref="account.mt_invoice_created"/>
+            <fieldname="relation_field">team_id</field>
         </record>
-        <record id="mt_salesteam_invoice_confirmed" model="mail.message.subtype">
-            <field name="name">Invoice Confirmed</field>
-            <field name="sequence">23</field>
-            <field name="res_model">crm.team</field>
-            <field name="parent_id" ref="account.mt_invoice_validated"/>
-            <field name="relation_field">team_id</field>
+        <recordid="mt_salesteam_invoice_confirmed"model="mail.message.subtype">
+            <fieldname="name">InvoiceConfirmed</field>
+            <fieldname="sequence">23</field>
+            <fieldname="res_model">crm.team</field>
+            <fieldname="parent_id"ref="account.mt_invoice_validated"/>
+            <fieldname="relation_field">team_id</field>
         </record>
     </data>
-    <!-- Template and notification section -->
-    <data noupdate="1">
-        <template id="mail_notification_paynow_online" inherit_id="mail.mail_notification_paynow"
-            name="Quotation: Sign and Pay mail notification template">
-            <xpath expr="//t[@t-set='access_name']" position="after">
-                <t t-if="record._name == 'sale.order'">
-                    <t t-set="is_transaction_pending" t-value="record.get_portal_last_transaction().state == 'pending'"/>
-                    <t t-if="record.has_to_be_signed(include_draft=True)">
-                        <t t-if="record.has_to_be_paid()" t-set="access_name">
-                            <t t-if="is_transaction_pending">View Quotation</t>
-                            <t t-else="">Sign &amp; Pay Quotation</t>
+    <!--Templateandnotificationsection-->
+    <datanoupdate="1">
+        <templateid="mail_notification_paynow_online"inherit_id="mail.mail_notification_paynow"
+            name="Quotation:SignandPaymailnotificationtemplate">
+            <xpathexpr="//t[@t-set='access_name']"position="after">
+                <tt-if="record._name=='sale.order'">
+                    <tt-set="is_transaction_pending"t-value="record.get_portal_last_transaction().state=='pending'"/>
+                    <tt-if="record.has_to_be_signed(include_draft=True)">
+                        <tt-if="record.has_to_be_paid()"t-set="access_name">
+                            <tt-if="is_transaction_pending">ViewQuotation</t>
+                            <tt-else="">Sign&amp;PayQuotation</t>
                         </t>
-                        <t t-else="" t-set="access_name">Accept &amp; Sign Quotation</t>
+                        <tt-else=""t-set="access_name">Accept&amp;SignQuotation</t>
                     </t>
-                    <t t-elif="record.has_to_be_paid(include_draft=True) and not is_transaction_pending">
-                        <t t-set="access_name">Accept &amp; Pay Quotation</t>
+                    <tt-elif="record.has_to_be_paid(include_draft=True)andnotis_transaction_pending">
+                        <tt-set="access_name">Accept&amp;PayQuotation</t>
                     </t>
-                    <t t-elif="record.state in ('draft', 'sent')">
-                        <t t-set="access_name">View Quotation</t>
+                    <tt-elif="record.statein('draft','sent')">
+                        <tt-set="access_name">ViewQuotation</t>
                     </t>
                 </t>
             </xpath>
         </template>
 
-        <record id="email_template_edi_sale" model="mail.template">
-            <field name="name">Sales Order: Send by email</field>
-            <field name="model_id" ref="sale.model_sale_order"/>
-            <field name="subject">${object.company_id.name} ${object.state in ('draft', 'sent') and (ctx.get('proforma') and 'Proforma' or 'Quotation') or 'Order'} (Ref ${object.name or 'n/a' })</field>
-            <field name="email_from">${(object.user_id.email_formatted or user.email_formatted) | safe}</field>
-            <field name="partner_to">${object.partner_id.id}</field>
-            <field name="body_html" type="html">
-<div style="margin: 0px; padding: 0px;">
-    <p style="margin: 0px; padding: 0px; font-size: 13px;">
-        % set doc_name = 'quotation' if object.state in ('draft', 'sent') else 'order'
+        <recordid="email_template_edi_sale"model="mail.template">
+            <fieldname="name">SalesOrder:Sendbyemail</field>
+            <fieldname="model_id"ref="sale.model_sale_order"/>
+            <fieldname="subject">${object.company_id.name}${object.statein('draft','sent')and(ctx.get('proforma')and'Proforma'or'Quotation')or'Order'}(Ref${object.nameor'n/a'})</field>
+            <fieldname="email_from">${(object.user_id.email_formattedoruser.email_formatted)|safe}</field>
+            <fieldname="partner_to">${object.partner_id.id}</field>
+            <fieldname="body_html"type="html">
+<divstyle="margin:0px;padding:0px;">
+    <pstyle="margin:0px;padding:0px;font-size:13px;">
+        %setdoc_name='quotation'ifobject.statein('draft','sent')else'order'
         Hello,
         <br/><br/>
         Your
-        % if ctx.get('proforma'):
-            Pro forma invoice for ${doc_name} <strong>${object.name}</strong>
-            % if object.origin:
-                (with reference: ${object.origin} )
-            % endif
-            amounting in <strong>${format_amount(object.amount_total, object.pricelist_id.currency_id)}</strong> is available.
-        % else:
-            ${doc_name} <strong>${object.name}</strong>
-            % if object.origin:
-                (with reference: ${object.origin} )
-            % endif
-            amounting in <strong>${format_amount(object.amount_total, object.pricelist_id.currency_id)}</strong> is ready for review.
-        % endif
+        %ifctx.get('proforma'):
+            Proformainvoicefor${doc_name}<strong>${object.name}</strong>
+            %ifobject.origin:
+                (withreference:${object.origin})
+            %endif
+            amountingin<strong>${format_amount(object.amount_total,object.pricelist_id.currency_id)}</strong>isavailable.
+        %else:
+            ${doc_name}<strong>${object.name}</strong>
+            %ifobject.origin:
+                (withreference:${object.origin})
+            %endif
+            amountingin<strong>${format_amount(object.amount_total,object.pricelist_id.currency_id)}</strong>isreadyforreview.
+        %endif
         <br/><br/>
-        Do not hesitate to contact us if you have any questions.
+        Donothesitatetocontactusifyouhaveanyquestions.
         <br/>
     </p>
 </div>
             </field>
-            <field name="report_template" ref="action_report_saleorder"/>
-            <field name="report_name">${(object.name or '').replace('/','_')}</field>
-            <field name="lang">${object.partner_id.lang}</field>
-            <field name="auto_delete" eval="True"/>
+            <fieldname="report_template"ref="action_report_saleorder"/>
+            <fieldname="report_name">${(object.nameor'').replace('/','_')}</field>
+            <fieldname="lang">${object.partner_id.lang}</field>
+            <fieldname="auto_delete"eval="True"/>
         </record>
 
-        <record id="mail_template_sale_confirmation" model="mail.template">
-            <field name="name">Sales Order: Confirmation Email</field>
-            <field name="model_id" ref="sale.model_sale_order"/>
-            <field name="subject">${object.company_id.name} ${(object.get_portal_last_transaction().state == 'pending') and 'Pending Order' or 'Order'} (Ref ${object.name or 'n/a' })</field>
-            <field name="email_from">${(object.user_id.email_formatted or user.email_formatted) | safe}</field>
-            <field name="partner_to">${object.partner_id.id}</field>
-            <field name="body_html" type="html">
-<div style="margin: 0px; padding: 0px;">
-    <p style="margin: 0px; padding: 0px; font-size: 12px;">
+        <recordid="mail_template_sale_confirmation"model="mail.template">
+            <fieldname="name">SalesOrder:ConfirmationEmail</field>
+            <fieldname="model_id"ref="sale.model_sale_order"/>
+            <fieldname="subject">${object.company_id.name}${(object.get_portal_last_transaction().state=='pending')and'PendingOrder'or'Order'}(Ref${object.nameor'n/a'})</field>
+            <fieldname="email_from">${(object.user_id.email_formattedoruser.email_formatted)|safe}</field>
+            <fieldname="partner_to">${object.partner_id.id}</field>
+            <fieldname="body_html"type="html">
+<divstyle="margin:0px;padding:0px;">
+    <pstyle="margin:0px;padding:0px;font-size:12px;">
         Hello,
         <br/><br/>
-        % set transaction = object.get_portal_last_transaction()
-        Your order <strong>${object.name}</strong> amounting in <strong>${format_amount(object.amount_total, object.currency_id)}</strong>
-        % if object.state == 'sale' or (transaction and transaction.state in ('done', 'authorized')) :
-            has been confirmed.<br/>
-            Thank you for your trust!
-        % elif transaction and transaction.state == 'pending' :
-            is pending. It will be confirmed when the payment is received.
-            % if object.reference:
-                Your payment reference is <strong>${object.reference}</strong>.
-            % endif
-        % endif
+        %settransaction=object.get_portal_last_transaction()
+        Yourorder<strong>${object.name}</strong>amountingin<strong>${format_amount(object.amount_total,object.currency_id)}</strong>
+        %ifobject.state=='sale'or(transactionandtransaction.statein('done','authorized')):
+            hasbeenconfirmed.<br/>
+            Thankyouforyourtrust!
+        %eliftransactionandtransaction.state=='pending':
+            ispending.Itwillbeconfirmedwhenthepaymentisreceived.
+            %ifobject.reference:
+                Yourpaymentreferenceis<strong>${object.reference}</strong>.
+            %endif
+        %endif
         <br/><br/>
-        Do not hesitate to contact us if you have any questions.
+        Donothesitatetocontactusifyouhaveanyquestions.
         <br/><br/>
     </p>
-% if object.website_id:
-    <div style="margin: 0px; padding: 0px;">
-        <table width="100%" style="color: #454748; font-size: 12px; border-collapse: collapse;">
-            <tr style="border-bottom: 2px solid #dee2e6;">
-                <td style="width: 150px;"><strong>Products</strong></td>
+%ifobject.website_id:
+    <divstyle="margin:0px;padding:0px;">
+        <tablewidth="100%"style="color:#454748;font-size:12px;border-collapse:collapse;">
+            <trstyle="border-bottom:2pxsolid#dee2e6;">
+                <tdstyle="width:150px;"><strong>Products</strong></td>
                 <td></td>
-                <td width="15%" align="center"><strong>Quantity</strong></td>
-                <td width="20%" align="right"><strong>
-                % if object.user_id.has_group('account.group_show_line_subtotals_tax_excluded'):
-                    VAT Excl.
-                % else
-                    VAT Incl.
-                % endif
+                <tdwidth="15%"align="center"><strong>Quantity</strong></td>
+                <tdwidth="20%"align="right"><strong>
+                %ifobject.user_id.has_group('account.group_show_line_subtotals_tax_excluded'):
+                    VATExcl.
+                %else
+                    VATIncl.
+                %endif
                 </strong></td>
             </tr>
         </table>
-        % for line in object.order_line:
-            % if not line.is_delivery and line.display_type in ['line_section', 'line_note']:
-                <table width="100%" style="color: #454748; font-size: 12px; border-collapse: collapse;">
-                    <tr style="${loop.cycle('background-color: #f2f2f2', 'background-color: #ffffff')}">
-                        <td colspan="4">
-                            % if line.display_type == 'line_section':
+        %forlineinobject.order_line:
+            %ifnotline.is_deliveryandline.display_typein['line_section','line_note']:
+                <tablewidth="100%"style="color:#454748;font-size:12px;border-collapse:collapse;">
+                    <trstyle="${loop.cycle('background-color:#f2f2f2','background-color:#ffffff')}">
+                        <tdcolspan="4">
+                            %ifline.display_type=='line_section':
                                 <strong>${line.name}</strong>
-                            % elif line.display_type == 'line_note':
+                            %elifline.display_type=='line_note':
                                 <i>${line.name}</i>
-                            % endif
+                            %endif
                         </td>
                     </tr>
                 </table>
-            % elif not line.is_delivery
-                <table width="100%" style="color: #454748; font-size: 12px; border-collapse: collapse;">
-                    <tr style="${loop.cycle('background-color: #f2f2f2', 'background-color: #ffffff')}">
-                        <td style="width: 150px;">
-                            <img src="/web/image/product.product/${line.product_id.id}/image_128" style="width: 64px; height: 64px; object-fit: contain;" alt="Product image"></img>
+            %elifnotline.is_delivery
+                <tablewidth="100%"style="color:#454748;font-size:12px;border-collapse:collapse;">
+                    <trstyle="${loop.cycle('background-color:#f2f2f2','background-color:#ffffff')}">
+                        <tdstyle="width:150px;">
+                            <imgsrc="/web/image/product.product/${line.product_id.id}/image_128"style="width:64px;height:64px;object-fit:contain;"alt="Productimage"></img>
                         </td>
-                        <td align="left">${line.product_id.name}</td>
-                        <td width="15%" align="center">${line.product_uom_qty}</td>
-                        <td width="20%" align="right"><strong>
-                        % if object.user_id.has_group('account.group_show_line_subtotals_tax_excluded'):
-                            ${format_amount(line.price_reduce_taxexcl, object.currency_id)}
-                        % else
-                            ${format_amount(line.price_reduce_taxinc, object.currency_id)}
-                        % endif
+                        <tdalign="left">${line.product_id.name}</td>
+                        <tdwidth="15%"align="center">${line.product_uom_qty}</td>
+                        <tdwidth="20%"align="right"><strong>
+                        %ifobject.user_id.has_group('account.group_show_line_subtotals_tax_excluded'):
+                            ${format_amount(line.price_reduce_taxexcl,object.currency_id)}
+                        %else
+                            ${format_amount(line.price_reduce_taxinc,object.currency_id)}
+                        %endif
                         </strong></td>
                     </tr>
                 </table>
-            % endif
-        % endfor
+            %endif
+        %endfor
     </div>
-    % if object.carrier_id:
-    <div style="margin: 0px; padding: 0px;">
-        <table width="100%" style="color: #454748; font-size: 12px; border-spacing: 0px 4px;" align="right">
+    %ifobject.carrier_id:
+    <divstyle="margin:0px;padding:0px;">
+        <tablewidth="100%"style="color:#454748;font-size:12px;border-spacing:0px4px;"align="right">
             <tr>
-                <td style="width: 60%"/>
-                <td style="width: 30%; border-top: 1px solid #dee2e6;" align="right"><strong>Delivery:</strong></td>
-                <td style="width: 10%; border-top: 1px solid #dee2e6;" align="right">${format_amount(object.amount_delivery, object.currency_id)}</td>
+                <tdstyle="width:60%"/>
+                <tdstyle="width:30%;border-top:1pxsolid#dee2e6;"align="right"><strong>Delivery:</strong></td>
+                <tdstyle="width:10%;border-top:1pxsolid#dee2e6;"align="right">${format_amount(object.amount_delivery,object.currency_id)}</td>
             </tr>
             <tr>
-                <td style="width: 60%"/>
-                <td style="width: 30%;" align="right"><strong>SubTotal:</strong></td>
-                <td style="width: 10%;" align="right">${format_amount(object.amount_untaxed, object.currency_id)}</td>
+                <tdstyle="width:60%"/>
+                <tdstyle="width:30%;"align="right"><strong>SubTotal:</strong></td>
+                <tdstyle="width:10%;"align="right">${format_amount(object.amount_untaxed,object.currency_id)}</td>
             </tr>
         </table>
     </div>
-    % else:
-    <div style="margin: 0px; padding: 0px;">
-        <table width="100%" style="color: #454748; font-size: 12px; border-spacing: 0px 4px;" align="right">
+    %else:
+    <divstyle="margin:0px;padding:0px;">
+        <tablewidth="100%"style="color:#454748;font-size:12px;border-spacing:0px4px;"align="right">
             <tr>
-                <td style="width: 60%"/>
-                <td style="width: 30%; border-top: 1px solid #dee2e6;" align="right"><strong>SubTotal:</strong></td>
-                <td style="width: 10%; border-top: 1px solid #dee2e6;" align="right">${format_amount(object.amount_untaxed, object.currency_id)}</td>
+                <tdstyle="width:60%"/>
+                <tdstyle="width:30%;border-top:1pxsolid#dee2e6;"align="right"><strong>SubTotal:</strong></td>
+                <tdstyle="width:10%;border-top:1pxsolid#dee2e6;"align="right">${format_amount(object.amount_untaxed,object.currency_id)}</td>
             </tr>
         </table>
     </div>
-    % endif
-    <div style="margin: 0px; padding: 0px;">
-        <table width="100%" style="color: #454748; font-size: 12px; border-spacing: 0px 4px;" align="right">
+    %endif
+    <divstyle="margin:0px;padding:0px;">
+        <tablewidth="100%"style="color:#454748;font-size:12px;border-spacing:0px4px;"align="right">
             <tr>
-                <td style="width: 60%"/>
-                <td style="width: 30%;" align="right"><strong>Taxes:</strong></td>
-                <td style="width: 10%;" align="right">${format_amount(object.amount_tax, object.currency_id)}</td>
+                <tdstyle="width:60%"/>
+                <tdstyle="width:30%;"align="right"><strong>Taxes:</strong></td>
+                <tdstyle="width:10%;"align="right">${format_amount(object.amount_tax,object.currency_id)}</td>
             </tr>
             <tr>
-                <td style="width: 60%"/>
-                <td style="width: 30%; border-top: 1px solid #dee2e6;" align="right"><strong>Total:</strong></td>
-                <td style="width: 10%; border-top: 1px solid #dee2e6;" align="right">${format_amount(object.amount_total, object.currency_id)}</td>
+                <tdstyle="width:60%"/>
+                <tdstyle="width:30%;border-top:1pxsolid#dee2e6;"align="right"><strong>Total:</strong></td>
+                <tdstyle="width:10%;border-top:1pxsolid#dee2e6;"align="right">${format_amount(object.amount_total,object.currency_id)}</td>
             </tr>
         </table>
     </div>
-    % if object.partner_invoice_id:
-    <div style="margin: 0px; padding: 0px;">
-        <table width="100%" style="color: #454748; font-size: 12px;">
+    %ifobject.partner_invoice_id:
+    <divstyle="margin:0px;padding:0px;">
+        <tablewidth="100%"style="color:#454748;font-size:12px;">
             <tr>
-                <td style="padding-top: 10px;">
-                    <strong>Bill to:</strong>
-                    ${object.partner_invoice_id.street or ''}
-                    ${object.partner_invoice_id.city or ''}
-                    ${object.partner_invoice_id.state_id.name or ''}
-                    ${object.partner_invoice_id.zip or ''}
-                    ${object.partner_invoice_id.country_id.name or ''}
+                <tdstyle="padding-top:10px;">
+                    <strong>Billto:</strong>
+                    ${object.partner_invoice_id.streetor''}
+                    ${object.partner_invoice_id.cityor''}
+                    ${object.partner_invoice_id.state_id.nameor''}
+                    ${object.partner_invoice_id.zipor''}
+                    ${object.partner_invoice_id.country_id.nameor''}
                 </td>
             </tr>
             <tr>
                 <td>
-                    <strong>Payment Method:</strong>
-                    % if transaction.payment_token_id:
+                    <strong>PaymentMethod:</strong>
+                    %iftransaction.payment_token_id:
                         ${transaction.payment_token_id.name}
-                    % else:
+                    %else:
                         ${transaction.acquirer_id.name}
-                    % endif
-                     (${format_amount(transaction.amount, object.currency_id)})
+                    %endif
+                     (${format_amount(transaction.amount,object.currency_id)})
                 </td>
             </tr>
         </table>
     </div>
-    % endif
-    % if object.partner_shipping_id and not object.only_services:
-    <div style="margin: 0px; padding: 0px;">
-        <table width="100%" style="color: #454748; font-size: 12px;">
+    %endif
+    %ifobject.partner_shipping_idandnotobject.only_services:
+    <divstyle="margin:0px;padding:0px;">
+        <tablewidth="100%"style="color:#454748;font-size:12px;">
             <tr>
                 <td>
                     <br/>
-                    <strong>Ship to:</strong>
-                    ${object.partner_shipping_id.street or ''}
-                    ${object.partner_shipping_id.city or ''}
-                    ${object.partner_shipping_id.state_id.name or ''}
-                    ${object.partner_shipping_id.zip or ''}
-                    ${object.partner_shipping_id.country_id.name or ''}
+                    <strong>Shipto:</strong>
+                    ${object.partner_shipping_id.streetor''}
+                    ${object.partner_shipping_id.cityor''}
+                    ${object.partner_shipping_id.state_id.nameor''}
+                    ${object.partner_shipping_id.zipor''}
+                    ${object.partner_shipping_id.country_id.nameor''}
                 </td>
             </tr>
         </table>
-        % if object.carrier_id:
-        <table width="100%" style="color: #454748; font-size: 12px;">
+        %ifobject.carrier_id:
+        <tablewidth="100%"style="color:#454748;font-size:12px;">
             <tr>
                 <td>
-                    <strong>Shipping Method:</strong>
+                    <strong>ShippingMethod:</strong>
                     ${object.carrier_id.name}
-                    % if object.carrier_id.fixed_price == 0.0:
+                    %ifobject.carrier_id.fixed_price==0.0:
                         (Free)
-                    % else:
-                        (${format_amount(object.carrier_id.fixed_price, object.currency_id)})
-                    % endif
+                    %else:
+                        (${format_amount(object.carrier_id.fixed_price,object.currency_id)})
+                    %endif
                 </td>
             </tr>
         </table>
-        % endif
+        %endif
     </div>
-    % endif
-% endif
+    %endif
+%endif
 </div></field>
-            <field name="report_template" ref="action_report_saleorder"/>
-            <field name="report_name">${(object.name or '').replace('/','_')}</field>
-            <field name="lang">${object.partner_id.lang}</field>
-            <field name="auto_delete" eval="True"/>
+            <fieldname="report_template"ref="action_report_saleorder"/>
+            <fieldname="report_name">${(object.nameor'').replace('/','_')}</field>
+            <fieldname="lang">${object.partner_id.lang}</field>
+            <fieldname="auto_delete"eval="True"/>
         </record>
     </data>
 </flectra>

@@ -1,22 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <record id="view_stock_track_confirmation" model="ir.ui.view">
-        <field name="name">stock.track.confirmation.view.form</field>
-        <field name="model">stock.track.confirmation</field>
-        <field name="arch" type="xml">
-            <form string="Lots or serial numbers were not provided to tracked products">
-                <field name="inventory_id" invisible="1"/>
-                <p>Some products of the inventory adjustment are tracked. Are you sure you don't want to specify a serial or lot number for them?</p>
-                <strong>Product(s) tracked: </strong>
-                <field name="tracking_line_ids" readonly="1">
+    <recordid="view_stock_track_confirmation"model="ir.ui.view">
+        <fieldname="name">stock.track.confirmation.view.form</field>
+        <fieldname="model">stock.track.confirmation</field>
+        <fieldname="arch"type="xml">
+            <formstring="Lotsorserialnumberswerenotprovidedtotrackedproducts">
+                <fieldname="inventory_id"invisible="1"/>
+                <p>Someproductsoftheinventoryadjustmentaretracked.Areyousureyoudon'twanttospecifyaserialorlotnumberforthem?</p>
+                <strong>Product(s)tracked:</strong>
+                <fieldname="tracking_line_ids"readonly="1">
                     <tree>
-                        <field name="product_id"/>
-                        <field name="tracking"/>
+                        <fieldname="product_id"/>
+                        <fieldname="tracking"/>
                     </tree>
                 </field>
                 <footer>
-                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary"/>
-                    <button string="Discard" special="cancel" class="btn-secondary"/>
+                    <buttonname="action_confirm"string="Confirm"type="object"class="btn-primary"/>
+                    <buttonstring="Discard"special="cancel"class="btn-secondary"/>
                 </footer>
             </form>
         </field>

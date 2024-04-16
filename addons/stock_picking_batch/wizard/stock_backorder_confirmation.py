@@ -1,20 +1,20 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class StockBackorderConfirmation(models.TransientModel):
-    _inherit = 'stock.backorder.confirmation'
+classStockBackorderConfirmation(models.TransientModel):
+    _inherit='stock.backorder.confirmation'
 
-    def process(self):
-        res = super().process()
-        if self.env.context.get('pickings_to_detach'):
-            self.env['stock.picking'].browse(self.env.context['pickings_to_detach']).batch_id = False
-        return res
+    defprocess(self):
+        res=super().process()
+        ifself.env.context.get('pickings_to_detach'):
+            self.env['stock.picking'].browse(self.env.context['pickings_to_detach']).batch_id=False
+        returnres
 
-    def process_cancel_backorder(self):
-        res = super().process_cancel_backorder()
-        if self.env.context.get('pickings_to_detach'):
-            self.env['stock.picking'].browse(self.env.context['pickings_to_detach']).batch_id = False
-        return res
+    defprocess_cancel_backorder(self):
+        res=super().process_cancel_backorder()
+        ifself.env.context.get('pickings_to_detach'):
+            self.env['stock.picking'].browse(self.env.context['pickings_to_detach']).batch_id=False
+        returnres

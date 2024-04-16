@@ -1,24 +1,24 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models, fields
+fromflectraimportapi,models,fields
 
-class goal_manual_wizard(models.TransientModel):
-    """Wizard to update a manual goal"""
-    _name = 'gamification.goal.wizard'
-    _description = 'Gamification Goal Wizard'
+classgoal_manual_wizard(models.TransientModel):
+    """Wizardtoupdateamanualgoal"""
+    _name='gamification.goal.wizard'
+    _description='GamificationGoalWizard'
 
-    goal_id = fields.Many2one("gamification.goal", string='Goal', required=True)
-    current = fields.Float('Current')
+    goal_id=fields.Many2one("gamification.goal",string='Goal',required=True)
+    current=fields.Float('Current')
 
-    def action_update_current(self):
-        """Wizard action for updating the current value"""
-        for wiz in self:
+    defaction_update_current(self):
+        """Wizardactionforupdatingthecurrentvalue"""
+        forwizinself:
             wiz.goal_id.write({
-                'current': wiz.current,
-                'goal_id': wiz.goal_id.id,
-                'to_update': False,
+                'current':wiz.current,
+                'goal_id':wiz.goal_id.id,
+                'to_update':False,
             })
             wiz.goal_id.update_goal()
 
-        return False
+        returnFalse

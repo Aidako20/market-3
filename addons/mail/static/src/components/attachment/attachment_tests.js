@@ -1,757 +1,757 @@
-flectra.define('mail/static/src/components/attachment/attachment_tests.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/attachment/attachment_tests.js',function(require){
+'usestrict';
 
-const components = {
-    Attachment: require('mail/static/src/components/attachment/attachment.js'),
+constcomponents={
+    Attachment:require('mail/static/src/components/attachment/attachment.js'),
 };
-const {
+const{
     afterEach,
     afterNextRender,
     beforeEach,
     createRootComponent,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-QUnit.module('mail', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('attachment', {}, function () {
-QUnit.module('attachment_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('attachment',{},function(){
+QUnit.module('attachment_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.createAttachmentComponent = async (attachment, otherProps) => {
-            const props = Object.assign({ attachmentLocalId: attachment.localId }, otherProps);
-            await createRootComponent(this, components.Attachment, {
+        this.createAttachmentComponent=async(attachment,otherProps)=>{
+            constprops=Object.assign({attachmentLocalId:attachment.localId},otherProps);
+            awaitcreateRootComponent(this,components.Attachment,{
                 props,
-                target: this.widget.el,
+                target:this.widget.el,
             });
         };
 
-        this.start = async params => {
-            const { env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
+        this.start=asyncparams=>{
+            const{env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('simplest layout', async function (assert) {
+QUnit.test('simplestlayout',asyncfunction(assert){
     assert.expect(8);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.txt",
-        id: 750,
-        mimetype: 'text/plain',
-        name: "test.txt",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.txt",
+        id:750,
+        mimetype:'text/plain',
+        name:"test.txt",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'none',
-        isDownloadable: false,
-        isEditable: false,
-        showExtension: false,
-        showFilename: false,
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'none',
+        isDownloadable:false,
+        isEditable:false,
+        showExtension:false,
+        showFilename:false,
     });
     assert.strictEqual(
         document.querySelectorAll('.o_Attachment').length,
         1,
-        "should have attachment component in DOM"
+        "shouldhaveattachmentcomponentinDOM"
     );
-    const attachmentEl = document.querySelector('.o_Attachment');
+    constattachmentEl=document.querySelector('.o_Attachment');
     assert.strictEqual(
         attachmentEl.dataset.attachmentLocalId,
-        this.env.models['mail.attachment'].findFromIdentifyingData({ id: 750 }).localId,
-        "attachment component should be linked to attachment store model"
+        this.env.models['mail.attachment'].findFromIdentifyingData({id:750}).localId,
+        "attachmentcomponentshouldbelinkedtoattachmentstoremodel"
     );
     assert.strictEqual(
         attachmentEl.title,
         "test.txt",
-        "attachment should have filename as title attribute"
+        "attachmentshouldhavefilenameastitleattribute"
     );
     assert.strictEqual(
-        attachmentEl.querySelectorAll(`:scope .o_Attachment_image`).length,
+        attachmentEl.querySelectorAll(`:scope.o_Attachment_image`).length,
         1,
-        "attachment should have an image part"
+        "attachmentshouldhaveanimagepart"
     );
-    const attachmentImage = document.querySelector(`.o_Attachment_image`);
+    constattachmentImage=document.querySelector(`.o_Attachment_image`);
     assert.ok(
         attachmentImage.classList.contains('o_image'),
-        "attachment should have o_image classname (required for mimetype.scss style)"
+        "attachmentshouldhaveo_imageclassname(requiredformimetype.scssstyle)"
     );
     assert.strictEqual(
         attachmentImage.dataset.mimetype,
         'text/plain',
-        "attachment should have data-mimetype set (required for mimetype.scss style)"
+        "attachmentshouldhavedata-mimetypeset(requiredformimetype.scssstyle)"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_details`).length,
         0,
-        "attachment should not have a details part"
+        "attachmentshouldnothaveadetailspart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_aside`).length,
         0,
-        "attachment should not have an aside part"
+        "attachmentshouldnothaveanasidepart"
     );
 });
 
-QUnit.test('simplest layout + deletable', async function (assert) {
+QUnit.test('simplestlayout+deletable',asyncfunction(assert){
     assert.expect(6);
 
-    await this.start({
-        async mockRPC(route, args) {
-            if (route.includes('web/image/750')) {
+    awaitthis.start({
+        asyncmockRPC(route,args){
+            if(route.includes('web/image/750')){
                 assert.ok(
                     route.includes('/200x200'),
-                    "should fetch image with 200x200 pixels ratio");
+                    "shouldfetchimagewith200x200pixelsratio");
                 assert.step('fetch_image');
             }
-            return this._super(...arguments);
+            returnthis._super(...arguments);
         },
     });
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.txt",
-        id: 750,
-        mimetype: 'text/plain',
-        name: "test.txt",
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.txt",
+        id:750,
+        mimetype:'text/plain',
+        name:"test.txt",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'none',
-        isDownloadable: false,
-        isEditable: true,
-        showExtension: false,
-        showFilename: false
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'none',
+        isDownloadable:false,
+        isEditable:true,
+        showExtension:false,
+        showFilename:false
     });
     assert.strictEqual(
         document.querySelectorAll('.o_Attachment').length,
         1,
-        "should have attachment component in DOM"
+        "shouldhaveattachmentcomponentinDOM"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_image`).length,
         1,
-        "attachment should have an image part"
+        "attachmentshouldhaveanimagepart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_details`).length,
         0,
-        "attachment should not have a details part"
+        "attachmentshouldnothaveadetailspart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_aside`).length,
         1,
-        "attachment should have an aside part"
+        "attachmentshouldhaveanasidepart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_asideItem`).length,
         1,
-        "attachment should have only one aside item"
+        "attachmentshouldhaveonlyoneasideitem"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_asideItemUnlink`).length,
         1,
-        "attachment should have a delete button"
+        "attachmentshouldhaveadeletebutton"
     );
 });
 
-QUnit.test('simplest layout + downloadable', async function (assert) {
+QUnit.test('simplestlayout+downloadable',asyncfunction(assert){
     assert.expect(6);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.txt",
-        id: 750,
-        mimetype: 'text/plain',
-        name: "test.txt",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.txt",
+        id:750,
+        mimetype:'text/plain',
+        name:"test.txt",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'none',
-        isDownloadable: true,
-        isEditable: false,
-        showExtension: false,
-        showFilename: false
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'none',
+        isDownloadable:true,
+        isEditable:false,
+        showExtension:false,
+        showFilename:false
     });
     assert.strictEqual(
         document.querySelectorAll('.o_Attachment').length,
         1,
-        "should have attachment component in DOM"
+        "shouldhaveattachmentcomponentinDOM"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_image`).length,
         1,
-        "attachment should have an image part"
+        "attachmentshouldhaveanimagepart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_details`).length,
         0,
-        "attachment should not have a details part"
+        "attachmentshouldnothaveadetailspart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_aside`).length,
         1,
-        "attachment should have an aside part"
+        "attachmentshouldhaveanasidepart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_asideItem`).length,
         1,
-        "attachment should have only one aside item"
+        "attachmentshouldhaveonlyoneasideitem"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_asideItemDownload`).length,
         1,
-        "attachment should have a download button"
+        "attachmentshouldhaveadownloadbutton"
     );
 });
 
-QUnit.test('simplest layout + deletable + downloadable', async function (assert) {
+QUnit.test('simplestlayout+deletable+downloadable',asyncfunction(assert){
     assert.expect(8);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.txt",
-        id: 750,
-        mimetype: 'text/plain',
-        name: "test.txt",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.txt",
+        id:750,
+        mimetype:'text/plain',
+        name:"test.txt",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'none',
-        isDownloadable: true,
-        isEditable: true,
-        showExtension: false,
-        showFilename: false
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'none',
+        isDownloadable:true,
+        isEditable:true,
+        showExtension:false,
+        showFilename:false
     });
     assert.strictEqual(
         document.querySelectorAll('.o_Attachment').length,
         1,
-        "should have attachment component in DOM"
+        "shouldhaveattachmentcomponentinDOM"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_image`).length,
         1,
-        "attachment should have an image part"
+        "attachmentshouldhaveanimagepart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_details`).length,
         0,
-        "attachment should not have a details part"
+        "attachmentshouldnothaveadetailspart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_aside`).length,
         1,
-        "attachment should have an aside part"
+        "attachmentshouldhaveanasidepart"
     );
     assert.ok(
         document.querySelector(`.o_Attachment_aside`).classList.contains('o-has-multiple-action'),
-        "attachment aside should contain multiple actions"
+        "attachmentasideshouldcontainmultipleactions"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_asideItem`).length,
         2,
-        "attachment should have only two aside items"
+        "attachmentshouldhaveonlytwoasideitems"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_asideItemDownload`).length,
         1,
-        "attachment should have a download button"
+        "attachmentshouldhaveadownloadbutton"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_asideItemUnlink`).length,
         1,
-        "attachment should have a delete button"
+        "attachmentshouldhaveadeletebutton"
     );
 });
 
-QUnit.test('layout with card details', async function (assert) {
+QUnit.test('layoutwithcarddetails',asyncfunction(assert){
     assert.expect(3);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.txt",
-        id: 750,
-        mimetype: 'text/plain',
-        name: "test.txt",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.txt",
+        id:750,
+        mimetype:'text/plain',
+        name:"test.txt",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'card',
-        isDownloadable: false,
-        isEditable: false,
-        showExtension: false,
-        showFilename: false
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'card',
+        isDownloadable:false,
+        isEditable:false,
+        showExtension:false,
+        showFilename:false
     });
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_image`).length,
         1,
-        "attachment should have an image part"
+        "attachmentshouldhaveanimagepart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_details`).length,
         0,
-        "attachment should not have a details part"
+        "attachmentshouldnothaveadetailspart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_aside`).length,
         0,
-        "attachment should not have an aside part"
+        "attachmentshouldnothaveanasidepart"
     );
 });
 
-QUnit.test('layout with card details and filename', async function (assert) {
+QUnit.test('layoutwithcarddetailsandfilename',asyncfunction(assert){
     assert.expect(3);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.txt",
-        id: 750,
-        mimetype: 'text/plain',
-        name: "test.txt",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.txt",
+        id:750,
+        mimetype:'text/plain',
+        name:"test.txt",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'card',
-        isDownloadable: false,
-        isEditable: false,
-        showExtension: false,
-        showFilename: true
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'card',
+        isDownloadable:false,
+        isEditable:false,
+        showExtension:false,
+        showFilename:true
     });
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_details`).length,
         1,
-        "attachment should have a details part"
+        "attachmentshouldhaveadetailspart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_filename`).length,
         1,
-        "attachment should not have its filename shown"
+        "attachmentshouldnothaveitsfilenameshown"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_extension`).length,
         0,
-        "attachment should have its extension shown"
+        "attachmentshouldhaveitsextensionshown"
     );
 });
 
-QUnit.test('layout with card details and extension', async function (assert) {
+QUnit.test('layoutwithcarddetailsandextension',asyncfunction(assert){
     assert.expect(3);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.txt",
-        id: 750,
-        mimetype: 'text/plain',
-        name: "test.txt",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.txt",
+        id:750,
+        mimetype:'text/plain',
+        name:"test.txt",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'card',
-        isDownloadable: false,
-        isEditable: false,
-        showExtension: true,
-        showFilename: false
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'card',
+        isDownloadable:false,
+        isEditable:false,
+        showExtension:true,
+        showFilename:false
     });
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_details`).length,
         1,
-        "attachment should have a details part"
+        "attachmentshouldhaveadetailspart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_filename`).length,
         0,
-        "attachment should not have its filename shown"
+        "attachmentshouldnothaveitsfilenameshown"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_extension`).length,
         1,
-        "attachment should have its extension shown"
+        "attachmentshouldhaveitsextensionshown"
     );
 });
 
-QUnit.test('layout with card details and filename and extension', async function (assert) {
+QUnit.test('layoutwithcarddetailsandfilenameandextension',asyncfunction(assert){
     assert.expect(3);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.txt",
-        id: 750,
-        mimetype: 'text/plain',
-        name: "test.txt",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.txt",
+        id:750,
+        mimetype:'text/plain',
+        name:"test.txt",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'card',
-        isDownloadable: false,
-        isEditable: false,
-        showExtension: true,
-        showFilename: true
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'card',
+        isDownloadable:false,
+        isEditable:false,
+        showExtension:true,
+        showFilename:true
     });
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_details`).length,
         1,
-        "attachment should have a details part"
+        "attachmentshouldhaveadetailspart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_filename`).length,
         1,
-        "attachment should have its filename shown"
+        "attachmentshouldhaveitsfilenameshown"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_extension`).length,
         1,
-        "attachment should have its extension shown"
+        "attachmentshouldhaveitsextensionshown"
     );
 });
 
-QUnit.test('simplest layout with hover details and filename and extension', async function (assert) {
+QUnit.test('simplestlayoutwithhoverdetailsandfilenameandextension',asyncfunction(assert){
     assert.expect(8);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.txt",
-        id: 750,
-        mimetype: 'text/plain',
-        name: "test.txt",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.txt",
+        id:750,
+        mimetype:'text/plain',
+        name:"test.txt",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'hover',
-        isDownloadable: true,
-        isEditable: true,
-        showExtension: true,
-        showFilename: true
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'hover',
+        isDownloadable:true,
+        isEditable:true,
+        showExtension:true,
+        showFilename:true
     });
     assert.strictEqual(
         document.querySelectorAll(`
             .o_Attachment_details:not(.o_Attachment_imageOverlayDetails)
         `).length,
         0,
-        "attachment should not have a details part directly"
+        "attachmentshouldnothaveadetailspartdirectly"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_imageOverlayDetails`).length,
         1,
-        "attachment should have a details part in the overlay"
+        "attachmentshouldhaveadetailspartintheoverlay"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_image`).length,
         1,
-        "attachment should have an image part"
+        "attachmentshouldhaveanimagepart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_imageOverlay`).length,
         1,
-        "attachment should have an image overlay part"
+        "attachmentshouldhaveanimageoverlaypart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_filename`).length,
         1,
-        "attachment should have its filename shown"
+        "attachmentshouldhaveitsfilenameshown"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_extension`).length,
         1,
-        "attachment should have its extension shown"
+        "attachmentshouldhaveitsextensionshown"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_actions`).length,
         1,
-        "attachment should have an actions part"
+        "attachmentshouldhaveanactionspart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_aside`).length,
         0,
-        "attachment should not have an aside element"
+        "attachmentshouldnothaveanasideelement"
     );
 });
 
-QUnit.test('auto layout with image', async function (assert) {
+QUnit.test('autolayoutwithimage',asyncfunction(assert){
     assert.expect(7);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.png",
-        id: 750,
-        mimetype: 'image/png',
-        name: "test.png",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.png",
+        id:750,
+        mimetype:'image/png',
+        name:"test.png",
     });
 
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'auto',
-        isDownloadable: false,
-        isEditable: false,
-        showExtension: true,
-        showFilename: true
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'auto',
+        isDownloadable:false,
+        isEditable:false,
+        showExtension:true,
+        showFilename:true
     });
     assert.strictEqual(
         document.querySelectorAll(`
             .o_Attachment_details:not(.o_Attachment_imageOverlayDetails)
         `).length,
         0,
-        "attachment should not have a details part directly"
+        "attachmentshouldnothaveadetailspartdirectly"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_imageOverlayDetails`).length,
         1,
-        "attachment should have a details part in the overlay"
+        "attachmentshouldhaveadetailspartintheoverlay"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_image`).length,
         1,
-        "attachment should have an image part"
+        "attachmentshouldhaveanimagepart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_imageOverlay`).length,
         1,
-        "attachment should have an image overlay part"
+        "attachmentshouldhaveanimageoverlaypart"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_filename`).length,
         1,
-        "attachment should have its filename shown"
+        "attachmentshouldhaveitsfilenameshown"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_extension`).length,
         1,
-        "attachment should have its extension shown"
+        "attachmentshouldhaveitsextensionshown"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_Attachment_aside`).length,
         0,
-        "attachment should not have an aside element"
+        "attachmentshouldnothaveanasideelement"
     );
 });
 
-QUnit.test('view attachment', async function (assert) {
+QUnit.test('viewattachment',asyncfunction(assert){
     assert.expect(3);
 
-    await this.start({
-        hasDialog: true,
+    awaitthis.start({
+        hasDialog:true,
     });
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.png",
-        id: 750,
-        mimetype: 'image/png',
-        name: "test.png",
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.png",
+        id:750,
+        mimetype:'image/png',
+        name:"test.png",
     });
 
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'hover',
-        isDownloadable: false,
-        isEditable: false,
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'hover',
+        isDownloadable:false,
+        isEditable:false,
     });
     assert.containsOnce(
         document.body,
         '.o_Attachment_image',
-        "attachment should have an image part"
+        "attachmentshouldhaveanimagepart"
     );
-    await afterNextRender(() => document.querySelector('.o_Attachment_image').click());
+    awaitafterNextRender(()=>document.querySelector('.o_Attachment_image').click());
     assert.containsOnce(
         document.body,
         '.o_Dialog',
-        'a dialog should have been opened once attachment image is clicked',
+        'adialogshouldhavebeenopenedonceattachmentimageisclicked',
     );
     assert.containsOnce(
         document.body,
         '.o_AttachmentViewer',
-        'an attachment viewer should have been opened once attachment image is clicked',
+        'anattachmentviewershouldhavebeenopenedonceattachmentimageisclicked',
     );
 });
 
-QUnit.test('close attachment viewer', async function (assert) {
+QUnit.test('closeattachmentviewer',asyncfunction(assert){
     assert.expect(3);
 
-    await this.start({ hasDialog: true });
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.png",
-        id: 750,
-        mimetype: 'image/png',
-        name: "test.png",
+    awaitthis.start({hasDialog:true});
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.png",
+        id:750,
+        mimetype:'image/png',
+        name:"test.png",
     });
 
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'hover',
-        isDownloadable: false,
-        isEditable: false,
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'hover',
+        isDownloadable:false,
+        isEditable:false,
     });
     assert.containsOnce(
         document.body,
         '.o_Attachment_image',
-        "attachment should have an image part"
+        "attachmentshouldhaveanimagepart"
     );
 
-    await afterNextRender(() => document.querySelector('.o_Attachment_image').click());
+    awaitafterNextRender(()=>document.querySelector('.o_Attachment_image').click());
     assert.containsOnce(
         document.body,
         '.o_AttachmentViewer',
-        "an attachment viewer should have been opened once attachment image is clicked",
+        "anattachmentviewershouldhavebeenopenedonceattachmentimageisclicked",
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_AttachmentViewer_headerItemButtonClose').click()
     );
     assert.containsNone(
         document.body,
         '.o_Dialog',
-        "attachment viewer should be closed after clicking on close button"
+        "attachmentviewershouldbeclosedafterclickingonclosebutton"
     );
 });
 
-QUnit.test('clicking on the delete attachment button multiple times should do the rpc only once', async function (assert) {
+QUnit.test('clickingonthedeleteattachmentbuttonmultipletimesshoulddotherpconlyonce',asyncfunction(assert){
     assert.expect(2);
-    await this.start({
-        async mockRPC(route, args) {
-            if (args.method === "unlink" && args.model === "ir.attachment") {
+    awaitthis.start({
+        asyncmockRPC(route,args){
+            if(args.method==="unlink"&&args.model==="ir.attachment"){
                 assert.step('attachment_unlink');
                 return;
             }
-            return this._super(...arguments);
+            returnthis._super(...arguments);
         },
     });
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.txt",
-        id: 750,
-        mimetype: 'text/plain',
-        name: "test.txt",
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.txt",
+        id:750,
+        mimetype:'text/plain',
+        name:"test.txt",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'hover',
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'hover',
     });
-    await afterNextRender(() => {
+    awaitafterNextRender(()=>{
         document.querySelector('.o_Attachment_actionUnlink').click();
     });
 
-    await afterNextRender(() => {
+    awaitafterNextRender(()=>{
         document.querySelector('.o_AttachmentDeleteConfirmDialog_confirmButton').click();
         document.querySelector('.o_AttachmentDeleteConfirmDialog_confirmButton').click();
         document.querySelector('.o_AttachmentDeleteConfirmDialog_confirmButton').click();
     });
     assert.verifySteps(
         ['attachment_unlink'],
-        "The unlink method must be called once"
+        "Theunlinkmethodmustbecalledonce"
     );
 });
 
-QUnit.test('[technical] does not crash when the viewer is closed before image load', async function (assert) {
+QUnit.test('[technical]doesnotcrashwhentheviewerisclosedbeforeimageload',asyncfunction(assert){
     /**
-     * When images are displayed using `src` attribute for the 1st time, it fetches the resource.
-     * In this case, images are actually displayed (fully fetched and rendered on screen) when
-     * `<image>` intercepts `load` event.
+     *Whenimagesaredisplayedusing`src`attributeforthe1sttime,itfetchestheresource.
+     *Inthiscase,imagesareactuallydisplayed(fullyfetchedandrenderedonscreen)when
+     *`<image>`intercepts`load`event.
      *
-     * Current code needs to be aware of load state of image, to display spinner when loading
-     * and actual image when loaded. This test asserts no crash from mishandling image becoming
-     * loaded from being viewed for 1st time, but viewer being closed while image is loading.
+     *Currentcodeneedstobeawareofloadstateofimage,todisplayspinnerwhenloading
+     *andactualimagewhenloaded.Thistestassertsnocrashfrommishandlingimagebecoming
+     *loadedfrombeingviewedfor1sttime,butviewerbeingclosedwhileimageisloading.
      */
     assert.expect(1);
 
-    await this.start({ hasDialog: true });
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.png",
-        id: 750,
-        mimetype: 'image/png',
-        name: "test.png",
+    awaitthis.start({hasDialog:true});
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.png",
+        id:750,
+        mimetype:'image/png',
+        name:"test.png",
     });
-    await this.createAttachmentComponent(attachment);
-    await afterNextRender(() => document.querySelector('.o_Attachment_image').click());
-    const imageEl = document.querySelector('.o_AttachmentViewer_viewImage');
-    await afterNextRender(() =>
+    awaitthis.createAttachmentComponent(attachment);
+    awaitafterNextRender(()=>document.querySelector('.o_Attachment_image').click());
+    constimageEl=document.querySelector('.o_AttachmentViewer_viewImage');
+    awaitafterNextRender(()=>
         document.querySelector('.o_AttachmentViewer_headerItemButtonClose').click()
     );
-    // Simulate image becoming loaded.
-    let successfulLoad;
-    try {
-        imageEl.dispatchEvent(new Event('load', { bubbles: true }));
-        successfulLoad = true;
-    } catch (err) {
-        successfulLoad = false;
-    } finally {
-        assert.ok(successfulLoad, 'should not crash when the image is loaded');
+    //Simulateimagebecomingloaded.
+    letsuccessfulLoad;
+    try{
+        imageEl.dispatchEvent(newEvent('load',{bubbles:true}));
+        successfulLoad=true;
+    }catch(err){
+        successfulLoad=false;
+    }finally{
+        assert.ok(successfulLoad,'shouldnotcrashwhentheimageisloaded');
     }
 });
 
-QUnit.test('plain text file is viewable', async function (assert) {
+QUnit.test('plaintextfileisviewable',asyncfunction(assert){
     assert.expect(1);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.txt",
-        id: 750,
-        mimetype: 'text/plain',
-        name: "test.txt",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.txt",
+        id:750,
+        mimetype:'text/plain',
+        name:"test.txt",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'card',
-        isDownloadable: false,
-        isEditable: false,
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'card',
+        isDownloadable:false,
+        isEditable:false,
     });
     assert.hasClass(
         document.querySelector('.o_Attachment'),
         'o-viewable',
-        "should be viewable",
+        "shouldbeviewable",
     );
 });
 
-QUnit.test('HTML file is viewable', async function (assert) {
+QUnit.test('HTMLfileisviewable',asyncfunction(assert){
     assert.expect(1);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.html",
-        id: 750,
-        mimetype: 'text/html',
-        name: "test.html",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.html",
+        id:750,
+        mimetype:'text/html',
+        name:"test.html",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'card',
-        isDownloadable: false,
-        isEditable: false,
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'card',
+        isDownloadable:false,
+        isEditable:false,
     });
     assert.hasClass(
         document.querySelector('.o_Attachment'),
         'o-viewable',
-        "should be viewable",
+        "shouldbeviewable",
     );
 });
 
-QUnit.test('ODT file is not viewable', async function (assert) {
+QUnit.test('ODTfileisnotviewable',asyncfunction(assert){
     assert.expect(1);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.odt",
-        id: 750,
-        mimetype: 'application/vnd.oasis.opendocument.text',
-        name: "test.odt",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.odt",
+        id:750,
+        mimetype:'application/vnd.oasis.opendocument.text',
+        name:"test.odt",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'card',
-        isDownloadable: false,
-        isEditable: false,
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'card',
+        isDownloadable:false,
+        isEditable:false,
     });
     assert.doesNotHaveClass(
         document.querySelector('.o_Attachment'),
         'o-viewable',
-        "should not be viewable",
+        "shouldnotbeviewable",
     );
 });
 
-QUnit.test('DOCX file is not viewable', async function (assert) {
+QUnit.test('DOCXfileisnotviewable',asyncfunction(assert){
     assert.expect(1);
 
-    await this.start();
-    const attachment = this.env.models['mail.attachment'].create({
-        filename: "test.docx",
-        id: 750,
-        mimetype: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        name: "test.docx",
+    awaitthis.start();
+    constattachment=this.env.models['mail.attachment'].create({
+        filename:"test.docx",
+        id:750,
+        mimetype:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        name:"test.docx",
     });
-    await this.createAttachmentComponent(attachment, {
-        detailsMode: 'card',
-        isDownloadable: false,
-        isEditable: false,
+    awaitthis.createAttachmentComponent(attachment,{
+        detailsMode:'card',
+        isDownloadable:false,
+        isEditable:false,
     });
     assert.doesNotHaveClass(
         document.querySelector('.o_Attachment'),
         'o-viewable',
-        "should not be viewable",
+        "shouldnotbeviewable",
     );
 });
 

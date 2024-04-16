@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class MeetingType(models.Model):
+classMeetingType(models.Model):
 
-    _name = 'calendar.event.type'
-    _description = 'Event Meeting Type'
+    _name='calendar.event.type'
+    _description='EventMeetingType'
 
-    name = fields.Char('Name', required=True)
+    name=fields.Char('Name',required=True)
 
-    _sql_constraints = [
-        ('name_uniq', 'unique (name)', "Tag name already exists !"),
+    _sql_constraints=[
+        ('name_uniq','unique(name)',"Tagnamealreadyexists!"),
     ]

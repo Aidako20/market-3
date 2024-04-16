@@ -1,100 +1,100 @@
-flectra.define("lunch/static/src/js/lunch_model_extension.js", function (require) {
-    "use strict";
+flectra.define("lunch/static/src/js/lunch_model_extension.js",function(require){
+    "usestrict";
 
-    const ActionModel = require("web/static/src/js/views/action_model.js");
+    constActionModel=require("web/static/src/js/views/action_model.js");
 
-    class LunchModelExtension extends ActionModel.Extension {
+    classLunchModelExtensionextendsActionModel.Extension{
 
         //---------------------------------------------------------------------
-        // Public
+        //Public
         //---------------------------------------------------------------------
 
         /**
-         * @override
-         * @returns {any}
+         *@override
+         *@returns{any}
          */
-        get(property) {
-            switch (property) {
-                case "domain": return this.getDomain();
-                case "userId": return this.state.userId;
+        get(property){
+            switch(property){
+                case"domain":returnthis.getDomain();
+                case"userId":returnthis.state.userId;
             }
         }
 
         /**
-         * @override
+         *@override
          */
-        async load() {
-            await this._updateLocationId();
+        asyncload(){
+            awaitthis._updateLocationId();
         }
 
         /**
-         * @override
+         *@override
          */
-        prepareState() {
-            Object.assign(this.state, {
-                locationId: null,
-                userId: null,
+        prepareState(){
+            Object.assign(this.state,{
+                locationId:null,
+                userId:null,
             });
         }
 
         //---------------------------------------------------------------------
-        // Actions / Getters
+        //Actions/Getters
         //---------------------------------------------------------------------
 
         /**
-         * @returns {Array[] | null}
+         *@returns{Array[]|null}
          */
-        getDomain() {
-            if (this.state.locationId) {
-                return [["is_available_at", "in", [this.state.locationId]]];
+        getDomain(){
+            if(this.state.locationId){
+                return[["is_available_at","in",[this.state.locationId]]];
             }
-            return null;
+            returnnull;
         }
 
         /**
-         * @param {number} locationId
-         * @returns {Promise}
+         *@param{number}locationId
+         *@returns{Promise}
          */
-        setLocationId(locationId) {
-            this.state.locationId = locationId;
+        setLocationId(locationId){
+            this.state.locationId=locationId;
             this.env.services.rpc({
-                route: "/lunch/user_location_set",
-                params: {
-                    context: this.env.session.user_context,
-                    location_id: this.state.locationId,
-                    user_id: this.state.userId,
+                route:"/lunch/user_location_set",
+                params:{
+                    context:this.env.session.user_context,
+                    location_id:this.state.locationId,
+                    user_id:this.state.userId,
                 },
             });
         }
 
         /**
-         * @param {number} userId
-         * @returns {Promise}
+         *@param{number}userId
+         *@returns{Promise}
          */
-        updateUserId(userId) {
-            this.state.userId = userId;
-            this.shouldLoad = true;
+        updateUserId(userId){
+            this.state.userId=userId;
+            this.shouldLoad=true;
         }
 
         //---------------------------------------------------------------------
-        // Private
+        //Private
         //---------------------------------------------------------------------
 
         /**
-         * @returns {Promise}
+         *@returns{Promise}
          */
-        async _updateLocationId() {
-            this.state.locationId = await this.env.services.rpc({
-                route: "/lunch/user_location_get",
-                params: {
-                    context: this.env.session.user_context,
-                    user_id: this.state.userId,
+        async_updateLocationId(){
+            this.state.locationId=awaitthis.env.services.rpc({
+                route:"/lunch/user_location_get",
+                params:{
+                    context:this.env.session.user_context,
+                    user_id:this.state.userId,
                 },
             });
         }
     }
 
-    ActionModel.registry.add("Lunch", LunchModelExtension, 20);
+    ActionModel.registry.add("Lunch",LunchModelExtension,20);
 
-    return LunchModelExtension;
+    returnLunchModelExtension;
 });

@@ -1,66 +1,66 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models, fields, _
-from flectra.exceptions import UserError
+fromflectraimportapi,models,fields,_
+fromflectra.exceptionsimportUserError
 
 
-class ResCurrency(models.Model):
-    _inherit = 'res.currency'
+classResCurrency(models.Model):
+    _inherit='res.currency'
 
-    display_rounding_warning = fields.Boolean(string="Display Rounding Warning", compute='_compute_display_rounding_warning',
-        help="Technical field. Used to tell whether or not to display the rounding warning. The warning informs a rounding factor change might be dangerous on res.currency's form view.")
+    display_rounding_warning=fields.Boolean(string="DisplayRoundingWarning",compute='_compute_display_rounding_warning',
+        help="Technicalfield.Usedtotellwhetherornottodisplaytheroundingwarning.Thewarninginformsaroundingfactorchangemightbedangerousonres.currency'sformview.")
 
 
     @api.depends('rounding')
-    def _compute_display_rounding_warning(self):
-        for record in self:
-            record.display_rounding_warning = record.id \
-                                              and record._origin.rounding != record.rounding \
-                                              and record._origin._has_accounting_entries()
+    def_compute_display_rounding_warning(self):
+        forrecordinself:
+            record.display_rounding_warning=record.id\
+                                              andrecord._origin.rounding!=record.rounding\
+                                              andrecord._origin._has_accounting_entries()
 
-    def write(self, vals):
-        if 'rounding' in vals:
-            rounding_val = vals['rounding']
-            for record in self:
-                if (rounding_val > record.rounding or rounding_val == 0) and record._has_accounting_entries():
-                    raise UserError(_("You cannot reduce the number of decimal places of a currency which has already been used to make accounting entries."))
+    defwrite(self,vals):
+        if'rounding'invals:
+            rounding_val=vals['rounding']
+            forrecordinself:
+                if(rounding_val>record.roundingorrounding_val==0)andrecord._has_accounting_entries():
+                    raiseUserError(_("Youcannotreducethenumberofdecimalplacesofacurrencywhichhasalreadybeenusedtomakeaccountingentries."))
 
-        return super(ResCurrency, self).write(vals)
+        returnsuper(ResCurrency,self).write(vals)
 
-    def _has_accounting_entries(self):
-        """ Returns True iff this currency has been used to generate (hence, round)
-        some move lines (either as their foreign currency, or as the main currency
-        of their company).
+    def_has_accounting_entries(self):
+        """ReturnsTrueiffthiscurrencyhasbeenusedtogenerate(hence,round)
+        somemovelines(eitherastheirforeigncurrency,orasthemaincurrency
+        oftheircompany).
         """
         self.ensure_one()
-        return bool(self.env['account.move.line'].search_count(['|', ('currency_id', '=', self.id), ('company_currency_id', '=', self.id)]))
+        returnbool(self.env['account.move.line'].search_count(['|',('currency_id','=',self.id),('company_currency_id','=',self.id)]))
 
     @api.model
-    def _get_query_currency_table(self, options):
-        ''' Construct the currency table as a mapping company -> rate to convert the amount to the user's company
-        currency in a multi-company/multi-currency environment.
-        The currency_table is a small postgresql table construct with VALUES.
-        :param options: The report options.
-        :return:        The query representing the currency table.
+    def_get_query_currency_table(self,options):
+        '''Constructthecurrencytableasamappingcompany->ratetoconverttheamounttotheuser'scompany
+        currencyinamulti-company/multi-currencyenvironment.
+        Thecurrency_tableisasmallpostgresqltableconstructwithVALUES.
+        :paramoptions:Thereportoptions.
+        :return:       Thequeryrepresentingthecurrencytable.
         '''
 
-        user_company = self.env.company
-        user_currency = user_company.currency_id
-        if options.get('multi_company', False):
-            companies = self.env.companies
-            conversion_date = options['date']['date_to']
-            currency_rates = companies.mapped('currency_id')._get_rates(user_company, conversion_date)
+        user_company=self.env.company
+        user_currency=user_company.currency_id
+        ifoptions.get('multi_company',False):
+            companies=self.env.companies
+            conversion_date=options['date']['date_to']
+            currency_rates=companies.mapped('currency_id')._get_rates(user_company,conversion_date)
         else:
-            companies = user_company
-            currency_rates = {user_currency.id: 1.0}
+            companies=user_company
+            currency_rates={user_currency.id:1.0}
 
-        conversion_rates = []
-        for company in companies:
+        conversion_rates=[]
+        forcompanyincompanies:
             conversion_rates.extend((
                 company.id,
-                currency_rates[user_company.currency_id.id] / currency_rates[company.currency_id.id],
+                currency_rates[user_company.currency_id.id]/currency_rates[company.currency_id.id],
                 user_currency.decimal_places,
             ))
-        query = '(VALUES %s) AS currency_table(company_id, rate, precision)' % ','.join('(%s, %s, %s)' for i in companies)
-        return self.env.cr.mogrify(query, conversion_rates).decode(self.env.cr.connection.encoding)
+        query='(VALUES%s)AScurrency_table(company_id,rate,precision)'%','.join('(%s,%s,%s)'foriincompanies)
+        returnself.env.cr.mogrify(query,conversion_rates).decode(self.env.cr.connection.encoding)

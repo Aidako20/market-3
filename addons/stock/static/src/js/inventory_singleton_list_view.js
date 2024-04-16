@@ -1,18 +1,18 @@
-flectra.define('stock.SingletonListView', function (require) {
-'use strict';
+flectra.define('stock.SingletonListView',function(require){
+'usestrict';
 
-var InventoryReportListView = require('stock.InventoryReportListView');
-var SingletonListController = require('stock.SingletonListController');
-var viewRegistry = require('web.view_registry');
+varInventoryReportListView=require('stock.InventoryReportListView');
+varSingletonListController=require('stock.SingletonListController');
+varviewRegistry=require('web.view_registry');
 
-var SingletonListView = InventoryReportListView.extend({
-    config: _.extend({}, InventoryReportListView.prototype.config, {
-        Controller: SingletonListController,
+varSingletonListView=InventoryReportListView.extend({
+    config:_.extend({},InventoryReportListView.prototype.config,{
+        Controller:SingletonListController,
     }),
 });
 
-viewRegistry.add('singleton_list', SingletonListView);
+viewRegistry.add('singleton_list',SingletonListView);
 
-return SingletonListView;
+returnSingletonListView;
 
 });

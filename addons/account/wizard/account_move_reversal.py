@@ -1,133 +1,133 @@
-# -*- coding: utf-8 -*-
-from flectra import models, fields, api
-from flectra.tools.translate import _
-from flectra.exceptions import UserError
+#-*-coding:utf-8-*-
+fromflectraimportmodels,fields,api
+fromflectra.tools.translateimport_
+fromflectra.exceptionsimportUserError
 
 
-class AccountMoveReversal(models.TransientModel):
+classAccountMoveReversal(models.TransientModel):
     """
-    Account move reversal wizard, it cancel an account move by reversing it.
+    Accountmovereversalwizard,itcancelanaccountmovebyreversingit.
     """
-    _name = 'account.move.reversal'
-    _description = 'Account Move Reversal'
-    _check_company_auto = True
+    _name='account.move.reversal'
+    _description='AccountMoveReversal'
+    _check_company_auto=True
 
-    move_ids = fields.Many2many('account.move', 'account_move_reversal_move', 'reversal_id', 'move_id', domain=[('state', '=', 'posted')])
-    new_move_ids = fields.Many2many('account.move', 'account_move_reversal_new_move', 'reversal_id', 'new_move_id')
-    date_mode = fields.Selection(selection=[
-            ('custom', 'Specific'),
-            ('entry', 'Journal Entry Date')
-    ], required=True, default='custom')
-    date = fields.Date(string='Reversal date', default=fields.Date.context_today)
-    reason = fields.Char(string='Reason')
-    refund_method = fields.Selection(selection=[
-            ('refund', 'Partial Refund'),
-            ('cancel', 'Full Refund'),
-            ('modify', 'Full refund and new draft invoice')
-        ], string='Credit Method', required=True,
-        help='Choose how you want to credit this invoice. You cannot "modify" nor "cancel" if the invoice is already reconciled.')
-    journal_id = fields.Many2one('account.journal', string='Use Specific Journal', help='If empty, uses the journal of the journal entry to be reversed.', check_company=True)
-    company_id = fields.Many2one('res.company', required=True, readonly=True)
-    country_code = fields.Char(related='company_id.country_id.code')
+    move_ids=fields.Many2many('account.move','account_move_reversal_move','reversal_id','move_id',domain=[('state','=','posted')])
+    new_move_ids=fields.Many2many('account.move','account_move_reversal_new_move','reversal_id','new_move_id')
+    date_mode=fields.Selection(selection=[
+            ('custom','Specific'),
+            ('entry','JournalEntryDate')
+    ],required=True,default='custom')
+    date=fields.Date(string='Reversaldate',default=fields.Date.context_today)
+    reason=fields.Char(string='Reason')
+    refund_method=fields.Selection(selection=[
+            ('refund','PartialRefund'),
+            ('cancel','FullRefund'),
+            ('modify','Fullrefundandnewdraftinvoice')
+        ],string='CreditMethod',required=True,
+        help='Choosehowyouwanttocreditthisinvoice.Youcannot"modify"nor"cancel"iftheinvoiceisalreadyreconciled.')
+    journal_id=fields.Many2one('account.journal',string='UseSpecificJournal',help='Ifempty,usesthejournalofthejournalentrytobereversed.',check_company=True)
+    company_id=fields.Many2one('res.company',required=True,readonly=True)
+    country_code=fields.Char(related='company_id.country_id.code')
 
-    # computed fields
-    residual = fields.Monetary(compute="_compute_from_moves")
-    currency_id = fields.Many2one('res.currency', compute="_compute_from_moves")
-    move_type = fields.Char(compute="_compute_from_moves")
+    #computedfields
+    residual=fields.Monetary(compute="_compute_from_moves")
+    currency_id=fields.Many2one('res.currency',compute="_compute_from_moves")
+    move_type=fields.Char(compute="_compute_from_moves")
 
     @api.model
-    def default_get(self, fields):
-        res = super(AccountMoveReversal, self).default_get(fields)
-        move_ids = self.env['account.move'].browse(self.env.context['active_ids']) if self.env.context.get('active_model') == 'account.move' else self.env['account.move']
+    defdefault_get(self,fields):
+        res=super(AccountMoveReversal,self).default_get(fields)
+        move_ids=self.env['account.move'].browse(self.env.context['active_ids'])ifself.env.context.get('active_model')=='account.move'elseself.env['account.move']
 
-        if any(move.state != "posted" for move in move_ids):
-            raise UserError(_('You can only reverse posted moves.'))
-        if 'company_id' in fields:
-            res['company_id'] = move_ids.company_id.id or self.env.company.id
-        if 'move_ids' in fields:
-            res['move_ids'] = [(6, 0, move_ids.ids)]
-        if 'refund_method' in fields:
-            res['refund_method'] = (len(move_ids) > 1 or move_ids.move_type == 'entry') and 'cancel' or 'refund'
-        return res
+        ifany(move.state!="posted"formoveinmove_ids):
+            raiseUserError(_('Youcanonlyreversepostedmoves.'))
+        if'company_id'infields:
+            res['company_id']=move_ids.company_id.idorself.env.company.id
+        if'move_ids'infields:
+            res['move_ids']=[(6,0,move_ids.ids)]
+        if'refund_method'infields:
+            res['refund_method']=(len(move_ids)>1ormove_ids.move_type=='entry')and'cancel'or'refund'
+        returnres
 
     @api.depends('move_ids')
-    def _compute_from_moves(self):
-        for record in self:
-            move_ids = record.move_ids._origin
-            record.residual = len(move_ids) == 1 and move_ids.amount_residual or 0
-            record.currency_id = len(move_ids.currency_id) == 1 and move_ids.currency_id or False
-            record.move_type = move_ids.move_type if len(move_ids) == 1 else (any(move.move_type in ('in_invoice', 'out_invoice') for move in move_ids) and 'some_invoice' or False)
+    def_compute_from_moves(self):
+        forrecordinself:
+            move_ids=record.move_ids._origin
+            record.residual=len(move_ids)==1andmove_ids.amount_residualor0
+            record.currency_id=len(move_ids.currency_id)==1andmove_ids.currency_idorFalse
+            record.move_type=move_ids.move_typeiflen(move_ids)==1else(any(move.move_typein('in_invoice','out_invoice')formoveinmove_ids)and'some_invoice'orFalse)
 
-    def _prepare_default_reversal(self, move):
-        reverse_date = self.date if self.date_mode == 'custom' else move.date
-        return {
-            'ref': _('Reversal of: %(move_name)s, %(reason)s', move_name=move.name, reason=self.reason) 
-                   if self.reason
-                   else _('Reversal of: %s', move.name),
-            'date': reverse_date,
-            'invoice_date': move.is_invoice(include_receipts=True) and (self.date or move.date) or False,
-            'journal_id': self.journal_id and self.journal_id.id or move.journal_id.id,
-            'invoice_payment_term_id': None,
-            'invoice_user_id': move.invoice_user_id.id,
-            'auto_post': True if reverse_date > fields.Date.context_today(self) else False,
+    def_prepare_default_reversal(self,move):
+        reverse_date=self.dateifself.date_mode=='custom'elsemove.date
+        return{
+            'ref':_('Reversalof:%(move_name)s,%(reason)s',move_name=move.name,reason=self.reason)
+                   ifself.reason
+                   else_('Reversalof:%s',move.name),
+            'date':reverse_date,
+            'invoice_date':move.is_invoice(include_receipts=True)and(self.dateormove.date)orFalse,
+            'journal_id':self.journal_idandself.journal_id.idormove.journal_id.id,
+            'invoice_payment_term_id':None,
+            'invoice_user_id':move.invoice_user_id.id,
+            'auto_post':Trueifreverse_date>fields.Date.context_today(self)elseFalse,
         }
 
-    def _reverse_moves_post_hook(self, moves):
-        # DEPRECATED: TO REMOVE IN MASTER
+    def_reverse_moves_post_hook(self,moves):
+        #DEPRECATED:TOREMOVEINMASTER
         return
 
-    def reverse_moves(self):
+    defreverse_moves(self):
         self.ensure_one()
-        moves = self.move_ids
+        moves=self.move_ids
 
-        # Create default values.
-        default_values_list = []
-        for move in moves:
+        #Createdefaultvalues.
+        default_values_list=[]
+        formoveinmoves:
             default_values_list.append(self._prepare_default_reversal(move))
 
-        batches = [
-            [self.env['account.move'], [], True],   # Moves to be cancelled by the reverses.
-            [self.env['account.move'], [], False],  # Others.
+        batches=[
+            [self.env['account.move'],[],True],  #Movestobecancelledbythereverses.
+            [self.env['account.move'],[],False], #Others.
         ]
-        for move, default_vals in zip(moves, default_values_list):
-            is_auto_post = bool(default_vals.get('auto_post'))
-            is_cancel_needed = not is_auto_post and self.refund_method in ('cancel', 'modify')
-            batch_index = 0 if is_cancel_needed else 1
-            batches[batch_index][0] |= move
+        formove,default_valsinzip(moves,default_values_list):
+            is_auto_post=bool(default_vals.get('auto_post'))
+            is_cancel_needed=notis_auto_postandself.refund_methodin('cancel','modify')
+            batch_index=0ifis_cancel_neededelse1
+            batches[batch_index][0]|=move
             batches[batch_index][1].append(default_vals)
 
-        # Handle reverse method.
-        moves_to_redirect = self.env['account.move']
-        for moves, default_values_list, is_cancel_needed in batches:
-            new_moves = moves._reverse_moves(default_values_list, cancel=is_cancel_needed)
+        #Handlereversemethod.
+        moves_to_redirect=self.env['account.move']
+        formoves,default_values_list,is_cancel_neededinbatches:
+            new_moves=moves._reverse_moves(default_values_list,cancel=is_cancel_needed)
 
-            if self.refund_method == 'modify':
-                moves_vals_list = []
-                for move in moves.with_context(include_business_fields=True):
-                    moves_vals_list.append(move.copy_data({'date': self.date if self.date_mode == 'custom' else move.date})[0])
-                new_moves = self.env['account.move'].create(moves_vals_list)
+            ifself.refund_method=='modify':
+                moves_vals_list=[]
+                formoveinmoves.with_context(include_business_fields=True):
+                    moves_vals_list.append(move.copy_data({'date':self.dateifself.date_mode=='custom'elsemove.date})[0])
+                new_moves=self.env['account.move'].create(moves_vals_list)
 
-            moves_to_redirect |= new_moves
+            moves_to_redirect|=new_moves
 
-        self.new_move_ids = moves_to_redirect
+        self.new_move_ids=moves_to_redirect
 
-        # Create action.
-        action = {
-            'name': _('Reverse Moves'),
-            'type': 'ir.actions.act_window',
-            'res_model': 'account.move',
+        #Createaction.
+        action={
+            'name':_('ReverseMoves'),
+            'type':'ir.actions.act_window',
+            'res_model':'account.move',
         }
-        if len(moves_to_redirect) == 1:
+        iflen(moves_to_redirect)==1:
             action.update({
-                'view_mode': 'form',
-                'res_id': moves_to_redirect.id,
-                'context': {'default_move_type':  moves_to_redirect.move_type},
+                'view_mode':'form',
+                'res_id':moves_to_redirect.id,
+                'context':{'default_move_type': moves_to_redirect.move_type},
             })
         else:
             action.update({
-                'view_mode': 'tree,form',
-                'domain': [('id', 'in', moves_to_redirect.ids)],
+                'view_mode':'tree,form',
+                'domain':[('id','in',moves_to_redirect.ids)],
             })
-            if len(set(moves_to_redirect.mapped('move_type'))) == 1:
-                action['context'] = {'default_move_type':  moves_to_redirect.mapped('move_type').pop()}
-        return action
+            iflen(set(moves_to_redirect.mapped('move_type')))==1:
+                action['context']={'default_move_type': moves_to_redirect.mapped('move_type').pop()}
+        returnaction

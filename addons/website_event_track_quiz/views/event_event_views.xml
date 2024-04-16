@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra><data>
 
-    <record id="event_event_view_form" model="ir.ui.view">
-        <field name="name">event.event.view.form.inherit.track.quiz</field>
-        <field name="model">event.event</field>
-        <field name="inherit_id" ref="website_event.event_event_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//label[@for='community_menu']" position="attributes">
-                <attribute name="invisible">0</attribute>
+    <recordid="event_event_view_form"model="ir.ui.view">
+        <fieldname="name">event.event.view.form.inherit.track.quiz</field>
+        <fieldname="model">event.event</field>
+        <fieldname="inherit_id"ref="website_event.event_event_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//label[@for='community_menu']"position="attributes">
+                <attributename="invisible">0</attribute>
             </xpath>
         </field>
     </record>

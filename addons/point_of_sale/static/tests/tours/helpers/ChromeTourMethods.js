@@ -1,42 +1,42 @@
-flectra.define('point_of_sale.tour.ChromeTourMethods', function (require) {
-    'use strict';
+flectra.define('point_of_sale.tour.ChromeTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        confirmPopup() {
-            return [
+    classDo{
+        confirmPopup(){
+            return[
                 {
-                    content: 'confirm popup',
-                    trigger: '.popups .modal-dialog .button.confirm',
+                    content:'confirmpopup',
+                    trigger:'.popups.modal-dialog.button.confirm',
                 },
             ];
         }
-        clickOrderManagementButton() {
-            return [
+        clickOrderManagementButton(){
+            return[
                 {
-                    content: 'check order management button is shown',
-                    trigger: '.pos .pos-rightheader .order-management',
-                    run: () => {},
+                    content:'checkordermanagementbuttonisshown',
+                    trigger:'.pos.pos-rightheader.order-management',
+                    run:()=>{},
                 },
                 {
-                    content: 'click order management button',
-                    trigger: '.pos .pos-rightheader .order-management',
+                    content:'clickordermanagementbutton',
+                    trigger:'.pos.pos-rightheader.order-management',
                 },
             ];
         }
-        clickTicketButton() {
-            return [
+        clickTicketButton(){
+            return[
                 {
-                    trigger: '.pos-topheader .ticket-button',
+                    trigger:'.pos-topheader.ticket-button',
                 },
                 {
-                    trigger: '.subwindow .ticket-screen',
-                    run: () => {},
+                    trigger:'.subwindow.ticket-screen',
+                    run:()=>{},
                 },
             ];
         }
     }
 
-    return createTourMethods('Chrome', Do);
+    returncreateTourMethods('Chrome',Do);
 });

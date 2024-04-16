@@ -1,66 +1,66 @@
-flectra.define('website.s_rating_options', function (require) {
-'use strict';
+flectra.define('website.s_rating_options',function(require){
+'usestrict';
 
-const weWidgets = require('wysiwyg.widgets');
-const options = require('web_editor.snippets.options');
+constweWidgets=require('wysiwyg.widgets');
+constoptions=require('web_editor.snippets.options');
 
-options.registry.Rating = options.Class.extend({
+options.registry.Rating=options.Class.extend({
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this.iconType = this.$target[0].dataset.icon;
-        this.faClassActiveCustomIcons = this.$target[0].dataset.activeCustomIcon || '';
-        this.faClassInactiveCustomIcons = this.$target[0].dataset.inactiveCustomIcon || '';
-        return this._super.apply(this, arguments);
+    start:function(){
+        this.iconType=this.$target[0].dataset.icon;
+        this.faClassActiveCustomIcons=this.$target[0].dataset.activeCustomIcon||'';
+        this.faClassInactiveCustomIcons=this.$target[0].dataset.inactiveCustomIcon||'';
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Displays the selected icon type.
+     *Displaystheselectedicontype.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    setIcons: function (previewMode, widgetValue, params) {
-        this.iconType = widgetValue;
+    setIcons:function(previewMode,widgetValue,params){
+        this.iconType=widgetValue;
         this._renderIcons();
-        this.$target[0].dataset.icon = widgetValue;
-        delete this.$target[0].dataset.activeCustomIcon;
-        delete this.$target[0].dataset.inactiveCustomIcon;
+        this.$target[0].dataset.icon=widgetValue;
+        deletethis.$target[0].dataset.activeCustomIcon;
+        deletethis.$target[0].dataset.inactiveCustomIcon;
     },
     /**
-     * Allows to select a font awesome icon with media dialog.
+     *Allowstoselectafontawesomeiconwithmediadialog.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    customIcon: async function (previewMode, widgetValue, params) {
-        return new Promise(resolve => {
-            const dialog = new weWidgets.MediaDialog(
+    customIcon:asyncfunction(previewMode,widgetValue,params){
+        returnnewPromise(resolve=>{
+            constdialog=newweWidgets.MediaDialog(
                 this,
-                {noImages: true, noDocuments: true, noVideos: true, mediaWidth: 1920},
+                {noImages:true,noDocuments:true,noVideos:true,mediaWidth:1920},
                 $('<i/>')
             );
-            this._saving = false;
-            dialog.on('save', this, function (attachments) {
-                this._saving = true;
-                const customClass = 'fa ' + attachments.className;
-                const $activeIcons = this.$target.find('.s_rating_active_icons > i');
-                const $inactiveIcons = this.$target.find('.s_rating_inactive_icons > i');
-                const $icons = params.customActiveIcon === 'true' ? $activeIcons : $inactiveIcons;
+            this._saving=false;
+            dialog.on('save',this,function(attachments){
+                this._saving=true;
+                constcustomClass='fa'+attachments.className;
+                const$activeIcons=this.$target.find('.s_rating_active_icons>i');
+                const$inactiveIcons=this.$target.find('.s_rating_inactive_icons>i');
+                const$icons=params.customActiveIcon==='true'?$activeIcons:$inactiveIcons;
                 $icons.removeClass().addClass(customClass);
-                this.faClassActiveCustomIcons = $activeIcons.length > 0 ? $activeIcons.attr('class') : customClass;
-                this.faClassInactiveCustomIcons = $inactiveIcons.length > 0 ? $inactiveIcons.attr('class') : customClass;
-                this.$target[0].dataset.activeCustomIcon = this.faClassActiveCustomIcons;
-                this.$target[0].dataset.inactiveCustomIcon = this.faClassInactiveCustomIcons;
-                this.$target[0].dataset.icon = 'custom';
-                this.iconType = 'custom';
+                this.faClassActiveCustomIcons=$activeIcons.length>0?$activeIcons.attr('class'):customClass;
+                this.faClassInactiveCustomIcons=$inactiveIcons.length>0?$inactiveIcons.attr('class'):customClass;
+                this.$target[0].dataset.activeCustomIcon=this.faClassActiveCustomIcons;
+                this.$target[0].dataset.inactiveCustomIcon=this.faClassInactiveCustomIcons;
+                this.$target[0].dataset.icon='custom';
+                this.iconType='custom';
                 resolve();
             });
-            dialog.on('closed', this, function () {
-                if (!this._saving) {
+            dialog.on('closed',this,function(){
+                if(!this._saving){
                     resolve();
                 }
             });
@@ -68,82 +68,82 @@ options.registry.Rating = options.Class.extend({
         });
     },
     /**
-     * Sets the number of active icons.
+     *Setsthenumberofactiveicons.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    activeIconsNumber: function (previewMode, widgetValue, params) {
-        this.nbActiveIcons = parseInt(widgetValue);
+    activeIconsNumber:function(previewMode,widgetValue,params){
+        this.nbActiveIcons=parseInt(widgetValue);
         this._createIcons();
     },
     /**
-     * Sets the total number of icons.
+     *Setsthetotalnumberoficons.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    totalIconsNumber: function (previewMode, widgetValue, params) {
-        this.nbTotalIcons = Math.max(parseInt(widgetValue), 1);
+    totalIconsNumber:function(previewMode,widgetValue,params){
+        this.nbTotalIcons=Math.max(parseInt(widgetValue),1);
         this._createIcons();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState: function (methodName, params) {
-        switch (methodName) {
-            case 'setIcons': {
-                return this.$target[0].dataset.icon;
+    _computeWidgetState:function(methodName,params){
+        switch(methodName){
+            case'setIcons':{
+                returnthis.$target[0].dataset.icon;
             }
-            case 'activeIconsNumber': {
-                this.nbActiveIcons = this.$target.find('.s_rating_active_icons > i').length;
-                return this.nbActiveIcons;
+            case'activeIconsNumber':{
+                this.nbActiveIcons=this.$target.find('.s_rating_active_icons>i').length;
+                returnthis.nbActiveIcons;
             }
-            case 'totalIconsNumber': {
-                this.nbTotalIcons = this.$target.find('.s_rating_icons i').length;
-                return this.nbTotalIcons;
+            case'totalIconsNumber':{
+                this.nbTotalIcons=this.$target.find('.s_rating_iconsi').length;
+                returnthis.nbTotalIcons;
             }
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * Creates the icons.
+     *Createstheicons.
      *
-     * @private
+     *@private
      */
-    _createIcons: function () {
-        const $activeIcons = this.$target.find('.s_rating_active_icons');
-        const $inactiveIcons = this.$target.find('.s_rating_inactive_icons');
-        this.$target.find('.s_rating_icons i').remove();
-        for (let i = 0; i < this.nbTotalIcons; i++) {
-            if (i < this.nbActiveIcons) {
-                $activeIcons.append('<i/> ');
-            } else {
-                $inactiveIcons.append('<i/> ');
+    _createIcons:function(){
+        const$activeIcons=this.$target.find('.s_rating_active_icons');
+        const$inactiveIcons=this.$target.find('.s_rating_inactive_icons');
+        this.$target.find('.s_rating_iconsi').remove();
+        for(leti=0;i<this.nbTotalIcons;i++){
+            if(i<this.nbActiveIcons){
+                $activeIcons.append('<i/>');
+            }else{
+                $inactiveIcons.append('<i/>');
             }
         }
         this._renderIcons();
     },
     /**
-     * Renders icons with selected fonts.
+     *Rendersiconswithselectedfonts.
      *
-     * @private
+     *@private
      */
-    _renderIcons: function () {
-        const icons = {
-            'fa-star': 'fa-star-o',
-            'fa-thumbs-up': 'fa-thumbs-o-up',
-            'fa-circle': 'fa-circle-o',
-            'fa-square': 'fa-square-o',
-            'fa-heart': 'fa-heart-o'
+    _renderIcons:function(){
+        consticons={
+            'fa-star':'fa-star-o',
+            'fa-thumbs-up':'fa-thumbs-o-up',
+            'fa-circle':'fa-circle-o',
+            'fa-square':'fa-square-o',
+            'fa-heart':'fa-heart-o'
         };
-        const faClassActiveIcons = (this.iconType === "custom") ? this.faClassActiveCustomIcons : 'fa ' + this.iconType;
-        const faClassInactiveIcons = (this.iconType === "custom") ? this.faClassInactiveCustomIcons : 'fa ' + icons[this.iconType];
-        const $activeIcons = this.$target.find('.s_rating_active_icons > i');
-        const $inactiveIcons = this.$target.find('.s_rating_inactive_icons > i');
+        constfaClassActiveIcons=(this.iconType==="custom")?this.faClassActiveCustomIcons:'fa'+this.iconType;
+        constfaClassInactiveIcons=(this.iconType==="custom")?this.faClassInactiveCustomIcons:'fa'+icons[this.iconType];
+        const$activeIcons=this.$target.find('.s_rating_active_icons>i');
+        const$inactiveIcons=this.$target.find('.s_rating_inactive_icons>i');
         $activeIcons.removeClass().addClass(faClassActiveIcons);
         $inactiveIcons.removeClass().addClass(faClassInactiveIcons);
     },

@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="event_event_view_form" model="ir.ui.view">
-        <field name="name">event.event.view.form.inherit.exhibitor</field>
-        <field name="inherit_id" ref="website_event_track.event_event_view_form"/>
-        <field name="model">event.event</field>
-        <field name="priority" eval="3"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='website_track_proposal']" position="after">
-                <label for="exhibitor_menu"/>
-                <field name="exhibitor_menu"/>
+    <recordid="event_event_view_form"model="ir.ui.view">
+        <fieldname="name">event.event.view.form.inherit.exhibitor</field>
+        <fieldname="inherit_id"ref="website_event_track.event_event_view_form"/>
+        <fieldname="model">event.event</field>
+        <fieldname="priority"eval="3"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='website_track_proposal']"position="after">
+                <labelfor="exhibitor_menu"/>
+                <fieldname="exhibitor_menu"/>
             </xpath>
         </field>
     </record>

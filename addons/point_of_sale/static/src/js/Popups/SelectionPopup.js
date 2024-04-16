@@ -1,57 +1,57 @@
-flectra.define('point_of_sale.SelectionPopup', function (require) {
-    'use strict';
+flectra.define('point_of_sale.SelectionPopup',function(require){
+    'usestrict';
 
-    const { useState } = owl.hooks;
-    const AbstractAwaitablePopup = require('point_of_sale.AbstractAwaitablePopup');
-    const Registries = require('point_of_sale.Registries');
+    const{useState}=owl.hooks;
+    constAbstractAwaitablePopup=require('point_of_sale.AbstractAwaitablePopup');
+    constRegistries=require('point_of_sale.Registries');
 
-    // formerly SelectionPopupWidget
-    class SelectionPopup extends AbstractAwaitablePopup {
+    //formerlySelectionPopupWidget
+    classSelectionPopupextendsAbstractAwaitablePopup{
         /**
-         * Value of the `item` key of the selected element in the Selection
-         * Array is the payload of this popup.
+         *Valueofthe`item`keyoftheselectedelementintheSelection
+         *Arrayisthepayloadofthispopup.
          *
-         * @param {Object} props
-         * @param {String} [props.confirmText='Confirm']
-         * @param {String} [props.cancelText='Cancel']
-         * @param {String} [props.title='Select']
-         * @param {String} [props.body='']
-         * @param {Array<Selection>} [props.list=[]]
-         *      Selection {
-         *          id: integer,
-         *          label: string,
-         *          isSelected: boolean,
-         *          item: any,
-         *      }
+         *@param{Object}props
+         *@param{String}[props.confirmText='Confirm']
+         *@param{String}[props.cancelText='Cancel']
+         *@param{String}[props.title='Select']
+         *@param{String}[props.body='']
+         *@param{Array<Selection>}[props.list=[]]
+         *     Selection{
+         *         id:integer,
+         *         label:string,
+         *         isSelected:boolean,
+         *         item:any,
+         *     }
          */
-        constructor() {
+        constructor(){
             super(...arguments);
-            this.state = useState({ selectedId: this.props.list.find((item) => item.isSelected) });
+            this.state=useState({selectedId:this.props.list.find((item)=>item.isSelected)});
         }
-        selectItem(itemId) {
-            this.state.selectedId = itemId;
+        selectItem(itemId){
+            this.state.selectedId=itemId;
             this.confirm();
         }
         /**
-         * We send as payload of the response the selected item.
+         *Wesendaspayloadoftheresponsetheselecteditem.
          *
-         * @override
+         *@override
          */
-        getPayload() {
-            const selected = this.props.list.find((item) => this.state.selectedId === item.id);
-            return selected && selected.item;
+        getPayload(){
+            constselected=this.props.list.find((item)=>this.state.selectedId===item.id);
+            returnselected&&selected.item;
         }
     }
-    SelectionPopup.template = 'SelectionPopup';
-    SelectionPopup.defaultProps = {
-        confirmText: 'Confirm',
-        cancelText: 'Cancel',
-        title: 'Select',
-        body: '',
-        list: [],
+    SelectionPopup.template='SelectionPopup';
+    SelectionPopup.defaultProps={
+        confirmText:'Confirm',
+        cancelText:'Cancel',
+        title:'Select',
+        body:'',
+        list:[],
     };
 
     Registries.Component.add(SelectionPopup);
 
-    return SelectionPopup;
+    returnSelectionPopup;
 });

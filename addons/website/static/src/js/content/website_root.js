@@ -1,364 +1,364 @@
-flectra.define('website.root', function (require) {
-'use strict';
+flectra.define('website.root',function(require){
+'usestrict';
 
-const ajax = require('web.ajax');
-const {_t} = require('web.core');
-var Dialog = require('web.Dialog');
-const KeyboardNavigationMixin = require('web.KeyboardNavigationMixin');
-const session = require('web.session');
-var publicRootData = require('web.public.root');
+constajax=require('web.ajax');
+const{_t}=require('web.core');
+varDialog=require('web.Dialog');
+constKeyboardNavigationMixin=require('web.KeyboardNavigationMixin');
+constsession=require('web.session');
+varpublicRootData=require('web.public.root');
 require("web.zoomflectra");
 
-var websiteRootRegistry = publicRootData.publicRootRegistry;
+varwebsiteRootRegistry=publicRootData.publicRootRegistry;
 
-var WebsiteRoot = publicRootData.PublicRoot.extend(KeyboardNavigationMixin, {
-    events: _.extend({}, KeyboardNavigationMixin.events, publicRootData.PublicRoot.prototype.events || {}, {
-        'click .js_change_lang': '_onLangChangeClick',
-        'click .js_publish_management .js_publish_btn': '_onPublishBtnClick',
-        'click .js_multi_website_switch': '_onWebsiteSwitch',
-        'shown.bs.modal': '_onModalShown',
+varWebsiteRoot=publicRootData.PublicRoot.extend(KeyboardNavigationMixin,{
+    events:_.extend({},KeyboardNavigationMixin.events,publicRootData.PublicRoot.prototype.events||{},{
+        'click.js_change_lang':'_onLangChangeClick',
+        'click.js_publish_management.js_publish_btn':'_onPublishBtnClick',
+        'click.js_multi_website_switch':'_onWebsiteSwitch',
+        'shown.bs.modal':'_onModalShown',
     }),
-    custom_events: _.extend({}, publicRootData.PublicRoot.prototype.custom_events || {}, {
-        'gmap_api_request': '_onGMapAPIRequest',
-        'gmap_api_key_request': '_onGMapAPIKeyRequest',
-        'ready_to_clean_for_save': '_onWidgetsStopRequest',
-        'seo_object_request': '_onSeoObjectRequest',
-        'will_remove_snippet': '_onWidgetsStopRequest',
+    custom_events:_.extend({},publicRootData.PublicRoot.prototype.custom_events||{},{
+        'gmap_api_request':'_onGMapAPIRequest',
+        'gmap_api_key_request':'_onGMapAPIKeyRequest',
+        'ready_to_clean_for_save':'_onWidgetsStopRequest',
+        'seo_object_request':'_onSeoObjectRequest',
+        'will_remove_snippet':'_onWidgetsStopRequest',
     }),
 
     /**
-     * @override
+     *@override
      */
-    init() {
-        this.isFullscreen = false;
-        KeyboardNavigationMixin.init.call(this, {
-            autoAccessKeys: false,
+    init(){
+        this.isFullscreen=false;
+        KeyboardNavigationMixin.init.call(this,{
+            autoAccessKeys:false,
         });
 
-        // Special case for Safari browser: padding on wrapwrap is added by the
-        // layout option (boxed, etc), but it also receives a border on top of
-        // it to simulate an addition of padding. That padding is added with
-        // the "sidebar" header template to combine both options/effects.
-        // Sadly, the border hack is not working on safari, the menu is somehow
-        // broken and its content is not visible.
-        // This class will be used in scss to instead add the border size to the
-        // padding directly on Safari when "sidebar" menu is enabled.
-        if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent) && document.querySelector('#wrapwrap')) {
+        //SpecialcaseforSafaribrowser:paddingonwrapwrapisaddedbythe
+        //layoutoption(boxed,etc),butitalsoreceivesaborderontopof
+        //ittosimulateanadditionofpadding.Thatpaddingisaddedwith
+        //the"sidebar"headertemplatetocombinebothoptions/effects.
+        //Sadly,theborderhackisnotworkingonsafari,themenuissomehow
+        //brokenanditscontentisnotvisible.
+        //Thisclasswillbeusedinscsstoinsteadaddthebordersizetothe
+        //paddingdirectlyonSafariwhen"sidebar"menuisenabled.
+        if(/^((?!chrome|android).)*safari/i.test(navigator.userAgent)&&document.querySelector('#wrapwrap')){
             document.querySelector('#wrapwrap').classList.add('o_safari_browser');
         }
 
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
+    start:function(){
         KeyboardNavigationMixin.start.call(this);
-        // Compatibility lang change ?
-        if (!this.$('.js_change_lang').length) {
-            var $links = this.$('.js_language_selector a:not([data-oe-id])');
-            var m = $(_.min($links, function (l) {
-                return $(l).attr('href').length;
+        //Compatibilitylangchange?
+        if(!this.$('.js_change_lang').length){
+            var$links=this.$('.js_language_selectora:not([data-oe-id])');
+            varm=$(_.min($links,function(l){
+                return$(l).attr('href').length;
             })).attr('href');
-            $links.each(function () {
-                var $link = $(this);
-                var t = $link.attr('href');
-                var l = (t === m) ? "default" : t.split('/')[1];
-                $link.data('lang', l).addClass('js_change_lang');
+            $links.each(function(){
+                var$link=$(this);
+                vart=$link.attr('href');
+                varl=(t===m)?"default":t.split('/')[1];
+                $link.data('lang',l).addClass('js_change_lang');
             });
         }
 
-        // Enable magnify on zommable img
-        this.$('.zoomable img[data-zoom]').zoomFlectra();
+        //Enablemagnifyonzommableimg
+        this.$('.zoomableimg[data-zoom]').zoomFlectra();
 
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy() {
+    destroy(){
         KeyboardNavigationMixin.destroy.call(this);
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _getContext: function (context) {
-        var html = document.documentElement;
-        return _.extend({
-            'website_id': html.getAttribute('data-website-id') | 0,
-        }, this._super.apply(this, arguments));
+    _getContext:function(context){
+        varhtml=document.documentElement;
+        return_.extend({
+            'website_id':html.getAttribute('data-website-id')|0,
+        },this._super.apply(this,arguments));
     },
     /**
-     * @override
+     *@override
      */
-    _getExtraContext: function (context) {
-        var html = document.documentElement;
-        return _.extend({
-            'editable': !!(html.dataset.editable || $('[data-oe-model]').length), // temporary hack, this should be done in python
-            'translatable': !!html.dataset.translatable,
-            'edit_translations': !!html.dataset.edit_translations,
-        }, this._super.apply(this, arguments));
+    _getExtraContext:function(context){
+        varhtml=document.documentElement;
+        return_.extend({
+            'editable':!!(html.dataset.editable||$('[data-oe-model]').length),//temporaryhack,thisshouldbedoneinpython
+            'translatable':!!html.dataset.translatable,
+            'edit_translations':!!html.dataset.edit_translations,
+        },this._super.apply(this,arguments));
     },
     /**
-     * @private
-     * @param {boolean} [refetch=false]
+     *@private
+     *@param{boolean}[refetch=false]
      */
-    async _getGMapAPIKey(refetch) {
-        if (refetch || !this._gmapAPIKeyProm) {
-            this._gmapAPIKeyProm = new Promise(async resolve => {
-                const data = await this._rpc({
-                    route: '/website/google_maps_api_key',
+    async_getGMapAPIKey(refetch){
+        if(refetch||!this._gmapAPIKeyProm){
+            this._gmapAPIKeyProm=newPromise(asyncresolve=>{
+                constdata=awaitthis._rpc({
+                    route:'/website/google_maps_api_key',
                 });
-                resolve(JSON.parse(data).google_maps_api_key || '');
+                resolve(JSON.parse(data).google_maps_api_key||'');
             });
         }
-        return this._gmapAPIKeyProm;
+        returnthis._gmapAPIKeyProm;
     },
     /**
-     * @override
+     *@override
      */
-    _getPublicWidgetsRegistry: function (options) {
-        var registry = this._super.apply(this, arguments);
-        if (options.editableMode) {
-            return _.pick(registry, function (PublicWidget) {
-                return !PublicWidget.prototype.disabledInEditableMode;
+    _getPublicWidgetsRegistry:function(options){
+        varregistry=this._super.apply(this,arguments);
+        if(options.editableMode){
+            return_.pick(registry,function(PublicWidget){
+                return!PublicWidget.prototype.disabledInEditableMode;
             });
         }
-        return registry;
+        returnregistry;
     },
     /**
-     * @private
-     * @param {boolean} [editableMode=false]
-     * @param {boolean} [refetch=false]
+     *@private
+     *@param{boolean}[editableMode=false]
+     *@param{boolean}[refetch=false]
      */
-    async _loadGMapAPI(editableMode, refetch) {
-        // Note: only need refetch to reload a configured key and load the
-        // library. If the library was loaded with a correct key and that the
-        // key changes meanwhile... it will not work but we can agree the user
-        // can bother to reload the page at that moment.
-        if (refetch || !this._gmapAPILoading) {
-            this._gmapAPILoading = new Promise(async resolve => {
-                const key = await this._getGMapAPIKey(refetch);
+    async_loadGMapAPI(editableMode,refetch){
+        //Note:onlyneedrefetchtoreloadaconfiguredkeyandloadthe
+        //library.Ifthelibrarywasloadedwithacorrectkeyandthatthe
+        //keychangesmeanwhile...itwillnotworkbutwecanagreetheuser
+        //canbothertoreloadthepageatthatmoment.
+        if(refetch||!this._gmapAPILoading){
+            this._gmapAPILoading=newPromise(asyncresolve=>{
+                constkey=awaitthis._getGMapAPIKey(refetch);
 
-                window.flectra_gmap_api_post_load = (async function flectra_gmap_api_post_load() {
-                    await this._startWidgets(undefined, {editableMode: editableMode});
+                window.flectra_gmap_api_post_load=(asyncfunctionflectra_gmap_api_post_load(){
+                    awaitthis._startWidgets(undefined,{editableMode:editableMode});
                     resolve(key);
                 }).bind(this);
 
-                if (!key) {
-                    if (!editableMode && session.is_admin) {
+                if(!key){
+                    if(!editableMode&&session.is_admin){
                         this.displayNotification({
-                            type: 'warning',
-                            sticky: true,
+                            type:'warning',
+                            sticky:true,
                             message:
                                 $('<div/>').append(
-                                    $('<span/>', {text: _t("Cannot load google map.")}),
+                                    $('<span/>',{text:_t("Cannotloadgooglemap.")}),
                                     $('<br/>'),
-                                    $('<a/>', {
-                                        href: "/web#action=website.action_website_configuration",
-                                        text: _t("Check your configuration."),
+                                    $('<a/>',{
+                                        href:"/web#action=website.action_website_configuration",
+                                        text:_t("Checkyourconfiguration."),
                                     }),
                                 )[0].outerHTML,
                         });
                     }
                     resolve(false);
-                    this._gmapAPILoading = false;
+                    this._gmapAPILoading=false;
                     return;
                 }
-                await ajax.loadJS(`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&callback=flectra_gmap_api_post_load&key=${encodeURIComponent(key)}`);
+                awaitajax.loadJS(`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&callback=flectra_gmap_api_post_load&key=${encodeURIComponent(key)}`);
             });
         }
-        return this._gmapAPILoading;
+        returnthis._gmapAPILoading;
     },
     /**
-     * Toggles the fullscreen mode.
+     *Togglesthefullscreenmode.
      *
-     * @private
-     * @param {boolean} state toggle fullscreen on/off (true/false)
+     *@private
+     *@param{boolean}statetogglefullscreenon/off(true/false)
      */
-    _toggleFullscreen(state) {
-        this.isFullscreen = state;
+    _toggleFullscreen(state){
+        this.isFullscreen=state;
         document.body.classList.add('o_fullscreen_transition');
-        document.body.classList.toggle('o_fullscreen', this.isFullscreen);
-        document.body.style.overflowX = 'hidden';
-        let resizing = true;
-        window.requestAnimationFrame(function resizeFunction() {
-            window.dispatchEvent(new Event('resize'));
-            if (resizing) {
+        document.body.classList.toggle('o_fullscreen',this.isFullscreen);
+        document.body.style.overflowX='hidden';
+        letresizing=true;
+        window.requestAnimationFrame(functionresizeFunction(){
+            window.dispatchEvent(newEvent('resize'));
+            if(resizing){
                 window.requestAnimationFrame(resizeFunction);
             }
         });
-        let stopResizing;
-        const onTransitionEnd = ev => {
-            if (ev.target === document.body && ev.propertyName === 'padding-top') {
+        letstopResizing;
+        constonTransitionEnd=ev=>{
+            if(ev.target===document.body&&ev.propertyName==='padding-top'){
                 stopResizing();
             }
         };
-        stopResizing = () => {
-            resizing = false;
-            document.body.style.overflowX = '';
-            document.body.removeEventListener('transitionend', onTransitionEnd);
+        stopResizing=()=>{
+            resizing=false;
+            document.body.style.overflowX='';
+            document.body.removeEventListener('transitionend',onTransitionEnd);
             document.body.classList.remove('o_fullscreen_transition');
         };
-        document.body.addEventListener('transitionend', onTransitionEnd);
-        // Safeguard in case the transitionend event doesn't trigger for whatever reason.
-        window.setTimeout(() => stopResizing(), 500);
+        document.body.addEventListener('transitionend',onTransitionEnd);
+        //Safeguardincasethetransitionendeventdoesn'ttriggerforwhateverreason.
+        window.setTimeout(()=>stopResizing(),500);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _onWidgetsStartRequest: function (ev) {
-        ev.data.options = _.clone(ev.data.options || {});
-        ev.data.options.editableMode = ev.data.editableMode;
-        this._super.apply(this, arguments);
+    _onWidgetsStartRequest:function(ev){
+        ev.data.options=_.clone(ev.data.options||{});
+        ev.data.options.editableMode=ev.data.editableMode;
+        this._super.apply(this,arguments);
     },
     /**
-     * @todo review
-     * @private
+     *@todoreview
+     *@private
      */
-    _onLangChangeClick: function (ev) {
+    _onLangChangeClick:function(ev){
         ev.preventDefault();
 
-        var $target = $(ev.currentTarget);
-        // retrieve the hash before the redirect
-        var redirect = {
-            lang: encodeURIComponent($target.data('url_code')),
-            url: encodeURIComponent($target.attr('href').replace(/[&?]edit_translations[^&?]+/, '')),
-            hash: encodeURIComponent(window.location.hash)
+        var$target=$(ev.currentTarget);
+        //retrievethehashbeforetheredirect
+        varredirect={
+            lang:encodeURIComponent($target.data('url_code')),
+            url:encodeURIComponent($target.attr('href').replace(/[&?]edit_translations[^&?]+/,'')),
+            hash:encodeURIComponent(window.location.hash)
         };
-        window.location.href = _.str.sprintf("/website/lang/%(lang)s?r=%(url)s%(hash)s", redirect);
+        window.location.href=_.str.sprintf("/website/lang/%(lang)s?r=%(url)s%(hash)s",redirect);
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    async _onGMapAPIRequest(ev) {
+    async_onGMapAPIRequest(ev){
         ev.stopPropagation();
-        const apiKey = await this._loadGMapAPI(ev.data.editableMode, ev.data.refetch);
+        constapiKey=awaitthis._loadGMapAPI(ev.data.editableMode,ev.data.refetch);
         ev.data.onSuccess(apiKey);
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    async _onGMapAPIKeyRequest(ev) {
+    async_onGMapAPIKeyRequest(ev){
         ev.stopPropagation();
-        const apiKey = await this._getGMapAPIKey(ev.data.refetch);
+        constapiKey=awaitthis._getGMapAPIKey(ev.data.refetch);
         ev.data.onSuccess(apiKey);
     },
     /**
     /**
-     * Checks information about the page SEO object.
+     *ChecksinformationaboutthepageSEOobject.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onSeoObjectRequest: function (ev) {
-        var res = this._unslugHtmlDataObject('seo-object');
+    _onSeoObjectRequest:function(ev){
+        varres=this._unslugHtmlDataObject('seo-object');
         ev.data.callback(res);
     },
     /**
-     * Returns a model/id object constructed from html data attribute.
+     *Returnsamodel/idobjectconstructedfromhtmldataattribute.
      *
-     * @private
-     * @param {string} dataAttr
-     * @returns {Object} an object with 2 keys: model and id, or null
-     * if not found
+     *@private
+     *@param{string}dataAttr
+     *@returns{Object}anobjectwith2keys:modelandid,ornull
+     *ifnotfound
      */
-    _unslugHtmlDataObject: function (dataAttr) {
-        var repr = $('html').data(dataAttr);
-        var match = repr && repr.match(/(.+)\((\d+),(.*)\)/);
-        if (!match) {
-            return null;
+    _unslugHtmlDataObject:function(dataAttr){
+        varrepr=$('html').data(dataAttr);
+        varmatch=repr&&repr.match(/(.+)\((\d+),(.*)\)/);
+        if(!match){
+            returnnull;
         }
-        return {
-            model: match[1],
-            id: match[2] | 0,
+        return{
+            model:match[1],
+            id:match[2]|0,
         };
     },
     /**
-     * @todo review
-     * @private
+     *@todoreview
+     *@private
      */
-    _onPublishBtnClick: function (ev) {
+    _onPublishBtnClick:function(ev){
         ev.preventDefault();
-        if (document.body.classList.contains('editor_enable')) {
+        if(document.body.classList.contains('editor_enable')){
             return;
         }
 
-        var self = this;
-        var $data = $(ev.currentTarget).parents(".js_publish_management:first");
+        varself=this;
+        var$data=$(ev.currentTarget).parents(".js_publish_management:first");
         this._rpc({
-            route: $data.data('controller') || '/website/publish',
-            params: {
-                id: +$data.data('id'),
-                object: $data.data('object'),
+            route:$data.data('controller')||'/website/publish',
+            params:{
+                id:+$data.data('id'),
+                object:$data.data('object'),
             },
         })
-        .then(function (result) {
-            $data.toggleClass("css_published", result).toggleClass("css_unpublished", !result);
-            $data.find('input').prop("checked", result);
-            $data.parents("[data-publish]").attr("data-publish", +result ? 'on' : 'off');
-            if (result) {
+        .then(function(result){
+            $data.toggleClass("css_published",result).toggleClass("css_unpublished",!result);
+            $data.find('input').prop("checked",result);
+            $data.parents("[data-publish]").attr("data-publish",+result?'on':'off');
+            if(result){
                 self.displayNotification({
-                    type: 'success',
-                    message: $data.data('description') ?
-                        _.str.sprintf(_t("You've published your %s."), $data.data('description')) :
-                        _t("Published with success."),
+                    type:'success',
+                    message:$data.data('description')?
+                        _.str.sprintf(_t("You'vepublishedyour%s."),$data.data('description')):
+                        _t("Publishedwithsuccess."),
                 });
             }
         });
     },
     /**
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onWebsiteSwitch: function (ev) {
-        var websiteId = ev.currentTarget.getAttribute('website-id');
-        var websiteDomain = ev.currentTarget.getAttribute('domain');
-        let url = `/website/force/${websiteId}`;
-        if (websiteDomain && window.location.hostname !== websiteDomain) {
-            url = websiteDomain + url;
+    _onWebsiteSwitch:function(ev){
+        varwebsiteId=ev.currentTarget.getAttribute('website-id');
+        varwebsiteDomain=ev.currentTarget.getAttribute('domain');
+        leturl=`/website/force/${websiteId}`;
+        if(websiteDomain&&window.location.hostname!==websiteDomain){
+            url=websiteDomain+url;
         }
-        const path = window.location.pathname + window.location.search + window.location.hash;
-        window.location.href = $.param.querystring(url, {'path': path});
+        constpath=window.location.pathname+window.location.search+window.location.hash;
+        window.location.href=$.param.querystring(url,{'path':path});
     },
     /**
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onModalShown: function (ev) {
+    _onModalShown:function(ev){
         $(ev.target).addClass('modal_shown');
     },
     /**
-     * @override
+     *@override
      */
-    _onKeyDown(ev) {
-        if (!session.user_id) {
+    _onKeyDown(ev){
+        if(!session.user_id){
             return;
         }
-        // If document.body doesn't contain the element, it was probably removed as a consequence of pressing Esc.
-        // we don't want to toggle fullscreen as the removal (eg, closing a modal) is the intended action.
-        if (ev.keyCode !== $.ui.keyCode.ESCAPE || !document.body.contains(ev.target) || ev.target.closest('.modal')) {
-            return KeyboardNavigationMixin._onKeyDown.apply(this, arguments);
+        //Ifdocument.bodydoesn'tcontaintheelement,itwasprobablyremovedasaconsequenceofpressingEsc.
+        //wedon'twanttotogglefullscreenastheremoval(eg,closingamodal)istheintendedaction.
+        if(ev.keyCode!==$.ui.keyCode.ESCAPE||!document.body.contains(ev.target)||ev.target.closest('.modal')){
+            returnKeyboardNavigationMixin._onKeyDown.apply(this,arguments);
         }
         this._toggleFullscreen(!this.isFullscreen);
     },
 });
 
-return {
-    WebsiteRoot: WebsiteRoot,
-    websiteRootRegistry: websiteRootRegistry,
+return{
+    WebsiteRoot:WebsiteRoot,
+    websiteRootRegistry:websiteRootRegistry,
 };
 });

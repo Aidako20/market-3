@@ -1,22 +1,22 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models
-from flectra.tools.translate import html_translate
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models
+fromflectra.tools.translateimporthtml_translate
 
 
-class DigestTip(models.Model):
-    _name = 'digest.tip'
-    _description = 'Digest Tips'
-    _order = 'sequence'
+classDigestTip(models.Model):
+    _name='digest.tip'
+    _description='DigestTips'
+    _order='sequence'
 
-    sequence = fields.Integer(
-        'Sequence', default=1,
-        help='Used to display digest tip in email template base on order')
-    name = fields.Char('Name', translate=True)
-    user_ids = fields.Many2many(
-        'res.users', string='Recipients',
-        help='Users having already received this tip')
-    tip_description = fields.Html('Tip description', translate=html_translate)
-    group_id = fields.Many2one(
-        'res.groups', string='Authorized Group',
-        default=lambda self: self.env.ref('base.group_user'))
+    sequence=fields.Integer(
+        'Sequence',default=1,
+        help='Usedtodisplaydigesttipinemailtemplatebaseonorder')
+    name=fields.Char('Name',translate=True)
+    user_ids=fields.Many2many(
+        'res.users',string='Recipients',
+        help='Usershavingalreadyreceivedthistip')
+    tip_description=fields.Html('Tipdescription',translate=html_translate)
+    group_id=fields.Many2one(
+        'res.groups',string='AuthorizedGroup',
+        default=lambdaself:self.env.ref('base.group_user'))

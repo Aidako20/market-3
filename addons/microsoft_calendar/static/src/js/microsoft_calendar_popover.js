@@ -1,34 +1,34 @@
-flectra.define('microsoft_calendar.MicrosoftCalendarPopover', function(require) {
-    "use strict";
+flectra.define('microsoft_calendar.MicrosoftCalendarPopover',function(require){
+    "usestrict";
 
-    const CalendarPopover = require('web.CalendarPopover');
+    constCalendarPopover=require('web.CalendarPopover');
 
-    const MicrosoftCalendarPopover = CalendarPopover.include({
-        events: _.extend({}, CalendarPopover.prototype.events, {
-            'click .o_cw_popover_archive_m': '_onClickPopoverArchive',
+    constMicrosoftCalendarPopover=CalendarPopover.include({
+        events:_.extend({},CalendarPopover.prototype.events,{
+            'click.o_cw_popover_archive_m':'_onClickPopoverArchive',
         }),
 
         /**
-         * We only want one 'Archive' button in the popover
-         * so if Google Sync is also active, it takes precedence
-         * over this popvoer.
+         *Weonlywantone'Archive'buttoninthepopover
+         *soifGoogleSyncisalsoactive,ittakesprecedence
+         *overthispopvoer.
          */
-        isMEventSyncedAndArchivable() {
-            if (this.event.extendedProps.record.google_id === undefined) {
-                return this.event.extendedProps.record.microsoft_id;
+        isMEventSyncedAndArchivable(){
+            if(this.event.extendedProps.record.google_id===undefined){
+                returnthis.event.extendedProps.record.microsoft_id;
             }
-            return !this.event.extendedProps.record.google_id && this.event.extendedProps.record.microsoft_id
+            return!this.event.extendedProps.record.google_id&&this.event.extendedProps.record.microsoft_id
         },
 
-        isEventDeletable() {
-            return !this.isMEventSyncedAndArchivable() && this._super();
+        isEventDeletable(){
+            return!this.isMEventSyncedAndArchivable()&&this._super();
         },
 
-        _onClickPopoverArchive: function (ev) {
+        _onClickPopoverArchive:function(ev){
             ev.preventDefault();
-            this.trigger_up('archive_event', {id: this.event.id});
+            this.trigger_up('archive_event',{id:this.event.id});
         },
     });
 
-    return MicrosoftCalendarPopover;
+    returnMicrosoftCalendarPopover;
 });

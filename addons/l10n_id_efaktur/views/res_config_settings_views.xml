@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="res_config_settings_view_form" model="ir.ui.view">
-        <field name="name">res.config.settings.view.form.chilean.loc</field>
-        <field name="model">res.config.settings</field>
-        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[@id='invoicing_settings']" position="after">
-                <div id="l10n_cl_title">
-                    <h2>Indonesian Localization</h2>
+    <recordid="res_config_settings_view_form"model="ir.ui.view">
+        <fieldname="name">res.config.settings.view.form.chilean.loc</field>
+        <fieldname="model">res.config.settings</field>
+        <fieldname="inherit_id"ref="account.res_config_settings_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[@id='invoicing_settings']"position="after">
+                <divid="l10n_cl_title">
+                    <h2>IndonesianLocalization</h2>
                 </div>
-                <div id="l10n_cl_section" class="row mt16 o_settings_container">
-                    <div class="col-12 col-lg-6 o_setting_box">
-                        <div class="o_setting_left_pane"/>
-                        <div class="o_setting_right_pane">
-                            <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>
-                            <div class="content-group">
-                                <div class="row mt16">
-                                    <label for="l10n_id_tax_address" class="col-lg-3"/>
-                                    <field name="l10n_id_tax_address"/>
+                <divid="l10n_cl_section"class="rowmt16o_settings_container">
+                    <divclass="col-12col-lg-6o_setting_box">
+                        <divclass="o_setting_left_pane"/>
+                        <divclass="o_setting_right_pane">
+                            <spanclass="fafa-lgfa-building-o"title="Valuessetherearecompany-specific."aria-label="Valuessetherearecompany-specific."groups="base.group_multi_company"role="img"/>
+                            <divclass="content-group">
+                                <divclass="rowmt16">
+                                    <labelfor="l10n_id_tax_address"class="col-lg-3"/>
+                                    <fieldname="l10n_id_tax_address"/>
                                 </div>
-                                <div class="row mt16">
-                                    <label for="l10n_id_tax_name" class="col-lg-3"/>
-                                    <field name="l10n_id_tax_name"/>
+                                <divclass="rowmt16">
+                                    <labelfor="l10n_id_tax_name"class="col-lg-3"/>
+                                    <fieldname="l10n_id_tax_name"/>
                                 </div>
                             </div>
                         </div>

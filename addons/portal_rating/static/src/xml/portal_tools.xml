@@ -1,56 +1,56 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
-    <t t-name="portal_rating.rating_stars_static">
-        <t t-set="val_integer" t-value="Math.floor(val)"/>
-        <t t-set="val_decimal" t-value="val - val_integer"/>
-        <t t-set="empty_star" t-value="5 - (val_integer+Math.ceil(val_decimal))"/>
-        <div class="o_website_rating_static" t-att-style="inline_mode ? 'display:inline' : ''" t-attf-aria-label="#{val} stars on 5" t-attf-title="#{val} stars on 5">
-            <t t-foreach="_.range(0, val_integer)" t-as="num">
-                <i class="fa fa-star" role="img"></i>
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
+    <tt-name="portal_rating.rating_stars_static">
+        <tt-set="val_integer"t-value="Math.floor(val)"/>
+        <tt-set="val_decimal"t-value="val-val_integer"/>
+        <tt-set="empty_star"t-value="5-(val_integer+Math.ceil(val_decimal))"/>
+        <divclass="o_website_rating_static"t-att-style="inline_mode?'display:inline':''"t-attf-aria-label="#{val}starson5"t-attf-title="#{val}starson5">
+            <tt-foreach="_.range(0,val_integer)"t-as="num">
+                <iclass="fafa-star"role="img"></i>
             </t>
-            <t t-if="val_decimal">
-                <i class="fa fa-star-half-o" role="img"></i>
+            <tt-if="val_decimal">
+                <iclass="fafa-star-half-o"role="img"></i>
             </t>
-            <t t-foreach="_.range(0, empty_star)" t-as="num">
-                <i class="fa fa-star text-black-25" role="img"></i>
+            <tt-foreach="_.range(0,empty_star)"t-as="num">
+                <iclass="fafa-startext-black-25"role="img"></i>
             </t>
         </div>
     </t>
 
-    <t t-name="portal_rating.rating_card">
-        <div class="row o_website_rating_card_container">
-            <div class="col-lg-3 offset-lg-2" t-if="!_.isEmpty(widget.get('rating_card_values'))">
+    <tt-name="portal_rating.rating_card">
+        <divclass="rowo_website_rating_card_container">
+            <divclass="col-lg-3offset-lg-2"t-if="!_.isEmpty(widget.get('rating_card_values'))">
                 <p><strong>Average</strong></p>
-                <div class="o_website_rating_avg text-center">
-                    <h1><t t-esc="widget.get('rating_card_values')['avg']"/></h1>
-                    <t t-call="portal_rating.rating_stars_static">
-                        <t t-set="val" t-value="widget.get('rating_card_values')['avg'] || 0"/>
+                <divclass="o_website_rating_avgtext-center">
+                    <h1><tt-esc="widget.get('rating_card_values')['avg']"/></h1>
+                    <tt-call="portal_rating.rating_stars_static">
+                        <tt-set="val"t-value="widget.get('rating_card_values')['avg']||0"/>
                     </t>
-                    <t t-call="portal.chatter_message_count"/>
+                    <tt-call="portal.chatter_message_count"/>
                 </div>
             </div>
-            <div class="col-lg-6" t-if="!_.isEmpty(widget.get('rating_card_values'))">
+            <divclass="col-lg-6"t-if="!_.isEmpty(widget.get('rating_card_values'))">
                 <p><strong>Details</strong></p>
-                <div class="o_website_rating_progress_bars">
-                    <table class="o_website_rating_progress_table">
-                        <t t-foreach="widget.get('rating_card_values')['percent']" t-as="percent">
-                            <tr class="o_website_rating_select" t-att-data-star="percent['num']" style="opacity: 1">
-                                <td class="o_website_rating_table_star_num" t-att-data-star="percent['num']">
-                                    <t t-esc="percent['num']"/> stars
+                <divclass="o_website_rating_progress_bars">
+                    <tableclass="o_website_rating_progress_table">
+                        <tt-foreach="widget.get('rating_card_values')['percent']"t-as="percent">
+                            <trclass="o_website_rating_select"t-att-data-star="percent['num']"style="opacity:1">
+                                <tdclass="o_website_rating_table_star_num"t-att-data-star="percent['num']">
+                                    <tt-esc="percent['num']"/>stars
                                 </td>
-                                <td class="o_website_rating_table_progress">
-                                    <div class="progress">
-                                        <div class="progress-bar o_rating_progressbar" role="progressbar" t-att-aria-valuenow="percent['percent']" aria-valuemin="0" aria-valuemax="100" t-att-style="'width:' + percent['percent'] + '%;'">
+                                <tdclass="o_website_rating_table_progress">
+                                    <divclass="progress">
+                                        <divclass="progress-baro_rating_progressbar"role="progressbar"t-att-aria-valuenow="percent['percent']"aria-valuemin="0"aria-valuemax="100"t-att-style="'width:'+percent['percent']+'%;'">
                                         </div>
                                     </div>
                                 </td>
-                                <td class="o_website_rating_table_percent">
-                                    <strong><t t-esc="Math.round(percent['percent'] * 100) / 100"/>%</strong>
+                                <tdclass="o_website_rating_table_percent">
+                                    <strong><tt-esc="Math.round(percent['percent']*100)/100"/>%</strong>
                                 </td>
-                                <td class="o_website_rating_table_reset">
-                                    <button class="btn btn-link o_website_rating_select_text" t-att-data-star="percent['num']">
-                                        <i class="fa fa-times d-block d-sm-none" role="img" aria-label="Remove Selection"/>
-                                        <span class="d-none d-sm-block">Remove Selection</span>
+                                <tdclass="o_website_rating_table_reset">
+                                    <buttonclass="btnbtn-linko_website_rating_select_text"t-att-data-star="percent['num']">
+                                        <iclass="fafa-timesd-blockd-sm-none"role="img"aria-label="RemoveSelection"/>
+                                        <spanclass="d-noned-sm-block">RemoveSelection</span>
                                     </button>
                                 </td>
                             </tr>
@@ -61,27 +61,27 @@
         </div>
     </t>
 
-    <t t-name="portal_rating.rating_star_input">
-        <div class="o_rating_star_card" t-if="widget.options['display_rating']">
-            <t t-set="val_integer" t-value="Math.floor(default_rating)"/>
-            <t t-set="val_decimal" t-value="default_rating - val_integer"/>
-            <t t-set="empty_star" t-value="5 - (val_integer+Math.ceil(val_decimal))"/>
+    <tt-name="portal_rating.rating_star_input">
+        <divclass="o_rating_star_card"t-if="widget.options['display_rating']">
+            <tt-set="val_integer"t-value="Math.floor(default_rating)"/>
+            <tt-set="val_decimal"t-value="default_rating-val_integer"/>
+            <tt-set="empty_star"t-value="5-(val_integer+Math.ceil(val_decimal))"/>
 
-            <div class="stars enabled">
-                <t t-foreach="_.range(0, val_integer)" t-as="num">
-                    <i class="fa fa-star" role="img" aria-label="One star" title="One star"></i>
+            <divclass="starsenabled">
+                <tt-foreach="_.range(0,val_integer)"t-as="num">
+                    <iclass="fafa-star"role="img"aria-label="Onestar"title="Onestar"></i>
                 </t>
-                <t t-if="val_decimal">
-                    <i class="fa fa-star-half-o" role="img" aria-label="Half a star" title="Half a star"></i>
+                <tt-if="val_decimal">
+                    <iclass="fafa-star-half-o"role="img"aria-label="Halfastar"title="Halfastar"></i>
                 </t>
-                <t t-foreach="_.range(0, empty_star)" t-as="num" role="img" t-attf-aria-label="#{empty_star} on 5" t-attf-title="#{empty_star} on 5">
-                    <i class="fa fa-star-o text-black-25"></i>
+                <tt-foreach="_.range(0,empty_star)"t-as="num"role="img"t-attf-aria-label="#{empty_star}on5"t-attf-title="#{empty_star}on5">
+                    <iclass="fafa-star-otext-black-25"></i>
                 </t>
             </div>
-            <div class="rate_text">
-                <span class="badge badge-info"></span>
+            <divclass="rate_text">
+                <spanclass="badgebadge-info"></span>
             </div>
-            <input type="hidden" readonly="readonly" name="rating_value" t-att-value="default_rating || ''"/>
+            <inputtype="hidden"readonly="readonly"name="rating_value"t-att-value="default_rating||''"/>
         </div>
     </t>
 </templates>

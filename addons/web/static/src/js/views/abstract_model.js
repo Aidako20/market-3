@@ -1,286 +1,286 @@
-flectra.define('web.AbstractModel', function (require) {
-"use strict";
+flectra.define('web.AbstractModel',function(require){
+"usestrict";
 
 /**
- * An AbstractModel is the M in MVC.  We tend to think of MVC more on the server
- * side, but we are talking here on the web client side.
+ *AnAbstractModelistheMinMVC. WetendtothinkofMVCmoreontheserver
+ *side,butwearetalkinghereonthewebclientside.
  *
- * The duties of the Model are to fetch all relevant data, and to make them
- * available for the rest of the view.  Also, every modification to that data
- * should pass through the model.
+ *ThedutiesoftheModelaretofetchallrelevantdata,andtomakethem
+ *availablefortherestoftheview. Also,everymodificationtothatdata
+ *shouldpassthroughthemodel.
  *
- * Note that the model is not a widget, it does not need to be rendered or
- * appended to the dom.  However, it inherits from the EventDispatcherMixin,
- * in order to be able to notify its parent by bubbling events up.
+ *Notethatthemodelisnotawidget,itdoesnotneedtoberenderedor
+ *appendedtothedom. However,itinheritsfromtheEventDispatcherMixin,
+ *inordertobeabletonotifyitsparentbybubblingeventsup.
  *
- * The model is able to generate sample (fake) data when there is no actual data
- * in database.  This feature can be activated by instantiating the model with
- * param "useSampleModel" set to true.  In this case, the model instantiates a
- * duplicated version of itself, parametrized to call a SampleServer (JS)
- * instead of doing RPCs.  Here is how it works: the main model first load the
- * data normally (from database), and then checks whether the result is empty or
- * not.  If it is, it asks the sample model to load with the exact same params,
- * and it thus enters in "sample" mode.  The model keeps doing this at reload,
- * but only if the (re)load params haven't changed: as soon as a param changes,
- * the "sample" mode is left, and it never enters it again in the future (in the
- * lifetime of the model instance).  To access those sample data from the outside,
- * 'get' must be called with the the option "withSampleData" set to true.  In
- * this case, if the main model is in "sample" mode, it redirects the call to the
- * sample model.
+ *Themodelisabletogeneratesample(fake)datawhenthereisnoactualdata
+ *indatabase. Thisfeaturecanbeactivatedbyinstantiatingthemodelwith
+ *param"useSampleModel"settotrue. Inthiscase,themodelinstantiatesa
+ *duplicatedversionofitself,parametrizedtocallaSampleServer(JS)
+ *insteadofdoingRPCs. Hereishowitworks:themainmodelfirstloadthe
+ *datanormally(fromdatabase),andthencheckswhethertheresultisemptyor
+ *not. Ifitis,itasksthesamplemodeltoloadwiththeexactsameparams,
+ *anditthusentersin"sample"mode. Themodelkeepsdoingthisatreload,
+ *butonlyifthe(re)loadparamshaven'tchanged:assoonasaparamchanges,
+ *the"sample"modeisleft,anditneverentersitagaininthefuture(inthe
+ *lifetimeofthemodelinstance). Toaccessthosesampledatafromtheoutside,
+ *'get'mustbecalledwiththetheoption"withSampleData"settotrue. In
+ *thiscase,ifthemainmodelisin"sample"mode,itredirectsthecalltothe
+ *samplemodel.
  */
 
-var fieldUtils = require('web.field_utils');
-var mvc = require('web.mvc');
-const SampleServer = require('web.SampleServer');
+varfieldUtils=require('web.field_utils');
+varmvc=require('web.mvc');
+constSampleServer=require('web.SampleServer');
 
 
-var AbstractModel = mvc.Model.extend({
+varAbstractModel=mvc.Model.extend({
     /**
-     * @param {Widget} parent
-     * @param {Object} [params={}]
-     * @param {Object} [params.fields]
-     * @param {string} [params.modelName]
-     * @param {boolean} [params.isSampleModel=false] if true, will fetch data
-     *   from a SampleServer instead of doing RPCs
-     * @param {boolean} [params.useSampleModel=false] if true, will use a sample
-     *   model to generate sample data when there is no "real" data in database
-     * @param {AbstractModel} [params.SampleModel] the AbstractModel class
-     *   to instantiate as sample model. This model won't do any rpc, but will
-     *   rather call a SampleServer that will generate sample data. This param
-     *   must be set when params.useSampleModel is true.
+     *@param{Widget}parent
+     *@param{Object}[params={}]
+     *@param{Object}[params.fields]
+     *@param{string}[params.modelName]
+     *@param{boolean}[params.isSampleModel=false]iftrue,willfetchdata
+     *  fromaSampleServerinsteadofdoingRPCs
+     *@param{boolean}[params.useSampleModel=false]iftrue,willuseasample
+     *  modeltogeneratesampledatawhenthereisno"real"dataindatabase
+     *@param{AbstractModel}[params.SampleModel]theAbstractModelclass
+     *  toinstantiateassamplemodel.Thismodelwon'tdoanyrpc,butwill
+     *  rathercallaSampleServerthatwillgeneratesampledata.Thisparam
+     *  mustbesetwhenparams.useSampleModelistrue.
      */
-    init(parent, params = {}) {
+    init(parent,params={}){
         this._super(...arguments);
-        this.useSampleModel = params.useSampleModel || false;
-        if (params.isSampleModel) {
-            this.isSampleModel = true;
-            this.sampleServer = new SampleServer(params.modelName, params.fields);
-        } else if (this.useSampleModel) {
-            const sampleModelParams = Object.assign({}, params, {
-                isSampleModel: true,
-                SampleModel: null,
-                useSampleModel: false,
+        this.useSampleModel=params.useSampleModel||false;
+        if(params.isSampleModel){
+            this.isSampleModel=true;
+            this.sampleServer=newSampleServer(params.modelName,params.fields);
+        }elseif(this.useSampleModel){
+            constsampleModelParams=Object.assign({},params,{
+                isSampleModel:true,
+                SampleModel:null,
+                useSampleModel:false,
             });
-            this.sampleModel = new params.SampleModel(this, sampleModelParams);
-            this._isInSampleMode = false;
+            this.sampleModel=newparams.SampleModel(this,sampleModelParams);
+            this._isInSampleMode=false;
         }
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Override to call get on the sampleModel when we are in sample mode, and
-     * option 'withSampleData' is set to true.
+     *OverridetocallgetonthesampleModelwhenweareinsamplemode,and
+     *option'withSampleData'issettotrue.
      *
-     * @override
-     * @param {any} _
-     * @param {Object} [options]
-     * @param {boolean} [options.withSampleData=false]
+     *@override
+     *@param{any}_
+     *@param{Object}[options]
+     *@param{boolean}[options.withSampleData=false]
      */
-    get(_, options) {
-        let state;
-        if (options && options.withSampleData && this._isInSampleMode) {
-            state = this.sampleModel.__get(...arguments);
-        } else {
-            state = this.__get(...arguments);
+    get(_,options){
+        letstate;
+        if(options&&options.withSampleData&&this._isInSampleMode){
+            state=this.sampleModel.__get(...arguments);
+        }else{
+            state=this.__get(...arguments);
         }
-        return state;
+        returnstate;
     },
     /**
-     * Under some conditions, the model is designed to generate sample data if
-     * there is no real data in database. This function returns a boolean which
-     * indicates the mode of the model: if true, we are in "sample" mode.
+     *Undersomeconditions,themodelisdesignedtogeneratesampledataif
+     *thereisnorealdataindatabase.Thisfunctionreturnsabooleanwhich
+     *indicatesthemodeofthemodel:iftrue,wearein"sample"mode.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    isInSampleMode() {
-        return !!this._isInSampleMode;
+    isInSampleMode(){
+        return!!this._isInSampleMode;
     },
     /**
-     * Disables the sample data (forever) on this model instance.
+     *Disablesthesampledata(forever)onthismodelinstance.
      */
-    leaveSampleMode() {
-        if (this.useSampleModel) {
-            this.useSampleModel = false;
-            this._isInSampleMode = false;
+    leaveSampleMode(){
+        if(this.useSampleModel){
+            this.useSampleModel=false;
+            this._isInSampleMode=false;
             this.sampleModel.destroy();
         }
     },
     /**
-     * Override to check if we need to call the sample model (and if so, to do
-     * it) after loading the data, in the case where there is no real data to
-     * display.
+     *Overridetocheckifweneedtocallthesamplemodel(andifso,todo
+     *it)afterloadingthedata,inthecasewherethereisnorealdatato
+     *display.
      *
-     * @override
+     *@override
      */
-    async load(params) {
-        this.loadParams = params;
-        const handle = await this.__load(...arguments);
-        await this._callSampleModel('__load', handle, ...arguments);
-        return handle;
+    asyncload(params){
+        this.loadParams=params;
+        consthandle=awaitthis.__load(...arguments);
+        awaitthis._callSampleModel('__load',handle,...arguments);
+        returnhandle;
     },
     /**
-     * When something changes, the data may need to be refetched.  This is the
-     * job for this method: reloading (only if necessary) all the data and
-     * making sure that they are ready to be redisplayed.
-     * Sometimes, we reload the data with the "same" params as the initial load
-     * params (see '_haveParamsChanged'). When we do, if we were in "sample" mode,
-     * we call again the sample server after the reload if there is still no data
-     * to display. When the parameters change, we automatically leave "sample"
-     * mode.
+     *Whensomethingchanges,thedatamayneedtoberefetched. Thisisthe
+     *jobforthismethod:reloading(onlyifnecessary)allthedataand
+     *makingsurethattheyarereadytoberedisplayed.
+     *Sometimes,wereloadthedatawiththe"same"paramsastheinitialload
+     *params(see'_haveParamsChanged').Whenwedo,ifwewerein"sample"mode,
+     *wecallagainthesampleserverafterthereloadifthereisstillnodata
+     *todisplay.Whentheparameterschange,weautomaticallyleave"sample"
+     *mode.
      *
-     * @param {any} _
-     * @param {Object} [params]
-     * @returns {Promise}
+     *@param{any}_
+     *@param{Object}[params]
+     *@returns{Promise}
      */
-    async reload(_, params) {
-        const handle = await this.__reload(...arguments);
-        if (this._isInSampleMode) {
-            if (!this._haveParamsChanged(params)) {
-                await this._callSampleModel('__reload', handle, ...arguments);
-            } else {
+    asyncreload(_,params){
+        consthandle=awaitthis.__reload(...arguments);
+        if(this._isInSampleMode){
+            if(!this._haveParamsChanged(params)){
+                awaitthis._callSampleModel('__reload',handle,...arguments);
+            }else{
                 this.leaveSampleMode();
             }
         }
-        return handle;
+        returnhandle;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {string} method
-     * @param {any} handle
-     * @param  {...any} args
-     * @returns {Promise}
+     *@private
+     *@param{string}method
+     *@param{any}handle
+     *@param {...any}args
+     *@returns{Promise}
      */
-    async _callSampleModel(method, handle, ...args) {
-        if (this.useSampleModel && this._isEmpty(handle)) {
-            try {
-                if (method === '__load') {
-                    await this.sampleModel.__load(...args);
-                } else if (method === '__reload') {
-                    await this.sampleModel.__reload(...args);
+    async_callSampleModel(method,handle,...args){
+        if(this.useSampleModel&&this._isEmpty(handle)){
+            try{
+                if(method==='__load'){
+                    awaitthis.sampleModel.__load(...args);
+                }elseif(method==='__reload'){
+                    awaitthis.sampleModel.__reload(...args);
                 }
-                this._isInSampleMode = true;
-            } catch (error) {
-                if (error instanceof SampleServer.UnimplementedRouteError) {
+                this._isInSampleMode=true;
+            }catch(error){
+                if(errorinstanceofSampleServer.UnimplementedRouteError){
                     this.leaveSampleMode();
-                } else {
-                    throw error;
+                }else{
+                    throwerror;
                 }
             }
-        } else {
+        }else{
             this.leaveSampleMode();
         }
     },
     /**
-     * @private
-     * @returns {Object}
+     *@private
+     *@returns{Object}
      */
-    __get() {
-        return {};
+    __get(){
+        return{};
     },
     /**
-     * This function can be overriden to determine if the result of a load or
-     * a reload is empty. In the affirmative, we will try to generate sample
-     * data to prevent from having an empty state to display.
+     *Thisfunctioncanbeoverridentodetermineiftheresultofaloador
+     *areloadisempty.Intheaffirmative,wewilltrytogeneratesample
+     *datatopreventfromhavinganemptystatetodisplay.
      *
-     * @private
-     * @params {any} handle, the value returned by a load or a reload
-     * @returns {boolean}
+     *@private
+     *@params{any}handle,thevaluereturnedbyaloadorareload
+     *@returns{boolean}
      */
-    _isEmpty(/* handle */) {
-        return false;
+    _isEmpty(/*handle*/){
+        returnfalse;
     },
     /**
-     * To override to do the initial load of the data (this function is supposed
-     * to be called only once).
+     *Tooverridetodotheinitialloadofthedata(thisfunctionissupposed
+     *tobecalledonlyonce).
      *
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    async __load() {
-        return Promise.resolve();
+    async__load(){
+        returnPromise.resolve();
     },
     /**
-     * Processes date(time) and selection field values sent by the server.
-     * Converts data(time) values to moment instances.
-     * Converts false values of selection fields to 0 if 0 is a valid key,
-     * because the server doesn't make a distinction between false and 0, and
-     * always sends false when value is 0.
+     *Processesdate(time)andselectionfieldvaluessentbytheserver.
+     *Convertsdata(time)valuestomomentinstances.
+     *Convertsfalsevaluesofselectionfieldsto0if0isavalidkey,
+     *becausetheserverdoesn'tmakeadistinctionbetweenfalseand0,and
+     *alwayssendsfalsewhenvalueis0.
      *
-     * @param {Object} field the field description
-     * @param {*} value
-     * @returns {*} the processed value
+     *@param{Object}fieldthefielddescription
+     *@param{*}value
+     *@returns{*}theprocessedvalue
      */
-    _parseServerValue: function (field, value) {
-        if (field.type === 'date' || field.type === 'datetime') {
-            // process date(time): convert into a moment instance
-            value = fieldUtils.parse[field.type](value, field, {isUTC: true});
-        } else if (field.type === 'selection' && value === false) {
-            // process selection: convert false to 0, if 0 is a valid key
-            var hasKey0 = _.find(field.selection, function (option) {
-                return option[0] === 0;
+    _parseServerValue:function(field,value){
+        if(field.type==='date'||field.type==='datetime'){
+            //processdate(time):convertintoamomentinstance
+            value=fieldUtils.parse[field.type](value,field,{isUTC:true});
+        }elseif(field.type==='selection'&&value===false){
+            //processselection:convertfalseto0,if0isavalidkey
+            varhasKey0=_.find(field.selection,function(option){
+                returnoption[0]===0;
             });
-            value = hasKey0 ? 0 : value;
+            value=hasKey0?0:value;
         }
-        return value;
+        returnvalue;
     },
     /**
-     * To override to reload data (this function may be called several times,
-     * after the initial load has been done).
+     *Tooverridetoreloaddata(thisfunctionmaybecalledseveraltimes,
+     *aftertheinitialloadhasbeendone).
      *
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    async __reload() {
-        return Promise.resolve();
+    async__reload(){
+        returnPromise.resolve();
     },
     /**
-     * Determines whether or not the given params (reload params) differ from
-     * the initial ones (this.loadParams). This is used to leave "sample" mode
-     * as soon as a parameter (e.g. domain) changes.
+     *Determineswhetherornotthegivenparams(reloadparams)differfrom
+     *theinitialones(this.loadParams).Thisisusedtoleave"sample"mode
+     *assoonasaparameter(e.g.domain)changes.
      *
-     * @private
-     * @param {Object} [params={}]
-     * @param {Object} [params.context]
-     * @param {Array[]} [params.domain]
-     * @param {Object} [params.timeRanges]
-     * @param {string[]} [params.groupBy]
-     * @returns {boolean}
+     *@private
+     *@param{Object}[params={}]
+     *@param{Object}[params.context]
+     *@param{Array[]}[params.domain]
+     *@param{Object}[params.timeRanges]
+     *@param{string[]}[params.groupBy]
+     *@returns{boolean}
      */
-    _haveParamsChanged(params = {}) {
-        for (const key of ['context', 'domain', 'timeRanges']) {
-            if (key in params) {
-                const diff = JSON.stringify(params[key]) !== JSON.stringify(this.loadParams[key]);
-                if (diff) {
-                    return true;
+    _haveParamsChanged(params={}){
+        for(constkeyof['context','domain','timeRanges']){
+            if(keyinparams){
+                constdiff=JSON.stringify(params[key])!==JSON.stringify(this.loadParams[key]);
+                if(diff){
+                    returntrue;
                 }
             }
         }
-        if (this.useSampleModel && 'groupBy' in params) {
-            return JSON.stringify(params.groupBy) !== JSON.stringify(this.loadParams.groupedBy);
+        if(this.useSampleModel&&'groupBy'inparams){
+            returnJSON.stringify(params.groupBy)!==JSON.stringify(this.loadParams.groupedBy);
         }
     },
     /**
-     * Override to redirect all rpcs to the SampleServer if this.isSampleModel
-     * is true.
+     *OverridetoredirectallrpcstotheSampleServerifthis.isSampleModel
+     *istrue.
      *
-     * @override
+     *@override
      */
-    async _rpc() {
-        if (this.isSampleModel) {
-            return this.sampleServer.mockRpc(...arguments);
+    async_rpc(){
+        if(this.isSampleModel){
+            returnthis.sampleServer.mockRpc(...arguments);
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 });
 
-return AbstractModel;
+returnAbstractModel;
 
 });

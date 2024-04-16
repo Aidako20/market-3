@@ -1,250 +1,250 @@
-flectra.define('web.mvc', function (require) {
-"use strict";
+flectra.define('web.mvc',function(require){
+"usestrict";
 
 /**
- * This file contains a 'formalization' of a MVC pattern, applied to Flectra
- * idioms.
+ *Thisfilecontainsa'formalization'ofaMVCpattern,appliedtoFlectra
+ *idioms.
  *
- * For a simple widget/component, this is definitely overkill.  However, when
- * working on complex systems, such as Flectra views (or the control panel, or some
- * client actions), it is useful to clearly separate the code in concerns.
+ *Forasimplewidget/component,thisisdefinitelyoverkill. However,when
+ *workingoncomplexsystems,suchasFlectraviews(orthecontrolpanel,orsome
+ *clientactions),itisusefultoclearlyseparatethecodeinconcerns.
  *
- * We define here 4 classes: Factory, Model, Renderer, Controller.  Note that
- * for various historical reasons, we use the term Renderer instead of View. The
- * main issue is that the term 'View' is used way too much in Flectra land, and
- * adding it would increase the confusion.
+ *Wedefinehere4classes:Factory,Model,Renderer,Controller. Notethat
+ *forvarioushistoricalreasons,weusethetermRendererinsteadofView.The
+ *mainissueisthattheterm'View'isusedwaytoomuchinFlectraland,and
+ *addingitwouldincreasetheconfusion.
  *
- * In short, here are the responsabilities of the four classes:
- * - Model: this is where the main state of the system lives.  This is the part
- *     that will talk to the server, process the results and is the owner of the
- *     state
- * - Renderer: this is the UI code: it should only be concerned with the look
- *     and feel of the system: rendering, binding handlers, ...
- * - Controller: coordinates the model with the renderer and the parents widgets.
- *     This is more a 'plumbing' widget.
- * - Factory: setting up the MRC components is a complex task, because each of
- *     them needs the proper arguments/options, it needs to be extensible, they
- *     needs to be created in the proper order, ...  The job of the factory is
- *     to process all the various arguments, and make sure each component is as
- *     simple as possible.
+ *Inshort,herearetheresponsabilitiesofthefourclasses:
+ *-Model:thisiswherethemainstateofthesystemlives. Thisisthepart
+ *    thatwilltalktotheserver,processtheresultsandistheownerofthe
+ *    state
+ *-Renderer:thisistheUIcode:itshouldonlybeconcernedwiththelook
+ *    andfeelofthesystem:rendering,bindinghandlers,...
+ *-Controller:coordinatesthemodelwiththerendererandtheparentswidgets.
+ *    Thisismorea'plumbing'widget.
+ *-Factory:settinguptheMRCcomponentsisacomplextask,becauseeachof
+ *    themneedstheproperarguments/options,itneedstobeextensible,they
+ *    needstobecreatedintheproperorder,... Thejobofthefactoryis
+ *    toprocessallthevariousarguments,andmakesureeachcomponentisas
+ *    simpleaspossible.
  */
 
-var ajax = require('web.ajax');
-var Class = require('web.Class');
-var mixins = require('web.mixins');
-var ServicesMixin = require('web.ServicesMixin');
-var Widget = require('web.Widget');
+varajax=require('web.ajax');
+varClass=require('web.Class');
+varmixins=require('web.mixins');
+varServicesMixin=require('web.ServicesMixin');
+varWidget=require('web.Widget');
 
 
 /**
- * Owner of the state, this component is tasked with fetching data, processing
- * it, updating it, ...
+ *Ownerofthestate,thiscomponentistaskedwithfetchingdata,processing
+ *it,updatingit,...
  *
- * Note that this is not a widget: it is a class which has not UI representation.
+ *Notethatthisisnotawidget:itisaclasswhichhasnotUIrepresentation.
  *
- * @class Model
+ *@classModel
  */
-var Model = Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
+varModel=Class.extend(mixins.EventDispatcherMixin,ServicesMixin,{
     /**
-     * @param {Widget} parent
-     * @param {Object} params
+     *@param{Widget}parent
+     *@param{Object}params
      */
-    init: function (parent, params) {
+    init:function(parent,params){
         mixins.EventDispatcherMixin.init.call(this);
         this.setParent(parent);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * This method should return the complete state necessary for the renderer
-     * to display the current data.
+     *Thismethodshouldreturnthecompletestatenecessaryfortherenderer
+     *todisplaythecurrentdata.
      *
-     * @returns {*}
+     *@returns{*}
      */
-    get: function () {
+    get:function(){
     },
     /**
-     * The load method is called once in a model, when we load the data for the
-     * first time.  The method returns (a promise that resolves to) some kind
-     * of token/handle.  The handle can then be used with the get method to
-     * access a representation of the data.
+     *Theloadmethodiscalledonceinamodel,whenweloadthedataforthe
+     *firsttime. Themethodreturns(apromisethatresolvesto)somekind
+     *oftoken/handle. Thehandlecanthenbeusedwiththegetmethodto
+     *accessarepresentationofthedata.
      *
-     * @param {Object} params
-     * @returns {Promise} The promise resolves to some kind of handle
+     *@param{Object}params
+     *@returns{Promise}Thepromiseresolvestosomekindofhandle
      */
-    load: function () {
-        return Promise.resolve();
+    load:function(){
+        returnPromise.resolve();
     },
 });
 
 /**
- * Only responsibility of this component is to display the user interface, and
- * react to user changes.
+ *Onlyresponsibilityofthiscomponentistodisplaytheuserinterface,and
+ *reacttouserchanges.
  *
- * @class Renderer
+ *@classRenderer
  */
-var Renderer = Widget.extend({
+varRenderer=Widget.extend({
     /**
-     * @override
-     * @param {any} state
-     * @param {Object} params
+     *@override
+     *@param{any}state
+     *@param{Object}params
      */
-    init: function (parent, state, params) {
+    init:function(parent,state,params){
         this._super(parent);
-        this.state = state;
+        this.state=state;
     },
 });
 
 /**
- * The controller has to coordinate between parent, renderer and model.
+ *Thecontrollerhastocoordinatebetweenparent,rendererandmodel.
  *
- * @class Controller
+ *@classController
  */
-var Controller = Widget.extend({
+varController=Widget.extend({
     /**
-     * @override
-     * @param {Model} model
-     * @param {Renderer} renderer
-     * @param {Object} params
-     * @param {any} [params.handle=null]
+     *@override
+     *@param{Model}model
+     *@param{Renderer}renderer
+     *@param{Object}params
+     *@param{any}[params.handle=null]
      */
-    init: function (parent, model, renderer, params) {
-        this._super.apply(this, arguments);
-        this.handle = params.handle || null;
-        this.model = model;
-        this.renderer = renderer;
+    init:function(parent,model,renderer,params){
+        this._super.apply(this,arguments);
+        this.handle=params.handle||null;
+        this.model=model;
+        this.renderer=renderer;
     },
     /**
-     * @returns {Promise}
+     *@returns{Promise}
      */
-    start: function () {
-        return Promise.all(
-            [this._super.apply(this, arguments),
+    start:function(){
+        returnPromise.all(
+            [this._super.apply(this,arguments),
             this._startRenderer()]
         );
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Appends the renderer in the $el. To override to insert it elsewhere.
+     *Appendstherendererinthe$el.Tooverridetoinsertitelsewhere.
      *
-     * @private
+     *@private
      */
-    _startRenderer: function () {
-        return this.renderer.appendTo(this.$el);
+    _startRenderer:function(){
+        returnthis.renderer.appendTo(this.$el);
     },
 });
 
-var Factory = Class.extend({
-    config: {
-        Model: Model,
-        Renderer: Renderer,
-        Controller: Controller,
+varFactory=Class.extend({
+    config:{
+        Model:Model,
+        Renderer:Renderer,
+        Controller:Controller,
     },
     /**
-     * @override
+     *@override
      */
-    init: function () {
-        this.rendererParams = {};
-        this.controllerParams = {};
-        this.modelParams = {};
-        this.loadParams = {};
+    init:function(){
+        this.rendererParams={};
+        this.controllerParams={};
+        this.modelParams={};
+        this.loadParams={};
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Main method of the Factory class. Create a controller, and make sure that
-     * data and libraries are loaded.
+     *MainmethodoftheFactoryclass.Createacontroller,andmakesurethat
+     *dataandlibrariesareloaded.
      *
-     * There is a unusual thing going in this method with parents: we create
-     * renderer/model with parent as parent, then we have to reassign them at
-     * the end to make sure that we have the proper relationships.  This is
-     * necessary to solve the problem that the controller needs the model and
-     * the renderer to be instantiated, but the model need a parent to be able
-     * to load itself, and the renderer needs the data in its constructor.
+     *Thereisaunusualthinggoinginthismethodwithparents:wecreate
+     *renderer/modelwithparentasparent,thenwehavetoreassignthemat
+     *theendtomakesurethatwehavetheproperrelationships. Thisis
+     *necessarytosolvetheproblemthatthecontrollerneedsthemodeland
+     *therenderertobeinstantiated,butthemodelneedaparenttobeable
+     *toloaditself,andtherendererneedsthedatainitsconstructor.
      *
-     * @param {Widget} parent the parent of the resulting Controller (most
-     *      likely an action manager)
-     * @returns {Promise<Controller>}
+     *@param{Widget}parenttheparentoftheresultingController(most
+     *     likelyanactionmanager)
+     *@returns{Promise<Controller>}
      */
-    getController: function (parent) {
-        var self = this;
-        var model = this.getModel(parent);
-        return Promise.all([this._loadData(model), ajax.loadLibs(this)]).then(function (result) {
-            const { state, handle } = result[0];
-            var renderer = self.getRenderer(parent, state);
-            var Controller = self.Controller || self.config.Controller;
-            const initialState = model.get(handle);
-            var controllerParams = _.extend({
+    getController:function(parent){
+        varself=this;
+        varmodel=this.getModel(parent);
+        returnPromise.all([this._loadData(model),ajax.loadLibs(this)]).then(function(result){
+            const{state,handle}=result[0];
+            varrenderer=self.getRenderer(parent,state);
+            varController=self.Controller||self.config.Controller;
+            constinitialState=model.get(handle);
+            varcontrollerParams=_.extend({
                 initialState,
                 handle,
-            }, self.controllerParams);
-            var controller = new Controller(parent, model, renderer, controllerParams);
+            },self.controllerParams);
+            varcontroller=newController(parent,model,renderer,controllerParams);
             model.setParent(controller);
             renderer.setParent(controller);
-            return controller;
+            returncontroller;
         });
     },
     /**
-     * Returns a new model instance
+     *Returnsanewmodelinstance
      *
-     * @param {Widget} parent the parent of the model
-     * @returns {Model} instance of the model
+     *@param{Widget}parenttheparentofthemodel
+     *@returns{Model}instanceofthemodel
      */
-    getModel: function (parent) {
-        var Model = this.config.Model;
-        return new Model(parent, this.modelParams);
+    getModel:function(parent){
+        varModel=this.config.Model;
+        returnnewModel(parent,this.modelParams);
     },
     /**
-     * Returns a new renderer instance
+     *Returnsanewrendererinstance
      *
-     * @param {Widget} parent the parent of the renderer
-     * @param {Object} state the information related to the rendered data
-     * @returns {Renderer} instance of the renderer
+     *@param{Widget}parenttheparentoftherenderer
+     *@param{Object}statetheinformationrelatedtotherendereddata
+     *@returns{Renderer}instanceoftherenderer
      */
-    getRenderer: function (parent, state) {
-        var Renderer = this.config.Renderer;
-        return new Renderer(parent, state, this.rendererParams);
+    getRenderer:function(parent,state){
+        varRenderer=this.config.Renderer;
+        returnnewRenderer(parent,state,this.rendererParams);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Loads initial data from the model
+     *Loadsinitialdatafromthemodel
      *
-     * @private
-     * @param {Model} model a Model instance
-     * @param {Object} [options={}]
-     * @param {boolean} [options.withSampleData=true]
-     * @returns {Promise<*>} a promise that resolves to the value returned by
-     *   the get method from the model
-     * @todo: get rid of loadParams (use modelParams instead)
+     *@private
+     *@param{Model}modelaModelinstance
+     *@param{Object}[options={}]
+     *@param{boolean}[options.withSampleData=true]
+     *@returns{Promise<*>}apromisethatresolvestothevaluereturnedby
+     *  thegetmethodfromthemodel
+     *@todo:getridofloadParams(usemodelParamsinstead)
      */
-    _loadData: function (model, options = {}) {
-        options.withSampleData = 'withSampleData' in options ? options.withSampleData : true;
-        return model.load(this.loadParams).then(function (handle) {
-            return { state: model.get(handle, options), handle };
+    _loadData:function(model,options={}){
+        options.withSampleData='withSampleData'inoptions?options.withSampleData:true;
+        returnmodel.load(this.loadParams).then(function(handle){
+            return{state:model.get(handle,options),handle};
         });
     },
 });
 
 
-return {
-    Factory: Factory,
-    Model: Model,
-    Renderer: Renderer,
-    Controller: Controller,
+return{
+    Factory:Factory,
+    Model:Model,
+    Renderer:Renderer,
+    Controller:Controller,
 };
 
 });

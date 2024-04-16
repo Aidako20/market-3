@@ -1,27 +1,27 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class HrDepartureWizard(models.TransientModel):
-    _inherit = 'hr.departure.wizard'
+classHrDepartureWizard(models.TransientModel):
+    _inherit='hr.departure.wizard'
 
-    release_campany_car = fields.Boolean("Release Company Car", default=True)
+    release_campany_car=fields.Boolean("ReleaseCompanyCar",default=True)
 
-    def action_register_departure(self):
-        super(HrDepartureWizard, self).action_register_departure()
-        if self.release_campany_car:
+    defaction_register_departure(self):
+        super(HrDepartureWizard,self).action_register_departure()
+        ifself.release_campany_car:
             self._free_campany_car()
 
-    def _free_campany_car(self):
-        """Find all fleet.vehichle.assignation.log records that link to the employee, if there is no 
-        end date or end date > departure date, update the date. Also check fleet.vehicle to see if 
-        there is any record with its dirver_id to be the employee, set them to False."""
-        drivers = self.employee_id.user_id.partner_id | self.employee_id.sudo().address_home_id
-        assignations = self.env['fleet.vehicle.assignation.log'].search([('driver_id', 'in', drivers.ids)])
-        for assignation in assignations:
-            if self.departure_date and (not assignation.date_end or assignation.date_end > self.departure_date):
-                assignation.write({'date_end': self.departure_date})
-        cars = self.env['fleet.vehicle'].search([('driver_id', 'in', drivers.ids)])
-        cars.write({'driver_id': False})
+    def_free_campany_car(self):
+        """Findallfleet.vehichle.assignation.logrecordsthatlinktotheemployee,ifthereisno
+        enddateorenddate>departuredate,updatethedate.Alsocheckfleet.vehicletoseeif
+        thereisanyrecordwithitsdirver_idtobetheemployee,setthemtoFalse."""
+        drivers=self.employee_id.user_id.partner_id|self.employee_id.sudo().address_home_id
+        assignations=self.env['fleet.vehicle.assignation.log'].search([('driver_id','in',drivers.ids)])
+        forassignationinassignations:
+            ifself.departure_dateand(notassignation.date_endorassignation.date_end>self.departure_date):
+                assignation.write({'date_end':self.departure_date})
+        cars=self.env['fleet.vehicle'].search([('driver_id','in',drivers.ids)])
+        cars.write({'driver_id':False})

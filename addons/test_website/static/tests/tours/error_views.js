@@ -1,152 +1,152 @@
-flectra.define('test_website.error_views', function (require) {
-'use strict';
+flectra.define('test_website.error_views',function(require){
+'usestrict';
 
-var tour = require('web_tour.tour');
+vartour=require('web_tour.tour');
 
-tour.register('test_error_website', {
-    test: true,
-    url: '/test_error_view',
+tour.register('test_error_website',{
+    test:true,
+    url:'/test_error_view',
 },
 [
-    // RPC ERROR
+    //RPCERROR
     {
-        content: "trigger rpc user error",
-        trigger: 'a[href="/test_user_error_json"]',
-    }, {
-        content: "rpc user error modal has message",
-        extra_trigger: 'div.toast-body:contains("This is a user rpc test")',
-        trigger: 'button.o_notification_close',
-    }, {
-        content: "trigger rpc access error",
-        trigger: 'a[href="/test_access_error_json"]',
-    }, {
-        content: "rpc access error modal has message",
-        extra_trigger: 'div.toast-body:contains("This is an access rpc test")',
-        trigger: 'button.o_notification_close',
-    }, {
-        content: "trigger validation rpc error",
-        trigger: 'a[href="/test_validation_error_json"]',
-    }, {
-        content: "rpc validation error modal has message",
-        extra_trigger: 'div.toast-body:contains("This is a validation rpc test")',
-        trigger: 'button.o_notification_close',
-    }, {
-        content: "trigger rpc missing error",
-        trigger: 'a[href="/test_missing_error_json"]',
-    }, {
-        content: "rpc missing error modal has message",
-        extra_trigger: 'div.toast-body:contains("This is a missing rpc test")',
-        trigger: 'button.o_notification_close',
-    }, {
-        content: "trigger rpc error 403",
-        trigger: 'a[href="/test_access_denied_json"]',
-    }, {
-        content: "rpc error 403 modal has message",
-        extra_trigger: 'div.toast-body:contains("This is an access denied rpc test")',
-        trigger: 'button.o_notification_close',
-    }, {
-        content: "trigger rpc error 500",
-        trigger: 'a[href="/test_internal_error_json"]',
-    }, {
-        content: "rpc error 500 modal is an ErrorDialog",
-        extra_trigger: 'div.o_dialog_error.modal-body div.alert.alert-warning',
-        trigger: 'button.btn.btn-primary[type="button"]',
+        content:"triggerrpcusererror",
+        trigger:'a[href="/test_user_error_json"]',
+    },{
+        content:"rpcusererrormodalhasmessage",
+        extra_trigger:'div.toast-body:contains("Thisisauserrpctest")',
+        trigger:'button.o_notification_close',
+    },{
+        content:"triggerrpcaccesserror",
+        trigger:'a[href="/test_access_error_json"]',
+    },{
+        content:"rpcaccesserrormodalhasmessage",
+        extra_trigger:'div.toast-body:contains("Thisisanaccessrpctest")',
+        trigger:'button.o_notification_close',
+    },{
+        content:"triggervalidationrpcerror",
+        trigger:'a[href="/test_validation_error_json"]',
+    },{
+        content:"rpcvalidationerrormodalhasmessage",
+        extra_trigger:'div.toast-body:contains("Thisisavalidationrpctest")',
+        trigger:'button.o_notification_close',
+    },{
+        content:"triggerrpcmissingerror",
+        trigger:'a[href="/test_missing_error_json"]',
+    },{
+        content:"rpcmissingerrormodalhasmessage",
+        extra_trigger:'div.toast-body:contains("Thisisamissingrpctest")',
+        trigger:'button.o_notification_close',
+    },{
+        content:"triggerrpcerror403",
+        trigger:'a[href="/test_access_denied_json"]',
+    },{
+        content:"rpcerror403modalhasmessage",
+        extra_trigger:'div.toast-body:contains("Thisisanaccessdeniedrpctest")',
+        trigger:'button.o_notification_close',
+    },{
+        content:"triggerrpcerror500",
+        trigger:'a[href="/test_internal_error_json"]',
+    },{
+        content:"rpcerror500modalisanErrorDialog",
+        extra_trigger:'div.o_dialog_error.modal-bodydiv.alert.alert-warning',
+        trigger:'button.btn.btn-primary[type="button"]',
     },
-    // HTTP ERROR
+    //HTTPERROR
     {
-        content: "trigger http user error",
-        trigger: 'body',
-        run: function () {
-            window.location.href = window.location.origin + '/test_user_error_http?debug=0';
+        content:"triggerhttpusererror",
+        trigger:'body',
+        run:function(){
+            window.location.href=window.location.origin+'/test_user_error_http?debug=0';
         },
-    }, {
-        content: "http user error page has title and message",
-        extra_trigger: 'h1:contains("Something went wrong.")',
-        trigger: 'div.container pre:contains("This is a user http test")',
-        run: function () {
-                window.location.href = window.location.origin + '/test_user_error_http?debug=1';
+    },{
+        content:"httpusererrorpagehastitleandmessage",
+        extra_trigger:'h1:contains("Somethingwentwrong.")',
+        trigger:'div.containerpre:contains("Thisisauserhttptest")',
+        run:function(){
+                window.location.href=window.location.origin+'/test_user_error_http?debug=1';
         },
-    }, {
-        content: "http user error page debug has title and message open",
-        extra_trigger: 'h1:contains("Something went wrong.")',
-        trigger: 'div#error_main.collapse.show pre:contains("This is a user http test")',
-        run: function () {},
-    }, {
-        content: "http user error page debug has traceback closed",
-        trigger: 'body:has(div#error_traceback.collapse:not(.show) pre#exception_traceback)',
-        run: function () {
-                window.location.href = window.location.origin + '/test_validation_error_http?debug=0';
+    },{
+        content:"httpusererrorpagedebughastitleandmessageopen",
+        extra_trigger:'h1:contains("Somethingwentwrong.")',
+        trigger:'div#error_main.collapse.showpre:contains("Thisisauserhttptest")',
+        run:function(){},
+    },{
+        content:"httpusererrorpagedebughastracebackclosed",
+        trigger:'body:has(div#error_traceback.collapse:not(.show)pre#exception_traceback)',
+        run:function(){
+                window.location.href=window.location.origin+'/test_validation_error_http?debug=0';
         },
-    }, {
-        content: "http validation error page has title and message",
-        extra_trigger: 'h1:contains("Something went wrong.")',
-        trigger: 'div.container pre:contains("This is a validation http test")',
-        run: function () {
-                window.location.href = window.location.origin + '/test_validation_error_http?debug=1';
+    },{
+        content:"httpvalidationerrorpagehastitleandmessage",
+        extra_trigger:'h1:contains("Somethingwentwrong.")',
+        trigger:'div.containerpre:contains("Thisisavalidationhttptest")',
+        run:function(){
+                window.location.href=window.location.origin+'/test_validation_error_http?debug=1';
         },
-    }, {
-        content: "http validation error page debug has title and message open",
-        extra_trigger: 'h1:contains("Something went wrong.")',
-        trigger: 'div#error_main.collapse.show pre:contains("This is a validation http test")',
-        run: function () {},
-    }, {
-        content: "http validation error page debug has traceback closed",
-        trigger: 'body:has(div#error_traceback.collapse:not(.show) pre#exception_traceback)',
-        run: function () {
-                window.location.href = window.location.origin + '/test_access_error_http?debug=0';
+    },{
+        content:"httpvalidationerrorpagedebughastitleandmessageopen",
+        extra_trigger:'h1:contains("Somethingwentwrong.")',
+        trigger:'div#error_main.collapse.showpre:contains("Thisisavalidationhttptest")',
+        run:function(){},
+    },{
+        content:"httpvalidationerrorpagedebughastracebackclosed",
+        trigger:'body:has(div#error_traceback.collapse:not(.show)pre#exception_traceback)',
+        run:function(){
+                window.location.href=window.location.origin+'/test_access_error_http?debug=0';
         },
-    }, {
-        content: "http access error page has title and message",
-        extra_trigger: 'h1:contains("403: Forbidden")',
-        trigger: 'div.container pre:contains("This is an access http test")',
-        run: function () {
-                window.location.href = window.location.origin + '/test_access_error_http?debug=1';
+    },{
+        content:"httpaccesserrorpagehastitleandmessage",
+        extra_trigger:'h1:contains("403:Forbidden")',
+        trigger:'div.containerpre:contains("Thisisanaccesshttptest")',
+        run:function(){
+                window.location.href=window.location.origin+'/test_access_error_http?debug=1';
         },
-    }, {
-        content: "http access error page debug has title and message open",
-        extra_trigger: 'h1:contains("403: Forbidden")',
-        trigger: 'div#error_main.collapse.show pre:contains("This is an access http test")',
-        run: function () {},
-    }, {
-        content: "http access error page debug has traceback closed",
-        trigger: 'body:has(div#error_traceback.collapse:not(.show) pre#exception_traceback)',
-        run: function () {
-                window.location.href = window.location.origin + '/test_missing_error_http?debug=0';
+    },{
+        content:"httpaccesserrorpagedebughastitleandmessageopen",
+        extra_trigger:'h1:contains("403:Forbidden")',
+        trigger:'div#error_main.collapse.showpre:contains("Thisisanaccesshttptest")',
+        run:function(){},
+    },{
+        content:"httpaccesserrorpagedebughastracebackclosed",
+        trigger:'body:has(div#error_traceback.collapse:not(.show)pre#exception_traceback)',
+        run:function(){
+                window.location.href=window.location.origin+'/test_missing_error_http?debug=0';
         },
-    }, {
-        content: "http missing error page has title and message",
-        extra_trigger: 'h1:contains("Something went wrong.")',
-        trigger: 'div.container pre:contains("This is a missing http test")',
-        run: function () {
-                window.location.href = window.location.origin + '/test_missing_error_http?debug=1';
+    },{
+        content:"httpmissingerrorpagehastitleandmessage",
+        extra_trigger:'h1:contains("Somethingwentwrong.")',
+        trigger:'div.containerpre:contains("Thisisamissinghttptest")',
+        run:function(){
+                window.location.href=window.location.origin+'/test_missing_error_http?debug=1';
         },
-    }, {
-        content: "http missing error page debug has title and message open",
-        extra_trigger: 'h1:contains("Something went wrong.")',
-        trigger: 'div#error_main.collapse.show pre:contains("This is a missing http test")',
-        run: function () {},
-    }, {
-        content: "http missing error page debug has traceback closed",
-        trigger: 'body:has(div#error_traceback.collapse:not(.show) pre#exception_traceback)',
-        run: function () {
-            window.location.href = window.location.origin + '/test_access_denied_http?debug=0';
+    },{
+        content:"httpmissingerrorpagedebughastitleandmessageopen",
+        extra_trigger:'h1:contains("Somethingwentwrong.")',
+        trigger:'div#error_main.collapse.showpre:contains("Thisisamissinghttptest")',
+        run:function(){},
+    },{
+        content:"httpmissingerrorpagedebughastracebackclosed",
+        trigger:'body:has(div#error_traceback.collapse:not(.show)pre#exception_traceback)',
+        run:function(){
+            window.location.href=window.location.origin+'/test_access_denied_http?debug=0';
         },
-    }, {
-        content: "http error 403 page has title but no message",
-        extra_trigger: 'h1:contains("403: Forbidden")',
-        trigger: 'div#wrap:not(:has(pre:contains("This is an access denied http test"))', //See ir_http.py handle_exception, the exception is replaced so there is no message !
-        run: function () {
-            window.location.href = window.location.origin + '/test_access_denied_http?debug=1';
+    },{
+        content:"httperror403pagehastitlebutnomessage",
+        extra_trigger:'h1:contains("403:Forbidden")',
+        trigger:'div#wrap:not(:has(pre:contains("Thisisanaccessdeniedhttptest"))',//Seeir_http.pyhandle_exception,theexceptionisreplacedsothereisnomessage!
+        run:function(){
+            window.location.href=window.location.origin+'/test_access_denied_http?debug=1';
         },
-    }, {
-        content: "http 403 error page debug has title but no message",
-        extra_trigger: 'h1:contains("403: Forbidden")',
-        trigger: 'div#debug_infos:not(:has(#error_main))',
-        run: function () {},
-    }, {
-        content: "http 403 error page debug has traceback open",
-        trigger: 'body:has(div#error_traceback.collapse.show pre#exception_traceback)',
-        run: function () {},
+    },{
+        content:"http403errorpagedebughastitlebutnomessage",
+        extra_trigger:'h1:contains("403:Forbidden")',
+        trigger:'div#debug_infos:not(:has(#error_main))',
+        run:function(){},
+    },{
+        content:"http403errorpagedebughastracebackopen",
+        trigger:'body:has(div#error_traceback.collapse.showpre#exception_traceback)',
+        run:function(){},
     },
 ]);
 });

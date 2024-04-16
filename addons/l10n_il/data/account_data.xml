@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<flectra noupdate="1">
+<?xmlversion="1.0"encoding="utf-8"?>
+<flectranoupdate="1">
 
-    <record id="tax_group_vat_16" model="account.tax.group">
-        <field name="name">VAT 16%</field>
+    <recordid="tax_group_vat_16"model="account.tax.group">
+        <fieldname="name">VAT16%</field>
     </record>
 
-    <record id="tax_group_vat_17" model="account.tax.group">
-        <field name="name">VAT 17%</field>
+    <recordid="tax_group_vat_17"model="account.tax.group">
+        <fieldname="name">VAT17%</field>
     </record>
 
-    <record id="tax_group_vat_exempt" model="account.tax.group">
-        <field name="name">VAT exempt</field>
+    <recordid="tax_group_vat_exempt"model="account.tax.group">
+        <fieldname="name">VATexempt</field>
     </record>
 
-    <record id="tax_group_retention_purchase" model="account.tax.group">
-        <field name="name">Withholding purchase</field>
+    <recordid="tax_group_retention_purchase"model="account.tax.group">
+        <fieldname="name">Withholdingpurchase</field>
     </record>
 </flectra>

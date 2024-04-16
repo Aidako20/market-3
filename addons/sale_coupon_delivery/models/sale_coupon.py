@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
 
-from flectra import models, _
+fromflectraimportmodels,_
 
 
-class Coupon(models.Model):
-    _inherit = "coupon.coupon"
+classCoupon(models.Model):
+    _inherit="coupon.coupon"
 
-    def _check_coupon_code(self, order):
-        if self.program_id.reward_type == 'free_shipping' and not order.order_line.filtered(lambda line: line.is_delivery):
-            return {'error': _('The shipping costs are not in the order lines.')}
-        return super(Coupon, self)._check_coupon_code(order)
+    def_check_coupon_code(self,order):
+        ifself.program_id.reward_type=='free_shipping'andnotorder.order_line.filtered(lambdaline:line.is_delivery):
+            return{'error':_('Theshippingcostsarenotintheorderlines.')}
+        returnsuper(Coupon,self)._check_coupon_code(order)

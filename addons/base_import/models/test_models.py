@@ -1,108 +1,108 @@
-# -*- coding: utf-8 -*-
-from flectra import fields, models
+#-*-coding:utf-8-*-
+fromflectraimportfields,models
 
 
-def model(suffix_name):
-    return 'base_import.tests.models.%s' % suffix_name
+defmodel(suffix_name):
+    return'base_import.tests.models.%s'%suffix_name
 
 
-class Char(models.Model):
-    _name = model('char')
-    _description = 'Tests : Base Import Model, Character'
+classChar(models.Model):
+    _name=model('char')
+    _description='Tests:BaseImportModel,Character'
 
-    value = fields.Char()
-class CharRequired(models.Model):
-    _name = model('char.required')
-    _description = 'Tests : Base Import Model, Character required'
+    value=fields.Char()
+classCharRequired(models.Model):
+    _name=model('char.required')
+    _description='Tests:BaseImportModel,Characterrequired'
 
-    value = fields.Char(required=True)
+    value=fields.Char(required=True)
 
-class CharReadonly(models.Model):
-    _name = model('char.readonly')
-    _description = 'Tests : Base Import Model, Character readonly'
+classCharReadonly(models.Model):
+    _name=model('char.readonly')
+    _description='Tests:BaseImportModel,Characterreadonly'
 
-    value = fields.Char(readonly=True)
+    value=fields.Char(readonly=True)
 
-class CharStates(models.Model):
-    _name = model('char.states')
-    _description = 'Tests : Base Import Model, Character states'
+classCharStates(models.Model):
+    _name=model('char.states')
+    _description='Tests:BaseImportModel,Characterstates'
 
-    value = fields.Char(readonly=True, states={'draft': [('readonly', False)]})
+    value=fields.Char(readonly=True,states={'draft':[('readonly',False)]})
 
-class CharNoreadonly(models.Model):
-    _name = model('char.noreadonly')
-    _description = 'Tests : Base Import Model, Character No readonly'
+classCharNoreadonly(models.Model):
+    _name=model('char.noreadonly')
+    _description='Tests:BaseImportModel,CharacterNoreadonly'
 
-    value = fields.Char(readonly=True, states={'draft': [('invisible', True)]})
+    value=fields.Char(readonly=True,states={'draft':[('invisible',True)]})
 
-class CharStillreadonly(models.Model):
-    _name = model('char.stillreadonly')
-    _description = 'Tests : Base Import Model, Character still readonly'
+classCharStillreadonly(models.Model):
+    _name=model('char.stillreadonly')
+    _description='Tests:BaseImportModel,Characterstillreadonly'
 
-    value = fields.Char(readonly=True, states={'draft': [('readonly', True)]})
+    value=fields.Char(readonly=True,states={'draft':[('readonly',True)]})
 
-# TODO: complex field (m2m, o2m, m2o)
-class M2o(models.Model):
-    _name = model('m2o')
-    _description = 'Tests : Base Import Model, Many to One'
+#TODO:complexfield(m2m,o2m,m2o)
+classM2o(models.Model):
+    _name=model('m2o')
+    _description='Tests:BaseImportModel,ManytoOne'
 
-    value = fields.Many2one(model('m2o.related'))
+    value=fields.Many2one(model('m2o.related'))
 
-class M2oRelated(models.Model):
-    _name = model('m2o.related')
-    _description = 'Tests : Base Import Model, Many to One related'
+classM2oRelated(models.Model):
+    _name=model('m2o.related')
+    _description='Tests:BaseImportModel,ManytoOnerelated'
 
-    value = fields.Integer(default=42)
+    value=fields.Integer(default=42)
 
-class M2oRequired(models.Model):
-    _name = model('m2o.required')
-    _description = 'Tests : Base Import Model, Many to One required'
+classM2oRequired(models.Model):
+    _name=model('m2o.required')
+    _description='Tests:BaseImportModel,ManytoOnerequired'
 
-    value = fields.Many2one(model('m2o.required.related'), required=True)
+    value=fields.Many2one(model('m2o.required.related'),required=True)
 
-class M2oRequiredRelated(models.Model):
-    _name = model('m2o.required.related')
-    _description = 'Tests : Base Import Model, Many to One required related'
+classM2oRequiredRelated(models.Model):
+    _name=model('m2o.required.related')
+    _description='Tests:BaseImportModel,ManytoOnerequiredrelated'
 
-    value = fields.Integer(default=42)
+    value=fields.Integer(default=42)
 
-class O2m(models.Model):
-    _name = model('o2m')
-    _description = 'Tests : Base Import Model, One to Many'
+classO2m(models.Model):
+    _name=model('o2m')
+    _description='Tests:BaseImportModel,OnetoMany'
 
-    name = fields.Char()
-    value = fields.One2many(model('o2m.child'), 'parent_id')
+    name=fields.Char()
+    value=fields.One2many(model('o2m.child'),'parent_id')
 
-class O2mChild(models.Model):
-    _name = model('o2m.child')
-    _description = 'Tests : Base Import Model, One to Many child'
+classO2mChild(models.Model):
+    _name=model('o2m.child')
+    _description='Tests:BaseImportModel,OnetoManychild'
 
-    parent_id = fields.Many2one(model('o2m'))
-    value = fields.Integer()
+    parent_id=fields.Many2one(model('o2m'))
+    value=fields.Integer()
 
-class PreviewModel(models.Model):
-    _name = model('preview')
-    _description = 'Tests : Base Import Model Preview'
+classPreviewModel(models.Model):
+    _name=model('preview')
+    _description='Tests:BaseImportModelPreview'
 
-    name = fields.Char('Name')
-    somevalue = fields.Integer(string='Some Value', required=True)
-    othervalue = fields.Integer(string='Other Variable')
+    name=fields.Char('Name')
+    somevalue=fields.Integer(string='SomeValue',required=True)
+    othervalue=fields.Integer(string='OtherVariable')
 
-class FloatModel(models.Model):
-    _name = model('float')
-    _description = 'Tests: Base Import Model Float'
+classFloatModel(models.Model):
+    _name=model('float')
+    _description='Tests:BaseImportModelFloat'
 
-    value = fields.Float()
-    value2 = fields.Monetary()
-    currency_id = fields.Many2one('res.currency')
+    value=fields.Float()
+    value2=fields.Monetary()
+    currency_id=fields.Many2one('res.currency')
 
-class ComplexModel(models.Model):
-    _name = model('complex')
-    _description = 'Tests: Base Import Model Complex'
+classComplexModel(models.Model):
+    _name=model('complex')
+    _description='Tests:BaseImportModelComplex'
 
-    f = fields.Float()
-    m = fields.Monetary()
-    c = fields.Char()
-    currency_id = fields.Many2one('res.currency')
-    d = fields.Date()
-    dt = fields.Datetime()
+    f=fields.Float()
+    m=fields.Monetary()
+    c=fields.Char()
+    currency_id=fields.Many2one('res.currency')
+    d=fields.Date()
+    dt=fields.Datetime()

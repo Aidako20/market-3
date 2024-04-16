@@ -1,21 +1,21 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models, api, _
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models,api,_
 
 
-class ResPartner(models.Model):
-    _inherit = 'res.partner'
+classResPartner(models.Model):
+    _inherit='res.partner'
 
-    siret = fields.Char(string='SIRET', size=14)
+    siret=fields.Char(string='SIRET',size=14)
 
-class ChartTemplate(models.Model):
-    _inherit = 'account.chart.template'
+classChartTemplate(models.Model):
+    _inherit='account.chart.template'
 
-    def _prepare_all_journals(self, acc_template_ref, company, journals_dict=None):
-        journals = super(ChartTemplate, self)._prepare_all_journals(acc_template_ref, company, journals_dict)
-        if company.country_id.code == "FR":
-            #For France, sale/purchase journals must have a dedicated sequence for refunds
-            for journal in journals:
-                if journal['type'] in ['sale', 'purchase']:
-                    journal['refund_sequence'] = True
-        return journals
+    def_prepare_all_journals(self,acc_template_ref,company,journals_dict=None):
+        journals=super(ChartTemplate,self)._prepare_all_journals(acc_template_ref,company,journals_dict)
+        ifcompany.country_id.code=="FR":
+            #ForFrance,sale/purchasejournalsmusthaveadedicatedsequenceforrefunds
+            forjournalinjournals:
+                ifjournal['type']in['sale','purchase']:
+                    journal['refund_sequence']=True
+        returnjournals

@@ -1,18 +1,18 @@
-flectra.define('point_of_sale.CategoryButton', function(require) {
-    'use strict';
+flectra.define('point_of_sale.CategoryButton',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
-    class CategoryButton extends PosComponent {
-        get imageUrl() {
-            const category = this.props.category
-            return `/web/image?model=pos.category&field=image_128&id=${category.id}&write_date=${category.write_date}&unique=1`;
+    classCategoryButtonextendsPosComponent{
+        getimageUrl(){
+            constcategory=this.props.category
+            return`/web/image?model=pos.category&field=image_128&id=${category.id}&write_date=${category.write_date}&unique=1`;
         }
     }
-    CategoryButton.template = 'CategoryButton';
+    CategoryButton.template='CategoryButton';
 
     Registries.Component.add(CategoryButton);
 
-    return CategoryButton;
+    returnCategoryButton;
 });

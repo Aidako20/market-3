@@ -1,78 +1,78 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
+importlogging
 
-from flectra import models, fields, api, _
-from flectra.tools.float_utils import float_compare
+fromflectraimportmodels,fields,api,_
+fromflectra.tools.float_utilsimportfloat_compare
 
-_logger = logging.getLogger(__name__)
-
-
-class BarcodeRule(models.Model):
-    _inherit = 'barcode.rule'
-
-    type = fields.Selection(selection_add=[
-        ('credit', 'Credit Card')
-    ], ondelete={'credit': 'set default'})
+_logger=logging.getLogger(__name__)
 
 
-class PosMercuryConfiguration(models.Model):
-    _name = 'pos_mercury.configuration'
-    _description = 'Point of Sale Vantiv Configuration'
+classBarcodeRule(models.Model):
+    _inherit='barcode.rule'
 
-    name = fields.Char(required=True, help='Name of this Vantiv configuration')
-    merchant_id = fields.Char(string='Merchant ID', required=True, help='ID of the merchant to authenticate him on the payment provider server')
-    merchant_pwd = fields.Char(string='Merchant Password', required=True, help='Password of the merchant to authenticate him on the payment provider server')
+    type=fields.Selection(selection_add=[
+        ('credit','CreditCard')
+    ],ondelete={'credit':'setdefault'})
 
 
-class PoSPayment(models.Model):
-    _inherit = "pos.payment"
+classPosMercuryConfiguration(models.Model):
+    _name='pos_mercury.configuration'
+    _description='PointofSaleVantivConfiguration'
 
-    mercury_card_number = fields.Char(string='Card Number', help='The last 4 numbers of the card used to pay')
-    mercury_prefixed_card_number = fields.Char(string='Card Number Prefix', compute='_compute_prefixed_card_number', help='The card number used for the payment.')
-    mercury_card_brand = fields.Char(string='Card Brand', help='The brand of the payment card (e.g. Visa, AMEX, ...)')
-    mercury_card_owner_name = fields.Char(string='Card Owner Name', help='The name of the card owner')
-    mercury_ref_no = fields.Char(string='Vantiv reference number', help='Payment reference number from Vantiv Pay')
-    mercury_record_no = fields.Char(string='Vantiv record number', help='Payment record number from Vantiv Pay')
-    mercury_invoice_no = fields.Char(string='Vantiv invoice number', help='Invoice number from Vantiv Pay')
+    name=fields.Char(required=True,help='NameofthisVantivconfiguration')
+    merchant_id=fields.Char(string='MerchantID',required=True,help='IDofthemerchanttoauthenticatehimonthepaymentproviderserver')
+    merchant_pwd=fields.Char(string='MerchantPassword',required=True,help='Passwordofthemerchanttoauthenticatehimonthepaymentproviderserver')
 
-    def _compute_prefixed_card_number(self):
-        for line in self:
-            if line.mercury_card_number:
-                line.mercury_prefixed_card_number = "********" + line.mercury_card_number
+
+classPoSPayment(models.Model):
+    _inherit="pos.payment"
+
+    mercury_card_number=fields.Char(string='CardNumber',help='Thelast4numbersofthecardusedtopay')
+    mercury_prefixed_card_number=fields.Char(string='CardNumberPrefix',compute='_compute_prefixed_card_number',help='Thecardnumberusedforthepayment.')
+    mercury_card_brand=fields.Char(string='CardBrand',help='Thebrandofthepaymentcard(e.g.Visa,AMEX,...)')
+    mercury_card_owner_name=fields.Char(string='CardOwnerName',help='Thenameofthecardowner')
+    mercury_ref_no=fields.Char(string='Vantivreferencenumber',help='PaymentreferencenumberfromVantivPay')
+    mercury_record_no=fields.Char(string='Vantivrecordnumber',help='PaymentrecordnumberfromVantivPay')
+    mercury_invoice_no=fields.Char(string='Vantivinvoicenumber',help='InvoicenumberfromVantivPay')
+
+    def_compute_prefixed_card_number(self):
+        forlineinself:
+            ifline.mercury_card_number:
+                line.mercury_prefixed_card_number="********"+line.mercury_card_number
             else:
-                line.mercury_prefixed_card_number = ""
+                line.mercury_prefixed_card_number=""
 
 
-class PoSPaymentMethod(models.Model):
-    _inherit = 'pos.payment.method'
+classPoSPaymentMethod(models.Model):
+    _inherit='pos.payment.method'
 
-    pos_mercury_config_id = fields.Many2one('pos_mercury.configuration', string='Vantiv Credentials', help='The configuration of Vantiv used for this journal')
+    pos_mercury_config_id=fields.Many2one('pos_mercury.configuration',string='VantivCredentials',help='TheconfigurationofVantivusedforthisjournal')
 
-    def _get_payment_terminal_selection(self):
-        return super(PoSPaymentMethod, self)._get_payment_terminal_selection() + [('mercury', 'Vantiv')]
+    def_get_payment_terminal_selection(self):
+        returnsuper(PoSPaymentMethod,self)._get_payment_terminal_selection()+[('mercury','Vantiv')]
 
     @api.onchange('use_payment_terminal')
-    def _onchange_use_payment_terminal(self):
-        super(PoSPaymentMethod, self)._onchange_use_payment_terminal()
-        if self.use_payment_terminal != 'mercury':
-            self.pos_mercury_config_id = False
+    def_onchange_use_payment_terminal(self):
+        super(PoSPaymentMethod,self)._onchange_use_payment_terminal()
+        ifself.use_payment_terminal!='mercury':
+            self.pos_mercury_config_id=False
 
-class PosOrder(models.Model):
-    _inherit = "pos.order"
+classPosOrder(models.Model):
+    _inherit="pos.order"
 
     @api.model
-    def _payment_fields(self, order, ui_paymentline):
-        fields = super(PosOrder, self)._payment_fields(order, ui_paymentline)
+    def_payment_fields(self,order,ui_paymentline):
+        fields=super(PosOrder,self)._payment_fields(order,ui_paymentline)
 
         fields.update({
-            'mercury_card_number': ui_paymentline.get('mercury_card_number'),
-            'mercury_card_brand': ui_paymentline.get('mercury_card_brand'),
-            'mercury_card_owner_name': ui_paymentline.get('mercury_card_owner_name'),
-            'mercury_ref_no': ui_paymentline.get('mercury_ref_no'),
-            'mercury_record_no': ui_paymentline.get('mercury_record_no'),
-            'mercury_invoice_no': ui_paymentline.get('mercury_invoice_no')
+            'mercury_card_number':ui_paymentline.get('mercury_card_number'),
+            'mercury_card_brand':ui_paymentline.get('mercury_card_brand'),
+            'mercury_card_owner_name':ui_paymentline.get('mercury_card_owner_name'),
+            'mercury_ref_no':ui_paymentline.get('mercury_ref_no'),
+            'mercury_record_no':ui_paymentline.get('mercury_record_no'),
+            'mercury_invoice_no':ui_paymentline.get('mercury_invoice_no')
         })
 
-        return fields
+        returnfields

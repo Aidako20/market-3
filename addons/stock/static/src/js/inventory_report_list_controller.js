@@ -1,66 +1,66 @@
-flectra.define('stock.InventoryReportListController', function (require) {
-"use strict";
+flectra.define('stock.InventoryReportListController',function(require){
+"usestrict";
 
-var core = require('web.core');
-var ListController = require('web.ListController');
+varcore=require('web.core');
+varListController=require('web.ListController');
 
-var qweb = core.qweb;
+varqweb=core.qweb;
 
 
-var InventoryReportListController = ListController.extend({
+varInventoryReportListController=ListController.extend({
 
-    // -------------------------------------------------------------------------
-    // Public
-    // -------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //Public
+    //-------------------------------------------------------------------------
 
-    init: function (parent, model, renderer, params) {
-        this.context = renderer.state.getContext();
-        return this._super.apply(this, arguments);
+    init:function(parent,model,renderer,params){
+        this.context=renderer.state.getContext();
+        returnthis._super.apply(this,arguments);
     },
 
     /**
-     * @override
+     *@override
      */
-    renderButtons: function ($node) {
-        this._super.apply(this, arguments);
-        if (this.context.no_at_date) {
+    renderButtons:function($node){
+        this._super.apply(this,arguments);
+        if(this.context.no_at_date){
             return;
         }
-        var $buttonToDate = $(qweb.render('InventoryReport.Buttons'));
-        $buttonToDate.on('click', this._onOpenWizard.bind(this));
+        var$buttonToDate=$(qweb.render('InventoryReport.Buttons'));
+        $buttonToDate.on('click',this._onOpenWizard.bind(this));
         this.$buttons.prepend($buttonToDate);
     },
 
-    // -------------------------------------------------------------------------
-    // Handlers
-    // -------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //Handlers
+    //-------------------------------------------------------------------------
 
     /**
-     * Handler called when the user clicked on the 'Inventory at Date' button.
-     * Opens wizard to display, at choice, the products inventory or a computed
-     * inventory at a given date.
+     *Handlercalledwhentheuserclickedonthe'InventoryatDate'button.
+     *Openswizardtodisplay,atchoice,theproductsinventoryoracomputed
+     *inventoryatagivendate.
      */
-    _onOpenWizard: function () {
-        var state = this.model.get(this.handle, {raw: true});
-        var stateContext = state.getContext();
-        var context = {
-            active_model: this.modelName,
+    _onOpenWizard:function(){
+        varstate=this.model.get(this.handle,{raw:true});
+        varstateContext=state.getContext();
+        varcontext={
+            active_model:this.modelName,
         };
-        if (stateContext.default_product_id) {
-            context.product_id = stateContext.default_product_id;
-        } else if (stateContext.product_tmpl_id) {
-            context.product_tmpl_id = stateContext.product_tmpl_id;
+        if(stateContext.default_product_id){
+            context.product_id=stateContext.default_product_id;
+        }elseif(stateContext.product_tmpl_id){
+            context.product_tmpl_id=stateContext.product_tmpl_id;
         }
         this.do_action({
-            res_model: 'stock.quantity.history',
-            views: [[false, 'form']],
-            target: 'new',
-            type: 'ir.actions.act_window',
-            context: context,
+            res_model:'stock.quantity.history',
+            views:[[false,'form']],
+            target:'new',
+            type:'ir.actions.act_window',
+            context:context,
         });
     },
 });
 
-return InventoryReportListController;
+returnInventoryReportListController;
 
 });

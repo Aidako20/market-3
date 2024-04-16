@@ -1,45 +1,45 @@
-flectra.define('mail/static/src/widgets/notification_alert/notification_alert.js', function (require) {
-"use strict";
+flectra.define('mail/static/src/widgets/notification_alert/notification_alert.js',function(require){
+"usestrict";
 
-const components = {
-    NotificationAlert: require('mail/static/src/components/notification_alert/notification_alert.js'),
+constcomponents={
+    NotificationAlert:require('mail/static/src/components/notification_alert/notification_alert.js'),
 };
 
-const { ComponentWrapper, WidgetAdapterMixin } = require('web.OwlCompatibility');
+const{ComponentWrapper,WidgetAdapterMixin}=require('web.OwlCompatibility');
 
-const Widget = require('web.Widget');
-const widgetRegistry = require('web.widget_registry');
+constWidget=require('web.Widget');
+constwidgetRegistry=require('web.widget_registry');
 
-class NotificationAlertWrapper extends ComponentWrapper {}
+classNotificationAlertWrapperextendsComponentWrapper{}
 
-// -----------------------------------------------------------------------------
-// Display Notification alert on user preferences form view
-// -----------------------------------------------------------------------------
-const NotificationAlert = Widget.extend(WidgetAdapterMixin, {
+//-----------------------------------------------------------------------------
+//DisplayNotificationalertonuserpreferencesformview
+//-----------------------------------------------------------------------------
+constNotificationAlert=Widget.extend(WidgetAdapterMixin,{
     /**
-     * @override
+     *@override
      */
-    init() {
+    init(){
         this._super(...arguments);
-        this.component = undefined;
+        this.component=undefined;
     },
     /**
-     * @override
+     *@override
      */
-    async start() {
-        await this._super(...arguments);
+    asyncstart(){
+        awaitthis._super(...arguments);
 
-        this.component = new NotificationAlertWrapper(
+        this.component=newNotificationAlertWrapper(
             this,
             components.NotificationAlert,
             {}
         );
-        await this.component.mount(this.el);
+        awaitthis.component.mount(this.el);
     },
 });
 
-widgetRegistry.add('notification_alert', NotificationAlert);
+widgetRegistry.add('notification_alert',NotificationAlert);
 
-return NotificationAlert;
+returnNotificationAlert;
 
 });

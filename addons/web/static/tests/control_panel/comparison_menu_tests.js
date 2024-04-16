@@ -1,143 +1,143 @@
-flectra.define('web.comparison_menu_tests', function (require) {
-    "use strict";
+flectra.define('web.comparison_menu_tests',function(require){
+    "usestrict";
 
-    const {
-        controlPanel: cpHelpers,
+    const{
+        controlPanel:cpHelpers,
         createControlPanel,
         mock,
-    } = require('web.test_utils');
+    }=require('web.test_utils');
 
-    const { patchDate } = mock;
-    const searchMenuTypes = ['filter', 'comparison'];
+    const{patchDate}=mock;
+    constsearchMenuTypes=['filter','comparison'];
 
-    QUnit.module('Components', {
-        beforeEach() {
-            this.fields = {
-                birthday: { string: "Birthday", type: "date", store: true, sortable: true },
-                date_field: { string: "Date", type: "date", store: true, sortable: true },
-                float_field: { string: "Float", type: "float", group_operator: 'sum' },
-                foo: { string: "Foo", type: "char", store: true, sortable: true },
+    QUnit.module('Components',{
+        beforeEach(){
+            this.fields={
+                birthday:{string:"Birthday",type:"date",store:true,sortable:true},
+                date_field:{string:"Date",type:"date",store:true,sortable:true},
+                float_field:{string:"Float",type:"float",group_operator:'sum'},
+                foo:{string:"Foo",type:"char",store:true,sortable:true},
             };
-            this.cpModelConfig = {
-                arch: `
+            this.cpModelConfig={
+                arch:`
                     <search>
-                        <filter name="birthday" date="birthday"/>
-                        <filter name="date_field" date="date_field"/>
+                        <filtername="birthday"date="birthday"/>
+                        <filtername="date_field"date="date_field"/>
                     </search>`,
-                fields: this.fields,
+                fields:this.fields,
                 searchMenuTypes,
             };
         },
-    }, function () {
+    },function(){
 
         QUnit.module('ComparisonMenu');
 
-        QUnit.test('simple rendering', async function (assert) {
+        QUnit.test('simplerendering',asyncfunction(assert){
             assert.expect(6);
 
-            const unpatchDate = patchDate(1997, 0, 9, 12, 0, 0);
-            const params = {
-                cpModelConfig: this.cpModelConfig,
-                cpProps: { fields: this.fields, searchMenuTypes },
+            constunpatchDate=patchDate(1997,0,9,12,0,0);
+            constparams={
+                cpModelConfig:this.cpModelConfig,
+                cpProps:{fields:this.fields,searchMenuTypes},
             };
-            const controlPanel = await createControlPanel(params);
+            constcontrolPanel=awaitcreateControlPanel(params);
 
-            assert.containsOnce(controlPanel, ".o_dropdown.o_filter_menu");
-            assert.containsNone(controlPanel, ".o_dropdown.o_comparison_menu");
+            assert.containsOnce(controlPanel,".o_dropdown.o_filter_menu");
+            assert.containsNone(controlPanel,".o_dropdown.o_comparison_menu");
 
-            await cpHelpers.toggleFilterMenu(controlPanel);
-            await cpHelpers.toggleMenuItem(controlPanel, "Birthday");
-            await cpHelpers.toggleMenuItemOption(controlPanel, "Birthday", "January");
+            awaitcpHelpers.toggleFilterMenu(controlPanel);
+            awaitcpHelpers.toggleMenuItem(controlPanel,"Birthday");
+            awaitcpHelpers.toggleMenuItemOption(controlPanel,"Birthday","January");
 
-            assert.containsOnce(controlPanel, 'div.o_comparison_menu > button i.fa.fa-adjust');
-            assert.strictEqual(controlPanel.el.querySelector('div.o_comparison_menu > button span').innerText.trim(), "Comparison");
+            assert.containsOnce(controlPanel,'div.o_comparison_menu>buttoni.fa.fa-adjust');
+            assert.strictEqual(controlPanel.el.querySelector('div.o_comparison_menu>buttonspan').innerText.trim(),"Comparison");
 
-            await cpHelpers.toggleComparisonMenu(controlPanel);
+            awaitcpHelpers.toggleComparisonMenu(controlPanel);
 
-            const comparisonOptions = [...controlPanel.el.querySelectorAll(
-                '.o_comparison_menu li'
+            constcomparisonOptions=[...controlPanel.el.querySelectorAll(
+                '.o_comparison_menuli'
             )];
-            assert.strictEqual(comparisonOptions.length, 2);
+            assert.strictEqual(comparisonOptions.length,2);
             assert.deepEqual(
-                comparisonOptions.map(e => e.innerText),
-                ["Birthday: Previous Period", "Birthday: Previous Year"]
+                comparisonOptions.map(e=>e.innerText),
+                ["Birthday:PreviousPeriod","Birthday:PreviousYear"]
             );
 
             controlPanel.destroy();
             unpatchDate();
         });
 
-        QUnit.test('activate a comparison works', async function (assert) {
+        QUnit.test('activateacomparisonworks',asyncfunction(assert){
             assert.expect(5);
 
-            const unpatchDate = patchDate(1997, 0, 9, 12, 0, 0);
-            const params = {
-                cpModelConfig: this.cpModelConfig,
-                cpProps: { fields: this.fields, searchMenuTypes },
+            constunpatchDate=patchDate(1997,0,9,12,0,0);
+            constparams={
+                cpModelConfig:this.cpModelConfig,
+                cpProps:{fields:this.fields,searchMenuTypes},
             };
-            const controlPanel = await createControlPanel(params);
+            constcontrolPanel=awaitcreateControlPanel(params);
 
-            await cpHelpers.toggleFilterMenu(controlPanel);
-            await cpHelpers.toggleMenuItem(controlPanel, "Birthday");
-            await cpHelpers.toggleMenuItemOption(controlPanel, "Birthday", "January");
-            await cpHelpers.toggleComparisonMenu(controlPanel);
-            await cpHelpers.toggleMenuItem(controlPanel, "Birthday: Previous Period");
+            awaitcpHelpers.toggleFilterMenu(controlPanel);
+            awaitcpHelpers.toggleMenuItem(controlPanel,"Birthday");
+            awaitcpHelpers.toggleMenuItemOption(controlPanel,"Birthday","January");
+            awaitcpHelpers.toggleComparisonMenu(controlPanel);
+            awaitcpHelpers.toggleMenuItem(controlPanel,"Birthday:PreviousPeriod");
 
-            assert.deepEqual(cpHelpers.getFacetTexts(controlPanel), [
-                "Birthday: January 1997",
-                "Birthday: Previous Period",
+            assert.deepEqual(cpHelpers.getFacetTexts(controlPanel),[
+                "Birthday:January1997",
+                "Birthday:PreviousPeriod",
             ]);
 
-            await cpHelpers.toggleFilterMenu(controlPanel);
-            await cpHelpers.toggleMenuItem(controlPanel, "Date");
-            await cpHelpers.toggleMenuItemOption(controlPanel, "Date", "December");
-            await cpHelpers.toggleComparisonMenu(controlPanel);
-            await cpHelpers.toggleMenuItem(controlPanel, "Date: Previous Year");
+            awaitcpHelpers.toggleFilterMenu(controlPanel);
+            awaitcpHelpers.toggleMenuItem(controlPanel,"Date");
+            awaitcpHelpers.toggleMenuItemOption(controlPanel,"Date","December");
+            awaitcpHelpers.toggleComparisonMenu(controlPanel);
+            awaitcpHelpers.toggleMenuItem(controlPanel,"Date:PreviousYear");
 
-            assert.deepEqual(cpHelpers.getFacetTexts(controlPanel), [
-                ["Birthday: January 1997", "Date: December 1996"].join("or"),
-                "Date: Previous Year",
+            assert.deepEqual(cpHelpers.getFacetTexts(controlPanel),[
+                ["Birthday:January1997","Date:December1996"].join("or"),
+                "Date:PreviousYear",
             ]);
 
-            await cpHelpers.toggleFilterMenu(controlPanel);
-            await cpHelpers.toggleMenuItem(controlPanel, "Date");
-            await cpHelpers.toggleMenuItemOption(controlPanel, "Date", "1996");
+            awaitcpHelpers.toggleFilterMenu(controlPanel);
+            awaitcpHelpers.toggleMenuItem(controlPanel,"Date");
+            awaitcpHelpers.toggleMenuItemOption(controlPanel,"Date","1996");
 
-            assert.deepEqual(cpHelpers.getFacetTexts(controlPanel), [
-                "Birthday: January 1997",
+            assert.deepEqual(cpHelpers.getFacetTexts(controlPanel),[
+                "Birthday:January1997",
             ]);
 
-            await cpHelpers.toggleComparisonMenu(controlPanel);
-            await cpHelpers.toggleMenuItem(controlPanel, "Birthday: Previous Year");
+            awaitcpHelpers.toggleComparisonMenu(controlPanel);
+            awaitcpHelpers.toggleMenuItem(controlPanel,"Birthday:PreviousYear");
 
-            assert.deepEqual(cpHelpers.getFacetTexts(controlPanel), [
-                "Birthday: January 1997",
-                "Birthday: Previous Year",
+            assert.deepEqual(cpHelpers.getFacetTexts(controlPanel),[
+                "Birthday:January1997",
+                "Birthday:PreviousYear",
             ]);
 
-            await cpHelpers.removeFacet(controlPanel);
+            awaitcpHelpers.removeFacet(controlPanel);
 
-            assert.deepEqual(cpHelpers.getFacetTexts(controlPanel), []);
+            assert.deepEqual(cpHelpers.getFacetTexts(controlPanel),[]);
 
             controlPanel.destroy();
             unpatchDate();
         });
 
-        QUnit.test('no timeRanges key in search query if "comparison" not in searchMenuTypes', async function (assert) {
+        QUnit.test('notimeRangeskeyinsearchqueryif"comparison"notinsearchMenuTypes',asyncfunction(assert){
             assert.expect(1);
 
-            this.cpModelConfig.searchMenuTypes = ['filter'];
-            const params = {
-                cpModelConfig: this.cpModelConfig,
-                cpProps: { fields: this.fields, searchMenuTypes: ['filter'] },
+            this.cpModelConfig.searchMenuTypes=['filter'];
+            constparams={
+                cpModelConfig:this.cpModelConfig,
+                cpProps:{fields:this.fields,searchMenuTypes:['filter']},
             };
-            const controlPanel = await createControlPanel(params);
+            constcontrolPanel=awaitcreateControlPanel(params);
 
-            await cpHelpers.toggleFilterMenu(controlPanel);
-            await cpHelpers.toggleMenuItem(controlPanel, "Birthday");
-            await cpHelpers.toggleMenuItemOption(controlPanel, "Birthday", 0);
+            awaitcpHelpers.toggleFilterMenu(controlPanel);
+            awaitcpHelpers.toggleMenuItem(controlPanel,"Birthday");
+            awaitcpHelpers.toggleMenuItemOption(controlPanel,"Birthday",0);
 
-            assert.notOk("timeRanges" in controlPanel.getQuery());
+            assert.notOk("timeRanges"incontrolPanel.getQuery());
 
             controlPanel.destroy();
         });

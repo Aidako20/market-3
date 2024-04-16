@@ -1,30 +1,30 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.pl = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.pl=factory()));
+}(this,function(){'usestrict';
 
-    var pl = {
-        code: "pl",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
+    varpl={
+        code:"pl",
+        week:{
+            dow:1,
+            doy:4//TheweekthatcontainsJan4thisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "Poprzedni",
-            next: "Następny",
-            today: "Dziś",
-            month: "Miesiąc",
-            week: "Tydzień",
-            day: "Dzień",
-            list: "Plan dnia"
+        buttonText:{
+            prev:"Poprzedni",
+            next:"Następny",
+            today:"Dziś",
+            month:"Miesiąc",
+            week:"Tydzień",
+            day:"Dzień",
+            list:"Plandnia"
         },
-        weekLabel: "Tydz",
-        allDayText: "Cały dzień",
-        eventLimitText: "więcej",
-        noEventsMessage: "Brak wydarzeń do wyświetlenia"
+        weekLabel:"Tydz",
+        allDayText:"Całydzień",
+        eventLimitText:"więcej",
+        noEventsMessage:"Brakwydarzeńdowyświetlenia"
     };
 
-    return pl;
+    returnpl;
 
 }));

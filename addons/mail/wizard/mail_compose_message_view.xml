@@ -1,97 +1,97 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record model="ir.ui.view" id="email_compose_message_wizard_form">
-            <field name="name">mail.compose.message.form</field>
-            <field name="model">mail.compose.message</field>
-            <field name="groups_id" eval="[(4,ref('base.group_user'))]"/>
-            <field name="arch" type="xml">
-                <form string="Compose Email">
+        <recordmodel="ir.ui.view"id="email_compose_message_wizard_form">
+            <fieldname="name">mail.compose.message.form</field>
+            <fieldname="model">mail.compose.message</field>
+            <fieldname="groups_id"eval="[(4,ref('base.group_user'))]"/>
+            <fieldname="arch"type="xml">
+                <formstring="ComposeEmail">
                     <group>
-                        <!-- truly invisible fields for control and options -->
-                        <field name="composition_mode" invisible="1"/>
-                        <field name="model" invisible="1"/>
-                        <field name="res_id" invisible="1"/>
-                        <field name="is_log" invisible="1"/>
-                        <field name="parent_id" invisible="1"/>
-                        <field name="mail_server_id" invisible="1"/>
-                        <field name="active_domain" invisible="1"/>
+                        <!--trulyinvisiblefieldsforcontrolandoptions-->
+                        <fieldname="composition_mode"invisible="1"/>
+                        <fieldname="model"invisible="1"/>
+                        <fieldname="res_id"invisible="1"/>
+                        <fieldname="is_log"invisible="1"/>
+                        <fieldname="parent_id"invisible="1"/>
+                        <fieldname="mail_server_id"invisible="1"/>
+                        <fieldname="active_domain"invisible="1"/>
 
-                        <!-- Various warnings -->
-                        <div colspan="2" class="oe_form_box_info bg-info oe_text_center"
-                                attrs="{'invisible': [('active_domain', '=', False)]}">
-                            <p attrs="{'invisible': [('use_active_domain', '=', False)]}">
+                        <!--Variouswarnings-->
+                        <divcolspan="2"class="oe_form_box_infobg-infooe_text_center"
+                                attrs="{'invisible':[('active_domain','=',False)]}">
+                            <pattrs="{'invisible':[('use_active_domain','=',False)]}">
                                 <strong>
-                                    All records matching your current search filter will be mailed,
-                                    not only the ids selected in the list view.
-                                </strong><br />
-                                The email will be sent for all the records selected in the list.<br />
-                                Confirming this wizard will probably take a few minutes blocking your browser.
+                                    Allrecordsmatchingyourcurrentsearchfilterwillbemailed,
+                                    notonlytheidsselectedinthelistview.
+                                </strong><br/>
+                                Theemailwillbesentforalltherecordsselectedinthelist.<br/>
+                                Confirmingthiswizardwillprobablytakeafewminutesblockingyourbrowser.
                             </p>
-                            <p attrs="{'invisible': [('use_active_domain', '=', True)]}">
-                                <strong>Only records checked in list view will be used.</strong><br />
-                                The email will be sent for all the records selected in the list.
+                            <pattrs="{'invisible':[('use_active_domain','=',True)]}">
+                                <strong>Onlyrecordscheckedinlistviewwillbeused.</strong><br/>
+                                Theemailwillbesentforalltherecordsselectedinthelist.
                             </p>
-                            <p class="mt8">
-                                <span attrs="{'invisible': [('use_active_domain', '=', True)]}">
-                                    If you want to send it for all the records matching your search criterion, check this box :
+                            <pclass="mt8">
+                                <spanattrs="{'invisible':[('use_active_domain','=',True)]}">
+                                    Ifyouwanttosenditforalltherecordsmatchingyoursearchcriterion,checkthisbox:
                                 </span>
-                                <span attrs="{'invisible': [('use_active_domain', '=', False)]}">
-                                    If you want to use only selected records please uncheck this selection box :
+                                <spanattrs="{'invisible':[('use_active_domain','=',False)]}">
+                                    Ifyouwanttouseonlyselectedrecordspleaseuncheckthisselectionbox:
                                 </span>
-                                <field class="oe_inline" name="use_active_domain"/>
+                                <fieldclass="oe_inline"name="use_active_domain"/>
                             </p>
                         </div>
-                        <!-- visible wizard -->
-                        <field name="email_from"
-                            attrs="{'invisible':[('composition_mode', '!=', 'mass_mail')]}"/>
-                        <label for="partner_ids" string="Recipients"  attrs="{'invisible': [('is_log', '=', True)]}" groups="base.group_user"/>
-                        <div groups="base.group_user" attrs="{'invisible': [('is_log', '=', True)]}">
-                            <span attrs="{'invisible': [('composition_mode', '!=', 'mass_mail')]}">
-                                <strong>Email mass mailing</strong> on
-                                <span attrs="{'invisible': [('use_active_domain', '=', True)]}">the selected records</span>
-                                <span attrs="{'invisible': [('use_active_domain', '=', False)]}">the current search filter</span>.
+                        <!--visiblewizard-->
+                        <fieldname="email_from"
+                            attrs="{'invisible':[('composition_mode','!=','mass_mail')]}"/>
+                        <labelfor="partner_ids"string="Recipients" attrs="{'invisible':[('is_log','=',True)]}"groups="base.group_user"/>
+                        <divgroups="base.group_user"attrs="{'invisible':[('is_log','=',True)]}">
+                            <spanattrs="{'invisible':[('composition_mode','!=','mass_mail')]}">
+                                <strong>Emailmassmailing</strong>on
+                                <spanattrs="{'invisible':[('use_active_domain','=',True)]}">theselectedrecords</span>
+                                <spanattrs="{'invisible':[('use_active_domain','=',False)]}">thecurrentsearchfilter</span>.
                             </span>
-                            <span name="document_followers_text" attrs="{'invisible':['|', ('model', '=', False), ('composition_mode', '=', 'mass_mail')]}">Followers of the document and</span>
-                            <field name="partner_ids" widget="many2many_tags_email" placeholder="Add contacts to notify..."
-                                context="{'force_email':True, 'show_email':True}"
-                                attrs="{'invisible': [('composition_mode', '!=', 'comment')]}"/>
+                            <spanname="document_followers_text"attrs="{'invisible':['|',('model','=',False),('composition_mode','=','mass_mail')]}">Followersofthedocumentand</span>
+                            <fieldname="partner_ids"widget="many2many_tags_email"placeholder="Addcontactstonotify..."
+                                context="{'force_email':True,'show_email':True}"
+                                attrs="{'invisible':[('composition_mode','!=','comment')]}"/>
                         </div>
-                        <field name="subject" placeholder="Subject..." required="True"/>
-                        <!-- mass post -->
-                        <field name="notify"
-                            attrs="{'invisible':[('composition_mode', '!=', 'mass_post')]}"/>
-                        <!-- mass mailing -->
-                        <field name="no_auto_thread" attrs="{'invisible':[('composition_mode', '!=', 'mass_mail')]}"/>
-                        <field name="reply_to" placeholder="Email address to redirect replies..."
-                            attrs="{'invisible':['|', ('no_auto_thread', '=', False), ('composition_mode', '!=', 'mass_mail')],
-                                    'required':[('no_auto_thread', '=', True), ('composition_mode', '=', 'mass_mail')]}"/>
+                        <fieldname="subject"placeholder="Subject..."required="True"/>
+                        <!--masspost-->
+                        <fieldname="notify"
+                            attrs="{'invisible':[('composition_mode','!=','mass_post')]}"/>
+                        <!--massmailing-->
+                        <fieldname="no_auto_thread"attrs="{'invisible':[('composition_mode','!=','mass_mail')]}"/>
+                        <fieldname="reply_to"placeholder="Emailaddresstoredirectreplies..."
+                            attrs="{'invisible':['|',('no_auto_thread','=',False),('composition_mode','!=','mass_mail')],
+                                    'required':[('no_auto_thread','=',True),('composition_mode','=','mass_mail')]}"/>
                     </group>
-                    <field name="body" options="{'style-inline': true}"/>
-                    <group col="4">
-                        <field name="attachment_ids" widget="many2many_binary" string="Attach a file" nolabel="1" colspan="2"/>
-                        <field name="template_id" options="{'no_create': True}"
-                               context="{'default_model': model, 'default_body_html': body, 'default_subject': subject}"/>
+                    <fieldname="body"options="{'style-inline':true}"/>
+                    <groupcol="4">
+                        <fieldname="attachment_ids"widget="many2many_binary"string="Attachafile"nolabel="1"colspan="2"/>
+                        <fieldname="template_id"options="{'no_create':True}"
+                               context="{'default_model':model,'default_body_html':body,'default_subject':subject}"/>
                     </group>
                     <footer>
-                        <button string="Send" attrs="{'invisible': [('is_log', '=', True)]}" name="action_send_mail" type="object" class="btn-primary o_mail_send"/>
-                        <button string="Log" attrs="{'invisible': [('is_log', '=', False)]}" name="action_send_mail" type="object" class="btn-primary"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                        <buttonstring="Send"attrs="{'invisible':[('is_log','=',True)]}"name="action_send_mail"type="object"class="btn-primaryo_mail_send"/>
+                        <buttonstring="Log"attrs="{'invisible':[('is_log','=',False)]}"name="action_send_mail"type="object"class="btn-primary"/>
+                        <buttonstring="Cancel"class="btn-secondary"special="cancel"/>
 
-                        <button icon="fa-lg fa-save" type="object" name="save_as_template" string="Save as new template"
-                                class="float-right btn-secondary" help="Save as a new template"/>
+                        <buttonicon="fa-lgfa-save"type="object"name="save_as_template"string="Saveasnewtemplate"
+                                class="float-rightbtn-secondary"help="Saveasanewtemplate"/>
                     </footer>
                 </form>
             </field>
         </record>
 
-        <record id="action_email_compose_message_wizard" model="ir.actions.act_window">
-            <field name="name">Compose Email</field>
-            <field name="res_model">mail.compose.message</field>
-            <field name="binding_model_id" ref="mail.model_mail_compose_message"/>
-            <field name="type">ir.actions.act_window</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
+        <recordid="action_email_compose_message_wizard"model="ir.actions.act_window">
+            <fieldname="name">ComposeEmail</field>
+            <fieldname="res_model">mail.compose.message</field>
+            <fieldname="binding_model_id"ref="mail.model_mail_compose_message"/>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">new</field>
         </record>
     </data>
 </flectra>

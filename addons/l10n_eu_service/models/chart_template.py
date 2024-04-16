@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
+fromflectraimportapi,fields,models,_
 
-class AccountChartTemplate(models.Model):
-    _inherit = 'account.chart.template'
+classAccountChartTemplate(models.Model):
+    _inherit='account.chart.template'
 
-    def _load(self, sale_tax_rate, purchase_tax_rate, company):
-        rslt = super()._load( sale_tax_rate, purchase_tax_rate, company)
+    def_load(self,sale_tax_rate,purchase_tax_rate,company):
+        rslt=super()._load(sale_tax_rate,purchase_tax_rate,company)
 
-        if company.account_tax_fiscal_country_id in self.env.ref('base.europe').country_ids:
+        ifcompany.account_tax_fiscal_country_idinself.env.ref('base.europe').country_ids:
             company._map_eu_taxes()
 
-        return rslt
+        returnrslt

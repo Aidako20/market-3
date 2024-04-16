@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra><data>
-    <record id="crm_lead_view_form" model="ir.ui.view">
-        <field name="name">crm.lead.view.form.inherit.website.crm</field>
-        <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
-                <button name="action_redirect_to_page_views" type="object" class="oe_stat_button" icon="fa-tags"
-                        attrs="{'invisible': [('visitor_page_count', '=', 0)]}">
-                    <field name="visitor_page_count" widget="statinfo" string="Page views"/>
+    <recordid="crm_lead_view_form"model="ir.ui.view">
+        <fieldname="name">crm.lead.view.form.inherit.website.crm</field>
+        <fieldname="model">crm.lead</field>
+        <fieldname="inherit_id"ref="crm.crm_lead_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[hasclass('oe_button_box')]"position="inside">
+                <buttonname="action_redirect_to_page_views"type="object"class="oe_stat_button"icon="fa-tags"
+                        attrs="{'invisible':[('visitor_page_count','=',0)]}">
+                    <fieldname="visitor_page_count"widget="statinfo"string="Pageviews"/>
                 </button>
             </xpath>
         </field>

@@ -1,58 +1,58 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import _, api, models
-from flectra.exceptions import UserError
+fromflectraimport_,api,models
+fromflectra.exceptionsimportUserError
 
 
-class FetchmailServer(models.Model):
-    """Add the Outlook OAuth authentication on the incoming mail servers."""
+classFetchmailServer(models.Model):
+    """AddtheOutlookOAuthauthenticationontheincomingmailservers."""
 
-    _name = 'fetchmail.server'
-    _inherit = ['fetchmail.server', 'microsoft.outlook.mixin']
+    _name='fetchmail.server'
+    _inherit=['fetchmail.server','microsoft.outlook.mixin']
 
-    _OUTLOOK_SCOPE = 'https://outlook.office.com/IMAP.AccessAsUser.All'
+    _OUTLOOK_SCOPE='https://outlook.office.com/IMAP.AccessAsUser.All'
 
-    @api.constrains('use_microsoft_outlook_service', 'server_type', 'password', 'is_ssl')
-    def _check_use_microsoft_outlook_service(self):
-        for server in self:
-            if not server.use_microsoft_outlook_service:
+    @api.constrains('use_microsoft_outlook_service','server_type','password','is_ssl')
+    def_check_use_microsoft_outlook_service(self):
+        forserverinself:
+            ifnotserver.use_microsoft_outlook_service:
                 continue
 
-            if server.server_type != 'imap':
-                raise UserError(_('Outlook mail server %r only supports IMAP server type.') % server.name)
+            ifserver.server_type!='imap':
+                raiseUserError(_('Outlookmailserver%ronlysupportsIMAPservertype.')%server.name)
 
-            if server.password:
-                raise UserError(_(
-                    'Please leave the password field empty for Outlook mail server %r. '
-                    'The OAuth process does not require it')
-                    % server.name)
+            ifserver.password:
+                raiseUserError(_(
+                    'PleaseleavethepasswordfieldemptyforOutlookmailserver%r.'
+                    'TheOAuthprocessdoesnotrequireit')
+                    %server.name)
 
-            if not server.is_ssl:
-                raise UserError(_('SSL is required .') % server.name)
+            ifnotserver.is_ssl:
+                raiseUserError(_('SSLisrequired.')%server.name)
 
     @api.onchange('use_microsoft_outlook_service')
-    def _onchange_use_microsoft_outlook_service(self):
-        """Set the default configuration for a IMAP Outlook server."""
-        if self.use_microsoft_outlook_service:
-            self.server = 'imap.outlook.com'
-            self.server_type = 'imap'
-            self.is_ssl = True
-            self.port = 993
+    def_onchange_use_microsoft_outlook_service(self):
+        """SetthedefaultconfigurationforaIMAPOutlookserver."""
+        ifself.use_microsoft_outlook_service:
+            self.server='imap.outlook.com'
+            self.server_type='imap'
+            self.is_ssl=True
+            self.port=993
         else:
-            self.microsoft_outlook_refresh_token = False
-            self.microsoft_outlook_access_token = False
-            self.microsoft_outlook_access_token_expiration = False
+            self.microsoft_outlook_refresh_token=False
+            self.microsoft_outlook_access_token=False
+            self.microsoft_outlook_access_token_expiration=False
 
-    def _imap_login(self, connection):
-        """Authenticate the IMAP connection.
+    def_imap_login(self,connection):
+        """AuthenticatetheIMAPconnection.
 
-        If the mail server is Outlook, we use the OAuth2 authentication protocol.
+        IfthemailserverisOutlook,weusetheOAuth2authenticationprotocol.
         """
         self.ensure_one()
-        if self.use_microsoft_outlook_service:
-            auth_string = self._generate_outlook_oauth2_string(self.user)
-            connection.authenticate('XOAUTH2', lambda x: auth_string)
+        ifself.use_microsoft_outlook_service:
+            auth_string=self._generate_outlook_oauth2_string(self.user)
+            connection.authenticate('XOAUTH2',lambdax:auth_string)
             connection.select('INBOX')
         else:
             super()._imap_login(connection)

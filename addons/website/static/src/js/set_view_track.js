@@ -1,85 +1,85 @@
-flectra.define('website.set_view_track', function (require) {
-"use strict";
+flectra.define('website.set_view_track',function(require){
+"usestrict";
 
-var CustomizeMenu = require('website.customizeMenu');
-var Widget = require('web.Widget');
+varCustomizeMenu=require('website.customizeMenu');
+varWidget=require('web.Widget');
 
-var TrackPage = Widget.extend({
-    template: 'website.track_page',
-    xmlDependencies: ['/website/static/src/xml/track_page.xml'],
-    events: {
-        'change #switch-track-page': '_onTrackChange',
+varTrackPage=Widget.extend({
+    template:'website.track_page',
+    xmlDependencies:['/website/static/src/xml/track_page.xml'],
+    events:{
+        'change#switch-track-page':'_onTrackChange',
     },
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this.$input = this.$('#switch-track-page');
-        this._isTracked().then((data) => {
-            if (data[0]['track']) {
-                this.track = true;
-                this.$input.attr('checked', 'checked');
-            } else {
-                this.track = false;
+    start:function(){
+        this.$input=this.$('#switch-track-page');
+        this._isTracked().then((data)=>{
+            if(data[0]['track']){
+                this.track=true;
+                this.$input.attr('checked','checked');
+            }else{
+                this.track=false;
             }
         });
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _isTracked: function (val) {
-        var viewid = $('html').data('viewid');
-        if (!viewid) {
-            return Promise.reject();
-        } else {
-            return this._rpc({
-                model: 'ir.ui.view',
-                method: 'read',
-                args: [[viewid], ['track']],
+    _isTracked:function(val){
+        varviewid=$('html').data('viewid');
+        if(!viewid){
+            returnPromise.reject();
+        }else{
+            returnthis._rpc({
+                model:'ir.ui.view',
+                method:'read',
+                args:[[viewid],['track']],
             });
         }
     },
     /**
-     * @private
+     *@private
      */
-    _onTrackChange: function (ev) {
-        var checkboxValue = this.$input.is(':checked');
-        if (checkboxValue !== this.track) {
-            this.track = checkboxValue;
+    _onTrackChange:function(ev){
+        varcheckboxValue=this.$input.is(':checked');
+        if(checkboxValue!==this.track){
+            this.track=checkboxValue;
             this._trackPage(checkboxValue);
         }
     },
     /**
-     * @private
+     *@private
      */
-    _trackPage: function (val) {
-        var viewid = $('html').data('viewid');
-        if (!viewid) {
-            return Promise.reject();
-        } else {
-            return this._rpc({
-                model: 'ir.ui.view',
-                method: 'write',
-                args: [[viewid], {track: val}],
+    _trackPage:function(val){
+        varviewid=$('html').data('viewid');
+        if(!viewid){
+            returnPromise.reject();
+        }else{
+            returnthis._rpc({
+                model:'ir.ui.view',
+                method:'write',
+                args:[[viewid],{track:val}],
             });
         }
     },
 });
 
 CustomizeMenu.include({
-    _loadCustomizeOptions: function () {
-        var self = this;
-        var def = this._super.apply(this, arguments);
-        return def.then(function () {
-            if (!self.__trackpageLoaded) {
-                self.__trackpageLoaded = true;
-                self.trackPage = new TrackPage(self);
+    _loadCustomizeOptions:function(){
+        varself=this;
+        vardef=this._super.apply(this,arguments);
+        returndef.then(function(){
+            if(!self.__trackpageLoaded){
+                self.__trackpageLoaded=true;
+                self.trackPage=newTrackPage(self);
                 self.trackPage.appendTo(self.$el.children('.dropdown-menu'));
             }
         });

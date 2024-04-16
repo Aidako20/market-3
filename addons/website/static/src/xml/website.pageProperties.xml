@@ -1,179 +1,179 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-<!-- Tooltip Dependencies -->
+<!--TooltipDependencies-->
 
-<t t-name="website.get_tooltip_dependencies">
-    <t t-foreach="dependencies" t-as="dep">
-        <b><t t-esc="dep"/></b>
+<tt-name="website.get_tooltip_dependencies">
+    <tt-foreach="dependencies"t-as="dep">
+        <b><tt-esc="dep"/></b>
         <ul>
-            <li t-foreach="dep_value" t-as="item">
-                <a t-att-href="item_value['link']"
+            <lit-foreach="dep_value"t-as="item">
+                <at-att-href="item_value['link']"
                    t-att-title="item_value['item']"
                    class="o_text_overflow">
-                    <t t-esc="item_value['item']"/>
+                    <tt-esc="item_value['item']"/>
                 </a>
             </li>
         </ul>
     </t>
 </t>
-<t t-name="website.show_page_key_dependencies">
-    <div class="col-md-9 offset-md-3">
-        <span class="text-muted" id="warn_about_call_message">
-            <t t-set="depTooltip">
-                <t t-call="website.get_tooltip_dependencies"/>
+<tt-name="website.show_page_key_dependencies">
+    <divclass="col-md-9offset-md-3">
+        <spanclass="text-muted"id="warn_about_call_message">
+            <tt-set="depTooltip">
+                <tt-call="website.get_tooltip_dependencies"/>
             </t>
-            It looks like your file is being called by
-            <a href="#" data-toggle="popover" t-att-data-content="depTooltip" data-html="true" title="Dependencies"><t t-esc="dep_text" /></a>.
-            Changing its name will break these calls.
+            Itlookslikeyourfileisbeingcalledby
+            <ahref="#"data-toggle="popover"t-att-data-content="depTooltip"data-html="true"title="Dependencies"><tt-esc="dep_text"/></a>.
+            Changingitsnamewillbreakthesecalls.
         </span>
     </div>
 </t>
-<t t-name="website.show_page_dependencies">
-    <t t-set="depTooltip">
-        <t t-call="website.get_tooltip_dependencies"/>
+<tt-name="website.show_page_dependencies">
+    <tt-set="depTooltip">
+        <tt-call="website.get_tooltip_dependencies"/>
     </t>
-    (could be used in <a href="#" class="o_dependencies_redirect_link"><t t-esc="dep_text" /></a>)
+    (couldbeusedin<ahref="#"class="o_dependencies_redirect_link"><tt-esc="dep_text"/></a>)
 </t>
-<t t-name="website.page_dependencies_popover">
-    <div class="popover o_redirect_old_url" role="tooltip">
-        <div class="arrow"/>
-        <h3 class="popover-header"/>
-        <div class="popover-body"/>
+<tt-name="website.page_dependencies_popover">
+    <divclass="popovero_redirect_old_url"role="tooltip">
+        <divclass="arrow"/>
+        <h3class="popover-header"/>
+        <divclass="popover-body"/>
     </div>
 </t>
 
-<!-- Page Properties -->
+<!--PageProperties-->
 
-<div t-name="website.pagesMenu.page_info" class="o_page_management_info">
+<divt-name="website.pagesMenu.page_info"class="o_page_management_info">
     <form>
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item"><a aria-controls="basic_page_info" role="tab" data-toggle="tab" class="nav-link active" href="#basic_page_info">Name</a></li>
-            <li class="nav-item"><a aria-controls="advances_page_info" role="tab" data-toggle="tab" class="nav-link" href="#advances_page_info">Publish</a></li>
+        <ulclass="navnav-tabs"role="tablist">
+            <liclass="nav-item"><aaria-controls="basic_page_info"role="tab"data-toggle="tab"class="nav-linkactive"href="#basic_page_info">Name</a></li>
+            <liclass="nav-item"><aaria-controls="advances_page_info"role="tab"data-toggle="tab"class="nav-link"href="#advances_page_info">Publish</a></li>
         </ul>
-        <div class="tab-content mt16">
-            <div role="tabpanel" id="basic_page_info" class="tab-pane fade show active">
-                <div class="form-group row">
-                    <label class="col-form-label col-md-3" for="page_name">Page Name</label>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" id="page_name" t-att-value="widget.page.name" />
+        <divclass="tab-contentmt16">
+            <divrole="tabpanel"id="basic_page_info"class="tab-panefadeshowactive">
+                <divclass="form-grouprow">
+                    <labelclass="col-form-labelcol-md-3"for="page_name">PageName</label>
+                    <divclass="col-md-9">
+                        <inputtype="text"class="form-control"id="page_name"t-att-value="widget.page.name"/>
                     </div>
                 </div>
-                <div class="form-group warn_about_call"></div>
-                <div class="form-group row">
-                    <label class="col-form-label col-md-3" for="page_url">Page URL</label>
-                    <div class="col-md-9">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" t-att-title="widget.serverUrl"><small><t t-esc="widget.serverUrlTrunc"/></small></span>
+                <divclass="form-groupwarn_about_call"></div>
+                <divclass="form-grouprow">
+                    <labelclass="col-form-labelcol-md-3"for="page_url">PageURL</label>
+                    <divclass="col-md-9">
+                        <divclass="input-group">
+                            <divclass="input-group-prepend">
+                                <spanclass="input-group-text"t-att-title="widget.serverUrl"><small><tt-esc="widget.serverUrlTrunc"/></small></span>
                             </div>
-                            <input type="text" class="form-control" id="page_url" t-att-value="widget.page.url" />
+                            <inputtype="text"class="form-control"id="page_url"t-att-value="widget.page.url"/>
                         </div>
                     </div>
                 </div>
-                <div class="form-group row ask_for_redirect">
-                    <label class="col-form-label col-md-3" for="create_redirect">Redirect Old URL</label>
-                    <div class="col-md-2">
+                <divclass="form-grouprowask_for_redirect">
+                    <labelclass="col-form-labelcol-md-3"for="create_redirect">RedirectOldURL</label>
+                    <divclass="col-md-2">
                         <a>
-                            <label class="o_switch" for="create_redirect" >
-                                <input type="checkbox" id="create_redirect"/>
+                            <labelclass="o_switch"for="create_redirect">
+                                <inputtype="checkbox"id="create_redirect"/>
                                 <span/>
                             </label>
                         </a>
                     </div>
-                    <div class="col-md-7 mt4 o_dependencies_redirect_list_popover">
-                        <span class="text-muted" id="dependencies_redirect"></span>
+                    <divclass="col-md-7mt4o_dependencies_redirect_list_popover">
+                        <spanclass="text-muted"id="dependencies_redirect"></span>
                     </div>
                 </div>
-                <div class="form-group row ask_for_redirect">
-                    <label class="col-form-label col-md-3 redirect_type" for="redirect_type">Type</label>
-                    <div class="col-md-6 redirect_type">
-                        <select class="form-control" id="redirect_type">
-                            <option value="301">301 Moved permanently</option>
-                            <option value="302">302 Moved temporarily</option>
+                <divclass="form-grouprowask_for_redirect">
+                    <labelclass="col-form-labelcol-md-3redirect_type"for="redirect_type">Type</label>
+                    <divclass="col-md-6redirect_type">
+                        <selectclass="form-control"id="redirect_type">
+                            <optionvalue="301">301Movedpermanently</option>
+                            <optionvalue="302">302Movedtemporarily</option>
                         </select>
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" id="advances_page_info" class="tab-pane fade">
-                <div class="form-group row">
-                    <label class="control-label col-md-4" for="is_menu">Show in Top Menu</label>
-                    <div class="col-sm-8">
-                        <label class="o_switch" for="is_menu" >
-                            <input type="checkbox" t-att-checked="widget.page.menu_ids.length > 0 ? true : undefined" id="is_menu"/>
+            <divrole="tabpanel"id="advances_page_info"class="tab-panefade">
+                <divclass="form-grouprow">
+                    <labelclass="control-labelcol-md-4"for="is_menu">ShowinTopMenu</label>
+                    <divclass="col-sm-8">
+                        <labelclass="o_switch"for="is_menu">
+                            <inputtype="checkbox"t-att-checked="widget.page.menu_ids.length>0?true:undefined"id="is_menu"/>
                             <span/>
                         </label>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label class="control-label col-md-4" for="is_homepage">Use as Homepage</label>
-                    <div class="col-sm-8">
-                        <label class="o_switch" for="is_homepage" >
-                            <input type="checkbox" t-att-checked="widget.page.is_homepage ? true : undefined" id="is_homepage"/>
+                <divclass="form-grouprow">
+                    <labelclass="control-labelcol-md-4"for="is_homepage">UseasHomepage</label>
+                    <divclass="col-sm-8">
+                        <labelclass="o_switch"for="is_homepage">
+                            <inputtype="checkbox"t-att-checked="widget.page.is_homepage?true:undefined"id="is_homepage"/>
                             <span/>
                         </label>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label class="control-label col-md-4" for="is_indexed">
+                <divclass="form-grouprow">
+                    <labelclass="control-labelcol-md-4"for="is_indexed">
                         Indexed
-                        <i class="fa fa-question-circle-o" title="Hide this page from search results" role="img" aria-label="Info"></i>
+                        <iclass="fafa-question-circle-o"title="Hidethispagefromsearchresults"role="img"aria-label="Info"></i>
                     </label>
-                    <div class="col-md-2">
-                        <label class="o_switch" for="is_indexed" >
-                            <input type="checkbox" t-att-checked="widget.page.website_indexed ? true : undefined" id="is_indexed"/>
+                    <divclass="col-md-2">
+                        <labelclass="o_switch"for="is_indexed">
+                            <inputtype="checkbox"t-att-checked="widget.page.website_indexed?true:undefined"id="is_indexed"/>
                             <span/>
                         </label>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label class="control-label col-md-4" for="is_published">Publish</label>
-                    <div class="col-sm-8">
-                        <label class="o_switch js_publish_btn" for="is_published">
-                            <input type="checkbox" t-att-checked="widget.page.website_published ? true : undefined" id="is_published"/>
+                <divclass="form-grouprow">
+                    <labelclass="control-labelcol-md-4"for="is_published">Publish</label>
+                    <divclass="col-sm-8">
+                        <labelclass="o_switchjs_publish_btn"for="is_published">
+                            <inputtype="checkbox"t-att-checked="widget.page.website_published?true:undefined"id="is_published"/>
                             <span/>
                         </label>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label class="control-label col-md-4" for="date_publish">Publishing Date</label>
-                    <div class="col-md-8">
-                        <div class="input-group date" id="date_publish_container" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#date_publish_container" id="date_publish"/>
-                            <div class="input-group-append" data-target="#date_publish_container" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                <divclass="form-grouprow">
+                    <labelclass="control-labelcol-md-4"for="date_publish">PublishingDate</label>
+                    <divclass="col-md-8">
+                        <divclass="input-groupdate"id="date_publish_container"data-target-input="nearest">
+                            <inputtype="text"class="form-controldatetimepicker-input"data-target="#date_publish_container"id="date_publish"/>
+                            <divclass="input-group-append"data-target="#date_publish_container"data-toggle="datetimepicker">
+                                <divclass="input-group-text"><iclass="fafa-calendar"></i></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label class="control-label col-md-4" for="visibility">Visibility</label>
-                    <div class="col-md-8">
-                        <div class="input-group">
-                            <select id="visibility" class="form-control col-md-4">
-                                <option value="" t-att-selected="widget.page.visibility == ''">Public</option>
-                                <option value="connected" t-att-selected="widget.page.visibility == 'connected' ? 'selected' : undefined">Signed In</option>
-                                <option value="restricted_group" t-att-selected="widget.page.visibility == 'restricted_group' ? 'selected' : undefined">Some Users</option>
-                                <option value="password" t-att-selected="widget.page.visibility == 'password' ? 'selected' : undefined">Password</option>
+                <divclass="form-grouprow">
+                    <labelclass="control-labelcol-md-4"for="visibility">Visibility</label>
+                    <divclass="col-md-8">
+                        <divclass="input-group">
+                            <selectid="visibility"class="form-controlcol-md-4">
+                                <optionvalue=""t-att-selected="widget.page.visibility==''">Public</option>
+                                <optionvalue="connected"t-att-selected="widget.page.visibility=='connected'?'selected':undefined">SignedIn</option>
+                                <optionvalue="restricted_group"t-att-selected="widget.page.visibility=='restricted_group'?'selected':undefined">SomeUsers</option>
+                                <optionvalue="password"t-att-selected="widget.page.visibility=='password'?'selected':undefined">Password</option>
                             </select>
-                            <div class="ml-1 input-group-prepend show_visibility_password" >
-                                <div class="input-group-text"><i class="fa fa-key"></i></div>
+                            <divclass="ml-1input-group-prependshow_visibility_password">
+                                <divclass="input-group-text"><iclass="fafa-key"></i></div>
                             </div>
-                            <input type="password" id="visibility_password"
+                            <inputtype="password"id="visibility_password"
                                    t-att-value='widget.page.visibility_password'
-                                   t-att-required="widget.page.visibility == 'password' ? 'required' : None"
-                                   class="form-control show_visibility_password"
+                                   t-att-required="widget.page.visibility=='password'?'required':None"
+                                   class="form-controlshow_visibility_password"
                                    autocomplete="new-password"/>
-                            <t t-if="widget.page.hasSingleGroup">
-                                <div class="ml-1 input-group-prepend show_group_id">
-                                    <div class="input-group-text"><i class="fa fa-group"></i></div>
+                            <tt-if="widget.page.hasSingleGroup">
+                                <divclass="ml-1input-group-prependshow_group_id">
+                                    <divclass="input-group-text"><iclass="fafa-group"></i></div>
                                 </div>
-                                <t t-set="group" t-value="widget.page.group_id"/>
-                                <input type="text" class="form-control show_group_id" id="group_id" t-att-value="group ? group[1] : ''" t-att-data-group-id='group ? group[0] : 0' />
+                                <tt-set="group"t-value="widget.page.group_id"/>
+                                <inputtype="text"class="form-controlshow_group_id"id="group_id"t-att-value="group?group[1]:''"t-att-data-group-id='group?group[0]:0'/>
                             </t>
-                            <t t-else="">
-                                <t t-set='groups_tooltip'>More than one group has been set on the view.</t>
-                                <a class="show_group_id btn btn-link mx-auto" t-attf-href="/web#id=#{widget.page.view_id[0]}&amp;view_type=form&amp;model=ir.ui.view" t-att-title='groups_tooltip'>Discard &amp; Edit in backend</a>
+                            <tt-else="">
+                                <tt-set='groups_tooltip'>Morethanonegrouphasbeensetontheview.</t>
+                                <aclass="show_group_idbtnbtn-linkmx-auto"t-attf-href="/web#id=#{widget.page.view_id[0]}&amp;view_type=form&amp;model=ir.ui.view"t-att-title='groups_tooltip'>Discard&amp;Editinbackend</a>
                             </t>
                         </div>
                     </div>

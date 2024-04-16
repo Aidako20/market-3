@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-<t t-name="survey.survey_breadcrumb_template">
-    <ol class="breadcrumb justify-content-end bg-transparent">
-        <t t-set="canGoBack" t-value="widget.canGoBack"/>
-        <t t-foreach="widget.pages" t-as="page">
-            <t t-set="isActivePage" t-value="page.id === widget.currentPageId"/>
-            <li t-att-class="'breadcrumb-item' + (isActivePage ? ' active font-weight-bold' : '')"
+<tt-name="survey.survey_breadcrumb_template">
+    <olclass="breadcrumbjustify-content-endbg-transparent">
+        <tt-set="canGoBack"t-value="widget.canGoBack"/>
+        <tt-foreach="widget.pages"t-as="page">
+            <tt-set="isActivePage"t-value="page.id===widget.currentPageId"/>
+            <lit-att-class="'breadcrumb-item'+(isActivePage?'activefont-weight-bold':'')"
                 t-att-data-page-id="page.id"
                 t-att-data-page-title="page.title">
-                <t t-if="widget.currentPageId === page.id">
-                    <!-- Users can only go back and not forward -->
-                    <!-- As soon as we reach the current page, set "can_go_back" to False -->
-                    <t t-set="canGoBack" t-value="false" />
+                <tt-if="widget.currentPageId===page.id">
+                    <!--Userscanonlygobackandnotforward-->
+                    <!--Assoonaswereachthecurrentpage,set"can_go_back"toFalse-->
+                    <tt-set="canGoBack"t-value="false"/>
                 </t>
-                <t t-if="canGoBack">
-                    <a class="text-primary text-break" href="#">
-                        <span t-esc="page.title" />
+                <tt-if="canGoBack">
+                    <aclass="text-primarytext-break"href="#">
+                        <spant-esc="page.title"/>
                     </a>
                 </t>
-                <t t-else="">
-                    <span t-att-class="'text-break ' + (isActivePage ? 'text-black' : 'text-muted')"
-                          t-esc="page.title" />
+                <tt-else="">
+                    <spant-att-class="'text-break'+(isActivePage?'text-black':'text-muted')"
+                          t-esc="page.title"/>
                 </t>
             </li>
         </t>

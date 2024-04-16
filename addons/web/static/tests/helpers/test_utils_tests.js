@@ -1,36 +1,36 @@
-flectra.define('web.testUtilsTests', function (require) {
-"use strict";
+flectra.define('web.testUtilsTests',function(require){
+"usestrict";
 
-var testUtils = require('web.test_utils');
+vartestUtils=require('web.test_utils');
 
-QUnit.module('web', {}, function () {
-QUnit.module('testUtils', {}, function () {
+QUnit.module('web',{},function(){
+QUnit.module('testUtils',{},function(){
 
-QUnit.module('patch date');
+QUnit.module('patchdate');
 
-QUnit.test('new date', function (assert) {
+QUnit.test('newdate',function(assert){
     assert.expect(5);
-    const unpatchDate = testUtils.mock.patchDate(2018, 9, 23, 14, 50, 0);
+    constunpatchDate=testUtils.mock.patchDate(2018,9,23,14,50,0);
 
-    const date = new Date();
+    constdate=newDate();
 
-    assert.strictEqual(date.getFullYear(), 2018);
-    assert.strictEqual(date.getMonth(), 9);
-    assert.strictEqual(date.getDate(), 23);
-    assert.strictEqual(date.getHours(), 14);
-    assert.strictEqual(date.getMinutes(), 50);
+    assert.strictEqual(date.getFullYear(),2018);
+    assert.strictEqual(date.getMonth(),9);
+    assert.strictEqual(date.getDate(),23);
+    assert.strictEqual(date.getHours(),14);
+    assert.strictEqual(date.getMinutes(),50);
     unpatchDate();
 });
 
-QUnit.test('new moment', function (assert) {
+QUnit.test('newmoment',function(assert){
     assert.expect(1);
-    const unpatchDate = testUtils.mock.patchDate(2018, 9, 23, 14, 50, 0);
+    constunpatchDate=testUtils.mock.patchDate(2018,9,23,14,50,0);
 
-    const m = moment();
-    assert.strictEqual(m.format('YYYY-MM-DD HH:mm'), '2018-10-23 14:50');
+    constm=moment();
+    assert.strictEqual(m.format('YYYY-MM-DDHH:mm'),'2018-10-2314:50');
     unpatchDate();
 });
 
 });
 });
-}); 
+});

@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models, fields
-from flectra.addons.http_routing.models.ir_http import slug
-from flectra.tools.translate import html_translate
+fromflectraimportapi,models,fields
+fromflectra.addons.http_routing.models.ir_httpimportslug
+fromflectra.tools.translateimporthtml_translate
 
 
-class ImLivechatChannel(models.Model):
+classImLivechatChannel(models.Model):
 
-    _name = 'im_livechat.channel'
-    _inherit = ['im_livechat.channel', 'website.published.mixin']
+    _name='im_livechat.channel'
+    _inherit=['im_livechat.channel','website.published.mixin']
 
-    def _compute_website_url(self):
-        super(ImLivechatChannel, self)._compute_website_url()
-        for channel in self:
-            channel.website_url = "/livechat/channel/%s" % (slug(channel),)
+    def_compute_website_url(self):
+        super(ImLivechatChannel,self)._compute_website_url()
+        forchannelinself:
+            channel.website_url="/livechat/channel/%s"%(slug(channel),)
 
-    website_description = fields.Html("Website description", default=False, help="Description of the channel displayed on the website page", sanitize_attributes=False, translate=html_translate, sanitize_form=False)
+    website_description=fields.Html("Websitedescription",default=False,help="Descriptionofthechanneldisplayedonthewebsitepage",sanitize_attributes=False,translate=html_translate,sanitize_form=False)

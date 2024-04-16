@@ -1,199 +1,199 @@
-flectra.define('web.upgrade_widgets', function (require) {
-"use strict";
+flectra.define('web.upgrade_widgets',function(require){
+"usestrict";
 
 /**
- *  The upgrade widgets are intended to be used in config settings.
- *  When checked, an upgrade popup is showed to the user.
+ * Theupgradewidgetsareintendedtobeusedinconfigsettings.
+ * Whenchecked,anupgradepopupisshowedtotheuser.
  */
 
-var AbstractField = require('web.AbstractField');
-var basic_fields = require('web.basic_fields');
-var core = require('web.core');
-var Dialog = require('web.Dialog');
-var field_registry = require('web.field_registry');
-var framework = require('web.framework');
-var relational_fields = require('web.relational_fields');
+varAbstractField=require('web.AbstractField');
+varbasic_fields=require('web.basic_fields');
+varcore=require('web.core');
+varDialog=require('web.Dialog');
+varfield_registry=require('web.field_registry');
+varframework=require('web.framework');
+varrelational_fields=require('web.relational_fields');
 
-var _t = core._t;
-var QWeb = core.qweb;
+var_t=core._t;
+varQWeb=core.qweb;
 
-var FieldBoolean = basic_fields.FieldBoolean;
-var FieldRadio = relational_fields.FieldRadio;
+varFieldBoolean=basic_fields.FieldBoolean;
+varFieldRadio=relational_fields.FieldRadio;
 
 
 /**
- * Mixin that defines the common functions shared between Boolean and Radio
- * upgrade widgets
+ *MixinthatdefinesthecommonfunctionssharedbetweenBooleanandRadio
+ *upgradewidgets
  */
-var AbstractFieldUpgrade = {
+varAbstractFieldUpgrade={
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Redirects the user to the flectra-enterprise/uprade page
+     *Redirectstheusertotheflectra-enterprise/upradepage
      *
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    _confirmUpgrade: function () {
-        return this._rpc({
-                model: 'res.users',
-                method: 'search_count',
-                args: [[["share", "=", false]]],
+    _confirmUpgrade:function(){
+        returnthis._rpc({
+                model:'res.users',
+                method:'search_count',
+                args:[[["share","=",false]]],
             })
-            .then(function (data) {
-                framework.redirect("https://www.flectrahq.com/flectra-enterprise/upgrade?num_users=" + data);
+            .then(function(data){
+                framework.redirect("https://www.flectrahq.com/flectra-enterprise/upgrade?num_users="+data);
             });
     },
     /**
-     * This function is meant to be overridden to insert the 'Enterprise' label
-     * JQuery node at the right place.
+     *Thisfunctionismeanttobeoverriddentoinsertthe'Enterprise'label
+     *JQuerynodeattherightplace.
      *
-     * @abstract
-     * @private
-     * @param {jQuery} $enterpriseLabel the 'Enterprise' label to insert
+     *@abstract
+     *@private
+     *@param{jQuery}$enterpriseLabelthe'Enterprise'labeltoinsert
      */
-    _insertEnterpriseLabel: function ($enterpriseLabel) {},
+    _insertEnterpriseLabel:function($enterpriseLabel){},
     /**
-     * Opens the Upgrade dialog.
+     *OpenstheUpgradedialog.
      *
-     * @private
-     * @returns {Dialog} the instance of the opened Dialog
+     *@private
+     *@returns{Dialog}theinstanceoftheopenedDialog
      */
-    _openDialog: function () {
-        var message = $(QWeb.render('EnterpriseUpgrade'));
+    _openDialog:function(){
+        varmessage=$(QWeb.render('EnterpriseUpgrade'));
 
-        var buttons = [
+        varbuttons=[
             {
-                text: _t("Upgrade now"),
-                classes: 'btn-primary',
-                close: true,
-                click: this._confirmUpgrade.bind(this),
+                text:_t("Upgradenow"),
+                classes:'btn-primary',
+                close:true,
+                click:this._confirmUpgrade.bind(this),
             },
             {
-                text: _t("Cancel"),
-                close: true,
+                text:_t("Cancel"),
+                close:true,
             },
         ];
 
-        return new Dialog(this, {
-            size: 'medium',
-            buttons: buttons,
-            $content: $('<div>', {
-                html: message,
+        returnnewDialog(this,{
+            size:'medium',
+            buttons:buttons,
+            $content:$('<div>',{
+                html:message,
             }),
-            title: _t("Flectra Enterprise"),
+            title:_t("FlectraEnterprise"),
         }).open();
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _render: function () {
-        this._super.apply(this, arguments);
-        this._insertEnterpriseLabel($("<span>", {
-            text: "Enterprise",
-            'class': "badge badge-primary oe_inline o_enterprise_label"
+    _render:function(){
+        this._super.apply(this,arguments);
+        this._insertEnterpriseLabel($("<span>",{
+            text:"Enterprise",
+            'class':"badgebadge-primaryoe_inlineo_enterprise_label"
         }));
     },
     /**
-     * This function is meant to be overridden to reset the $el to its initial
-     * state.
+     *Thisfunctionismeanttobeoverriddentoresetthe$eltoitsinitial
+     *state.
      *
-     * @abstract
-     * @private
+     *@abstract
+     *@private
      */
-    _resetValue: function () {},
+    _resetValue:function(){},
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} event
+     *@private
+     *@param{MouseEvent}event
      */
-    _onInputClicked: function (event) {
-        if ($(event.currentTarget).prop("checked")) {
-            this._openDialog().on('closed', this, this._resetValue.bind(this));
+    _onInputClicked:function(event){
+        if($(event.currentTarget).prop("checked")){
+            this._openDialog().on('closed',this,this._resetValue.bind(this));
         }
     },
 
 };
 
-var UpgradeBoolean = FieldBoolean.extend(AbstractFieldUpgrade, {
-    supportedFieldTypes: [],
-    events: _.extend({}, AbstractField.prototype.events, {
-        'click input': '_onInputClicked',
+varUpgradeBoolean=FieldBoolean.extend(AbstractFieldUpgrade,{
+    supportedFieldTypes:[],
+    events:_.extend({},AbstractField.prototype.events,{
+        'clickinput':'_onInputClicked',
     }),
     /**
-     * Re-renders the widget with the label
+     *Re-rendersthewidgetwiththelabel
      *
-     * @param {jQuery} $label
+     *@param{jQuery}$label
      */
-    renderWithLabel: function ($label) {
-        this.$label = $label;
+    renderWithLabel:function($label){
+        this.$label=$label;
         this._render();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _insertEnterpriseLabel: function ($enterpriseLabel) {
-        var $el = this.$label || this.$el;
+    _insertEnterpriseLabel:function($enterpriseLabel){
+        var$el=this.$label||this.$el;
         $el.append('&nbsp;').append($enterpriseLabel);
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _resetValue: function () {
-        this.$input.prop("checked", false).change();
+    _resetValue:function(){
+        this.$input.prop("checked",false).change();
     },
 });
 
-var UpgradeRadio = FieldRadio.extend(AbstractFieldUpgrade, {
-    supportedFieldTypes: [],
-    events: _.extend({}, FieldRadio.prototype.events, {
-        'click input:last': '_onInputClicked',
+varUpgradeRadio=FieldRadio.extend(AbstractFieldUpgrade,{
+    supportedFieldTypes:[],
+    events:_.extend({},FieldRadio.prototype.events,{
+        'clickinput:last':'_onInputClicked',
     }),
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
-    isSet: function () {
-        return true;
+    isSet:function(){
+        returntrue;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _insertEnterpriseLabel: function ($enterpriseLabel) {
+    _insertEnterpriseLabel:function($enterpriseLabel){
         this.$('label').last().append('&nbsp;').append($enterpriseLabel);
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _resetValue: function () {
-        this.$('input').first().prop("checked", true).click();
+    _resetValue:function(){
+        this.$('input').first().prop("checked",true).click();
     },
 });
 
 field_registry
-    .add('upgrade_boolean', UpgradeBoolean)
-    .add('upgrade_radio', UpgradeRadio);
+    .add('upgrade_boolean',UpgradeBoolean)
+    .add('upgrade_radio',UpgradeRadio);
 
 });

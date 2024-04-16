@@ -1,47 +1,47 @@
-flectra.define('website_event.editor', function (require) {
-"use strict";
+flectra.define('website_event.editor',function(require){
+"usestrict";
 
-var core = require('web.core');
-var wUtils = require('website.utils');
-var WebsiteNewMenu = require('website.newMenu');
+varcore=require('web.core');
+varwUtils=require('website.utils');
+varWebsiteNewMenu=require('website.newMenu');
 
-var _t = core._t;
+var_t=core._t;
 
 WebsiteNewMenu.include({
-    actions: _.extend({}, WebsiteNewMenu.prototype.actions || {}, {
-        new_event: '_createNewEvent',
+    actions:_.extend({},WebsiteNewMenu.prototype.actions||{},{
+        new_event:'_createNewEvent',
     }),
 
     //--------------------------------------------------------------------------
-    // Actions
+    //Actions
     //--------------------------------------------------------------------------
 
     /**
-     * Asks the user information about a new event to create, then creates it
-     * and redirects the user to this new event.
+     *Askstheuserinformationaboutaneweventtocreate,thencreatesit
+     *andredirectstheusertothisnewevent.
      *
-     * @private
-     * @returns {Promise} Unresolved if there is a redirection
+     *@private
+     *@returns{Promise}Unresolvedifthereisaredirection
      */
-    _createNewEvent: function () {
-        var self = this;
-        return wUtils.prompt({
-            id: "editor_new_event",
-            window_title: _t("New Event"),
-            input: _t("Event Name"),
-        }).then(function (result) {
-            var eventName = result.val;
-            if (!eventName) {
+    _createNewEvent:function(){
+        varself=this;
+        returnwUtils.prompt({
+            id:"editor_new_event",
+            window_title:_t("NewEvent"),
+            input:_t("EventName"),
+        }).then(function(result){
+            vareventName=result.val;
+            if(!eventName){
                 return;
             }
-            return self._rpc({
-                route: '/event/add_event',
-                params: {
-                    event_name: eventName,
+            returnself._rpc({
+                route:'/event/add_event',
+                params:{
+                    event_name:eventName,
                 },
-            }).then(function (url) {
-                window.location.href = url;
-                return new Promise(function () {});
+            }).then(function(url){
+                window.location.href=url;
+                returnnewPromise(function(){});
             });
         });
     },

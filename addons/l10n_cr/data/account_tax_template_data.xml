@@ -1,77 +1,77 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <!-- Account Tax Template -->
-        <record id="account_tax_template_IV_0" model="account.tax.template">
-            <field name="name">Sales Tax</field>
-            <field name="description">IV</field>
-            <field name="sequence">10</field>
-            <field name="amount">13</field>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">sale</field>
-            <field name="chart_template_id" ref="account_chart_template_0"/>
-            <field name="tax_group_id" ref="tax_group_13"/>
-            <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+        <!--AccountTaxTemplate-->
+        <recordid="account_tax_template_IV_0"model="account.tax.template">
+            <fieldname="name">SalesTax</field>
+            <fieldname="description">IV</field>
+            <fieldname="sequence">10</field>
+            <fieldname="amount">13</field>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">sale</field>
+            <fieldname="chart_template_id"ref="account_chart_template_0"/>
+            <fieldname="tax_group_id"ref="tax_group_13"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
 
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('account_account_template_0_212101'),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('account_account_template_0_212101'),
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
 
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('account_account_template_0_212101'),
-                }),
-            ]"/>
-        </record>
-        <record id="account_tax_template_IV_1" model="account.tax.template">
-            <field name="name">Purchase Tax</field>
-            <field name="description">IV</field>
-            <field name="sequence">10</field>
-            <field name="amount">13</field>
-            <field name="amount_type">percent</field>
-            <field name="type_tax_use">purchase</field>
-            <field name="chart_template_id" ref="account_chart_template_0"/>
-            <field name="tax_group_id" ref="tax_group_13"/>
-            <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('account_account_template_0_212101'),
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('account_account_template_0_212101'),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('account_account_template_0_212101'),
                 }),
             ]"/>
         </record>
+        <recordid="account_tax_template_IV_1"model="account.tax.template">
+            <fieldname="name">PurchaseTax</field>
+            <fieldname="description">IV</field>
+            <fieldname="sequence">10</field>
+            <fieldname="amount">13</field>
+            <fieldname="amount_type">percent</field>
+            <fieldname="type_tax_use">purchase</field>
+            <fieldname="chart_template_id"ref="account_chart_template_0"/>
+            <fieldname="tax_group_id"ref="tax_group_13"/>
+            <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                }),
 
-        <!-- Default Tax -->
-        <record id="account_account_template_0_410001" model="account.account.template">
-            <field name="tax_ids" eval="[(6,0,[ref('account_tax_template_IV_0')])]"/>
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('account_account_template_0_212101'),
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                }),
+
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('account_account_template_0_212101'),
+                }),
+            ]"/>
+        </record>
+
+        <!--DefaultTax-->
+        <recordid="account_account_template_0_410001"model="account.account.template">
+            <fieldname="tax_ids"eval="[(6,0,[ref('account_tax_template_IV_0')])]"/>
         </record>
 </flectra>

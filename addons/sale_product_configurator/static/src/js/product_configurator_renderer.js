@@ -1,55 +1,55 @@
-flectra.define('sale_product_configurator.ProductConfiguratorFormRenderer', function (require) {
-"use strict";
+flectra.define('sale_product_configurator.ProductConfiguratorFormRenderer',function(require){
+"usestrict";
 
-var FormRenderer = require('web.FormRenderer');
-var VariantMixin = require('sale.VariantMixin');
+varFormRenderer=require('web.FormRenderer');
+varVariantMixin=require('sale.VariantMixin');
 
-var ProductConfiguratorFormRenderer = FormRenderer.extend(VariantMixin, {
+varProductConfiguratorFormRenderer=FormRenderer.extend(VariantMixin,{
 
-    events: _.extend({}, FormRenderer.prototype.events, VariantMixin.events, {
-        'click button.js_add_cart_json': 'onClickAddCartJSON',
+    events:_.extend({},FormRenderer.prototype.events,VariantMixin.events,{
+        'clickbutton.js_add_cart_json':'onClickAddCartJSON',
     }),
 
     /**
-     * @override
+     *@override
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        this.pricelistId = this.state.context.default_pricelist_id || 0;
+    init:function(){
+        this._super.apply(this,arguments);
+        this.pricelistId=this.state.context.default_pricelist_id||0;
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        return this._super.apply(this, arguments).then(function () {
-            self.$el.append($('<div>', {class: 'configurator_container'}));
+    start:function(){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(function(){
+            self.$el.append($('<div>',{class:'configurator_container'}));
             self.renderConfigurator(self.configuratorHtml);
             self._checkMode();
         });
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Renders the product configurator within the form
+     *Renderstheproductconfiguratorwithintheform
      *
-     * Will also:
+     *Willalso:
      *
-     * - add events handling for variant changes
-     * - trigger variant change to compute the price and other
-     *   variant specific changes
+     *-addeventshandlingforvariantchanges
+     *-triggervariantchangetocomputethepriceandother
+     *  variantspecificchanges
      *
-     * @param {string} configuratorHtml the evaluated template of
-     *   the product configurator
+     *@param{string}configuratorHtmltheevaluatedtemplateof
+     *  theproductconfigurator
      */
-    renderConfigurator: function (configuratorHtml) {
-        var $configuratorContainer = this.$('.configurator_container');
+    renderConfigurator:function(configuratorHtml){
+        var$configuratorContainer=this.$('.configurator_container');
         $configuratorContainer.empty();
 
-        var $configuratorHtml = $(configuratorHtml);
+        var$configuratorHtml=$(configuratorHtml);
         $configuratorHtml.appendTo($configuratorContainer);
 
         this.triggerVariantChange($configuratorContainer);
@@ -57,51 +57,51 @@ var ProductConfiguratorFormRenderer = FormRenderer.extend(VariantMixin, {
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * If the configuratorMode in the given context is 'edit', we need to
-     * hide the regular 'Add' button to replace it with an 'EDIT' button.
+     *IftheconfiguratorModeinthegivencontextis'edit',weneedto
+     *hidetheregular'Add'buttontoreplaceitwithan'EDIT'button.
      *
-     * If the configuratorMode is set to 'options', we will directly open the
-     * options modal.
+     *IftheconfiguratorModeissetto'options',wewilldirectlyopenthe
+     *optionsmodal.
      *
-     * @private
+     *@private
      */
-    _checkMode: function () {
-        if (this.state.context.configuratorMode === 'edit') {
+    _checkMode:function(){
+        if(this.state.context.configuratorMode==='edit'){
             this.$('.o_sale_product_configurator_add').hide();
-            this.$('.o_sale_product_configurator_edit').css('display', 'inline-block');
-        } else if (this.state.context.configuratorMode === 'options') {
+            this.$('.o_sale_product_configurator_edit').css('display','inline-block');
+        }elseif(this.state.context.configuratorMode==='options'){
             this.trigger_up('handle_add');
         }
     },
 
     /**
-     * Toggles the add button depending on the possibility of the current
-     * combination.
+     *Togglestheaddbuttondependingonthepossibilityofthecurrent
+     *combination.
      *
-     * @override
+     *@override
      */
-    _toggleDisable: function ($parent, isCombinationPossible) {
-        VariantMixin._toggleDisable.apply(this, arguments);
-        $parent.parents('.modal').find('.o_sale_product_configurator_add').toggleClass('disabled', !isCombinationPossible);
+    _toggleDisable:function($parent,isCombinationPossible){
+        VariantMixin._toggleDisable.apply(this,arguments);
+        $parent.parents('.modal').find('.o_sale_product_configurator_add').toggleClass('disabled',!isCombinationPossible);
     },
 
     /**
-     * Will fill the custom values input based on the provided initial configuration.
+     *Willfillthecustomvaluesinputbasedontheprovidedinitialconfiguration.
      *
-     * @private
+     *@private
      */
-    _applyCustomValues: function () {
-        var self = this;
-        var customValueIds = this.state.data.product_custom_attribute_value_ids;
-        if (customValueIds) {
-            _.each(customValueIds.data, function (customValue) {
-                if (customValue.data.custom_value) {
-                    var attributeValueId = customValue.data.custom_product_template_attribute_value_id.data.id;
-                    var $input = self._findRelatedAttributeValueInput(attributeValueId);
+    _applyCustomValues:function(){
+        varself=this;
+        varcustomValueIds=this.state.data.product_custom_attribute_value_ids;
+        if(customValueIds){
+            _.each(customValueIds.data,function(customValue){
+                if(customValue.data.custom_value){
+                    varattributeValueId=customValue.data.custom_product_template_attribute_value_id.data.id;
+                    var$input=self._findRelatedAttributeValueInput(attributeValueId);
                     $input
                         .closest('li[data-attribute_id]')
                         .find('.variant_custom_value')
@@ -112,22 +112,22 @@ var ProductConfiguratorFormRenderer = FormRenderer.extend(VariantMixin, {
     },
 
     /**
-     * Find the $.Element input/select related to that product.attribute.value
+     *Findthe$.Elementinput/selectrelatedtothatproduct.attribute.value
      *
-     * @param {integer} attributeValueId
+     *@param{integer}attributeValueId
      *
-     * @private
+     *@private
      */
-    _findRelatedAttributeValueInput: function (attributeValueId) {
-        var selectors = [
-            'ul.js_add_cart_variants input[data-value_id="' + attributeValueId + '"]',
-            'ul.js_add_cart_variants option[data-value_id="' + attributeValueId + '"]'
+    _findRelatedAttributeValueInput:function(attributeValueId){
+        varselectors=[
+            'ul.js_add_cart_variantsinput[data-value_id="'+attributeValueId+'"]',
+            'ul.js_add_cart_variantsoption[data-value_id="'+attributeValueId+'"]'
         ];
 
-        return this.$(selectors.join(', '));
+        returnthis.$(selectors.join(','));
     }
 });
 
-return ProductConfiguratorFormRenderer;
+returnProductConfiguratorFormRenderer;
 
 });

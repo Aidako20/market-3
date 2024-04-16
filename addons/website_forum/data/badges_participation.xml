@@ -1,175 +1,175 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <!-- Biography: complet your profile -->
-        <record id="badge_p_1" model="gamification.badge">
-            <field name="name">Autobiographer</field>
-            <field name="description">Completed own biography</field>
-            <field name="level">bronze</field>
-            <field name="rule_auth">nobody</field>
+        <!--Biography:completyourprofile-->
+        <recordid="badge_p_1"model="gamification.badge">
+            <fieldname="name">Autobiographer</field>
+            <fieldname="description">Completedownbiography</field>
+            <fieldname="level">bronze</field>
+            <fieldname="rule_auth">nobody</field>
         </record>
-        <record model="gamification.goal.definition" id="definition_configure_profile">
-            <field name="name">Completed own biography</field>
-            <field name="description">Write some information about yourself</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="base.model_res_users"/>
-            <field name="condition">higher</field>
-            <field name="domain">[
-                ('partner_id.country_id', '!=', False),
-                ('partner_id.city', '!=', False),
-                ('partner_id.email', '!=', False)
+        <recordmodel="gamification.goal.definition"id="definition_configure_profile">
+            <fieldname="name">Completedownbiography</field>
+            <fieldname="description">Writesomeinformationaboutyourself</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="base.model_res_users"/>
+            <fieldname="condition">higher</field>
+            <fieldname="domain">[
+                ('partner_id.country_id','!=',False),
+                ('partner_id.city','!=',False),
+                ('partner_id.email','!=',False)
             ]</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="base.field_res_users__id"/>
-            <field name="batch_user_expression">user.id</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="base.field_res_users__id"/>
+            <fieldname="batch_user_expression">user.id</field>
         </record>
-        <record model="gamification.challenge" id="challenge_configure_profile">
-            <field name="name">Complete own biography</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_p_1"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
+        <recordmodel="gamification.challenge"id="challenge_configure_profile">
+            <fieldname="name">Completeownbiography</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_p_1"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
         </record>
-        <record model="gamification.challenge.line" id="line_configure_profile">
-            <field name="definition_id" ref="definition_configure_profile"/>
-            <field name="challenge_id" ref="challenge_configure_profile"/>
-            <field name="target_goal">1</field>
-        </record>
-
-        <!-- Commentator: at least 10 comments posted on posts -->
-        <record id="badge_p_2" model="gamification.badge">
-            <field name="name">Commentator</field>
-            <field name="description">Posted 10 comments</field>
-            <field name="level">bronze</field>
-            <field name="rule_auth">nobody</field>
-        </record>
-        <record model="gamification.goal.definition" id="definition_commentator">
-            <field name="name">Commentator</field>
-            <field name="description">Comment an answer or a question</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="mail.model_mail_message"/>
-            <field name="condition">higher</field>
-            <field name="domain" eval="[('message_type', '=', 'comment'), ('subtype_id', '=', ref('mail.mt_comment')), ('model', '=', 'forum.post')]"/>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="mail.field_mail_message__author_id"/>
-            <field name="batch_user_expression">user.partner_id.id</field>
-        </record>
-        <record model="gamification.challenge" id="challenge_commentator">
-            <field name="name">Commentator</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_p_2"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
-        </record>
-        <record model="gamification.challenge.line" id="line_commentator">
-            <field name="definition_id" ref="definition_commentator"/>
-            <field name="challenge_id" ref="challenge_commentator"/>
-            <field name="target_goal">10</field>
+        <recordmodel="gamification.challenge.line"id="line_configure_profile">
+            <fieldname="definition_id"ref="definition_configure_profile"/>
+            <fieldname="challenge_id"ref="challenge_configure_profile"/>
+            <fieldname="target_goal">1</field>
         </record>
 
-        <!-- Pundit: 10 answers with at least score of 10 -->
-        <record id="badge_25" model="gamification.badge">
-            <field name="name">Pundit</field>
-            <field name="description">Left 10 answers with score of 10 or more</field>
-            <field name="level">silver</field>
-            <field name="rule_auth">nobody</field>
+        <!--Commentator:atleast10commentspostedonposts-->
+        <recordid="badge_p_2"model="gamification.badge">
+            <fieldname="name">Commentator</field>
+            <fieldname="description">Posted10comments</field>
+            <fieldname="level">bronze</field>
+            <fieldname="rule_auth">nobody</field>
         </record>
-        <record model="gamification.goal.definition" id="definition_pundit">
-            <field name="name">Pundit</field>
-            <field name="description">Post 10 answers with score of 10 or more</field>
-            <field name="display_mode">boolean</field>
-            <field name="condition">higher</field>
-            <field name="model_id" ref="website_forum.model_forum_post"/>
-            <field name="domain" eval="[('parent', '!=', False), ('vote_count' '>=', 10)]"/>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_post__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
+        <recordmodel="gamification.goal.definition"id="definition_commentator">
+            <fieldname="name">Commentator</field>
+            <fieldname="description">Commentanansweroraquestion</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="mail.model_mail_message"/>
+            <fieldname="condition">higher</field>
+            <fieldname="domain"eval="[('message_type','=','comment'),('subtype_id','=',ref('mail.mt_comment')),('model','=','forum.post')]"/>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="mail.field_mail_message__author_id"/>
+            <fieldname="batch_user_expression">user.partner_id.id</field>
         </record>
-        <record model="gamification.challenge" id="challenge_pundit">
-            <field name="name">Pundit</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_25"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
+        <recordmodel="gamification.challenge"id="challenge_commentator">
+            <fieldname="name">Commentator</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_p_2"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
         </record>
-        <record model="gamification.challenge.line" id="line_pundit">
-            <field name="definition_id" ref="definition_pundit"/>
-            <field name="target_goal">10</field>
-            <field name="challenge_id" ref="challenge_pundit"/>
-        </record>
-
-        <!-- Chief Commentator: 100 comments -->
-        <record id="badge_p_4" model="gamification.badge">
-            <field name="name">Chief Commentator</field>
-            <field name="description">Posted 100 comments</field>
-            <field name="level">silver</field>
-            <field name="rule_auth">nobody</field>
-        </record>
-        <record model="gamification.challenge" id="challenge_chief_commentator">
-            <field name="name">Chief Commentator</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_p_4"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
-        </record>
-        <record model="gamification.challenge.line" id="line_chief_commentator">
-            <field name="definition_id" ref="definition_commentator"/>
-            <field name="challenge_id" ref="challenge_chief_commentator"/>
-            <field name="target_goal">100</field>
+        <recordmodel="gamification.challenge.line"id="line_commentator">
+            <fieldname="definition_id"ref="definition_commentator"/>
+            <fieldname="challenge_id"ref="challenge_commentator"/>
+            <fieldname="target_goal">10</field>
         </record>
 
-        <record id="badge_32" model="gamification.badge">
-            <field name="name">Taxonomist</field>
-            <field name="description">Created a tag used by 15 questions</field>
-            <field name="level">silver</field>
-            <field name="rule_auth">nobody</field>
+        <!--Pundit:10answerswithatleastscoreof10-->
+        <recordid="badge_25"model="gamification.badge">
+            <fieldname="name">Pundit</field>
+            <fieldname="description">Left10answerswithscoreof10ormore</field>
+            <fieldname="level">silver</field>
+            <fieldname="rule_auth">nobody</field>
         </record>
-        <record model="gamification.goal.definition" id="definition_taxonomist">
-            <field name="name">Taxonomist</field>
-            <field name="description">Create a tag which can used in minimum 15 questions</field>
-            <field name="computation_mode">count</field>
-            <field name="display_mode">boolean</field>
-            <field name="model_id" ref="website_forum.model_forum_tag"/>
-            <field name="condition">higher</field>
-            <field name="domain">[('posts_count', '>=', 15)]</field>
-            <field name="batch_mode">True</field>
-            <field name="batch_distinctive_field" ref="website_forum.field_forum_tag__create_uid"/>
-            <field name="batch_user_expression">user.id</field>
+        <recordmodel="gamification.goal.definition"id="definition_pundit">
+            <fieldname="name">Pundit</field>
+            <fieldname="description">Post10answerswithscoreof10ormore</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="condition">higher</field>
+            <fieldname="model_id"ref="website_forum.model_forum_post"/>
+            <fieldname="domain"eval="[('parent','!=',False),('vote_count''>=',10)]"/>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_post__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
         </record>
-        <record model="gamification.challenge" id="challenge_taxonomist">
-            <field name="name">Taxonomist</field>
-            <field name="period">once</field>
-            <field name="visibility_mode">personal</field>
-            <field name="report_message_frequency">never</field>
-            <field name="reward_id" ref="badge_32"/>
-            <field name="reward_realtime">True</field>
-            <field name="user_domain">[('karma', '>', 0)]</field>
-            <field name="state">inprogress</field>
-            <field name="challenge_category">forum</field>
+        <recordmodel="gamification.challenge"id="challenge_pundit">
+            <fieldname="name">Pundit</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_25"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
         </record>
-        <record model="gamification.challenge.line" id="line_taxonomist">
-            <field name="definition_id" ref="definition_taxonomist"/>
-            <field name="challenge_id" ref="challenge_taxonomist"/>
-            <field name="target_goal">1</field>
+        <recordmodel="gamification.challenge.line"id="line_pundit">
+            <fieldname="definition_id"ref="definition_pundit"/>
+            <fieldname="target_goal">10</field>
+            <fieldname="challenge_id"ref="challenge_pundit"/>
+        </record>
+
+        <!--ChiefCommentator:100comments-->
+        <recordid="badge_p_4"model="gamification.badge">
+            <fieldname="name">ChiefCommentator</field>
+            <fieldname="description">Posted100comments</field>
+            <fieldname="level">silver</field>
+            <fieldname="rule_auth">nobody</field>
+        </record>
+        <recordmodel="gamification.challenge"id="challenge_chief_commentator">
+            <fieldname="name">ChiefCommentator</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_p_4"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
+        </record>
+        <recordmodel="gamification.challenge.line"id="line_chief_commentator">
+            <fieldname="definition_id"ref="definition_commentator"/>
+            <fieldname="challenge_id"ref="challenge_chief_commentator"/>
+            <fieldname="target_goal">100</field>
+        </record>
+
+        <recordid="badge_32"model="gamification.badge">
+            <fieldname="name">Taxonomist</field>
+            <fieldname="description">Createdatagusedby15questions</field>
+            <fieldname="level">silver</field>
+            <fieldname="rule_auth">nobody</field>
+        </record>
+        <recordmodel="gamification.goal.definition"id="definition_taxonomist">
+            <fieldname="name">Taxonomist</field>
+            <fieldname="description">Createatagwhichcanusedinminimum15questions</field>
+            <fieldname="computation_mode">count</field>
+            <fieldname="display_mode">boolean</field>
+            <fieldname="model_id"ref="website_forum.model_forum_tag"/>
+            <fieldname="condition">higher</field>
+            <fieldname="domain">[('posts_count','>=',15)]</field>
+            <fieldname="batch_mode">True</field>
+            <fieldname="batch_distinctive_field"ref="website_forum.field_forum_tag__create_uid"/>
+            <fieldname="batch_user_expression">user.id</field>
+        </record>
+        <recordmodel="gamification.challenge"id="challenge_taxonomist">
+            <fieldname="name">Taxonomist</field>
+            <fieldname="period">once</field>
+            <fieldname="visibility_mode">personal</field>
+            <fieldname="report_message_frequency">never</field>
+            <fieldname="reward_id"ref="badge_32"/>
+            <fieldname="reward_realtime">True</field>
+            <fieldname="user_domain">[('karma','>',0)]</field>
+            <fieldname="state">inprogress</field>
+            <fieldname="challenge_category">forum</field>
+        </record>
+        <recordmodel="gamification.challenge.line"id="line_taxonomist">
+            <fieldname="definition_id"ref="definition_taxonomist"/>
+            <fieldname="challenge_id"ref="challenge_taxonomist"/>
+            <fieldname="target_goal">1</field>
         </record>
 
     </data>

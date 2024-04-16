@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
-    <div t-name="Tip" t-attf-class="o_tooltip #{widget.info.position} #{widget.is_anchor_fixed_position ? 'o_tooltip_fixed' : ''}">
-        <div class="o_tooltip_overlay"/>
-        <div class="o_tooltip_content">
-            <t t-raw="widget.info.content"/>
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
+    <divt-name="Tip"t-attf-class="o_tooltip#{widget.info.position}#{widget.is_anchor_fixed_position?'o_tooltip_fixed':''}">
+        <divclass="o_tooltip_overlay"/>
+        <divclass="o_tooltip_content">
+            <tt-raw="widget.info.content"/>
         </div>
     </div>
 </templates>

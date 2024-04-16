@@ -1,17 +1,17 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import http
-from flectra.http import request
-from flectra.addons.web.controllers.main import WebClient, Home
+fromflectraimporthttp
+fromflectra.httpimportrequest
+fromflectra.addons.web.controllers.mainimportWebClient,Home
 
 
-class Routing(Home):
+classRouting(Home):
 
-    @http.route('/website/translations/<string:unique>', type='http', auth="public", website=True)
-    def get_website_translations(self, unique, lang, mods=None):
-        IrHttp = request.env['ir.http'].sudo()
-        modules = IrHttp.get_translation_frontend_modules()
-        if mods:
-            modules += mods.split(',') if isinstance(mods, str) else mods
-        return WebClient().translations(unique, mods=','.join(modules), lang=lang)
+    @http.route('/website/translations/<string:unique>',type='http',auth="public",website=True)
+    defget_website_translations(self,unique,lang,mods=None):
+        IrHttp=request.env['ir.http'].sudo()
+        modules=IrHttp.get_translation_frontend_modules()
+        ifmods:
+            modules+=mods.split(',')ifisinstance(mods,str)elsemods
+        returnWebClient().translations(unique,mods=','.join(modules),lang=lang)

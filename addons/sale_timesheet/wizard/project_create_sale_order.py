@@ -1,368 +1,368 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportUserError
 
 
-class ProjectCreateSalesOrder(models.TransientModel):
-    _name = 'project.create.sale.order'
-    _description = "Create SO from project"
+classProjectCreateSalesOrder(models.TransientModel):
+    _name='project.create.sale.order'
+    _description="CreateSOfromproject"
 
     @api.model
-    def default_get(self, fields):
-        result = super(ProjectCreateSalesOrder, self).default_get(fields)
+    defdefault_get(self,fields):
+        result=super(ProjectCreateSalesOrder,self).default_get(fields)
 
-        active_model = self._context.get('active_model')
-        if active_model != 'project.project':
-            raise UserError(_("You can only apply this action from a project."))
+        active_model=self._context.get('active_model')
+        ifactive_model!='project.project':
+            raiseUserError(_("Youcanonlyapplythisactionfromaproject."))
 
-        active_id = self._context.get('active_id')
-        if 'project_id' in fields and active_id:
-            project = self.env['project.project'].browse(active_id)
-            if project.sale_order_id:
-                raise UserError(_("The project has already a sale order."))
-            result['project_id'] = active_id
-            if not result.get('partner_id', False):
-                result['partner_id'] = project.partner_id.id
-            if project.bill_type == 'customer_project' and not result.get('line_ids', False):
-                if project.pricing_type == 'employee_rate':
-                    default_product = self.env.ref('sale_timesheet.time_product', False)
-                    result['line_ids'] = [
-                        (0, 0, {
-                            'employee_id': e.employee_id.id,
-                            'product_id': e.timesheet_product_id.id or default_product.id,
-                            'price_unit': e.price_unit if e.timesheet_product_id else default_product.lst_price
-                        }) for e in project.sale_line_employee_ids]
-                    employee_from_timesheet = project.task_ids.timesheet_ids.employee_id - project.sale_line_employee_ids.employee_id
-                    result['line_ids'] += [
-                        (0, 0, {
-                            'employee_id': e.id,
-                            'product_id': default_product.id,
-                            'price_unit': default_product.lst_price
-                        }) for e in employee_from_timesheet]
+        active_id=self._context.get('active_id')
+        if'project_id'infieldsandactive_id:
+            project=self.env['project.project'].browse(active_id)
+            ifproject.sale_order_id:
+                raiseUserError(_("Theprojecthasalreadyasaleorder."))
+            result['project_id']=active_id
+            ifnotresult.get('partner_id',False):
+                result['partner_id']=project.partner_id.id
+            ifproject.bill_type=='customer_project'andnotresult.get('line_ids',False):
+                ifproject.pricing_type=='employee_rate':
+                    default_product=self.env.ref('sale_timesheet.time_product',False)
+                    result['line_ids']=[
+                        (0,0,{
+                            'employee_id':e.employee_id.id,
+                            'product_id':e.timesheet_product_id.idordefault_product.id,
+                            'price_unit':e.price_unitife.timesheet_product_idelsedefault_product.lst_price
+                        })foreinproject.sale_line_employee_ids]
+                    employee_from_timesheet=project.task_ids.timesheet_ids.employee_id-project.sale_line_employee_ids.employee_id
+                    result['line_ids']+=[
+                        (0,0,{
+                            'employee_id':e.id,
+                            'product_id':default_product.id,
+                            'price_unit':default_product.lst_price
+                        })foreinemployee_from_timesheet]
                 else:
-                    result['line_ids'] = [
-                        (0, 0, {
-                            'product_id': p.id,
-                            'price_unit': p.lst_price
-                        }) for p in project.task_ids.timesheet_product_id]
-        return result
+                    result['line_ids']=[
+                        (0,0,{
+                            'product_id':p.id,
+                            'price_unit':p.lst_price
+                        })forpinproject.task_ids.timesheet_product_id]
+        returnresult
 
-    project_id = fields.Many2one('project.project', "Project", domain=[('sale_line_id', '=', False)], help="Project for which we are creating a sales order", required=True)
-    company_id = fields.Many2one(related='project_id.company_id')
-    partner_id = fields.Many2one('res.partner', string="Customer", required=True, help="Customer of the sales order")
-    commercial_partner_id = fields.Many2one(related='partner_id.commercial_partner_id')
+    project_id=fields.Many2one('project.project',"Project",domain=[('sale_line_id','=',False)],help="Projectforwhichwearecreatingasalesorder",required=True)
+    company_id=fields.Many2one(related='project_id.company_id')
+    partner_id=fields.Many2one('res.partner',string="Customer",required=True,help="Customerofthesalesorder")
+    commercial_partner_id=fields.Many2one(related='partner_id.commercial_partner_id')
 
-    pricing_type = fields.Selection(related="project_id.pricing_type")
-    link_selection = fields.Selection([('create', 'Create a new sales order'), ('link', 'Link to an existing sales order')], required=True, default='create')
-    sale_order_id = fields.Many2one(
-        'sale.order', string="Sales Order",
-        domain="['|', '|', ('partner_id', '=', partner_id), ('partner_id', 'child_of', commercial_partner_id), ('partner_id', 'parent_of', partner_id)]")
+    pricing_type=fields.Selection(related="project_id.pricing_type")
+    link_selection=fields.Selection([('create','Createanewsalesorder'),('link','Linktoanexistingsalesorder')],required=True,default='create')
+    sale_order_id=fields.Many2one(
+        'sale.order',string="SalesOrder",
+        domain="['|','|',('partner_id','=',partner_id),('partner_id','child_of',commercial_partner_id),('partner_id','parent_of',partner_id)]")
 
-    line_ids = fields.One2many('project.create.sale.order.line', 'wizard_id', string='Lines')
-    info_invoice = fields.Char(compute='_compute_info_invoice')
+    line_ids=fields.One2many('project.create.sale.order.line','wizard_id',string='Lines')
+    info_invoice=fields.Char(compute='_compute_info_invoice')
 
-    @api.depends('sale_order_id', 'link_selection')
-    def _compute_info_invoice(self):
-        for line in self:
-            tasks = line.project_id.tasks.filtered(lambda t: not t.non_allow_billable)
-            domain = self.env['sale.order.line']._timesheet_compute_delivered_quantity_domain()
-            timesheet = self.env['account.analytic.line'].read_group(domain + [('task_id', 'in', tasks.ids), ('so_line', '=', False), ('timesheet_invoice_id', '=', False)], ['unit_amount'], ['task_id'])
-            unit_amount = round(sum(t.get('unit_amount', 0) for t in timesheet), 2) if timesheet else 0
-            if not unit_amount:
-                line.info_invoice = False
+    @api.depends('sale_order_id','link_selection')
+    def_compute_info_invoice(self):
+        forlineinself:
+            tasks=line.project_id.tasks.filtered(lambdat:nott.non_allow_billable)
+            domain=self.env['sale.order.line']._timesheet_compute_delivered_quantity_domain()
+            timesheet=self.env['account.analytic.line'].read_group(domain+[('task_id','in',tasks.ids),('so_line','=',False),('timesheet_invoice_id','=',False)],['unit_amount'],['task_id'])
+            unit_amount=round(sum(t.get('unit_amount',0)fortintimesheet),2)iftimesheetelse0
+            ifnotunit_amount:
+                line.info_invoice=False
                 continue
-            company_uom = self.env.company.timesheet_encode_uom_id
-            label = _("hours")
-            if company_uom == self.env.ref('uom.product_uom_day'):
-                label = _("days")
-            if line.link_selection == 'create':
-                line.info_invoice = _("%(amount)s %(label)s will be added to the new Sales Order.", amount=unit_amount, label=label)
+            company_uom=self.env.company.timesheet_encode_uom_id
+            label=_("hours")
+            ifcompany_uom==self.env.ref('uom.product_uom_day'):
+                label=_("days")
+            ifline.link_selection=='create':
+                line.info_invoice=_("%(amount)s%(label)swillbeaddedtothenewSalesOrder.",amount=unit_amount,label=label)
             else:
-                line.info_invoice = _("%(amount)s %(label)s will be added to the selected Sales Order.", amount=unit_amount, label=label)
+                line.info_invoice=_("%(amount)s%(label)swillbeaddedtotheselectedSalesOrder.",amount=unit_amount,label=label)
 
     @api.onchange('partner_id')
-    def _onchange_partner_id(self):
-        self.sale_order_id = False
+    def_onchange_partner_id(self):
+        self.sale_order_id=False
 
-    def action_link_sale_order(self):
-        task_no_sale_line = self.project_id.tasks.filtered(lambda task: not task.sale_line_id)
-        # link the project to the SO line
+    defaction_link_sale_order(self):
+        task_no_sale_line=self.project_id.tasks.filtered(lambdatask:nottask.sale_line_id)
+        #linktheprojecttotheSOline
         self.project_id.write({
-            'sale_line_id': self.sale_order_id.order_line[0].id,
-            'sale_order_id': self.sale_order_id.id,
-            'partner_id': self.partner_id.id,
+            'sale_line_id':self.sale_order_id.order_line[0].id,
+            'sale_order_id':self.sale_order_id.id,
+            'partner_id':self.partner_id.id,
         })
 
-        if self.pricing_type == 'employee_rate':
-            lines_already_present = dict([(l.employee_id.id, l) for l in self.project_id.sale_line_employee_ids])
-            EmployeeMap = self.env['project.sale.line.employee.map'].sudo()
+        ifself.pricing_type=='employee_rate':
+            lines_already_present=dict([(l.employee_id.id,l)forlinself.project_id.sale_line_employee_ids])
+            EmployeeMap=self.env['project.sale.line.employee.map'].sudo()
 
-            for wizard_line in self.line_ids:
-                if wizard_line.employee_id.id not in lines_already_present:
+            forwizard_lineinself.line_ids:
+                ifwizard_line.employee_id.idnotinlines_already_present:
                     EmployeeMap.create({
-                        'project_id': self.project_id.id,
-                        'sale_line_id': wizard_line.sale_line_id.id,
-                        'employee_id': wizard_line.employee_id.id,
+                        'project_id':self.project_id.id,
+                        'sale_line_id':wizard_line.sale_line_id.id,
+                        'employee_id':wizard_line.employee_id.id,
                     })
                 else:
                     lines_already_present[wizard_line.employee_id.id].write({
-                        'sale_line_id': wizard_line.sale_line_id.id
+                        'sale_line_id':wizard_line.sale_line_id.id
                     })
 
-            self.project_id.tasks.filtered(lambda task: task.non_allow_billable).sale_line_id = False
-            tasks = self.project_id.tasks.filtered(lambda t: not t.non_allow_billable)
-            # assign SOL to timesheets
-            for map_entry in self.project_id.sale_line_employee_ids:
-                self.env['account.analytic.line'].search([('task_id', 'in', tasks.ids), ('employee_id', '=', map_entry.employee_id.id), ('so_line', '=', False)]).write({
-                    'so_line': map_entry.sale_line_id.id
+            self.project_id.tasks.filtered(lambdatask:task.non_allow_billable).sale_line_id=False
+            tasks=self.project_id.tasks.filtered(lambdat:nott.non_allow_billable)
+            #assignSOLtotimesheets
+            formap_entryinself.project_id.sale_line_employee_ids:
+                self.env['account.analytic.line'].search([('task_id','in',tasks.ids),('employee_id','=',map_entry.employee_id.id),('so_line','=',False)]).write({
+                    'so_line':map_entry.sale_line_id.id
                 })
         else:
-            dict_product_sol = dict([(l.product_id.id, l.id) for l in self.sale_order_id.order_line])
-            # remove SOL for task without product
-            # and if a task has a product that match a product from a SOL, we put this SOL on task.
-            for task in task_no_sale_line:
-                if not task.timesheet_product_id:
-                    task.sale_line_id = False
-                elif task.timesheet_product_id.id in dict_product_sol:
-                    task.write({'sale_line_id': dict_product_sol[task.timesheet_product_id.id]})
+            dict_product_sol=dict([(l.product_id.id,l.id)forlinself.sale_order_id.order_line])
+            #removeSOLfortaskwithoutproduct
+            #andifataskhasaproductthatmatchaproductfromaSOL,weputthisSOLontask.
+            fortaskintask_no_sale_line:
+                ifnottask.timesheet_product_id:
+                    task.sale_line_id=False
+                eliftask.timesheet_product_id.idindict_product_sol:
+                    task.write({'sale_line_id':dict_product_sol[task.timesheet_product_id.id]})
 
-    def action_create_sale_order(self):
-        # if project linked to SO line or at least on tasks with SO line, then we consider project as billable.
-        if self.project_id.sale_line_id:
-            raise UserError(_("The project is already linked to a sales order item."))
-        # at least one line
-        if not self.line_ids:
-            raise UserError(_("At least one line should be filled."))
+    defaction_create_sale_order(self):
+        #ifprojectlinkedtoSOlineoratleastontaskswithSOline,thenweconsiderprojectasbillable.
+        ifself.project_id.sale_line_id:
+            raiseUserError(_("Theprojectisalreadylinkedtoasalesorderitem."))
+        #atleastoneline
+        ifnotself.line_ids:
+            raiseUserError(_("Atleastonelineshouldbefilled."))
 
-        if self.pricing_type == 'employee_rate':
-            # all employee having timesheet should be in the wizard map
-            timesheet_employees = self.env['account.analytic.line'].search([('task_id', 'in', self.project_id.tasks.ids)]).mapped('employee_id')
-            map_employees = self.line_ids.mapped('employee_id')
-            missing_meployees = timesheet_employees - map_employees
-            if missing_meployees:
-                raise UserError(_('The Sales Order cannot be created because you did not enter some employees that entered timesheets on this project. Please list all the relevant employees before creating the Sales Order.\nMissing employee(s): %s') % (', '.join(missing_meployees.mapped('name'))))
+        ifself.pricing_type=='employee_rate':
+            #allemployeehavingtimesheetshouldbeinthewizardmap
+            timesheet_employees=self.env['account.analytic.line'].search([('task_id','in',self.project_id.tasks.ids)]).mapped('employee_id')
+            map_employees=self.line_ids.mapped('employee_id')
+            missing_meployees=timesheet_employees-map_employees
+            ifmissing_meployees:
+                raiseUserError(_('TheSalesOrdercannotbecreatedbecauseyoudidnotentersomeemployeesthatenteredtimesheetsonthisproject.PleaselistalltherelevantemployeesbeforecreatingtheSalesOrder.\nMissingemployee(s):%s')%(','.join(missing_meployees.mapped('name'))))
 
-        # check here if timesheet already linked to SO line
-        timesheet_with_so_line = self.env['account.analytic.line'].search_count([('task_id', 'in', self.project_id.tasks.ids), ('so_line', '!=', False)])
-        if timesheet_with_so_line:
-            raise UserError(_('The sales order cannot be created because some timesheets of this project are already linked to another sales order.'))
+        #checkhereiftimesheetalreadylinkedtoSOline
+        timesheet_with_so_line=self.env['account.analytic.line'].search_count([('task_id','in',self.project_id.tasks.ids),('so_line','!=',False)])
+        iftimesheet_with_so_line:
+            raiseUserError(_('Thesalesordercannotbecreatedbecausesometimesheetsofthisprojectarealreadylinkedtoanothersalesorder.'))
 
-        # create SO according to the chosen billable type
-        sale_order = self._create_sale_order()
+        #createSOaccordingtothechosenbillabletype
+        sale_order=self._create_sale_order()
 
-        view_form_id = self.env.ref('sale.view_order_form').id
-        action = self.env["ir.actions.actions"]._for_xml_id("sale.action_orders")
+        view_form_id=self.env.ref('sale.view_order_form').id
+        action=self.env["ir.actions.actions"]._for_xml_id("sale.action_orders")
         action.update({
-            'views': [(view_form_id, 'form')],
-            'view_mode': 'form',
-            'name': sale_order.name,
-            'res_id': sale_order.id,
+            'views':[(view_form_id,'form')],
+            'view_mode':'form',
+            'name':sale_order.name,
+            'res_id':sale_order.id,
         })
-        return action
+        returnaction
 
-    def _create_sale_order(self):
-        """ Private implementation of generating the sales order """
-        sale_order = self.env['sale.order'].create({
-            'project_id': self.project_id.id,
-            'partner_id': self.partner_id.id,
-            'analytic_account_id': self.project_id.analytic_account_id.id,
-            'client_order_ref': self.project_id.name,
-            'company_id': self.project_id.company_id.id,
+    def_create_sale_order(self):
+        """Privateimplementationofgeneratingthesalesorder"""
+        sale_order=self.env['sale.order'].create({
+            'project_id':self.project_id.id,
+            'partner_id':self.partner_id.id,
+            'analytic_account_id':self.project_id.analytic_account_id.id,
+            'client_order_ref':self.project_id.name,
+            'company_id':self.project_id.company_id.id,
         })
         sale_order.onchange_partner_id()
         sale_order.onchange_partner_shipping_id()
-        # rewrite the user as the onchange_partner_id erases it
-        sale_order.write({'user_id': self.project_id.user_id.id})
+        #rewritetheuserastheonchange_partner_iderasesit
+        sale_order.write({'user_id':self.project_id.user_id.id})
         sale_order.onchange_user_id()
 
-        # create the sale lines, the map (optional), and assign existing timesheet to sale lines
+        #createthesalelines,themap(optional),andassignexistingtimesheettosalelines
         self._make_billable(sale_order)
 
-        # confirm SO
+        #confirmSO
         sale_order.action_confirm()
-        return sale_order
+        returnsale_order
 
-    def _make_billable(self, sale_order):
-        if self.pricing_type == 'fixed_rate':
+    def_make_billable(self,sale_order):
+        ifself.pricing_type=='fixed_rate':
             self._make_billable_at_project_rate(sale_order)
         else:
             self._make_billable_at_employee_rate(sale_order)
 
-    def _make_billable_at_project_rate(self, sale_order):
+    def_make_billable_at_project_rate(self,sale_order):
         self.ensure_one()
-        task_left = self.project_id.tasks.filtered(lambda task: not task.sale_line_id)
-        ticket_timesheet_ids = self.env.context.get('ticket_timesheet_ids', [])
-        for wizard_line in self.line_ids:
-            task_ids = self.project_id.tasks.filtered(lambda task: not task.sale_line_id and task.timesheet_product_id == wizard_line.product_id)
-            task_left -= task_ids
-            # trying to simulate the SO line created a task, according to the product configuration
-            # To avoid, generating a task when confirming the SO
-            task_id = False
-            if task_ids and wizard_line.product_id.service_tracking in ['task_in_project', 'task_global_project']:
-                task_id = task_ids.ids[0]
+        task_left=self.project_id.tasks.filtered(lambdatask:nottask.sale_line_id)
+        ticket_timesheet_ids=self.env.context.get('ticket_timesheet_ids',[])
+        forwizard_lineinself.line_ids:
+            task_ids=self.project_id.tasks.filtered(lambdatask:nottask.sale_line_idandtask.timesheet_product_id==wizard_line.product_id)
+            task_left-=task_ids
+            #tryingtosimulatetheSOlinecreatedatask,accordingtotheproductconfiguration
+            #Toavoid,generatingataskwhenconfirmingtheSO
+            task_id=False
+            iftask_idsandwizard_line.product_id.service_trackingin['task_in_project','task_global_project']:
+                task_id=task_ids.ids[0]
 
-            # create SO line
-            sale_order_line = self.env['sale.order.line'].create({
-                'order_id': sale_order.id,
-                'product_id': wizard_line.product_id.id,
-                'price_unit': wizard_line.price_unit,
-                'project_id': self.project_id.id,  # prevent to re-create a project on confirmation
-                'task_id': task_id,
-                'product_uom_qty': 0.0,
+            #createSOline
+            sale_order_line=self.env['sale.order.line'].create({
+                'order_id':sale_order.id,
+                'product_id':wizard_line.product_id.id,
+                'price_unit':wizard_line.price_unit,
+                'project_id':self.project_id.id, #preventtore-createaprojectonconfirmation
+                'task_id':task_id,
+                'product_uom_qty':0.0,
             })
 
-            if ticket_timesheet_ids and not self.project_id.sale_line_id and not task_ids:
-                # With pricing = "project rate" in project. When the user wants to create a sale order from a ticket in helpdesk
-                # The project cannot contain any tasks. Thus, we need to give the first sale_order_line created to link
-                # the timesheet to this first sale order line.
-                # link the project to the SO line
+            ifticket_timesheet_idsandnotself.project_id.sale_line_idandnottask_ids:
+                #Withpricing="projectrate"inproject.Whentheuserwantstocreateasaleorderfromaticketinhelpdesk
+                #Theprojectcannotcontainanytasks.Thus,weneedtogivethefirstsale_order_linecreatedtolink
+                #thetimesheettothisfirstsaleorderline.
+                #linktheprojecttotheSOline
                 self.project_id.write({
-                    'sale_order_id': sale_order.id,
-                    'sale_line_id': sale_order_line.id,
-                    'partner_id': self.partner_id.id,
+                    'sale_order_id':sale_order.id,
+                    'sale_line_id':sale_order_line.id,
+                    'partner_id':self.partner_id.id,
                 })
 
-            # link the tasks to the SO line
+            #linkthetaskstotheSOline
             task_ids.write({
-                'sale_line_id': sale_order_line.id,
-                'partner_id': sale_order.partner_id.id,
-                'email_from': sale_order.partner_id.email,
+                'sale_line_id':sale_order_line.id,
+                'partner_id':sale_order.partner_id.id,
+                'email_from':sale_order.partner_id.email,
             })
 
-            # assign SOL to timesheets
-            search_domain = [('task_id', 'in', task_ids.ids), ('so_line', '=', False)]
-            if ticket_timesheet_ids:
-                search_domain = [('id', 'in', ticket_timesheet_ids), ('so_line', '=', False)]
+            #assignSOLtotimesheets
+            search_domain=[('task_id','in',task_ids.ids),('so_line','=',False)]
+            ifticket_timesheet_ids:
+                search_domain=[('id','in',ticket_timesheet_ids),('so_line','=',False)]
 
             self.env['account.analytic.line'].search(search_domain).write({
-                'so_line': sale_order_line.id
+                'so_line':sale_order_line.id
             })
-            sale_order_line.with_context({'no_update_planned_hours': True}).write({
-                'product_uom_qty': sale_order_line.qty_delivered
+            sale_order_line.with_context({'no_update_planned_hours':True}).write({
+                'product_uom_qty':sale_order_line.qty_delivered
             })
 
-        if ticket_timesheet_ids and self.project_id.sale_line_id and not self.project_id.tasks and len(self.line_ids) > 1:
-            # Then, we need to give to the project the last sale order line created
+        ifticket_timesheet_idsandself.project_id.sale_line_idandnotself.project_id.tasksandlen(self.line_ids)>1:
+            #Then,weneedtogivetotheprojectthelastsaleorderlinecreated
             self.project_id.write({
-                'sale_line_id': sale_order_line.id
+                'sale_line_id':sale_order_line.id
             })
-        else:  # Otherwise, we are in the normal behaviour
-            # link the project to the SO line
+        else: #Otherwise,weareinthenormalbehaviour
+            #linktheprojecttotheSOline
             self.project_id.write({
-                'sale_order_id': sale_order.id,
-                'sale_line_id': sale_order_line.id,  # we take the last sale_order_line created
-                'partner_id': self.partner_id.id,
+                'sale_order_id':sale_order.id,
+                'sale_line_id':sale_order_line.id, #wetakethelastsale_order_linecreated
+                'partner_id':self.partner_id.id,
             })
 
-        if task_left:
-            task_left.sale_line_id = False
+        iftask_left:
+            task_left.sale_line_id=False
 
-    def _make_billable_at_employee_rate(self, sale_order):
-        # trying to simulate the SO line created a task, according to the product configuration
-        # To avoid, generating a task when confirming the SO
-        task_id = self.env['project.task'].search([('project_id', '=', self.project_id.id)], order='create_date DESC', limit=1).id
-        project_id = self.project_id.id
+    def_make_billable_at_employee_rate(self,sale_order):
+        #tryingtosimulatetheSOlinecreatedatask,accordingtotheproductconfiguration
+        #Toavoid,generatingataskwhenconfirmingtheSO
+        task_id=self.env['project.task'].search([('project_id','=',self.project_id.id)],order='create_dateDESC',limit=1).id
+        project_id=self.project_id.id
 
-        lines_already_present = dict([(l.employee_id.id, l) for l in self.project_id.sale_line_employee_ids])
+        lines_already_present=dict([(l.employee_id.id,l)forlinself.project_id.sale_line_employee_ids])
 
-        non_billable_tasks = self.project_id.tasks.filtered(lambda task: not task.sale_line_id)
-        non_allow_billable_tasks = self.project_id.tasks.filtered(lambda task: task.non_allow_billable)
+        non_billable_tasks=self.project_id.tasks.filtered(lambdatask:nottask.sale_line_id)
+        non_allow_billable_tasks=self.project_id.tasks.filtered(lambdatask:task.non_allow_billable)
 
-        map_entries = self.env['project.sale.line.employee.map']
-        EmployeeMap = self.env['project.sale.line.employee.map'].sudo()
+        map_entries=self.env['project.sale.line.employee.map']
+        EmployeeMap=self.env['project.sale.line.employee.map'].sudo()
 
-        # create SO lines: create on SOL per product/price. So many employee can be linked to the same SOL
-        map_product_price_sol = {}  # (product_id, price) --> SOL
-        for wizard_line in self.line_ids:
-            map_key = (wizard_line.product_id.id, wizard_line.price_unit)
-            if map_key not in map_product_price_sol:
-                values = {
-                    'order_id': sale_order.id,
-                    'product_id': wizard_line.product_id.id,
-                    'price_unit': wizard_line.price_unit,
-                    'product_uom_qty': 0.0,
+        #createSOlines:createonSOLperproduct/price.SomanyemployeecanbelinkedtothesameSOL
+        map_product_price_sol={} #(product_id,price)-->SOL
+        forwizard_lineinself.line_ids:
+            map_key=(wizard_line.product_id.id,wizard_line.price_unit)
+            ifmap_keynotinmap_product_price_sol:
+                values={
+                    'order_id':sale_order.id,
+                    'product_id':wizard_line.product_id.id,
+                    'price_unit':wizard_line.price_unit,
+                    'product_uom_qty':0.0,
                 }
-                if wizard_line.product_id.service_tracking in ['task_in_project', 'task_global_project']:
-                    values['task_id'] = task_id
-                if wizard_line.product_id.service_tracking in ['task_in_project', 'project_only']:
-                    values['project_id'] = project_id
+                ifwizard_line.product_id.service_trackingin['task_in_project','task_global_project']:
+                    values['task_id']=task_id
+                ifwizard_line.product_id.service_trackingin['task_in_project','project_only']:
+                    values['project_id']=project_id
 
-                sale_order_line = self.env['sale.order.line'].create(values)
-                map_product_price_sol[map_key] = sale_order_line
+                sale_order_line=self.env['sale.order.line'].create(values)
+                map_product_price_sol[map_key]=sale_order_line
 
-            if wizard_line.employee_id.id not in lines_already_present:
-                map_entries |= EmployeeMap.create({
-                    'project_id': self.project_id.id,
-                    'sale_line_id': map_product_price_sol[map_key].id,
-                    'employee_id': wizard_line.employee_id.id,
+            ifwizard_line.employee_id.idnotinlines_already_present:
+                map_entries|=EmployeeMap.create({
+                    'project_id':self.project_id.id,
+                    'sale_line_id':map_product_price_sol[map_key].id,
+                    'employee_id':wizard_line.employee_id.id,
                 })
             else:
-                map_entries |= lines_already_present[wizard_line.employee_id.id]
+                map_entries|=lines_already_present[wizard_line.employee_id.id]
                 lines_already_present[wizard_line.employee_id.id].write({
-                    'sale_line_id': map_product_price_sol[map_key].id
+                    'sale_line_id':map_product_price_sol[map_key].id
                 })
 
-        # link the project to the SO
+        #linktheprojecttotheSO
         self.project_id.write({
-            'sale_order_id': sale_order.id,
-            'sale_line_id': sale_order.order_line[0].id,
-            'partner_id': self.partner_id.id,
+            'sale_order_id':sale_order.id,
+            'sale_line_id':sale_order.order_line[0].id,
+            'partner_id':self.partner_id.id,
         })
         non_billable_tasks.write({
-            'partner_id': sale_order.partner_id.id,
-            'email_from': sale_order.partner_id.email,
+            'partner_id':sale_order.partner_id.id,
+            'email_from':sale_order.partner_id.email,
         })
-        non_allow_billable_tasks.sale_line_id = False
+        non_allow_billable_tasks.sale_line_id=False
 
-        tasks = self.project_id.tasks.filtered(lambda t: not t.non_allow_billable)
-        # assign SOL to timesheets
-        for map_entry in map_entries:
-            search_domain = [('employee_id', '=', map_entry.employee_id.id), ('so_line', '=', False)]
-            ticket_timesheet_ids = self.env.context.get('ticket_timesheet_ids', [])
-            if ticket_timesheet_ids:
-                search_domain.append(('id', 'in', ticket_timesheet_ids))
+        tasks=self.project_id.tasks.filtered(lambdat:nott.non_allow_billable)
+        #assignSOLtotimesheets
+        formap_entryinmap_entries:
+            search_domain=[('employee_id','=',map_entry.employee_id.id),('so_line','=',False)]
+            ticket_timesheet_ids=self.env.context.get('ticket_timesheet_ids',[])
+            ifticket_timesheet_ids:
+                search_domain.append(('id','in',ticket_timesheet_ids))
             else:
-                search_domain.append(('task_id', 'in', tasks.ids))
+                search_domain.append(('task_id','in',tasks.ids))
             self.env['account.analytic.line'].search(search_domain).write({
-                'so_line': map_entry.sale_line_id.id
+                'so_line':map_entry.sale_line_id.id
             })
-            map_entry.sale_line_id.with_context({'no_update_planned_hours': True}).write({
-                'product_uom_qty': map_entry.sale_line_id.qty_delivered
+            map_entry.sale_line_id.with_context({'no_update_planned_hours':True}).write({
+                'product_uom_qty':map_entry.sale_line_id.qty_delivered
             })
 
-        return map_entries
+        returnmap_entries
 
 
-class ProjectCreateSalesOrderLine(models.TransientModel):
-    _name = 'project.create.sale.order.line'
-    _description = 'Create SO Line from project'
-    _order = 'id,create_date'
+classProjectCreateSalesOrderLine(models.TransientModel):
+    _name='project.create.sale.order.line'
+    _description='CreateSOLinefromproject'
+    _order='id,create_date'
 
-    wizard_id = fields.Many2one('project.create.sale.order', required=True)
-    product_id = fields.Many2one('product.product', domain=[('type', '=', 'service'), ('invoice_policy', '=', 'delivery'), ('service_type', '=', 'timesheet')], string="Service",
-        help="Product of the sales order item. Must be a service invoiced based on timesheets on tasks.")
-    price_unit = fields.Float("Unit Price", help="Unit price of the sales order item.")
-    currency_id = fields.Many2one('res.currency', string="Currency")
-    employee_id = fields.Many2one('hr.employee', string="Employee", help="Employee that has timesheets on the project.")
-    sale_line_id = fields.Many2one('sale.order.line', "Sale Order Item", compute='_compute_sale_line_id', store=True, readonly=False)
+    wizard_id=fields.Many2one('project.create.sale.order',required=True)
+    product_id=fields.Many2one('product.product',domain=[('type','=','service'),('invoice_policy','=','delivery'),('service_type','=','timesheet')],string="Service",
+        help="Productofthesalesorderitem.Mustbeaserviceinvoicedbasedontimesheetsontasks.")
+    price_unit=fields.Float("UnitPrice",help="Unitpriceofthesalesorderitem.")
+    currency_id=fields.Many2one('res.currency',string="Currency")
+    employee_id=fields.Many2one('hr.employee',string="Employee",help="Employeethathastimesheetsontheproject.")
+    sale_line_id=fields.Many2one('sale.order.line',"SaleOrderItem",compute='_compute_sale_line_id',store=True,readonly=False)
 
-    _sql_constraints = [
-        ('unique_employee_per_wizard', 'UNIQUE(wizard_id, employee_id)', "An employee cannot be selected more than once in the mapping. Please remove duplicate(s) and try again."),
+    _sql_constraints=[
+        ('unique_employee_per_wizard','UNIQUE(wizard_id,employee_id)',"Anemployeecannotbeselectedmorethanonceinthemapping.Pleaseremoveduplicate(s)andtryagain."),
     ]
 
-    @api.onchange('product_id', 'sale_line_id')
-    def _onchange_product_id(self):
-        if self.wizard_id.link_selection == 'link':
-            self.price_unit = self.sale_line_id.price_unit
-            self.currency_id = self.sale_line_id.currency_id
+    @api.onchange('product_id','sale_line_id')
+    def_onchange_product_id(self):
+        ifself.wizard_id.link_selection=='link':
+            self.price_unit=self.sale_line_id.price_unit
+            self.currency_id=self.sale_line_id.currency_id
         else:
-            self.price_unit = self.product_id.lst_price or 0
-            self.currency_id = self.product_id.currency_id
+            self.price_unit=self.product_id.lst_priceor0
+            self.currency_id=self.product_id.currency_id
 
     @api.depends('wizard_id.sale_order_id')
-    def _compute_sale_line_id(self):
-        for line in self:
-            if line.sale_line_id and line.sale_line_id.order_id != line.wizard_id.sale_order_id:
-                line.sale_line_id = False
+    def_compute_sale_line_id(self):
+        forlineinself:
+            ifline.sale_line_idandline.sale_line_id.order_id!=line.wizard_id.sale_order_id:
+                line.sale_line_id=False

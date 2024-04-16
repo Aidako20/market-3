@@ -1,197 +1,197 @@
-flectra.define('portal.signature_form', function (require) {
-'use strict';
+flectra.define('portal.signature_form',function(require){
+'usestrict';
 
-var core = require('web.core');
-var publicWidget = require('web.public.widget');
-var NameAndSignature = require('web.name_and_signature').NameAndSignature;
-var qweb = core.qweb;
+varcore=require('web.core');
+varpublicWidget=require('web.public.widget');
+varNameAndSignature=require('web.name_and_signature').NameAndSignature;
+varqweb=core.qweb;
 
-var _t = core._t;
+var_t=core._t;
 
 /**
- * This widget is a signature request form. It uses
- * @see NameAndSignature for the input fields, adds a submit
- * button, and handles the RPC to save the result.
+ *Thiswidgetisasignaturerequestform.Ituses
+ *@seeNameAndSignaturefortheinputfields,addsasubmit
+ *button,andhandlestheRPCtosavetheresult.
  */
-var SignatureForm = publicWidget.Widget.extend({
-    template: 'portal.portal_signature',
-    xmlDependencies: ['/portal/static/src/xml/portal_signature.xml'],
-    events: {
-        'click .o_portal_sign_submit': 'async _onClickSignSubmit',
+varSignatureForm=publicWidget.Widget.extend({
+    template:'portal.portal_signature',
+    xmlDependencies:['/portal/static/src/xml/portal_signature.xml'],
+    events:{
+        'click.o_portal_sign_submit':'async_onClickSignSubmit',
     },
-    custom_events: {
-        'signature_changed': '_onChangeSignature',
+    custom_events:{
+        'signature_changed':'_onChangeSignature',
     },
 
     /**
-     * Overridden to allow options.
+     *Overriddentoallowoptions.
      *
-     * @constructor
-     * @param {Widget} parent
-     * @param {Object} options
-     * @param {string} options.callUrl - make RPC to this url
-     * @param {string} [options.sendLabel='Accept & Sign'] - label of the
-     *  send button
-     * @param {Object} [options.rpcParams={}] - params for the RPC
-     * @param {Object} [options.nameAndSignatureOptions={}] - options for
-     *  @see NameAndSignature.init()
+     *@constructor
+     *@param{Widget}parent
+     *@param{Object}options
+     *@param{string}options.callUrl-makeRPCtothisurl
+     *@param{string}[options.sendLabel='Accept&Sign']-labelofthe
+     * sendbutton
+     *@param{Object}[options.rpcParams={}]-paramsfortheRPC
+     *@param{Object}[options.nameAndSignatureOptions={}]-optionsfor
+     * @seeNameAndSignature.init()
      */
-    init: function (parent, options) {
-        this._super.apply(this, arguments);
+    init:function(parent,options){
+        this._super.apply(this,arguments);
 
-        this.csrf_token = flectra.csrf_token;
+        this.csrf_token=flectra.csrf_token;
 
-        this.callUrl = options.callUrl || '';
-        this.rpcParams = options.rpcParams || {};
-        this.sendLabel = options.sendLabel || _t("Accept & Sign");
+        this.callUrl=options.callUrl||'';
+        this.rpcParams=options.rpcParams||{};
+        this.sendLabel=options.sendLabel||_t("Accept&Sign");
 
-        this.nameAndSignature = new NameAndSignature(this,
-            options.nameAndSignatureOptions || {});
+        this.nameAndSignature=newNameAndSignature(this,
+            options.nameAndSignatureOptions||{});
     },
     /**
-     * Overridden to get the DOM elements
-     * and to insert the name and signature.
+     *OverriddentogettheDOMelements
+     *andtoinsertthenameandsignature.
      *
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        this.$confirm_btn = this.$('.o_portal_sign_submit');
-        this.$controls = this.$('.o_portal_sign_controls');
-        var subWidgetStart = this.nameAndSignature.replace(this.$('.o_web_sign_name_and_signature'));
-        return Promise.all([subWidgetStart, this._super.apply(this, arguments)]).then(function () {
+    start:function(){
+        varself=this;
+        this.$confirm_btn=this.$('.o_portal_sign_submit');
+        this.$controls=this.$('.o_portal_sign_controls');
+        varsubWidgetStart=this.nameAndSignature.replace(this.$('.o_web_sign_name_and_signature'));
+        returnPromise.all([subWidgetStart,this._super.apply(this,arguments)]).then(function(){
             self.nameAndSignature.resetSignature();
         });
     },
 
     //----------------------------------------------------------------------
-    // Public
+    //Public
     //----------------------------------------------------------------------
 
     /**
-     * Focuses the name.
+     *Focusesthename.
      *
-     * @see NameAndSignature.focusName();
+     *@seeNameAndSignature.focusName();
      */
-    focusName: function () {
+    focusName:function(){
         this.nameAndSignature.focusName();
     },
     /**
-     * Resets the signature.
+     *Resetsthesignature.
      *
-     * @see NameAndSignature.resetSignature();
+     *@seeNameAndSignature.resetSignature();
      */
-    resetSignature: function () {
-        return this.nameAndSignature.resetSignature();
+    resetSignature:function(){
+        returnthis.nameAndSignature.resetSignature();
     },
 
     //----------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //----------------------------------------------------------------------
 
     /**
-     * Handles click on the submit button.
+     *Handlesclickonthesubmitbutton.
      *
-     * This will get the current name and signature and validate them.
-     * If they are valid, they are sent to the server, and the reponse is
-     * handled. If they are invalid, it will display the errors to the user.
+     *Thiswillgetthecurrentnameandsignatureandvalidatethem.
+     *Iftheyarevalid,theyaresenttotheserver,andthereponseis
+     *handled.Iftheyareinvalid,itwilldisplaytheerrorstotheuser.
      *
-     * @private
-     * @param {Event} ev
-     * @returns {Deferred}
+     *@private
+     *@param{Event}ev
+     *@returns{Deferred}
      */
-    _onClickSignSubmit: function (ev) {
-        var self = this;
+    _onClickSignSubmit:function(ev){
+        varself=this;
         ev.preventDefault();
 
-        if (!this.nameAndSignature.validateSignature()) {
+        if(!this.nameAndSignature.validateSignature()){
             return;
         }
 
-        var name = this.nameAndSignature.getName();
-        var signature = this.nameAndSignature.getSignatureImage()[1];
+        varname=this.nameAndSignature.getName();
+        varsignature=this.nameAndSignature.getSignatureImage()[1];
 
-        return this._rpc({
-            route: this.callUrl,
-            params: _.extend(this.rpcParams, {
-                'name': name,
-                'signature': signature,
+        returnthis._rpc({
+            route:this.callUrl,
+            params:_.extend(this.rpcParams,{
+                'name':name,
+                'signature':signature,
             }),
-        }).then(function (data) {
-            if (data.error) {
+        }).then(function(data){
+            if(data.error){
                 self.$('.o_portal_sign_error_msg').remove();
-                self.$controls.prepend(qweb.render('portal.portal_signature_error', {widget: data}));
-            } else if (data.success) {
-                var $success = qweb.render('portal.portal_signature_success', {widget: data});
+                self.$controls.prepend(qweb.render('portal.portal_signature_error',{widget:data}));
+            }elseif(data.success){
+                var$success=qweb.render('portal.portal_signature_success',{widget:data});
                 self.$el.empty().append($success);
             }
-            if (data.force_refresh) {
-                if (data.redirect_url) {
-                    window.location = data.redirect_url;
-                } else {
+            if(data.force_refresh){
+                if(data.redirect_url){
+                    window.location=data.redirect_url;
+                }else{
                     window.location.reload();
                 }
-                // no resolve if we reload the page
-                return new Promise(function () { });
+                //noresolveifwereloadthepage
+                returnnewPromise(function(){});
             }
         });
     },
     /**
-     * Toggles the submit button depending on the signature state.
+     *Togglesthesubmitbuttondependingonthesignaturestate.
      *
-     * @private
+     *@private
      */
-    _onChangeSignature: function () {
-        var isEmpty = this.nameAndSignature.isSignatureEmpty();
-        this.$confirm_btn.prop('disabled', isEmpty);
+    _onChangeSignature:function(){
+        varisEmpty=this.nameAndSignature.isSignatureEmpty();
+        this.$confirm_btn.prop('disabled',isEmpty);
     },
 });
 
-publicWidget.registry.SignatureForm = publicWidget.Widget.extend({
-    selector: '.o_portal_signature_form',
+publicWidget.registry.SignatureForm=publicWidget.Widget.extend({
+    selector:'.o_portal_signature_form',
 
     /**
-     * @private
+     *@private
      */
-    start: function () {
-        var hasBeenReset = false;
+    start:function(){
+        varhasBeenReset=false;
 
-        var callUrl = this.$el.data('call-url');
-        var nameAndSignatureOptions = {
-            defaultName: this.$el.data('default-name'),
-            mode: this.$el.data('mode'),
-            displaySignatureRatio: this.$el.data('signature-ratio'),
-            signatureType: this.$el.data('signature-type'),
-            fontColor: this.$el.data('font-color')  || 'black',
+        varcallUrl=this.$el.data('call-url');
+        varnameAndSignatureOptions={
+            defaultName:this.$el.data('default-name'),
+            mode:this.$el.data('mode'),
+            displaySignatureRatio:this.$el.data('signature-ratio'),
+            signatureType:this.$el.data('signature-type'),
+            fontColor:this.$el.data('font-color') ||'black',
         };
-        var sendLabel = this.$el.data('send-label');
+        varsendLabel=this.$el.data('send-label');
 
-        var form = new SignatureForm(this, {
-            callUrl: callUrl,
-            nameAndSignatureOptions: nameAndSignatureOptions,
-            sendLabel: sendLabel,
+        varform=newSignatureForm(this,{
+            callUrl:callUrl,
+            nameAndSignatureOptions:nameAndSignatureOptions,
+            sendLabel:sendLabel,
         });
 
-        // Correctly set up the signature area if it is inside a modal
-        this.$el.closest('.modal').on('shown.bs.modal', function (ev) {
-            if (!hasBeenReset) {
-                // Reset it only the first time it is open to get correct
-                // size. After we want to keep its content on reopen.
-                hasBeenReset = true;
+        //Correctlysetupthesignatureareaifitisinsideamodal
+        this.$el.closest('.modal').on('shown.bs.modal',function(ev){
+            if(!hasBeenReset){
+                //Resetitonlythefirsttimeitisopentogetcorrect
+                //size.Afterwewanttokeepitscontentonreopen.
+                hasBeenReset=true;
                 form.resetSignature();
-            } else {
+            }else{
                 form.focusName();
             }
         });
 
-        return Promise.all([
-            this._super.apply(this, arguments),
+        returnPromise.all([
+            this._super.apply(this,arguments),
             form.appendTo(this.$el)
         ]);
     },
 });
 
-return {
-    SignatureForm: SignatureForm,
+return{
+    SignatureForm:SignatureForm,
 };
 });

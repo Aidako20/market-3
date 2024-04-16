@@ -1,86 +1,86 @@
-import time
-from xmlrpc.client import Fault
+importtime
+fromxmlrpc.clientimportFault
 
-from passlib.totp import TOTP
+frompasslib.totpimportTOTP
 
-from flectra import http
-from flectra.exceptions import AccessDenied
-from flectra.service import common as auth, model
-from flectra.tests import tagged, HttpCase, get_db_name
+fromflectraimporthttp
+fromflectra.exceptionsimportAccessDenied
+fromflectra.serviceimportcommonasauth,model
+fromflectra.testsimporttagged,HttpCase,get_db_name
 
-from ..controllers.home import Home
+from..controllers.homeimportHome
 
-@tagged('post_install', '-at_install')
-class TestTOTP(HttpCase):
-    def setUp(self):
+@tagged('post_install','-at_install')
+classTestTOTP(HttpCase):
+    defsetUp(self):
         super().setUp()
 
-        totp = None
-        # might be possible to do client-side using `crypto.subtle` instead of
-        # this horror show, but requires working on 64b integers, & BigInt is
-        # significantly less well supported than crypto
-        def totp_hook(self, secret=None):
-            nonlocal totp
-            if totp is None:
-                totp = TOTP(secret)
-            if secret:
-                return totp.generate().token
+        totp=None
+        #mightbepossibletodoclient-sideusing`crypto.subtle`insteadof
+        #thishorrorshow,butrequiresworkingon64bintegers,&BigIntis
+        #significantlylesswellsupportedthancrypto
+        deftotp_hook(self,secret=None):
+            nonlocaltotp
+            iftotpisNone:
+                totp=TOTP(secret)
+            ifsecret:
+                returntotp.generate().token
             else:
-                # on check, take advantage of window because previous token has been
-                # "burned" so we can't generate the same, but tour is so fast
-                # we're pretty certainly within the same 30s
-                return totp.generate(time.time() + 30).token
-        # because not preprocessed by ControllerType metaclass
-        totp_hook.routing_type = 'json'
+                #oncheck,takeadvantageofwindowbecauseprevioustokenhasbeen
+                #"burned"sowecan'tgeneratethesame,buttourissofast
+                #we'reprettycertainlywithinthesame30s
+                returntotp.generate(time.time()+30).token
+        #becausenotpreprocessedbyControllerTypemetaclass
+        totp_hook.routing_type='json'
         self.env['ir.http']._clear_routing_map()
-        # patch Home to add test endpoint
-        Home.totp_hook = http.route('/totphook', type='json', auth='none')(totp_hook)
-        # remove endpoint and destroy routing map
+        #patchHometoaddtestendpoint
+        Home.totp_hook=http.route('/totphook',type='json',auth='none')(totp_hook)
+        #removeendpointanddestroyroutingmap
         @self.addCleanup
-        def _cleanup():
-            del Home.totp_hook
+        def_cleanup():
+            delHome.totp_hook
             self.env['ir.http']._clear_routing_map()
 
-    def test_totp(self):
-        # 1. Enable 2FA
-        self.start_tour('/web', 'totp_tour_setup', login='demo')
+    deftest_totp(self):
+        #1.Enable2FA
+        self.start_tour('/web','totp_tour_setup',login='demo')
 
-        # 2. Verify that RPC is blocked because 2FA is on.
+        #2.VerifythatRPCisblockedbecause2FAison.
         self.assertFalse(
-            self.xmlrpc_common.authenticate(get_db_name(), 'demo', 'demo', {}),
-            "Should not have returned a uid"
+            self.xmlrpc_common.authenticate(get_db_name(),'demo','demo',{}),
+            "Shouldnothavereturnedauid"
         )
         self.assertFalse(
-            self.xmlrpc_common.authenticate(get_db_name(), 'demo', 'demo', {'interactive': True}),
-            'Trying to fake the auth type should not work'
+            self.xmlrpc_common.authenticate(get_db_name(),'demo','demo',{'interactive':True}),
+            'Tryingtofaketheauthtypeshouldnotwork'
         )
-        uid = self.env.ref('base.user_demo').id
-        with self.assertRaisesRegex(Fault, r'Access Denied'):
+        uid=self.env.ref('base.user_demo').id
+        withself.assertRaisesRegex(Fault,r'AccessDenied'):
             self.xmlrpc_object.execute_kw(
-                get_db_name(), uid, 'demo',
-                'res.users', 'read', [uid, ['login']]
+                get_db_name(),uid,'demo',
+                'res.users','read',[uid,['login']]
             )
 
-        # 3. Check 2FA is required
-        self.start_tour('/', 'totp_login_enabled', login=None)
+        #3.Check2FAisrequired
+        self.start_tour('/','totp_login_enabled',login=None)
 
-        # 4. Check 2FA is not requested on saved device and disable it
-        self.start_tour('/', 'totp_login_device', login=None)
+        #4.Check2FAisnotrequestedonsaveddeviceanddisableit
+        self.start_tour('/','totp_login_device',login=None)
 
-        # 5. Finally, check that 2FA is in fact disabled
-        self.start_tour('/', 'totp_login_disabled', login=None)
+        #5.Finally,checkthat2FAisinfactdisabled
+        self.start_tour('/','totp_login_disabled',login=None)
 
-        # 6. Check that rpc is now re-allowed
-        uid = self.xmlrpc_common.authenticate(get_db_name(), 'demo', 'demo', {})
-        self.assertEqual(uid, self.env.ref('base.user_demo').id)
-        [r] = self.xmlrpc_object.execute_kw(
-            get_db_name(), uid, 'demo',
-            'res.users', 'read', [uid, ['login']]
+        #6.Checkthatrpcisnowre-allowed
+        uid=self.xmlrpc_common.authenticate(get_db_name(),'demo','demo',{})
+        self.assertEqual(uid,self.env.ref('base.user_demo').id)
+        [r]=self.xmlrpc_object.execute_kw(
+            get_db_name(),uid,'demo',
+            'res.users','read',[uid,['login']]
         )
-        self.assertEqual(r['login'], 'demo')
+        self.assertEqual(r['login'],'demo')
 
 
-    def test_totp_administration(self):
-        self.start_tour('/web', 'totp_tour_setup', login='demo')
-        self.start_tour('/web', 'totp_admin_disables', login='admin')
-        self.start_tour('/', 'totp_login_disabled', login=None)
+    deftest_totp_administration(self):
+        self.start_tour('/web','totp_tour_setup',login='demo')
+        self.start_tour('/web','totp_admin_disables',login='admin')
+        self.start_tour('/','totp_login_disabled',login=None)

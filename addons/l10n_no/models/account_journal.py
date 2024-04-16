@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class AccountJournal(models.Model):
-    _inherit = 'account.journal'
+classAccountJournal(models.Model):
+    _inherit='account.journal'
 
-    invoice_reference_model = fields.Selection(selection_add=[
-        ('no', 'Norway')
-    ], ondelete={'no': lambda recs: recs.write({'invoice_reference_model': 'flectra'})})
+    invoice_reference_model=fields.Selection(selection_add=[
+        ('no','Norway')
+    ],ondelete={'no':lambdarecs:recs.write({'invoice_reference_model':'flectra'})})

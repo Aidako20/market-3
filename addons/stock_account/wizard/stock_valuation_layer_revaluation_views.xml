@@ -1,41 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="stock_valuation_layer_revaluation_form_view" model="ir.ui.view">
-        <field name="name">stock.valuation.layer.revaluation.form</field>
-        <field name="model">stock.valuation.layer.revaluation</field>
-        <field name="arch" type="xml">
-            <form string="Product Revaluation">
+    <recordid="stock_valuation_layer_revaluation_form_view"model="ir.ui.view">
+        <fieldname="name">stock.valuation.layer.revaluation.form</field>
+        <fieldname="model">stock.valuation.layer.revaluation</field>
+        <fieldname="arch"type="xml">
+            <formstring="ProductRevaluation">
                 <sheet>
                     <group>
-                        <label for="current_value_svl" string="Current Value"/>
-                        <div class="o_row">
-                            <span><field name="current_value_svl" widget="monetary"/> for <field name="current_quantity_svl"/> <field name="product_uom_name" class="mx-1"/> </span>
+                        <labelfor="current_value_svl"string="CurrentValue"/>
+                        <divclass="o_row">
+                            <span><fieldname="current_value_svl"widget="monetary"/>for<fieldname="current_quantity_svl"/><fieldname="product_uom_name"class="mx-1"/></span>
                         </div>
-                        <label for="added_value" string="Added Value"/>
-                        <div class="o_row">
-                            <span><field name="added_value" class="oe_inline"/> = <field name="new_value"/> (<field name="new_value_by_qty"/> by <field name="product_uom_name" class="mx-1"/>)
-                            <small class="mx-2 font-italic">Use a negative added value to record a decrease in the product value</small></span>
+                        <labelfor="added_value"string="AddedValue"/>
+                        <divclass="o_row">
+                            <span><fieldname="added_value"class="oe_inline"/>=<fieldname="new_value"/>(<fieldname="new_value_by_qty"/>by<fieldname="product_uom_name"class="mx-1"/>)
+                            <smallclass="mx-2font-italic">Useanegativeaddedvaluetorecordadecreaseintheproductvalue</small></span>
                         </div>
-                        <field name="company_id" invisible="1"/>
-                        <field name="currency_id" invisible="1"/>
-                        <field name="product_id" invisible="1"/>
+                        <fieldname="company_id"invisible="1"/>
+                        <fieldname="currency_id"invisible="1"/>
+                        <fieldname="product_id"invisible="1"/>
                     </group>
                     <group>
-                        <field name="property_valuation" invisible="1"/>
+                        <fieldname="property_valuation"invisible="1"/>
                         <group>
-                            <field name="reason"/>
-                            <field name="account_journal_id" attrs="{'invisible':[('property_valuation', '!=', 'real_time')], 'required': [('property_valuation', '=', 'real_time')]}"/>
+                            <fieldname="reason"/>
+                            <fieldname="account_journal_id"attrs="{'invisible':[('property_valuation','!=','real_time')],'required':[('property_valuation','=','real_time')]}"/>
                         </group>
                         <group>
-                            <field name="account_id" attrs="{'invisible':[('property_valuation', '!=', 'real_time')], 'required': [('property_valuation', '=', 'real_time')]}"/>
-                            <field name="date" attrs="{'invisible':[('property_valuation', '!=', 'real_time')]}"/>
+                            <fieldname="account_id"attrs="{'invisible':[('property_valuation','!=','real_time')],'required':[('property_valuation','=','real_time')]}"/>
+                            <fieldname="date"attrs="{'invisible':[('property_valuation','!=','real_time')]}"/>
                         </group>
                     </group>
                 </sheet>
                 <footer>
-                    <button name="action_validate_revaluation" string="Revalue" type="object" class="btn-primary"/>
-                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                    <buttonname="action_validate_revaluation"string="Revalue"type="object"class="btn-primary"/>
+                    <buttonstring="Cancel"class="btn-secondary"special="cancel"/>
                 </footer>
             </form>
         </field>

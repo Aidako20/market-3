@@ -1,97 +1,97 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <template id="external_layout_standard" inherit_id="web.external_layout_standard" >
-        <!-- support for custom header -->
-        <div t-attf-class="header o_company_#{company.id}_layout" position="attributes">
-            <attribute name="t-if">not custom_header</attribute>
+    <templateid="external_layout_standard"inherit_id="web.external_layout_standard">
+        <!--supportforcustomheader-->
+        <divt-attf-class="headero_company_#{company.id}_layout"position="attributes">
+            <attributename="t-if">notcustom_header</attribute>
         </div>
-        <div t-attf-class="header o_company_#{company.id}_layout" position="after">
-            <div t-attf-class="header o_company_#{company.id}_layout" t-if="custom_header">
-                <t t-if="custom_header" t-call="#{custom_header}"/>
+        <divt-attf-class="headero_company_#{company.id}_layout"position="after">
+            <divt-attf-class="headero_company_#{company.id}_layout"t-if="custom_header">
+                <tt-if="custom_header"t-call="#{custom_header}"/>
             </div>
         </div>
 
-        <!-- support for custom footer -->
-        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout" position="attributes">
-            <attribute name="t-if">not custom_footer</attribute>
+        <!--supportforcustomfooter-->
+        <divt-attf-class="footero_standard_footero_company_#{company.id}_layout"position="attributes">
+            <attributename="t-if">notcustom_footer</attribute>
         </div>
 
-        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout" position="after">
-            <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout" t-if="custom_footer">
-                <t t-if="custom_footer" t-raw="custom_footer"/>
-            </div>
-        </div>
-    </template>
-
-    <template id="external_layout_clean" inherit_id="web.external_layout_clean" >
-        <!-- support for custom header -->
-        <div t-attf-class="header o_company_#{company.id}_layout" position="attributes">
-            <attribute name="t-if">not custom_header</attribute>
-        </div>
-        <div t-attf-class="header o_company_#{company.id}_layout" position="after">
-            <div t-attf-class="header o_company_#{company.id}_layout" t-if="custom_header">
-                <div class="o_clean_header">
-                    <t t-if="custom_header" t-call="#{custom_header}"/>
-                </div>
-            </div>
-        </div>
-
-        <!-- support for custom footer -->
-        <div t-attf-class="footer o_clean_footer o_company_#{company.id}_layout" position="attributes">
-            <attribute name="t-if">not custom_footer</attribute>
-        </div>
-        <div t-attf-class="footer o_clean_footer o_company_#{company.id}_layout" position="after">
-            <div t-attf-class="footer o_clean_footer o_company_#{company.id}_layout" t-if="custom_footer">
-                <t t-if="custom_footer" t-raw="custom_footer"/>
+        <divt-attf-class="footero_standard_footero_company_#{company.id}_layout"position="after">
+            <divt-attf-class="footero_standard_footero_company_#{company.id}_layout"t-if="custom_footer">
+                <tt-if="custom_footer"t-raw="custom_footer"/>
             </div>
         </div>
     </template>
 
-    <template id="external_layout_boxed" inherit_id="web.external_layout_boxed" >
-        <!-- support for custom header -->
-        <div t-attf-class="header o_company_#{company.id}_layout" position="attributes">
-            <attribute name="t-if">not custom_header</attribute>
+    <templateid="external_layout_clean"inherit_id="web.external_layout_clean">
+        <!--supportforcustomheader-->
+        <divt-attf-class="headero_company_#{company.id}_layout"position="attributes">
+            <attributename="t-if">notcustom_header</attribute>
         </div>
-        <div t-attf-class="header o_company_#{company.id}_layout" position="after">
-            <div t-attf-class="header o_company_#{company.id}_layout" t-if="custom_header">
-                <div class="o_boxed_header">
-                    <t t-if="custom_header" t-call="#{custom_header}"/>
+        <divt-attf-class="headero_company_#{company.id}_layout"position="after">
+            <divt-attf-class="headero_company_#{company.id}_layout"t-if="custom_header">
+                <divclass="o_clean_header">
+                    <tt-if="custom_header"t-call="#{custom_header}"/>
                 </div>
             </div>
         </div>
 
-        <!-- support for custom footer -->
-        <div t-attf-class="footer o_boxed_footer o_company_#{company.id}_layout" position="attributes">
-            <attribute name="t-if">not custom_footer</attribute>
+        <!--supportforcustomfooter-->
+        <divt-attf-class="footero_clean_footero_company_#{company.id}_layout"position="attributes">
+            <attributename="t-if">notcustom_footer</attribute>
         </div>
-        <div t-attf-class="footer o_boxed_footer o_company_#{company.id}_layout" position="after">
-            <div t-attf-class="footer o_boxed_footer o_company_#{company.id}_layout" t-if="custom_footer">
-                <t t-if="custom_footer" t-raw="custom_footer"/>
+        <divt-attf-class="footero_clean_footero_company_#{company.id}_layout"position="after">
+            <divt-attf-class="footero_clean_footero_company_#{company.id}_layout"t-if="custom_footer">
+                <tt-if="custom_footer"t-raw="custom_footer"/>
             </div>
         </div>
     </template>
 
-    <template id="external_layout_background" inherit_id="web.external_layout_background" >
-        <!-- support for custom header -->
-        <div t-attf-class="o_company_#{company.id}_layout header" position="attributes">
-            <attribute name="t-if">not custom_header</attribute>
+    <templateid="external_layout_boxed"inherit_id="web.external_layout_boxed">
+        <!--supportforcustomheader-->
+        <divt-attf-class="headero_company_#{company.id}_layout"position="attributes">
+            <attributename="t-if">notcustom_header</attribute>
         </div>
-        <div t-attf-class="o_company_#{company.id}_layout header" position="after">
-            <div t-attf-class="o_company_#{company.id}_layout header" t-if="custom_header">
-                <div class="o_background_header">
-                    <t t-if="custom_header" t-call="#{custom_header}"/>
+        <divt-attf-class="headero_company_#{company.id}_layout"position="after">
+            <divt-attf-class="headero_company_#{company.id}_layout"t-if="custom_header">
+                <divclass="o_boxed_header">
+                    <tt-if="custom_header"t-call="#{custom_header}"/>
                 </div>
             </div>
         </div>
 
-        <!-- support for custom footer -->
-        <div t-attf-class="o_company_#{company.id}_layout footer o_background_footer" position="attributes">
-            <attribute name="t-if">not custom_footer</attribute>
+        <!--supportforcustomfooter-->
+        <divt-attf-class="footero_boxed_footero_company_#{company.id}_layout"position="attributes">
+            <attributename="t-if">notcustom_footer</attribute>
         </div>
-        <div t-attf-class="o_company_#{company.id}_layout footer o_background_footer" position="after">
-            <div t-attf-class="o_company_#{company.id}_layout footer o_background_footer" t-if="custom_footer">
-                <t t-if="custom_footer" t-raw="custom_footer"/>
+        <divt-attf-class="footero_boxed_footero_company_#{company.id}_layout"position="after">
+            <divt-attf-class="footero_boxed_footero_company_#{company.id}_layout"t-if="custom_footer">
+                <tt-if="custom_footer"t-raw="custom_footer"/>
+            </div>
+        </div>
+    </template>
+
+    <templateid="external_layout_background"inherit_id="web.external_layout_background">
+        <!--supportforcustomheader-->
+        <divt-attf-class="o_company_#{company.id}_layoutheader"position="attributes">
+            <attributename="t-if">notcustom_header</attribute>
+        </div>
+        <divt-attf-class="o_company_#{company.id}_layoutheader"position="after">
+            <divt-attf-class="o_company_#{company.id}_layoutheader"t-if="custom_header">
+                <divclass="o_background_header">
+                    <tt-if="custom_header"t-call="#{custom_header}"/>
+                </div>
+            </div>
+        </div>
+
+        <!--supportforcustomfooter-->
+        <divt-attf-class="o_company_#{company.id}_layoutfootero_background_footer"position="attributes">
+            <attributename="t-if">notcustom_footer</attribute>
+        </div>
+        <divt-attf-class="o_company_#{company.id}_layoutfootero_background_footer"position="after">
+            <divt-attf-class="o_company_#{company.id}_layoutfootero_background_footer"t-if="custom_footer">
+                <tt-if="custom_footer"t-raw="custom_footer"/>
             </div>
         </div>
     </template>

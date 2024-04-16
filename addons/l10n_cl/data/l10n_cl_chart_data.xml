@@ -1,1200 +1,1200 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <!-- Account Tags -->
-    <!-- Account Taxes Tags Ventas -->
-    <record id="tag_cl_sale_mnt_exe" model="account.account.tag">
-        <!-- TotMntExe -->
-        <field name="name">Ventas - Total Monto Exento o No Gravado</field>
-        <field name="applicability">accounts</field>
+    <!--AccountTags-->
+    <!--AccountTaxesTagsVentas-->
+    <recordid="tag_cl_sale_mnt_exe"model="account.account.tag">
+        <!--TotMntExe-->
+        <fieldname="name">Ventas-TotalMontoExentooNoGravado</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_sale_mnt_neto" model="account.account.tag">
-        <!-- TotMntNeto -->
-        <field name="name">Ventas - Total Monto Neto</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_sale_mnt_neto"model="account.account.tag">
+        <!--TotMntNeto-->
+        <fieldname="name">Ventas-TotalMontoNeto</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_sale_valor_neto_comis" model="account.account.tag">
-        <!-- TotValComNeto -->
-        <field name="name">Ventas - Total Valor Neto Comisiones y Otros Cargos</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_sale_valor_neto_comis"model="account.account.tag">
+        <!--TotValComNeto-->
+        <fieldname="name">Ventas-TotalValorNetoComisionesyOtrosCargos</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_sale_valor_comisiones_no_afecto" model="account.account.tag">
-        <!-- TotValComExe -->
-        <field name="name">Ventas - Total Valor Neto Comisiones y Otros Cargos No Afectos</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_sale_valor_comisiones_no_afecto"model="account.account.tag">
+        <!--TotValComExe-->
+        <fieldname="name">Ventas-TotalValorNetoComisionesyOtrosCargosNoAfectos</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_sale_monto_no_facturable" model="account.account.tag">
-        <!-- TotMntNoFact -->
-        <field name="name">Ventas - Total Monto No Facturable</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_sale_monto_no_facturable"model="account.account.tag">
+        <!--TotMntNoFact-->
+        <fieldname="name">Ventas-TotalMontoNoFacturable</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_sale_exento_vta_pasajes_nacional" model="account.account.tag">
-        <!-- TotPsjNac -->
-        <field name="name">Ventas - Exento Ventas de Pasajes Nacional</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_sale_exento_vta_pasajes_nacional"model="account.account.tag">
+        <!--TotPsjNac-->
+        <fieldname="name">Ventas-ExentoVentasdePasajesNacional</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_sale_exento_vta_pasajes_internacional" model="account.account.tag">
-        <!-- TotPsjInt -->
-        <field name="name">Ventas - Exento Ventas de Pasajes Internacional</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_sale_exento_vta_pasajes_internacional"model="account.account.tag">
+        <!--TotPsjInt-->
+        <fieldname="name">Ventas-ExentoVentasdePasajesInternacional</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <!-- Account Taxes Tags Commpras -->
-    <record id="tag_cl_purchase_mnt_exe" model="account.account.tag">
-        <!-- TotMntExe -->
-        <field name="name">Compras - Total Monto Exento o No Gravado</field>
-        <field name="applicability">accounts</field>
+    <!--AccountTaxesTagsCommpras-->
+    <recordid="tag_cl_purchase_mnt_exe"model="account.account.tag">
+        <!--TotMntExe-->
+        <fieldname="name">Compras-TotalMontoExentooNoGravado</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_purchase_mnt_neto" model="account.account.tag">
-        <!-- TotMntNeto -->
-        <field name="name">Compras - Total Monto Neto</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_purchase_mnt_neto"model="account.account.tag">
+        <!--TotMntNeto-->
+        <fieldname="name">Compras-TotalMontoNeto</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_purchase_mnt_neto_uso_comun" model="account.account.tag">
-        <!-- TotMntNeto -->
-        <field name="name">Compras - Total Monto Neto Uso Común</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_purchase_mnt_neto_uso_comun"model="account.account.tag">
+        <!--TotMntNeto-->
+        <fieldname="name">Compras-TotalMontoNetoUsoComún</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_purchase_mnt_neto_no_recup" model="account.account.tag">
-        <!-- TotMntNeto -->
-        <field name="name">Compras - Total Monto Neto No Recuperable</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_purchase_mnt_neto_no_recup"model="account.account.tag">
+        <!--TotMntNeto-->
+        <fieldname="name">Compras-TotalMontoNetoNoRecuperable</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_purchase_mnt_neto_supermercado" model="account.account.tag">
-        <!-- TotMntNeto -->
-        <field name="name">Compras - Total Monto Neto Compras de Supermercado</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_purchase_mnt_neto_supermercado"model="account.account.tag">
+        <!--TotMntNeto-->
+        <fieldname="name">Compras-TotalMontoNetoComprasdeSupermercado</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
 
-    <record id="tag_cl_purchase_mnt_neto_actf" model="account.account.tag">
-        <!-- TotMntActivoFijo -->
-        <field name="name">Compras - Total Monto Neto Activo Fijo</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_purchase_mnt_neto_actf"model="account.account.tag">
+        <!--TotMntActivoFijo-->
+        <fieldname="name">Compras-TotalMontoNetoActivoFijo</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
 
-    <record id="tag_cl_purchase_tab_puros" model="account.account.tag">
-        <!-- TotTabPuros -->
-        <field name="name">Compras - Total Tabacos Manufacturados Puros</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_purchase_tab_puros"model="account.account.tag">
+        <!--TotTabPuros-->
+        <fieldname="name">Compras-TotalTabacosManufacturadosPuros</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_purchase_tab_cigar" model="account.account.tag">
-        <!-- TotTabCigarrillos -->
-        <field name="name">Compras - Total Tabacos Manufacturados Cigarrillos</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_purchase_tab_cigar"model="account.account.tag">
+        <!--TotTabCigarrillos-->
+        <fieldname="name">Compras-TotalTabacosManufacturadosCigarrillos</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_purchase_tab_elab" model="account.account.tag">
-        <!-- TotTabCigarrillos -->
-        <field name="name">Compras - Total Tabacos Manufacturados Elaborados</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_purchase_tab_elab"model="account.account.tag">
+        <!--TotTabCigarrillos-->
+        <fieldname="name">Compras-TotalTabacosManufacturadosElaborados</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_remanente_cf" model="account.account.tag">
-        <field name="name">Remantente de Crédito Fiscal</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_remanente_cf"model="account.account.tag">
+        <fieldname="name">RemantentedeCréditoFiscal</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="tag_cl_impuesto_unico_trabajadores" model="account.account.tag">
-        <field name="name">Impuesto Unico Trabajadores</field>
-        <field name="applicability">accounts</field>
+    <recordid="tag_cl_impuesto_unico_trabajadores"model="account.account.tag">
+        <fieldname="name">ImpuestoUnicoTrabajadores</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <!-- honorarios y otros -->
-    <record id="tag_cl_fees_amount" model="account.account.tag">
-        <field name="name">Honorarios -  Montos Sujetos a Retención Renta 2 Categoría</field>
-        <field name="applicability">accounts</field>
+    <!--honorariosyotros-->
+    <recordid="tag_cl_fees_amount"model="account.account.tag">
+        <fieldname="name">Honorarios- MontosSujetosaRetenciónRenta2Categoría</field>
+        <fieldname="applicability">accounts</field>
     </record>
 
-    <record id="cl_chart_template" model="account.chart.template">
-        <field name="name">Chile - Plan de Cuentas</field>
-        <field name="bank_account_code_prefix">1101</field>
-        <field name="cash_account_code_prefix">1101</field>
-        <field name="transfer_account_code_prefix">117</field>
-        <field name="code_digits">6</field>
-        <field name="currency_id" ref="base.CLP"/>
-        <field name="use_anglo_saxon" eval="True" />
+    <recordid="cl_chart_template"model="account.chart.template">
+        <fieldname="name">Chile-PlandeCuentas</field>
+        <fieldname="bank_account_code_prefix">1101</field>
+        <fieldname="cash_account_code_prefix">1101</field>
+        <fieldname="transfer_account_code_prefix">117</field>
+        <fieldname="code_digits">6</field>
+        <fieldname="currency_id"ref="base.CLP"/>
+        <fieldname="use_anglo_saxon"eval="True"/>
     </record>
 
-    <record id="account_11700" model="account.account.template">
-        <field name="code">117000</field>
-        <field name="name">Cuenta de Transferencia</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_11700"model="account.account.template">
+        <fieldname="code">117000</field>
+        <fieldname="name">CuentadeTransferencia</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110210" model="account.account.template">
-        <field name="code">110210</field>
-        <field name="name">Depósitos en Divisas</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110210"model="account.account.template">
+        <fieldname="code">110210</field>
+        <fieldname="name">DepósitosenDivisas</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110220" model="account.account.template">
-        <field name="code">110220</field>
-        <field name="name">Acciones</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110220"model="account.account.template">
+        <fieldname="code">110220</field>
+        <fieldname="name">Acciones</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110310" model="account.account.template">
-        <field name="code">110310</field>
-        <field name="name">Clientes</field>
-        <field ref="account.data_account_type_receivable" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110310"model="account.account.template">
+        <fieldname="code">110310</field>
+        <fieldname="name">Clientes</field>
+        <fieldref="account.data_account_type_receivable"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_11320" model="account.account.template">
-        <field name="code">110320</field>
-        <field name="name">Anticipo Proveedores</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_11320"model="account.account.template">
+        <fieldname="code">110320</field>
+        <fieldname="name">AnticipoProveedores</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_11410" model="account.account.template">
-        <field name="code">110410</field>
-        <field name="name">Cheques a Fecha Por Cobrar</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_11410"model="account.account.template">
+        <fieldname="code">110410</field>
+        <fieldname="name">ChequesaFechaPorCobrar</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110420" model="account.account.template">
-        <field name="code">110420</field>
-        <field name="name">Deudores Varios</field>
-        <field ref="account.data_account_type_receivable" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110420"model="account.account.template">
+        <fieldname="code">110420</field>
+        <fieldname="name">DeudoresVarios</field>
+        <fieldref="account.data_account_type_receivable"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110421" model="account.account.template">
-        <field name="code">110421</field>
-        <field name="name">Deudores por Ventas (Pos)</field>
-        <field ref="account.data_account_type_receivable" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110421"model="account.account.template">
+        <fieldname="code">110421</field>
+        <fieldname="name">DeudoresporVentas(Pos)</field>
+        <fieldref="account.data_account_type_receivable"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
 
-    <record id="account_110430" model="account.account.template">
-        <field name="code">110430</field>
-        <field name="name">Boletas en Garantía</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110430"model="account.account.template">
+        <fieldname="code">110430</field>
+        <fieldname="name">BoletasenGarantía</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110440" model="account.account.template">
-        <field name="code">110440</field>
-        <field name="name">Letras en Cartera</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110440"model="account.account.template">
+        <fieldname="code">110440</field>
+        <fieldname="name">LetrasenCartera</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110450" model="account.account.template">
-        <field name="code">110450</field>
-        <field name="name">Documentos Protestados</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110450"model="account.account.template">
+        <fieldname="code">110450</field>
+        <fieldname="name">DocumentosProtestados</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110510" model="account.account.template">
-        <field name="code">110510</field>
-        <field name="name">Anticipo de Sueldo</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110510"model="account.account.template">
+        <fieldname="code">110510</field>
+        <fieldname="name">AnticipodeSueldo</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110520" model="account.account.template">
-        <field name="code">110520</field>
-        <field name="name">Préstamos otorgados</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110520"model="account.account.template">
+        <fieldname="code">110520</field>
+        <fieldname="name">Préstamosotorgados</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110530" model="account.account.template">
-        <field name="code">110530</field>
-        <field name="name">Anticipos de Viáticos</field>
-        <field ref="account.data_account_type_prepayments" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110530"model="account.account.template">
+        <fieldname="code">110530</field>
+        <fieldname="name">AnticiposdeViáticos</field>
+        <fieldref="account.data_account_type_prepayments"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110540" model="account.account.template">
-        <field name="code">110540</field>
-        <field name="name">Fondos x Rendir</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110540"model="account.account.template">
+        <fieldname="code">110540</field>
+        <fieldname="name">FondosxRendir</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110550" model="account.account.template">
-        <field name="code">110550</field>
-        <field name="name">Anticipo de Honorarios</field>
-        <field ref="account.data_account_type_prepayments" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110550"model="account.account.template">
+        <fieldname="code">110550</field>
+        <fieldname="name">AnticipodeHonorarios</field>
+        <fieldref="account.data_account_type_prepayments"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110560" model="account.account.template">
-        <field name="code">110560</field>
-        <field name="name">Anticipo de Aguinaldo</field>
-        <field ref="account.data_account_type_prepayments" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110560"model="account.account.template">
+        <fieldname="code">110560</field>
+        <fieldname="name">AnticipodeAguinaldo</field>
+        <fieldref="account.data_account_type_prepayments"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110570" model="account.account.template">
-        <field name="code">110570</field>
-        <field name="name">Asignación Familiar</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110570"model="account.account.template">
+        <fieldname="code">110570</field>
+        <fieldname="name">AsignaciónFamiliar</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110580" model="account.account.template">
-        <field name="code">110580</field>
-        <field name="name">Anticipo de Impuestos</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110580"model="account.account.template">
+        <fieldname="code">110580</field>
+        <fieldname="name">AnticipodeImpuestos</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110585" model="account.account.template">
-        <field name="code">110585</field>
-        <field name="name">Alquileres Pagados por Adelantado</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110585"model="account.account.template">
+        <fieldname="code">110585</field>
+        <fieldname="name">AlquileresPagadosporAdelantado</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110590" model="account.account.template">
-        <field name="code">110590</field>
-        <field name="name">Intereses Pagados por Adelantado</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110590"model="account.account.template">
+        <fieldname="code">110590</field>
+        <fieldname="name">InteresesPagadosporAdelantado</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110610" model="account.account.template">
-        <field name="code">110610</field>
-        <field name="name">Mercaderías</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110610"model="account.account.template">
+        <fieldname="code">110610</field>
+        <fieldname="name">Mercaderías</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110612" model="account.account.template">
-        <field name="code">110612</field>
-        <field name="name">Materia Prima</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110612"model="account.account.template">
+        <fieldname="code">110612</field>
+        <fieldname="name">MateriaPrima</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110615" model="account.account.template">
-        <field name="code">110615</field>
-        <field name="name">Materiales</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110615"model="account.account.template">
+        <fieldname="code">110615</field>
+        <fieldname="name">Materiales</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110620" model="account.account.template">
-        <field name="code">110620</field>
-        <field name="name">Insumos</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110620"model="account.account.template">
+        <fieldname="code">110620</field>
+        <fieldname="name">Insumos</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110625" model="account.account.template">
-        <field name="code">110625</field>
-        <field name="name">Equipos</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110625"model="account.account.template">
+        <fieldname="code">110625</field>
+        <fieldname="name">Equipos</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110630" model="account.account.template">
-        <field name="code">110630</field>
-        <field name="name">Repuestos</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110630"model="account.account.template">
+        <fieldname="code">110630</field>
+        <fieldname="name">Repuestos</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110640" model="account.account.template">
-        <field name="code">110640</field>
-        <field name="name">Existencias en Tránsito</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110640"model="account.account.template">
+        <fieldname="code">110640</field>
+        <fieldname="name">ExistenciasenTránsito</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110650" model="account.account.template">
-        <field name="code">110650</field>
-        <field name="name">Productos Fabricados</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110650"model="account.account.template">
+        <fieldname="code">110650</field>
+        <fieldname="name">ProductosFabricados</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110660" model="account.account.template">
-        <field name="code">110660</field>
-        <field name="name">Productos En Proceso</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110660"model="account.account.template">
+        <fieldname="code">110660</field>
+        <fieldname="name">ProductosEnProceso</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110670" model="account.account.template">
-        <field name="code">110670</field>
-        <field name="name">Envases</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110670"model="account.account.template">
+        <fieldname="code">110670</field>
+        <fieldname="name">Envases</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110710" model="account.account.template">
-        <field name="code">110710</field>
-        <field name="name">IVA Crédito Fiscal</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110710"model="account.account.template">
+        <fieldname="code">110710</field>
+        <fieldname="name">IVACréditoFiscal</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110720" model="account.account.template">
-        <field name="code">110720</field>
-        <field name="name">Remanente Crédito Fiscal</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids" eval="[(6,0,[ref('tag_cl_remanente_cf')])]"/>
+    <recordid="account_110720"model="account.account.template">
+        <fieldname="code">110720</field>
+        <fieldname="name">RemanenteCréditoFiscal</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"eval="[(6,0,[ref('tag_cl_remanente_cf')])]"/>
     </record>
 
-    <record id="account_110730" model="account.account.template">
-        <field name="code">110730</field>
-        <field name="name">Crédito por Activo Fijo</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110730"model="account.account.template">
+        <fieldname="code">110730</field>
+        <fieldname="name">CréditoporActivoFijo</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110740" model="account.account.template">
-        <field name="code">110740</field>
-        <field name="name">P.P.M. / Art 33 BIS</field>
-        <field ref="account.data_account_type_receivable" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110740"model="account.account.template">
+        <fieldname="code">110740</field>
+        <fieldname="name">P.P.M./Art33BIS</field>
+        <fieldref="account.data_account_type_receivable"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110750" model="account.account.template">
-        <field name="code">110750</field>
-        <field name="name">Crédito Sence</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110750"model="account.account.template">
+        <fieldname="code">110750</field>
+        <fieldname="name">CréditoSence</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110810" model="account.account.template">
-        <field name="code">110810</field>
-        <field name="name">Anticipos Comercio Exterior</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110810"model="account.account.template">
+        <fieldname="code">110810</field>
+        <fieldname="name">AnticiposComercioExterior</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110820" model="account.account.template">
-        <field name="code">110820</field>
-        <field name="name">Gastos Anticipados</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110820"model="account.account.template">
+        <fieldname="code">110820</field>
+        <fieldname="name">GastosAnticipados</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110830" model="account.account.template">
-        <field name="code">110830</field>
-        <field name="name">Organización y Puesta en Marcha</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110830"model="account.account.template">
+        <fieldname="code">110830</field>
+        <fieldname="name">OrganizaciónyPuestaenMarcha</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110910" model="account.account.template">
-        <field name="code">110910</field>
-        <field name="name">Retiros Socios</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110910"model="account.account.template">
+        <fieldname="code">110910</field>
+        <fieldname="name">RetirosSocios</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_110920" model="account.account.template">
-        <field name="code">110920</field>
-        <field name="name">Retiros Reinversión</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_110920"model="account.account.template">
+        <fieldname="code">110920</field>
+        <fieldname="name">RetirosReinversión</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_111010" model="account.account.template">
-        <field name="code">111010</field>
-        <field name="name">Gastos Reorganización</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_111010"model="account.account.template">
+        <fieldname="code">111010</field>
+        <fieldname="name">GastosReorganización</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_111110" model="account.account.template">
-        <field name="code">111110</field>
-        <field name="name">Cuentas Obligadas Socios</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_111110"model="account.account.template">
+        <fieldname="code">111110</field>
+        <fieldname="name">CuentasObligadasSocios</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_111210" model="account.account.template">
-        <field name="code">111210</field>
-        <field name="name">Gastos Tributarios</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_111210"model="account.account.template">
+        <fieldname="code">111210</field>
+        <fieldname="name">GastosTributarios</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_111310" model="account.account.template">
-        <field name="code">111310</field>
-        <field name="name">Cuenta Importaciones</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_111310"model="account.account.template">
+        <fieldname="code">111310</field>
+        <fieldname="name">CuentaImportaciones</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_111410" model="account.account.template">
-        <field name="code">111410</field>
-        <field name="name">Gastos Rechazados</field>
-        <field ref="account.data_account_type_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_111410"model="account.account.template">
+        <fieldname="code">111410</field>
+        <fieldname="name">GastosRechazados</field>
+        <fieldref="account.data_account_type_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_120110" model="account.account.template">
-        <field name="code">120110</field>
-        <field name="name">Deudores Morosos</field>
-        <field ref="account.data_account_type_receivable" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_120110"model="account.account.template">
+        <fieldname="code">120110</field>
+        <fieldname="name">DeudoresMorosos</field>
+        <fieldref="account.data_account_type_receivable"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_120120" model="account.account.template">
-        <field name="code">120120</field>
-        <field name="name">Deudores en Gestión Judicial</field>
-        <field ref="account.data_account_type_receivable" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_120120"model="account.account.template">
+        <fieldname="code">120120</field>
+        <fieldname="name">DeudoresenGestiónJudicial</field>
+        <fieldref="account.data_account_type_receivable"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_121110" model="account.account.template">
-        <field name="code">121110</field>
-        <field name="name">Equipos y Mobiliario de Oficina</field>
-        <field ref="account.data_account_type_fixed_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
+    <recordid="account_121110"model="account.account.template">
+        <fieldname="code">121110</field>
+        <fieldname="name">EquiposyMobiliariodeOficina</field>
+        <fieldref="account.data_account_type_fixed_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
                eval="[(6,0,[ref('tag_cl_purchase_mnt_neto_actf')])]"/>
     </record>
 
-    <record id="account_121120" model="account.account.template">
-        <field name="code">121120</field>
-        <field name="name">Equipos Computacionales</field>
-        <field ref="account.data_account_type_fixed_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
+    <recordid="account_121120"model="account.account.template">
+        <fieldname="code">121120</field>
+        <fieldname="name">EquiposComputacionales</field>
+        <fieldref="account.data_account_type_fixed_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
                eval="[(6,0,[ref('tag_cl_purchase_mnt_neto_actf')])]"/>
     </record>
 
-    <record id="account_121130" model="account.account.template">
-        <field name="code">121130</field>
-        <field name="name">Vehículos</field>
-        <field ref="account.data_account_type_fixed_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
+    <recordid="account_121130"model="account.account.template">
+        <fieldname="code">121130</field>
+        <fieldname="name">Vehículos</field>
+        <fieldref="account.data_account_type_fixed_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
                eval="[(6,0,[ref('tag_cl_purchase_mnt_neto_actf')])]"/>
     </record>
 
-    <record id="account_121140" model="account.account.template">
-        <field name="code">121140</field>
-        <field name="name">Maquinaria</field>
-        <field ref="account.data_account_type_fixed_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
+    <recordid="account_121140"model="account.account.template">
+        <fieldname="code">121140</field>
+        <fieldname="name">Maquinaria</field>
+        <fieldref="account.data_account_type_fixed_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
                eval="[(6,0,[ref('tag_cl_purchase_mnt_neto_actf')])]"/>
     </record>
 
-    <record id="account_121210" model="account.account.template">
-        <field name="code">121210</field>
-        <field name="name">Bienes Raíces</field>
-        <field ref="account.data_account_type_fixed_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
+    <recordid="account_121210"model="account.account.template">
+        <fieldname="code">121210</field>
+        <fieldname="name">BienesRaíces</field>
+        <fieldref="account.data_account_type_fixed_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
                eval="[(6,0,[ref('tag_cl_purchase_mnt_neto_actf')])]"/>
     </record>
 
-    <record id="account_121310" model="account.account.template">
-        <field name="code">121310</field>
-        <field name="name">Depreciación Acum Equipos y Mob de Oficina</field>
-        <field ref="account.data_account_type_fixed_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_121310"model="account.account.template">
+        <fieldname="code">121310</field>
+        <fieldname="name">DepreciaciónAcumEquiposyMobdeOficina</field>
+        <fieldref="account.data_account_type_fixed_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_121320" model="account.account.template">
-        <field name="code">121320</field>
-        <field name="name">Depreciación Acum Equipos Computacionales</field>
-        <field ref="account.data_account_type_fixed_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_121320"model="account.account.template">
+        <fieldname="code">121320</field>
+        <fieldname="name">DepreciaciónAcumEquiposComputacionales</field>
+        <fieldref="account.data_account_type_fixed_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_121330" model="account.account.template">
-        <field name="code">121330</field>
-        <field name="name">Depreciación Acum Otros Activos</field>
-        <field ref="account.data_account_type_fixed_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
+    <recordid="account_121330"model="account.account.template">
+        <fieldname="code">121330</field>
+        <fieldname="name">DepreciaciónAcumOtrosActivos</field>
+        <fieldref="account.data_account_type_fixed_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
                eval="[(6,0,[ref('tag_cl_purchase_mnt_neto_actf')])]"/>
     </record>
 
-    <record id="account_130110" model="account.account.template">
-        <field name="code">130110</field>
-        <field name="name">Activo Intangible - Derecho de Llaves</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_130112" model="account.account.template">
-        <field name="code">130112</field>
-        <field name="name">Activo Intangible - Concesiones y Franquicias</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_130114" model="account.account.template">
-        <field name="code">130114</field>
-        <field name="name">Activo Intangible - Marcas y Patentes de Invención</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_130116" model="account.account.template">
-        <field name="code">130116</field>
-        <field name="name">Activo Intangible - (-) Amortización Acumulada</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_130120" model="account.account.template">
-        <field name="code">130120</field>
-        <field name="name">Derechos Otras Empresas</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_130130" model="account.account.template">
-        <field name="code">130130</field>
-        <field name="name">Cuentas por Cobrar a Personas y Empresas Relacionadas Largo Plazo</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_130140" model="account.account.template">
-        <field name="code">130140</field>
-        <field name="name">Documentos y Cuentas por Cobrar a Largo Plazo</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_130150" model="account.account.template">
-        <field name="code">130150</field>
-        <field name="name">Garantías de Obligaciones a Largo Plazo y de Obligaciones de Terceros</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_130160" model="account.account.template">
-        <field name="code">130160</field>
-        <field name="name">Títulos Patrimoniales Bolsas de Productos</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_190110" model="account.account.template">
-        <field name="code">190110</field>
-        <field name="name">Boletas de Garantía</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_190210" model="account.account.template">
-        <field name="code">190210</field>
-        <field name="name">Letras Descontadas</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_130110"model="account.account.template">
+        <fieldname="code">130110</field>
+        <fieldname="name">ActivoIntangible-DerechodeLlaves</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_130112"model="account.account.template">
+        <fieldname="code">130112</field>
+        <fieldname="name">ActivoIntangible-ConcesionesyFranquicias</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_130114"model="account.account.template">
+        <fieldname="code">130114</field>
+        <fieldname="name">ActivoIntangible-MarcasyPatentesdeInvención</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_130116"model="account.account.template">
+        <fieldname="code">130116</field>
+        <fieldname="name">ActivoIntangible-(-)AmortizaciónAcumulada</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_130120"model="account.account.template">
+        <fieldname="code">130120</field>
+        <fieldname="name">DerechosOtrasEmpresas</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_130130"model="account.account.template">
+        <fieldname="code">130130</field>
+        <fieldname="name">CuentasporCobraraPersonasyEmpresasRelacionadasLargoPlazo</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_130140"model="account.account.template">
+        <fieldname="code">130140</field>
+        <fieldname="name">DocumentosyCuentasporCobraraLargoPlazo</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_130150"model="account.account.template">
+        <fieldname="code">130150</field>
+        <fieldname="name">GarantíasdeObligacionesaLargoPlazoydeObligacionesdeTerceros</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_130160"model="account.account.template">
+        <fieldname="code">130160</field>
+        <fieldname="name">TítulosPatrimonialesBolsasdeProductos</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_190110"model="account.account.template">
+        <fieldname="code">190110</field>
+        <fieldname="name">BoletasdeGarantía</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_190210"model="account.account.template">
+        <fieldname="code">190210</field>
+        <fieldname="name">LetrasDescontadas</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_190310" model="account.account.template">
-        <field name="code">190310</field>
-        <field name="name">Documentos en Garantía</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_190310"model="account.account.template">
+        <fieldname="code">190310</field>
+        <fieldname="name">DocumentosenGarantía</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_190410" model="account.account.template">
-        <field name="code">190410</field>
-        <field name="name">Acciones Suscritas</field>
-        <field ref="account.data_account_type_non_current_assets" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_190410"model="account.account.template">
+        <fieldname="code">190410</field>
+        <fieldname="name">AccionesSuscritas</field>
+        <fieldref="account.data_account_type_non_current_assets"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210110" model="account.account.template">
-        <field name="code">210110</field>
-        <field name="name">Tarjeta de Crédito Corporativa</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210110"model="account.account.template">
+        <fieldname="code">210110</field>
+        <fieldname="name">TarjetadeCréditoCorporativa</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210120" model="account.account.template">
-        <field name="code">210120</field>
-        <field name="name">Linea de Crédito Bancaria</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210120"model="account.account.template">
+        <fieldname="code">210120</field>
+        <fieldname="name">LineadeCréditoBancaria</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210140" model="account.account.template">
-        <field name="code">210140</field>
-        <field name="name">Crédito Comercial C/Plazo</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210140"model="account.account.template">
+        <fieldname="code">210140</field>
+        <fieldname="name">CréditoComercialC/Plazo</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210150" model="account.account.template">
-        <field name="code">210150</field>
-        <field name="name">Obligaciones Leasing Corto Plazo</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210150"model="account.account.template">
+        <fieldname="code">210150</field>
+        <fieldname="name">ObligacionesLeasingCortoPlazo</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210160" model="account.account.template">
-        <field name="code">210160</field>
-        <field name="name">Crédito Hipotecario C/Plazo</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210160"model="account.account.template">
+        <fieldname="code">210160</field>
+        <fieldname="name">CréditoHipotecarioC/Plazo</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210170" model="account.account.template">
-        <field name="code">210170</field>
-        <field name="name">Crédito Comercial LP Venc. C/Plazo</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210170"model="account.account.template">
+        <fieldname="code">210170</field>
+        <fieldname="name">CréditoComercialLPVenc.C/Plazo</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210180" model="account.account.template">
-        <field name="code">210180</field>
-        <field name="name">Dividendos por Pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210180"model="account.account.template">
+        <fieldname="code">210180</field>
+        <fieldname="name">DividendosporPagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210190" model="account.account.template">
-        <field name="code">210190</field>
-        <field name="name">Intereses a Devengar por Compras al Crédito</field>
-        <field ref="account.data_account_type_payable" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210190"model="account.account.template">
+        <fieldname="code">210190</field>
+        <fieldname="name">InteresesaDevengarporComprasalCrédito</field>
+        <fieldref="account.data_account_type_payable"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210195" model="account.account.template">
-        <field name="code">210195</field>
-        <field name="name">Intereses a pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210195"model="account.account.template">
+        <fieldname="code">210195</field>
+        <fieldname="name">Interesesapagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210210" model="account.account.template">
-        <field name="code">210210</field>
-        <field name="name">Proveedores</field>
-        <field ref="account.data_account_type_payable" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210210"model="account.account.template">
+        <fieldname="code">210210</field>
+        <fieldname="name">Proveedores</field>
+        <fieldref="account.data_account_type_payable"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
 
-    <record id="account_210220" model="account.account.template">
-        <field name="code">210220</field>
-        <field name="name">Anticipo de Clientes</field>
-        <field ref="account.data_account_type_payable" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210220"model="account.account.template">
+        <fieldname="code">210220</field>
+        <fieldname="name">AnticipodeClientes</field>
+        <fieldref="account.data_account_type_payable"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210230" model="account.account.template">
-        <field name="code">210230</field>
-        <field name="name">Facturas por Recibir</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210230"model="account.account.template">
+        <fieldname="code">210230</field>
+        <fieldname="name">FacturasporRecibir</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210310" model="account.account.template">
-        <field name="code">210310</field>
-        <field name="name">Cheques Girados y No Cobrados</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210310"model="account.account.template">
+        <fieldname="code">210310</field>
+        <fieldname="name">ChequesGiradosyNoCobrados</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210320" model="account.account.template">
-        <field name="code">210320</field>
-        <field name="name">Documentos en Garantía</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210320"model="account.account.template">
+        <fieldname="code">210320</field>
+        <fieldname="name">DocumentosenGarantía</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210330" model="account.account.template">
-        <field name="code">210330</field>
-        <field name="name">Boleta en Garantia</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210330"model="account.account.template">
+        <fieldname="code">210330</field>
+        <fieldname="name">BoletaenGarantia</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210410" model="account.account.template">
-        <field name="code">210410</field>
-        <field name="name">AFP x Pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210410"model="account.account.template">
+        <fieldname="code">210410</field>
+        <fieldname="name">AFPxPagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210420" model="account.account.template">
-        <field name="code">210420</field>
-        <field name="name">C.C.A.F. x Pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210420"model="account.account.template">
+        <fieldname="code">210420</field>
+        <fieldname="name">C.C.A.F.xPagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210430" model="account.account.template">
-        <field name="code">210430</field>
-        <field name="name">INP x Pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210430"model="account.account.template">
+        <fieldname="code">210430</field>
+        <fieldname="name">INPxPagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210440" model="account.account.template">
-        <field name="code">210440</field>
-        <field name="name">ISAPRES x Pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210440"model="account.account.template">
+        <fieldname="code">210440</field>
+        <fieldname="name">ISAPRESxPagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210450" model="account.account.template">
-        <field name="code">210450</field>
-        <field name="name">Mutual Seg. x Pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210450"model="account.account.template">
+        <fieldname="code">210450</field>
+        <fieldname="name">MutualSeg.xPagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210510" model="account.account.template">
-        <field name="code">210510</field>
-        <field name="name">Sueldos por Pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210510"model="account.account.template">
+        <fieldname="code">210510</field>
+        <fieldname="name">SueldosporPagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210520" model="account.account.template">
-        <field name="code">210520</field>
-        <field name="name">Honorarios por Pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210520"model="account.account.template">
+        <fieldname="code">210520</field>
+        <fieldname="name">HonorariosporPagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210550" model="account.account.template">
-        <field name="code">210550</field>
-        <field name="name">Rendiciones por Pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210550"model="account.account.template">
+        <fieldname="code">210550</field>
+        <fieldname="name">RendicionesporPagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210560" model="account.account.template">
-        <field name="code">210560</field>
-        <field name="name">Provisión de Vacaciones</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210560"model="account.account.template">
+        <fieldname="code">210560</field>
+        <fieldname="name">ProvisióndeVacaciones</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210565" model="account.account.template">
-        <field name="code">210565</field>
-        <field name="name">Provisión por Finiquitos</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210565"model="account.account.template">
+        <fieldname="code">210565</field>
+        <fieldname="name">ProvisiónporFiniquitos</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210610" model="account.account.template">
-        <field name="code">210610</field>
-        <field name="name">Provisión de Impuesto PPM</field>
-        <field ref="account.data_account_type_non_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210610"model="account.account.template">
+        <fieldname="code">210610</field>
+        <fieldname="name">ProvisióndeImpuestoPPM</field>
+        <fieldref="account.data_account_type_non_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210620" model="account.account.template">
-        <field name="code">210620</field>
-        <field name="name">Otras Provisiones</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210620"model="account.account.template">
+        <fieldname="code">210620</field>
+        <fieldname="name">OtrasProvisiones</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210710" model="account.account.template">
-        <field name="code">210710</field>
-        <field name="name">IVA Débito Fiscal</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210710"model="account.account.template">
+        <fieldname="code">210710</field>
+        <fieldname="name">IVADébitoFiscal</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210720" model="account.account.template">
-        <field name="code">210720</field>
-        <field name="name">PPM por Pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210720"model="account.account.template">
+        <fieldname="code">210720</field>
+        <fieldname="name">PPMporPagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210730" model="account.account.template">
-        <field name="code">210730</field>
-        <field name="name">Impuesto Único Trabajadores</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids" eval="[(6,0,[ref('tag_cl_impuesto_unico_trabajadores')])]"/>
+    <recordid="account_210730"model="account.account.template">
+        <fieldname="code">210730</field>
+        <fieldname="name">ImpuestoÚnicoTrabajadores</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"eval="[(6,0,[ref('tag_cl_impuesto_unico_trabajadores')])]"/>
     </record>
 
-    <record id="account_210740" model="account.account.template">
-        <field name="code">210740</field>
-        <field name="name">Impuesto Retención Segunda Categoría</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210740"model="account.account.template">
+        <fieldname="code">210740</field>
+        <fieldname="name">ImpuestoRetenciónSegundaCategoría</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210750" model="account.account.template">
-        <field name="code">210750</field>
-        <field name="name">Impuesto Renta 1a Categoría por Pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210750"model="account.account.template">
+        <fieldname="code">210750</field>
+        <fieldname="name">ImpuestoRenta1aCategoríaporPagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_210760" model="account.account.template">
-        <field name="code">210760</field>
-        <field name="name">Impuesto Mensuales por Pagar</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_210760"model="account.account.template">
+        <fieldname="code">210760</field>
+        <fieldname="name">ImpuestoMensualesporPagar</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_220120" model="account.account.template">
-        <field name="code">220120</field>
-        <field name="name">Obligaciones Leasing L/Plazo</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_220120"model="account.account.template">
+        <fieldname="code">220120</field>
+        <fieldname="name">ObligacionesLeasingL/Plazo</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_220130" model="account.account.template">
-        <field name="code">220130</field>
-        <field name="name">Crédito Comercial L/Plazo</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_220130"model="account.account.template">
+        <fieldname="code">220130</field>
+        <fieldname="name">CréditoComercialL/Plazo</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_220210" model="account.account.template">
-        <field name="code">220210</field>
-        <field name="name">Provisión Indemnización por Años de Servicio</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_220210"model="account.account.template">
+        <fieldname="code">220210</field>
+        <fieldname="name">ProvisiónIndemnizaciónporAñosdeServicio</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_220310" model="account.account.template">
-        <field name="code">220310</field>
-        <field name="name">Cta Corriente Empresa Relacionada</field>
-        <field ref="account.data_account_type_non_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_220310"model="account.account.template">
+        <fieldname="code">220310</field>
+        <fieldname="name">CtaCorrienteEmpresaRelacionada</field>
+        <fieldref="account.data_account_type_non_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_220320" model="account.account.template">
-        <field name="code">220320</field>
-        <field name="name">Impuesto Diferido Largo Plazo</field>
-        <field ref="account.data_account_type_non_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_220320"model="account.account.template">
+        <fieldname="code">220320</field>
+        <fieldname="name">ImpuestoDiferidoLargoPlazo</field>
+        <fieldref="account.data_account_type_non_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_220330" model="account.account.template">
-        <field name="code">220330</field>
-        <field name="name">Otros Pasivos</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_220330"model="account.account.template">
+        <fieldname="code">220330</field>
+        <fieldname="name">OtrosPasivos</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_230110" model="account.account.template">
-        <field name="code">230110</field>
-        <field name="name">Capital Social</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_230110"model="account.account.template">
+        <fieldname="code">230110</field>
+        <fieldname="name">CapitalSocial</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_230120" model="account.account.template">
-        <field name="code">230120</field>
-        <field name="name">Acciones en Circulación</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_230120"model="account.account.template">
+        <fieldname="code">230120</field>
+        <fieldname="name">AccionesenCirculación</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_230130" model="account.account.template">
-        <field name="code">230130</field>
-        <field name="name">Dividendos a Distribuir en Acciones</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_230130"model="account.account.template">
+        <fieldname="code">230130</field>
+        <fieldname="name">DividendosaDistribuirenAcciones</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_230140" model="account.account.template">
-        <field name="code">230140</field>
-        <field name="name">Descuento de Emisión de Acciones</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_230140"model="account.account.template">
+        <fieldname="code">230140</field>
+        <fieldname="name">DescuentodeEmisióndeAcciones</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_230210" model="account.account.template">
-        <field name="code">230210</field>
-        <field name="name">Revalorización Capital Propio</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_230210"model="account.account.template">
+        <fieldname="code">230210</field>
+        <fieldname="name">RevalorizaciónCapitalPropio</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_230220" model="account.account.template">
-        <field name="code">230220</field>
-        <field name="name">Otras Revalorizaciones</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_230220"model="account.account.template">
+        <fieldname="code">230220</field>
+        <fieldname="name">OtrasRevalorizaciones</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_230230" model="account.account.template">
-        <field name="code">230230</field>
-        <field name="name">Revalorización Activo Fijo</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_230230"model="account.account.template">
+        <fieldname="code">230230</field>
+        <fieldname="name">RevalorizaciónActivoFijo</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_230240" model="account.account.template">
-        <field name="code">230240</field>
-        <field name="name">Fluctuación de Valores</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_230240"model="account.account.template">
+        <fieldname="code">230240</field>
+        <fieldname="name">FluctuacióndeValores</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_230250" model="account.account.template">
-        <field name="code">230250</field>
-        <field name="name">Reserva Legal</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_230250"model="account.account.template">
+        <fieldname="code">230250</field>
+        <fieldname="name">ReservaLegal</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_230260" model="account.account.template">
-        <field name="code">230260</field>
-        <field name="name">Reserva Estatutaria</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_230270" model="account.account.template">
-        <field name="code">230270</field>
-        <field name="name">Reserva Facultativa</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_230280" model="account.account.template">
-        <field name="code">230280</field>
-        <field name="name">Reserva para Renovación de Activo Fijo</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_230290" model="account.account.template">
-        <field name="code">230290</field>
-        <field name="name">Resultados Acumulados</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_230300" model="account.account.template">
-        <field name="code">230300</field>
-        <field name="name">Utilidades y Pérdidas del Ejercicio</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_230310" model="account.account.template">
-        <field name="code">230310</field>
-        <field name="name">Resultados Acumulados del Ejercicio Anterior</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_230510" model="account.account.template">
-        <field name="code">230510</field>
-        <field name="name">Resultado del Ejercicio</field>
-        <field ref="account.data_account_type_equity" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_290110" model="account.account.template">
-        <field name="code">290110</field>
-        <field name="name">Cuenta Puente</field>
-        <field ref="account.data_account_type_non_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="True"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_290210" model="account.account.template">
-        <field name="code">290210</field>
-        <field name="name">Responsable Boletas Garantía</field>
-        <field ref="account.data_account_type_non_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_290220" model="account.account.template">
-        <field name="code">290220</field>
-        <field name="name">Responsable Documentos Garantía</field>
-        <field ref="account.data_account_type_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_290230" model="account.account.template">
-        <field name="code">290230</field>
-        <field name="name">Responsable Letras Descontadas</field>
-        <field ref="account.data_account_type_non_current_liabilities" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_310110" model="account.account.template">
-        <field name="code">310110</field>
-        <field name="name">Ingresos por Consultoría</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-    </record>
-
-    <record id="account_310115" model="account.account.template">
-        <field name="code">310115</field>
-        <field name="name">Ventas de Productos</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
+    <recordid="account_230260"model="account.account.template">
+        <fieldname="code">230260</field>
+        <fieldname="name">ReservaEstatutaria</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_230270"model="account.account.template">
+        <fieldname="code">230270</field>
+        <fieldname="name">ReservaFacultativa</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_230280"model="account.account.template">
+        <fieldname="code">230280</field>
+        <fieldname="name">ReservaparaRenovacióndeActivoFijo</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_230290"model="account.account.template">
+        <fieldname="code">230290</field>
+        <fieldname="name">ResultadosAcumulados</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_230300"model="account.account.template">
+        <fieldname="code">230300</field>
+        <fieldname="name">UtilidadesyPérdidasdelEjercicio</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_230310"model="account.account.template">
+        <fieldname="code">230310</field>
+        <fieldname="name">ResultadosAcumuladosdelEjercicioAnterior</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_230510"model="account.account.template">
+        <fieldname="code">230510</field>
+        <fieldname="name">ResultadodelEjercicio</field>
+        <fieldref="account.data_account_type_equity"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_290110"model="account.account.template">
+        <fieldname="code">290110</field>
+        <fieldname="name">CuentaPuente</field>
+        <fieldref="account.data_account_type_non_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="True"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_290210"model="account.account.template">
+        <fieldname="code">290210</field>
+        <fieldname="name">ResponsableBoletasGarantía</field>
+        <fieldref="account.data_account_type_non_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_290220"model="account.account.template">
+        <fieldname="code">290220</field>
+        <fieldname="name">ResponsableDocumentosGarantía</field>
+        <fieldref="account.data_account_type_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_290230"model="account.account.template">
+        <fieldname="code">290230</field>
+        <fieldname="name">ResponsableLetrasDescontadas</field>
+        <fieldref="account.data_account_type_non_current_liabilities"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_310110"model="account.account.template">
+        <fieldname="code">310110</field>
+        <fieldname="name">IngresosporConsultoría</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+    </record>
+
+    <recordid="account_310115"model="account.account.template">
+        <fieldname="code">310115</field>
+        <fieldname="name">VentasdeProductos</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
                eval="[(6,0,[
                          ref('tag_cl_sale_mnt_neto'),
                          ref('tag_cl_sale_valor_neto_comis')
                ])]"/>
     </record>
 
-    <record id="account_310120" model="account.account.template">
-        <field name="code">310120</field>
-        <field name="name">Ventas de Servicios</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
+    <recordid="account_310120"model="account.account.template">
+        <fieldname="code">310120</field>
+        <fieldname="name">VentasdeServicios</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
                eval="[(6,0,[
                          ref('tag_cl_sale_mnt_exe'),
                          ref('tag_cl_sale_valor_comisiones_no_afecto'),
@@ -1203,479 +1203,479 @@
                ])]"/>
     </record>
 
-    <record id="account_310125" model="account.account.template">
-        <field name="code">310125</field>
-        <field name="name">Ventas de Exportación</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_310125"model="account.account.template">
+        <fieldname="code">310125</field>
+        <fieldname="name">VentasdeExportación</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_310130" model="account.account.template">
-        <field name="code">310130</field>
-        <field name="name">Comisiones Percibidas por Ventas</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_310130"model="account.account.template">
+        <fieldname="code">310130</field>
+        <fieldname="name">ComisionesPercibidasporVentas</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320210" model="account.account.template">
-        <field name="code">320210</field>
-        <field name="name">Utilidad Venta Activo Fijo</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320210"model="account.account.template">
+        <fieldname="code">320210</field>
+        <fieldname="name">UtilidadVentaActivoFijo</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320220" model="account.account.template">
-        <field name="code">320220</field>
-        <field name="name">Intereses Percibidos Sobre Préstamos Otorgados</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320220"model="account.account.template">
+        <fieldname="code">320220</field>
+        <fieldname="name">InteresesPercibidosSobrePréstamosOtorgados</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320225" model="account.account.template">
-        <field name="code">320225</field>
-        <field name="name">Arriendos ganados, obtenidos, percibidos</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320225"model="account.account.template">
+        <fieldname="code">320225</field>
+        <fieldname="name">Arriendosganados,obtenidos,percibidos</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320230" model="account.account.template">
-        <field name="code">320230</field>
-        <field name="name">Descuentos ganados, obtenidos, percibidos</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320230"model="account.account.template">
+        <fieldname="code">320230</field>
+        <fieldname="name">Descuentosganados,obtenidos,percibidos</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320235" model="account.account.template">
-        <field name="code">320235</field>
-        <field name="name">Intereses sobre Inversiones</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320235"model="account.account.template">
+        <fieldname="code">320235</field>
+        <fieldname="name">InteresessobreInversiones</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320240" model="account.account.template">
-        <field name="code">320240</field>
-        <field name="name">Ganancia Venta de Acciones</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320240"model="account.account.template">
+        <fieldname="code">320240</field>
+        <fieldname="name">GananciaVentadeAcciones</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320245" model="account.account.template">
-        <field name="code">320245</field>
-        <field name="name">Recupero de Rezagos</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320245"model="account.account.template">
+        <fieldname="code">320245</field>
+        <fieldname="name">RecuperodeRezagos</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320250" model="account.account.template">
-        <field name="code">320250</field>
-        <field name="name">Recupero de Deudores Incobrables</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320250"model="account.account.template">
+        <fieldname="code">320250</field>
+        <fieldname="name">RecuperodeDeudoresIncobrables</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320255" model="account.account.template">
-        <field name="code">320255</field>
-        <field name="name">Donaciones obtenidas, ganandas, percibidas</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320255"model="account.account.template">
+        <fieldname="code">320255</field>
+        <fieldname="name">Donacionesobtenidas,ganandas,percibidas</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320260" model="account.account.template">
-        <field name="code">320260</field>
-        <field name="name">Ganancia Venta Inversiones Permanentes</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320260"model="account.account.template">
+        <fieldname="code">320260</field>
+        <fieldname="name">GananciaVentaInversionesPermanentes</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320265" model="account.account.template">
-        <field name="code">320265</field>
-        <field name="name">Diferencia tipo de cambio</field>
-        <field ref="account.data_account_type_revenue" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320265"model="account.account.template">
+        <fieldname="code">320265</field>
+        <fieldname="name">Diferenciatipodecambio</field>
+        <fieldref="account.data_account_type_revenue"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320270" model="account.account.template">
-        <field name="code">320270</field>
-        <field name="name">Cŕeditos a Largo Plazo</field>
-        <field ref="account.data_account_type_other_income" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320270"model="account.account.template">
+        <fieldname="code">320270</field>
+        <fieldname="name">CŕeditosaLargoPlazo</field>
+        <fieldref="account.data_account_type_other_income"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320275" model="account.account.template">
-        <field name="code">320275</field>
-        <field name="name">Otros Ingresos</field>
-        <field ref="account.data_account_type_other_income" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320275"model="account.account.template">
+        <fieldname="code">320275</field>
+        <fieldname="name">OtrosIngresos</field>
+        <fieldref="account.data_account_type_other_income"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320280" model="account.account.template">
-        <field name="code">320280</field>
-        <field name="name">Corrección Monetaria Activos</field>
-        <field ref="account.data_account_type_other_income" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320280"model="account.account.template">
+        <fieldname="code">320280</field>
+        <fieldname="name">CorrecciónMonetariaActivos</field>
+        <fieldref="account.data_account_type_other_income"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_320285" model="account.account.template">
-        <field name="code">320285</field>
-        <field name="name">Corrección Monetaria Bienes Leasing</field>
-        <field ref="account.data_account_type_other_income" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_320285"model="account.account.template">
+        <fieldname="code">320285</field>
+        <fieldname="name">CorrecciónMonetariaBienesLeasing</field>
+        <fieldref="account.data_account_type_other_income"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410110" model="account.account.template">
-        <field name="code">410110</field>
-        <field name="name">Remuneraciones Operación</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410110"model="account.account.template">
+        <fieldname="code">410110</field>
+        <fieldname="name">RemuneracionesOperación</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410115" model="account.account.template">
-        <field name="code">410115</field>
-        <field name="name">Aporte Patronal Operación</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410115"model="account.account.template">
+        <fieldname="code">410115</field>
+        <fieldname="name">AportePatronalOperación</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410120" model="account.account.template">
-        <field name="code">410120</field>
-        <field name="name">Viáticos</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410120"model="account.account.template">
+        <fieldname="code">410120</field>
+        <fieldname="name">Viáticos</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410125" model="account.account.template">
-        <field name="code">410125</field>
-        <field name="name">Capacitación</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410125"model="account.account.template">
+        <fieldname="code">410125</field>
+        <fieldname="name">Capacitación</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410130" model="account.account.template">
-        <field name="code">410130</field>
-        <field name="name">Honorarios Pagados</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410130"model="account.account.template">
+        <fieldname="code">410130</field>
+        <fieldname="name">HonorariosPagados</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410135" model="account.account.template">
-        <field name="code">410135</field>
-        <field name="name">Asesorías</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410135"model="account.account.template">
+        <fieldname="code">410135</field>
+        <fieldname="name">Asesorías</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410140" model="account.account.template">
-        <field name="code">410140</field>
-        <field name="name">Arriendos Oficina</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410140"model="account.account.template">
+        <fieldname="code">410140</field>
+        <fieldname="name">ArriendosOficina</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410145" model="account.account.template">
-        <field name="code">410145</field>
-        <field name="name">Arriendos Bodega</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410145"model="account.account.template">
+        <fieldname="code">410145</field>
+        <fieldname="name">ArriendosBodega</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410150" model="account.account.template">
-        <field name="code">410150</field>
-        <field name="name">Comunicaciones</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410150"model="account.account.template">
+        <fieldname="code">410150</field>
+        <fieldname="name">Comunicaciones</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410155" model="account.account.template">
-        <field name="code">410155</field>
-        <field name="name">Servicios Legales</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410155"model="account.account.template">
+        <fieldname="code">410155</field>
+        <fieldname="name">ServiciosLegales</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410160" model="account.account.template">
-        <field name="code">410160</field>
-        <field name="name">Manutención y Reparación de Activos</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410160"model="account.account.template">
+        <fieldname="code">410160</field>
+        <fieldname="name">ManutenciónyReparacióndeActivos</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410165" model="account.account.template">
-        <field name="code">410165</field>
-        <field name="name">Papelería-Aseo-Gastos Diversos</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410165"model="account.account.template">
+        <fieldname="code">410165</field>
+        <fieldname="name">Papelería-Aseo-GastosDiversos</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410170" model="account.account.template">
-        <field name="code">410170</field>
-        <field name="name">Remuneraciones Administración</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410170"model="account.account.template">
+        <fieldname="code">410170</field>
+        <fieldname="name">RemuneracionesAdministración</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410175" model="account.account.template">
-        <field name="code">410175</field>
-        <field name="name">Aporte Patronal Administración</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410175"model="account.account.template">
+        <fieldname="code">410175</field>
+        <fieldname="name">AportePatronalAdministración</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410180" model="account.account.template">
-        <field name="code">410180</field>
-        <field name="name">Electricidad</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410180"model="account.account.template">
+        <fieldname="code">410180</field>
+        <fieldname="name">Electricidad</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410185" model="account.account.template">
-        <field name="code">410185</field>
-        <field name="name">Gastos Comunes</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410185"model="account.account.template">
+        <fieldname="code">410185</field>
+        <fieldname="name">GastosComunes</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410190" model="account.account.template">
-        <field name="code">410190</field>
-        <field name="name">Gastos Bancarios</field>
-        <field ref="account.data_account_off_sheet" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410190"model="account.account.template">
+        <fieldname="code">410190</field>
+        <fieldname="name">GastosBancarios</field>
+        <fieldref="account.data_account_off_sheet"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410195" model="account.account.template">
-        <field name="code">410195</field>
-        <field name="name">Diferencia Tipo de Cambio</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410195"model="account.account.template">
+        <fieldname="code">410195</field>
+        <fieldname="name">DiferenciaTipodeCambio</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410200" model="account.account.template">
-        <field name="code">410200</field>
-        <field name="name">Corrección Monetaria</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410200"model="account.account.template">
+        <fieldname="code">410200</field>
+        <fieldname="name">CorrecciónMonetaria</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410205" model="account.account.template">
-        <field name="code">410205</field>
-        <field name="name">Multas Fiscales</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410205"model="account.account.template">
+        <fieldname="code">410205</field>
+        <fieldname="name">MultasFiscales</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410210" model="account.account.template">
-        <field name="code">410210</field>
-        <field name="name">Impuesto a la Renta 1ra Categoría</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410210"model="account.account.template">
+        <fieldname="code">410210</field>
+        <fieldname="name">ImpuestoalaRenta1raCategoría</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410215" model="account.account.template">
-        <field name="code">410215</field>
-        <field name="name">Pérdida por Venta Activo</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410215"model="account.account.template">
+        <fieldname="code">410215</field>
+        <fieldname="name">PérdidaporVentaActivo</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410220" model="account.account.template">
-        <field name="code">410220</field>
-        <field name="name">Ajuste Ejercicio Anterior</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410220"model="account.account.template">
+        <fieldname="code">410220</field>
+        <fieldname="name">AjusteEjercicioAnterior</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410225" model="account.account.template">
-        <field name="code">410225</field>
-        <field name="name">Donación</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410225"model="account.account.template">
+        <fieldname="code">410225</field>
+        <fieldname="name">Donación</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410230" model="account.account.template">
-        <field name="code">410230</field>
-        <field name="name">Compras Productos 1ra Categoría</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
-               eval="[(6,0,[ref('tag_cl_purchase_mnt_neto'), ref('tag_cl_purchase_tab_puros'), ref('tag_cl_purchase_tab_cigar')])]"/>
+    <recordid="account_410230"model="account.account.template">
+        <fieldname="code">410230</field>
+        <fieldname="name">ComprasProductos1raCategoría</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
+               eval="[(6,0,[ref('tag_cl_purchase_mnt_neto'),ref('tag_cl_purchase_tab_puros'),ref('tag_cl_purchase_tab_cigar')])]"/>
     </record>
-    <record id="account_410231" model="account.account.template">
-        <field name="code">410231</field>
-        <field name="name">Compras Netas (IVA Uso Común)</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
+    <recordid="account_410231"model="account.account.template">
+        <fieldname="code">410231</field>
+        <fieldname="name">ComprasNetas(IVAUsoComún)</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
                eval="[(6,0,[ref('tag_cl_purchase_mnt_neto_uso_comun')])]"/>
     </record>
-    <record id="account_410232" model="account.account.template">
-        <field name="code">410232</field>
-        <field name="name">Compras Netas (IVA No Recuperable)</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
+    <recordid="account_410232"model="account.account.template">
+        <fieldname="code">410232</field>
+        <fieldname="name">ComprasNetas(IVANoRecuperable)</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
                eval="[(6,0,[ref('tag_cl_purchase_mnt_neto_no_recup')])]"/>
     </record>
-    <record id="account_410233" model="account.account.template">
-        <field name="code">410233</field>
-        <field name="name">Compras de Supermercado</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
+    <recordid="account_410233"model="account.account.template">
+        <fieldname="code">410233</field>
+        <fieldname="name">ComprasdeSupermercado</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
                eval="[(6,0,[ref('tag_cl_purchase_mnt_neto_supermercado')])]"/>
     </record>
 
-    <record id="account_410235" model="account.account.template">
-        <field name="code">410235</field>
-        <field name="name">Costo de Mercaderías Vendidas - Prod. 1ra Categoría</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
-        <field name="tag_ids"
-               eval="[(6,0,[ref('tag_cl_purchase_mnt_neto'), ref('tag_cl_purchase_tab_puros'), ref('tag_cl_purchase_tab_cigar')])]"/>
+    <recordid="account_410235"model="account.account.template">
+        <fieldname="code">410235</field>
+        <fieldname="name">CostodeMercaderíasVendidas-Prod.1raCategoría</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
+        <fieldname="tag_ids"
+               eval="[(6,0,[ref('tag_cl_purchase_mnt_neto'),ref('tag_cl_purchase_tab_puros'),ref('tag_cl_purchase_tab_cigar')])]"/>
     </record>
 
-    <record id="account_410240" model="account.account.template">
-        <field name="code">410240</field>
-        <field name="name">Importaciones</field>
-        <field ref="account.data_account_type_direct_costs" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410240"model="account.account.template">
+        <fieldname="code">410240</field>
+        <fieldname="name">Importaciones</field>
+        <fieldref="account.data_account_type_direct_costs"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410245" model="account.account.template">
-        <field name="code">410245</field>
-        <field name="name">CIF</field>
-        <field ref="account.data_account_type_direct_costs" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410245"model="account.account.template">
+        <fieldname="code">410245</field>
+        <fieldname="name">CIF</field>
+        <fieldref="account.data_account_type_direct_costs"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410250" model="account.account.template">
-        <field name="code">410250</field>
-        <field name="name">Compras de Materia Prima</field>
-        <field ref="account.data_account_type_direct_costs" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410250"model="account.account.template">
+        <fieldname="code">410250</field>
+        <fieldname="name">ComprasdeMateriaPrima</field>
+        <fieldref="account.data_account_type_direct_costs"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_410255" model="account.account.template">
-        <field name="code">410255</field>
-        <field name="name">Mano de Obra Directa</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_410255"model="account.account.template">
+        <fieldname="code">410255</field>
+        <fieldname="name">ManodeObraDirecta</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_420110" model="account.account.template">
-        <field name="code">420110</field>
-        <field name="name">Mercaderias Recibidas en Consignación</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_420110"model="account.account.template">
+        <fieldname="code">420110</field>
+        <fieldname="name">MercaderiasRecibidasenConsignación</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_440210" model="account.account.template">
-        <field name="code">440210</field>
-        <field name="name">Comitente por Mercaderias Recibidas en Consignación</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_440210"model="account.account.template">
+        <fieldname="code">440210</field>
+        <fieldname="name">ComitenteporMercaderiasRecibidasenConsignación</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_420120" model="account.account.template">
-        <field name="code">420120</field>
-        <field name="name">Gastos en Depreciación de Activo Fijo</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_420120"model="account.account.template">
+        <fieldname="code">420120</field>
+        <fieldname="name">GastosenDepreciacióndeActivoFijo</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_420140" model="account.account.template">
-        <field name="code">420140</field>
-        <field name="name">Gastos en Amortización</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_420140"model="account.account.template">
+        <fieldname="code">420140</field>
+        <fieldname="name">GastosenAmortización</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_420150" model="account.account.template">
-        <field name="code">420150</field>
-        <field name="name">Gastos en Siniestros</field>
-        <field ref="account.data_account_type_expenses" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_420150"model="account.account.template">
+        <fieldname="code">420150</field>
+        <fieldname="name">GastosenSiniestros</field>
+        <fieldref="account.data_account_type_expenses"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_420170" model="account.account.template">
-        <field name="code">420170</field>
-        <field name="name">Garantias Otorgadas</field>
-        <field ref="account.data_account_off_sheet" name="user_type_id"/>
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_420170"model="account.account.template">
+        <fieldname="code">420170</field>
+        <fieldname="name">GarantiasOtorgadas</field>
+        <fieldref="account.data_account_off_sheet"name="user_type_id"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="account_420220" model="account.account.template">
-        <field name="code">420220</field>
-        <field name="name">Gastos Otros Impuestos</field>
-        <field name="user_type_id" ref="account.data_account_type_expenses" />
-        <field name="reconcile" eval="False"/>
-        <field name="chart_template_id" ref="cl_chart_template"/>
+    <recordid="account_420220"model="account.account.template">
+        <fieldname="code">420220</field>
+        <fieldname="name">GastosOtrosImpuestos</field>
+        <fieldname="user_type_id"ref="account.data_account_type_expenses"/>
+        <fieldname="reconcile"eval="False"/>
+        <fieldname="chart_template_id"ref="cl_chart_template"/>
     </record>
 
-    <record id="cl_chart_template" model="account.chart.template">
-        <field name="property_account_receivable_id" ref="account_110310"/>
-        <field name="property_account_payable_id" ref="account_210210"/>
-        <field name="property_account_expense_categ_id" ref="account_410235"/>
-        <field name="property_account_income_categ_id" ref="account_310115"/>
-        <field name="income_currency_exchange_account_id" ref="account_410195"/>
-        <field name="expense_currency_exchange_account_id" ref="account_410195"/>
-        <field name="default_pos_receivable_account_id" ref="account_110421"/>
-        <field name="property_stock_account_input_categ_id" ref="account_210230"/>
-        <field name="property_stock_account_output_categ_id" ref="account_110640"/>
-        <field name="property_stock_valuation_account_id" ref="account_110610"/>
+    <recordid="cl_chart_template"model="account.chart.template">
+        <fieldname="property_account_receivable_id"ref="account_110310"/>
+        <fieldname="property_account_payable_id"ref="account_210210"/>
+        <fieldname="property_account_expense_categ_id"ref="account_410235"/>
+        <fieldname="property_account_income_categ_id"ref="account_310115"/>
+        <fieldname="income_currency_exchange_account_id"ref="account_410195"/>
+        <fieldname="expense_currency_exchange_account_id"ref="account_410195"/>
+        <fieldname="default_pos_receivable_account_id"ref="account_110421"/>
+        <fieldname="property_stock_account_input_categ_id"ref="account_210230"/>
+        <fieldname="property_stock_account_output_categ_id"ref="account_110640"/>
+        <fieldname="property_stock_valuation_account_id"ref="account_110610"/>
     </record>
 
 </flectra>

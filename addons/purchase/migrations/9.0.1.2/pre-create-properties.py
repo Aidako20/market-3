@@ -1,35 +1,35 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-def convert_field(cr, model, field, target_model):
-    table = model.replace('.', '_')
+defconvert_field(cr,model,field,target_model):
+    table=model.replace('.','_')
 
-    cr.execute("""SELECT 1
-                    FROM information_schema.columns
-                   WHERE table_name = %s
-                     AND column_name = %s
-               """, (table, field))
-    if not cr.fetchone():
+    cr.execute("""SELECT1
+                    FROMinformation_schema.columns
+                   WHEREtable_name=%s
+                     ANDcolumn_name=%s
+               """,(table,field))
+    ifnotcr.fetchone():
         return
 
-    cr.execute("SELECT id FROM ir_model_fields WHERE model=%s AND name=%s", (model, field))
-    [fields_id] = cr.fetchone()
+    cr.execute("SELECTidFROMir_model_fieldsWHEREmodel=%sANDname=%s",(model,field))
+    [fields_id]=cr.fetchone()
 
     cr.execute("""
-        INSERT INTO ir_property(name, type, fields_id, company_id, res_id, value_reference)
-        SELECT %(field)s, 'many2one', %(fields_id)s, company_id, CONCAT('{model},', id),
-               CONCAT('{target_model},', {field})
-          FROM {table} t
-         WHERE {field} IS NOT NULL
-           AND NOT EXISTS(SELECT 1
-                            FROM ir_property
-                           WHERE fields_id=%(fields_id)s
-                             AND company_id=t.company_id
-                             AND res_id=CONCAT('{model},', t.id))
-    """.format(**locals()), locals())
+        INSERTINTOir_property(name,type,fields_id,company_id,res_id,value_reference)
+        SELECT%(field)s,'many2one',%(fields_id)s,company_id,CONCAT('{model},',id),
+               CONCAT('{target_model},',{field})
+          FROM{table}t
+         WHERE{field}ISNOTNULL
+           ANDNOTEXISTS(SELECT1
+                            FROMir_property
+                           WHEREfields_id=%(fields_id)s
+                             ANDcompany_id=t.company_id
+                             ANDres_id=CONCAT('{model},',t.id))
+    """.format(**locals()),locals())
 
-    cr.execute('ALTER TABLE "{0}" DROP COLUMN "{1}" CASCADE'.format(table, field))
+    cr.execute('ALTERTABLE"{0}"DROPCOLUMN"{1}"CASCADE'.format(table,field))
 
-def migrate(cr, version):
-    convert_field(cr, 'res.partner', 'property_purchase_currency_id', 'res.currency')
-    convert_field(cr, 'product.template',
-                  'property_account_creditor_price_difference', 'account.account')
+defmigrate(cr,version):
+    convert_field(cr,'res.partner','property_purchase_currency_id','res.currency')
+    convert_field(cr,'product.template',
+                  'property_account_creditor_price_difference','account.account')

@@ -1,111 +1,111 @@
-flectra.define('web.NotificationService', function (require) {
-'use strict';
+flectra.define('web.NotificationService',function(require){
+'usestrict';
 
-var AbstractService = require('web.AbstractService');
-var Notification = require('web.Notification');
-var core = require('web.core');
+varAbstractService=require('web.AbstractService');
+varNotification=require('web.Notification');
+varcore=require('web.core');
 
-var id = 0;
+varid=0;
 
 /**
- * Notification Service
+ *NotificationService
  *
- * The Notification Service is simply a service used to display notifications in
- * the top/right part of the screen.
+ *TheNotificationServiceissimplyaserviceusedtodisplaynotificationsin
+ *thetop/rightpartofthescreen.
  *
- * If you want to display such a notification, you probably do not want to do it
- * by using this file. The proper way is to use the do_warn or do_notify
- * methods on the Widget class.
+ *Ifyouwanttodisplaysuchanotification,youprobablydonotwanttodoit
+ *byusingthisfile.Theproperwayistousethedo_warnordo_notify
+ *methodsontheWidgetclass.
  */
-var NotificationService = AbstractService.extend({
-    custom_events: {
-        close: '_onCloseNotification',
+varNotificationService=AbstractService.extend({
+    custom_events:{
+        close:'_onCloseNotification',
     },
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this._super.apply(this, arguments);
-        this.notifications = {};
+    start:function(){
+        this._super.apply(this,arguments);
+        this.notifications={};
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * It may sometimes be useful to close programmatically a notification. For
-     * example, when there is a sticky notification warning the user about some
-     * condition (connection lost), but the condition does not apply anymore.
+     *Itmaysometimesbeusefultocloseprogrammaticallyanotification.For
+     *example,whenthereisastickynotificationwarningtheuseraboutsome
+     *condition(connectionlost),buttheconditiondoesnotapplyanymore.
      *
-     * @param {number} notificationId
-     * @param {boolean} [silent=false] if true, the notification does not call
-     *   onClose callback
+     *@param{number}notificationId
+     *@param{boolean}[silent=false]iftrue,thenotificationdoesnotcall
+     *  onClosecallback
      */
-    close: function (notificationId, silent) {
-        var notification = this.notifications[notificationId];
-        if (!notification) {
+    close:function(notificationId,silent){
+        varnotification=this.notifications[notificationId];
+        if(!notification){
             return;
         }
         notification.close(silent);
     },
     /**
-     * Display a notification at the appropriate location, and returns the
-     * reference id to the same widget.
+     *Displayanotificationattheappropriatelocation,andreturnsthe
+     *referenceidtothesamewidget.
      *
-     * Note that this method does not wait for the appendTo method to complete.
+     *NotethatthismethoddoesnotwaitfortheappendTomethodtocomplete.
      *
-     * @param {Object} params
-     * @param {function} [params.Notification] javascript class of a notification
-     *   to instantiate by default use 'web.Notification'
-     * @param {string} params.title notification title
-     * @param {string} params.subtitle notification subtitle
-     * @param {string} params.message notification main message
-     * @param {string} params.type 'notification' or 'warning'
-     * @param {boolean} [params.sticky=false] if true, the notification will stay
-     *   visible until the user clicks on it.
-     * @param {string} [params.className] className to add on the dom
-     * @param {function} [params.onClose] callback when the user click on the x
-     *   or when the notification is auto close (no sticky)
-     * @param {Object[]} params.buttons
-     * @param {function} params.buttons[0].click callback on click
-     * @param {Boolean} [params.buttons[0].primary] display the button as primary
-     * @param {string} [params.buttons[0].text] button label
-     * @param {string} [params.buttons[0].icon] font-awsome className or image src
-     * @returns {Number} notification id
+     *@param{Object}params
+     *@param{function}[params.Notification]javascriptclassofanotification
+     *  toinstantiatebydefaultuse'web.Notification'
+     *@param{string}params.titlenotificationtitle
+     *@param{string}params.subtitlenotificationsubtitle
+     *@param{string}params.messagenotificationmainmessage
+     *@param{string}params.type'notification'or'warning'
+     *@param{boolean}[params.sticky=false]iftrue,thenotificationwillstay
+     *  visibleuntiltheuserclicksonit.
+     *@param{string}[params.className]classNametoaddonthedom
+     *@param{function}[params.onClose]callbackwhentheuserclickonthex
+     *  orwhenthenotificationisautoclose(nosticky)
+     *@param{Object[]}params.buttons
+     *@param{function}params.buttons[0].clickcallbackonclick
+     *@param{Boolean}[params.buttons[0].primary]displaythebuttonasprimary
+     *@param{string}[params.buttons[0].text]buttonlabel
+     *@param{string}[params.buttons[0].icon]font-awsomeclassNameorimagesrc
+     *@returns{Number}notificationid
      */
-    notify: function (params) {
-        if (!this.$el) {
-            this.$el = $('<div class="o_notification_manager"/>');
+    notify:function(params){
+        if(!this.$el){
+            this.$el=$('<divclass="o_notification_manager"/>');
             this.$el.prependTo('body');
         }
-        var NotificationWidget = params.Notification || Notification;
-        var notification = this.notifications[++id] = new NotificationWidget(this, params);
+        varNotificationWidget=params.Notification||Notification;
+        varnotification=this.notifications[++id]=newNotificationWidget(this,params);
         notification.appendTo(this.$el);
-        return id;
+        returnid;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onCloseNotification: function (ev) {
+    _onCloseNotification:function(ev){
         ev.stopPropagation();
-        for (var notificationId in this.notifications) {
-            if (this.notifications[notificationId] === ev.target) {
-                delete this.notifications[notificationId];
+        for(varnotificationIdinthis.notifications){
+            if(this.notifications[notificationId]===ev.target){
+                deletethis.notifications[notificationId];
                 break;
             }
         }
     },
 });
 
-core.serviceRegistry.add('notification', NotificationService);
+core.serviceRegistry.add('notification',NotificationService);
 
-return NotificationService;
+returnNotificationService;
 });

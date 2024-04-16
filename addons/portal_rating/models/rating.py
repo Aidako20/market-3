@@ -1,23 +1,23 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import fields, models, exceptions, _
+fromflectraimportfields,models,exceptions,_
 
 
-class Rating(models.Model):
-    _inherit = 'rating.rating'
+classRating(models.Model):
+    _inherit='rating.rating'
 
-    # Adding information for comment a rating message
-    publisher_comment = fields.Text("Publisher comment")
-    publisher_id = fields.Many2one('res.partner', 'Commented by',
-                                   ondelete='set null', readonly=True)
-    publisher_datetime = fields.Datetime("Commented on", readonly=True)
+    #Addinginformationforcommentaratingmessage
+    publisher_comment=fields.Text("Publishercomment")
+    publisher_id=fields.Many2one('res.partner','Commentedby',
+                                   ondelete='setnull',readonly=True)
+    publisher_datetime=fields.Datetime("Commentedon",readonly=True)
 
-    def write(self, values):
-        if values.get('publisher_comment'):
-            if not self.env.user.has_group("website.group_website_publisher"):
-                raise exceptions.AccessError(_("Only the publisher of the website can change the rating comment"))
-            if not values.get('publisher_datetime'):
-                values['publisher_datetime'] = fields.Datetime.now()
-            if not values.get('publisher_id'):
-                values['publisher_id'] = self.env.user.partner_id.id
-        return super(Rating, self).write(values)
+    defwrite(self,values):
+        ifvalues.get('publisher_comment'):
+            ifnotself.env.user.has_group("website.group_website_publisher"):
+                raiseexceptions.AccessError(_("Onlythepublisherofthewebsitecanchangetheratingcomment"))
+            ifnotvalues.get('publisher_datetime'):
+                values['publisher_datetime']=fields.Datetime.now()
+            ifnotvalues.get('publisher_id'):
+                values['publisher_id']=self.env.user.partner_id.id
+        returnsuper(Rating,self).write(values)

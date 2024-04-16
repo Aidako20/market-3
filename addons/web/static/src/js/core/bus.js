@@ -1,16 +1,16 @@
-flectra.define('web.Bus', function (require) {
-"use strict";
+flectra.define('web.Bus',function(require){
+"usestrict";
 
-var Class = require('web.Class');
-var mixins = require('web.mixins');
+varClass=require('web.Class');
+varmixins=require('web.mixins');
 
 /**
- * Event Bus used to bind events scoped in the current instance
+ *EventBususedtobindeventsscopedinthecurrentinstance
  *
- * @class Bus
+ *@classBus
  */
-return Class.extend(mixins.EventDispatcherMixin, {
-    init: function (parent) {
+returnClass.extend(mixins.EventDispatcherMixin,{
+    init:function(parent){
         mixins.EventDispatcherMixin.init.call(this);
         this.setParent(parent);
     },

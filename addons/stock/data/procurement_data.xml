@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-        <record id="sequence_proc_group" model="ir.sequence">
-            <field name="name">Procurement Group</field>
-            <field name="code">procurement.group</field>
-            <field name="prefix">PG/</field>
-            <field name="padding">6</field>
-            <field name="number_next">1</field>
-            <field name="number_increment">1</field>
+        <recordid="sequence_proc_group"model="ir.sequence">
+            <fieldname="name">ProcurementGroup</field>
+            <fieldname="code">procurement.group</field>
+            <fieldname="prefix">PG/</field>
+            <fieldname="padding">6</field>
+            <fieldname="number_next">1</field>
+            <fieldname="number_increment">1</field>
         </record>
 
     </data>

@@ -1,30 +1,30 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.tools import float_round
+fromflectraimportapi,fields,models,_
+fromflectra.toolsimportfloat_round
 
 
-class LunchCashMove(models.Model):
-    """ Two types of cashmoves: payment (credit) or order (debit) """
-    _name = 'lunch.cashmove'
-    _description = 'Lunch Cashmove'
-    _order = 'date desc'
+classLunchCashMove(models.Model):
+    """Twotypesofcashmoves:payment(credit)ororder(debit)"""
+    _name='lunch.cashmove'
+    _description='LunchCashmove'
+    _order='datedesc'
 
-    currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
-    user_id = fields.Many2one('res.users', 'User',
-                              default=lambda self: self.env.uid)
-    date = fields.Date('Date', required=True, default=fields.Date.context_today)
-    amount = fields.Float('Amount', required=True)
-    description = fields.Text('Description')
+    currency_id=fields.Many2one('res.currency',default=lambdaself:self.env.company.currency_id)
+    user_id=fields.Many2one('res.users','User',
+                              default=lambdaself:self.env.uid)
+    date=fields.Date('Date',required=True,default=fields.Date.context_today)
+    amount=fields.Float('Amount',required=True)
+    description=fields.Text('Description')
 
-    def name_get(self):
-        return [(cashmove.id, '%s %s' % (_('Lunch Cashmove'), '#%d' % cashmove.id)) for cashmove in self]
+    defname_get(self):
+        return[(cashmove.id,'%s%s'%(_('LunchCashmove'),'#%d'%cashmove.id))forcashmoveinself]
 
     @api.model
-    def get_wallet_balance(self, user, include_config=True):
-        result = float_round(sum(move['amount'] for move in self.env['lunch.cashmove.report'].search_read(
-            [('user_id', '=', user.id)], ['amount'])), precision_digits=2)
-        if include_config:
-            result += user.company_id.lunch_minimum_threshold
-        return result
+    defget_wallet_balance(self,user,include_config=True):
+        result=float_round(sum(move['amount']formoveinself.env['lunch.cashmove.report'].search_read(
+            [('user_id','=',user.id)],['amount'])),precision_digits=2)
+        ifinclude_config:
+            result+=user.company_id.lunch_minimum_threshold
+        returnresult

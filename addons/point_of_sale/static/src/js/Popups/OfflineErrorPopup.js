@@ -1,29 +1,29 @@
-flectra.define('point_of_sale.OfflineErrorPopup', function(require) {
-    'use strict';
+flectra.define('point_of_sale.OfflineErrorPopup',function(require){
+    'usestrict';
 
-    const ErrorPopup = require('point_of_sale.ErrorPopup');
-    const Registries = require('point_of_sale.Registries');
+    constErrorPopup=require('point_of_sale.ErrorPopup');
+    constRegistries=require('point_of_sale.Registries');
 
     /**
-     * This is a special kind of error popup as it introduces
-     * an option to not show it again.
+     *Thisisaspecialkindoferrorpopupasitintroduces
+     *anoptiontonotshowitagain.
      */
-    class OfflineErrorPopup extends ErrorPopup {
-        dontShowAgain() {
-            this.constructor.dontShow = true;
+    classOfflineErrorPopupextendsErrorPopup{
+        dontShowAgain(){
+            this.constructor.dontShow=true;
             this.cancel();
         }
     }
-    OfflineErrorPopup.template = 'OfflineErrorPopup';
-    OfflineErrorPopup.dontShow = false;
-    OfflineErrorPopup.defaultProps = {
-        confirmText: 'Ok',
-        cancelText: 'Cancel',
-        title: 'Offline Error',
-        body: 'Either the server is inaccessible or browser is not connected online.',
+    OfflineErrorPopup.template='OfflineErrorPopup';
+    OfflineErrorPopup.dontShow=false;
+    OfflineErrorPopup.defaultProps={
+        confirmText:'Ok',
+        cancelText:'Cancel',
+        title:'OfflineError',
+        body:'Eithertheserverisinaccessibleorbrowserisnotconnectedonline.',
     };
 
     Registries.Component.add(OfflineErrorPopup);
 
-    return OfflineErrorPopup;
+    returnOfflineErrorPopup;
 });

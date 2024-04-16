@@ -1,65 +1,65 @@
-flectra.define('mail/static/src/components/activity_box/activity_box.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/activity_box/activity_box.js',function(require){
+'usestrict';
 
-const components = {
-    Activity: require('mail/static/src/components/activity/activity.js'),
+constcomponents={
+    Activity:require('mail/static/src/components/activity/activity.js'),
 };
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-const { Component } = owl;
+const{Component}=owl;
 
-class ActivityBox extends Component {
+classActivityBoxextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps();
-        useStore(props => {
-            const chatter = this.env.models['mail.chatter'].get(props.chatterLocalId);
-            const thread = chatter && chatter.thread;
-            return {
-                chatter: chatter ? chatter.__state : undefined,
-                thread: thread && thread.__state,
+        useStore(props=>{
+            constchatter=this.env.models['mail.chatter'].get(props.chatterLocalId);
+            constthread=chatter&&chatter.thread;
+            return{
+                chatter:chatter?chatter.__state:undefined,
+                thread:thread&&thread.__state,
             };
         });
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {Chatter}
+     *@returns{Chatter}
      */
-    get chatter() {
-        return this.env.models['mail.chatter'].get(this.props.chatterLocalId);
+    getchatter(){
+        returnthis.env.models['mail.chatter'].get(this.props.chatterLocalId);
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onClickTitle(ev) {
+    _onClickTitle(ev){
         ev.preventDefault();
         this.chatter.toggleActivityBoxVisibility();
     }
 
 }
 
-Object.assign(ActivityBox, {
+Object.assign(ActivityBox,{
     components,
-    props: {
-        chatterLocalId: String,
+    props:{
+        chatterLocalId:String,
     },
-    template: 'mail.ActivityBox',
+    template:'mail.ActivityBox',
 });
 
-return ActivityBox;
+returnActivityBox;
 
 });

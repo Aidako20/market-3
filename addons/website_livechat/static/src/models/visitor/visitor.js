@@ -1,169 +1,169 @@
-flectra.define('website_livechat/static/src/models/partner/partner.js', function (require) {
-'use strict';
+flectra.define('website_livechat/static/src/models/partner/partner.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr, many2one, one2many } = require('mail/static/src/model/model_field.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{attr,many2one,one2many}=require('mail/static/src/model/model_field.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class Visitor extends dependencies['mail.model'] {
+    classVisitorextendsdependencies['mail.model']{
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * @override
+         *@override
          */
-        static convertData(data) {
-            const data2 = {};
-            if ('country_id' in data) {
-                if (data.country_id) {
-                    data2.country = [['insert', {
-                        id: data.country_id,
-                        code: data.country_code,
+        staticconvertData(data){
+            constdata2={};
+            if('country_id'indata){
+                if(data.country_id){
+                    data2.country=[['insert',{
+                        id:data.country_id,
+                        code:data.country_code,
                     }]];
-                } else {
-                    data2.country = [['unlink']];
+                }else{
+                    data2.country=[['unlink']];
                 }
             }
-            if ('history' in data) {
-                data2.history = data.history;
+            if('history'indata){
+                data2.history=data.history;
             }
-            if ('is_connected' in data) {
-                data2.is_connected = data.is_connected;
+            if('is_connected'indata){
+                data2.is_connected=data.is_connected;
             }
-            if ('lang' in data) {
-                data2.lang = data.lang;
+            if('lang'indata){
+                data2.lang=data.lang;
             }
-            if ('name' in data) {
-                data2.name = data.name;
+            if('name'indata){
+                data2.name=data.name;
             }
-            if ('partner_id' in data) {
-                if (data.partner_id) {
-                    data2.partner = [['insert', { id: data.partner_id }]];
-                } else {
-                    data2.partner = [['unlink']];
+            if('partner_id'indata){
+                if(data.partner_id){
+                    data2.partner=[['insert',{id:data.partner_id}]];
+                }else{
+                    data2.partner=[['unlink']];
                 }
             }
-            if ('website' in data) {
-                data2.website = data.website;
+            if('website'indata){
+                data2.website=data.website;
             }
-            return data2;
+            returndata2;
         }
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @private
-         * @returns {string}
+         *@private
+         *@returns{string}
          */
-        _computeAvatarUrl() {
-            if (!this.partner) {
-                return '/mail/static/src/img/smiley/avatar.jpg';
+        _computeAvatarUrl(){
+            if(!this.partner){
+                return'/mail/static/src/img/smiley/avatar.jpg';
             }
-            return this.partner.avatarUrl;
+            returnthis.partner.avatarUrl;
         }
 
         /**
-         * @private
-         * @returns {mail.country}
+         *@private
+         *@returns{mail.country}
          */
-        _computeCountry() {
-            if (this.partner && this.partner.country) {
-                return [['link', this.partner.country]];
+        _computeCountry(){
+            if(this.partner&&this.partner.country){
+                return[['link',this.partner.country]];
             }
-            if (this.country) {
-                return [['link', this.country]];
+            if(this.country){
+                return[['link',this.country]];
             }
-            return [['unlink']];
+            return[['unlink']];
         }
 
         /**
-         * @private
-         * @returns {string}
+         *@private
+         *@returns{string}
          */
-        _computeNameOrDisplayName() {
-            if (this.partner) {
-                return this.partner.nameOrDisplayName;
+        _computeNameOrDisplayName(){
+            if(this.partner){
+                returnthis.partner.nameOrDisplayName;
             }
-            return this.name;
+            returnthis.name;
         }
     }
 
-    Visitor.fields = {
+    Visitor.fields={
         /**
-         * Url to the avatar of the visitor.
+         *Urltotheavatarofthevisitor.
          */
-        avatarUrl: attr({
-            compute: '_computeAvatarUrl',
-            dependencies: [
+        avatarUrl:attr({
+            compute:'_computeAvatarUrl',
+            dependencies:[
                 'partner',
                 'partnerAvatarUrl',
             ],
         }),
         /**
-         * Country of the visitor.
+         *Countryofthevisitor.
          */
-        country: many2one('mail.country', {
-            compute: '_computeCountry',
-            dependencies: [
+        country:many2one('mail.country',{
+            compute:'_computeCountry',
+            dependencies:[
                 'country',
                 'partnerCountry',
             ],
         }),
         /**
-         * Browsing history of the visitor as a string.
+         *Browsinghistoryofthevisitorasastring.
          */
-        history: attr(),
+        history:attr(),
         /**
-         * Determine whether the visitor is connected or not.
+         *Determinewhetherthevisitorisconnectedornot.
          */
-        is_connected: attr(),
+        is_connected:attr(),
         /**
-         * Name of the language of the visitor. (Ex: "English")
+         *Nameofthelanguageofthevisitor.(Ex:"English")
          */
-        lang: attr(),
+        lang:attr(),
         /**
-         * Name of the visitor.
+         *Nameofthevisitor.
          */
-        name: attr(),
-        nameOrDisplayName: attr({
-            compute: '_computeNameOrDisplayName',
-            dependencies: [
+        name:attr(),
+        nameOrDisplayName:attr({
+            compute:'_computeNameOrDisplayName',
+            dependencies:[
                 'name',
                 'partnerNameOrDisplayName',
             ],
         }),
         /**
-         * Partner linked to this visitor, if any.
+         *Partnerlinkedtothisvisitor,ifany.
          */
-        partner: many2one('mail.partner'),
-        partnerAvatarUrl: attr({
-            related: 'partner.avatarUrl',
+        partner:many2one('mail.partner'),
+        partnerAvatarUrl:attr({
+            related:'partner.avatarUrl',
         }),
-        partnerCountry: many2one('mail.country',{
-            related: 'partner.country',
+        partnerCountry:many2one('mail.country',{
+            related:'partner.country',
         }),
-        partnerNameOrDisplayName: attr({related: 'partner.nameOrDisplayName'}),
+        partnerNameOrDisplayName:attr({related:'partner.nameOrDisplayName'}),
         /**
-         * Threads with this visitor as member
+         *Threadswiththisvisitorasmember
          */
-        threads: one2many('mail.thread', {
-            inverse: 'visitor',
+        threads:one2many('mail.thread',{
+            inverse:'visitor',
         }),
         /**
-         * Name of the website on which the visitor is connected. (Ex: "Website 1")
+         *Nameofthewebsiteonwhichthevisitorisconnected.(Ex:"Website1")
          */
-        website: attr(),
+        website:attr(),
     };
 
-    Visitor.modelName = 'website_livechat.visitor';
+    Visitor.modelName='website_livechat.visitor';
 
-    return Visitor;
+    returnVisitor;
 }
 
-registerNewModel('website_livechat.visitor', factory);
+registerNewModel('website_livechat.visitor',factory);
 
 });

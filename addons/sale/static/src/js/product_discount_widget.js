@@ -1,37 +1,37 @@
-flectra.define('sale.product_discount', function (require) {
-    "use strict";
+flectra.define('sale.product_discount',function(require){
+    "usestrict";
 
-    const BasicFields = require('web.basic_fields');
-    const FieldsRegistry = require('web.field_registry');
+    constBasicFields=require('web.basic_fields');
+    constFieldsRegistry=require('web.field_registry');
 
     /**
-     * The sale.product_discount widget is a simple widget extending FieldFloat
+     *Thesale.product_discountwidgetisasimplewidgetextendingFieldFloat
      *
      *
-     * !!! WARNING !!!
+     *!!!WARNING!!!
      *
-     * This widget is only designed for sale_order_line creation/updates.
-     * !!! It should only be used on a discount field !!!
+     *Thiswidgetisonlydesignedforsale_order_linecreation/updates.
+     *!!!Itshouldonlybeusedonadiscountfield!!!
      */
-    const ProductDiscountWidget = BasicFields.FieldFloat.extend({
+    constProductDiscountWidget=BasicFields.FieldFloat.extend({
 
         /**
-         * Override changes at a discount.
+         *Overridechangesatadiscount.
          *
-         * @override
-         * @param {FlectraEvent} ev
+         *@override
+         *@param{FlectraEvent}ev
          *
          */
-        async reset(record, ev) {
-            if (ev && ev.data.changes && ev.data.changes.discount >= 0) {
+        asyncreset(record,ev){
+            if(ev&&ev.data.changes&&ev.data.changes.discount>=0){
                this.trigger_up('open_discount_wizard');
             }
             this._super(...arguments);
         },
     });
 
-    FieldsRegistry.add('product_discount', ProductDiscountWidget);
+    FieldsRegistry.add('product_discount',ProductDiscountWidget);
 
-    return ProductDiscountWidget;
+    returnProductDiscountWidget;
 
 });

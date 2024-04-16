@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class Website(models.Model):
-    _inherit = 'website'
+classWebsite(models.Model):
+    _inherit='website'
 
-    karma_profile_min = fields.Integer(string="Minimal karma to see other user's profile", default=150)
+    karma_profile_min=fields.Integer(string="Minimalkarmatoseeotheruser'sprofile",default=150)

@@ -1,269 +1,269 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from collections import defaultdict
-from lxml import etree
-import re
+fromcollectionsimportdefaultdict
+fromlxmlimportetree
+importre
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError, AccessError
-from flectra.osv import expression
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportUserError,AccessError
+fromflectra.osvimportexpression
 
-class AccountAnalyticLine(models.Model):
-    _inherit = 'account.analytic.line'
+classAccountAnalyticLine(models.Model):
+    _inherit='account.analytic.line'
 
     @api.model
-    def default_get(self, field_list):
-        result = super(AccountAnalyticLine, self).default_get(field_list)
-        if 'encoding_uom_id' in field_list:
-            result['encoding_uom_id'] = self.env.company.timesheet_encode_uom_id.id
-        employee_id = self._context.get('default_employee_id')
-        if employee_id:
-            employee = self.env['hr.employee'].browse(employee_id)
-            if 'user_id' not in result or employee.user_id.id != result.get('user_id'):
-                result['user_id'] = employee.user_id.id
-        if not self.env.context.get('default_employee_id') and 'employee_id' in field_list and result.get('user_id'):
-            result['employee_id'] = self.env['hr.employee'].search([('user_id', '=', result['user_id']), ('company_id', '=', result.get('company_id', self.env.company.id))], limit=1).id
-        return result
+    defdefault_get(self,field_list):
+        result=super(AccountAnalyticLine,self).default_get(field_list)
+        if'encoding_uom_id'infield_list:
+            result['encoding_uom_id']=self.env.company.timesheet_encode_uom_id.id
+        employee_id=self._context.get('default_employee_id')
+        ifemployee_id:
+            employee=self.env['hr.employee'].browse(employee_id)
+            if'user_id'notinresultoremployee.user_id.id!=result.get('user_id'):
+                result['user_id']=employee.user_id.id
+        ifnotself.env.context.get('default_employee_id')and'employee_id'infield_listandresult.get('user_id'):
+            result['employee_id']=self.env['hr.employee'].search([('user_id','=',result['user_id']),('company_id','=',result.get('company_id',self.env.company.id))],limit=1).id
+        returnresult
 
-    def _domain_project_id(self):
-        domain = [('allow_timesheets', '=', True)]
-        if not self.user_has_groups('hr_timesheet.group_timesheet_manager'):
-            return expression.AND([domain,
-                ['|', ('privacy_visibility', '!=', 'followers'), ('allowed_internal_user_ids', 'in', self.env.user.ids)]
+    def_domain_project_id(self):
+        domain=[('allow_timesheets','=',True)]
+        ifnotself.user_has_groups('hr_timesheet.group_timesheet_manager'):
+            returnexpression.AND([domain,
+                ['|',('privacy_visibility','!=','followers'),('allowed_internal_user_ids','in',self.env.user.ids)]
             ])
-        return domain
+        returndomain
 
-    def _domain_employee_id(self):
-        if not self.user_has_groups('hr_timesheet.group_hr_timesheet_approver'):
-            return [('user_id', '=', self.env.user.id)]
-        return []
+    def_domain_employee_id(self):
+        ifnotself.user_has_groups('hr_timesheet.group_hr_timesheet_approver'):
+            return[('user_id','=',self.env.user.id)]
+        return[]
 
-    def _domain_task_id(self):
-        if not self.user_has_groups('hr_timesheet.group_hr_timesheet_approver'):
-            return ['|', ('privacy_visibility', '!=', 'followers'), ('allowed_user_ids', 'in', self.env.user.ids)]
-        return []
+    def_domain_task_id(self):
+        ifnotself.user_has_groups('hr_timesheet.group_hr_timesheet_approver'):
+            return['|',('privacy_visibility','!=','followers'),('allowed_user_ids','in',self.env.user.ids)]
+        return[]
 
-    task_id = fields.Many2one(
-        'project.task', 'Task', compute='_compute_task_id', store=True, readonly=False, index=True,
-        domain="[('project_id.allow_timesheets', '=', True), ('project_id', '=?', project_id)]")
-    project_id = fields.Many2one(
-        'project.project', 'Project', compute='_compute_project_id', store=True, readonly=False,
+    task_id=fields.Many2one(
+        'project.task','Task',compute='_compute_task_id',store=True,readonly=False,index=True,
+        domain="[('project_id.allow_timesheets','=',True),('project_id','=?',project_id)]")
+    project_id=fields.Many2one(
+        'project.project','Project',compute='_compute_project_id',store=True,readonly=False,
         domain=_domain_project_id)
-    user_id = fields.Many2one(compute='_compute_user_id', store=True, readonly=False)
-    employee_id = fields.Many2one('hr.employee', "Employee", domain=_domain_employee_id, context={'active_test': False})
-    department_id = fields.Many2one('hr.department', "Department", compute='_compute_department_id', store=True, compute_sudo=True)
-    encoding_uom_id = fields.Many2one('uom.uom', compute='_compute_encoding_uom_id')
-    partner_id = fields.Many2one(compute='_compute_partner_id', store=True, readonly=False)
+    user_id=fields.Many2one(compute='_compute_user_id',store=True,readonly=False)
+    employee_id=fields.Many2one('hr.employee',"Employee",domain=_domain_employee_id,context={'active_test':False})
+    department_id=fields.Many2one('hr.department',"Department",compute='_compute_department_id',store=True,compute_sudo=True)
+    encoding_uom_id=fields.Many2one('uom.uom',compute='_compute_encoding_uom_id')
+    partner_id=fields.Many2one(compute='_compute_partner_id',store=True,readonly=False)
 
-    def _compute_encoding_uom_id(self):
-        for analytic_line in self:
-            analytic_line.encoding_uom_id = analytic_line.company_id.timesheet_encode_uom_id
+    def_compute_encoding_uom_id(self):
+        foranalytic_lineinself:
+            analytic_line.encoding_uom_id=analytic_line.company_id.timesheet_encode_uom_id
 
-    @api.depends('task_id.partner_id', 'project_id.partner_id')
-    def _compute_partner_id(self):
-        for timesheet in self:
-            if timesheet.project_id:
-                timesheet.partner_id = timesheet.task_id.partner_id or timesheet.project_id.partner_id
+    @api.depends('task_id.partner_id','project_id.partner_id')
+    def_compute_partner_id(self):
+        fortimesheetinself:
+            iftimesheet.project_id:
+                timesheet.partner_id=timesheet.task_id.partner_idortimesheet.project_id.partner_id
 
-    @api.depends('task_id', 'task_id.project_id')
-    def _compute_project_id(self):
-        for line in self.filtered(lambda line: not line.project_id):
-            line.project_id = line.task_id.project_id
+    @api.depends('task_id','task_id.project_id')
+    def_compute_project_id(self):
+        forlineinself.filtered(lambdaline:notline.project_id):
+            line.project_id=line.task_id.project_id
 
     @api.depends('project_id')
-    def _compute_task_id(self):
-        for line in self.filtered(lambda line: not line.project_id):
-            line.task_id = False
+    def_compute_task_id(self):
+        forlineinself.filtered(lambdaline:notline.project_id):
+            line.task_id=False
 
     @api.onchange('project_id')
-    def _onchange_project_id(self):
-        # TODO KBA in master - check to do it "properly", currently:
-        # This onchange is used to reset the task_id when the project changes.
-        # Doing it in the compute will remove the task_id when the project of a task changes.
-        if self.project_id != self.task_id.project_id:
-            self.task_id = False
+    def_onchange_project_id(self):
+        #TODOKBAinmaster-checktodoit"properly",currently:
+        #Thisonchangeisusedtoresetthetask_idwhentheprojectchanges.
+        #Doingitinthecomputewillremovethetask_idwhentheprojectofataskchanges.
+        ifself.project_id!=self.task_id.project_id:
+            self.task_id=False
 
     @api.depends('employee_id')
-    def _compute_user_id(self):
-        for line in self:
-            line.user_id = line.employee_id.user_id if line.employee_id else line._default_user()
+    def_compute_user_id(self):
+        forlineinself:
+            line.user_id=line.employee_id.user_idifline.employee_idelseline._default_user()
 
     @api.depends('employee_id')
-    def _compute_department_id(self):
-        for line in self:
-            line.department_id = line.employee_id.department_id
+    def_compute_department_id(self):
+        forlineinself:
+            line.department_id=line.employee_id.department_id
 
     @api.model_create_multi
-    def create(self, vals_list):
-        default_user_id = self._default_user()
-        user_ids = list(map(lambda x: x.get('user_id', default_user_id), filter(lambda x: not x.get('employee_id') and x.get('project_id'), vals_list)))
+    defcreate(self,vals_list):
+        default_user_id=self._default_user()
+        user_ids=list(map(lambdax:x.get('user_id',default_user_id),filter(lambdax:notx.get('employee_id')andx.get('project_id'),vals_list)))
 
-        for vals in vals_list:
-            # when the name is not provide by the 'Add a line', we set a default one
-            if vals.get('project_id') and not vals.get('name'):
-                vals['name'] = '/'
+        forvalsinvals_list:
+            #whenthenameisnotprovidebythe'Addaline',wesetadefaultone
+            ifvals.get('project_id')andnotvals.get('name'):
+                vals['name']='/'
             vals.update(self._timesheet_preprocess(vals))
 
-        # Although this make a second loop on the vals, we need to wait the preprocess as it could change the company_id in the vals
-        # TODO To be refactored in master
-        employees = self.env['hr.employee'].sudo().search([('user_id', 'in', user_ids)])
-        employee_for_user_company = defaultdict(dict)
-        for employee in employees:
-            employee_for_user_company[employee.user_id.id][employee.company_id.id] = employee.id
+        #Althoughthismakeasecondlooponthevals,weneedtowaitthepreprocessasitcouldchangethecompany_idinthevals
+        #TODOToberefactoredinmaster
+        employees=self.env['hr.employee'].sudo().search([('user_id','in',user_ids)])
+        employee_for_user_company=defaultdict(dict)
+        foremployeeinemployees:
+            employee_for_user_company[employee.user_id.id][employee.company_id.id]=employee.id
 
-        employee_ids = set()
-        for vals in vals_list:
-            # compute employee only for timesheet lines, makes no sense for other lines
-            if not vals.get('employee_id') and vals.get('project_id'):
-                employee_for_company = employee_for_user_company.get(vals.get('user_id', default_user_id), False)
-                if not employee_for_company:
+        employee_ids=set()
+        forvalsinvals_list:
+            #computeemployeeonlyfortimesheetlines,makesnosenseforotherlines
+            ifnotvals.get('employee_id')andvals.get('project_id'):
+                employee_for_company=employee_for_user_company.get(vals.get('user_id',default_user_id),False)
+                ifnotemployee_for_company:
                     continue
-                company_id = list(employee_for_company)[0] if len(employee_for_company) == 1 else vals.get('company_id', self.env.company.id)
-                vals['employee_id'] = employee_for_company.get(company_id, False)
-            elif vals.get('employee_id'):
+                company_id=list(employee_for_company)[0]iflen(employee_for_company)==1elsevals.get('company_id',self.env.company.id)
+                vals['employee_id']=employee_for_company.get(company_id,False)
+            elifvals.get('employee_id'):
                 employee_ids.add(vals['employee_id'])
-        if any(not emp.active for emp in self.env['hr.employee'].browse(list(employee_ids))):
-            raise UserError(_('Timesheets must be created with an active employee.'))
-        lines = super(AccountAnalyticLine, self).create(vals_list)
-        for line, values in zip(lines, vals_list):
-            if line.project_id:  # applied only for timesheet
+        ifany(notemp.activeforempinself.env['hr.employee'].browse(list(employee_ids))):
+            raiseUserError(_('Timesheetsmustbecreatedwithanactiveemployee.'))
+        lines=super(AccountAnalyticLine,self).create(vals_list)
+        forline,valuesinzip(lines,vals_list):
+            ifline.project_id: #appliedonlyfortimesheet
                 line._timesheet_postprocess(values)
-        return lines
+        returnlines
 
-    def write(self, values):
-        # If it's a basic user then check if the timesheet is his own.
-        if not (self.user_has_groups('hr_timesheet.group_hr_timesheet_approver') or self.env.su) and any(self.env.user.id != analytic_line.user_id.id for analytic_line in self):
-            raise AccessError(_("You cannot access timesheets that are not yours."))
+    defwrite(self,values):
+        #Ifit'sabasicuserthencheckifthetimesheetishisown.
+        ifnot(self.user_has_groups('hr_timesheet.group_hr_timesheet_approver')orself.env.su)andany(self.env.user.id!=analytic_line.user_id.idforanalytic_lineinself):
+            raiseAccessError(_("Youcannotaccesstimesheetsthatarenotyours."))
 
-        values = self._timesheet_preprocess(values)
-        if values.get('employee_id'):
-            employee = self.env['hr.employee'].browse(values['employee_id'])
-            if not employee.active:
-                raise UserError(_('You cannot set an archived employee to the existing timesheets.'))
-        if 'name' in values and not values.get('name'):
-            values['name'] = '/'
-        result = super(AccountAnalyticLine, self).write(values)
-        # applied only for timesheet
-        self.filtered(lambda t: t.project_id)._timesheet_postprocess(values)
-        return result
-
-    @api.model
-    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
-        """ Set the correct label for `unit_amount`, depending on company UoM """
-        result = super(AccountAnalyticLine, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
-        result['arch'] = self._apply_timesheet_label(result['arch'], view_type=view_type)
-        return result
+        values=self._timesheet_preprocess(values)
+        ifvalues.get('employee_id'):
+            employee=self.env['hr.employee'].browse(values['employee_id'])
+            ifnotemployee.active:
+                raiseUserError(_('Youcannotsetanarchivedemployeetotheexistingtimesheets.'))
+        if'name'invaluesandnotvalues.get('name'):
+            values['name']='/'
+        result=super(AccountAnalyticLine,self).write(values)
+        #appliedonlyfortimesheet
+        self.filtered(lambdat:t.project_id)._timesheet_postprocess(values)
+        returnresult
 
     @api.model
-    def _apply_timesheet_label(self, view_arch, view_type='form'):
-        doc = etree.XML(view_arch)
-        encoding_uom = self.env.company.timesheet_encode_uom_id
-        # Here, we select only the unit_amount field having no string set to give priority to
-        # custom inheretied view stored in database. Even if normally, no xpath can be done on
-        # 'string' attribute.
-        for node in doc.xpath("//field[@name='unit_amount'][@widget='timesheet_uom'][not(@string)]"):
-            node.set('string', _('Duration (%s)') % (re.sub(r'[\(\)]', '', encoding_uom.name or '')))
-        return etree.tostring(doc, encoding='unicode')
+    deffields_view_get(self,view_id=None,view_type='form',toolbar=False,submenu=False):
+        """Setthecorrectlabelfor`unit_amount`,dependingoncompanyUoM"""
+        result=super(AccountAnalyticLine,self).fields_view_get(view_id=view_id,view_type=view_type,toolbar=toolbar,submenu=submenu)
+        result['arch']=self._apply_timesheet_label(result['arch'],view_type=view_type)
+        returnresult
 
-    def _timesheet_get_portal_domain(self):
-        if self.env.user.has_group('hr_timesheet.group_hr_timesheet_user'):
-            # Then, he is internal user, and we take the domain for this current user
-            return self.env['ir.rule']._compute_domain(self._name)
-        return [
+    @api.model
+    def_apply_timesheet_label(self,view_arch,view_type='form'):
+        doc=etree.XML(view_arch)
+        encoding_uom=self.env.company.timesheet_encode_uom_id
+        #Here,weselectonlytheunit_amountfieldhavingnostringsettogivepriorityto
+        #custominheretiedviewstoredindatabase.Evenifnormally,noxpathcanbedoneon
+        #'string'attribute.
+        fornodeindoc.xpath("//field[@name='unit_amount'][@widget='timesheet_uom'][not(@string)]"):
+            node.set('string',_('Duration(%s)')%(re.sub(r'[\(\)]','',encoding_uom.nameor'')))
+        returnetree.tostring(doc,encoding='unicode')
+
+    def_timesheet_get_portal_domain(self):
+        ifself.env.user.has_group('hr_timesheet.group_hr_timesheet_user'):
+            #Then,heisinternaluser,andwetakethedomainforthiscurrentuser
+            returnself.env['ir.rule']._compute_domain(self._name)
+        return[
             '|',
                 '&',
-                    '|', '|', '|',
-                        ('task_id.project_id.message_partner_ids', 'child_of', [self.env.user.partner_id.commercial_partner_id.id]),
-                        ('task_id.message_partner_ids', 'child_of', [self.env.user.partner_id.commercial_partner_id.id]),
-                        ('task_id.project_id.allowed_portal_user_ids', 'in', [self.env.user.id]),
-                        ('task_id.allowed_user_ids', 'in', [self.env.user.id]),
-                    ('task_id.project_id.privacy_visibility', '=', 'portal'),
+                    '|','|','|',
+                        ('task_id.project_id.message_partner_ids','child_of',[self.env.user.partner_id.commercial_partner_id.id]),
+                        ('task_id.message_partner_ids','child_of',[self.env.user.partner_id.commercial_partner_id.id]),
+                        ('task_id.project_id.allowed_portal_user_ids','in',[self.env.user.id]),
+                        ('task_id.allowed_user_ids','in',[self.env.user.id]),
+                    ('task_id.project_id.privacy_visibility','=','portal'),
                 '&',
-                    ('task_id', '=', False),
+                    ('task_id','=',False),
                     '&',
                         '|',
-                            ('project_id.message_partner_ids', 'child_of', [self.env.user.partner_id.commercial_partner_id.id]),
-                            ('project_id.allowed_portal_user_ids', 'in', [self.env.user.id]),
-                        ('project_id.privacy_visibility', '=', 'portal')
+                            ('project_id.message_partner_ids','child_of',[self.env.user.partner_id.commercial_partner_id.id]),
+                            ('project_id.allowed_portal_user_ids','in',[self.env.user.id]),
+                        ('project_id.privacy_visibility','=','portal')
         ]
 
-    def _timesheet_preprocess(self, vals):
-        """ Deduce other field values from the one given.
-            Overrride this to compute on the fly some field that can not be computed fields.
-            :param values: dict values for `create`or `write`.
+    def_timesheet_preprocess(self,vals):
+        """Deduceotherfieldvaluesfromtheonegiven.
+            Overrridethistocomputeontheflysomefieldthatcannotbecomputedfields.
+            :paramvalues:dictvaluesfor`create`or`write`.
         """
-        # project implies analytic account
-        if vals.get('project_id') and not vals.get('account_id'):
-            project = self.env['project.project'].browse(vals.get('project_id'))
-            vals['account_id'] = project.analytic_account_id.id
-            vals['company_id'] = project.analytic_account_id.company_id.id or project.company_id.id
-            if not project.analytic_account_id.active:
-                raise UserError(_('The project you are timesheeting on is not linked to an active analytic account. Set one on the project configuration.'))
-        # employee implies user
-        if vals.get('employee_id') and not vals.get('user_id'):
-            employee = self.env['hr.employee'].browse(vals['employee_id'])
-            vals['user_id'] = employee.user_id.id
-        # force customer partner, from the task or the project
-        if (vals.get('project_id') or vals.get('task_id')) and not vals.get('partner_id'):
-            partner_id = False
-            if vals.get('task_id'):
-                partner_id = self.env['project.task'].browse(vals['task_id']).partner_id.id
+        #projectimpliesanalyticaccount
+        ifvals.get('project_id')andnotvals.get('account_id'):
+            project=self.env['project.project'].browse(vals.get('project_id'))
+            vals['account_id']=project.analytic_account_id.id
+            vals['company_id']=project.analytic_account_id.company_id.idorproject.company_id.id
+            ifnotproject.analytic_account_id.active:
+                raiseUserError(_('Theprojectyouaretimesheetingonisnotlinkedtoanactiveanalyticaccount.Setoneontheprojectconfiguration.'))
+        #employeeimpliesuser
+        ifvals.get('employee_id')andnotvals.get('user_id'):
+            employee=self.env['hr.employee'].browse(vals['employee_id'])
+            vals['user_id']=employee.user_id.id
+        #forcecustomerpartner,fromthetaskortheproject
+        if(vals.get('project_id')orvals.get('task_id'))andnotvals.get('partner_id'):
+            partner_id=False
+            ifvals.get('task_id'):
+                partner_id=self.env['project.task'].browse(vals['task_id']).partner_id.id
             else:
-                partner_id = self.env['project.project'].browse(vals['project_id']).partner_id.id
-            if partner_id:
-                vals['partner_id'] = partner_id
-        # set timesheet UoM from the AA company (AA implies uom)
-        if not vals.get('product_uom_id') and all(v in vals for v in ['account_id', 'project_id']):  # project_id required to check this is timesheet flow
-            analytic_account = self.env['account.analytic.account'].sudo().browse(vals['account_id'])
-            uom_id = analytic_account.company_id.project_time_mode_id.id
-            if not uom_id:
-                company_id = vals.get('company_id', False)
-                if not company_id:
-                    project = self.env['project.project'].browse(vals.get('project_id'))
-                    company_id = project.analytic_account_id.company_id.id or project.company_id.id
-                uom_id = self.env['res.company'].browse(company_id).project_time_mode_id.id
-            vals['product_uom_id'] = uom_id
-        return vals
+                partner_id=self.env['project.project'].browse(vals['project_id']).partner_id.id
+            ifpartner_id:
+                vals['partner_id']=partner_id
+        #settimesheetUoMfromtheAAcompany(AAimpliesuom)
+        ifnotvals.get('product_uom_id')andall(vinvalsforvin['account_id','project_id']): #project_idrequiredtocheckthisistimesheetflow
+            analytic_account=self.env['account.analytic.account'].sudo().browse(vals['account_id'])
+            uom_id=analytic_account.company_id.project_time_mode_id.id
+            ifnotuom_id:
+                company_id=vals.get('company_id',False)
+                ifnotcompany_id:
+                    project=self.env['project.project'].browse(vals.get('project_id'))
+                    company_id=project.analytic_account_id.company_id.idorproject.company_id.id
+                uom_id=self.env['res.company'].browse(company_id).project_time_mode_id.id
+            vals['product_uom_id']=uom_id
+        returnvals
 
-    def _timesheet_postprocess(self, values):
-        """ Hook to update record one by one according to the values of a `write` or a `create`. """
-        sudo_self = self.sudo()  # this creates only one env for all operation that required sudo() in `_timesheet_postprocess_values`override
-        values_to_write = self._timesheet_postprocess_values(values)
-        for timesheet in sudo_self:
-            if values_to_write[timesheet.id]:
+    def_timesheet_postprocess(self,values):
+        """Hooktoupdaterecordonebyoneaccordingtothevaluesofa`write`ora`create`."""
+        sudo_self=self.sudo() #thiscreatesonlyoneenvforalloperationthatrequiredsudo()in`_timesheet_postprocess_values`override
+        values_to_write=self._timesheet_postprocess_values(values)
+        fortimesheetinsudo_self:
+            ifvalues_to_write[timesheet.id]:
                 timesheet.write(values_to_write[timesheet.id])
-        return values
+        returnvalues
 
-    def _timesheet_postprocess_values(self, values):
-        """ Get the addionnal values to write on record
-            :param dict values: values for the model's fields, as a dictionary::
-                {'field_name': field_value, ...}
-            :return: a dictionary mapping each record id to its corresponding
-                dictionary values to write (may be empty).
+    def_timesheet_postprocess_values(self,values):
+        """Gettheaddionnalvaluestowriteonrecord
+            :paramdictvalues:valuesforthemodel'sfields,asadictionary::
+                {'field_name':field_value,...}
+            :return:adictionarymappingeachrecordidtoitscorresponding
+                dictionaryvaluestowrite(maybeempty).
         """
-        result = {id_: {} for id_ in self.ids}
-        sudo_self = self.sudo()  # this creates only one env for all operation that required sudo()
-        # (re)compute the amount (depending on unit_amount, employee_id for the cost, and account_id for currency)
-        if any(field_name in values for field_name in ['unit_amount', 'employee_id', 'account_id']):
-            for timesheet in sudo_self:
-                cost = timesheet.employee_id.timesheet_cost or 0.0
-                amount = -timesheet.unit_amount * cost
-                amount_converted = timesheet.employee_id.currency_id._convert(
-                    amount, timesheet.account_id.currency_id or timesheet.currency_id, self.env.company, timesheet.date)
+        result={id_:{}forid_inself.ids}
+        sudo_self=self.sudo() #thiscreatesonlyoneenvforalloperationthatrequiredsudo()
+        #(re)computetheamount(dependingonunit_amount,employee_idforthecost,andaccount_idforcurrency)
+        ifany(field_nameinvaluesforfield_namein['unit_amount','employee_id','account_id']):
+            fortimesheetinsudo_self:
+                cost=timesheet.employee_id.timesheet_costor0.0
+                amount=-timesheet.unit_amount*cost
+                amount_converted=timesheet.employee_id.currency_id._convert(
+                    amount,timesheet.account_id.currency_idortimesheet.currency_id,self.env.company,timesheet.date)
                 result[timesheet.id].update({
-                    'amount': amount_converted,
+                    'amount':amount_converted,
                 })
-        return result
+        returnresult
 
-    def _is_timesheet_encode_uom_day(self):
-        company_uom = self.env.company.timesheet_encode_uom_id
-        return company_uom == self.env.ref('uom.product_uom_day')
+    def_is_timesheet_encode_uom_day(self):
+        company_uom=self.env.company.timesheet_encode_uom_id
+        returncompany_uom==self.env.ref('uom.product_uom_day')
 
-    def _convert_hours_to_days(self, time):
-        uom_hour = self.env.ref('uom.product_uom_hour')
-        uom_day = self.env.ref('uom.product_uom_day')
-        return round(uom_hour._compute_quantity(time, uom_day, raise_if_failure=False), 2)
+    def_convert_hours_to_days(self,time):
+        uom_hour=self.env.ref('uom.product_uom_hour')
+        uom_day=self.env.ref('uom.product_uom_day')
+        returnround(uom_hour._compute_quantity(time,uom_day,raise_if_failure=False),2)
 
-    def _get_timesheet_time_day(self):
-        return self._convert_hours_to_days(self.unit_amount)
+    def_get_timesheet_time_day(self):
+        returnself._convert_hours_to_days(self.unit_amount)

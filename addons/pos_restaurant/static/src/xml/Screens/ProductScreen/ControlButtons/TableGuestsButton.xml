@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="TableGuestsButton" owl="1">
-        <div class="control-button">
-            <span class="control-button-number">
-                <t t-esc="nGuests" />
+    <tt-name="TableGuestsButton"owl="1">
+        <divclass="control-button">
+            <spanclass="control-button-number">
+                <tt-esc="nGuests"/>
             </span>
-            <span> </span>
+            <span></span>
             <span>Guests</span>
         </div>
     </t>

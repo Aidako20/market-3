@@ -1,10 +1,10 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import flectra.tests
+importflectra.tests
 
 
-@flectra.tests.tagged('post_install', '-at_install')
-class TestUi(flectra.tests.HttpCase):
+@flectra.tests.tagged('post_install','-at_install')
+classTestUi(flectra.tests.HttpCase):
 
-    def test_01_mail_tour(self):
-        self.start_tour("/web", 'mail_tour', login="admin")
+    deftest_01_mail_tour(self):
+        self.start_tour("/web",'mail_tour',login="admin")

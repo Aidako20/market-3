@@ -1,100 +1,100 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
 
-    <record id="view_hr_holidays_filter_report" model="ir.ui.view">
-        <field name="name">hr.holidays.filter</field>
-        <field name="model">hr.leave.report</field>
-        <field name="arch" type="xml">
-            <search string="Search Time Off">
-                <field name="name"/>
-                <filter domain="[('state','in',('confirm','validate1'))]" string="To Approve" name="approve"/>
-                <filter string="Approved Requests" domain="[('state', '=', 'validate')]" name="validated"/>
+    <recordid="view_hr_holidays_filter_report"model="ir.ui.view">
+        <fieldname="name">hr.holidays.filter</field>
+        <fieldname="model">hr.leave.report</field>
+        <fieldname="arch"type="xml">
+            <searchstring="SearchTimeOff">
+                <fieldname="name"/>
+                <filterdomain="[('state','in',('confirm','validate1'))]"string="ToApprove"name="approve"/>
+                <filterstring="ApprovedRequests"domain="[('state','=','validate')]"name="validated"/>
                 <separator/>
-                <filter name="active_types" string="Active Types" domain="[('holiday_status_id.active', '=', True)]" help="Filters only on requests that belong to an time off type that is 'active' (active field is True)"/>
+                <filtername="active_types"string="ActiveTypes"domain="[('holiday_status_id.active','=',True)]"help="Filtersonlyonrequeststhatbelongtoantimeofftypethatis'active'(activefieldisTrue)"/>
                 <separator/>
-                <filter string="My Department Time Off" name="department" domain="[('department_id.manager_id.user_id', '=', uid)]" help="My Department Time Off"/>
-                <filter name="my_team_leaves" string="My Team Time Off" domain="[('employee_id.parent_id.user_id', '=', uid)]" groups="hr_holidays.group_hr_holidays_manager" help="Time Off of Your Team Member"/>
+                <filterstring="MyDepartmentTimeOff"name="department"domain="[('department_id.manager_id.user_id','=',uid)]"help="MyDepartmentTimeOff"/>
+                <filtername="my_team_leaves"string="MyTeamTimeOff"domain="[('employee_id.parent_id.user_id','=',uid)]"groups="hr_holidays.group_hr_holidays_manager"help="TimeOffofYourTeamMember"/>
                 <separator/>
-                <filter name="year" string="Current Year"
-                    domain="[('holiday_status_id.active', '=', True)]" help="Active Time Off"/>
+                <filtername="year"string="CurrentYear"
+                    domain="[('holiday_status_id.active','=',True)]"help="ActiveTimeOff"/>
                 <separator/>
-                <filter string="My Requests" name="my_leaves" domain="[('employee_id.user_id', '=', uid)]"/>
+                <filterstring="MyRequests"name="my_leaves"domain="[('employee_id.user_id','=',uid)]"/>
                 <separator/>
-                <field name="employee_id"/>
-                <field name="department_id" operator="child_of"/>
-                <field name="holiday_status_id"/>
-                <group expand="0" string="Group By">
-                    <filter name="group_employee" string="Employee" context="{'group_by':'employee_id'}"/>
-                    <filter name="group_type" string="Type" context="{'group_by':'holiday_status_id'}"/>
+                <fieldname="employee_id"/>
+                <fieldname="department_id"operator="child_of"/>
+                <fieldname="holiday_status_id"/>
+                <groupexpand="0"string="GroupBy">
+                    <filtername="group_employee"string="Employee"context="{'group_by':'employee_id'}"/>
+                    <filtername="group_type"string="Type"context="{'group_by':'holiday_status_id'}"/>
                     <separator/>
-                    <filter name="group_date_from" string="Start Date" context="{'group_by':'date_from'}"/>
+                    <filtername="group_date_from"string="StartDate"context="{'group_by':'date_from'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <record id="hr_leave_report_tree" model="ir.ui.view">
-        <field name="name">report.hr.holidays.report.leave_all.tree</field>
-        <field name="model">hr.leave.report</field>
-        <field name="arch" type="xml">
-            <tree create="0" edit="0" delete="0">
-                <field name="employee_id"/>
-                <field name="number_of_days" string="Number of Days" sum="Remaining Days"/>
-                <field name="leave_type"/>
-                <field name="date_from"/>
-                <field name="date_to"/>
-                <field name="state"/>
-                <field name="name"/>
+    <recordid="hr_leave_report_tree"model="ir.ui.view">
+        <fieldname="name">report.hr.holidays.report.leave_all.tree</field>
+        <fieldname="model">hr.leave.report</field>
+        <fieldname="arch"type="xml">
+            <treecreate="0"edit="0"delete="0">
+                <fieldname="employee_id"/>
+                <fieldname="number_of_days"string="NumberofDays"sum="RemainingDays"/>
+                <fieldname="leave_type"/>
+                <fieldname="date_from"/>
+                <fieldname="date_to"/>
+                <fieldname="state"/>
+                <fieldname="name"/>
             </tree>
         </field>
     </record>
 
-    <!-- TODO: See if we need to keep this -->
-    <record id="hr_leave_report_kanban" model="ir.ui.view">
-        <field name="name">report.hr.holidays.report.leave_all.kanban</field>
-        <field name="model">hr.leave.report</field>
-        <field name="arch" type="xml">
-            <kanban class="o_kanban_mobile" create="0">
-                <field name="employee_id"/>
-                <field name="date_from"/>
-                <field name="date_to"/>
-                <field name="name"/>
-                <field name="number_of_days"/>
+    <!--TODO:Seeifweneedtokeepthis-->
+    <recordid="hr_leave_report_kanban"model="ir.ui.view">
+        <fieldname="name">report.hr.holidays.report.leave_all.kanban</field>
+        <fieldname="model">hr.leave.report</field>
+        <fieldname="arch"type="xml">
+            <kanbanclass="o_kanban_mobile"create="0">
+                <fieldname="employee_id"/>
+                <fieldname="date_from"/>
+                <fieldname="date_to"/>
+                <fieldname="name"/>
+                <fieldname="number_of_days"/>
                 <templates>
-                    <t t-name="kanban-box">
-                        <div t-attf-class="oe_kanban_global_click">
+                    <tt-name="kanban-box">
+                        <divt-attf-class="oe_kanban_global_click">
                             <div>
                                 <span>
-                                    <img t-att-src="kanban_image('hr.employee', 'image_128', record.employee_id.raw_value)" t-att-title="record.employee_id.value" t-att-alt="record.employee_id.value" class="oe_kanban_avatar o_image_40_cover float-left mr4"/>
+                                    <imgt-att-src="kanban_image('hr.employee','image_128',record.employee_id.raw_value)"t-att-title="record.employee_id.value"t-att-alt="record.employee_id.value"class="oe_kanban_avataro_image_40_coverfloat-leftmr4"/>
                                 </span>
                                 <span>
                                     <div>
-                                        <strong class="o_kanban_record_title"><t t-esc="record.employee_id.value"/></strong>
-                                        <span class="float-right">
-                                            <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'validate': 'success','confirm': 'default', 'cancel': 'danger'}}"/>
+                                        <strongclass="o_kanban_record_title"><tt-esc="record.employee_id.value"/></strong>
+                                        <spanclass="float-right">
+                                            <fieldname="state"widget="label_selection"options="{'classes':{'draft':'default','validate':'success','confirm':'default','cancel':'danger'}}"/>
                                         </span>
                                     </div>
-                                    <div class="text-muted o_kanban_record_subtitle">
-                                        <t t-esc="record.name.value"/>
+                                    <divclass="text-mutedo_kanban_record_subtitle">
+                                        <tt-esc="record.name.value"/>
                                     </div>
                                 </span>
                             </div>
-                            <hr class="mt4 mb8"/>
-                            <div class="o_kanban_record_bottom mt8 mb4">
-                                <div t-attf-class="oe_kanban_bottom_left #{record.date_from.value ? 'mt8 mb4': ''}">
-                                    <table class="text-right" t-if="record.date_from.value">
+                            <hrclass="mt4mb8"/>
+                            <divclass="o_kanban_record_bottommt8mb4">
+                                <divt-attf-class="oe_kanban_bottom_left#{record.date_from.value?'mt8mb4':''}">
+                                    <tableclass="text-right"t-if="record.date_from.value">
                                         <tr>
-                                            <td style="padding-bottom:4px"><small class="text-muted">from</small></td>
-                                            <td style="padding:0 0 4px 4px"><t t-esc="record.date_from.value"/></td>
+                                            <tdstyle="padding-bottom:4px"><smallclass="text-muted">from</small></td>
+                                            <tdstyle="padding:004px4px"><tt-esc="record.date_from.value"/></td>
                                         </tr>
                                         <tr>
-                                            <td><small class="text-muted">to</small></td>
-                                            <td style="padding-left:4px"><t t-esc="record.date_to.value"/></td>
+                                            <td><smallclass="text-muted">to</small></td>
+                                            <tdstyle="padding-left:4px"><tt-esc="record.date_to.value"/></td>
                                         </tr>
                                     </table>
                                 </div>
-                                <div t-attf-class="oe_kanban_bottom_right #{record.date_from.value ? 'mt8': ''}">
-                                    <span class="badge badge-pill"><t t-esc="record.number_of_days.value"/> days</span>
+                                <divt-attf-class="oe_kanban_bottom_right#{record.date_from.value?'mt8':''}">
+                                    <spanclass="badgebadge-pill"><tt-esc="record.number_of_days.value"/>days</span>
                                 </div>
                             </div>
                         </div>
@@ -104,14 +104,14 @@
         </field>
     </record>
 
-    <record id="act_hr_employee_holiday_request" model="ir.actions.server">
-        <field name="name">Time off Analysis</field>
-        <field name="model_id" ref="hr_holidays.model_hr_leave_report"/>
-        <field name="binding_model_id" ref="hr.model_hr_employee"/>
-        <field name="state">code</field>
-        <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>
-        <field name="code">
-        action = model.action_time_off_analysis()
+    <recordid="act_hr_employee_holiday_request"model="ir.actions.server">
+        <fieldname="name">TimeoffAnalysis</field>
+        <fieldname="model_id"ref="hr_holidays.model_hr_leave_report"/>
+        <fieldname="binding_model_id"ref="hr.model_hr_employee"/>
+        <fieldname="state">code</field>
+        <fieldname="groups_id"eval="[(4,ref('base.group_user'))]"/>
+        <fieldname="code">
+        action=model.action_time_off_analysis()
         </field>
     </record>
 

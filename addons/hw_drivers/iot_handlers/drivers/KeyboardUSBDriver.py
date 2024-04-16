@@ -1,368 +1,368 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import ctypes
-import evdev
-import json
-import logging
-from lxml import etree
-import os
-from pathlib import Path
-from queue import Queue, Empty
-import re
-import subprocess
-from threading import Lock
-import time
-import urllib3
-from usb import util
+importctypes
+importevdev
+importjson
+importlogging
+fromlxmlimportetree
+importos
+frompathlibimportPath
+fromqueueimportQueue,Empty
+importre
+importsubprocess
+fromthreadingimportLock
+importtime
+importurllib3
+fromusbimportutil
 
-from flectra import http, _
-from flectra.addons.hw_drivers.controllers.proxy import proxy_drivers
-from flectra.addons.hw_drivers.driver import Driver
-from flectra.addons.hw_drivers.event_manager import event_manager
-from flectra.addons.hw_drivers.main import iot_devices
-from flectra.addons.hw_drivers.tools import helpers
+fromflectraimporthttp,_
+fromflectra.addons.hw_drivers.controllers.proxyimportproxy_drivers
+fromflectra.addons.hw_drivers.driverimportDriver
+fromflectra.addons.hw_drivers.event_managerimportevent_manager
+fromflectra.addons.hw_drivers.mainimportiot_devices
+fromflectra.addons.hw_drivers.toolsimporthelpers
 
-_logger = logging.getLogger(__name__)
-xlib = ctypes.cdll.LoadLibrary('libX11.so.6')
+_logger=logging.getLogger(__name__)
+xlib=ctypes.cdll.LoadLibrary('libX11.so.6')
 
 
-class KeyboardUSBDriver(Driver):
-    connection_type = 'usb'
-    keyboard_layout_groups = []
-    available_layouts = []
+classKeyboardUSBDriver(Driver):
+    connection_type='usb'
+    keyboard_layout_groups=[]
+    available_layouts=[]
 
-    def __init__(self, identifier, device):
-        if not hasattr(KeyboardUSBDriver, 'display'):
-            os.environ['XAUTHORITY'] = "/run/lightdm/pi/xauthority"
-            KeyboardUSBDriver.display = xlib.XOpenDisplay(bytes(":0.0", "utf-8"))
+    def__init__(self,identifier,device):
+        ifnothasattr(KeyboardUSBDriver,'display'):
+            os.environ['XAUTHORITY']="/run/lightdm/pi/xauthority"
+            KeyboardUSBDriver.display=xlib.XOpenDisplay(bytes(":0.0","utf-8"))
 
-        super(KeyboardUSBDriver, self).__init__(identifier, device)
-        self.device_connection = 'direct'
-        self.device_name = self._set_name()
+        super(KeyboardUSBDriver,self).__init__(identifier,device)
+        self.device_connection='direct'
+        self.device_name=self._set_name()
 
-        # from https://github.com/xkbcommon/libxkbcommon/blob/master/test/evdev-scancodes.h
-        self._scancode_to_modifier = {
-            42: 'left_shift',
-            54: 'right_shift',
-            58: 'caps_lock',
-            69: 'num_lock',
-            100: 'alt_gr', # right alt
+        #fromhttps://github.com/xkbcommon/libxkbcommon/blob/master/test/evdev-scancodes.h
+        self._scancode_to_modifier={
+            42:'left_shift',
+            54:'right_shift',
+            58:'caps_lock',
+            69:'num_lock',
+            100:'alt_gr',#rightalt
         }
-        self._tracked_modifiers = {modifier: False for modifier in self._scancode_to_modifier.values()}
+        self._tracked_modifiers={modifier:Falseformodifierinself._scancode_to_modifier.values()}
 
-        if not KeyboardUSBDriver.available_layouts:
+        ifnotKeyboardUSBDriver.available_layouts:
             KeyboardUSBDriver.load_layouts_list()
         KeyboardUSBDriver.send_layouts_list()
 
-        for evdev_device in [evdev.InputDevice(path) for path in evdev.list_devices()]:
-            if (device.idVendor == evdev_device.info.vendor) and (device.idProduct == evdev_device.info.product):
-                self.input_device = evdev_device
+        forevdev_devicein[evdev.InputDevice(path)forpathinevdev.list_devices()]:
+            if(device.idVendor==evdev_device.info.vendor)and(device.idProduct==evdev_device.info.product):
+                self.input_device=evdev_device
 
-        self._set_device_type('scanner') if self._is_scanner() else self._set_device_type()
-
-    @classmethod
-    def supported(cls, device):
-        for cfg in device:
-            for itf in cfg:
-                if itf.bInterfaceClass == 3 and itf.bInterfaceProtocol != 2:
-                    device.interface_protocol = itf.bInterfaceProtocol
-                    return True
-        return False
+        self._set_device_type('scanner')ifself._is_scanner()elseself._set_device_type()
 
     @classmethod
-    def get_status(self):
-        """Allows `hw_proxy.Proxy` to retrieve the status of the scanners"""
-        status = 'connected' if any(iot_devices[d].device_type == "scanner" for d in iot_devices) else 'disconnected'
-        return {'status': status, 'messages': ''}
+    defsupported(cls,device):
+        forcfgindevice:
+            foritfincfg:
+                ifitf.bInterfaceClass==3anditf.bInterfaceProtocol!=2:
+                    device.interface_protocol=itf.bInterfaceProtocol
+                    returnTrue
+        returnFalse
 
     @classmethod
-    def send_layouts_list(cls):
-        server = helpers.get_flectra_server_url()
-        if server:
+    defget_status(self):
+        """Allows`hw_proxy.Proxy`toretrievethestatusofthescanners"""
+        status='connected'ifany(iot_devices[d].device_type=="scanner"fordiniot_devices)else'disconnected'
+        return{'status':status,'messages':''}
+
+    @classmethod
+    defsend_layouts_list(cls):
+        server=helpers.get_flectra_server_url()
+        ifserver:
             urllib3.disable_warnings()
-            pm = urllib3.PoolManager(cert_reqs='CERT_NONE')
-            server = server + '/iot/keyboard_layouts'
+            pm=urllib3.PoolManager(cert_reqs='CERT_NONE')
+            server=server+'/iot/keyboard_layouts'
             try:
-                pm.request('POST', server, fields={'available_layouts': json.dumps(cls.available_layouts)})
-            except Exception as e:
-                _logger.error('Could not reach configured server')
-                _logger.error('A error encountered : %s ' % e)
+                pm.request('POST',server,fields={'available_layouts':json.dumps(cls.available_layouts)})
+            exceptExceptionase:
+                _logger.error('Couldnotreachconfiguredserver')
+                _logger.error('Aerrorencountered:%s'%e)
 
     @classmethod
-    def load_layouts_list(cls):
-        tree = etree.parse("/usr/share/X11/xkb/rules/base.xml", etree.XMLParser(ns_clean=True, recover=True))
-        layouts = tree.xpath("//layout")
-        for layout in layouts:
-            layout_name = layout.xpath("./configItem/name")[0].text
-            layout_description = layout.xpath("./configItem/description")[0].text
+    defload_layouts_list(cls):
+        tree=etree.parse("/usr/share/X11/xkb/rules/base.xml",etree.XMLParser(ns_clean=True,recover=True))
+        layouts=tree.xpath("//layout")
+        forlayoutinlayouts:
+            layout_name=layout.xpath("./configItem/name")[0].text
+            layout_description=layout.xpath("./configItem/description")[0].text
             KeyboardUSBDriver.available_layouts.append({
-                'name': layout_description,
-                'layout': layout_name,
+                'name':layout_description,
+                'layout':layout_name,
             })
-            for variant in layout.xpath("./variantList/variant"):
-                variant_name = variant.xpath("./configItem/name")[0].text
-                variant_description = variant.xpath("./configItem/description")[0].text
+            forvariantinlayout.xpath("./variantList/variant"):
+                variant_name=variant.xpath("./configItem/name")[0].text
+                variant_description=variant.xpath("./configItem/description")[0].text
                 KeyboardUSBDriver.available_layouts.append({
-                    'name': variant_description,
-                    'layout': layout_name,
-                    'variant': variant_name,
+                    'name':variant_description,
+                    'layout':layout_name,
+                    'variant':variant_name,
                 })
 
-    def _set_name(self):
+    def_set_name(self):
         try:
-            manufacturer = util.get_string(self.dev, self.dev.iManufacturer)
-            product = util.get_string(self.dev, self.dev.iProduct)
-            return re.sub(r"[^\w \-+/*&]", '', "%s - %s" % (manufacturer, product))
-        except ValueError as e:
+            manufacturer=util.get_string(self.dev,self.dev.iManufacturer)
+            product=util.get_string(self.dev,self.dev.iProduct)
+            returnre.sub(r"[^\w\-+/*&]",'',"%s-%s"%(manufacturer,product))
+        exceptValueErrorase:
             _logger.warning(e)
-            return _('Unknown input device')
+            return_('Unknowninputdevice')
 
-    def action(self, data):
-        if data.get('action', False) == 'update_layout':
-            layout = {
-                'layout': data.get('layout'),
-                'variant': data.get('variant'),
+    defaction(self,data):
+        ifdata.get('action',False)=='update_layout':
+            layout={
+                'layout':data.get('layout'),
+                'variant':data.get('variant'),
             }
             self._change_keyboard_layout(layout)
             self.save_layout(layout)
-        elif data.get('action', False) == 'update_is_scanner':
-            is_scanner = {'is_scanner': data.get('is_scanner')}
+        elifdata.get('action',False)=='update_is_scanner':
+            is_scanner={'is_scanner':data.get('is_scanner')}
             self.save_is_scanner(is_scanner)
         else:
-            self.data['value'] = ''
+            self.data['value']=''
             event_manager.device_changed(self)
 
-    def run(self):
+    defrun(self):
         try:
-            for event in self.input_device.read_loop():
-                if self._stopped.isSet():
+            foreventinself.input_device.read_loop():
+                ifself._stopped.isSet():
                     break
-                if event.type == evdev.ecodes.EV_KEY:
-                    data = evdev.categorize(event)
+                ifevent.type==evdev.ecodes.EV_KEY:
+                    data=evdev.categorize(event)
 
-                    modifier_name = self._scancode_to_modifier.get(data.scancode)
-                    if modifier_name:
-                        if modifier_name in ('caps_lock', 'num_lock'):
-                            if data.keystate == 1:
-                                self._tracked_modifiers[modifier_name] = not self._tracked_modifiers[modifier_name]
+                    modifier_name=self._scancode_to_modifier.get(data.scancode)
+                    ifmodifier_name:
+                        ifmodifier_namein('caps_lock','num_lock'):
+                            ifdata.keystate==1:
+                                self._tracked_modifiers[modifier_name]=notself._tracked_modifiers[modifier_name]
                         else:
-                            self._tracked_modifiers[modifier_name] = bool(data.keystate)  # 1 for keydown, 0 for keyup
-                    elif data.keystate == 1:
+                            self._tracked_modifiers[modifier_name]=bool(data.keystate) #1forkeydown,0forkeyup
+                    elifdata.keystate==1:
                         self.key_input(data.scancode)
 
-        except Exception as err:
+        exceptExceptionaserr:
             _logger.warning(err)
 
-    def _change_keyboard_layout(self, new_layout):
-        """Change the layout of the current device to what is specified in
+    def_change_keyboard_layout(self,new_layout):
+        """Changethelayoutofthecurrentdevicetowhatisspecifiedin
         new_layout.
 
         Args:
-            new_layout (dict): A dict containing two keys:
-                - layout (str): The layout code
-                - variant (str): An optional key to represent the variant of the
-                                 selected layout
+            new_layout(dict):Adictcontainingtwokeys:
+                -layout(str):Thelayoutcode
+                -variant(str):Anoptionalkeytorepresentthevariantofthe
+                                 selectedlayout
         """
-        if hasattr(self, 'keyboard_layout'):
+        ifhasattr(self,'keyboard_layout'):
             KeyboardUSBDriver.keyboard_layout_groups.remove(self.keyboard_layout)
 
-        if new_layout:
-            self.keyboard_layout = new_layout.get('layout') or 'us'
-            if new_layout.get('variant'):
-                self.keyboard_layout += "(%s)" % new_layout['variant']
+        ifnew_layout:
+            self.keyboard_layout=new_layout.get('layout')or'us'
+            ifnew_layout.get('variant'):
+                self.keyboard_layout+="(%s)"%new_layout['variant']
         else:
-            self.keyboard_layout = 'us'
+            self.keyboard_layout='us'
 
         KeyboardUSBDriver.keyboard_layout_groups.append(self.keyboard_layout)
-        subprocess.call(["setxkbmap", "-display", ":0.0", ",".join(KeyboardUSBDriver.keyboard_layout_groups)])
+        subprocess.call(["setxkbmap","-display",":0.0",",".join(KeyboardUSBDriver.keyboard_layout_groups)])
 
-        # Close then re-open display to refresh the mapping
+        #Closethenre-opendisplaytorefreshthemapping
         xlib.XCloseDisplay(KeyboardUSBDriver.display)
-        KeyboardUSBDriver.display = xlib.XOpenDisplay(bytes(":0.0", "utf-8"))
+        KeyboardUSBDriver.display=xlib.XOpenDisplay(bytes(":0.0","utf-8"))
 
-    def save_layout(self, layout):
-        """Save the layout to a file on the box to read it when restarting it.
-        We need that in order to keep the selected layout after a reboot.
+    defsave_layout(self,layout):
+        """Savethelayouttoafileontheboxtoreaditwhenrestartingit.
+        Weneedthatinordertokeeptheselectedlayoutafterareboot.
 
         Args:
-            new_layout (dict): A dict containing two keys:
-                - layout (str): The layout code
-                - variant (str): An optional key to represent the variant of the
-                                 selected layout
+            new_layout(dict):Adictcontainingtwokeys:
+                -layout(str):Thelayoutcode
+                -variant(str):Anoptionalkeytorepresentthevariantofthe
+                                 selectedlayout
         """
-        file_path = Path.home() / 'flectra-keyboard-layouts.conf'
-        if file_path.exists():
-            data = json.loads(file_path.read_text())
+        file_path=Path.home()/'flectra-keyboard-layouts.conf'
+        iffile_path.exists():
+            data=json.loads(file_path.read_text())
         else:
-            data = {}
-        data[self.device_identifier] = layout
-        helpers.write_file('flectra-keyboard-layouts.conf', json.dumps(data))
+            data={}
+        data[self.device_identifier]=layout
+        helpers.write_file('flectra-keyboard-layouts.conf',json.dumps(data))
 
-    def save_is_scanner(self, is_scanner):
-        """Save the type of device.
-        We need that in order to keep the selected type of device after a reboot.
+    defsave_is_scanner(self,is_scanner):
+        """Savethetypeofdevice.
+        Weneedthatinordertokeeptheselectedtypeofdeviceafterareboot.
         """
-        file_path = Path.home() / 'flectra-keyboard-is-scanner.conf'
-        if file_path.exists():
-            data = json.loads(file_path.read_text())
+        file_path=Path.home()/'flectra-keyboard-is-scanner.conf'
+        iffile_path.exists():
+            data=json.loads(file_path.read_text())
         else:
-            data = {}
-        data[self.device_identifier] = is_scanner
-        helpers.write_file('flectra-keyboard-is-scanner.conf', json.dumps(data))
-        self._set_device_type('scanner') if is_scanner.get('is_scanner') else self._set_device_type()
+            data={}
+        data[self.device_identifier]=is_scanner
+        helpers.write_file('flectra-keyboard-is-scanner.conf',json.dumps(data))
+        self._set_device_type('scanner')ifis_scanner.get('is_scanner')elseself._set_device_type()
 
-    def load_layout(self):
-        """Read the layout from the saved filed and set it as current layout.
-        If no file or no layout is found we use 'us' by default.
+    defload_layout(self):
+        """Readthelayoutfromthesavedfiledandsetitascurrentlayout.
+        Ifnofileornolayoutisfoundweuse'us'bydefault.
         """
-        file_path = Path.home() / 'flectra-keyboard-layouts.conf'
-        if file_path.exists():
-            data = json.loads(file_path.read_text())
-            layout = data.get(self.device_identifier, {'layout': 'us'})
+        file_path=Path.home()/'flectra-keyboard-layouts.conf'
+        iffile_path.exists():
+            data=json.loads(file_path.read_text())
+            layout=data.get(self.device_identifier,{'layout':'us'})
         else:
-            layout = {'layout': 'us'}
+            layout={'layout':'us'}
         self._change_keyboard_layout(layout)
 
-    def _is_scanner(self):
-        """Read the device type from the saved filed and set it as current type.
-        If no file or no device type is found we try to detect it automatically.
+    def_is_scanner(self):
+        """Readthedevicetypefromthesavedfiledandsetitascurrenttype.
+        Ifnofileornodevicetypeisfoundwetrytodetectitautomatically.
         """
-        device_name = self.device_name.lower()
-        scanner_name = ['barcode', 'scanner', 'reader']
-        is_scanner = any(x in device_name for x in scanner_name) or self.dev.interface_protocol == '0'
+        device_name=self.device_name.lower()
+        scanner_name=['barcode','scanner','reader']
+        is_scanner=any(xindevice_nameforxinscanner_name)orself.dev.interface_protocol=='0'
 
-        file_path = Path.home() / 'flectra-keyboard-is-scanner.conf'
-        if file_path.exists():
-            data = json.loads(file_path.read_text())
-            is_scanner = data.get(self.device_identifier, {}).get('is_scanner', is_scanner)
-        return is_scanner
+        file_path=Path.home()/'flectra-keyboard-is-scanner.conf'
+        iffile_path.exists():
+            data=json.loads(file_path.read_text())
+            is_scanner=data.get(self.device_identifier,{}).get('is_scanner',is_scanner)
+        returnis_scanner
 
-    def _keyboard_input(self, scancode):
-        """Deal with a keyboard input. Send the character corresponding to the
-        pressed key represented by its scancode to the connected Flectra instance.
+    def_keyboard_input(self,scancode):
+        """Dealwithakeyboardinput.Sendthecharactercorrespondingtothe
+        pressedkeyrepresentedbyitsscancodetotheconnectedFlectrainstance.
 
         Args:
-            scancode (int): The scancode of the pressed key.
+            scancode(int):Thescancodeofthepressedkey.
         """
-        self.data['value'] = self._scancode_to_char(scancode)
-        if self.data['value']:
+        self.data['value']=self._scancode_to_char(scancode)
+        ifself.data['value']:
             event_manager.device_changed(self)
 
-    def _barcode_scanner_input(self, scancode):
-        """Deal with a barcode scanner input. Add the new character scanned to
-        the current barcode or complete the barcode if "Return" is pressed.
-        When a barcode is completed, two tasks are performed:
-            - Send a device_changed update to the event manager to notify the
-            listeners that the value has changed (used in Enterprise).
-            - Add the barcode to the list barcodes that are being queried in
+    def_barcode_scanner_input(self,scancode):
+        """Dealwithabarcodescannerinput.Addthenewcharacterscannedto
+        thecurrentbarcodeorcompletethebarcodeif"Return"ispressed.
+        Whenabarcodeiscompleted,twotasksareperformed:
+            -Sendadevice_changedupdatetotheeventmanagertonotifythe
+            listenersthatthevaluehaschanged(usedinEnterprise).
+            -Addthebarcodetothelistbarcodesthatarebeingqueriedin
             Community.
 
         Args:
-            scancode (int): The scancode of the pressed key.
+            scancode(int):Thescancodeofthepressedkey.
         """
-        if scancode == 28:  # Return
-            self.data['value'] = self._current_barcode
+        ifscancode==28: #Return
+            self.data['value']=self._current_barcode
             event_manager.device_changed(self)
-            self._barcodes.put((time.time(), self._current_barcode))
-            self._current_barcode = ''
+            self._barcodes.put((time.time(),self._current_barcode))
+            self._current_barcode=''
         else:
-            self._current_barcode += self._scancode_to_char(scancode)
+            self._current_barcode+=self._scancode_to_char(scancode)
 
-    def _set_device_type(self, device_type='keyboard'):
-        """Modify the device type between 'keyboard' and 'scanner'
+    def_set_device_type(self,device_type='keyboard'):
+        """Modifythedevicetypebetween'keyboard'and'scanner'
 
         Args:
-            type (string): Type wanted to switch
+            type(string):Typewantedtoswitch
         """
-        if device_type == 'scanner':
-            self.device_type = 'scanner'
-            self.key_input = self._barcode_scanner_input
-            self._barcodes = Queue()
-            self._current_barcode = ''
+        ifdevice_type=='scanner':
+            self.device_type='scanner'
+            self.key_input=self._barcode_scanner_input
+            self._barcodes=Queue()
+            self._current_barcode=''
             self.input_device.grab()
-            self.read_barcode_lock = Lock()
+            self.read_barcode_lock=Lock()
         else:
-            self.device_type = 'keyboard'
-            self.key_input = self._keyboard_input
+            self.device_type='keyboard'
+            self.key_input=self._keyboard_input
         self.load_layout()
 
-    def _scancode_to_char(self, scancode):
-        """Translate a received scancode to a character depending on the
-        selected keyboard layout and the current state of the keyboard's
+    def_scancode_to_char(self,scancode):
+        """Translateareceivedscancodetoacharacterdependingonthe
+        selectedkeyboardlayoutandthecurrentstateofthekeyboard's
         modifiers.
 
         Args:
-            scancode (int): The scancode of the pressed key, to be translated to
-                a character
+            scancode(int):Thescancodeofthepressedkey,tobetranslatedto
+                acharacter
 
         Returns:
-            str: The translated scancode.
+            str:Thetranslatedscancode.
         """
-        # Scancode -> Keysym : Depends on the keyboard layout
-        group = KeyboardUSBDriver.keyboard_layout_groups.index(self.keyboard_layout)
-        modifiers = self._get_active_modifiers(scancode)
-        keysym = ctypes.c_int(xlib.XkbKeycodeToKeysym(KeyboardUSBDriver.display, scancode + 8, group, modifiers))
+        #Scancode->Keysym:Dependsonthekeyboardlayout
+        group=KeyboardUSBDriver.keyboard_layout_groups.index(self.keyboard_layout)
+        modifiers=self._get_active_modifiers(scancode)
+        keysym=ctypes.c_int(xlib.XkbKeycodeToKeysym(KeyboardUSBDriver.display,scancode+8,group,modifiers))
 
-        # Translate Keysym to a character
-        key_pressed = ctypes.create_string_buffer(5)
-        xlib.XkbTranslateKeySym(KeyboardUSBDriver.display, ctypes.byref(keysym), 0, ctypes.byref(key_pressed), 5, ctypes.byref(ctypes.c_int()))
-        if key_pressed.value:
-            return key_pressed.value.decode('utf-8')
-        return ''
+        #TranslateKeysymtoacharacter
+        key_pressed=ctypes.create_string_buffer(5)
+        xlib.XkbTranslateKeySym(KeyboardUSBDriver.display,ctypes.byref(keysym),0,ctypes.byref(key_pressed),5,ctypes.byref(ctypes.c_int()))
+        ifkey_pressed.value:
+            returnkey_pressed.value.decode('utf-8')
+        return''
 
-    def _get_active_modifiers(self, scancode):
-        """Get the state of currently active modifiers.
+    def_get_active_modifiers(self,scancode):
+        """Getthestateofcurrentlyactivemodifiers.
 
         Args:
-            scancode (int): The scancode of the key being translated
+            scancode(int):Thescancodeofthekeybeingtranslated
 
         Returns:
-            int: The current state of the modifiers:
-                0 -- Lowercase
-                1 -- Highercase or (NumLock + key pressed on keypad)
-                2 -- AltGr
-                3 -- Highercase + AltGr
+            int:Thecurrentstateofthemodifiers:
+                0--Lowercase
+                1--Highercaseor(NumLock+keypressedonkeypad)
+                2--AltGr
+                3--Highercase+AltGr
         """
-        modifiers = 0
-        uppercase = (self._tracked_modifiers['right_shift'] or self._tracked_modifiers['left_shift']) ^ self._tracked_modifiers['caps_lock']
-        if uppercase or (scancode in [71, 72, 73, 75, 76, 77, 79, 80, 81, 82, 83] and self._tracked_modifiers['num_lock']):
-            modifiers += 1
+        modifiers=0
+        uppercase=(self._tracked_modifiers['right_shift']orself._tracked_modifiers['left_shift'])^self._tracked_modifiers['caps_lock']
+        ifuppercaseor(scancodein[71,72,73,75,76,77,79,80,81,82,83]andself._tracked_modifiers['num_lock']):
+            modifiers+=1
 
-        if self._tracked_modifiers['alt_gr']:
-            modifiers += 2
+        ifself._tracked_modifiers['alt_gr']:
+            modifiers+=2
 
-        return modifiers
+        returnmodifiers
 
-    def read_next_barcode(self):
-        """Get the value of the last barcode that was scanned but not sent yet
-        and not older than 5 seconds. This function is used in Community, when
-        we don't have access to the IoTLongpolling.
+    defread_next_barcode(self):
+        """Getthevalueofthelastbarcodethatwasscannedbutnotsentyet
+        andnotolderthan5seconds.ThisfunctionisusedinCommunity,when
+        wedon'thaveaccesstotheIoTLongpolling.
 
         Returns:
-            str: The next barcode to be read or an empty string.
+            str:Thenextbarcodetobereadoranemptystring.
         """
 
-        # Previous query still running, stop it by sending a fake barcode
-        if self.read_barcode_lock.locked():
-            self._barcodes.put((time.time(), ""))
+        #Previousquerystillrunning,stopitbysendingafakebarcode
+        ifself.read_barcode_lock.locked():
+            self._barcodes.put((time.time(),""))
 
-        with self.read_barcode_lock:
+        withself.read_barcode_lock:
             try:
-                timestamp, barcode = self._barcodes.get(True, 55)
-                if timestamp > time.time() - 5:
-                    return barcode
-            except Empty:
-                return ''
+                timestamp,barcode=self._barcodes.get(True,55)
+                iftimestamp>time.time()-5:
+                    returnbarcode
+            exceptEmpty:
+                return''
 
-proxy_drivers['scanner'] = KeyboardUSBDriver
+proxy_drivers['scanner']=KeyboardUSBDriver
 
 
-class KeyboardUSBController(http.Controller):
-    @http.route('/hw_proxy/scanner', type='json', auth='none', cors='*')
-    def get_barcode(self):
-        scanners = [iot_devices[d] for d in iot_devices if iot_devices[d].device_type == "scanner"]
-        if scanners:
-            return scanners[0].read_next_barcode()
+classKeyboardUSBController(http.Controller):
+    @http.route('/hw_proxy/scanner',type='json',auth='none',cors='*')
+    defget_barcode(self):
+        scanners=[iot_devices[d]fordiniot_devicesifiot_devices[d].device_type=="scanner"]
+        ifscanners:
+            returnscanners[0].read_next_barcode()
         time.sleep(5)
-        return None
+        returnNone

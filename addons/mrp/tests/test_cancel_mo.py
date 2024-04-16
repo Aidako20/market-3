@@ -1,139 +1,139 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.tests import Form
-from datetime import datetime, timedelta
+fromflectra.testsimportForm
+fromdatetimeimportdatetime,timedelta
 
-from flectra.fields import Datetime as Dt
-from flectra.exceptions import UserError
-from flectra.addons.mrp.tests.common import TestMrpCommon
+fromflectra.fieldsimportDatetimeasDt
+fromflectra.exceptionsimportUserError
+fromflectra.addons.mrp.tests.commonimportTestMrpCommon
 
 
-class TestMrpCancelMO(TestMrpCommon):
+classTestMrpCancelMO(TestMrpCommon):
 
-    def test_cancel_mo_without_routing_1(self):
-        """ Cancel a Manufacturing Order with no routing, no production.
+    deftest_cancel_mo_without_routing_1(self):
+        """CancelaManufacturingOrderwithnorouting,noproduction.
         """
-        # Create MO
-        manufacturing_order = self.generate_mo()[0]
-        # Do nothing, cancel it
+        #CreateMO
+        manufacturing_order=self.generate_mo()[0]
+        #Donothing,cancelit
         manufacturing_order.action_cancel()
-        # Check the MO and its moves are cancelled
-        self.assertEqual(manufacturing_order.state, 'cancel', "MO should be in cancel state.")
-        self.assertEqual(manufacturing_order.move_raw_ids[0].state, 'cancel',
-            "Cancelled MO raw moves must be cancelled as well.")
-        self.assertEqual(manufacturing_order.move_raw_ids[1].state, 'cancel',
-            "Cancelled MO raw moves must be cancelled as well.")
-        self.assertEqual(manufacturing_order.move_finished_ids.state, 'cancel',
-            "Cancelled MO finished move must be cancelled as well.")
+        #ChecktheMOanditsmovesarecancelled
+        self.assertEqual(manufacturing_order.state,'cancel',"MOshouldbeincancelstate.")
+        self.assertEqual(manufacturing_order.move_raw_ids[0].state,'cancel',
+            "CancelledMOrawmovesmustbecancelledaswell.")
+        self.assertEqual(manufacturing_order.move_raw_ids[1].state,'cancel',
+            "CancelledMOrawmovesmustbecancelledaswell.")
+        self.assertEqual(manufacturing_order.move_finished_ids.state,'cancel',
+            "CancelledMOfinishedmovemustbecancelledaswell.")
 
-    def test_cancel_mo_without_routing_2(self):
-        """ Cancel a Manufacturing Order with no routing but some productions.
+    deftest_cancel_mo_without_routing_2(self):
+        """CancelaManufacturingOrderwithnoroutingbutsomeproductions.
         """
-        # Create MO
-        manufacturing_order = self.generate_mo()[0]
-        # Produce some quantity
-        mo_form = Form(manufacturing_order)
-        mo_form.qty_producing = 2
-        manufacturing_order = mo_form.save()
-        # Cancel it
+        #CreateMO
+        manufacturing_order=self.generate_mo()[0]
+        #Producesomequantity
+        mo_form=Form(manufacturing_order)
+        mo_form.qty_producing=2
+        manufacturing_order=mo_form.save()
+        #Cancelit
         manufacturing_order.action_cancel()
-        # Check it's cancelled
-        self.assertEqual(manufacturing_order.state, 'cancel', "MO should be in cancel state.")
-        self.assertEqual(manufacturing_order.move_raw_ids[0].state, 'cancel',
-            "Cancelled MO raw moves must be cancelled as well.")
-        self.assertEqual(manufacturing_order.move_raw_ids[1].state, 'cancel',
-            "Cancelled MO raw moves must be cancelled as well.")
-        self.assertEqual(manufacturing_order.move_finished_ids.state, 'cancel',
-            "Cancelled MO finished move must be cancelled as well.")
+        #Checkit'scancelled
+        self.assertEqual(manufacturing_order.state,'cancel',"MOshouldbeincancelstate.")
+        self.assertEqual(manufacturing_order.move_raw_ids[0].state,'cancel',
+            "CancelledMOrawmovesmustbecancelledaswell.")
+        self.assertEqual(manufacturing_order.move_raw_ids[1].state,'cancel',
+            "CancelledMOrawmovesmustbecancelledaswell.")
+        self.assertEqual(manufacturing_order.move_finished_ids.state,'cancel',
+            "CancelledMOfinishedmovemustbecancelledaswell.")
 
-    def test_cancel_mo_without_routing_3(self):
-        """ Cancel a Manufacturing Order with no routing but some productions
-        after post inventory.
+    deftest_cancel_mo_without_routing_3(self):
+        """CancelaManufacturingOrderwithnoroutingbutsomeproductions
+        afterpostinventory.
         """
-        # Create MO
-        manufacturing_order = self.generate_mo(consumption='strict')[0]
-        # Produce some quantity (not all to avoid to done the MO when post inventory)
-        mo_form = Form(manufacturing_order)
-        mo_form.qty_producing = 2
-        manufacturing_order = mo_form.save()
-        # Post Inventory
+        #CreateMO
+        manufacturing_order=self.generate_mo(consumption='strict')[0]
+        #Producesomequantity(notalltoavoidtodonetheMOwhenpostinventory)
+        mo_form=Form(manufacturing_order)
+        mo_form.qty_producing=2
+        manufacturing_order=mo_form.save()
+        #PostInventory
         manufacturing_order._post_inventory()
-        # Cancel the MO
+        #CanceltheMO
         manufacturing_order.action_cancel()
-        # Check MO is marked as done and its SML are done or cancelled
-        self.assertEqual(manufacturing_order.state, 'done', "MO should be in done state.")
-        self.assertEqual(manufacturing_order.move_raw_ids[0].state, 'done',
-            "Due to 'post_inventory', some move raw must stay in done state")
-        self.assertEqual(manufacturing_order.move_raw_ids[1].state, 'done',
-            "Due to 'post_inventory', some move raw must stay in done state")
-        self.assertEqual(manufacturing_order.move_raw_ids[2].state, 'cancel',
-            "The other move raw are cancelled like their MO.")
-        self.assertEqual(manufacturing_order.move_raw_ids[3].state, 'cancel',
-            "The other move raw are cancelled like their MO.")
-        self.assertEqual(manufacturing_order.move_finished_ids[0].state, 'done',
-            "Due to 'post_inventory', a move finished must stay in done state")
-        self.assertEqual(manufacturing_order.move_finished_ids[1].state, 'cancel',
-            "The other move finished is cancelled like its MO.")
+        #CheckMOismarkedasdoneanditsSMLaredoneorcancelled
+        self.assertEqual(manufacturing_order.state,'done',"MOshouldbeindonestate.")
+        self.assertEqual(manufacturing_order.move_raw_ids[0].state,'done',
+            "Dueto'post_inventory',somemoverawmuststayindonestate")
+        self.assertEqual(manufacturing_order.move_raw_ids[1].state,'done',
+            "Dueto'post_inventory',somemoverawmuststayindonestate")
+        self.assertEqual(manufacturing_order.move_raw_ids[2].state,'cancel',
+            "TheothermoverawarecancelledliketheirMO.")
+        self.assertEqual(manufacturing_order.move_raw_ids[3].state,'cancel',
+            "TheothermoverawarecancelledliketheirMO.")
+        self.assertEqual(manufacturing_order.move_finished_ids[0].state,'done',
+            "Dueto'post_inventory',amovefinishedmuststayindonestate")
+        self.assertEqual(manufacturing_order.move_finished_ids[1].state,'cancel',
+            "TheothermovefinishediscancelledlikeitsMO.")
 
-    def test_unlink_mo(self):
-        """ Try to unlink a Manufacturing Order, and check it's possible or not
-        depending of the MO state (must be in cancel state to be unlinked, but
-        the unlink method will try to cancel MO before unlink them).
+    deftest_unlink_mo(self):
+        """TrytounlinkaManufacturingOrder,andcheckit'spossibleornot
+        dependingoftheMOstate(mustbeincancelstatetobeunlinked,but
+        theunlinkmethodwilltrytocancelMObeforeunlinkthem).
         """
-        # Case #1: Create MO, do nothing and try to unlink it (can be deleted)
-        manufacturing_order = self.generate_mo()[0]
-        self.assertEqual(manufacturing_order.exists().state, 'confirmed')
+        #Case#1:CreateMO,donothingandtrytounlinkit(canbedeleted)
+        manufacturing_order=self.generate_mo()[0]
+        self.assertEqual(manufacturing_order.exists().state,'confirmed')
         manufacturing_order.unlink()
-        # Check the MO is deleted.
-        self.assertEqual(manufacturing_order.exists().state, False)
+        #ChecktheMOisdeleted.
+        self.assertEqual(manufacturing_order.exists().state,False)
 
-        # Case #2: Create MO, make and post some production, then try to unlink
-        # it (cannot be deleted)
-        manufacturing_order = self.generate_mo()[0]
-        # Produce some quantity (not all to avoid to done the MO when post inventory)
-        mo_form = Form(manufacturing_order)
-        mo_form.qty_producing = 2
-        manufacturing_order = mo_form.save()
-        # Post Inventory
+        #Case#2:CreateMO,makeandpostsomeproduction,thentrytounlink
+        #it(cannotbedeleted)
+        manufacturing_order=self.generate_mo()[0]
+        #Producesomequantity(notalltoavoidtodonetheMOwhenpostinventory)
+        mo_form=Form(manufacturing_order)
+        mo_form.qty_producing=2
+        manufacturing_order=mo_form.save()
+        #PostInventory
         manufacturing_order._post_inventory()
-        # Unlink the MO must raises an UserError since it cannot be really cancelled
-        self.assertEqual(manufacturing_order.exists().state, 'progress')
-        with self.assertRaises(UserError):
+        #UnlinktheMOmustraisesanUserErrorsinceitcannotbereallycancelled
+        self.assertEqual(manufacturing_order.exists().state,'progress')
+        withself.assertRaises(UserError):
             manufacturing_order.unlink()
 
-    def test_cancel_mo_with_workorder(self):
+    deftest_cancel_mo_with_workorder(self):
         """
-            Create a manufacturing order without component and with a work order
-            and check that when you cancel the MO, the WO is also canceled.
+            Createamanufacturingorderwithoutcomponentandwithaworkorder
+            andcheckthatwhenyoucanceltheMO,theWOisalsocanceled.
         """
 
-        bom = self.env['mrp.bom'].create({
-            'product_id': self.product_2.id,
-            'product_tmpl_id': self.product_2.product_tmpl_id.id,
-            'product_uom_id': self.product_2.uom_id.id,
-            'consumption': 'flexible',
-            'product_qty': 1.0,
-            'operation_ids': [
-                (0, 0, {'name': 'test_wo', 'workcenter_id': self.workcenter_1.id, 'time_cycle': 15, 'sequence': 1}),
+        bom=self.env['mrp.bom'].create({
+            'product_id':self.product_2.id,
+            'product_tmpl_id':self.product_2.product_tmpl_id.id,
+            'product_uom_id':self.product_2.uom_id.id,
+            'consumption':'flexible',
+            'product_qty':1.0,
+            'operation_ids':[
+                (0,0,{'name':'test_wo','workcenter_id':self.workcenter_1.id,'time_cycle':15,'sequence':1}),
             ],
-            'type': 'normal',
-            'sequence': 2,
-            'bom_line_ids': []
+            'type':'normal',
+            'sequence':2,
+            'bom_line_ids':[]
             })
 
-        # Create MO
-        production_form = Form(self.env['mrp.production'])
-        production_form.product_id = self.product_2
-        production_form.bom_id = bom
-        manufacturing_order = production_form.save()
+        #CreateMO
+        production_form=Form(self.env['mrp.production'])
+        production_form.product_id=self.product_2
+        production_form.bom_id=bom
+        manufacturing_order=production_form.save()
 
-        # Check that there is no component
+        #Checkthatthereisnocomponent
         self.assertFalse(manufacturing_order.move_raw_ids.id)
 
-        # Cancel the MO
+        #CanceltheMO
         manufacturing_order.action_cancel()
 
-        # Check that MO and WO are canceled
-        self.assertEqual(manufacturing_order.state, 'cancel', "MO should be in cancel state.")
-        self.assertEqual(manufacturing_order.workorder_ids.state, 'cancel', 'MO work orders must be cancelled as well.')
+        #CheckthatMOandWOarecanceled
+        self.assertEqual(manufacturing_order.state,'cancel',"MOshouldbeincancelstate.")
+        self.assertEqual(manufacturing_order.workorder_ids.state,'cancel','MOworkordersmustbecancelledaswell.')

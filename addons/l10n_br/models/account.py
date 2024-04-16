@@ -1,28 +1,28 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
-
-
-class AccountTaxTemplate(models.Model):
-    """ Add fields used to define some brazilian taxes """
-    _inherit = 'account.tax.template'
-
-    tax_discount = fields.Boolean(string='Discount this Tax in Prince',
-                                    help="Mark it for (ICMS, PIS e etc.).")
-    base_reduction = fields.Float(string='Redution', digits=0, required=True,
-                                    help="Um percentual decimal em % entre 0-1.", default=0)
-    amount_mva = fields.Float(string='MVA Percent', digits=0, required=True,
-                                help="Um percentual decimal em % entre 0-1.", default=0)
+fromflectraimportfields,models
 
 
-class AccountTax(models.Model):
-    """ Add fields used to define some brazilian taxes """
-    _inherit = 'account.tax'
+classAccountTaxTemplate(models.Model):
+    """Addfieldsusedtodefinesomebraziliantaxes"""
+    _inherit='account.tax.template'
 
-    tax_discount = fields.Boolean(string='Discount this Tax in Prince', 
-                                  help="Mark it for (ICMS, PIS e etc.).")
-    base_reduction = fields.Float(string='Redution', digits=0, required=True,
-                                  help="Um percentual decimal em % entre 0-1.", default=0)
-    amount_mva = fields.Float(string='MVA Percent', digits=0, required=True,
-                              help="Um percentual decimal em % entre 0-1.", default=0)
+    tax_discount=fields.Boolean(string='DiscountthisTaxinPrince',
+                                    help="Markitfor(ICMS,PISeetc.).")
+    base_reduction=fields.Float(string='Redution',digits=0,required=True,
+                                    help="Umpercentualdecimalem%entre0-1.",default=0)
+    amount_mva=fields.Float(string='MVAPercent',digits=0,required=True,
+                                help="Umpercentualdecimalem%entre0-1.",default=0)
+
+
+classAccountTax(models.Model):
+    """Addfieldsusedtodefinesomebraziliantaxes"""
+    _inherit='account.tax'
+
+    tax_discount=fields.Boolean(string='DiscountthisTaxinPrince',
+                                  help="Markitfor(ICMS,PISeetc.).")
+    base_reduction=fields.Float(string='Redution',digits=0,required=True,
+                                  help="Umpercentualdecimalem%entre0-1.",default=0)
+    amount_mva=fields.Float(string='MVAPercent',digits=0,required=True,
+                              help="Umpercentualdecimalem%entre0-1.",default=0)

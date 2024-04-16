@@ -1,212 +1,212 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from contextlib import contextmanager
-from dateutil.relativedelta import relativedelta
-import itertools
-from psycopg2 import OperationalError
+fromcontextlibimportcontextmanager
+fromdateutil.relativedeltaimportrelativedelta
+importitertools
+frompsycopg2importOperationalError
 
-from flectra import api, fields, models, tools
+fromflectraimportapi,fields,models,tools
 
 
-class HrWorkEntry(models.Model):
-    _name = 'hr.work.entry'
-    _description = 'HR Work Entry'
-    _order = 'conflict desc,state,date_start'
+classHrWorkEntry(models.Model):
+    _name='hr.work.entry'
+    _description='HRWorkEntry'
+    _order='conflictdesc,state,date_start'
 
-    name = fields.Char(required=True)
-    active = fields.Boolean(default=True)
-    employee_id = fields.Many2one('hr.employee', required=True, domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]", index=True)
-    date_start = fields.Datetime(required=True, string='From')
-    date_stop = fields.Datetime(compute='_compute_date_stop', store=True, readonly=False, string='To')
-    duration = fields.Float(compute='_compute_duration', store=True, string="Period")
-    work_entry_type_id = fields.Many2one('hr.work.entry.type', index=True)
-    color = fields.Integer(related='work_entry_type_id.color', readonly=True)
-    state = fields.Selection([
-        ('draft', 'Draft'),
-        ('validated', 'Validated'),
-        ('conflict', 'Conflict'),
-        ('cancelled', 'Cancelled')
-    ], default='draft')
-    company_id = fields.Many2one('res.company', string='Company', readonly=True, required=True,
-        default=lambda self: self.env.company)
-    conflict = fields.Boolean('Conflicts', compute='_compute_conflict', store=True)  # Used to show conflicting work entries first
+    name=fields.Char(required=True)
+    active=fields.Boolean(default=True)
+    employee_id=fields.Many2one('hr.employee',required=True,domain="['|',('company_id','=',False),('company_id','=',company_id)]",index=True)
+    date_start=fields.Datetime(required=True,string='From')
+    date_stop=fields.Datetime(compute='_compute_date_stop',store=True,readonly=False,string='To')
+    duration=fields.Float(compute='_compute_duration',store=True,string="Period")
+    work_entry_type_id=fields.Many2one('hr.work.entry.type',index=True)
+    color=fields.Integer(related='work_entry_type_id.color',readonly=True)
+    state=fields.Selection([
+        ('draft','Draft'),
+        ('validated','Validated'),
+        ('conflict','Conflict'),
+        ('cancelled','Cancelled')
+    ],default='draft')
+    company_id=fields.Many2one('res.company',string='Company',readonly=True,required=True,
+        default=lambdaself:self.env.company)
+    conflict=fields.Boolean('Conflicts',compute='_compute_conflict',store=True) #Usedtoshowconflictingworkentriesfirst
 
-    _sql_constraints = [
-        ('_work_entry_has_end', 'check (date_stop IS NOT NULL)', 'Work entry must end. Please define an end date or a duration.'),
-        ('_work_entry_start_before_end', 'check (date_stop > date_start)', 'Starting time should be before end time.')
+    _sql_constraints=[
+        ('_work_entry_has_end','check(date_stopISNOTNULL)','Workentrymustend.Pleasedefineanenddateoraduration.'),
+        ('_work_entry_start_before_end','check(date_stop>date_start)','Startingtimeshouldbebeforeendtime.')
     ]
 
-    def init(self):
-        tools.create_index(self._cr, "hr_work_entry_date_start_date_stop_index", self._table, ["date_start", "date_stop"])
+    definit(self):
+        tools.create_index(self._cr,"hr_work_entry_date_start_date_stop_index",self._table,["date_start","date_stop"])
 
     @api.depends('state')
-    def _compute_conflict(self):
-        for rec in self:
-            rec.conflict = rec.state == 'conflict'
+    def_compute_conflict(self):
+        forrecinself:
+            rec.conflict=rec.state=='conflict'
 
-    @api.depends('date_stop', 'date_start')
-    def _compute_duration(self):
-        for work_entry in self:
-            work_entry.duration = work_entry._get_duration(work_entry.date_start, work_entry.date_stop)
+    @api.depends('date_stop','date_start')
+    def_compute_duration(self):
+        forwork_entryinself:
+            work_entry.duration=work_entry._get_duration(work_entry.date_start,work_entry.date_stop)
 
-    @api.depends('date_start', 'duration')
-    def _compute_date_stop(self):
-        for work_entry in self.filtered(lambda w: w.date_start and w.duration):
-            work_entry.date_stop = work_entry.date_start + relativedelta(hours=work_entry.duration)
+    @api.depends('date_start','duration')
+    def_compute_date_stop(self):
+        forwork_entryinself.filtered(lambdaw:w.date_startandw.duration):
+            work_entry.date_stop=work_entry.date_start+relativedelta(hours=work_entry.duration)
 
-    def _get_duration(self, date_start, date_stop):
-        if not date_start or not date_stop:
-            return 0
-        dt = date_stop - date_start
-        return dt.days * 24 + dt.seconds / 3600  # Number of hours
+    def_get_duration(self,date_start,date_stop):
+        ifnotdate_startornotdate_stop:
+            return0
+        dt=date_stop-date_start
+        returndt.days*24+dt.seconds/3600 #Numberofhours
 
-    def action_validate(self):
+    defaction_validate(self):
         """
-        Try to validate work entries.
-        If some errors are found, set `state` to conflict for conflicting work entries
-        and validation fails.
-        :return: True if validation succeded
+        Trytovalidateworkentries.
+        Ifsomeerrorsarefound,set`state`toconflictforconflictingworkentries
+        andvalidationfails.
+        :return:Trueifvalidationsucceded
         """
-        work_entries = self.filtered(lambda work_entry: work_entry.state != 'validated')
-        if not work_entries._check_if_error():
-            work_entries.write({'state': 'validated'})
-            return True
-        return False
+        work_entries=self.filtered(lambdawork_entry:work_entry.state!='validated')
+        ifnotwork_entries._check_if_error():
+            work_entries.write({'state':'validated'})
+            returnTrue
+        returnFalse
 
-    def _check_if_error(self):
-        if not self:
-            return False
-        undefined_type = self.filtered(lambda b: not b.work_entry_type_id)
-        undefined_type.write({'state': 'conflict'})
-        conflict = self._mark_conflicting_work_entries(min(self.mapped('date_start')), max(self.mapped('date_stop')))
-        return undefined_type or conflict
+    def_check_if_error(self):
+        ifnotself:
+            returnFalse
+        undefined_type=self.filtered(lambdab:notb.work_entry_type_id)
+        undefined_type.write({'state':'conflict'})
+        conflict=self._mark_conflicting_work_entries(min(self.mapped('date_start')),max(self.mapped('date_stop')))
+        returnundefined_typeorconflict
 
-    def _mark_conflicting_work_entries(self, start, stop):
+    def_mark_conflicting_work_entries(self,start,stop):
         """
-        Set `state` to `conflict` for overlapping work entries
-        between two dates.
-        If `self.ids` is truthy then check conflicts with the corresponding work entries.
-        Return True if overlapping work entries were detected.
+        Set`state`to`conflict`foroverlappingworkentries
+        betweentwodates.
+        If`self.ids`istruthythencheckconflictswiththecorrespondingworkentries.
+        ReturnTrueifoverlappingworkentriesweredetected.
         """
-        # Use the postgresql range type `tsrange` which is a range of timestamp
-        # It supports the intersection operator (&&) useful to detect overlap.
-        # use '()' to exlude the lower and upper bounds of the range.
-        # Filter on date_start and date_stop (both indexed) in the EXISTS clause to
-        # limit the resulting set size and fasten the query.
-        self.flush(['date_start', 'date_stop', 'employee_id', 'active'])
-        query = """
-            SELECT b1.id,
+        #Usethepostgresqlrangetype`tsrange`whichisarangeoftimestamp
+        #Itsupportstheintersectionoperator(&&)usefultodetectoverlap.
+        #use'()'toexludethelowerandupperboundsoftherange.
+        #Filterondate_startanddate_stop(bothindexed)intheEXISTSclauseto
+        #limittheresultingsetsizeandfastenthequery.
+        self.flush(['date_start','date_stop','employee_id','active'])
+        query="""
+            SELECTb1.id,
                    b2.id
-              FROM hr_work_entry b1
-              JOIN hr_work_entry b2
-                ON b1.employee_id = b2.employee_id
-               AND b1.id <> b2.id
-             WHERE b1.date_start <= %(stop)s
-               AND b1.date_stop >= %(start)s
-               AND b1.active = TRUE
-               AND b2.active = TRUE
-               AND tsrange(b1.date_start, b1.date_stop, '()') && tsrange(b2.date_start, b2.date_stop, '()')
-               AND {}
-        """.format("b2.id IN %(ids)s" if self.ids else "b2.date_start <= %(stop)s AND b2.date_stop >= %(start)s")
-        self.env.cr.execute(query, {"stop": stop, "start": start, "ids": tuple(self.ids)})
-        conflicts = set(itertools.chain.from_iterable(self.env.cr.fetchall()))
+              FROMhr_work_entryb1
+              JOINhr_work_entryb2
+                ONb1.employee_id=b2.employee_id
+               ANDb1.id<>b2.id
+             WHEREb1.date_start<=%(stop)s
+               ANDb1.date_stop>=%(start)s
+               ANDb1.active=TRUE
+               ANDb2.active=TRUE
+               ANDtsrange(b1.date_start,b1.date_stop,'()')&&tsrange(b2.date_start,b2.date_stop,'()')
+               AND{}
+        """.format("b2.idIN%(ids)s"ifself.idselse"b2.date_start<=%(stop)sANDb2.date_stop>=%(start)s")
+        self.env.cr.execute(query,{"stop":stop,"start":start,"ids":tuple(self.ids)})
+        conflicts=set(itertools.chain.from_iterable(self.env.cr.fetchall()))
         self.browse(conflicts).write({
-            'state': 'conflict',
+            'state':'conflict',
         })
-        return bool(conflicts)
+        returnbool(conflicts)
 
     @api.model_create_multi
-    def create(self, vals_list):
-        work_entries = super().create(vals_list)
+    defcreate(self,vals_list):
+        work_entries=super().create(vals_list)
         work_entries._check_if_error()
-        return work_entries
+        returnwork_entries
 
-    def write(self, vals):
-        skip_check = not bool({'date_start', 'date_stop', 'employee_id', 'work_entry_type_id', 'active'} & vals.keys())
-        if 'state' in vals:
-            if vals['state'] == 'draft':
-                vals['active'] = True
-            elif vals['state'] == 'cancelled':
-                vals['active'] = False
-                skip_check &= all(self.mapped(lambda w: w.state != 'conflict'))
+    defwrite(self,vals):
+        skip_check=notbool({'date_start','date_stop','employee_id','work_entry_type_id','active'}&vals.keys())
+        if'state'invals:
+            ifvals['state']=='draft':
+                vals['active']=True
+            elifvals['state']=='cancelled':
+                vals['active']=False
+                skip_check&=all(self.mapped(lambdaw:w.state!='conflict'))
 
-        if 'active' in vals:
-            vals['state'] = 'draft' if vals['active'] else 'cancelled'
+        if'active'invals:
+            vals['state']='draft'ifvals['active']else'cancelled'
 
-        with self._error_checking(skip=skip_check):
-            return super(HrWorkEntry, self).write(vals)
+        withself._error_checking(skip=skip_check):
+            returnsuper(HrWorkEntry,self).write(vals)
 
-    def unlink(self):
-        with self._error_checking():
-            return super().unlink()
+    defunlink(self):
+        withself._error_checking():
+            returnsuper().unlink()
 
-    def _reset_conflicting_state(self):
-        self.filtered(lambda w: w.state == 'conflict').write({'state': 'draft'})
+    def_reset_conflicting_state(self):
+        self.filtered(lambdaw:w.state=='conflict').write({'state':'draft'})
 
     @contextmanager
-    def _error_checking(self, start=None, stop=None, skip=False):
+    def_error_checking(self,start=None,stop=None,skip=False):
         """
-        Context manager used for conflicts checking.
-        When exiting the context manager, conflicts are checked
-        for all work entries within a date range. By default, the start and end dates are
-        computed according to `self` (min and max respectively) but it can be overwritten by providing
-        other values as parameter.
-        :param start: datetime to overwrite the default behaviour
-        :param stop: datetime to overwrite the default behaviour
-        :param skip: If True, no error checking is done
+        Contextmanagerusedforconflictschecking.
+        Whenexitingthecontextmanager,conflictsarechecked
+        forallworkentrieswithinadaterange.Bydefault,thestartandenddatesare
+        computedaccordingto`self`(minandmaxrespectively)butitcanbeoverwrittenbyproviding
+        othervaluesasparameter.
+        :paramstart:datetimetooverwritethedefaultbehaviour
+        :paramstop:datetimetooverwritethedefaultbehaviour
+        :paramskip:IfTrue,noerrorcheckingisdone
         """
         try:
-            skip = skip or self.env.context.get('hr_work_entry_no_check', False)
-            start = start or min(self.mapped('date_start'), default=False)
-            stop = stop or max(self.mapped('date_stop'), default=False)
-            if not skip and start and stop:
-                work_entries = self.sudo().with_context(hr_work_entry_no_check=True).search([
-                    ('date_start', '<', stop),
-                    ('date_stop', '>', start),
-                    ('state', 'not in', ('validated', 'cancelled')),
+            skip=skiporself.env.context.get('hr_work_entry_no_check',False)
+            start=startormin(self.mapped('date_start'),default=False)
+            stop=stopormax(self.mapped('date_stop'),default=False)
+            ifnotskipandstartandstop:
+                work_entries=self.sudo().with_context(hr_work_entry_no_check=True).search([
+                    ('date_start','<',stop),
+                    ('date_stop','>',start),
+                    ('state','notin',('validated','cancelled')),
                 ])
                 work_entries._reset_conflicting_state()
             yield
-        except OperationalError:
-            # the cursor is dead, do not attempt to use it or we will shadow the root exception
-            # with a "psycopg2.InternalError: current transaction is aborted, ..."
-            skip = True
+        exceptOperationalError:
+            #thecursorisdead,donotattempttouseitorwewillshadowtherootexception
+            #witha"psycopg2.InternalError:currenttransactionisaborted,..."
+            skip=True
             raise
         finally:
-            if not skip and start and stop:
-                # New work entries are handled in the create method,
-                # no need to reload work entries.
+            ifnotskipandstartandstop:
+                #Newworkentriesarehandledinthecreatemethod,
+                #noneedtoreloadworkentries.
                 work_entries.exists()._check_if_error()
 
 
-class HrWorkEntryType(models.Model):
-    _name = 'hr.work.entry.type'
-    _description = 'HR Work Entry Type'
+classHrWorkEntryType(models.Model):
+    _name='hr.work.entry.type'
+    _description='HRWorkEntryType'
 
-    name = fields.Char(required=True, translate=True)
-    code = fields.Char(required=True)
-    color = fields.Integer(default=0)
-    sequence = fields.Integer(default=25)
-    active = fields.Boolean(
-        'Active', default=True,
-        help="If the active field is set to false, it will allow you to hide the work entry type without removing it.")
+    name=fields.Char(required=True,translate=True)
+    code=fields.Char(required=True)
+    color=fields.Integer(default=0)
+    sequence=fields.Integer(default=25)
+    active=fields.Boolean(
+        'Active',default=True,
+        help="Iftheactivefieldissettofalse,itwillallowyoutohidetheworkentrytypewithoutremovingit.")
 
-    _sql_constraints = [
-        ('unique_work_entry_code', 'UNIQUE(code)', 'The same code cannot be associated to multiple work entry types.'),
+    _sql_constraints=[
+        ('unique_work_entry_code','UNIQUE(code)','Thesamecodecannotbeassociatedtomultipleworkentrytypes.'),
     ]
 
 
-class Contacts(models.Model):
-    """ Personnal calendar filter """
+classContacts(models.Model):
+    """Personnalcalendarfilter"""
 
-    _name = 'hr.user.work.entry.employee'
-    _description = 'Work Entries Employees'
+    _name='hr.user.work.entry.employee'
+    _description='WorkEntriesEmployees'
 
-    user_id = fields.Many2one('res.users', 'Me', required=True, default=lambda self: self.env.user)
-    employee_id = fields.Many2one('hr.employee', 'Employee', required=True)
-    active = fields.Boolean('Active', default=True)
+    user_id=fields.Many2one('res.users','Me',required=True,default=lambdaself:self.env.user)
+    employee_id=fields.Many2one('hr.employee','Employee',required=True)
+    active=fields.Boolean('Active',default=True)
 
-    _sql_constraints = [
-        ('user_id_employee_id_unique', 'UNIQUE(user_id,employee_id)', 'You cannot have the same employee twice.')
+    _sql_constraints=[
+        ('user_id_employee_id_unique','UNIQUE(user_id,employee_id)','Youcannothavethesameemployeetwice.')
     ]

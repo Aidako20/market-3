@@ -1,121 +1,121 @@
-flectra.define('web.signature_dialog', function (require) {
-"use strict";
+flectra.define('web.signature_dialog',function(require){
+"usestrict";
 
-var core = require('web.core');
-var Dialog = require('web.Dialog');
-var NameAndSignature = require('web.name_and_signature').NameAndSignature;
+varcore=require('web.core');
+varDialog=require('web.Dialog');
+varNameAndSignature=require('web.name_and_signature').NameAndSignature;
 
-var _t = core._t;
+var_t=core._t;
 
-// The goal of this dialog is to ask the user a signature request.
-// It uses @see SignNameAndSignature for the name and signature fields.
-var SignatureDialog = Dialog.extend({
-    template: 'web.signature_dialog',
-    xmlDependencies: Dialog.prototype.xmlDependencies.concat(
+//Thegoalofthisdialogistoasktheuserasignaturerequest.
+//Ituses@seeSignNameAndSignatureforthenameandsignaturefields.
+varSignatureDialog=Dialog.extend({
+    template:'web.signature_dialog',
+    xmlDependencies:Dialog.prototype.xmlDependencies.concat(
         ['/web/static/src/xml/name_and_signature.xml']
     ),
-    custom_events: {
-        'signature_changed': '_onChangeSignature',
+    custom_events:{
+        'signature_changed':'_onChangeSignature',
     },
 
     /**
-     * @constructor
-     * @param {Widget} parent
-     * @param {Object} options
-     * @param {string} [options.title='Adopt Your Signature'] - modal title
-     * @param {string} [options.size='medium'] - modal size
-     * @param {Object} [options.nameAndSignatureOptions={}] - options for
-     *  @see NameAndSignature.init()
+     *@constructor
+     *@param{Widget}parent
+     *@param{Object}options
+     *@param{string}[options.title='AdoptYourSignature']-modaltitle
+     *@param{string}[options.size='medium']-modalsize
+     *@param{Object}[options.nameAndSignatureOptions={}]-optionsfor
+     * @seeNameAndSignature.init()
      */
-    init: function (parent, options) {
-        var self = this;
-        options = options || {};
+    init:function(parent,options){
+        varself=this;
+        options=options||{};
 
-        options.title = options.title || _t("Adopt Your Signature");
-        options.size = options.size || 'medium';
-        options.technical = false;
+        options.title=options.title||_t("AdoptYourSignature");
+        options.size=options.size||'medium';
+        options.technical=false;
 
-        if (!options.buttons) {
-            options.buttons = [];
-            options.buttons.push({text: _t("Adopt and Sign"), classes: "btn-primary", disabled: true, click: function (e) {
+        if(!options.buttons){
+            options.buttons=[];
+            options.buttons.push({text:_t("AdoptandSign"),classes:"btn-primary",disabled:true,click:function(e){
                 self._onConfirm();
             }});
-            options.buttons.push({text: _t("Cancel"), close: true});
+            options.buttons.push({text:_t("Cancel"),close:true});
         }
 
-        this._super(parent, options);
+        this._super(parent,options);
 
-        this.nameAndSignature = new NameAndSignature(this, options.nameAndSignatureOptions);
+        this.nameAndSignature=newNameAndSignature(this,options.nameAndSignatureOptions);
     },
     /**
-     * Start the nameAndSignature widget and wait for it.
+     *StartthenameAndSignaturewidgetandwaitforit.
      *
-     * @override
+     *@override
      */
-    willStart: function () {
-        return Promise.all([
+    willStart:function(){
+        returnPromise.all([
             this.nameAndSignature.appendTo($('<div>')),
-            this._super.apply(this, arguments)
+            this._super.apply(this,arguments)
         ]);
     },
     /**
-     * Initialize the name and signature widget when the modal is opened.
+     *Initializethenameandsignaturewidgetwhenthemodalisopened.
      *
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        this.$primaryButton = this.$footer.find('.btn-primary');
+    start:function(){
+        varself=this;
+        this.$primaryButton=this.$footer.find('.btn-primary');
 
-        this.opened().then(function () {
+        this.opened().then(function(){
             self.$('.o_web_sign_name_and_signature').replaceWith(self.nameAndSignature.$el);
-            // initialize the signature area
+            //initializethesignaturearea
             self.nameAndSignature.resetSignature();
         });
 
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 
     //----------------------------------------------------------------------
-    // Public
+    //Public
     //----------------------------------------------------------------------
 
     /**
-     * Returns whether the drawing area is currently empty.
+     *Returnswhetherthedrawingareaiscurrentlyempty.
      *
-     * @see NameAndSignature.isSignatureEmpty()
-     * @returns {boolean} Whether the drawing area is currently empty.
+     *@seeNameAndSignature.isSignatureEmpty()
+     *@returns{boolean}Whetherthedrawingareaiscurrentlyempty.
      */
-    isSignatureEmpty: function () {
-        return this.nameAndSignature.isSignatureEmpty();
+    isSignatureEmpty:function(){
+        returnthis.nameAndSignature.isSignatureEmpty();
     },
 
     //----------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //----------------------------------------------------------------------
 
     /**
-     * Toggles the submit button depending on the signature state.
+     *Togglesthesubmitbuttondependingonthesignaturestate.
      *
-     * @private
+     *@private
      */
-    _onChangeSignature: function () {
-        var isEmpty = this.nameAndSignature.isSignatureEmpty();
-        this.$primaryButton.prop('disabled', isEmpty);
+    _onChangeSignature:function(){
+        varisEmpty=this.nameAndSignature.isSignatureEmpty();
+        this.$primaryButton.prop('disabled',isEmpty);
     },
     /**
-     * Upload the signature image when confirm.
+     *Uploadthesignatureimagewhenconfirm.
      *
-     * @private
+     *@private
      */
-    _onConfirm: function (fct) {
-        this.trigger_up('upload_signature', {
-            name: this.nameAndSignature.getName(),
-            signatureImage: this.nameAndSignature.getSignatureImage(),
+    _onConfirm:function(fct){
+        this.trigger_up('upload_signature',{
+            name:this.nameAndSignature.getName(),
+            signatureImage:this.nameAndSignature.getSignatureImage(),
         });
     },
 });
 
-return SignatureDialog;
+returnSignatureDialog;
 
 });

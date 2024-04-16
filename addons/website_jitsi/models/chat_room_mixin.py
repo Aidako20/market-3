@@ -1,77 +1,77 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import re
+importre
 
-from flectra import api, fields, models
-from flectra.tools import remove_accents
+fromflectraimportapi,fields,models
+fromflectra.toolsimportremove_accents
 
-class ChatRoomMixin(models.AbstractModel):
-    """Add the chat room configuration (`chat.room`) on the needed models.
+classChatRoomMixin(models.AbstractModel):
+    """Addthechatroomconfiguration(`chat.room`)ontheneededmodels.
 
-    The chat room configuration contains all information about the room. So, we store
-    all the chat room logic at the same place, for all models.
-    Embed chat room related fields prefixed with `room_`.
+    Thechatroomconfigurationcontainsallinformationabouttheroom.So,westore
+    allthechatroomlogicatthesameplace,forallmodels.
+    Embedchatroomrelatedfieldsprefixedwith`room_`.
     """
-    _name = "chat.room.mixin"
-    _description = "Chat Room Mixin"
-    ROOM_CONFIG_FIELDS = [
-        ('room_name', 'name'),
-        ('room_lang_id', 'lang_id'),
-        ('room_max_capacity', 'max_capacity'),
-        ('room_participant_count', 'participant_count')
+    _name="chat.room.mixin"
+    _description="ChatRoomMixin"
+    ROOM_CONFIG_FIELDS=[
+        ('room_name','name'),
+        ('room_lang_id','lang_id'),
+        ('room_max_capacity','max_capacity'),
+        ('room_participant_count','participant_count')
     ]
 
-    chat_room_id = fields.Many2one("chat.room", "Chat Room", readonly=True, copy=False, ondelete="set null")
-    # chat room related fields
-    room_name = fields.Char("Room Name", related="chat_room_id.name")
-    room_is_full = fields.Boolean("Room Is Full", related="chat_room_id.is_full")
-    room_lang_id = fields.Many2one("res.lang", "Language", related="chat_room_id.lang_id", readonly=False)
-    room_max_capacity = fields.Selection(string="Max capacity", related="chat_room_id.max_capacity", readonly=False, required=True)
-    room_participant_count = fields.Integer("Participant count", related="chat_room_id.participant_count", readonly=False)
-    room_last_activity = fields.Datetime("Last activity", related="chat_room_id.last_activity")
-    room_max_participant_reached = fields.Integer("Peak participants", related="chat_room_id.max_participant_reached")
+    chat_room_id=fields.Many2one("chat.room","ChatRoom",readonly=True,copy=False,ondelete="setnull")
+    #chatroomrelatedfields
+    room_name=fields.Char("RoomName",related="chat_room_id.name")
+    room_is_full=fields.Boolean("RoomIsFull",related="chat_room_id.is_full")
+    room_lang_id=fields.Many2one("res.lang","Language",related="chat_room_id.lang_id",readonly=False)
+    room_max_capacity=fields.Selection(string="Maxcapacity",related="chat_room_id.max_capacity",readonly=False,required=True)
+    room_participant_count=fields.Integer("Participantcount",related="chat_room_id.participant_count",readonly=False)
+    room_last_activity=fields.Datetime("Lastactivity",related="chat_room_id.last_activity")
+    room_max_participant_reached=fields.Integer("Peakparticipants",related="chat_room_id.max_participant_reached")
 
     @api.model_create_multi
-    def create(self, values_list):
-        for values in values_list:
-            if any(values.get(fmatch[0]) for fmatch in self.ROOM_CONFIG_FIELDS) and not values.get('chat_room_id'):
-                if values.get('room_name'):
-                    values['room_name'] = self._jitsi_sanitize_name(values['room_name'])
-                room_values = dict((fmatch[1], values.pop(fmatch[0])) for fmatch in self.ROOM_CONFIG_FIELDS if values.get(fmatch[0]))
-                values['chat_room_id'] = self.env['chat.room'].create(room_values).id
-        return super(ChatRoomMixin, self).create(values_list)
+    defcreate(self,values_list):
+        forvaluesinvalues_list:
+            ifany(values.get(fmatch[0])forfmatchinself.ROOM_CONFIG_FIELDS)andnotvalues.get('chat_room_id'):
+                ifvalues.get('room_name'):
+                    values['room_name']=self._jitsi_sanitize_name(values['room_name'])
+                room_values=dict((fmatch[1],values.pop(fmatch[0]))forfmatchinself.ROOM_CONFIG_FIELDSifvalues.get(fmatch[0]))
+                values['chat_room_id']=self.env['chat.room'].create(room_values).id
+        returnsuper(ChatRoomMixin,self).create(values_list)
 
-    def write(self, values):
-        if any(values.get(fmatch[0]) for fmatch in self.ROOM_CONFIG_FIELDS):
-            if values.get('room_name'):
-                values['room_name'] = self._jitsi_sanitize_name(values['room_name'])
-            for document in self.filtered(lambda doc: not doc.chat_room_id):
-                room_values = dict((fmatch[1], values[fmatch[0]]) for fmatch in self.ROOM_CONFIG_FIELDS if values.get(fmatch[0]))
-                document.chat_room_id = self.env['chat.room'].create(room_values).id
-        return super(ChatRoomMixin, self).write(values)
+    defwrite(self,values):
+        ifany(values.get(fmatch[0])forfmatchinself.ROOM_CONFIG_FIELDS):
+            ifvalues.get('room_name'):
+                values['room_name']=self._jitsi_sanitize_name(values['room_name'])
+            fordocumentinself.filtered(lambdadoc:notdoc.chat_room_id):
+                room_values=dict((fmatch[1],values[fmatch[0]])forfmatchinself.ROOM_CONFIG_FIELDSifvalues.get(fmatch[0]))
+                document.chat_room_id=self.env['chat.room'].create(room_values).id
+        returnsuper(ChatRoomMixin,self).write(values)
 
-    def copy_data(self, default=None):
-        if default is None:
-            default = {}
-        if self.chat_room_id:
-            chat_room_default = {}
-            if 'room_name' not in default:
-                chat_room_default['name'] = self._jitsi_sanitize_name(self.chat_room_id.name)
-            default['chat_room_id'] = self.chat_room_id.copy(default=chat_room_default).id
-        return super(ChatRoomMixin, self).copy_data(default=default)
+    defcopy_data(self,default=None):
+        ifdefaultisNone:
+            default={}
+        ifself.chat_room_id:
+            chat_room_default={}
+            if'room_name'notindefault:
+                chat_room_default['name']=self._jitsi_sanitize_name(self.chat_room_id.name)
+            default['chat_room_id']=self.chat_room_id.copy(default=chat_room_default).id
+        returnsuper(ChatRoomMixin,self).copy_data(default=default)
 
-    def unlink(self):
-        rooms = self.chat_room_id
-        res = super(ChatRoomMixin, self).unlink()
+    defunlink(self):
+        rooms=self.chat_room_id
+        res=super(ChatRoomMixin,self).unlink()
         rooms.unlink()
-        return res
+        returnres
 
-    def _jitsi_sanitize_name(self, name):
-        sanitized = re.sub(r'[^\w+.]+', '-', remove_accents(name).lower())
-        counter, sanitized_suffixed = 1, sanitized
-        existing = self.env['chat.room'].search([('name', '=like', '%s%%' % sanitized)]).mapped('name')
-        while sanitized_suffixed in existing:
-            sanitized_suffixed = '%s-%d' % (sanitized, counter)
-            counter += 1
-        return sanitized_suffixed
+    def_jitsi_sanitize_name(self,name):
+        sanitized=re.sub(r'[^\w+.]+','-',remove_accents(name).lower())
+        counter,sanitized_suffixed=1,sanitized
+        existing=self.env['chat.room'].search([('name','=like','%s%%'%sanitized)]).mapped('name')
+        whilesanitized_suffixedinexisting:
+            sanitized_suffixed='%s-%d'%(sanitized,counter)
+            counter+=1
+        returnsanitized_suffixed

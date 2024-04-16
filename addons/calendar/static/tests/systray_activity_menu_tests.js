@@ -1,80 +1,80 @@
-flectra.define('calendar.systray.ActivityMenuTests', function (require) {
-"use strict";
+flectra.define('calendar.systray.ActivityMenuTests',function(require){
+"usestrict";
 
-const { afterEach, beforeEach, start } = require('mail/static/src/utils/test_utils.js');
-var ActivityMenu = require('mail.systray.ActivityMenu');
+const{afterEach,beforeEach,start}=require('mail/static/src/utils/test_utils.js');
+varActivityMenu=require('mail.systray.ActivityMenu');
 
-var testUtils = require('web.test_utils');
+vartestUtils=require('web.test_utils');
 
-QUnit.module('calendar', {}, function () {
-QUnit.module('ActivityMenu', {
-    beforeEach() {
+QUnit.module('calendar',{},function(){
+QUnit.module('ActivityMenu',{
+    beforeEach(){
         beforeEach(this);
 
-        Object.assign(this.data, {
-            'calendar.event': {
-                fields: { // those are all fake, this is the mock of a formatter
-                    meetings: { type: 'binary' },
-                    model: { type: 'char' },
-                    name: { type: 'char', required: true },
-                    type: { type: 'char' },
+        Object.assign(this.data,{
+            'calendar.event':{
+                fields:{//thoseareallfake,thisisthemockofaformatter
+                    meetings:{type:'binary'},
+                    model:{type:'char'},
+                    name:{type:'char',required:true},
+                    type:{type:'char'},
                 },
-                records: [{
-                    name: "Today's meeting (3)",
-                    model: "calendar.event",
-                    type: 'meeting',
-                    meetings: [{
-                        id: 1,
-                        res_model: "calendar.event",
-                        name: "meeting1",
-                        start: "2018-04-20 06:30:00",
-                        allday: false,
-                    }, {
-                        id: 2,
-                        res_model: "calendar.event",
-                        name: "meeting2",
-                        start: "2018-04-20 09:30:00",
-                        allday: false,
+                records:[{
+                    name:"Today'smeeting(3)",
+                    model:"calendar.event",
+                    type:'meeting',
+                    meetings:[{
+                        id:1,
+                        res_model:"calendar.event",
+                        name:"meeting1",
+                        start:"2018-04-2006:30:00",
+                        allday:false,
+                    },{
+                        id:2,
+                        res_model:"calendar.event",
+                        name:"meeting2",
+                        start:"2018-04-2009:30:00",
+                        allday:false,
                     }]
                 }],
             },
         });
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('activity menu widget:today meetings', async function (assert) {
+QUnit.test('activitymenuwidget:todaymeetings',asyncfunction(assert){
     assert.expect(6);
-    var self = this;
+    varself=this;
 
-    const { widget } = await start({
-        data: this.data,
-        mockRPC: function (route, args) {
-            if (args.method === 'systray_get_activities') {
-                return Promise.resolve(self.data['calendar.event']['records']);
+    const{widget}=awaitstart({
+        data:this.data,
+        mockRPC:function(route,args){
+            if(args.method==='systray_get_activities'){
+                returnPromise.resolve(self.data['calendar.event']['records']);
             }
-            return this._super(route, args);
+            returnthis._super(route,args);
         },
     });
 
-    const activityMenu = new ActivityMenu(widget);
-    await activityMenu.appendTo($('#qunit-fixture'));
+    constactivityMenu=newActivityMenu(widget);
+    awaitactivityMenu.appendTo($('#qunit-fixture'));
 
-    assert.hasClass(activityMenu.$el, 'o_mail_systray_item', 'should be the instance of widget');
+    assert.hasClass(activityMenu.$el,'o_mail_systray_item','shouldbetheinstanceofwidget');
 
-    await testUtils.dom.click(activityMenu.$('.dropdown-toggle'));
+    awaittestUtils.dom.click(activityMenu.$('.dropdown-toggle'));
 
-    testUtils.mock.intercept(activityMenu, 'do_action', function (event) {
-        assert.strictEqual(event.data.action, "calendar.action_calendar_event", 'should open meeting calendar view in day mode');
+    testUtils.mock.intercept(activityMenu,'do_action',function(event){
+        assert.strictEqual(event.data.action,"calendar.action_calendar_event",'shouldopenmeetingcalendarviewindaymode');
     });
-    await testUtils.dom.click(activityMenu.$('.o_mail_preview'));
+    awaittestUtils.dom.click(activityMenu.$('.o_mail_preview'));
 
-    assert.ok(activityMenu.$('.o_meeting_filter'), "should be a meeting");
-    assert.containsN(activityMenu, '.o_meeting_filter', 2, 'there should be 2 meetings');
-    assert.hasClass(activityMenu.$('.o_meeting_filter').eq(0), 'o_meeting_bold', 'this meeting is yet to start');
-    assert.doesNotHaveClass(activityMenu.$('.o_meeting_filter').eq(1), 'o_meeting_bold', 'this meeting has been started');
+    assert.ok(activityMenu.$('.o_meeting_filter'),"shouldbeameeting");
+    assert.containsN(activityMenu,'.o_meeting_filter',2,'thereshouldbe2meetings');
+    assert.hasClass(activityMenu.$('.o_meeting_filter').eq(0),'o_meeting_bold','thismeetingisyettostart');
+    assert.doesNotHaveClass(activityMenu.$('.o_meeting_filter').eq(1),'o_meeting_bold','thismeetinghasbeenstarted');
     widget.destroy();
 });
 });

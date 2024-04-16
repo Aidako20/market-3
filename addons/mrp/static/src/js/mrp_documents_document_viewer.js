@@ -1,19 +1,19 @@
-flectra.define('mrp.MrpDocumentViewer', function (require) {
-"use strict";
+flectra.define('mrp.MrpDocumentViewer',function(require){
+"usestrict";
 
-const DocumentViewer = require('mail.DocumentViewer');
+constDocumentViewer=require('mail.DocumentViewer');
 
 /**
- * This file defines the DocumentViewer for the MRP Documents Kanban view.
+ *ThisfiledefinestheDocumentViewerfortheMRPDocumentsKanbanview.
  */
-const MrpDocumentsDocumentViewer = DocumentViewer.extend({
-    init(parent, attachments, activeAttachmentID) {
+constMrpDocumentsDocumentViewer=DocumentViewer.extend({
+    init(parent,attachments,activeAttachmentID){
         this._super(...arguments);
-        this.modelName = 'mrp.document';
+        this.modelName='mrp.document';
     },
 });
 
-return MrpDocumentsDocumentViewer;
+returnMrpDocumentsDocumentViewer;
 
 });
 

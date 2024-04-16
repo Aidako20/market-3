@@ -1,31 +1,31 @@
-flectra.define('web.PublicCrashManager', function (require) {
-"use strict";
+flectra.define('web.PublicCrashManager',function(require){
+"usestrict";
 
-const core = require('web.core');
-const CrashManager = require('web.CrashManager').CrashManager;
+constcore=require('web.core');
+constCrashManager=require('web.CrashManager').CrashManager;
 
-const PublicCrashManager = CrashManager.extend({
+constPublicCrashManager=CrashManager.extend({
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _displayWarning(message, title, options) {
-        this.displayNotification(Object.assign({}, options, {
+    _displayWarning(message,title,options){
+        this.displayNotification(Object.assign({},options,{
             title,
             message,
-            sticky: true,
+            sticky:true,
         }));
     },
 });
 
-core.serviceRegistry.add('crash_manager', PublicCrashManager);
+core.serviceRegistry.add('crash_manager',PublicCrashManager);
 
-return {
-    CrashManager: PublicCrashManager,
+return{
+    CrashManager:PublicCrashManager,
 };
 
 });

@@ -1,14 +1,14 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
 
-    <record id="view_pos_pos_form" model="ir.ui.view">
-        <field name="name">pos.order.form.view.inherit</field>
-        <field name="model">pos.order</field>
-        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"></field>
-        <field name="arch" type="xml">
-            <xpath expr="//group[@name='order_fields']" position="inside">
-                <field name="table_id"/>
-                <field name="customer_count"/>
+    <recordid="view_pos_pos_form"model="ir.ui.view">
+        <fieldname="name">pos.order.form.view.inherit</field>
+        <fieldname="model">pos.order</field>
+        <fieldname="inherit_id"ref="point_of_sale.view_pos_pos_form"></field>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//group[@name='order_fields']"position="inside">
+                <fieldname="table_id"/>
+                <fieldname="customer_count"/>
             </xpath>
         </field>
     </record>

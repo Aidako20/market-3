@@ -1,77 +1,77 @@
-flectra.define('mail/static/src/components/composer_suggested_recipient_list/composer_suggested_recipient_list.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/composer_suggested_recipient_list/composer_suggested_recipient_list.js',function(require){
+'usestrict';
 
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-const { Component } = owl;
-const { useState } = owl.hooks;
+const{Component}=owl;
+const{useState}=owl.hooks;
 
-const components = {
-    ComposerSuggestedRecipient: require('mail/static/src/components/composer_suggested_recipient/composer_suggested_recipient.js'),
+constcomponents={
+    ComposerSuggestedRecipient:require('mail/static/src/components/composer_suggested_recipient/composer_suggested_recipient.js'),
 };
 
-class ComposerSuggestedRecipientList extends Component {
+classComposerSuggestedRecipientListextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps();
-        this.state = useState({
-            hasShowMoreButton: false,
+        this.state=useState({
+            hasShowMoreButton:false,
         });
-        useStore(props => {
-            const thread = this.env.models['mail.thread'].get(props.threadLocalId);
-            return {
-                threadSuggestedRecipientInfoList: thread ? thread.suggestedRecipientInfoList : [],
+        useStore(props=>{
+            constthread=this.env.models['mail.thread'].get(props.threadLocalId);
+            return{
+                threadSuggestedRecipientInfoList:thread?thread.suggestedRecipientInfoList:[],
             };
-        }, {
-            compareDepth: {
-                threadSuggestedRecipientInfoList: 1,
+        },{
+            compareDepth:{
+                threadSuggestedRecipientInfoList:1,
             },
         });
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {mail.thread}
+     *@returns{mail.thread}
      */
-    get thread() {
-        return this.env.models['mail.thread'].get(this.props.threadLocalId);
+    getthread(){
+        returnthis.env.models['mail.thread'].get(this.props.threadLocalId);
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onClickShowLess(ev) {
-        this.state.hasShowMoreButton = false;
+    _onClickShowLess(ev){
+        this.state.hasShowMoreButton=false;
     }
 
     /**
-     * @private
+     *@private
      */
-    _onClickShowMore(ev) {
-        this.state.hasShowMoreButton = true;
+    _onClickShowMore(ev){
+        this.state.hasShowMoreButton=true;
     }
 
 }
 
-Object.assign(ComposerSuggestedRecipientList, {
+Object.assign(ComposerSuggestedRecipientList,{
     components,
-    props: {
-        threadLocalId: String,
+    props:{
+        threadLocalId:String,
     },
-    template: 'mail.ComposerSuggestedRecipientList',
+    template:'mail.ComposerSuggestedRecipientList',
 });
 
-return ComposerSuggestedRecipientList;
+returnComposerSuggestedRecipientList;
 });

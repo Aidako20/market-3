@@ -1,68 +1,68 @@
-flectra.define('base_automation.BaseAutomatioErrorDialogTests', function (require) {
-'use strict';
+flectra.define('base_automation.BaseAutomatioErrorDialogTests',function(require){
+'usestrict';
 
-    const CrashManager = require('web.CrashManager').CrashManager;
-    const session = require('web.session');
+    constCrashManager=require('web.CrashManager').CrashManager;
+    constsession=require('web.session');
 
-    QUnit.module('base_automation', {}, function () {
+    QUnit.module('base_automation',{},function(){
 
-        QUnit.module('Error Dialog');
+        QUnit.module('ErrorDialog');
 
-        QUnit.test('Error due to an automated action', async function (assert) {
+        QUnit.test('Errorduetoanautomatedaction',asyncfunction(assert){
             assert.expect(4);
 
-            let baseAutomationName = 'Test base automation error dialog';
-            let error = {
-                type: 'Flectra Client Error',
-                message: 'Message',
-                data: {
-                    debug: 'Traceback',
-                    context: {
-                        exception_class: 'base_automation',
-                        base_automation: {
-                            id: 1,
-                            name: baseAutomationName,
+            letbaseAutomationName='Testbaseautomationerrordialog';
+            leterror={
+                type:'FlectraClientError',
+                message:'Message',
+                data:{
+                    debug:'Traceback',
+                    context:{
+                        exception_class:'base_automation',
+                        base_automation:{
+                            id:1,
+                            name:baseAutomationName,
                         },
                     },
                 },
             };
-            // Force the user session to be admin, to display the disable and edit action buttons,
-            // then reset back to the origin value after the test.
-            let isAdmin = session.is_admin;
-            session.is_admin = true;
+            //Forcetheusersessiontobeadmin,todisplaythedisableandeditactionbuttons,
+            //thenresetbacktotheoriginvalueafterthetest.
+            letisAdmin=session.is_admin;
+            session.is_admin=true;
 
-            let crashManager = new CrashManager();
-            let dialog = crashManager.show_error(error);
+            letcrashManager=newCrashManager();
+            letdialog=crashManager.show_error(error);
 
-            await dialog._opened;
+            awaitdialog._opened;
 
-            assert.containsOnce(document.body, '.modal .o_clipboard_button');
-            assert.containsOnce(document.body, '.modal .o_disable_action_button');
-            assert.containsOnce(document.body, '.modal .o_edit_action_button');
-            assert.ok(dialog.$el.text().indexOf(baseAutomationName) !== -1);
+            assert.containsOnce(document.body,'.modal.o_clipboard_button');
+            assert.containsOnce(document.body,'.modal.o_disable_action_button');
+            assert.containsOnce(document.body,'.modal.o_edit_action_button');
+            assert.ok(dialog.$el.text().indexOf(baseAutomationName)!==-1);
 
-            session.is_admin = isAdmin;
+            session.is_admin=isAdmin;
             crashManager.destroy();
         });
 
-        QUnit.test('Error not due to an automated action', async function (assert) {
+        QUnit.test('Errornotduetoanautomatedaction',asyncfunction(assert){
             assert.expect(3);
 
-            let error = {
-                type: 'Flectra Client Error',
-                message: 'Message',
-                data: {
-                    debug: 'Traceback',
+            leterror={
+                type:'FlectraClientError',
+                message:'Message',
+                data:{
+                    debug:'Traceback',
                 },
             };
-            let crashManager = new CrashManager();
-            let dialog = crashManager.show_error(error);
+            letcrashManager=newCrashManager();
+            letdialog=crashManager.show_error(error);
 
-            await dialog._opened;
+            awaitdialog._opened;
 
-            assert.containsOnce(document.body, '.modal .o_clipboard_button');
-            assert.containsNone(document.body, '.modal .o_disable_action_button');
-            assert.containsNone(document.body, '.modal .o_edit_action_button');
+            assert.containsOnce(document.body,'.modal.o_clipboard_button');
+            assert.containsNone(document.body,'.modal.o_disable_action_button');
+            assert.containsNone(document.body,'.modal.o_edit_action_button');
 
             crashManager.destroy();
         });

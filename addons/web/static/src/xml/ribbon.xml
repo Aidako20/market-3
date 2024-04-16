@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <template>
 
-    <t t-name="web.ribbon">
-        <div class="ribbon ribbon-top-right">
-            <span t-att-class="widget.className" t-att-title="widget.tooltip">
-                <t t-esc="widget.text"/>
+    <tt-name="web.ribbon">
+        <divclass="ribbonribbon-top-right">
+            <spant-att-class="widget.className"t-att-title="widget.tooltip">
+                <tt-esc="widget.text"/>
             </span>
         </div>
     </t>

@@ -1,44 +1,44 @@
-flectra.define('website.s_dynamic_snippet', function (require) {
-'use strict';
+flectra.define('website.s_dynamic_snippet',function(require){
+'usestrict';
 
-const core = require('web.core');
-const config = require('web.config');
-const publicWidget = require('web.public.widget');
+constcore=require('web.core');
+constconfig=require('web.config');
+constpublicWidget=require('web.public.widget');
 
-const DynamicSnippet = publicWidget.Widget.extend({
-    selector: '.s_dynamic_snippet',
-    xmlDependencies: ['/website/static/src/snippets/s_dynamic_snippet/000.xml'],
-    read_events: {
-        'click [data-url]': '_onCallToAction',
+constDynamicSnippet=publicWidget.Widget.extend({
+    selector:'.s_dynamic_snippet',
+    xmlDependencies:['/website/static/src/snippets/s_dynamic_snippet/000.xml'],
+    read_events:{
+        'click[data-url]':'_onCallToAction',
     },
-    disabledInEditableMode: false,
+    disabledInEditableMode:false,
 
     /**
      *
-     * @override
+     *@override
      */
-    init: function () {
-        this._super.apply(this, arguments);
+    init:function(){
+        this._super.apply(this,arguments);
         /**
-         * The dynamic filter data source data formatted with the chosen template.
-         * Can be accessed when overriding the _render_content() function in order to generate
-         * a new renderedContent from the original data.
+         *Thedynamicfilterdatasourcedataformattedwiththechosentemplate.
+         *Canbeaccessedwhenoverridingthe_render_content()functioninordertogenerate
+         *anewrenderedContentfromtheoriginaldata.
          *
-         * @type {*|jQuery.fn.init|jQuery|HTMLElement}
+         *@type{*|jQuery.fn.init|jQuery|HTMLElement}
          */
-        this.data = [];
-        this.renderedContent = '';
-        this.isDesplayedAsMobile = config.device.isMobile;
-        this.uniqueId = _.uniqueId('s_dynamic_snippet_');
-        this.template_key = 'website.s_dynamic_snippet.grid';
+        this.data=[];
+        this.renderedContent='';
+        this.isDesplayedAsMobile=config.device.isMobile;
+        this.uniqueId=_.uniqueId('s_dynamic_snippet_');
+        this.template_key='website.s_dynamic_snippet.grid';
     },
     /**
      *
-     * @override
+     *@override
      */
-    willStart: function () {
-        return this._super.apply(this, arguments).then(
-            () => Promise.all([
+    willStart:function(){
+        returnthis._super.apply(this,arguments).then(
+            ()=>Promise.all([
                 this._fetchData(),
                 this._manageWarningMessageVisibility()
             ])
@@ -46,11 +46,11 @@ const DynamicSnippet = publicWidget.Widget.extend({
     },
     /**
      *
-     * @override
+     *@override
      */
-    start: function () {
-        return this._super.apply(this, arguments)
-            .then(() => {
+    start:function(){
+        returnthis._super.apply(this,arguments)
+            .then(()=>{
                 this._setupSizeChangedManagement(true);
                 this._render();
                 this._toggleVisibility(true);
@@ -58,198 +58,198 @@ const DynamicSnippet = publicWidget.Widget.extend({
     },
     /**
      *
-     * @override
+     *@override
      */
-    destroy: function () {
+    destroy:function(){
         this._toggleVisibility(false);
         this._setupSizeChangedManagement(false);
         this._clearContent();
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _clearContent: function () {
-        const $templateArea = this.$el.find('.dynamic_snippet_template');
-        this.trigger_up('widgets_stop_request', {
-            $target: $templateArea,
+    _clearContent:function(){
+        const$templateArea=this.$el.find('.dynamic_snippet_template');
+        this.trigger_up('widgets_stop_request',{
+            $target:$templateArea,
         });
         $templateArea.html('');
     },
     /**
-     * Method to be overridden in child components if additional configuration elements
-     * are required in order to fetch data.
-     * @private
+     *Methodtobeoverriddeninchildcomponentsifadditionalconfigurationelements
+     *arerequiredinordertofetchdata.
+     *@private
      */
-    _isConfigComplete: function () {
-        return this.$el.get(0).dataset.filterId !== undefined && this.$el.get(0).dataset.templateKey !== undefined;
+    _isConfigComplete:function(){
+        returnthis.$el.get(0).dataset.filterId!==undefined&&this.$el.get(0).dataset.templateKey!==undefined;
     },
     /**
-     * Method to be overridden in child components in order to provide a search
-     * domain if needed.
-     * @private
+     *Methodtobeoverriddeninchildcomponentsinordertoprovideasearch
+     *domainifneeded.
+     *@private
      */
-    _getSearchDomain: function () {
-        return [];
+    _getSearchDomain:function(){
+        return[];
     },
     /**
-     * Fetches the data.
-     * @private
+     *Fetchesthedata.
+     *@private
      */
-    _fetchData: function () {
-        if (this._isConfigComplete()) {
-            return this._rpc(
+    _fetchData:function(){
+        if(this._isConfigComplete()){
+            returnthis._rpc(
                 {
-                    'route': '/website/snippet/filters',
-                    'params': {
-                        'filter_id': parseInt(this.$el.get(0).dataset.filterId),
-                        'template_key': this.$el.get(0).dataset.templateKey,
-                        'limit': parseInt(this.$el.get(0).dataset.numberOfRecords),
-                        'search_domain': this._getSearchDomain()
+                    'route':'/website/snippet/filters',
+                    'params':{
+                        'filter_id':parseInt(this.$el.get(0).dataset.filterId),
+                        'template_key':this.$el.get(0).dataset.templateKey,
+                        'limit':parseInt(this.$el.get(0).dataset.numberOfRecords),
+                        'search_domain':this._getSearchDomain()
                     },
                 })
                 .then(
-                    (data) => {
-                        this.data = data;
+                    (data)=>{
+                        this.data=data;
                     }
                 );
-        } else {
-            return new Promise((resolve) => {
-                this.data = [];
+        }else{
+            returnnewPromise((resolve)=>{
+                this.data=[];
                 resolve();
             });
         }
     },
     /**
      *
-     * @private
+     *@private
      */
-    _mustMessageWarningBeHidden: function() {
-        return this._isConfigComplete() || !this.editableMode;
+    _mustMessageWarningBeHidden:function(){
+        returnthis._isConfigComplete()||!this.editableMode;
     },
     /**
      *
-     * @private
+     *@private
      */
-    _manageWarningMessageVisibility: async function () {
+    _manageWarningMessageVisibility:asyncfunction(){
         this.$el.find('.missing_option_warning').toggleClass(
             'd-none',
             this._mustMessageWarningBeHidden()
         );
     },
     /**
-     * Method to be overridden in child components in order to prepare content
-     * before rendering.
-     * @private
+     *Methodtobeoverriddeninchildcomponentsinordertopreparecontent
+     *beforerendering.
+     *@private
      */
-    _prepareContent: function () {
-        if (this.$target[0].dataset.numberOfElements && this.$target[0].dataset.numberOfElementsSmallDevices) {
-            this.renderedContent = core.qweb.render(
+    _prepareContent:function(){
+        if(this.$target[0].dataset.numberOfElements&&this.$target[0].dataset.numberOfElementsSmallDevices){
+            this.renderedContent=core.qweb.render(
                 this.template_key,
                 this._getQWebRenderOptions());
-        } else {
-            this.renderedContent = '';
+        }else{
+            this.renderedContent='';
         }
     },
     /**
-     * Method to be overridden in child components in order to prepare QWeb
-     * options.
+     *MethodtobeoverriddeninchildcomponentsinordertoprepareQWeb
+     *options.
      *
-     * @private
+     *@private
      */
-    _getQWebRenderOptions: function () {
-        return {
-            chunkSize: parseInt(
+    _getQWebRenderOptions:function(){
+        return{
+            chunkSize:parseInt(
                 config.device.isMobile
-                    ? this.$target[0].dataset.numberOfElementsSmallDevices
-                    : this.$target[0].dataset.numberOfElements
+                    ?this.$target[0].dataset.numberOfElementsSmallDevices
+                    :this.$target[0].dataset.numberOfElements
             ),
-            data: this.data,
-            uniqueId: this.uniqueId
+            data:this.data,
+            uniqueId:this.uniqueId
         };
     },
     /**
      *
-     * @private
+     *@private
      */
-    _render: function () {
-        if (this.data.length) {
+    _render:function(){
+        if(this.data.length){
             this._prepareContent();
-        } else {
-            this.renderedContent = '';
+        }else{
+            this.renderedContent='';
         }
         this._renderContent();
     },
     /**
-     * @private
+     *@private
      */
-    _renderContent: function () {
-        const $templateArea = this.$el.find('.dynamic_snippet_template');
-        this.trigger_up('widgets_stop_request', {
-            $target: $templateArea,
+    _renderContent:function(){
+        const$templateArea=this.$el.find('.dynamic_snippet_template');
+        this.trigger_up('widgets_stop_request',{
+            $target:$templateArea,
         });
         $templateArea.html(this.renderedContent);
-        // TODO this is probably not the only public widget which creates DOM
-        // which should be attached to another public widget. Maybe a generic
-        // method could be added to properly do this operation of DOM addition.
-        this.trigger_up('widgets_start_request', {
-            $target: $templateArea,
-            editableMode: this.editableMode,
+        //TODOthisisprobablynottheonlypublicwidgetwhichcreatesDOM
+        //whichshouldbeattachedtoanotherpublicwidget.Maybeageneric
+        //methodcouldbeaddedtoproperlydothisoperationofDOMaddition.
+        this.trigger_up('widgets_start_request',{
+            $target:$templateArea,
+            editableMode:this.editableMode,
         });
     },
     /**
      *
-     * @param {Boolean} enable
-     * @private
+     *@param{Boolean}enable
+     *@private
      */
-    _setupSizeChangedManagement: function (enable) {
-        if (enable === true) {
-            config.device.bus.on('size_changed', this, this._onSizeChanged);
-        } else {
-            config.device.bus.off('size_changed', this, this._onSizeChanged);
+    _setupSizeChangedManagement:function(enable){
+        if(enable===true){
+            config.device.bus.on('size_changed',this,this._onSizeChanged);
+        }else{
+            config.device.bus.off('size_changed',this,this._onSizeChanged);
         }
     },
     /**
      *
-     * @param visible
-     * @private
+     *@paramvisible
+     *@private
      */
-    _toggleVisibility: function (visible) {
-        this.$el.toggleClass('d-none', !visible);
+    _toggleVisibility:function(visible){
+        this.$el.toggleClass('d-none',!visible);
     },
 
-    //------------------------------------- -------------------------------------
-    // Handlers
+    //--------------------------------------------------------------------------
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Navigates to the call to action url.
-     * @private
+     *Navigatestothecalltoactionurl.
+     *@private
      */
-    _onCallToAction: function (ev) {
-        window.location = $(ev.currentTarget).attr('data-url');
+    _onCallToAction:function(ev){
+        window.location=$(ev.currentTarget).attr('data-url');
     },
     /**
-     * Called when the size has reached a new bootstrap breakpoint.
+     *Calledwhenthesizehasreachedanewbootstrapbreakpoint.
      *
-     * @private
-     * @param {number} size as Integer @see web.config.device.SIZES
+     *@private
+     *@param{number}sizeasInteger@seeweb.config.device.SIZES
      */
-    _onSizeChanged: function (size) {
-        if (this.isDesplayedAsMobile !== config.device.isMobile) {
-            this.isDesplayedAsMobile = config.device.isMobile;
+    _onSizeChanged:function(size){
+        if(this.isDesplayedAsMobile!==config.device.isMobile){
+            this.isDesplayedAsMobile=config.device.isMobile;
             this._render();
         }
     },
 });
 
-publicWidget.registry.dynamic_snippet = DynamicSnippet;
+publicWidget.registry.dynamic_snippet=DynamicSnippet;
 
-return DynamicSnippet;
+returnDynamicSnippet;
 
 });

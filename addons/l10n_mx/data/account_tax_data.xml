@@ -1,882 +1,882 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
   <data>
 
-    <record id="ieps_8_sale" model="account.tax.template">
-        <field name="sequence" eval="0"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="active" eval="False"/>
-        <field name="name">IEPS 8% VENTAS</field>
-        <field name="description">IEPS 8%</field>
-        <field name="amount">8</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_ieps_8"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="include_base_amount">1</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta209_02"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="ieps_8_sale"model="account.tax.template">
+        <fieldname="sequence"eval="0"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="name">IEPS8%VENTAS</field>
+        <fieldname="description">IEPS8%</field>
+        <fieldname="amount">8</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_ieps_8"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="include_base_amount">1</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta209_02"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta208_02'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta208_02'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta208_02'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="ieps_8_purchase" model="account.tax.template">
-        <field name="sequence" eval="1"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">IEPS 8% COMPRAS</field>
-        <field name="description">IEPS 8%</field>
-        <field name="amount">8</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_ieps_8"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="include_base_amount">1</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta119_03"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta118_03'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta118_03'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta208_02'),
             }),
         ]"/>
     </record>
 
-    <record id="ieps_25_sale" model="account.tax.template">
-        <field name="sequence" eval="2"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="active" eval="False"/>
-        <field name="name">IEPS 25% VENTAS</field>
-        <field name="description">IEPS 25%</field>
-        <field name="amount">25</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_ieps_25"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="include_base_amount">1</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta209_02"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="ieps_8_purchase"model="account.tax.template">
+        <fieldname="sequence"eval="1"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">IEPS8%COMPRAS</field>
+        <fieldname="description">IEPS8%</field>
+        <fieldname="amount">8</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_ieps_8"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="include_base_amount">1</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta119_03"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta208_02'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta118_03'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta208_02'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="ieps_25_purchase" model="account.tax.template">
-        <field name="sequence" eval="3"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">IEPS 25% COMPRAS</field>
-        <field name="description">IEPS 25%</field>
-        <field name="amount">25</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_ieps_25"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="include_base_amount">1</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta119_03"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta118_03'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta118_03'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta118_03'),
             }),
         ]"/>
     </record>
 
-    <record id="ieps_26_5_sale" model="account.tax.template">
-        <field name="sequence" eval="4"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="active" eval="False"/>
-        <field name="name">IEPS 26.5% VENTAS</field>
-        <field name="description">IEPS 26.5%</field>
-        <field name="amount">26.5</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_ieps_26_5"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="include_base_amount">1</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta209_02"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="ieps_25_sale"model="account.tax.template">
+        <fieldname="sequence"eval="2"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="name">IEPS25%VENTAS</field>
+        <fieldname="description">IEPS25%</field>
+        <fieldname="amount">25</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_ieps_25"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="include_base_amount">1</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta209_02"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta208_02'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta208_02'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta208_02'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="ieps_26_5_purchase" model="account.tax.template">
-        <field name="sequence" eval="5"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">IEPS 26.5% COMPRAS</field>
-        <field name="description">IEPS 26.5%</field>
-        <field name="amount">26.5</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="include_base_amount">1</field>
-        <field name="tax_group_id" ref="tax_group_ieps_26_5"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta119_03"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta118_03'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta118_03'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta208_02'),
             }),
         ]"/>
     </record>
 
-    <record id="ieps_30_sale" model="account.tax.template">
-        <field name="sequence" eval="6"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="active" eval="False"/>
-        <field name="name">IEPS 30% VENTAS</field>
-        <field name="description">IEPS 30%</field>
-        <field name="amount">30</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_ieps_30"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="include_base_amount">1</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta209_02"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="ieps_25_purchase"model="account.tax.template">
+        <fieldname="sequence"eval="3"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">IEPS25%COMPRAS</field>
+        <fieldname="description">IEPS25%</field>
+        <fieldname="amount">25</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_ieps_25"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="include_base_amount">1</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta119_03"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta208_02'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta118_03'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta208_02'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="ieps_30_purchase" model="account.tax.template">
-        <field name="sequence" eval="7"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">IEPS 30% COMPRAS</field>
-        <field name="description">IEPS 30%</field>
-        <field name="amount">30</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_ieps_30"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="include_base_amount">1</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta119_03"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta118_03'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta118_03'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta118_03'),
             }),
         ]"/>
     </record>
 
-    <record id="ieps_53_sale" model="account.tax.template">
-        <field name="sequence" eval="8"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="active" eval="False"/>
-        <field name="name">IEPS 53% VENTAS</field>
-        <field name="description">IEPS 53%</field>
-        <field name="amount">53</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_ieps_53"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="include_base_amount">1</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta209_02"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="ieps_26_5_sale"model="account.tax.template">
+        <fieldname="sequence"eval="4"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="name">IEPS26.5%VENTAS</field>
+        <fieldname="description">IEPS26.5%</field>
+        <fieldname="amount">26.5</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_ieps_26_5"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="include_base_amount">1</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta209_02"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta208_02'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta208_02'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta208_02'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="ieps_53_purchase" model="account.tax.template">
-        <field name="sequence" eval="9"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">IEPS 53% COMPRAS</field>
-        <field name="description">IEPS 53%</field>
-        <field name="amount">53</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_ieps_53"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="include_base_amount">1</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta119_03"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta118_03'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_ieps')],
-                'account_id': ref('l10n_mx.cuenta118_03'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta208_02'),
             }),
         ]"/>
     </record>
 
-    <record id="tax1" model="account.tax.template">
-        <field name="sequence" eval="10"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">RET IVA FLETES 4%</field>
-        <field name="description">RET IVA -4%</field>
-        <field name="amount">-4</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_iva_ret_4"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta216_10"/>
-        <field name="l10n_mx_tax_type">Tasa</field>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_ret')],
+    <recordid="ieps_26_5_purchase"model="account.tax.template">
+        <fieldname="sequence"eval="5"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">IEPS26.5%COMPRAS</field>
+        <fieldname="description">IEPS26.5%</field>
+        <fieldname="amount">26.5</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="include_base_amount">1</field>
+        <fieldname="tax_group_id"ref="tax_group_ieps_26_5"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta119_03"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta216_10_20'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta118_03'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_ret')],
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta216_10_20'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="tax2" model="account.tax.template">
-        <field name="sequence" eval="11"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">RET IVA ARRENDAMIENTO 10%</field>
-        <field name="description">RET IVA -10%</field>
-        <field name="amount">-10</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_iva_ret_10"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta216_10"/>
-        <field name="l10n_mx_tax_type">Tasa</field>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_ret')],
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta216_10_20'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_ret')],
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta216_10_20'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta118_03'),
             }),
         ]"/>
     </record>
 
-    <record id="tax3" model="account.tax.template">
-        <field name="sequence" eval="12"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">RET ISR ARRENDAMIENTO 10%</field>
-        <field name="description">RET ISR -10%</field>
-        <field name="amount">-10</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_isr_ret_10"/>
-        <field name="l10n_mx_tax_type">Tasa</field>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="ieps_30_sale"model="account.tax.template">
+        <fieldname="sequence"eval="6"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="name">IEPS30%VENTAS</field>
+        <fieldname="description">IEPS30%</field>
+        <fieldname="amount">30</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_ieps_30"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="include_base_amount">1</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta209_02"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta216_03'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta208_02'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta216_03'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="tax5" model="account.tax.template">
-        <field name="sequence" eval="13"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">RET ISR HONORARIOS 10%</field>
-        <field name="description">RET ISR -10%</field>
-        <field name="amount">-10</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_isr_ret_10"/>
-        <field name="l10n_mx_tax_type">Tasa</field>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta216_04'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta216_04'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta208_02'),
             }),
         ]"/>
     </record>
 
-    <record id="tax7" model="account.tax.template">
-        <field name="sequence" eval="14"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">RET IVA ARRENDAMIENTO 10.67%</field>
-        <field name="description">RET IVA -10.67%</field>
-        <field name="amount">-10.67</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_iva_ret_1067"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta216_10"/>
-        <field name="l10n_mx_tax_type">Tasa</field>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_ret')],
+    <recordid="ieps_30_purchase"model="account.tax.template">
+        <fieldname="sequence"eval="7"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">IEPS30%COMPRAS</field>
+        <fieldname="description">IEPS30%</field>
+        <fieldname="amount">30</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_ieps_30"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="include_base_amount">1</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta119_03"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta216_10_20'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta118_03'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_ret')],
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta216_10_20'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="tax8" model="account.tax.template">
-        <field name="sequence" eval="15"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">RET IVA HONORARIOS 10.67%</field>
-        <field name="description">RET IVA -10.67%</field>
-        <field name="amount">-10.67</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_iva_ret_1067"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta216_10"/>
-        <field name="l10n_mx_tax_type">Tasa</field>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_ret')],
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta216_10_20'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_ret')],
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta216_10_20'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta118_03'),
             }),
         ]"/>
     </record>
 
-    <record id="tax9" model="account.tax.template">
-        <field name="sequence" eval="16"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">IVA 0% VENTAS</field>
-        <field name="description">IVA 0%</field>
-        <field name="amount">0</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_iva_0"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta209_01"/>
-        <field name="l10n_mx_tax_type">Tasa</field>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="ieps_53_sale"model="account.tax.template">
+        <fieldname="sequence"eval="8"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="name">IEPS53%VENTAS</field>
+        <fieldname="description">IEPS53%</field>
+        <fieldname="amount">53</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_ieps_53"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="include_base_amount">1</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta209_02"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta208_01'),
-                'tag_ids': [ref('tag_iva')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta208_02'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta208_01'),
-                'tag_ids': [ref('tag_iva')],
-            }),
-        ]"/>
-    </record>
-
-    <record id="tax12" model="account.tax.template">
-        <field name="sequence" eval="17"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">IVA 16% VENTAS</field>
-        <field name="description">IVA 16%</field>
-        <field name="amount">16</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_iva_16"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta209_01"/>
-        <field name="l10n_mx_tax_type">Tasa</field>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta208_01'),
-                'tag_ids': [ref('tag_iva')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta208_01'),
-                'tag_ids': [ref('tag_iva')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta208_02'),
             }),
         ]"/>
     </record>
 
-    <record id="tax13" model="account.tax.template">
-        <field name="sequence" eval="18"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">IVA 0% COMPRAS</field>
-        <field name="description">IVA 0%</field>
-        <field name="amount">0</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_iva_0"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta119_01"/>
-        <field name="l10n_mx_tax_type">Tasa</field>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_0')],
+    <recordid="ieps_53_purchase"model="account.tax.template">
+        <fieldname="sequence"eval="9"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">IEPS53%COMPRAS</field>
+        <fieldname="description">IEPS53%</field>
+        <fieldname="amount">53</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_ieps_53"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="include_base_amount">1</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta119_03"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta118_01'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta118_03'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_0')],
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta118_01'),
-            }),
-        ]"/>
-    </record>
-
-    <record id="tax14" model="account.tax.template">
-        <field name="sequence" eval="19"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">IVA 16% COMPRAS</field>
-        <field name="description">IVA 16%</field>
-        <field name="amount">16</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_iva_16"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta119_01"/>
-        <field name="l10n_mx_tax_type">Tasa</field>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_16')],
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta118_01'),
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_16')],
-            }),
-
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta118_01'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_ieps')],
+                'account_id':ref('l10n_mx.cuenta118_03'),
             }),
         ]"/>
     </record>
 
-    <record id="tax16" model="account.tax.template">
-        <field name="sequence" eval="20"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">IVA 8% COMPRAS</field>
-        <field name="description">IVA 8%</field>
-        <field name="amount">8</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_iva_8"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta119_01"/>
-        <field name="l10n_mx_tax_type">Tasa</field>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_8')],
+    <recordid="tax1"model="account.tax.template">
+        <fieldname="sequence"eval="10"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">RETIVAFLETES4%</field>
+        <fieldname="description">RETIVA-4%</field>
+        <fieldname="amount">-4</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_ret_4"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta216_10"/>
+        <fieldname="l10n_mx_tax_type">Tasa</field>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_ret')],
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta118_01'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta216_10_20'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'tag_ids': [ref('tag_diot_8')],
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_ret')],
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('cuenta118_01'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta216_10_20'),
             }),
         ]"/>
     </record>
 
-    <record id="tax17" model="account.tax.template">
-        <field name="sequence" eval="21"/>
-        <field name="chart_template_id" ref="mx_coa"/>
-        <field name="name">IVA 8% VENTAS</field>
-        <field name="description">IVA 8%</field>
-        <field name="amount">8</field>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_iva_8"/>
-        <field name="tax_exigibility">on_payment</field>
-        <field name="cash_basis_transition_account_id" ref="cuenta209_01"/>
-        <field name="l10n_mx_tax_type">Tasa</field>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="tax2"model="account.tax.template">
+        <fieldname="sequence"eval="11"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">RETIVAARRENDAMIENTO10%</field>
+        <fieldname="description">RETIVA-10%</field>
+        <fieldname="amount">-10</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_ret_10"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta216_10"/>
+        <fieldname="l10n_mx_tax_type">Tasa</field>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_ret')],
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_iva')],
-                'account_id': ref('cuenta208_01'),
-                'tag_ids': [ref('tag_iva')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta216_10_20'),
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_ret')],
             }),
 
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'tag_ids': [ref('l10n_mx.tag_iva')],
-                'account_id': ref('cuenta208_01'),
-                'tag_ids': [ref('tag_iva')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta216_10_20'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="tax3"model="account.tax.template">
+        <fieldname="sequence"eval="12"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">RETISRARRENDAMIENTO10%</field>
+        <fieldname="description">RETISR-10%</field>
+        <fieldname="amount">-10</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_isr_ret_10"/>
+        <fieldname="l10n_mx_tax_type">Tasa</field>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta216_03'),
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta216_03'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="tax5"model="account.tax.template">
+        <fieldname="sequence"eval="13"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">RETISRHONORARIOS10%</field>
+        <fieldname="description">RETISR-10%</field>
+        <fieldname="amount">-10</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_isr_ret_10"/>
+        <fieldname="l10n_mx_tax_type">Tasa</field>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta216_04'),
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta216_04'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="tax7"model="account.tax.template">
+        <fieldname="sequence"eval="14"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">RETIVAARRENDAMIENTO10.67%</field>
+        <fieldname="description">RETIVA-10.67%</field>
+        <fieldname="amount">-10.67</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_ret_1067"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta216_10"/>
+        <fieldname="l10n_mx_tax_type">Tasa</field>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_ret')],
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta216_10_20'),
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_ret')],
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta216_10_20'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="tax8"model="account.tax.template">
+        <fieldname="sequence"eval="15"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">RETIVAHONORARIOS10.67%</field>
+        <fieldname="description">RETIVA-10.67%</field>
+        <fieldname="amount">-10.67</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_ret_1067"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta216_10"/>
+        <fieldname="l10n_mx_tax_type">Tasa</field>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_ret')],
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta216_10_20'),
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_ret')],
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta216_10_20'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="tax9"model="account.tax.template">
+        <fieldname="sequence"eval="16"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">IVA0%VENTAS</field>
+        <fieldname="description">IVA0%</field>
+        <fieldname="amount">0</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_0"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta209_01"/>
+        <fieldname="l10n_mx_tax_type">Tasa</field>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta208_01'),
+                'tag_ids':[ref('tag_iva')],
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta208_01'),
+                'tag_ids':[ref('tag_iva')],
+            }),
+        ]"/>
+    </record>
+
+    <recordid="tax12"model="account.tax.template">
+        <fieldname="sequence"eval="17"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">IVA16%VENTAS</field>
+        <fieldname="description">IVA16%</field>
+        <fieldname="amount">16</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_16"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta209_01"/>
+        <fieldname="l10n_mx_tax_type">Tasa</field>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta208_01'),
+                'tag_ids':[ref('tag_iva')],
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta208_01'),
+                'tag_ids':[ref('tag_iva')],
+            }),
+        ]"/>
+    </record>
+
+    <recordid="tax13"model="account.tax.template">
+        <fieldname="sequence"eval="18"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">IVA0%COMPRAS</field>
+        <fieldname="description">IVA0%</field>
+        <fieldname="amount">0</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_0"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta119_01"/>
+        <fieldname="l10n_mx_tax_type">Tasa</field>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_0')],
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta118_01'),
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_0')],
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta118_01'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="tax14"model="account.tax.template">
+        <fieldname="sequence"eval="19"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">IVA16%COMPRAS</field>
+        <fieldname="description">IVA16%</field>
+        <fieldname="amount">16</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_16"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta119_01"/>
+        <fieldname="l10n_mx_tax_type">Tasa</field>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_16')],
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta118_01'),
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_16')],
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta118_01'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="tax16"model="account.tax.template">
+        <fieldname="sequence"eval="20"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">IVA8%COMPRAS</field>
+        <fieldname="description">IVA8%</field>
+        <fieldname="amount">8</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_8"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta119_01"/>
+        <fieldname="l10n_mx_tax_type">Tasa</field>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_8')],
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta118_01'),
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'tag_ids':[ref('tag_diot_8')],
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('cuenta118_01'),
+            }),
+        ]"/>
+    </record>
+
+    <recordid="tax17"model="account.tax.template">
+        <fieldname="sequence"eval="21"/>
+        <fieldname="chart_template_id"ref="mx_coa"/>
+        <fieldname="name">IVA8%VENTAS</field>
+        <fieldname="description">IVA8%</field>
+        <fieldname="amount">8</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_iva_8"/>
+        <fieldname="tax_exigibility">on_payment</field>
+        <fieldname="cash_basis_transition_account_id"ref="cuenta209_01"/>
+        <fieldname="l10n_mx_tax_type">Tasa</field>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_iva')],
+                'account_id':ref('cuenta208_01'),
+                'tag_ids':[ref('tag_iva')],
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'tag_ids':[ref('l10n_mx.tag_iva')],
+                'account_id':ref('cuenta208_01'),
+                'tag_ids':[ref('tag_iva')],
             }),
         ]"/>
     </record>

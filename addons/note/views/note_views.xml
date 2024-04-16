@@ -1,128 +1,128 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-    <!-- note Stage Form View -->
-    <record id="view_note_stage_form" model="ir.ui.view">
-      <field name="name">note.stage.form</field>
-      <field name="model">note.stage</field>
-      <field name="arch" type="xml">
-        <form string="Stage of Notes">
+    <!--noteStageFormView-->
+    <recordid="view_note_stage_form"model="ir.ui.view">
+      <fieldname="name">note.stage.form</field>
+      <fieldname="model">note.stage</field>
+      <fieldname="arch"type="xml">
+        <formstring="StageofNotes">
           <group>
-            <field name="name"/>
-            <field name="fold"/>
+            <fieldname="name"/>
+            <fieldname="fold"/>
           </group>
         </form>
       </field>
     </record>
 
-    <!-- note Stage Tree View -->
-    <record id="view_note_stage_tree" model="ir.ui.view">
-      <field name="name">note.stage.tree</field>
-      <field name="model">note.stage</field>
-      <field name="field_parent"></field>
-      <field name="arch" type="xml">
-        <tree string="Stages of Notes" editable="bottom">
-            <field name="sequence" widget="handle"/>
-            <field name="name"/>
-            <field name="fold"/>
+    <!--noteStageTreeView-->
+    <recordid="view_note_stage_tree"model="ir.ui.view">
+      <fieldname="name">note.stage.tree</field>
+      <fieldname="model">note.stage</field>
+      <fieldname="field_parent"></field>
+      <fieldname="arch"type="xml">
+        <treestring="StagesofNotes"editable="bottom">
+            <fieldname="sequence"widget="handle"/>
+            <fieldname="name"/>
+            <fieldname="fold"/>
         </tree>
       </field>
     </record>
 
-    <!-- note Stage Action -->
-    <record id="action_note_stage" model="ir.actions.act_window">
-        <field name="name">Stages</field>
-        <field name="res_model">note.stage</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[('user_id','=',uid)]</field>
+    <!--noteStageAction-->
+    <recordid="action_note_stage"model="ir.actions.act_window">
+        <fieldname="name">Stages</field>
+        <fieldname="res_model">note.stage</field>
+        <fieldname="view_mode">tree,form</field>
+        <fieldname="domain">[('user_id','=',uid)]</field>
     </record>
 
-    <!-- note Tag Form View -->
-    <record id="note_tag_view_form" model="ir.ui.view">
-      <field name="name">note.tag.form</field>
-      <field name="model">note.tag</field>
-      <field name="arch" type="xml">
-        <form string="Tags">
+    <!--noteTagFormView-->
+    <recordid="note_tag_view_form"model="ir.ui.view">
+      <fieldname="name">note.tag.form</field>
+      <fieldname="model">note.tag</field>
+      <fieldname="arch"type="xml">
+        <formstring="Tags">
           <group>
-            <field name="name"/>
+            <fieldname="name"/>
           </group>
         </form>
       </field>
     </record>
 
-    <!-- note Tag Tree View -->
-    <record id="note_tag_view_tree" model="ir.ui.view">
-      <field name="name">note.tag.tree</field>
-      <field name="model">note.tag</field>
-      <field name="arch" type="xml">
-        <tree string="Tags" editable="bottom">
-            <field name="name"/>
+    <!--noteTagTreeView-->
+    <recordid="note_tag_view_tree"model="ir.ui.view">
+      <fieldname="name">note.tag.tree</field>
+      <fieldname="model">note.tag</field>
+      <fieldname="arch"type="xml">
+        <treestring="Tags"editable="bottom">
+            <fieldname="name"/>
         </tree>
       </field>
     </record>
 
-    <!-- note Tag Action -->
-    <record id="note_tag_action" model="ir.actions.act_window">
-      <field name="name">Tags</field>
-      <field name="res_model">note.tag</field>
-      <field name="view_mode">tree,form</field>
-      <field name="help" type="html">
-        <p class="o_view_nocontent_smiling_face">
-          Add a new tag
+    <!--noteTagAction-->
+    <recordid="note_tag_action"model="ir.actions.act_window">
+      <fieldname="name">Tags</field>
+      <fieldname="res_model">note.tag</field>
+      <fieldname="view_mode">tree,form</field>
+      <fieldname="help"type="html">
+        <pclass="o_view_nocontent_smiling_face">
+          Addanewtag
         </p>
       </field>
     </record>
 
-    <!-- New note Kanban View -->
-    <record id="view_note_note_kanban" model="ir.ui.view">
-      <field name="name">note.note.kanban</field>
-      <field name="model">note.note</field>
-      <field name="arch" type="xml">
-        <kanban default_group_by="stage_id" class="oe_notes oe_kanban_quickcreate_textarea o_kanban_small_column">
-          <field name="color"/>
-          <field name="sequence"/>
-          <field name="name"/>
-          <field name="stage_id"/>
-          <field name="open"/>
-          <field name="memo"/>
-          <field name="date_done"/>
-          <field name="message_partner_ids"/>
-          <field name="activity_ids" />
-          <field name="activity_state" />
-          <progressbar field="activity_state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}'/>
+    <!--NewnoteKanbanView-->
+    <recordid="view_note_note_kanban"model="ir.ui.view">
+      <fieldname="name">note.note.kanban</field>
+      <fieldname="model">note.note</field>
+      <fieldname="arch"type="xml">
+        <kanbandefault_group_by="stage_id"class="oe_notesoe_kanban_quickcreate_textareao_kanban_small_column">
+          <fieldname="color"/>
+          <fieldname="sequence"/>
+          <fieldname="name"/>
+          <fieldname="stage_id"/>
+          <fieldname="open"/>
+          <fieldname="memo"/>
+          <fieldname="date_done"/>
+          <fieldname="message_partner_ids"/>
+          <fieldname="activity_ids"/>
+          <fieldname="activity_state"/>
+          <progressbarfield="activity_state"colors='{"planned":"success","today":"warning","overdue":"danger"}'/>
           <templates>
-            <t t-name="kanban-box">
+            <tt-name="kanban-box">
 
-              <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click_edit oe_semantic_html_override oe_kanban_card">
+              <divt-attf-class="#{!selection_mode?kanban_color(record.color.raw_value):''}oe_kanban_global_click_editoe_semantic_html_overrideoe_kanban_card">
 
-                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <fieldname="tag_ids"widget="many2many_tags"options="{'color_field':'color'}"/>
 
-                <div class="o_dropdown_kanban dropdown">
-                    <a role="button" class="dropdown-toggle o-no-caret btn" data-toggle="dropdown" data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
-                        <span class="fa fa-ellipsis-v"/>
+                <divclass="o_dropdown_kanbandropdown">
+                    <arole="button"class="dropdown-toggleo-no-caretbtn"data-toggle="dropdown"data-display="static"href="#"aria-label="Dropdownmenu"title="Dropdownmenu">
+                        <spanclass="fafa-ellipsis-v"/>
                     </a>
-                    <div class="dropdown-menu" role="menu">
-                        <a role="menuitem" type="delete" class="dropdown-item">Delete</a>
-                        <ul class="oe_kanban_colorpicker" data-field="color"/>
+                    <divclass="dropdown-menu"role="menu">
+                        <arole="menuitem"type="delete"class="dropdown-item">Delete</a>
+                        <ulclass="oe_kanban_colorpicker"data-field="color"/>
                     </div>
                 </div>
                   <span>
-                    <a name="action_close" type="object" t-if="record.open.raw_value"><i class="fa fa-check" role="img" aria-label="Opened" title="Opened"/></a>
-                    <a name="action_open" type="object" t-if="!record.open.raw_value"><i class="fa fa-undo" role="img" aria-label="Closed" title="Closed"/></a>
+                    <aname="action_close"type="object"t-if="record.open.raw_value"><iclass="fafa-check"role="img"aria-label="Opened"title="Opened"/></a>
+                    <aname="action_open"type="object"t-if="!record.open.raw_value"><iclass="fafa-undo"role="img"aria-label="Closed"title="Closed"/></a>
                   </span>
-                <!-- kanban note -->
-                <span t-attf-class="oe_kanban_content #{record.open.raw_value ? '' : 'note_text_line_through'}">
-                  <!-- title -->
-                  <field name="name"/>
-                  <div class="o_kanban_inline_block float-right mr4">
-                    <field name="activity_ids" widget="kanban_activity" />
+                <!--kanbannote-->
+                <spant-attf-class="oe_kanban_content#{record.open.raw_value?'':'note_text_line_through'}">
+                  <!--title-->
+                  <fieldname="name"/>
+                  <divclass="o_kanban_inline_blockfloat-rightmr4">
+                    <fieldname="activity_ids"widget="kanban_activity"/>
                   </div>
                 </span>
-                <t t-if="record.message_partner_ids.raw_value.length &gt; 1">
-                    <div class="clearfix"></div>
-                      <t t-foreach="record.message_partner_ids.raw_value" t-as="follower">
-                        <img t-att-src="kanban_image('res.partner', 'image_128', follower)" class="oe_kanban_avatar o_image_24_cover float-right mt-2" t-att-data-member_id="follower" alt="Follower"/>
+                <tt-if="record.message_partner_ids.raw_value.length&gt;1">
+                    <divclass="clearfix"></div>
+                      <tt-foreach="record.message_partner_ids.raw_value"t-as="follower">
+                        <imgt-att-src="kanban_image('res.partner','image_128',follower)"class="oe_kanban_avataro_image_24_coverfloat-rightmt-2"t-att-data-member_id="follower"alt="Follower"/>
                       </t>
-                    <div class="clearfix"></div>
+                    <divclass="clearfix"></div>
                 </t>
               </div>
             </t>
@@ -131,81 +131,81 @@
       </field>
     </record>
 
-    <!-- New note Tree View -->
-    <record id="view_note_note_tree" model="ir.ui.view">
-      <field name="name">note.note.tree</field>
-      <field name="model">note.note</field>
-      <field name="arch" type="xml">
-        <tree string="Stages">
-          <field name="name"/>
-          <field name="open"/>
-          <field name="stage_id"/>
-          <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-          <field name="activity_ids" widget="list_activity" optional="show"/>
+    <!--NewnoteTreeView-->
+    <recordid="view_note_note_tree"model="ir.ui.view">
+      <fieldname="name">note.note.tree</field>
+      <fieldname="model">note.note</field>
+      <fieldname="arch"type="xml">
+        <treestring="Stages">
+          <fieldname="name"/>
+          <fieldname="open"/>
+          <fieldname="stage_id"/>
+          <fieldname="tag_ids"widget="many2many_tags"options="{'color_field':'color'}"/>
+          <fieldname="activity_ids"widget="list_activity"optional="show"/>
         </tree>
       </field>
     </record>
 
-    <!-- New note Form View -->
-    <record id="view_note_note_form" model="ir.ui.view">
-        <field name="name">note.note.form</field>
-        <field name="model">note.note</field>
-        <field name="arch" type="xml">
-            <form string="Note" class="oe_form_nomargin o_note_form_view">
+    <!--NewnoteFormView-->
+    <recordid="view_note_note_form"model="ir.ui.view">
+        <fieldname="name">note.note.form</field>
+        <fieldname="model">note.note</field>
+        <fieldname="arch"type="xml">
+            <formstring="Note"class="oe_form_nomargino_note_form_view">
                 <header>
-                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" placeholder="Tags"/>
-                    <field name="stage_id" domain="[('user_id','=',uid)]" widget="statusbar" options="{'clickable': '1'}"/>
+                    <fieldname="tag_ids"widget="many2many_tags"options="{'color_field':'color'}"placeholder="Tags"/>
+                    <fieldname="stage_id"domain="[('user_id','=',uid)]"widget="statusbar"options="{'clickable':'1'}"/>
                 </header>
                 <sheet>
-                  <field name="memo" type="html" class="oe_memo"/>
+                  <fieldname="memo"type="html"class="oe_memo"/>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
+                <divclass="oe_chatter">
+                    <fieldname="message_follower_ids"/>
+                    <fieldname="activity_ids"/>
+                    <fieldname="message_ids"/>
                 </div>
             </form>
         </field>
     </record>
 
-    <!-- Search note  -->
-    <record id="view_note_note_filter" model="ir.ui.view">
-      <field name="name">note.note.search</field>
-      <field name="model">note.note</field>
-      <field name="arch" type="xml">
-        <search string="Notes">
-          <field name="memo" string="Note"/>
-          <field name="tag_ids"/>
-          <filter name="open_true" string="Active" domain="[('open', '=', True)]"/>
-          <filter name="open_false" string="Archive" domain="[('open', '=', False)]"/>
-          <filter invisible="1" string="Late Activities" name="activities_overdue"
-                  domain="[('my_activity_date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
-                  help="Show all records which has next action date is before today"/>
-          <filter invisible="1" string="Today Activities" name="activities_today"
-                  domain="[('my_activity_date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
-          <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
-                        domain="[('my_activity_date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))
+    <!--Searchnote -->
+    <recordid="view_note_note_filter"model="ir.ui.view">
+      <fieldname="name">note.note.search</field>
+      <fieldname="model">note.note</field>
+      <fieldname="arch"type="xml">
+        <searchstring="Notes">
+          <fieldname="memo"string="Note"/>
+          <fieldname="tag_ids"/>
+          <filtername="open_true"string="Active"domain="[('open','=',True)]"/>
+          <filtername="open_false"string="Archive"domain="[('open','=',False)]"/>
+          <filterinvisible="1"string="LateActivities"name="activities_overdue"
+                  domain="[('my_activity_date_deadline','&lt;',context_today().strftime('%Y-%m-%d'))]"
+                  help="Showallrecordswhichhasnextactiondateisbeforetoday"/>
+          <filterinvisible="1"string="TodayActivities"name="activities_today"
+                  domain="[('my_activity_date_deadline','=',context_today().strftime('%Y-%m-%d'))]"/>
+          <filterinvisible="1"string="FutureActivities"name="activities_upcoming_all"
+                        domain="[('my_activity_date_deadline','&gt;',context_today().strftime('%Y-%m-%d'))
                         ]"/>
-          <group expand="0" string="Group By">
-            <filter string="Stage" name="stage" help="By sticky note Category" context="{'group_by':'stage_id'}"/>
+          <groupexpand="0"string="GroupBy">
+            <filterstring="Stage"name="stage"help="BystickynoteCategory"context="{'group_by':'stage_id'}"/>
           </group>
         </search>
       </field>
     </record>
 
-    <!-- Action -->
-    <record id="action_note_note" model="ir.actions.act_window">
-      <field name="name">Notes</field>
-      <field name="res_model">note.note</field>
-      <field name="view_mode">kanban,tree,form,activity</field>
-      <field name="search_view_id" ref="view_note_note_filter"/>
-      <field name="context">{}</field>
-      <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            Add a new personal note
+    <!--Action-->
+    <recordid="action_note_note"model="ir.actions.act_window">
+      <fieldname="name">Notes</field>
+      <fieldname="res_model">note.note</field>
+      <fieldname="view_mode">kanban,tree,form,activity</field>
+      <fieldname="search_view_id"ref="view_note_note_filter"/>
+      <fieldname="context">{}</field>
+      <fieldname="help"type="html">
+          <pclass="o_view_nocontent_smiling_face">
+            Addanewpersonalnote
           </p><p>
-            Notes are private, unless you share them by inviting follower on a note.
-            (Useful for meeting minutes).
+            Notesareprivate,unlessyousharethembyinvitingfolloweronanote.
+            (Usefulformeetingminutes).
           </p>
         </field>
     </record>

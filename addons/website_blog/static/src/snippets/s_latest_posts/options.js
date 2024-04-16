@@ -1,29 +1,29 @@
-flectra.define('website_blog.s_latest_posts_editor', function (require) {
-'use strict';
+flectra.define('website_blog.s_latest_posts_editor',function(require){
+'usestrict';
 
-var sOptions = require('web_editor.snippets.options');
-var wUtils = require('website.utils');
+varsOptions=require('web_editor.snippets.options');
+varwUtils=require('website.utils');
 
-sOptions.registry.js_get_posts_selectBlog = sOptions.Class.extend({
+sOptions.registry.js_get_posts_selectBlog=sOptions.Class.extend({
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _renderCustomXML: function (uiFragment) {
-        return this._rpc({
-            model: 'blog.blog',
-            method: 'search_read',
-            args: [wUtils.websiteDomain(this), ['name']],
-        }).then(blogs => {
-            const menuEl = uiFragment.querySelector('[name="blog_selection"]');
-            for (const blog of blogs) {
-                const el = document.createElement('we-button');
-                el.dataset.selectDataAttribute = blog.id;
-                el.textContent = blog.name;
+    _renderCustomXML:function(uiFragment){
+        returnthis._rpc({
+            model:'blog.blog',
+            method:'search_read',
+            args:[wUtils.websiteDomain(this),['name']],
+        }).then(blogs=>{
+            constmenuEl=uiFragment.querySelector('[name="blog_selection"]');
+            for(constblogofblogs){
+                constel=document.createElement('we-button');
+                el.dataset.selectDataAttribute=blog.id;
+                el.textContent=blog.name;
                 menuEl.appendChild(el);
             }
         });

@@ -1,21 +1,21 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, api, _
-from stdnum import luhn
+fromflectraimportfields,models,api,_
+fromstdnumimportluhn
 
 
-class ResPartner(models.Model):
-    _inherit = 'res.partner'
+classResPartner(models.Model):
+    _inherit='res.partner'
 
-    l10n_se_check_vendor_ocr = fields.Boolean(string='Check Vendor OCR', help='This Vendor uses OCR Number on their Vendor Bills.')
-    l10n_se_default_vendor_payment_ref = fields.Char(string='Default Vendor Payment Ref', help='If set, the vendor uses the same Default Payment Reference or OCR Number on all their Vendor Bills.')
+    l10n_se_check_vendor_ocr=fields.Boolean(string='CheckVendorOCR',help='ThisVendorusesOCRNumberontheirVendorBills.')
+    l10n_se_default_vendor_payment_ref=fields.Char(string='DefaultVendorPaymentRef',help='Ifset,thevendorusesthesameDefaultPaymentReferenceorOCRNumberonalltheirVendorBills.')
 
     @api.onchange('l10n_se_default_vendor_payment_ref')
-    def onchange_l10n_se_default_vendor_payment_ref(self):
-        if not self.l10n_se_default_vendor_payment_ref == "" and self.l10n_se_check_vendor_ocr:
-            reference = self.l10n_se_default_vendor_payment_ref
+    defonchange_l10n_se_default_vendor_payment_ref(self):
+        ifnotself.l10n_se_default_vendor_payment_ref==""andself.l10n_se_check_vendor_ocr:
+            reference=self.l10n_se_default_vendor_payment_ref
             try:
                 luhn.validate(reference)
-            except: 
-                return {'warning': {'title': _('Warning'), 'message': _('Default vendor OCR number isn\'t a valid OCR number.')}}
+            except:
+                return{'warning':{'title':_('Warning'),'message':_('DefaultvendorOCRnumberisn\'tavalidOCRnumber.')}}

@@ -1,27 +1,27 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models
 
 
-class AccountTax(models.Model):
-    _name = 'account.tax'
-    _inherit = 'account.tax'
+classAccountTax(models.Model):
+    _name='account.tax'
+    _inherit='account.tax'
 
-    l10n_cl_sii_code = fields.Integer('SII Code', group_operator=False)
+    l10n_cl_sii_code=fields.Integer('SIICode',group_operator=False)
 
 
-class AccountTaxTemplate(models.Model):
-    _name = 'account.tax.template'
-    _inherit = 'account.tax.template'
+classAccountTaxTemplate(models.Model):
+    _name='account.tax.template'
+    _inherit='account.tax.template'
 
-    l10n_cl_sii_code = fields.Integer('SII Code')
+    l10n_cl_sii_code=fields.Integer('SIICode')
 
-    def _get_tax_vals(self, company, tax_template_to_tax):
+    def_get_tax_vals(self,company,tax_template_to_tax):
         self.ensure_one()
-        vals = super(AccountTaxTemplate, self)._get_tax_vals(company, tax_template_to_tax)
+        vals=super(AccountTaxTemplate,self)._get_tax_vals(company,tax_template_to_tax)
         vals.update({
-            'l10n_cl_sii_code': self.l10n_cl_sii_code,
+            'l10n_cl_sii_code':self.l10n_cl_sii_code,
         })
-        if self.tax_group_id:
-            vals['tax_group_id'] = self.tax_group_id.id
-        return vals
+        ifself.tax_group_id:
+            vals['tax_group_id']=self.tax_group_id.id
+        returnvals

@@ -1,46 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
-        <record id="account_tag_view_form" model="ir.ui.view">
-            <field name="name">Tags</field>
-            <field name="model">account.account.tag</field>
-            <field name="arch" type="xml">
-                <form string="Tags">
+        <recordid="account_tag_view_form"model="ir.ui.view">
+            <fieldname="name">Tags</field>
+            <fieldname="model">account.account.tag</field>
+            <fieldname="arch"type="xml">
+                <formstring="Tags">
                     <sheet>
-                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                        <widgetname="web_ribbon"title="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
                         <group>
-                            <field name="active" invisible="1"/>
-                            <field name="name"/>
-                            <field name="applicability"/>
-                            <field name="tax_negate" readonly="1" attrs="{'invisible': [('applicability', '!=', 'taxes')]}"/>
-                            <field name="country_id" attrs="{'invisible': [('applicability', '!=', 'taxes')], 'readonly': [('tax_report_line_ids', '!=', [])]}"/>
-                            <field name="tax_report_line_ids" readonly="1" attrs="{'invisible': [('applicability', '!=', 'taxes')]}"/>
+                            <fieldname="active"invisible="1"/>
+                            <fieldname="name"/>
+                            <fieldname="applicability"/>
+                            <fieldname="tax_negate"readonly="1"attrs="{'invisible':[('applicability','!=','taxes')]}"/>
+                            <fieldname="country_id"attrs="{'invisible':[('applicability','!=','taxes')],'readonly':[('tax_report_line_ids','!=',[])]}"/>
+                            <fieldname="tax_report_line_ids"readonly="1"attrs="{'invisible':[('applicability','!=','taxes')]}"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <record id="account_tag_view_tree" model="ir.ui.view">
-            <field name="name">Tags</field>
-            <field name="model">account.account.tag</field>
-            <field name="arch" type="xml">
-                <tree string="Tags">
-                    <field name="name"/>
-                    <field name="applicability"/>
+        <recordid="account_tag_view_tree"model="ir.ui.view">
+            <fieldname="name">Tags</field>
+            <fieldname="model">account.account.tag</field>
+            <fieldname="arch"type="xml">
+                <treestring="Tags">
+                    <fieldname="name"/>
+                    <fieldname="applicability"/>
                 </tree>
             </field>
         </record>
 
-        <record id="account_tag_view_search" model="ir.ui.view">
-            <field name="name">account.tag.view.search</field>
-            <field name="model">account.account.tag</field>
-            <field name="arch" type="xml">
+        <recordid="account_tag_view_search"model="ir.ui.view">
+            <fieldname="name">account.tag.view.search</field>
+            <fieldname="model">account.account.tag</field>
+            <fieldname="arch"type="xml">
                 <search>
-                    <field name="name"/>
+                    <fieldname="name"/>
                     <separator/>
-                    <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                    <filtername="archived"string="Archived"domain="[('active','=',False)]"/>
                 </search>
             </field>
         </record>

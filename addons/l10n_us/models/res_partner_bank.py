@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import re
-from flectra import fields, models, api, _
-from flectra.exceptions import ValidationError
+importre
+fromflectraimportfields,models,api,_
+fromflectra.exceptionsimportValidationError
 
 
-class ResPartnerBank(models.Model):
-    _inherit = 'res.partner.bank'
+classResPartnerBank(models.Model):
+    _inherit='res.partner.bank'
 
-    aba_routing = fields.Char(string="ABA/Routing", help="American Bankers Association Routing Number")
+    aba_routing=fields.Char(string="ABA/Routing",help="AmericanBankersAssociationRoutingNumber")
 
     @api.constrains('aba_routing')
-    def _check_aba_routing(self):
-        for bank in self:
-            if bank.aba_routing and not re.match(r'^\d{1,9}$', bank.aba_routing):
-                raise ValidationError(_('ABA/Routing should only contains numbers (maximum 9 digits).'))
+    def_check_aba_routing(self):
+        forbankinself:
+            ifbank.aba_routingandnotre.match(r'^\d{1,9}$',bank.aba_routing):
+                raiseValidationError(_('ABA/Routingshouldonlycontainsnumbers(maximum9digits).'))

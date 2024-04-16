@@ -1,67 +1,67 @@
-flectra.define('pos_hr.tour.PosHrTourMethods', function (require) {
-    'use strict';
+flectra.define('pos_hr.tour.PosHrTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
-    const { SelectionPopup } = require('point_of_sale.tour.SelectionPopupTourMethods');
-    const { NumberPopup } = require('point_of_sale.tour.NumberPopupTourMethods');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
+    const{SelectionPopup}=require('point_of_sale.tour.SelectionPopupTourMethods');
+    const{NumberPopup}=require('point_of_sale.tour.NumberPopupTourMethods');
 
-    class Do {
-        clickLoginButton() {
-            return [
+    classDo{
+        clickLoginButton(){
+            return[
                 {
-                    content: 'click login button',
-                    trigger: '.login-overlay .login-button.select-employee',
+                    content:'clickloginbutton',
+                    trigger:'.login-overlay.login-button.select-employee',
                 },
             ];
         }
-        clickLockButton() {
-            return [
+        clickLockButton(){
+            return[
                 {
-                    content: 'click lock button',
-                    trigger: '.header-button .lock-button',
+                    content:'clicklockbutton',
+                    trigger:'.header-button.lock-button',
                 },
             ];
         }
-        clickCashierName() {
-            return [
+        clickCashierName(){
+            return[
                 {
-                    content: 'click cashier name',
-                    trigger: '.oe_status .username',
+                    content:'clickcashiername',
+                    trigger:'.oe_status.username',
                 }
             ]
         }
     }
-    class Check {
-        loginScreenIsShown() {
-            return [
+    classCheck{
+        loginScreenIsShown(){
+            return[
                 {
-                    content: 'login screen is shown',
-                    trigger: '.login-overlay .screen-login .login-body',
-                    run: () => {},
+                    content:'loginscreenisshown',
+                    trigger:'.login-overlay.screen-login.login-body',
+                    run:()=>{},
                 },
             ];
         }
-        cashierNameIs(name) {
-            return [
+        cashierNameIs(name){
+            return[
                 {
-                    content: `logged cashier is '${name}'`,
-                    trigger: `.pos .oe_status .username:contains("${name}")`,
-                    run: () => {},
+                    content:`loggedcashieris'${name}'`,
+                    trigger:`.pos.oe_status.username:contains("${name}")`,
+                    run:()=>{},
                 },
             ];
         }
     }
-    class Execute {
-        login(name, pin) {
-            const res = this._do.clickLoginButton();
+    classExecute{
+        login(name,pin){
+            constres=this._do.clickLoginButton();
             res.push(...SelectionPopup._do.clickItem(name));
-            if (pin) {
-                res.push(...NumberPopup._do.pressNumpad(pin.split('').join(' ')));
+            if(pin){
+                res.push(...NumberPopup._do.pressNumpad(pin.split('').join('')));
                 res.push(...NumberPopup._do.clickConfirm());
             }
-            return res;
+            returnres;
         }
     }
 
-    return createTourMethods('PosHr', Do, Check, Execute);
+    returncreateTourMethods('PosHr',Do,Check,Execute);
 });

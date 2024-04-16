@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class Employee(models.Model):
-    _inherit = ["hr.employee"]
+classEmployee(models.Model):
+    _inherit=["hr.employee"]
 
-    subordinate_ids = fields.One2many('hr.employee', string='Subordinates', compute='_compute_subordinates', help="Direct and indirect subordinates",
+    subordinate_ids=fields.One2many('hr.employee',string='Subordinates',compute='_compute_subordinates',help="Directandindirectsubordinates",
                                       compute_sudo=True)
 
 
-class HrEmployeePublic(models.Model):
-    _inherit = ["hr.employee.public"]
+classHrEmployeePublic(models.Model):
+    _inherit=["hr.employee.public"]
 
-    subordinate_ids = fields.One2many('hr.employee.public', string='Subordinates', compute='_compute_subordinates', help="Direct and indirect subordinates",
+    subordinate_ids=fields.One2many('hr.employee.public',string='Subordinates',compute='_compute_subordinates',help="Directandindirectsubordinates",
                                       compute_sudo=True)

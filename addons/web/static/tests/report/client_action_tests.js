@@ -1,106 +1,106 @@
-flectra.define('web/static/tests/report/client_action_tests', function (require) {
-    "use strict";
+flectra.define('web/static/tests/report/client_action_tests',function(require){
+    "usestrict";
 
-    const ControlPanel = require('web.ControlPanel');
-    const ReportClientAction = require('report.client_action');
-    const testUtils = require("web.test_utils");
+    constControlPanel=require('web.ControlPanel');
+    constReportClientAction=require('report.client_action');
+    consttestUtils=require("web.test_utils");
 
-    const { createActionManager, dom, mock } = testUtils;
+    const{createActionManager,dom,mock}=testUtils;
 
-    QUnit.module('Client Action Report', {}, () => {
-        QUnit.test("mounted is called once when returning on 'Client Action Report' from breadcrumb", async assert => {
-            // This test can be removed as soon as we don't mix legacy and owl layers anymore.
+    QUnit.module('ClientActionReport',{},()=>{
+        QUnit.test("mountediscalledoncewhenreturningon'ClientActionReport'frombreadcrumb",asyncassert=>{
+            //Thistestcanberemovedassoonaswedon'tmixlegacyandowllayersanymore.
             assert.expect(7);
 
-            let mountCount = 0;
+            letmountCount=0;
 
-            // patch the report client action to override its iframe's url so that
-            // it doesn't trigger an RPC when it is appended to the DOM (for this
-            // usecase, using removeSRCAttribute doesn't work as the RPC is
-            // triggered as soon as the iframe is in the DOM, even if its src
-            // attribute is removed right after)
-            mock.patch(ReportClientAction, {
-                start: function () {
-                    var self = this;
-                    return this._super.apply(this, arguments).then(function () {
-                        self._rpc({route: self.iframe.getAttribute('src')});
-                        self.iframe.setAttribute('src', 'about:blank');
+            //patchthereportclientactiontooverrideitsiframe'surlsothat
+            //itdoesn'ttriggeranRPCwhenitisappendedtotheDOM(forthis
+            //usecase,usingremoveSRCAttributedoesn'tworkastheRPCis
+            //triggeredassoonastheiframeisintheDOM,evenifitssrc
+            //attributeisremovedrightafter)
+            mock.patch(ReportClientAction,{
+                start:function(){
+                    varself=this;
+                    returnthis._super.apply(this,arguments).then(function(){
+                        self._rpc({route:self.iframe.getAttribute('src')});
+                        self.iframe.setAttribute('src','about:blank');
                     });
                 }
             });
 
-            ControlPanel.patch('test.ControlPanel', T => {
-                class ControlPanelPatchTest extends T {
-                    mounted() {
-                        mountCount = mountCount + 1;
-                        this.__uniqueId = mountCount;
-                        assert.step(`mounted ${this.__uniqueId}`);
+            ControlPanel.patch('test.ControlPanel',T=>{
+                classControlPanelPatchTestextendsT{
+                    mounted(){
+                        mountCount=mountCount+1;
+                        this.__uniqueId=mountCount;
+                        assert.step(`mounted${this.__uniqueId}`);
                         super.mounted(...arguments);
                     }
-                    willUnmount() {
-                        assert.step(`willUnmount ${this.__uniqueId}`);
+                    willUnmount(){
+                        assert.step(`willUnmount${this.__uniqueId}`);
                         super.mounted(...arguments);
                     }
                 }
-                return ControlPanelPatchTest;
+                returnControlPanelPatchTest;
             });
-            const actionManager = await createActionManager({
-                actions: [
+            constactionManager=awaitcreateActionManager({
+                actions:[
                     {
-                        id: 42,
-                        name: "Client Action Report",
-                        tag: 'report.client_action',
-                        type: 'ir.actions.report',
-                        report_type: 'qweb-html',
+                        id:42,
+                        name:"ClientActionReport",
+                        tag:'report.client_action',
+                        type:'ir.actions.report',
+                        report_type:'qweb-html',
                     },
                     {
-                        id: 43,
-                        type: "ir.actions.act_window",
-                        res_id: 1,
-                        res_model: "partner",
-                        views: [
-                            [false, "form"],
+                        id:43,
+                        type:"ir.actions.act_window",
+                        res_id:1,
+                        res_model:"partner",
+                        views:[
+                            [false,"form"],
                         ],
                     }
                 ],
-                archs: {
-                    'partner,false,form': '<form><field name="display_name"/></form>',
-                    'partner,false,search': '<search></search>',
+                archs:{
+                    'partner,false,form':'<form><fieldname="display_name"/></form>',
+                    'partner,false,search':'<search></search>',
                 },
-                data: {
-                    partner: {
-                        fields: {
-                            display_name: { string: "Displayed name", type: "char" },
+                data:{
+                    partner:{
+                        fields:{
+                            display_name:{string:"Displayedname",type:"char"},
                         },
-                        records: [
-                            {id: 1, display_name: "Genda Swami"},
+                        records:[
+                            {id:1,display_name:"GendaSwami"},
                         ],
                     },
                 },
-                mockRPC: function (route) {
-                    if (route === '/report/html/undefined?context=%7B%7D') {
-                        return Promise.resolve('<a action="go_to_details">Go to detail view</a>');
+                mockRPC:function(route){
+                    if(route==='/report/html/undefined?context=%7B%7D'){
+                        returnPromise.resolve('<aaction="go_to_details">Gotodetailview</a>');
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
-                intercepts: {
-                    do_action: ev => actionManager.doAction(ev.data.action, ev.data.options),
+                intercepts:{
+                    do_action:ev=>actionManager.doAction(ev.data.action,ev.data.options),
                 },
             });
 
-            await actionManager.doAction(42);
-            // simulate an action as we are not able to reproduce a real doAction using 'Client Action Report'
-            await actionManager.doAction(43);
-            await dom.click(actionManager.$('.breadcrumb-item:first'));
+            awaitactionManager.doAction(42);
+            //simulateanactionaswearenotabletoreproducearealdoActionusing'ClientActionReport'
+            awaitactionManager.doAction(43);
+            awaitdom.click(actionManager.$('.breadcrumb-item:first'));
             actionManager.destroy();
 
             assert.verifySteps([
-                'mounted 1',
-                'willUnmount 1',
-                'mounted 2',
-                'willUnmount 2',
-                'mounted 3',
-                'willUnmount 3',
+                'mounted1',
+                'willUnmount1',
+                'mounted2',
+                'willUnmount2',
+                'mounted3',
+                'willUnmount3',
             ]);
 
             ControlPanel.unpatch('test.ControlPanel');

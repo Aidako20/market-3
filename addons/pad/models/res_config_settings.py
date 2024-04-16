@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
-    pad_server = fields.Char(related='company_id.pad_server', string="Pad Server", readonly=False)
-    pad_key = fields.Char(related='company_id.pad_key', string="Pad API Key", readonly=False)
+    pad_server=fields.Char(related='company_id.pad_server',string="PadServer",readonly=False)
+    pad_key=fields.Char(related='company_id.pad_key',string="PadAPIKey",readonly=False)

@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class AccountMove(models.Model):
-    _inherit = "account.move"
+classAccountMove(models.Model):
+    _inherit="account.move"
 
-    def _l10n_in_get_shipping_partner(self):
-        shipping_partner = super()._l10n_in_get_shipping_partner()
-        return self.partner_shipping_id or shipping_partner
+    def_l10n_in_get_shipping_partner(self):
+        shipping_partner=super()._l10n_in_get_shipping_partner()
+        returnself.partner_shipping_idorshipping_partner
 
     @api.model
-    def _l10n_in_get_shipping_partner_gstin(self, shipping_partner):
-        return shipping_partner.l10n_in_shipping_gstin
+    def_l10n_in_get_shipping_partner_gstin(self,shipping_partner):
+        returnshipping_partner.l10n_in_shipping_gstin

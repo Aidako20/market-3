@@ -1,56 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="resource_calendar_leave_view_form" model="ir.ui.view">
-        <field name="name">resource.calendar.leaves.view.form</field>
-        <field name="model">resource.calendar.leaves</field>
-        <field name="inherit_id" ref="resource.resource_calendar_leave_form"/>
-        <field name="arch" type="xml">
-            <field name="resource_id" position="after">
-                <field name="work_entry_type_id"/>
+    <recordid="resource_calendar_leave_view_form"model="ir.ui.view">
+        <fieldname="name">resource.calendar.leaves.view.form</field>
+        <fieldname="model">resource.calendar.leaves</field>
+        <fieldname="inherit_id"ref="resource.resource_calendar_leave_form"/>
+        <fieldname="arch"type="xml">
+            <fieldname="resource_id"position="after">
+                <fieldname="work_entry_type_id"/>
             </field>
         </field>
     </record>
 
-    <record id="resource_calendar_leave_view_tree" model="ir.ui.view">
-        <field name="name">resource.calendar.leaves.view.tree</field>
-        <field name="model">resource.calendar.leaves</field>
-        <field name="inherit_id" ref="resource.resource_calendar_leave_tree"/>
-        <field name="arch" type="xml">
-            <field name="date_to" position="after">
-                <field name="work_entry_type_id"/>
+    <recordid="resource_calendar_leave_view_tree"model="ir.ui.view">
+        <fieldname="name">resource.calendar.leaves.view.tree</field>
+        <fieldname="model">resource.calendar.leaves</field>
+        <fieldname="inherit_id"ref="resource.resource_calendar_leave_tree"/>
+        <fieldname="arch"type="xml">
+            <fieldname="date_to"position="after">
+                <fieldname="work_entry_type_id"/>
             </field>
         </field>
     </record>
 
-    <record id="resource_calendar_attendance_view_tree" model="ir.ui.view">
-        <field name="name">resource.calendar.attendance.view.tree</field>
-        <field name="model">resource.calendar.attendance</field>
-        <field name="inherit_id" ref="resource.view_resource_calendar_attendance_tree"/>
-        <field name="arch" type="xml">
-            <field name="week_type" position="after">
-                <field name="work_entry_type_id"/>
+    <recordid="resource_calendar_attendance_view_tree"model="ir.ui.view">
+        <fieldname="name">resource.calendar.attendance.view.tree</field>
+        <fieldname="model">resource.calendar.attendance</field>
+        <fieldname="inherit_id"ref="resource.view_resource_calendar_attendance_tree"/>
+        <fieldname="arch"type="xml">
+            <fieldname="week_type"position="after">
+                <fieldname="work_entry_type_id"/>
             </field>
         </field>
     </record>
 
-    <record id="resource_calendar_attendance_view_form" model="ir.ui.view">
-        <field name="name">resource.calendar.attendance.view.form</field>
-        <field name="model">resource.calendar.attendance</field>
-        <field name="inherit_id" ref="resource.view_resource_calendar_attendance_form"/>
-        <field name="arch" type="xml">
-            <field name="day_period" position="after">
-                <field name="work_entry_type_id"/>
+    <recordid="resource_calendar_attendance_view_form"model="ir.ui.view">
+        <fieldname="name">resource.calendar.attendance.view.form</field>
+        <fieldname="model">resource.calendar.attendance</field>
+        <fieldname="inherit_id"ref="resource.view_resource_calendar_attendance_form"/>
+        <fieldname="arch"type="xml">
+            <fieldname="day_period"position="after">
+                <fieldname="work_entry_type_id"/>
             </field>
         </field>
     </record>
 
-    <record id="resource_calendar_view_form" model="ir.ui.view">
-        <field name="name">resource.calendar.view.form</field>
-        <field name="model">resource.calendar</field>
-        <field name="inherit_id" ref="resource.resource_calendar_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//page[@name='global_leaves']//field[@name='date_to']" position="after">
-                <field name="work_entry_type_id"/>
+    <recordid="resource_calendar_view_form"model="ir.ui.view">
+        <fieldname="name">resource.calendar.view.form</field>
+        <fieldname="model">resource.calendar</field>
+        <fieldname="inherit_id"ref="resource.resource_calendar_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//page[@name='global_leaves']//field[@name='date_to']"position="after">
+                <fieldname="work_entry_type_id"/>
             </xpath>
         </field>
     </record>

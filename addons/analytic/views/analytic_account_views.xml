@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="account_analytic_tag_tree_view" model="ir.ui.view">
-            <field name="name">account.analytic.tag.tree</field>
-            <field name="model">account.analytic.tag</field>
-            <field name="arch" type="xml">
-                <tree string="Analytic Tags">
-                    <field name="name"/>
-                    <field name="display_name" invisible="1"/>
-                    <field name="company_id" groups="base.group_multi_company"/>
+        <recordid="account_analytic_tag_tree_view"model="ir.ui.view">
+            <fieldname="name">account.analytic.tag.tree</field>
+            <fieldname="model">account.analytic.tag</field>
+            <fieldname="arch"type="xml">
+                <treestring="AnalyticTags">
+                    <fieldname="name"/>
+                    <fieldname="display_name"invisible="1"/>
+                    <fieldname="company_id"groups="base.group_multi_company"/>
                 </tree>
             </field>
         </record>
 
-        <record id="account_analytic_tag_form_view" model="ir.ui.view">
-            <field name="name">account.analytic.tag.form</field>
-            <field name="model">account.analytic.tag</field>
-            <field name="arch" type="xml">
-                <form string="Analytic Tags">
+        <recordid="account_analytic_tag_form_view"model="ir.ui.view">
+            <fieldname="name">account.analytic.tag.form</field>
+            <fieldname="model">account.analytic.tag</field>
+            <fieldname="arch"type="xml">
+                <formstring="AnalyticTags">
                     <sheet>
-                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                        <widgetname="web_ribbon"title="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
                         <group>
-                            <field name="active" invisible="1"/>
-                            <field name="name"/>
-                            <field name="active_analytic_distribution" groups="analytic.group_analytic_accounting"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
+                            <fieldname="active"invisible="1"/>
+                            <fieldname="name"/>
+                            <fieldname="active_analytic_distribution"groups="analytic.group_analytic_accounting"/>
+                            <fieldname="company_id"groups="base.group_multi_company"/>
                         </group>
-                        <field name="analytic_distribution_ids" nolabel="1" widget="one2many"
-                            attrs="{'invisible': [('active_analytic_distribution', '=', False)]}" groups="analytic.group_analytic_accounting">
-                            <tree string="Analytic Distribution" editable="bottom">
-                                <field name="account_id"/>
-                                <field name="percentage"/>
+                        <fieldname="analytic_distribution_ids"nolabel="1"widget="one2many"
+                            attrs="{'invisible':[('active_analytic_distribution','=',False)]}"groups="analytic.group_analytic_accounting">
+                            <treestring="AnalyticDistribution"editable="bottom">
+                                <fieldname="account_id"/>
+                                <fieldname="percentage"/>
                             </tree>
                         </field>
                     </sheet>
@@ -37,195 +37,195 @@
             </field>
         </record>
 
-        <record id="account_analytic_tag_view_search" model="ir.ui.view">
-            <field name="name">account.analytic.tag.view.search</field>
-            <field name="model">account.analytic.tag</field>
-            <field name="arch" type="xml">
-                <search string="Search Analytic Tags">
-                    <field name="name" />
+        <recordid="account_analytic_tag_view_search"model="ir.ui.view">
+            <fieldname="name">account.analytic.tag.view.search</field>
+            <fieldname="model">account.analytic.tag</field>
+            <fieldname="arch"type="xml">
+                <searchstring="SearchAnalyticTags">
+                    <fieldname="name"/>
                     <separator/>
-                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <filterstring="Archived"name="inactive"domain="[('active','=',False)]"/>
                 </search>
             </field>
         </record>
 
-        <record id="account_analytic_tag_action" model="ir.actions.act_window">
-            <field name="name">Analytic Tags</field>
-            <field name="res_model">account.analytic.tag</field>
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                Add a new tag
+        <recordid="account_analytic_tag_action"model="ir.actions.act_window">
+            <fieldname="name">AnalyticTags</field>
+            <fieldname="res_model">account.analytic.tag</field>
+            <fieldname="view_mode">tree,form</field>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                Addanewtag
               </p>
             </field>
         </record>
 
-        <record id="account_analytic_group_form_view" model="ir.ui.view">
-            <field name="name">account.analytic.group.form</field>
-            <field name="model">account.analytic.group</field>
-            <field name="arch" type="xml">
-                <form string="Analytic Account Groups">
+        <recordid="account_analytic_group_form_view"model="ir.ui.view">
+            <fieldname="name">account.analytic.group.form</field>
+            <fieldname="model">account.analytic.group</field>
+            <fieldname="arch"type="xml">
+                <formstring="AnalyticAccountGroups">
                     <sheet>
                         <group>
-                            <field name="name"/>
-                            <field name="parent_id"/>
+                            <fieldname="name"/>
+                            <fieldname="parent_id"/>
                         </group>
                         <group>
-                            <field name="description"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
+                            <fieldname="description"/>
+                            <fieldname="company_id"groups="base.group_multi_company"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <record id="account_analytic_group_tree_view" model="ir.ui.view">
-            <field name="name">account.analytic.group.tree</field>
-            <field name="model">account.analytic.group</field>
-            <field name="arch" type="xml">
-                <tree string="Analytic Account Groups">
-                    <field name="name"/>
-                    <field name="company_id" groups="base.group_multi_company"/>
+        <recordid="account_analytic_group_tree_view"model="ir.ui.view">
+            <fieldname="name">account.analytic.group.tree</field>
+            <fieldname="model">account.analytic.group</field>
+            <fieldname="arch"type="xml">
+                <treestring="AnalyticAccountGroups">
+                    <fieldname="name"/>
+                    <fieldname="company_id"groups="base.group_multi_company"/>
                 </tree>
             </field>
         </record>
 
-        <record id="account_analytic_group_action" model="ir.actions.act_window">
-            <field name="name">Analytic Account Groups</field>
-            <field name="res_model">account.analytic.group</field>
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                  Click to add a new analytic account group.
+        <recordid="account_analytic_group_action"model="ir.actions.act_window">
+            <fieldname="name">AnalyticAccountGroups</field>
+            <fieldname="res_model">account.analytic.group</field>
+            <fieldname="view_mode">tree,form</field>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                  Clicktoaddanewanalyticaccountgroup.
               </p>
               <p>
-                  This allows you to classify your analytic accounts.
+                  Thisallowsyoutoclassifyyouranalyticaccounts.
               </p>
             </field>
         </record>
 
 
-        <record id="view_account_analytic_line_tree" model="ir.ui.view">
-            <field name="name">account.analytic.line.tree</field>
-            <field name="model">account.analytic.line</field>
-            <field name="arch" type="xml">
-                <tree string="Analytic Entries">
-                    <field name="date" optional="show"/>
-                    <field name="name"/>
-                    <field name="account_id"/>
-                    <field name="currency_id" invisible="1"/>
-                    <field name="unit_amount" sum="Quantity" optional="hide"/>
-                    <field name="product_uom_id" optional="hide"/>
-                    <field name="partner_id" optional="hide"/>
-                    <field name="company_id" groups="base.group_multi_company" optional="show"/>
-                    <field name="amount" sum="Total" optional="show"/>
-                    <field name="tag_ids" optional="hide" widget="many2many_tags"/>
+        <recordid="view_account_analytic_line_tree"model="ir.ui.view">
+            <fieldname="name">account.analytic.line.tree</field>
+            <fieldname="model">account.analytic.line</field>
+            <fieldname="arch"type="xml">
+                <treestring="AnalyticEntries">
+                    <fieldname="date"optional="show"/>
+                    <fieldname="name"/>
+                    <fieldname="account_id"/>
+                    <fieldname="currency_id"invisible="1"/>
+                    <fieldname="unit_amount"sum="Quantity"optional="hide"/>
+                    <fieldname="product_uom_id"optional="hide"/>
+                    <fieldname="partner_id"optional="hide"/>
+                    <fieldname="company_id"groups="base.group_multi_company"optional="show"/>
+                    <fieldname="amount"sum="Total"optional="show"/>
+                    <fieldname="tag_ids"optional="hide"widget="many2many_tags"/>
                 </tree>
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="account_analytic_line_action">
-            <field name="context">{'search_default_group_date': 1, 'default_account_id': active_id}</field>
-            <field name="domain">[('account_id','=', active_id)]</field>
-            <field name="name">Costs &amp; Revenues</field>
-            <field name="res_model">account.analytic.line</field>
-            <field name="view_mode">tree,form,graph,pivot</field>
-            <field name="view_id" ref="view_account_analytic_line_tree"/>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_empty_folder">
-                No activity yet on this account
+        <recordmodel="ir.actions.act_window"id="account_analytic_line_action">
+            <fieldname="context">{'search_default_group_date':1,'default_account_id':active_id}</field>
+            <fieldname="domain">[('account_id','=',active_id)]</field>
+            <fieldname="name">Costs&amp;Revenues</field>
+            <fieldname="res_model">account.analytic.line</field>
+            <fieldname="view_mode">tree,form,graph,pivot</field>
+            <fieldname="view_id"ref="view_account_analytic_line_tree"/>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_empty_folder">
+                Noactivityyetonthisaccount
               </p><p>
-                In Flectra, sales orders and projects are implemented using
-                analytic accounts. You can track costs and revenues to analyse
-                your margins easily.
+                InFlectra,salesordersandprojectsareimplementedusing
+                analyticaccounts.Youcantrackcostsandrevenuestoanalyse
+                yourmarginseasily.
               </p><p>
-                Costs will be created automatically when you register supplier
-                invoices, expenses or timesheets.
+                Costswillbecreatedautomaticallywhenyouregistersupplier
+                invoices,expensesortimesheets.
               </p><p>
-                Revenues will be created automatically when you create customer
-                invoices. Customer invoices can be created based on sales orders
-                (fixed price invoices), on timesheets (based on the work done) or
-                on expenses (e.g. reinvoicing of travel costs).
+                Revenueswillbecreatedautomaticallywhenyoucreatecustomer
+                invoices.Customerinvoicescanbecreatedbasedonsalesorders
+                (fixedpriceinvoices),ontimesheets(basedontheworkdone)or
+                onexpenses(e.g.reinvoicingoftravelcosts).
               </p>
             </field>
         </record>
 
-        <record id="view_account_analytic_account_form" model="ir.ui.view">
-            <field name="name">analytic.analytic.account.form</field>
-            <field name="model">account.analytic.account</field>
-            <field name="arch" type="xml">
-                <form string="Analytic Account">
-                    <sheet string="Analytic Account">
-                        <div class="oe_button_box" name="button_box">
-                            <button class="oe_stat_button" type="action" name="%(account_analytic_line_action)d"
-                            icon="fa-usd"  string="Cost/Revenue" widget="statinfo"/>
+        <recordid="view_account_analytic_account_form"model="ir.ui.view">
+            <fieldname="name">analytic.analytic.account.form</field>
+            <fieldname="model">account.analytic.account</field>
+            <fieldname="arch"type="xml">
+                <formstring="AnalyticAccount">
+                    <sheetstring="AnalyticAccount">
+                        <divclass="oe_button_box"name="button_box">
+                            <buttonclass="oe_stat_button"type="action"name="%(account_analytic_line_action)d"
+                            icon="fa-usd" string="Cost/Revenue"widget="statinfo"/>
                         </div>
-                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
-                        <div class="oe_title">
-                            <label for="name" class="oe_edit_only"/>
+                        <widgetname="web_ribbon"title="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
+                        <divclass="oe_title">
+                            <labelfor="name"class="oe_edit_only"/>
                             <h1>
-                                <field name="name" class="oe_inline" placeholder="e.g. Project XYZ"/>
+                                <fieldname="name"class="oe_inline"placeholder="e.g.ProjectXYZ"/>
                             </h1>
                         </div>
-                        <div name="project"/>
-                        <group name="main">
+                        <divname="project"/>
+                        <groupname="main">
                             <group>
-                                <field name="active" invisible="1"/>
-                                <field name="code"/>
-                                <field name="partner_id"/>
+                                <fieldname="active"invisible="1"/>
+                                <fieldname="code"/>
+                                <fieldname="partner_id"/>
                             </group>
                             <group>
-                                <field name="group_id"/>
-                                <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
-                                <field name="currency_id" options="{'no_create': True}" groups="base.group_multi_currency"/>
+                                <fieldname="group_id"/>
+                                <fieldname="company_id"options="{'no_create':True}"groups="base.group_multi_company"/>
+                                <fieldname="currency_id"options="{'no_create':True}"groups="base.group_multi_currency"/>
                             </group>
                         </group>
                     </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids"/>
-                        <field name="message_ids"/>
+                    <divclass="oe_chatter">
+                        <fieldname="message_follower_ids"/>
+                        <fieldname="message_ids"/>
                     </div>
                 </form>
             </field>
         </record>
 
-        <record id="view_account_analytic_account_list" model="ir.ui.view">
-            <field name="name">account.analytic.account.list</field>
-            <field name="model">account.analytic.account</field>
-            <field eval="8" name="priority"/>
-            <field name="arch" type="xml">
-                <tree string="Analytic Accounts">
-                    <field name="name" string="Name"/>
-                    <field name="code"/>
-                    <field name="partner_id"/>
-                    <field name="active" invisible="1"/>
-                    <field name="company_id" groups="base.group_multi_company"/>
-                    <field name="debit" sum="Debit"/>
-                    <field name="credit" sum="Credit"/>
-                    <field name="balance" sum="Balance"/>
+        <recordid="view_account_analytic_account_list"model="ir.ui.view">
+            <fieldname="name">account.analytic.account.list</field>
+            <fieldname="model">account.analytic.account</field>
+            <fieldeval="8"name="priority"/>
+            <fieldname="arch"type="xml">
+                <treestring="AnalyticAccounts">
+                    <fieldname="name"string="Name"/>
+                    <fieldname="code"/>
+                    <fieldname="partner_id"/>
+                    <fieldname="active"invisible="1"/>
+                    <fieldname="company_id"groups="base.group_multi_company"/>
+                    <fieldname="debit"sum="Debit"/>
+                    <fieldname="credit"sum="Credit"/>
+                    <fieldname="balance"sum="Balance"/>
                 </tree>
             </field>
         </record>
 
-        <record id="view_account_analytic_account_kanban" model="ir.ui.view">
-            <field name="name">account.analytic.account.kanban</field>
-            <field name="model">account.analytic.account</field>
-            <field name="arch" type="xml">
-               <kanban class="o_kanban_mobile">
-                   <field name="display_name"/>
-                   <field name="balance"/>
-                   <field name="currency_id"/>
+        <recordid="view_account_analytic_account_kanban"model="ir.ui.view">
+            <fieldname="name">account.analytic.account.kanban</field>
+            <fieldname="model">account.analytic.account</field>
+            <fieldname="arch"type="xml">
+               <kanbanclass="o_kanban_mobile">
+                   <fieldname="display_name"/>
+                   <fieldname="balance"/>
+                   <fieldname="currency_id"/>
                    <templates>
-                        <t t-name="kanban-box">
-                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
-                                <div t-attf-class="#{!selection_mode ? 'text-center' : ''}">
-                                   <strong><span><field name="display_name"/></span></strong>
+                        <tt-name="kanban-box">
+                            <divt-attf-class="oe_kanban_cardoe_kanban_global_click">
+                                <divt-attf-class="#{!selection_mode?'text-center':''}">
+                                   <strong><span><fieldname="display_name"/></span></strong>
                                 </div>
-                                <hr class="mt8 mb8"/>
-                                <div class="row">
-                                    <div t-attf-class="col-12 #{!selection_mode ? 'text-center' : ''}">
+                                <hrclass="mt8mb8"/>
+                                <divclass="row">
+                                    <divt-attf-class="col-12#{!selection_mode?'text-center':''}">
                                         <span>
-                                            Balance: <field name="balance" widget="monetary"/>
+                                            Balance:<fieldname="balance"widget="monetary"/>
                                         </span>
                                     </div>
                                 </div>
@@ -236,71 +236,71 @@
             </field>
         </record>
 
-        <record id="view_account_analytic_account_search" model="ir.ui.view">
-            <field name="name">account.analytic.account.search</field>
-            <field name="model">account.analytic.account</field>
-            <field name="arch" type="xml">
-                <search string="Analytic Account">
-                    <field name="name" filter_domain="['|', ('name', 'ilike', self), ('code', 'ilike', self)]" string="Analytic Account"/>
-                    <field name="partner_id"/>
+        <recordid="view_account_analytic_account_search"model="ir.ui.view">
+            <fieldname="name">account.analytic.account.search</field>
+            <fieldname="model">account.analytic.account</field>
+            <fieldname="arch"type="xml">
+                <searchstring="AnalyticAccount">
+                    <fieldname="name"filter_domain="['|',('name','ilike',self),('code','ilike',self)]"string="AnalyticAccount"/>
+                    <fieldname="partner_id"/>
                     <separator/>
-                    <filter string="Archived" domain="[('active', '=', False)]" name="inactive"/>
-                    <group expand="0" string="Group By...">
-                        <filter string="Associated Partner" name="associatedpartner" domain="[]" context="{'group_by': 'partner_id'}"/>
+                    <filterstring="Archived"domain="[('active','=',False)]"name="inactive"/>
+                    <groupexpand="0"string="GroupBy...">
+                        <filterstring="AssociatedPartner"name="associatedpartner"domain="[]"context="{'group_by':'partner_id'}"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <record id="action_analytic_account_form" model="ir.actions.act_window">
-            <field name="name">Chart of Analytic Accounts</field>
-            <field name="res_model">account.analytic.account</field>
-            <field name="view_mode">tree,kanban,form</field>
-            <field name="search_view_id" ref="view_account_analytic_account_search"/>
-            <field name="context">{'search_default_active':1}</field>
-            <field name="view_id" ref="view_account_analytic_account_list"/>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                Add a new analytic account
+        <recordid="action_analytic_account_form"model="ir.actions.act_window">
+            <fieldname="name">ChartofAnalyticAccounts</field>
+            <fieldname="res_model">account.analytic.account</field>
+            <fieldname="view_mode">tree,kanban,form</field>
+            <fieldname="search_view_id"ref="view_account_analytic_account_search"/>
+            <fieldname="context">{'search_default_active':1}</field>
+            <fieldname="view_id"ref="view_account_analytic_account_list"/>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                Addanewanalyticaccount
               </p>
             </field>
         </record>
 
-        <record id="action_account_analytic_account_form" model="ir.actions.act_window">
-            <field name="name">Analytic Accounts</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">account.analytic.account</field>
-            <field name="search_view_id" ref="view_account_analytic_account_search"/>
-            <field name="context">{'search_default_active':1}</field>
-            <field name="view_mode">tree,kanban,form</field>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                Add a new analytic account
+        <recordid="action_account_analytic_account_form"model="ir.actions.act_window">
+            <fieldname="name">AnalyticAccounts</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">account.analytic.account</field>
+            <fieldname="search_view_id"ref="view_account_analytic_account_search"/>
+            <fieldname="context">{'search_default_active':1}</field>
+            <fieldname="view_mode">tree,kanban,form</field>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                Addanewanalyticaccount
               </p>
             </field>
         </record>
 
-        <record id="view_account_analytic_line_form" model="ir.ui.view">
-            <field name="name">account.analytic.line.form</field>
-            <field name="model">account.analytic.line</field>
-            <field name="priority">1</field>
-            <field name="arch" type="xml">
-                <form string="Analytic Entry">
+        <recordid="view_account_analytic_line_form"model="ir.ui.view">
+            <fieldname="name">account.analytic.line.form</field>
+            <fieldname="model">account.analytic.line</field>
+            <fieldname="priority">1</field>
+            <fieldname="arch"type="xml">
+                <formstring="AnalyticEntry">
                 <sheet>
                     <group>
-                        <group name="analytic_entry" string="Analytic Entry">
-                            <field name="name"/>
-                            <field name="account_id"/>
-                            <field name="tag_ids" widget="many2many_tags"/>
-                            <field name="date"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
+                        <groupname="analytic_entry"string="AnalyticEntry">
+                            <fieldname="name"/>
+                            <fieldname="account_id"/>
+                            <fieldname="tag_ids"widget="many2many_tags"/>
+                            <fieldname="date"/>
+                            <fieldname="company_id"groups="base.group_multi_company"/>
                         </group>
-                        <group name="amount" string="Amount">
-                            <field name="amount"/>
-                            <field name="unit_amount"/>
-                            <field name="product_uom_category_id" invisible="1"/>
-                            <field name="product_uom_id" class="oe_inline"/>
-                            <field name="currency_id" invisible="1"/>
+                        <groupname="amount"string="Amount">
+                            <fieldname="amount"/>
+                            <fieldname="unit_amount"/>
+                            <fieldname="product_uom_category_id"invisible="1"/>
+                            <fieldname="product_uom_id"class="oe_inline"/>
+                            <fieldname="currency_id"invisible="1"/>
                         </group>
                     </group>
                 </sheet>
@@ -308,76 +308,76 @@
             </field>
         </record>
 
-        <record id="view_account_analytic_line_filter" model="ir.ui.view">
-            <field name="name">account.analytic.line.select</field>
-            <field name="model">account.analytic.line</field>
-            <field name="arch" type="xml">
-                <search string="Search Analytic Lines">
-                    <field name="name"/>
-                    <field name="date"/>
-                    <field name="account_id"/>
-                    <field name="tag_ids"/>
-                    <filter string="Date" name="date" date="date"/>
-                    <group string="Group By..." expand="0" name="groupby">
-                        <filter string="Analytic Account" name="account_id" context="{'group_by': 'account_id'}"/>
-                        <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>
+        <recordid="view_account_analytic_line_filter"model="ir.ui.view">
+            <fieldname="name">account.analytic.line.select</field>
+            <fieldname="model">account.analytic.line</field>
+            <fieldname="arch"type="xml">
+                <searchstring="SearchAnalyticLines">
+                    <fieldname="name"/>
+                    <fieldname="date"/>
+                    <fieldname="account_id"/>
+                    <fieldname="tag_ids"/>
+                    <filterstring="Date"name="date"date="date"/>
+                    <groupstring="GroupBy..."expand="0"name="groupby">
+                        <filterstring="AnalyticAccount"name="account_id"context="{'group_by':'account_id'}"/>
+                        <filterstring="Date"name="group_date"context="{'group_by':'date'}"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <record id="view_account_analytic_line_graph" model="ir.ui.view">
-            <field name="name">account.analytic.line.graph</field>
-            <field name="model">account.analytic.line</field>
-            <field name="arch" type="xml">
-                <graph string="Analytic Entries" sample="1">
-                    <field name="account_id" type="row"/>
-                    <field name="unit_amount" type="measure"/>
-                    <field name="amount" type="measure"/>
+        <recordid="view_account_analytic_line_graph"model="ir.ui.view">
+            <fieldname="name">account.analytic.line.graph</field>
+            <fieldname="model">account.analytic.line</field>
+            <fieldname="arch"type="xml">
+                <graphstring="AnalyticEntries"sample="1">
+                    <fieldname="account_id"type="row"/>
+                    <fieldname="unit_amount"type="measure"/>
+                    <fieldname="amount"type="measure"/>
                 </graph>
             </field>
         </record>
 
-        <record id="view_account_analytic_line_pivot" model="ir.ui.view">
-            <field name="name">account.analytic.line.pivot</field>
-            <field name="model">account.analytic.line</field>
-            <field name="arch" type="xml">
-                <pivot string="Analytic Entries" sample="1">
-                    <field name="account_id" type="row"/>
-                    <field name="unit_amount" type="measure"/>
-                    <field name="amount" type="measure"/>
+        <recordid="view_account_analytic_line_pivot"model="ir.ui.view">
+            <fieldname="name">account.analytic.line.pivot</field>
+            <fieldname="model">account.analytic.line</field>
+            <fieldname="arch"type="xml">
+                <pivotstring="AnalyticEntries"sample="1">
+                    <fieldname="account_id"type="row"/>
+                    <fieldname="unit_amount"type="measure"/>
+                    <fieldname="amount"type="measure"/>
                 </pivot>
             </field>
         </record>
 
-        <record id="view_account_analytic_line_kanban" model="ir.ui.view">
-            <field name="name">account.analytic.line.kanban</field>
-            <field name="model">account.analytic.line</field>
-            <field name="arch" type="xml">
-                <kanban class="o_kanban_mobile">
-                    <field name="date"/>
-                    <field name="name"/>
-                    <field name="account_id"/>
-                    <field name="currency_id"/>
-                    <field name="amount"/>
+        <recordid="view_account_analytic_line_kanban"model="ir.ui.view">
+            <fieldname="name">account.analytic.line.kanban</field>
+            <fieldname="model">account.analytic.line</field>
+            <fieldname="arch"type="xml">
+                <kanbanclass="o_kanban_mobile">
+                    <fieldname="date"/>
+                    <fieldname="name"/>
+                    <fieldname="account_id"/>
+                    <fieldname="currency_id"/>
+                    <fieldname="amount"/>
                     <templates>
-                        <t t-name="kanban-box">
-                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <strong><span><t t-esc="record.name.value"/></span></strong>
+                        <tt-name="kanban-box">
+                            <divt-attf-class="oe_kanban_cardoe_kanban_global_click">
+                                <divclass="row">
+                                    <divclass="col-6">
+                                        <strong><span><tt-esc="record.name.value"/></span></strong>
                                     </div>
-                                    <div class="col-6 text-right">
-                                        <strong><t t-esc="record.date.value"/></strong>
+                                    <divclass="col-6text-right">
+                                        <strong><tt-esc="record.date.value"/></strong>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-6 text-muted">
-                                        <span><t t-esc="record.account_id.value"/></span>
+                                <divclass="row">
+                                    <divclass="col-6text-muted">
+                                        <span><tt-esc="record.account_id.value"/></span>
                                     </div>
-                                    <div class="col-6">
-                                        <span class="float-right text-right">
-                                            <field name="amount" widget="monetary"/>
+                                    <divclass="col-6">
+                                        <spanclass="float-righttext-right">
+                                            <fieldname="amount"widget="monetary"/>
                                         </span>
                                     </div>
                                 </div>
@@ -388,27 +388,27 @@
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="account_analytic_line_action_entries">
-            <field name="name">Analytic Items</field>
-            <field name="res_model">account.analytic.line</field>
-            <field name="view_mode">tree,kanban,form,graph,pivot</field>
-            <field name="view_id" ref="view_account_analytic_line_tree"/>
-            <field name="search_view_id" ref="analytic.view_account_analytic_line_filter"/>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_empty_folder">
-                No activity yet
+        <recordmodel="ir.actions.act_window"id="account_analytic_line_action_entries">
+            <fieldname="name">AnalyticItems</field>
+            <fieldname="res_model">account.analytic.line</field>
+            <fieldname="view_mode">tree,kanban,form,graph,pivot</field>
+            <fieldname="view_id"ref="view_account_analytic_line_tree"/>
+            <fieldname="search_view_id"ref="analytic.view_account_analytic_line_filter"/>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_empty_folder">
+                Noactivityyet
               </p><p>
-                In Flectra, sales orders and projects are implemented using
-                analytic accounts. You can track costs and revenues to analyse
-                your margins easily.
+                InFlectra,salesordersandprojectsareimplementedusing
+                analyticaccounts.Youcantrackcostsandrevenuestoanalyse
+                yourmarginseasily.
               </p><p>
-                Costs will be created automatically when you register supplier
-                invoices, expenses or timesheets.
+                Costswillbecreatedautomaticallywhenyouregistersupplier
+                invoices,expensesortimesheets.
               </p><p>
-                Revenues will be created automatically when you create customer
-                invoices. Customer invoices can be created based on sales orders
-                (fixed price invoices), on timesheets (based on the work done) or
-                on expenses (e.g. reinvoicing of travel costs).
+                Revenueswillbecreatedautomaticallywhenyoucreatecustomer
+                invoices.Customerinvoicescanbecreatedbasedonsalesorders
+                (fixedpriceinvoices),ontimesheets(basedontheworkdone)or
+                onexpenses(e.g.reinvoicingoftravelcosts).
               </p>
             </field>
         </record>

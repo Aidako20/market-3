@@ -1,173 +1,173 @@
-flectra.define('web.Signature', function (require) {
-    "use strict";
+flectra.define('web.Signature',function(require){
+    "usestrict";
 
-    var AbstractFieldBinary = require('web.basic_fields').AbstractFieldBinary;
-    var core = require('web.core');
-    var field_utils = require('web.field_utils');
-    var registry = require('web.field_registry');
-    var session = require('web.session');
-    const SignatureDialog = require('web.signature_dialog');
-    var utils = require('web.utils');
+    varAbstractFieldBinary=require('web.basic_fields').AbstractFieldBinary;
+    varcore=require('web.core');
+    varfield_utils=require('web.field_utils');
+    varregistry=require('web.field_registry');
+    varsession=require('web.session');
+    constSignatureDialog=require('web.signature_dialog');
+    varutils=require('web.utils');
 
 
-    var qweb = core.qweb;
-    var _t = core._t;
-    var _lt = core._lt;
+    varqweb=core.qweb;
+    var_t=core._t;
+    var_lt=core._lt;
 
-var FieldBinarySignature = AbstractFieldBinary.extend({
-    description: _lt("Signature"),
-    fieldDependencies: _.extend({}, AbstractFieldBinary.prototype.fieldDependencies, {
-        __last_update: {type: 'datetime'},
+varFieldBinarySignature=AbstractFieldBinary.extend({
+    description:_lt("Signature"),
+    fieldDependencies:_.extend({},AbstractFieldBinary.prototype.fieldDependencies,{
+        __last_update:{type:'datetime'},
     }),
-    resetOnAnyFieldChange: true,
-    custom_events: _.extend({}, AbstractFieldBinary.prototype.custom_events, {
-        upload_signature: '_onUploadSignature',
+    resetOnAnyFieldChange:true,
+    custom_events:_.extend({},AbstractFieldBinary.prototype.custom_events,{
+        upload_signature:'_onUploadSignature',
     }),
-    events: _.extend({}, AbstractFieldBinary.prototype.events, {
-        'click .o_signature': '_onClickSignature',
+    events:_.extend({},AbstractFieldBinary.prototype.events,{
+        'click.o_signature':'_onClickSignature',
     }),
-    template: null,
-    supportedFieldTypes: ['binary'],
-    file_type_magic_word: {
-        '/': 'jpg',
-        'R': 'gif',
-        'i': 'png',
-        'P': 'svg+xml',
+    template:null,
+    supportedFieldTypes:['binary'],
+    file_type_magic_word:{
+        '/':'jpg',
+        'R':'gif',
+        'i':'png',
+        'P':'svg+xml',
     },
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * This widget must always have render even if there are no signature.
-     * In edit mode, the real value is return to manage required fields.
+     *Thiswidgetmustalwayshaverendereveniftherearenosignature.
+     *Ineditmode,therealvalueisreturntomanagerequiredfields.
      *
-     * @override
+     *@override
      */
-    isSet: function () {
-        if (this.mode === 'edit') {
-            return this.value;
+    isSet:function(){
+        if(this.mode==='edit'){
+            returnthis.value;
         }
-        return true;
+        returntrue;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Renders an empty signature or the saved signature. Both must have the same size.
+     *Rendersanemptysignatureorthesavedsignature.Bothmusthavethesamesize.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
 
-    _render: function () {
-        var self = this;
-        var displaySignatureRatio = 3;
-        var url;
-        var $img;
-        var width = this.nodeOptions.size ? this.nodeOptions.size[0] : this.attrs.width;
-        var height = this.nodeOptions.size ? this.nodeOptions.size[1] : this.attrs.height;
-        if (this.value) {
-            if (!utils.is_bin_size(this.value)) {
-                // Use magic-word technique for detecting image type
-                url = 'data:image/' + (this.file_type_magic_word[this.value[0]] || 'png') + ';base64,' + this.value;
-            } else {
-                url = session.url('/web/image', {
-                    model: this.model,
-                    id: JSON.stringify(this.res_id),
-                    field: this.nodeOptions.preview_image || this.name,
-                    // unique forces a reload of the image when the record has been updated
-                    unique: field_utils.format.datetime(this.recordData.__last_update).replace(/[^0-9]/g, ''),
+    _render:function(){
+        varself=this;
+        vardisplaySignatureRatio=3;
+        varurl;
+        var$img;
+        varwidth=this.nodeOptions.size?this.nodeOptions.size[0]:this.attrs.width;
+        varheight=this.nodeOptions.size?this.nodeOptions.size[1]:this.attrs.height;
+        if(this.value){
+            if(!utils.is_bin_size(this.value)){
+                //Usemagic-wordtechniquefordetectingimagetype
+                url='data:image/'+(this.file_type_magic_word[this.value[0]]||'png')+';base64,'+this.value;
+            }else{
+                url=session.url('/web/image',{
+                    model:this.model,
+                    id:JSON.stringify(this.res_id),
+                    field:this.nodeOptions.preview_image||this.name,
+                    //uniqueforcesareloadoftheimagewhentherecordhasbeenupdated
+                    unique:field_utils.format.datetime(this.recordData.__last_update).replace(/[^0-9]/g,''),
                 });
             }
-            $img = $(qweb.render("FieldBinarySignature-img", {widget: this, url: url}));
-        } else {
-            $img = $('<div class="o_signature o_signature_empty"><svg></svg><p>' + _t('SIGNATURE') + '</p></div>');
-            if (width && height) {
-                width = Math.min(width, displaySignatureRatio * height);
-                height = width / displaySignatureRatio;
-            } else if (width) {
-                height = width / displaySignatureRatio;
-            } else if (height) {
-                width = height * displaySignatureRatio;
+            $img=$(qweb.render("FieldBinarySignature-img",{widget:this,url:url}));
+        }else{
+            $img=$('<divclass="o_signatureo_signature_empty"><svg></svg><p>'+_t('SIGNATURE')+'</p></div>');
+            if(width&&height){
+                width=Math.min(width,displaySignatureRatio*height);
+                height=width/displaySignatureRatio;
+            }elseif(width){
+                height=width/displaySignatureRatio;
+            }elseif(height){
+                width=height*displaySignatureRatio;
             }
         }
-        if (width) {
-            $img.attr('width', width);
-            $img.css('max-width', width + 'px');
+        if(width){
+            $img.attr('width',width);
+            $img.css('max-width',width+'px');
         }
-        if (height) {
-            $img.attr('height', height);
-            $img.css('max-height', height + 'px');
+        if(height){
+            $img.attr('height',height);
+            $img.css('max-height',height+'px');
         }
-        this.$('> div').remove();
-        this.$('> img').remove();
+        this.$('>div').remove();
+        this.$('>img').remove();
 
         this.$el.prepend($img);
 
-        $img.on('error', function () {
+        $img.on('error',function(){
             self._clearFile();
-            $img.attr('src', self.placeholder);
-            self.do_warn(false, _t("Could not display the selected image"));
+            $img.attr('src',self.placeholder);
+            self.do_warn(false,_t("Couldnotdisplaytheselectedimage"));
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * If the view is in edit mode, open dialog to sign.
+     *Iftheviewisineditmode,opendialogtosign.
      *
-     * @private
+     *@private
      */
-    _onClickSignature: function () {
-        var self = this;
-        if (this.mode === 'edit') {
+    _onClickSignature:function(){
+        varself=this;
+        if(this.mode==='edit'){
 
-            var nameAndSignatureOptions = {
-                mode: 'draw',
-                displaySignatureRatio: 3,
-                signatureType: 'signature',
-                noInputName: true,
+            varnameAndSignatureOptions={
+                mode:'draw',
+                displaySignatureRatio:3,
+                signatureType:'signature',
+                noInputName:true,
             };
 
-            if (this.nodeOptions.full_name) {
-                var signName;
-                if (this.fields[this.nodeOptions.full_name].type === 'many2one') {
-                    // If m2o is empty, it will have falsy value in recordData
-                    signName = this.recordData[this.nodeOptions.full_name] && this.recordData[this.nodeOptions.full_name].data.display_name;
-                } else {
-                     signName = this.recordData[this.nodeOptions.full_name];
+            if(this.nodeOptions.full_name){
+                varsignName;
+                if(this.fields[this.nodeOptions.full_name].type==='many2one'){
+                    //Ifm2oisempty,itwillhavefalsyvalueinrecordData
+                    signName=this.recordData[this.nodeOptions.full_name]&&this.recordData[this.nodeOptions.full_name].data.display_name;
+                }else{
+                     signName=this.recordData[this.nodeOptions.full_name];
                  }
-                nameAndSignatureOptions.defaultName = (signName === '') ? undefined : signName;
+                nameAndSignatureOptions.defaultName=(signName==='')?undefined:signName;
             }
 
-            nameAndSignatureOptions.defaultFont = this.nodeOptions.default_font || '';
-            this.signDialog = new SignatureDialog(self, {nameAndSignatureOptions: nameAndSignatureOptions});
+            nameAndSignatureOptions.defaultFont=this.nodeOptions.default_font||'';
+            this.signDialog=newSignatureDialog(self,{nameAndSignatureOptions:nameAndSignatureOptions});
 
             this.signDialog.open();
         }
     },
 
     /**
-     * Upload the signature image if valid and close the dialog.
+     *Uploadthesignatureimageifvalidandclosethedialog.
      *
-     * @private
+     *@private
      */
-    _onUploadSignature: function (ev) {
-        var signatureImage = ev.data.signatureImage;
-        if (signatureImage !== this.signDialog.emptySignature) {
-            var data = signatureImage[1];
-            var type = signatureImage[0].split('/')[1];
-            this.on_file_uploaded(data.length, ev.data.name, type, data);
+    _onUploadSignature:function(ev){
+        varsignatureImage=ev.data.signatureImage;
+        if(signatureImage!==this.signDialog.emptySignature){
+            vardata=signatureImage[1];
+            vartype=signatureImage[0].split('/')[1];
+            this.on_file_uploaded(data.length,ev.data.name,type,data);
         }
         this.signDialog.close();
     }
 });
 
-registry.add('signature', FieldBinarySignature);
+registry.add('signature',FieldBinarySignature);
 
 });

@@ -1,400 +1,400 @@
 /*
-Copyright (c) 2013, Fabien Meghazi
+Copyright(c)2013,FabienMeghazi
 
-Released under the MIT license
+ReleasedundertheMITlicense
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
+Permissionisherebygranted,freeofcharge,toanypersonobtainingacopyof
+thissoftwareandassociateddocumentationfiles(the"Software"),todealin
+theSoftwarewithoutrestriction,includingwithoutlimitationtherightstouse,
+copy,modify,merge,publish,distribute,sublicense,and/orsellcopiesofthe
+Software,andtopermitpersonstowhomtheSoftwareisfurnishedtodoso,
+subjecttothefollowingconditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Theabovecopyrightnoticeandthispermissionnoticeshallbeincludedinall
+copiesorsubstantialportionsoftheSoftware.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
-AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THESOFTWAREISPROVIDED"ASIS",WITHOUTWARRANTYOFANYKIND,EXPRESSOR
+IMPLIED,INCLUDINGBUTNOTLIMITEDTOTHEWARRANTIESOFMERCHANTABILITY,FITNESS
+FORAPARTICULARPURPOSEANDNONINFRINGEMENT.INNOEVENTSHALLTHEAUTHORSOR
+COPYRIGHTHOLDERSBELIABLEFORANYCLAIM,DAMAGESOROTHERLIABILITY,WHETHERIN
+ANACTIONOFCONTRACT,TORTOROTHERWISE,ARISINGFROM,OUTOFORINCONNECTION
+WITHTHESOFTWAREORTHEUSEOROTHERDEALINGSINTHESOFTWARE.
 */
 
 //---------------------------------------------------------
-// QWeb javascript
+//QWebjavascript
 //---------------------------------------------------------
 
 /*
 	TODO
 
-		String parsing
-			if (window.DOMParser) {
-				parser=new DOMParser();
+		Stringparsing
+			if(window.DOMParser){
+				parser=newDOMParser();
 				xmlDoc=parser.parseFromString(text,"text/xml");
-			} else {
-				xmlDoc=new ActiveXObject("Msxml2.DOMDocument.4.0");
-				xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
-					Which versions to try, it's confusing...
+			}else{
+				xmlDoc=newActiveXObject("Msxml2.DOMDocument.4.0");
+				xmlDoc=newActiveXObject("Microsoft.XMLDOM");
+					Whichversionstotry,it'sconfusing...
 				xmlDoc.async="false";
 				xmlDoc.async=false;
 				xmlDoc.preserveWhiteSpace=true;
 				xmlDoc.load("f.xml");
-				xmlDoc.loadXML(text);  ?
+				xmlDoc.loadXML(text); ?
 			}
 
-		Support space in IE by reparsing the responseText
-			xmlhttp.responseXML.loadXML(xmlhttp.responseText); ?
+		SupportspaceinIEbyreparsingtheresponseText
+			xmlhttp.responseXML.loadXML(xmlhttp.responseText);?
 
-		Preprocess: (nice optimization) 
-			preprocess by flattening all non t- element to a TEXT_NODE.
-			count the number of "\n" in text nodes to give an aproximate LINE NUMBER on elements for error reporting
-			if from IE HTMLDOM use if(a[i].specified) to avoid 88 empty attributes per element during the preprocess, 
+		Preprocess:(niceoptimization)
+			preprocessbyflatteningallnont-elementtoaTEXT_NODE.
+			countthenumberof"\n"intextnodestogiveanaproximateLINENUMBERonelementsforerrorreporting
+			iffromIEHTMLDOMuseif(a[i].specified)toavoid88emptyattributesperelementduringthepreprocess,
 
-		implement t-trim 'left' 'right' 'both', is it needed ? inner=render_trim(l_inner.join(), t_att)
+		implementt-trim'left''right''both',isitneeded?inner=render_trim(l_inner.join(),t_att)
 
-		Ruby/python: to backport from javascript to python/ruby render_node to use regexp, factorize foreach %var, t-att test for tuple(attname,value)
+		Ruby/python:tobackportfromjavascripttopython/rubyrender_nodetouseregexp,factorizeforeach%var,t-atttestfortuple(attname,value)
 
 	DONE
-		we reintroduced t-att-id, no more t-esc-id because of the new convention t-att="["id","val"]"
+		wereintroducedt-att-id,nomoret-esc-idbecauseofthenewconventiont-att="["id","val"]"
 */
 
-var QWeb = {
+varQWeb={
     templates:{},
     prefix:"t",
-    reg:new RegExp(),
+    reg:newRegExp(),
     tag:{},
     att:{},
-    ValueException: function (value, message) {
-        this.value = value;
-        this.message = message;
+    ValueException:function(value,message){
+        this.value=value;
+        this.message=message;
     },
-    eval_object:function(e, v) {
-        // TODO: Currently this will also replace and, or, ... in strings. Try
-        // 'hi boys and girls' != '' and 1 == 1  -- will be replaced to : 'hi boys && girls' != '' && 1 == 1
-        // try to find a solution without tokenizing
-        e = '(' + e + ')';
-        e = e.replace(/\band\b/g, " && ");
-        e = e.replace(/\bor\b/g, " || ");
-        e = e.replace(/\bgt\b/g, " > ");
-        e = e.replace(/\bgte\b/g, " >= ");
-        e = e.replace(/\blt\b/g, " < ");
-        e = e.replace(/\blte\b/g, " <= ");
-        if (v[e] != undefined) {
-            return v[e];
-        } else {
-            with (v) return eval(e);
+    eval_object:function(e,v){
+        //TODO:Currentlythiswillalsoreplaceand,or,...instrings.Try
+        //'hiboysandgirls'!=''and1==1 --willbereplacedto:'hiboys&&girls'!=''&&1==1
+        //trytofindasolutionwithouttokenizing
+        e='('+e+')';
+        e=e.replace(/\band\b/g,"&&");
+        e=e.replace(/\bor\b/g,"||");
+        e=e.replace(/\bgt\b/g,">");
+        e=e.replace(/\bgte\b/g,">=");
+        e=e.replace(/\blt\b/g,"<");
+        e=e.replace(/\blte\b/g,"<=");
+        if(v[e]!=undefined){
+            returnv[e];
+        }else{
+            with(v)returneval(e);
         }
     },
-    eval_str:function(e, v) {
-        var r = this.eval_object(e, v);
-        r = (typeof(r) == "undefined" || r == null) ? "" : r.toString();
-        return e == "0" ? v["0"] : r;
+    eval_str:function(e,v){
+        varr=this.eval_object(e,v);
+        r=(typeof(r)=="undefined"||r==null)?"":r.toString();
+        returne=="0"?v["0"]:r;
     },
-    eval_format:function(e, v) {
-        var m, src = e.split(/#/), r = src[0];
-        for (var i = 1; i < src.length; i++) {
-            if (m = src[i].match(/^{(.*)}(.*)/)) {
-                r += this.eval_str(m[1], v) + m[2];
-            } else {
-                r += "#" + src[i];
+    eval_format:function(e,v){
+        varm,src=e.split(/#/),r=src[0];
+        for(vari=1;i<src.length;i++){
+            if(m=src[i].match(/^{(.*)}(.*)/)){
+                r+=this.eval_str(m[1],v)+m[2];
+            }else{
+                r+="#"+src[i];
             }
         }
-        return r;
+        returnr;
     },
-    eval_bool:function(e, v) {
-        return !!this.eval_object(e, v);
+    eval_bool:function(e,v){
+        return!!this.eval_object(e,v);
     },
-    trim : function(v, mode) {
-        if (!v || !mode) return v;
-        switch (mode) {
-            case 'both':
-                return v.replace(/^\s*|\s*$/g, "");
-            case "left":
-                return v.replace(/^\s*/, "");
-            case "right":
-                return v.replace(/\s*$/, "");
+    trim:function(v,mode){
+        if(!v||!mode)returnv;
+        switch(mode){
+            case'both':
+                returnv.replace(/^\s*|\s*$/g,"");
+            case"left":
+                returnv.replace(/^\s*/,"");
+            case"right":
+                returnv.replace(/\s*$/,"");
         }
-        throw new QWeb.ValueException(
-            mode, "unknown trimming mode, trim mode must follow the pattern '[inner] (left|right|both)'");
+        thrownewQWeb.ValueException(
+            mode,"unknowntrimmingmode,trimmodemustfollowthepattern'[inner](left|right|both)'");
     },
-    escape_text:function(s) {
-        return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    escape_text:function(s){
+        returns.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
     },
-    escape_att:function(s) {
-        return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    escape_att:function(s){
+        returns.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
     },
-    render_node : function(e, v, inner_trim) {
-        if (e.nodeType == 3) {
-            return inner_trim ? this.trim(e.data, inner_trim) : e.data;
+    render_node:function(e,v,inner_trim){
+        if(e.nodeType==3){
+            returninner_trim?this.trim(e.data,inner_trim):e.data;
         }
-        if (e.nodeType == 1) {
-            var g_att = {};
-            var t_att = {};
-            var t_render = null;
-            var a = e.attributes;
-            for (var i = 0; i < a.length; i++) {
-                var an = a[i].name,av = a[i].value;
-                var m;
-                if (m = an.match(this.reg)) {
-                    var n = m[1];
-                    if (n == "eval") {
-                        n = m[2].substring(1);
-                        av = this.eval_str(av, v);
+        if(e.nodeType==1){
+            varg_att={};
+            vart_att={};
+            vart_render=null;
+            vara=e.attributes;
+            for(vari=0;i<a.length;i++){
+                varan=a[i].name,av=a[i].value;
+                varm;
+                if(m=an.match(this.reg)){
+                    varn=m[1];
+                    if(n=="eval"){
+                        n=m[2].substring(1);
+                        av=this.eval_str(av,v);
                     }
-                    var f;
-                    if (f = this.att[n]) {
-                        this[f](e, t_att, g_att, v, m[2], av);
-                    } else if (f = this.tag[n]) {
-                        t_render = f;
+                    varf;
+                    if(f=this.att[n]){
+                        this[f](e,t_att,g_att,v,m[2],av);
+                    }elseif(f=this.tag[n]){
+                        t_render=f;
                     }
-                    t_att[n] = av;
-                } else {
-                    g_att[an] = av;
+                    t_att[n]=av;
+                }else{
+                    g_att[an]=av;
                 }
             }
-            if (inner_trim && !t_att["trim"]) {
-                t_att["trim"] = "inner " + inner_trim;
+            if(inner_trim&&!t_att["trim"]){
+                t_att["trim"]="inner"+inner_trim;
             }
-            if (t_render) {
-                return this[t_render](e, t_att, g_att, v);
+            if(t_render){
+                returnthis[t_render](e,t_att,g_att,v);
             }
-            return this.render_element(e, t_att, g_att, v);
+            returnthis.render_element(e,t_att,g_att,v);
         }
-        return "";
+        return"";
     },
-    render_element:function(e, t_att, g_att, v) {
-        var inner = "", ec = e.childNodes, trim = t_att["trim"], inner_trim;
-        if (trim) {
-            if (/\binner\b/.test(trim)) {
-                inner_trim = true;
-                if (trim == 'inner') {
-                    trim = "both";
+    render_element:function(e,t_att,g_att,v){
+        varinner="",ec=e.childNodes,trim=t_att["trim"],inner_trim;
+        if(trim){
+            if(/\binner\b/.test(trim)){
+                inner_trim=true;
+                if(trim=='inner'){
+                    trim="both";
                 }
             }
-            var tm = /\b(both|left|right)\b/.exec(trim);
-            if (tm) trim = tm[1];
+            vartm=/\b(both|left|right)\b/.exec(trim);
+            if(tm)trim=tm[1];
         }
-        for (var i = 0; i < ec.length; i++) {
-            inner += inner_trim ? this.trim(this.render_node(ec[i], v, inner_trim ? trim : null), trim) : this.render_node(ec[i], v, inner_trim ? trim : null);
+        for(vari=0;i<ec.length;i++){
+            inner+=inner_trim?this.trim(this.render_node(ec[i],v,inner_trim?trim:null),trim):this.render_node(ec[i],v,inner_trim?trim:null);
         }
-        if (trim && !inner_trim) {
-            inner = this.trim(inner, trim);
+        if(trim&&!inner_trim){
+            inner=this.trim(inner,trim);
         }
-        if (e.tagName == this.prefix) {
-            return inner;
+        if(e.tagName==this.prefix){
+            returninner;
         }
-        var att = "";
-        for (var an in g_att) {
-            att += " " + an + '="' + this.escape_att(g_att[an]) + '"';
+        varatt="";
+        for(varaning_att){
+            att+=""+an+'="'+this.escape_att(g_att[an])+'"';
         }
-        // Some IE versions have problems with closed tags
-        var opentag = !!t_att['opentag'] && this.eval_bool(t_att["opentag"], v);
-        return inner.length || opentag ? "<" + e.tagName + att + ">" + inner + "</" + e.tagName + ">" : "<" + e.tagName + att + "/>";
+        //SomeIEversionshaveproblemswithclosedtags
+        varopentag=!!t_att['opentag']&&this.eval_bool(t_att["opentag"],v);
+        returninner.length||opentag?"<"+e.tagName+att+">"+inner+"</"+e.tagName+">":"<"+e.tagName+att+"/>";
     },
-    render_att_att:function(e, t_att, g_att, v, ext, av) {
-        if (ext) {
-            var attv = this.eval_object(av, v);
-            if (attv != null) {
-                g_att[ext.substring(1)] = attv.toString();
+    render_att_att:function(e,t_att,g_att,v,ext,av){
+        if(ext){
+            varattv=this.eval_object(av,v);
+            if(attv!=null){
+                g_att[ext.substring(1)]=attv.toString();
             }
-        } else {
-            var o = this.eval_object(av, v);
-            if (o != null) {
-                // TODO: http://bonsaiden.github.com/JavaScript-Garden/#types.typeof
-                if (o.constructor == Array && o.length > 1 && o[1] != null) {
-                    g_att[o[0]] = new String(o[1]);
-                } else if (o.constructor == Object) {
-                    for (var i in o) {
-                    	if(o[i]!=null) {
-                    		g_att[i] = new String(o[i]);
+        }else{
+            varo=this.eval_object(av,v);
+            if(o!=null){
+                //TODO:http://bonsaiden.github.com/JavaScript-Garden/#types.typeof
+                if(o.constructor==Array&&o.length>1&&o[1]!=null){
+                    g_att[o[0]]=newString(o[1]);
+                }elseif(o.constructor==Object){
+                    for(variino){
+                    	if(o[i]!=null){
+                    		g_att[i]=newString(o[i]);
                     	}
                     }
                 }
             }
         }
     },
-    render_att_attf:function(e, t_att, g_att, v, ext, av) {
-        g_att[ext.substring(1)] = this.eval_format(av, v);
+    render_att_attf:function(e,t_att,g_att,v,ext,av){
+        g_att[ext.substring(1)]=this.eval_format(av,v);
     },
-    render_tag_raw:function(e, t_att, g_att, v) {
-        return this.eval_str(t_att["raw"], v);
+    render_tag_raw:function(e,t_att,g_att,v){
+        returnthis.eval_str(t_att["raw"],v);
     },
-    render_tag_rawf:function(e, t_att, g_att, v) {
-        return this.eval_format(t_att["rawf"], v);
+    render_tag_rawf:function(e,t_att,g_att,v){
+        returnthis.eval_format(t_att["rawf"],v);
     },
     /*
-     * Idea: if the name of the tag != t render the tag around the value <a name="a" t-esc="label"/>
+     *Idea:ifthenameofthetag!=trenderthetagaroundthevalue<aname="a"t-esc="label"/>
      */
-    render_tag_esc:function(e, t_att, g_att, v) {
-        return this.escape_text(this.eval_str(t_att["esc"], v));
+    render_tag_esc:function(e,t_att,g_att,v){
+        returnthis.escape_text(this.eval_str(t_att["esc"],v));
     },
-    render_tag_escf:function(e, t_att, g_att, v) {
-        return this.escape_text(this.eval_format(t_att["escf"], v));
+    render_tag_escf:function(e,t_att,g_att,v){
+        returnthis.escape_text(this.eval_format(t_att["escf"],v));
     },
-    render_tag_if:function(e, t_att, g_att, v) {
-        return this.eval_bool(t_att["if"], v) ? this.render_element(e, t_att, g_att, v) : "";
+    render_tag_if:function(e,t_att,g_att,v){
+        returnthis.eval_bool(t_att["if"],v)?this.render_element(e,t_att,g_att,v):"";
     },
-    render_tag_set:function(e, t_att, g_att, v) {
-        var ev = t_att["value"];
-        if (ev && ev.constructor != Function) {
-            v[t_att["set"]] = this.eval_object(ev, v);
-        } else {
-            v[t_att["set"]] = this.render_element(e, t_att, g_att, v);
+    render_tag_set:function(e,t_att,g_att,v){
+        varev=t_att["value"];
+        if(ev&&ev.constructor!=Function){
+            v[t_att["set"]]=this.eval_object(ev,v);
+        }else{
+            v[t_att["set"]]=this.render_element(e,t_att,g_att,v);
         }
-        return "";
+        return"";
     },
-    render_tag_call:function(e, t_att, g_att, v) {
-        var d = v;
-        if (!t_att["import"]) {
-            d = {};
-            for (var i in v) {
-                d[i] = v[i];
+    render_tag_call:function(e,t_att,g_att,v){
+        vard=v;
+        if(!t_att["import"]){
+            d={};
+            for(variinv){
+                d[i]=v[i];
             }
         }
-        d["0"] = this.render_element(e, t_att, g_att, d);
-        return this.render(t_att["call"], d);
+        d["0"]=this.render_element(e,t_att,g_att,d);
+        returnthis.render(t_att["call"],d);
     },
-    render_tag_js:function(e, t_att, g_att, v) {
-        var dict_name = t_att["js"] || "dict";
-        v[dict_name] = v;
-        var r = this.eval_str(this.render_element(e, t_att, g_att, v), v);
+    render_tag_js:function(e,t_att,g_att,v){
+        vardict_name=t_att["js"]||"dict";
+        v[dict_name]=v;
+        varr=this.eval_str(this.render_element(e,t_att,g_att,v),v);
         delete(v[dict_name]);
-        return r || '';
+        returnr||'';
     },
     /**
-     * Renders a foreach loop (@t-foreach).
+     *Rendersaforeachloop(@t-foreach).
      *
-     * Adds the following elements to its context, where <code>${name}</code>
-     * is specified via <code>@t-as</code>:
-     * * <code>${name}</code> The current element itself
-     * * <code>${name}_value</code> Same as <code>${name}</code>
-     * * <code>${name}_index</code> The 0-based index of the current element
-     * * <code>${name}_first</code> Whether the current element is the first one
-     * * <code>${name}_parity</code> odd|even (as strings)
-     * * <code>${name}_all</code> The iterated collection itself
+     *Addsthefollowingelementstoitscontext,where<code>${name}</code>
+     *isspecifiedvia<code>@t-as</code>:
+     **<code>${name}</code>Thecurrentelementitself
+     **<code>${name}_value</code>Sameas<code>${name}</code>
+     **<code>${name}_index</code>The0-basedindexofthecurrentelement
+     **<code>${name}_first</code>Whetherthecurrentelementisthefirstone
+     **<code>${name}_parity</code>odd|even(asstrings)
+     **<code>${name}_all</code>Theiteratedcollectionitself
      *
-     * If the collection being iterated is an array, also adds:
-     * * <code>${name}_last</code> Whether the current element is the last one
-     * * All members of the current object
+     *Ifthecollectionbeingiteratedisanarray,alsoadds:
+     **<code>${name}_last</code>Whetherthecurrentelementisthelastone
+     **Allmembersofthecurrentobject
      *
-     * If the collection being iterated is an object, the value is actually the object's key
+     *Ifthecollectionbeingiteratedisanobject,thevalueisactuallytheobject'skey
      *
-     * @param e ?
-     * @param t_att attributes of the element being <code>t-foreach</code>'d
-     * @param g_att ?
-     * @param old_context the context in which the foreach is evaluated
+     *@parame?
+     *@paramt_attattributesoftheelementbeing<code>t-foreach</code>'d
+     *@paramg_att?
+     *@paramold_contextthecontextinwhichtheforeachisevaluated
      */
-    render_tag_foreach:function(e, t_att, g_att, old_context) {
-        var expr = t_att["foreach"];
-        var enu = this.eval_object(expr, old_context);
-        var ru = [];
-        if (enu) {
-            var val = t_att['as'] || expr.replace(/[^a-zA-Z0-9]/g, '_');
-            var context = {};
-            for (var i in old_context) {
-                context[i] = old_context[i];
+    render_tag_foreach:function(e,t_att,g_att,old_context){
+        varexpr=t_att["foreach"];
+        varenu=this.eval_object(expr,old_context);
+        varru=[];
+        if(enu){
+            varval=t_att['as']||expr.replace(/[^a-zA-Z0-9]/g,'_');
+            varcontext={};
+            for(variinold_context){
+                context[i]=old_context[i];
             }
-            context[val + "_all"] = enu;
-            var val_value = val + "_value",
-                val_index = val + "_index",
-                val_first = val + "_first",
-                val_last = val + "_last",
-                val_parity = val + "_parity";
-            var size = enu.length;
-            if (size) {
-                context[val + "_size"] = size;
-                for (var j = 0; j < size; j++) {
-                    var cur = enu[j];
-                    context[val_value] = cur;
-                    context[val_index] = j;
-                    context[val_first] = j == 0;
-                    context[val_last] = j + 1 == size;
-                    context[val_parity] = (j % 2 == 1 ? 'odd' : 'even');
-                    if (cur.constructor == Object) {
-                        for (var k in cur) {
-                            context[k] = cur[k];
+            context[val+"_all"]=enu;
+            varval_value=val+"_value",
+                val_index=val+"_index",
+                val_first=val+"_first",
+                val_last=val+"_last",
+                val_parity=val+"_parity";
+            varsize=enu.length;
+            if(size){
+                context[val+"_size"]=size;
+                for(varj=0;j<size;j++){
+                    varcur=enu[j];
+                    context[val_value]=cur;
+                    context[val_index]=j;
+                    context[val_first]=j==0;
+                    context[val_last]=j+1==size;
+                    context[val_parity]=(j%2==1?'odd':'even');
+                    if(cur.constructor==Object){
+                        for(varkincur){
+                            context[k]=cur[k];
                         }
                     }
-                    context[val] = cur;
-                    var r = this.render_element(e, t_att, g_att, context);
+                    context[val]=cur;
+                    varr=this.render_element(e,t_att,g_att,context);
                     ru.push(r);
                 }
-            } else {
-                var index = 0;
-                for (cur in enu) {
-                    context[val_value] = cur;
-                    context[val_index] = index;
-                    context[val_first] = index == 0;
-                    context[val_parity] = (index % 2 == 1 ? 'odd' : 'even');
-                    context[val] = cur;
-                    ru.push(this.render_element(e, t_att, g_att, context));
-                    index += 1;
+            }else{
+                varindex=0;
+                for(curinenu){
+                    context[val_value]=cur;
+                    context[val_index]=index;
+                    context[val_first]=index==0;
+                    context[val_parity]=(index%2==1?'odd':'even');
+                    context[val]=cur;
+                    ru.push(this.render_element(e,t_att,g_att,context));
+                    index+=1;
                 }
             }
-            return ru.join("");
-        } else {
-            return "qweb: foreach " + expr + " not found.";
+            returnru.join("");
+        }else{
+            return"qweb:foreach"+expr+"notfound.";
         }
     },
-    hash:function() {
-        var l = [], m;
-        for (var i in this) {
-            if (m = i.match(/render_tag_(.*)/)) {
-                this.tag[m[1]] = i;
+    hash:function(){
+        varl=[],m;
+        for(variinthis){
+            if(m=i.match(/render_tag_(.*)/)){
+                this.tag[m[1]]=i;
                 l.push(m[1]);
-            } else if (m = i.match(/render_att_(.*)/)) {
-                this.att[m[1]] = i;
+            }elseif(m=i.match(/render_att_(.*)/)){
+                this.att[m[1]]=i;
                 l.push(m[1]);
             }
         }
-        l.sort(function(a, b) {
-            return a.length > b.length ? -1 : 1;
+        l.sort(function(a,b){
+            returna.length>b.length?-1:1;
         });
-        var s = "^" + this.prefix + "-(eval|" + l.join("|") + "|.*)(.*)$";
-        this.reg = new RegExp(s);
+        vars="^"+this.prefix+"-(eval|"+l.join("|")+"|.*)(.*)$";
+        this.reg=newRegExp(s);
     },
     /**
-     * returns the correct XMLHttpRequest instance for the browser, or null if
-     * it was not able to build any XHR instance.
+     *returnsthecorrectXMLHttpRequestinstanceforthebrowser,ornullif
+     *itwasnotabletobuildanyXHRinstance.
      *
-     * @returns XMLHttpRequest|MSXML2.XMLHTTP.3.0|null
+     *@returnsXMLHttpRequest|MSXML2.XMLHTTP.3.0|null
      */
-    get_xhr:function () {
-        if (window.XMLHttpRequest) {
-            return new window.XMLHttpRequest();
+    get_xhr:function(){
+        if(window.XMLHttpRequest){
+            returnnewwindow.XMLHttpRequest();
         }
-        try {
-            return new ActiveXObject('MSXML2.XMLHTTP.3.0');
-        } catch(e) {
-            return null;
+        try{
+            returnnewActiveXObject('MSXML2.XMLHTTP.3.0');
+        }catch(e){
+            returnnull;
         }
     },
-    load_xml:function(s) {
-        var xml;
-        if (s[0] == "<") {
+    load_xml:function(s){
+        varxml;
+        if(s[0]=="<"){
             /*
-             manque ca pour sarrisa
+             manquecapoursarrisa
              if(window.DOMParser){
              mozilla
              if(!window.DOMParser){
-             var doc = Sarissa.getDomDocument();
+             vardoc=Sarissa.getDomDocument();
              doc.loadXML(sXml);
-             return doc;
+             returndoc;
              };
              };
              */
-        } else {
-            var req = this.get_xhr();
-            if (req) {
-                req.open("GET", s, false);
+        }else{
+            varreq=this.get_xhr();
+            if(req){
+                req.open("GET",s,false);
                 req.send(null);
-                //if ie r.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
-                xml = req.responseXML;
+                //ifier.setRequestHeader("If-Modified-Since","Sat,1Jan200000:00:00GMT");
+                xml=req.responseXML;
                 /*
                  TODO
-                 if intsernetexploror
-                 getdomimplmentation() for try catch
+                 ifintsernetexploror
+                 getdomimplmentation()fortrycatch
                  responseXML.getImplet
                  d=domimple()
                  d.preserverWhitespace=1
@@ -403,33 +403,33 @@ var QWeb = {
                  xml.preserverWhitespace=1
                  xml.loadXML(r.reponseText)
                  */
-                return xml;
+                returnxml;
             }
         }
     },
-    add_template:function(e) {
-        // TODO: keep sources so we can implement reload()
+    add_template:function(e){
+        //TODO:keepsourcessowecanimplementreload()
         this.hash();
-        if (e.constructor == String) {
-            e = this.load_xml(e);
+        if(e.constructor==String){
+            e=this.load_xml(e);
         }
         
-        var ec = e.documentElement ? e.documentElement.childNodes : ( e.childNodes ? e.childNodes : [] );
+        varec=e.documentElement?e.documentElement.childNodes:(e.childNodes?e.childNodes:[]);
 
-        for (var i = 0; i < ec.length; i++) {
-            var n = ec[i];
-            if (n.nodeType == 1) {
-                var name = n.getAttribute(this.prefix + "-name");
-                this.templates[name] = n;
+        for(vari=0;i<ec.length;i++){
+            varn=ec[i];
+            if(n.nodeType==1){
+                varname=n.getAttribute(this.prefix+"-name");
+                this.templates[name]=n;
             }
         }
     },
-    render:function(name, v) {
-        var e;
-        if (e = this.templates[name]) {
-            return this.render_node(e, v);
+    render:function(name,v){
+        vare;
+        if(e=this.templates[name]){
+            returnthis.render_node(e,v);
         }
-        return "template " + name + " not found";
+        return"template"+name+"notfound";
     }
 };
 

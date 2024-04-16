@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
 
@@ -11,7 +11,7 @@
 
         <menuitem
             id="menu_hr_main"
-            name="Human Resources"
+            name="HumanResources"
             parent="menu_hr_root"
             sequence="0"/>
 
@@ -31,7 +31,7 @@
 
         <menuitem
             id="menu_hr_employee"
-            name="Employee Directory"
+            name="EmployeeDirectory"
             action="hr_employee_public_action"
             parent="menu_hr_root"
             sequence="4"/>
@@ -92,14 +92,14 @@
 
             <menuitem
                 id="menu_config_plan"
-                name="Activity Planning"
+                name="ActivityPlanning"
                 parent="menu_human_resources_configuration"
                 groups="group_hr_manager"
                 sequence="100"/>
 
                 <menuitem
                     id="menu_config_plan_types"
-                    name="Planning Types"
+                    name="PlanningTypes"
                     action="hr_plan_activity_type_action"
                     parent="menu_config_plan"
                     groups="base.group_no_one"

@@ -1,213 +1,213 @@
-flectra.define('mail.utils', function (require) {
-"use strict";
+flectra.define('mail.utils',function(require){
+"usestrict";
 
-var core = require('web.core');
+varcore=require('web.core');
 
-var _t = core._t;
+var_t=core._t;
 
 /**
- * WARNING: this is not enough to unescape potential XSS contained in htmlString, transformFunction
- * should handle it or it should be handled after/before calling parseAndTransform. So if the result
- * of this function is used in a t-raw, be very careful.
+ *WARNING:thisisnotenoughtounescapepotentialXSScontainedinhtmlString,transformFunction
+ *shouldhandleitoritshouldbehandledafter/beforecallingparseAndTransform.Soiftheresult
+ *ofthisfunctionisusedinat-raw,beverycareful.
  *
- * @param {string} htmlString
- * @param {function} transformFunction
- * @returns {string}
+ *@param{string}htmlString
+ *@param{function}transformFunction
+ *@returns{string}
  */
-function parseAndTransform(htmlString, transformFunction) {
-    var openToken = "OPEN" + Date.now();
-    var string = htmlString.replace(/&lt;/g, openToken);
-    var children;
-    try {
-        children = $('<div>').html(string).contents();
-    } catch (e) {
-        children = $('<div>').html('<pre>' + string + '</pre>').contents();
+functionparseAndTransform(htmlString,transformFunction){
+    varopenToken="OPEN"+Date.now();
+    varstring=htmlString.replace(/&lt;/g,openToken);
+    varchildren;
+    try{
+        children=$('<div>').html(string).contents();
+    }catch(e){
+        children=$('<div>').html('<pre>'+string+'</pre>').contents();
     }
-    return _parseAndTransform(children, transformFunction)
-                .replace(new RegExp(openToken, "g"), "&lt;");
+    return_parseAndTransform(children,transformFunction)
+                .replace(newRegExp(openToken,"g"),"&lt;");
 }
 
 /**
- * @param {Node[]} nodes
- * @param {function} transformFunction with:
- *   param node
- *   param function
- *   return string
- * @return {string}
+ *@param{Node[]}nodes
+ *@param{function}transformFunctionwith:
+ *  paramnode
+ *  paramfunction
+ *  returnstring
+ *@return{string}
  */
-function _parseAndTransform(nodes, transformFunction) {
-    return _.map(nodes, function (node) {
-        return transformFunction(node, function () {
-            return _parseAndTransform(node.childNodes, transformFunction);
+function_parseAndTransform(nodes,transformFunction){
+    return_.map(nodes,function(node){
+        returntransformFunction(node,function(){
+            return_parseAndTransform(node.childNodes,transformFunction);
         });
     }).join("");
 }
 
 /**
- * Escape < > & as html entities (copy from _.escape with less escaped characters)
+ *Escape<>&ashtmlentities(copyfrom_.escapewithlessescapedcharacters)
  *
- * @param {string}
- * @return {string}
+ *@param{string}
+ *@return{string}
  */
-var _escapeEntities = (function () {
-    var map = {"&":"&amp;","<":"&lt;",">":"&gt;"};
-    var escaper = function(match) {
-        return map[match];
+var_escapeEntities=(function(){
+    varmap={"&":"&amp;","<":"&lt;",">":"&gt;"};
+    varescaper=function(match){
+        returnmap[match];
     };
-    var testRegexp = RegExp('(?:&|<|>)');
-    var replaceRegexp = RegExp('(?:&|<|>)', 'g');
-    return function(string) {
-        string = string == null ? '' : '' + string;
-        return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
+    vartestRegexp=RegExp('(?:&|<|>)');
+    varreplaceRegexp=RegExp('(?:&|<|>)','g');
+    returnfunction(string){
+        string=string==null?'':''+string;
+        returntestRegexp.test(string)?string.replace(replaceRegexp,escaper):string;
     };
 })();
 
-// Suggested URL Javascript regex of http://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
-// Adapted to make http(s):// not required if (and only if) www. is given. So `should.notmatch` does not match.
-// And further extended to include Latin-1 Supplement, Latin Extended-A, Latin Extended-B and Latin Extended Additional.
-var urlRegexp = /\b(?:https?:\/\/\d{1,3}(?:\.\d{1,3}){3}|(?:https?:\/\/|(?:www\.))[-a-z0-9@:%._+~#=\u00C0-\u024F\u1E00-\u1EFF]{2,256}\.[a-z]{2,13})\b(?:[-a-z0-9@:%_+.~#?&'$//=;\u00C0-\u024F\u1E00-\u1EFF]*)/gi;
+//SuggestedURLJavascriptregexofhttp://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+//Adaptedtomakehttp(s)://notrequiredif(andonlyif)www.isgiven.So`should.notmatch`doesnotmatch.
+//AndfurtherextendedtoincludeLatin-1Supplement,LatinExtended-A,LatinExtended-BandLatinExtendedAdditional.
+varurlRegexp=/\b(?:https?:\/\/\d{1,3}(?:\.\d{1,3}){3}|(?:https?:\/\/|(?:www\.))[-a-z0-9@:%._+~#=\u00C0-\u024F\u1E00-\u1EFF]{2,256}\.[a-z]{2,13})\b(?:[-a-z0-9@:%_+.~#?&'$//=;\u00C0-\u024F\u1E00-\u1EFF]*)/gi;
 /**
- * @param {string} text
- * @param {Object} [attrs={}]
- * @return {string} linkified text
+ *@param{string}text
+ *@param{Object}[attrs={}]
+ *@return{string}linkifiedtext
  */
-function linkify(text, attrs) {
-    attrs = attrs || {};
-    if (attrs.target === undefined) {
-        attrs.target = '_blank';
+functionlinkify(text,attrs){
+    attrs=attrs||{};
+    if(attrs.target===undefined){
+        attrs.target='_blank';
     }
-    if (attrs.target === '_blank') {
-      attrs.rel = 'noreferrer noopener';
+    if(attrs.target==='_blank'){
+      attrs.rel='noreferrernoopener';
     }
-    attrs = _.map(attrs, function (value, key) {
-        return key + '="' + _.escape(value) + '"';
-    }).join(' ');
-    var curIndex = 0;
-    var result = "";
-    var match;
-    while ((match = urlRegexp.exec(text)) !== null) {
-        result += _escapeEntities(text.slice(curIndex, match.index));
-        var url = match[0];
-        var href = (!/^https?:\/\//i.test(url)) ? "http://" + _.escape(url) : _.escape(url);
-        result += '<a ' + attrs + ' href="' + href + '">' + _escapeEntities(url) + '</a>';
-        curIndex = match.index + match[0].length;
+    attrs=_.map(attrs,function(value,key){
+        returnkey+'="'+_.escape(value)+'"';
+    }).join('');
+    varcurIndex=0;
+    varresult="";
+    varmatch;
+    while((match=urlRegexp.exec(text))!==null){
+        result+=_escapeEntities(text.slice(curIndex,match.index));
+        varurl=match[0];
+        varhref=(!/^https?:\/\//i.test(url))?"http://"+_.escape(url):_.escape(url);
+        result+='<a'+attrs+'href="'+href+'">'+_escapeEntities(url)+'</a>';
+        curIndex=match.index+match[0].length;
     }
-    return result + _escapeEntities(text.slice(curIndex));
+    returnresult+_escapeEntities(text.slice(curIndex));
 }
 
-function addLink(node, transformChildren) {
-    if (node.nodeType === 3) {  // text node
-        const linkified = linkify(node.data);
-        if (linkified !== node.data) {
-            const div = document.createElement('div');
-            div.innerHTML = linkified;
-            for (const childNode of [...div.childNodes]) {
-                node.parentNode.insertBefore(childNode, node);
+functionaddLink(node,transformChildren){
+    if(node.nodeType===3){ //textnode
+        constlinkified=linkify(node.data);
+        if(linkified!==node.data){
+            constdiv=document.createElement('div');
+            div.innerHTML=linkified;
+            for(constchildNodeof[...div.childNodes]){
+                node.parentNode.insertBefore(childNode,node);
             }
             node.parentNode.removeChild(node);
-            return linkified;
+            returnlinkified;
         }
-        return node.textContent;
+        returnnode.textContent;
     }
-    if (node.tagName === "A") return node.outerHTML;
+    if(node.tagName==="A")returnnode.outerHTML;
     transformChildren();
-    return node.outerHTML;
+    returnnode.outerHTML;
 }
 
 /**
- * @param {string} htmlString
- * @return {string}
+ *@param{string}htmlString
+ *@return{string}
  */
-function htmlToTextContentInline(htmlString) {
-    const fragment = document.createDocumentFragment();
-    const div = document.createElement('div');
+functionhtmlToTextContentInline(htmlString){
+    constfragment=document.createDocumentFragment();
+    constdiv=document.createElement('div');
     fragment.appendChild(div);
-    htmlString = htmlString.replace(/<br\s*\/?>/gi,' ');
-    try {
-        div.innerHTML = htmlString;
-    } catch (e) {
-        div.innerHTML = `<pre>${htmlString}</pre>`;
+    htmlString=htmlString.replace(/<br\s*\/?>/gi,'');
+    try{
+        div.innerHTML=htmlString;
+    }catch(e){
+        div.innerHTML=`<pre>${htmlString}</pre>`;
     }
-    return div
+    returndiv
         .textContent
         .trim()
-        .replace(/[\n\r]/g, '')
-        .replace(/\s\s+/g, ' ');
+        .replace(/[\n\r]/g,'')
+        .replace(/\s\s+/g,'');
 }
 
-function stripHTML(node, transformChildren) {
-    if (node.nodeType === 3) return node.data;  // text node
-    if (node.tagName === "BR") return "\n";
-    return transformChildren();
+functionstripHTML(node,transformChildren){
+    if(node.nodeType===3)returnnode.data; //textnode
+    if(node.tagName==="BR")return"\n";
+    returntransformChildren();
 }
 
-function inline(node, transform_children) {
-    if (node.nodeType === 3) return node.data;
-    if (node.nodeType === 8) return "";
-    if (node.tagName === "BR") return " ";
-    if (node.tagName.match(/^(A|P|DIV|PRE|BLOCKQUOTE)$/)) return transform_children();
-    node.innerHTML = transform_children();
-    return node.outerHTML;
+functioninline(node,transform_children){
+    if(node.nodeType===3)returnnode.data;
+    if(node.nodeType===8)return"";
+    if(node.tagName==="BR")return"";
+    if(node.tagName.match(/^(A|P|DIV|PRE|BLOCKQUOTE)$/))returntransform_children();
+    node.innerHTML=transform_children();
+    returnnode.outerHTML;
 }
 
-// Parses text to find email: Tagada <address@mail.fr> -> [Tagada, address@mail.fr] or False
-function parseEmail(text) {
-    if (text){
-        var result = text.match(/(.*)<(.*@.*)>/);
-        if (result) {
-            name = _.str.trim(result[1]).replace(/(^"|"$)/g, '')
-            return [name, _.str.trim(result[2])];
+//Parsestexttofindemail:Tagada<address@mail.fr>->[Tagada,address@mail.fr]orFalse
+functionparseEmail(text){
+    if(text){
+        varresult=text.match(/(.*)<(.*@.*)>/);
+        if(result){
+            name=_.str.trim(result[1]).replace(/(^"|"$)/g,'')
+            return[name,_.str.trim(result[2])];
         }
-        result = text.match(/(.*@.*)/);
-        if (result) {
-            return [_.str.trim(result[1]), _.str.trim(result[1])];
+        result=text.match(/(.*@.*)/);
+        if(result){
+            return[_.str.trim(result[1]),_.str.trim(result[1])];
         }
-        return [text, false];
+        return[text,false];
     }
 }
 
 /**
- * Returns an escaped conversion of a content.
+ *Returnsanescapedconversionofacontent.
  *
- * @param {string} content
- * @returns {string}
+ *@param{string}content
+ *@returns{string}
  */
-function escapeAndCompactTextContent(content) {
-    //Removing unwanted extra spaces from message
-    let value = owl.utils.escape(content).trim();
-    value = value.replace(/(\r|\n){2,}/g, '<br/><br/>');
-    value = value.replace(/(\r|\n)/g, '<br/>');
+functionescapeAndCompactTextContent(content){
+    //Removingunwantedextraspacesfrommessage
+    letvalue=owl.utils.escape(content).trim();
+    value=value.replace(/(\r|\n){2,}/g,'<br/><br/>');
+    value=value.replace(/(\r|\n)/g,'<br/>');
 
-    // prevent html space collapsing
-    value = value.replace(/ /g, '&nbsp;').replace(/([^>])&nbsp;([^<])/g, '$1 $2');
-    return value;
+    //preventhtmlspacecollapsing
+    value=value.replace(//g,'&nbsp;').replace(/([^>])&nbsp;([^<])/g,'$1$2');
+    returnvalue;
 }
 
-// Replaces textarea text into html text (add <p>, <a>)
-// TDE note : should be done server-side, in Python -> use mail.compose.message ?
-function getTextToHTML(text) {
-    return text
-        .replace(/((?:https?|ftp):\/\/[\S]+)/g,'<a href="$1">$1</a> ')
+//Replacestextareatextintohtmltext(add<p>,<a>)
+//TDEnote:shouldbedoneserver-side,inPython->usemail.compose.message?
+functiongetTextToHTML(text){
+    returntext
+        .replace(/((?:https?|ftp):\/\/[\S]+)/g,'<ahref="$1">$1</a>')
         .replace(/[\n\r]/g,'<br/>');
 }
 
-function timeFromNow(date) {
-    if (moment().diff(date, 'seconds') < 45) {
-        return _t("now");
+functiontimeFromNow(date){
+    if(moment().diff(date,'seconds')<45){
+        return_t("now");
     }
-    return date.fromNow();
+    returndate.fromNow();
 }
 
-return {
-    addLink: addLink,
-    getTextToHTML: getTextToHTML,
+return{
+    addLink:addLink,
+    getTextToHTML:getTextToHTML,
     htmlToTextContentInline,
-    inline: inline,
-    linkify: linkify,
-    parseAndTransform: parseAndTransform,
-    parseEmail: parseEmail,
-    stripHTML: stripHTML,
-    timeFromNow: timeFromNow,
+    inline:inline,
+    linkify:linkify,
+    parseAndTransform:parseAndTransform,
+    parseEmail:parseEmail,
+    stripHTML:stripHTML,
+    timeFromNow:timeFromNow,
     escapeAndCompactTextContent,
 };
 

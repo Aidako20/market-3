@@ -1,51 +1,51 @@
-flectra.define('mail/static/src/utils/throttle/throttle_tests.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/utils/throttle/throttle_tests.js',function(require){
+'usestrict';
 
-const { afterEach, beforeEach, start } = require('mail/static/src/utils/test_utils.js');
-const throttle = require('mail/static/src/utils/throttle/throttle.js');
-const { nextTick } = require('mail/static/src/utils/utils.js');
+const{afterEach,beforeEach,start}=require('mail/static/src/utils/test_utils.js');
+constthrottle=require('mail/static/src/utils/throttle/throttle.js');
+const{nextTick}=require('mail/static/src/utils/utils.js');
 
-const { ThrottleReinvokedError, ThrottleCanceledError } = throttle;
+const{ThrottleReinvokedError,ThrottleCanceledError}=throttle;
 
-QUnit.module('mail', {}, function () {
-QUnit.module('utils', {}, function () {
-QUnit.module('throttle', {}, function () {
-QUnit.module('throttle_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('utils',{},function(){
+QUnit.module('throttle',{},function(){
+QUnit.module('throttle_tests.js',{
+    beforeEach(){
         beforeEach(this);
-        this.throttles = [];
+        this.throttles=[];
 
-        this.start = async params => {
-            const { env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
+        this.start=asyncparams=>{
+            const{env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
-        // Important: tests should cleanly intercept cancelation errors that
-        // may result from this teardown.
-        for (const t of this.throttles) {
+    afterEach(){
+        //Important:testsshouldcleanlyinterceptcancelationerrorsthat
+        //mayresultfromthisteardown.
+        for(consttofthis.throttles){
             t.clear();
         }
         afterEach(this);
     },
 });
 
-QUnit.test('single call', async function (assert) {
+QUnit.test('singlecall',asyncfunction(assert){
     assert.expect(6);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    let hasInvokedFunc = false;
-    const throttledFunc = throttle(
+    lethasInvokedFunc=false;
+    constthrottledFunc=throttle(
         this.env,
-        () => {
-            hasInvokedFunc = true;
-            return 'func_result';
+        ()=>{
+            hasInvokedFunc=true;
+            return'func_result';
         },
         0
     );
@@ -53,350 +53,350 @@ QUnit.test('single call', async function (assert) {
 
     assert.notOk(
         hasInvokedFunc,
-        "func should not have been invoked on immediate throttle initialization"
+        "funcshouldnothavebeeninvokedonimmediatethrottleinitialization"
     );
 
-    await this.env.testUtils.advanceTime(0);
+    awaitthis.env.testUtils.advanceTime(0);
     assert.notOk(
         hasInvokedFunc,
-        "func should not have been invoked from throttle initialization after 0ms"
+        "funcshouldnothavebeeninvokedfromthrottleinitializationafter0ms"
     );
 
-    throttledFunc().then(res => {
+    throttledFunc().then(res=>{
         assert.step('throttle_observed_invoke');
         assert.strictEqual(
             res,
             'func_result',
-            "throttle call return should forward result of inner func"
+            "throttlecallreturnshouldforwardresultofinnerfunc"
         );
     });
-    await nextTick();
+    awaitnextTick();
     assert.ok(
         hasInvokedFunc,
-        "func should have been immediately invoked on first throttle call"
+        "funcshouldhavebeenimmediatelyinvokedonfirstthrottlecall"
     );
     assert.verifySteps(
         ['throttle_observed_invoke'],
-        "throttle should have observed invoked on first throttle call"
+        "throttleshouldhaveobservedinvokedonfirstthrottlecall"
     );
 });
 
-QUnit.test('2nd (throttled) call', async function (assert) {
+QUnit.test('2nd(throttled)call',asyncfunction(assert){
     assert.expect(8);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    let funcCalledAmount = 0;
-    const throttledFunc = throttle(
+    letfuncCalledAmount=0;
+    constthrottledFunc=throttle(
         this.env,
-        () => {
+        ()=>{
             funcCalledAmount++;
-            return `func_result_${funcCalledAmount}`;
+            return`func_result_${funcCalledAmount}`;
         },
         1000
     );
     this.throttles.push(throttledFunc);
 
-    throttledFunc().then(result => {
+    throttledFunc().then(result=>{
         assert.step('throttle_observed_invoke_1');
         assert.strictEqual(
             result,
             'func_result_1',
-            "throttle call return should forward result of inner func 1"
+            "throttlecallreturnshouldforwardresultofinnerfunc1"
         );
     });
-    await nextTick();
+    awaitnextTick();
     assert.verifySteps(
         ['throttle_observed_invoke_1'],
-        "inner function of throttle should have been invoked on 1st call (immediate return)"
+        "innerfunctionofthrottleshouldhavebeeninvokedon1stcall(immediatereturn)"
     );
 
-    throttledFunc().then(res => {
+    throttledFunc().then(res=>{
         assert.step('throttle_observed_invoke_2');
         assert.strictEqual(
             res,
             'func_result_2',
-            "throttle call return should forward result of inner func 2"
+            "throttlecallreturnshouldforwardresultofinnerfunc2"
         );
     });
-    await nextTick();
+    awaitnextTick();
     assert.verifySteps(
         [],
-        "inner function of throttle should not have been immediately invoked after 2nd call immediately after 1st call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeenimmediatelyinvokedafter2ndcallimmediatelyafter1stcall(throttledwith1sinternalclock)"
     );
 
-    await this.env.testUtils.advanceTime(999);
+    awaitthis.env.testUtils.advanceTime(999);
     assert.verifySteps(
         [],
-        "inner function of throttle should not have been invoked after 999ms of 2nd call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeeninvokedafter999msof2ndcall(throttledwith1sinternalclock)"
     );
 
-    await this.env.testUtils.advanceTime(1);
+    awaitthis.env.testUtils.advanceTime(1);
     assert.verifySteps(
         ['throttle_observed_invoke_2'],
-        "inner function of throttle should not have been invoked after 1s of 2nd call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeeninvokedafter1sof2ndcall(throttledwith1sinternalclock)"
     );
 });
 
-QUnit.test('throttled call reinvocation', async function (assert) {
+QUnit.test('throttledcallreinvocation',asyncfunction(assert){
     assert.expect(11);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    let funcCalledAmount = 0;
-    const throttledFunc = throttle(
+    letfuncCalledAmount=0;
+    constthrottledFunc=throttle(
         this.env,
-        () => {
+        ()=>{
             funcCalledAmount++;
-            return `func_result_${funcCalledAmount}`;
+            return`func_result_${funcCalledAmount}`;
         },
         1000,
-        { silentCancelationErrors: false }
+        {silentCancelationErrors:false}
     );
     this.throttles.push(throttledFunc);
 
-    throttledFunc().then(result => {
+    throttledFunc().then(result=>{
         assert.step('throttle_observed_invoke_1');
         assert.strictEqual(
             result,
             'func_result_1',
-            "throttle call return should forward result of inner func 1"
+            "throttlecallreturnshouldforwardresultofinnerfunc1"
         );
     });
-    await nextTick();
+    awaitnextTick();
     assert.verifySteps(
         ['throttle_observed_invoke_1'],
-        "inner function of throttle should have been invoked on 1st call (immediate return)"
+        "innerfunctionofthrottleshouldhavebeeninvokedon1stcall(immediatereturn)"
     );
 
     throttledFunc()
-        .then(() => {
-            throw new Error("2nd throttle call should not be resolved (should have been canceled by reinvocation)");
+        .then(()=>{
+            thrownewError("2ndthrottlecallshouldnotberesolved(shouldhavebeencanceledbyreinvocation)");
         })
-        .catch(error => {
+        .catch(error=>{
             assert.ok(
-                error instanceof ThrottleReinvokedError,
-                "Should generate a Throttle reinvoked error (from another throttle function call)"
+                errorinstanceofThrottleReinvokedError,
+                "ShouldgenerateaThrottlereinvokederror(fromanotherthrottlefunctioncall)"
             );
             assert.step('throttle_reinvoked_1');
         });
-    await nextTick();
+    awaitnextTick();
     assert.verifySteps(
         [],
-        "inner function of throttle should not have been immediately invoked after 2nd call immediately after 1st call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeenimmediatelyinvokedafter2ndcallimmediatelyafter1stcall(throttledwith1sinternalclock)"
     );
 
-    await this.env.testUtils.advanceTime(999);
+    awaitthis.env.testUtils.advanceTime(999);
     assert.verifySteps(
         [],
-        "inner function of throttle should not have been invoked after 999ms of 2nd call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeeninvokedafter999msof2ndcall(throttledwith1sinternalclock)"
     );
 
     throttledFunc()
-        .then(result => {
+        .then(result=>{
             assert.step('throttle_observed_invoke_2');
             assert.strictEqual(
                 result,
                 'func_result_2',
-                "throttle call return should forward result of inner func 2"
+                "throttlecallreturnshouldforwardresultofinnerfunc2"
             );
         });
-    await nextTick();
+    awaitnextTick();
     assert.verifySteps(
         ['throttle_reinvoked_1'],
-        "2nd throttle call should have been canceled from 3rd throttle call (reinvoked before cooling down phase has ended)"
+        "2ndthrottlecallshouldhavebeencanceledfrom3rdthrottlecall(reinvokedbeforecoolingdownphasehasended)"
     );
 
-    await this.env.testUtils.advanceTime(1);
+    awaitthis.env.testUtils.advanceTime(1);
     assert.verifySteps(
         ['throttle_observed_invoke_2'],
-        "inner function of throttle should have been invoked after 1s of 1st call (throttled with 1s internal clock, 3rd throttle call re-use timer of 2nd throttle call)"
+        "innerfunctionofthrottleshouldhavebeeninvokedafter1sof1stcall(throttledwith1sinternalclock,3rdthrottlecallre-usetimerof2ndthrottlecall)"
     );
 });
 
-QUnit.test('flush throttled call', async function (assert) {
+QUnit.test('flushthrottledcall',asyncfunction(assert){
     assert.expect(9);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    const throttledFunc = throttle(
+    constthrottledFunc=throttle(
         this.env,
-        () => {},
+        ()=>{},
         1000,
     );
     this.throttles.push(throttledFunc);
 
-    throttledFunc().then(() => assert.step('throttle_observed_invoke_1'));
-    await nextTick();
+    throttledFunc().then(()=>assert.step('throttle_observed_invoke_1'));
+    awaitnextTick();
     assert.verifySteps(
         ['throttle_observed_invoke_1'],
-        "inner function of throttle should have been invoked on 1st call (immediate return)"
+        "innerfunctionofthrottleshouldhavebeeninvokedon1stcall(immediatereturn)"
     );
 
-    throttledFunc().then(() => assert.step('throttle_observed_invoke_2'));
-    await nextTick();
+    throttledFunc().then(()=>assert.step('throttle_observed_invoke_2'));
+    awaitnextTick();
     assert.verifySteps(
         [],
-        "inner function of throttle should not have been immediately invoked after 2nd call immediately after 1st call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeenimmediatelyinvokedafter2ndcallimmediatelyafter1stcall(throttledwith1sinternalclock)"
     );
 
-    await this.env.testUtils.advanceTime(10);
+    awaitthis.env.testUtils.advanceTime(10);
     assert.verifySteps(
         [],
-        "inner function of throttle should not have been invoked after 10ms of 2nd call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeeninvokedafter10msof2ndcall(throttledwith1sinternalclock)"
     );
 
     throttledFunc.flush();
-    await nextTick();
+    awaitnextTick();
     assert.verifySteps(
         ['throttle_observed_invoke_2'],
-        "inner function of throttle should have been invoked from 2nd call after flush"
+        "innerfunctionofthrottleshouldhavebeeninvokedfrom2ndcallafterflush"
     );
 
-    throttledFunc().then(() => assert.step('throttle_observed_invoke_3'));
-    await nextTick();
-    await this.env.testUtils.advanceTime(999);
+    throttledFunc().then(()=>assert.step('throttle_observed_invoke_3'));
+    awaitnextTick();
+    awaitthis.env.testUtils.advanceTime(999);
     assert.verifySteps(
         [],
-        "inner function of throttle should not have been invoked after 999ms of 3rd call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeeninvokedafter999msof3rdcall(throttledwith1sinternalclock)"
     );
 
-    await this.env.testUtils.advanceTime(1);
+    awaitthis.env.testUtils.advanceTime(1);
     assert.verifySteps(
         ['throttle_observed_invoke_3'],
-        "inner function of throttle should not have been invoked after 999ms of 3rd call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeeninvokedafter999msof3rdcall(throttledwith1sinternalclock)"
     );
 });
 
-QUnit.test('cancel throttled call', async function (assert) {
+QUnit.test('cancelthrottledcall',asyncfunction(assert){
     assert.expect(10);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    const throttledFunc = throttle(
+    constthrottledFunc=throttle(
         this.env,
-        () => {},
+        ()=>{},
         1000,
-        { silentCancelationErrors: false }
+        {silentCancelationErrors:false}
     );
     this.throttles.push(throttledFunc);
 
-    throttledFunc().then(() => assert.step('throttle_observed_invoke_1'));
-    await nextTick();
+    throttledFunc().then(()=>assert.step('throttle_observed_invoke_1'));
+    awaitnextTick();
     assert.verifySteps(
         ['throttle_observed_invoke_1'],
-        "inner function of throttle should have been invoked on 1st call (immediate return)"
+        "innerfunctionofthrottleshouldhavebeeninvokedon1stcall(immediatereturn)"
     );
 
     throttledFunc()
-        .then(() => {
-            throw new Error("2nd throttle call should not be resolved (should have been canceled)");
+        .then(()=>{
+            thrownewError("2ndthrottlecallshouldnotberesolved(shouldhavebeencanceled)");
         })
-        .catch(error => {
+        .catch(error=>{
             assert.ok(
-                error instanceof ThrottleCanceledError,
-                "Should generate a Throttle canceled error (from `.cancel()`)"
+                errorinstanceofThrottleCanceledError,
+                "ShouldgenerateaThrottlecancelederror(from`.cancel()`)"
             );
             assert.step('throttle_canceled');
         });
-    await nextTick();
+    awaitnextTick();
     assert.verifySteps(
         [],
-        "inner function of throttle should not have been immediately invoked after 2nd call immediately after 1st call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeenimmediatelyinvokedafter2ndcallimmediatelyafter1stcall(throttledwith1sinternalclock)"
     );
 
-    await this.env.testUtils.advanceTime(500);
+    awaitthis.env.testUtils.advanceTime(500);
     assert.verifySteps(
         [],
-        "inner function of throttle should not have been invoked after 500ms of 2nd call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeeninvokedafter500msof2ndcall(throttledwith1sinternalclock)"
     );
 
     throttledFunc.cancel();
-    await nextTick();
+    awaitnextTick();
     assert.verifySteps(
         ['throttle_canceled'],
-        "2nd throttle function call should have been canceled"
+        "2ndthrottlefunctioncallshouldhavebeencanceled"
     );
 
-    throttledFunc().then(() => assert.step('throttle_observed_invoke_3'));
-    await nextTick();
+    throttledFunc().then(()=>assert.step('throttle_observed_invoke_3'));
+    awaitnextTick();
     assert.verifySteps(
         [],
-        "3rd throttle function call should not have invoked inner function yet (cancel reuses inner clock of throttle)"
+        "3rdthrottlefunctioncallshouldnothaveinvokedinnerfunctionyet(cancelreusesinnerclockofthrottle)"
     );
 
-    await this.env.testUtils.advanceTime(500);
+    awaitthis.env.testUtils.advanceTime(500);
     assert.verifySteps(
         ['throttle_observed_invoke_3'],
-        "3rd throttle function call should have invoke inner function after 500ms (cancel reuses inner clock of throttle which was at 500ms in, throttle set at 1ms)"
+        "3rdthrottlefunctioncallshouldhaveinvokeinnerfunctionafter500ms(cancelreusesinnerclockofthrottlewhichwasat500msin,throttlesetat1ms)"
     );
 });
 
-QUnit.test('clear throttled call', async function (assert) {
+QUnit.test('clearthrottledcall',asyncfunction(assert){
     assert.expect(9);
 
-    await this.start({
-        hasTimeControl: true,
+    awaitthis.start({
+        hasTimeControl:true,
     });
 
-    const throttledFunc = throttle(
+    constthrottledFunc=throttle(
         this.env,
-        () => {},
+        ()=>{},
         1000,
-        { silentCancelationErrors: false }
+        {silentCancelationErrors:false}
     );
     this.throttles.push(throttledFunc);
 
-    throttledFunc().then(() => assert.step('throttle_observed_invoke_1'));
-    await nextTick();
+    throttledFunc().then(()=>assert.step('throttle_observed_invoke_1'));
+    awaitnextTick();
     assert.verifySteps(
         ['throttle_observed_invoke_1'],
-        "inner function of throttle should have been invoked on 1st call (immediate return)"
+        "innerfunctionofthrottleshouldhavebeeninvokedon1stcall(immediatereturn)"
     );
 
     throttledFunc()
-        .then(() => {
-            throw new Error("2nd throttle call should not be resolved (should have been canceled from clear)");
+        .then(()=>{
+            thrownewError("2ndthrottlecallshouldnotberesolved(shouldhavebeencanceledfromclear)");
         })
-        .catch(error => {
+        .catch(error=>{
             assert.ok(
-                error instanceof ThrottleCanceledError,
-                "Should generate a Throttle canceled error (from `.clear()`)"
+                errorinstanceofThrottleCanceledError,
+                "ShouldgenerateaThrottlecancelederror(from`.clear()`)"
             );
             assert.step('throttle_canceled');
         });
-    await nextTick();
+    awaitnextTick();
     assert.verifySteps(
         [],
-        "inner function of throttle should not have been immediately invoked after 2nd call immediately after 1st call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeenimmediatelyinvokedafter2ndcallimmediatelyafter1stcall(throttledwith1sinternalclock)"
     );
 
-    await this.env.testUtils.advanceTime(500);
+    awaitthis.env.testUtils.advanceTime(500);
     assert.verifySteps(
         [],
-        "inner function of throttle should not have been invoked after 500ms of 2nd call (throttled with 1s internal clock)"
+        "innerfunctionofthrottleshouldnothavebeeninvokedafter500msof2ndcall(throttledwith1sinternalclock)"
     );
 
     throttledFunc.clear();
-    await nextTick();
+    awaitnextTick();
     assert.verifySteps(
         ['throttle_canceled'],
-        "2nd throttle function call should have been canceled (from `.clear()`)"
+        "2ndthrottlefunctioncallshouldhavebeencanceled(from`.clear()`)"
     );
 
-    throttledFunc().then(() => assert.step('throttle_observed_invoke_3'));
-    await nextTick();
+    throttledFunc().then(()=>assert.step('throttle_observed_invoke_3'));
+    awaitnextTick();
     assert.verifySteps(
         ['throttle_observed_invoke_3'],
-        "3rd throttle function call should have invoke inner function immediately (`.clear()` flushes throttle)"
+        "3rdthrottlefunctioncallshouldhaveinvokeinnerfunctionimmediately(`.clear()`flushesthrottle)"
     );
 });
 

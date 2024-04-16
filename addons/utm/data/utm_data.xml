@@ -1,77 +1,77 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <!-- UTM Stage -->
-        <!-- This one is kept in data instead of demo to avoid crashing if the user starts creating campaigns
-        before stages have been created, as they are mandatory -->
-        <record id="default_utm_stage" model="utm.stage">
-            <field name="name">New</field>
-            <field name="sequence">10</field>
+        <!--UTMStage-->
+        <!--Thisoneiskeptindatainsteadofdemotoavoidcrashingiftheuserstartscreatingcampaigns
+        beforestageshavebeencreated,astheyaremandatory-->
+        <recordid="default_utm_stage"model="utm.stage">
+            <fieldname="name">New</field>
+            <fieldname="sequence">10</field>
         </record>
 
-        <!-- UTM Source -->
-        <record model="utm.source" id="utm_source_search_engine">
-            <field name="name">Search engine</field>
+        <!--UTMSource-->
+        <recordmodel="utm.source"id="utm_source_search_engine">
+            <fieldname="name">Searchengine</field>
         </record>
-        <record model="utm.source" id="utm_source_mailing">
-            <field name="name">Lead Recall</field>
+        <recordmodel="utm.source"id="utm_source_mailing">
+            <fieldname="name">LeadRecall</field>
         </record>
-        <record model="utm.source" id="utm_source_newsletter">
-            <field name="name">Newsletter</field>
+        <recordmodel="utm.source"id="utm_source_newsletter">
+            <fieldname="name">Newsletter</field>
         </record>
-        <record model="utm.source" id="utm_source_facebook">
-            <field name="name">Facebook</field>
+        <recordmodel="utm.source"id="utm_source_facebook">
+            <fieldname="name">Facebook</field>
         </record>
-        <record model="utm.source" id="utm_source_twitter">
-            <field name="name">Twitter</field>
+        <recordmodel="utm.source"id="utm_source_twitter">
+            <fieldname="name">Twitter</field>
         </record>
-        <record model="utm.source" id="utm_source_linkedin">
-            <field name="name">LinkedIn</field>
+        <recordmodel="utm.source"id="utm_source_linkedin">
+            <fieldname="name">LinkedIn</field>
         </record>
-        <record model="utm.source" id="utm_source_monster">
-            <field name="name">Monster</field>
+        <recordmodel="utm.source"id="utm_source_monster">
+            <fieldname="name">Monster</field>
         </record>
-        <record model="utm.source" id="utm_source_glassdoor">
-            <field name="name">Glassdoor</field>
+        <recordmodel="utm.source"id="utm_source_glassdoor">
+            <fieldname="name">Glassdoor</field>
         </record>
-        <record model="utm.source" id="utm_source_craigslist">
-            <field name="name">Craigslist</field>
-        </record>
-
-        <!-- UTM Medium -->
-        <record model="utm.medium" id="utm_medium_website">
-            <field name="name">Website</field>
-        </record>
-        <record model="utm.medium" id="utm_medium_phone">
-            <field name="name">Phone</field>
-        </record>
-        <record model="utm.medium" id="utm_medium_direct">
-            <field name="name">Direct</field>
-        </record>
-        <record model="utm.medium" id="utm_medium_email">
-            <field name="name">Email</field>
-        </record>
-        <record model="utm.medium" id="utm_medium_banner">
-            <field name="name">Banner</field>
-        </record>
-        <record model="utm.medium" id="utm_medium_twitter">
-            <field name="name">Twitter</field>
-        </record>
-        <record model="utm.medium" id="utm_medium_facebook">
-            <field name="name">Facebook</field>
-        </record>
-        <record model="utm.medium" id="utm_medium_linkedin">
-            <field name="name">LinkedIn</field>
-        </record>
-        <record model="utm.medium" id="utm_medium_television">
-            <field name="name">Television</field>
-        </record>
-        <record model="utm.medium" id="utm_medium_google_adwords">
-            <field name="name">Google Adwords</field>
+        <recordmodel="utm.source"id="utm_source_craigslist">
+            <fieldname="name">Craigslist</field>
         </record>
 
-        <!-- UTM Tag -->
-        <record id="utm_tag_1" model="utm.tag">
-            <field name="name">Marketing</field>
-            <field name="color" eval="1"/>
+        <!--UTMMedium-->
+        <recordmodel="utm.medium"id="utm_medium_website">
+            <fieldname="name">Website</field>
+        </record>
+        <recordmodel="utm.medium"id="utm_medium_phone">
+            <fieldname="name">Phone</field>
+        </record>
+        <recordmodel="utm.medium"id="utm_medium_direct">
+            <fieldname="name">Direct</field>
+        </record>
+        <recordmodel="utm.medium"id="utm_medium_email">
+            <fieldname="name">Email</field>
+        </record>
+        <recordmodel="utm.medium"id="utm_medium_banner">
+            <fieldname="name">Banner</field>
+        </record>
+        <recordmodel="utm.medium"id="utm_medium_twitter">
+            <fieldname="name">Twitter</field>
+        </record>
+        <recordmodel="utm.medium"id="utm_medium_facebook">
+            <fieldname="name">Facebook</field>
+        </record>
+        <recordmodel="utm.medium"id="utm_medium_linkedin">
+            <fieldname="name">LinkedIn</field>
+        </record>
+        <recordmodel="utm.medium"id="utm_medium_television">
+            <fieldname="name">Television</field>
+        </record>
+        <recordmodel="utm.medium"id="utm_medium_google_adwords">
+            <fieldname="name">GoogleAdwords</field>
+        </record>
+
+        <!--UTMTag-->
+        <recordid="utm_tag_1"model="utm.tag">
+            <fieldname="name">Marketing</field>
+            <fieldname="color"eval="1"/>
         </record>
 </flectra>

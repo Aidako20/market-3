@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="InvoiceButton" owl="1">
-        <div class="control-button" t-att-class="{ highlight: isHighlighted }">
-            <i class="fa fa-file-pdf-o"></i>
-            <span> </span>
-            <span><t t-esc="commandName"></t></span>
+    <tt-name="InvoiceButton"owl="1">
+        <divclass="control-button"t-att-class="{highlight:isHighlighted}">
+            <iclass="fafa-file-pdf-o"></i>
+            <span></span>
+            <span><tt-esc="commandName"></t></span>
         </div>
     </t>
 

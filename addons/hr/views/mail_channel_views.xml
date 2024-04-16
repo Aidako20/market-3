@@ -1,14 +1,14 @@
-<?xml version="1.0" ?>
+<?xmlversion="1.0"?>
 <flectra><data>
-    <record id="mail_channel_view_form_" model="ir.ui.view">
-        <field name="name">mail.channel.view.form.inherit.hr</field>
-        <field name="model">mail.channel</field>
-        <field name="inherit_id" ref="mail.mail_channel_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='group_ids']" position="after">
-                <field name="subscription_department_ids" widget="many2many_tags"
-                    string="Auto Subscribe Departments"/>
+    <recordid="mail_channel_view_form_"model="ir.ui.view">
+        <fieldname="name">mail.channel.view.form.inherit.hr</field>
+        <fieldname="model">mail.channel</field>
+        <fieldname="inherit_id"ref="mail.mail_channel_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='group_ids']"position="after">
+                <fieldname="subscription_department_ids"widget="many2many_tags"
+                    string="AutoSubscribeDepartments"/>
             </xpath>
         </field>
     </record>
-</data></flectra> 
+</data></flectra>

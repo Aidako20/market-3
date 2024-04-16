@@ -1,51 +1,51 @@
-flectra.define('web.public.lazyloader', function (require) {
-'use strict';
+flectra.define('web.public.lazyloader',function(require){
+'usestrict';
 
-var blockEvents = ['submit', 'click'];
-var blockFunction = function (ev) {
+varblockEvents=['submit','click'];
+varblockFunction=function(ev){
     ev.preventDefault();
     ev.stopImmediatePropagation();
 };
 
-var waitingLazy = false;
+varwaitingLazy=false;
 
 /**
- * Blocks the DOM sections which explicitly require the lazy loaded JS to be
- * working (those sections should be marked with the 'o_wait_lazy_js' class).
+ *BlockstheDOMsectionswhichexplicitlyrequirethelazyloadedJStobe
+ *working(thosesectionsshouldbemarkedwiththe'o_wait_lazy_js'class).
  *
- * @see stopWaitingLazy
+ *@seestopWaitingLazy
  */
-function waitLazy() {
-    if (waitingLazy) {
+functionwaitLazy(){
+    if(waitingLazy){
         return;
     }
-    waitingLazy = true;
+    waitingLazy=true;
 
-    var lazyEls = document.querySelectorAll('.o_wait_lazy_js');
-    for (var i = 0; i < lazyEls.length; i++) {
-        var element = lazyEls[i];
-        blockEvents.forEach(function (evType) {
-            element.addEventListener(evType, blockFunction);
+    varlazyEls=document.querySelectorAll('.o_wait_lazy_js');
+    for(vari=0;i<lazyEls.length;i++){
+        varelement=lazyEls[i];
+        blockEvents.forEach(function(evType){
+            element.addEventListener(evType,blockFunction);
         });
     }
 
     document.body.classList.add('o_lazy_js_waiting');
 }
 /**
- * Unblocks the DOM sections blocked by @see waitLazy and removes the related
- * 'o_wait_lazy_js' class from the whole DOM.
+ *UnblockstheDOMsectionsblockedby@seewaitLazyandremovestherelated
+ *'o_wait_lazy_js'classfromthewholeDOM.
  */
-function stopWaitingLazy() {
-    if (!waitingLazy) {
+functionstopWaitingLazy(){
+    if(!waitingLazy){
         return;
     }
-    waitingLazy = false;
+    waitingLazy=false;
 
-    var lazyEls = document.querySelectorAll('.o_wait_lazy_js');
-    for (var i = 0; i < lazyEls.length; i++) {
-        var element = lazyEls[i];
-        blockEvents.forEach(function (evType) {
-            element.removeEventListener(evType, blockFunction);
+    varlazyEls=document.querySelectorAll('.o_wait_lazy_js');
+    for(vari=0;i<lazyEls.length;i++){
+        varelement=lazyEls[i];
+        blockEvents.forEach(function(evType){
+            element.removeEventListener(evType,blockFunction);
         });
         element.classList.remove('o_wait_lazy_js');
     }
@@ -53,63 +53,63 @@ function stopWaitingLazy() {
     document.body.classList.remove('o_lazy_js_waiting');
 }
 
-// Start waiting for lazy loading as soon as the DOM is available
-if (document.readyState !== 'loading') {
+//StartwaitingforlazyloadingassoonastheDOMisavailable
+if(document.readyState!=='loading'){
     waitLazy();
-} else {
-    document.addEventListener('DOMContentLoaded', function () {
+}else{
+    document.addEventListener('DOMContentLoaded',function(){
         waitLazy();
     });
 }
 
-// As soon as everything is fully loaded, start loading all the remaining JS
-// and unblock the related DOM section when all of it have been loaded and
-// executed
-var doResolve = null;
-var _allScriptsLoaded = new Promise(function (resolve) {
-    if (doResolve) {
+//Assoonaseverythingisfullyloaded,startloadingalltheremainingJS
+//andunblocktherelatedDOMsectionwhenallofithavebeenloadedand
+//executed
+vardoResolve=null;
+var_allScriptsLoaded=newPromise(function(resolve){
+    if(doResolve){
         resolve();
-    } else {
-        doResolve = resolve;
+    }else{
+        doResolve=resolve;
     }
-}).then(function () {
+}).then(function(){
     stopWaitingLazy();
 });
-if (document.readyState === 'complete') {
-    setTimeout(_loadScripts, 0);
-} else {
-    window.addEventListener('load', function () {
-        setTimeout(_loadScripts, 0);
+if(document.readyState==='complete'){
+    setTimeout(_loadScripts,0);
+}else{
+    window.addEventListener('load',function(){
+        setTimeout(_loadScripts,0);
     });
 }
 
 /**
- * @param {DOMElement[]} scripts
- * @param {integer} index
+ *@param{DOMElement[]}scripts
+ *@param{integer}index
  */
-function _loadScripts(scripts, index) {
-    if (scripts === undefined) {
-        scripts = document.querySelectorAll('script[data-src]');
+function_loadScripts(scripts,index){
+    if(scripts===undefined){
+        scripts=document.querySelectorAll('script[data-src]');
     }
-    if (index === undefined) {
-        index = 0;
+    if(index===undefined){
+        index=0;
     }
-    if (index >= scripts.length) {
-        if (typeof doResolve === 'function') {
+    if(index>=scripts.length){
+        if(typeofdoResolve==='function'){
             doResolve();
-        } else {
-            doResolve = true;
+        }else{
+            doResolve=true;
         }
         return;
     }
-    var script = scripts[index];
-    script.addEventListener('load', _loadScripts.bind(this, scripts, index + 1));
-    script.src = script.dataset.src;
+    varscript=scripts[index];
+    script.addEventListener('load',_loadScripts.bind(this,scripts,index+1));
+    script.src=script.dataset.src;
     script.removeAttribute('data-src');
 }
 
-return {
-    loadScripts: _loadScripts,
-    allScriptsLoaded: _allScriptsLoaded,
+return{
+    loadScripts:_loadScripts,
+    allScriptsLoaded:_allScriptsLoaded,
 };
 });

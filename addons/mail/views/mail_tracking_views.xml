@@ -1,75 +1,75 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
     <data>
 
-        <record model="ir.ui.view" id="view_mail_tracking_value_tree">
-            <field name="name">mail.tracking.value.tree</field>
-            <field name="model">mail.tracking.value</field>
-            <field name="priority">12</field>
-            <field name="arch" type="xml">
-                <tree string="Tracking Value">
-                    <field name="field"/>
-                    <field name="old_value_integer"/>
-                    <field name="old_value_float"/>
-                    <field name="old_value_char"/>
-                    <field name="old_value_text"/>
-                    <field name="old_value_datetime"/>
-                    <field name="new_value_integer"/>
-                    <field name="new_value_float"/>
-                    <field name="new_value_char"/>
-                    <field name="new_value_text"/>
-                    <field name="new_value_datetime"/>
-                    <field name="mail_message_id"/>
+        <recordmodel="ir.ui.view"id="view_mail_tracking_value_tree">
+            <fieldname="name">mail.tracking.value.tree</field>
+            <fieldname="model">mail.tracking.value</field>
+            <fieldname="priority">12</field>
+            <fieldname="arch"type="xml">
+                <treestring="TrackingValue">
+                    <fieldname="field"/>
+                    <fieldname="old_value_integer"/>
+                    <fieldname="old_value_float"/>
+                    <fieldname="old_value_char"/>
+                    <fieldname="old_value_text"/>
+                    <fieldname="old_value_datetime"/>
+                    <fieldname="new_value_integer"/>
+                    <fieldname="new_value_float"/>
+                    <fieldname="new_value_char"/>
+                    <fieldname="new_value_text"/>
+                    <fieldname="new_value_datetime"/>
+                    <fieldname="mail_message_id"/>
                 </tree>
             </field>
         </record>
 
-        <record model="ir.ui.view" id="view_mail_tracking_value_form">
-            <field name="name">mail.tracking.value.form</field>
-            <field name="model">mail.tracking.value</field>
-            <field name="arch" type="xml">
-                <form string="Tracking Value">
+        <recordmodel="ir.ui.view"id="view_mail_tracking_value_form">
+            <fieldname="name">mail.tracking.value.form</field>
+            <fieldname="model">mail.tracking.value</field>
+            <fieldname="arch"type="xml">
+                <formstring="TrackingValue">
                     <sheet>
-                        <group name="field_details" string="Field details">
-                            <field name="field"/>
-                            <field name="field_desc"/>
-                            <field name="field_type"/>
-                            <field name="tracking_sequence"/>
+                        <groupname="field_details"string="Fielddetails">
+                            <fieldname="field"/>
+                            <fieldname="field_desc"/>
+                            <fieldname="field_type"/>
+                            <fieldname="tracking_sequence"/>
                         </group>
-                        <group name="values">
-                            <group name="old_values" string="Old values">
-                                <field name="old_value_integer"/>
-                                <field name="old_value_float"/>
-                                <field name="old_value_char"/>
-                                <field name="old_value_text"/>
-                                <field name="old_value_datetime"/>
+                        <groupname="values">
+                            <groupname="old_values"string="Oldvalues">
+                                <fieldname="old_value_integer"/>
+                                <fieldname="old_value_float"/>
+                                <fieldname="old_value_char"/>
+                                <fieldname="old_value_text"/>
+                                <fieldname="old_value_datetime"/>
                             </group>
-                            <group name="new_values" string="New values">
-                                <field name="new_value_integer"/>
-                                <field name="new_value_float"/>
-                                <field name="new_value_char"/>
-                                <field name="new_value_text"/>
-                                <field name="new_value_datetime"/>
+                            <groupname="new_values"string="Newvalues">
+                                <fieldname="new_value_integer"/>
+                                <fieldname="new_value_float"/>
+                                <fieldname="new_value_char"/>
+                                <fieldname="new_value_text"/>
+                                <fieldname="new_value_datetime"/>
                             </group>
                         </group>
-                        <group string='Related Message'>
-                            <field name="mail_message_id"/>
+                        <groupstring='RelatedMessage'>
+                            <fieldname="mail_message_id"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="action_view_mail_tracking_value">
-            <field name="name">Tracking Values</field>
-            <field name="res_model">mail.tracking.value</field>
-            <field name="view_mode">tree,form</field>
+        <recordmodel="ir.actions.act_window"id="action_view_mail_tracking_value">
+            <fieldname="name">TrackingValues</field>
+            <fieldname="res_model">mail.tracking.value</field>
+            <fieldname="view_mode">tree,form</field>
         </record>
-        <menuitem name="Tracking Values"
+        <menuitemname="TrackingValues"
             id="menu_mail_tracking_value"
             parent="mail.mail_menu_technical"
             action="action_view_mail_tracking_value"
             sequence="5"/>
 
     </data>
-</flectra> 
+</flectra>

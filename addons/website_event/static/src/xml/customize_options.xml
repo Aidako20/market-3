@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="website_event.customize_options" id="event_options">
-        <li class="dropdown-header">Event Specific</li>
-        <a href="#" name="display-website-menu" class="dropdown-item" role="menuitem">
-            <label class="o_switch" for="display-website-menu">
-                <input id="display-website-menu" type="checkbox"/>
+    <tt-name="website_event.customize_options"id="event_options">
+        <liclass="dropdown-header">EventSpecific</li>
+        <ahref="#"name="display-website-menu"class="dropdown-item"role="menuitem">
+            <labelclass="o_switch"for="display-website-menu">
+                <inputid="display-website-menu"type="checkbox"/>
                 <span/>
-                Event Sub-menu
+                EventSub-menu
             </label>
         </a>
     </t>

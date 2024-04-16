@@ -1,67 +1,67 @@
-flectra.define('mail/static/src/components/message_author_prefix/message_author_prefix.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/message_author_prefix/message_author_prefix.js',function(require){
+'usestrict';
 
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-const { Component } = owl;
+const{Component}=owl;
 
-class MessageAuthorPrefix extends Component {
+classMessageAuthorPrefixextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps();
-        useStore(props => {
-            const message = this.env.models['mail.message'].get(props.messageLocalId);
-            const author = message ? message.author : undefined;
-            const thread = props.threadLocalId
-                ? this.env.models['mail.thread'].get(props.threadLocalId)
-                : undefined;
-            return {
-                author: author ? author.__state : undefined,
-                currentPartner: this.env.messaging.currentPartner
-                    ? this.env.messaging.currentPartner.__state
-                    : undefined,
-                message: message ? message.__state : undefined,
-                thread: thread ? thread.__state : undefined,
+        useStore(props=>{
+            constmessage=this.env.models['mail.message'].get(props.messageLocalId);
+            constauthor=message?message.author:undefined;
+            constthread=props.threadLocalId
+                ?this.env.models['mail.thread'].get(props.threadLocalId)
+                :undefined;
+            return{
+                author:author?author.__state:undefined,
+                currentPartner:this.env.messaging.currentPartner
+                    ?this.env.messaging.currentPartner.__state
+                    :undefined,
+                message:message?message.__state:undefined,
+                thread:thread?thread.__state:undefined,
             };
         });
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {mail.message}
+     *@returns{mail.message}
      */
-    get message() {
-        return this.env.models['mail.message'].get(this.props.messageLocalId);
+    getmessage(){
+        returnthis.env.models['mail.message'].get(this.props.messageLocalId);
     }
 
     /**
-     * @returns {mail.thread|undefined}
+     *@returns{mail.thread|undefined}
      */
-    get thread() {
-        return this.env.models['mail.thread'].get(this.props.threadLocalId);
+    getthread(){
+        returnthis.env.models['mail.thread'].get(this.props.threadLocalId);
     }
 
 }
 
-Object.assign(MessageAuthorPrefix, {
-    props: {
-        messageLocalId: String,
-        threadLocalId: {
-            type: String,
-            optional: true,
+Object.assign(MessageAuthorPrefix,{
+    props:{
+        messageLocalId:String,
+        threadLocalId:{
+            type:String,
+            optional:true,
         },
     },
-    template: 'mail.MessageAuthorPrefix',
+    template:'mail.MessageAuthorPrefix',
 });
 
-return MessageAuthorPrefix;
+returnMessageAuthorPrefix;
 
 });

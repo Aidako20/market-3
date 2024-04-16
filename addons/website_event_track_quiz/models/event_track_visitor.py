@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class TrackVisitor(models.Model):
-    _name = 'event.track.visitor'
-    _inherit = ['event.track.visitor']
+classTrackVisitor(models.Model):
+    _name='event.track.visitor'
+    _inherit=['event.track.visitor']
 
-    quiz_completed = fields.Boolean('Completed')
-    quiz_points = fields.Integer("Quiz Points", default=0)
+    quiz_completed=fields.Boolean('Completed')
+    quiz_points=fields.Integer("QuizPoints",default=0)

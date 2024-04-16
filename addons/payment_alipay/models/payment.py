@@ -1,226 +1,226 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
+importlogging
 
-from hashlib import md5
-from werkzeug import urls
+fromhashlibimportmd5
+fromwerkzeugimporturls
 
-from flectra import api, fields, models, _
-from flectra.tools.float_utils import float_compare
-from flectra.addons.payment_alipay.controllers.main import AlipayController
-from flectra.addons.payment.models.payment_acquirer import ValidationError
+fromflectraimportapi,fields,models,_
+fromflectra.tools.float_utilsimportfloat_compare
+fromflectra.addons.payment_alipay.controllers.mainimportAlipayController
+fromflectra.addons.payment.models.payment_acquirerimportValidationError
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class PaymentAcquirer(models.Model):
-    _inherit = 'payment.acquirer'
+classPaymentAcquirer(models.Model):
+    _inherit='payment.acquirer'
 
-    provider = fields.Selection(selection_add=[
-        ('alipay', 'Alipay')
-    ], ondelete={'alipay': 'set default'})
-    alipay_payment_method = fields.Selection([
-        ('express_checkout', 'Express Checkout (only for Chinese Merchant)'),
-        ('standard_checkout', 'Cross-border'),
-    ], string='Account', default='express_checkout',
-        help="  * Cross-border: For the Overseas seller \n  * Express Checkout: For the Chinese Seller")
-    alipay_merchant_partner_id = fields.Char(
-        string='Merchant Partner ID', required_if_provider='alipay', groups='base.group_user',
-        help='The Merchant Partner ID is used to ensure communications coming from Alipay are valid and secured.')
-    alipay_md5_signature_key = fields.Char(
-        string='MD5 Signature Key', required_if_provider='alipay', groups='base.group_user',
-        help="The MD5 private key is the 32-byte string which is composed of English letters and numbers.")
-    alipay_seller_email = fields.Char(string='Alipay Seller Email', groups='base.group_user')
+    provider=fields.Selection(selection_add=[
+        ('alipay','Alipay')
+    ],ondelete={'alipay':'setdefault'})
+    alipay_payment_method=fields.Selection([
+        ('express_checkout','ExpressCheckout(onlyforChineseMerchant)'),
+        ('standard_checkout','Cross-border'),
+    ],string='Account',default='express_checkout',
+        help=" *Cross-border:FortheOverseasseller\n *ExpressCheckout:FortheChineseSeller")
+    alipay_merchant_partner_id=fields.Char(
+        string='MerchantPartnerID',required_if_provider='alipay',groups='base.group_user',
+        help='TheMerchantPartnerIDisusedtoensurecommunicationscomingfromAlipayarevalidandsecured.')
+    alipay_md5_signature_key=fields.Char(
+        string='MD5SignatureKey',required_if_provider='alipay',groups='base.group_user',
+        help="TheMD5privatekeyisthe32-bytestringwhichiscomposedofEnglishlettersandnumbers.")
+    alipay_seller_email=fields.Char(string='AlipaySellerEmail',groups='base.group_user')
 
-    def _get_feature_support(self):
-        res = super(PaymentAcquirer, self)._get_feature_support()
+    def_get_feature_support(self):
+        res=super(PaymentAcquirer,self)._get_feature_support()
         res['fees'].append('alipay')
-        return res
+        returnres
 
     @api.model
-    def _get_alipay_urls(self, environment):
-        """ Alipay URLS """
-        if environment == 'prod':
-            return 'https://mapi.alipay.com/gateway.do'
-        return 'https://openapi.alipaydev.com/gateway.do'
+    def_get_alipay_urls(self,environment):
+        """AlipayURLS"""
+        ifenvironment=='prod':
+            return'https://mapi.alipay.com/gateway.do'
+        return'https://openapi.alipaydev.com/gateway.do'
 
-    def alipay_compute_fees(self, amount, currency_id, country_id):
-        """ Compute alipay fees.
+    defalipay_compute_fees(self,amount,currency_id,country_id):
+        """Computealipayfees.
 
-            :param float amount: the amount to pay
-            :param integer country_id: an ID of a res.country, or None. This is
-                                       the customer's country, to be compared to
-                                       the acquirer company country.
-            :return float fees: computed fees
+            :paramfloatamount:theamounttopay
+            :paramintegercountry_id:anIDofares.country,orNone.Thisis
+                                       thecustomer'scountry,tobecomparedto
+                                       theacquirercompanycountry.
+            :returnfloatfees:computedfees
         """
-        fees = 0.0
-        if self.fees_active:
-            country = self.env['res.country'].browse(country_id)
-            if country and self.company_id.sudo().country_id.id == country.id:
-                percentage = self.fees_dom_var
-                fixed = self.fees_dom_fixed
+        fees=0.0
+        ifself.fees_active:
+            country=self.env['res.country'].browse(country_id)
+            ifcountryandself.company_id.sudo().country_id.id==country.id:
+                percentage=self.fees_dom_var
+                fixed=self.fees_dom_fixed
             else:
-                percentage = self.fees_int_var
-                fixed = self.fees_int_fixed
-            fees = (percentage / 100.0 * amount + fixed) / (1 - percentage / 100.0)
-        return fees
+                percentage=self.fees_int_var
+                fixed=self.fees_int_fixed
+            fees=(percentage/100.0*amount+fixed)/(1-percentage/100.0)
+        returnfees
 
-    def _build_sign(self, val):
-        # Rearrange parameters in the data set alphabetically
-        data_to_sign = sorted(val.items())
-        # Exclude parameters that should not be signed
-        data_to_sign = ["{}={}".format(k, v) for k, v in data_to_sign if k not in ['sign', 'sign_type', 'reference']]
-        # And connect rearranged parameters with &
-        data_string = '&'.join(data_to_sign)
-        data_string += self.alipay_md5_signature_key
-        return md5(data_string.encode('utf-8')).hexdigest()
+    def_build_sign(self,val):
+        #Rearrangeparametersinthedatasetalphabetically
+        data_to_sign=sorted(val.items())
+        #Excludeparametersthatshouldnotbesigned
+        data_to_sign=["{}={}".format(k,v)fork,vindata_to_signifknotin['sign','sign_type','reference']]
+        #Andconnectrearrangedparameterswith&
+        data_string='&'.join(data_to_sign)
+        data_string+=self.alipay_md5_signature_key
+        returnmd5(data_string.encode('utf-8')).hexdigest()
 
-    def _get_alipay_tx_values(self, values):
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+    def_get_alipay_tx_values(self,values):
+        base_url=self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
-        alipay_tx_values = ({
-            '_input_charset': 'utf-8',
-            'notify_url': urls.url_join(base_url, AlipayController._notify_url),
-            'out_trade_no': values.get('reference'),
-            'partner': self.alipay_merchant_partner_id,
-            'return_url': urls.url_join(base_url, AlipayController._return_url),
-            'subject': values.get('reference'),
-            'total_fee': '%.2f' % (values.get('amount') + values.get('fees')),
+        alipay_tx_values=({
+            '_input_charset':'utf-8',
+            'notify_url':urls.url_join(base_url,AlipayController._notify_url),
+            'out_trade_no':values.get('reference'),
+            'partner':self.alipay_merchant_partner_id,
+            'return_url':urls.url_join(base_url,AlipayController._return_url),
+            'subject':values.get('reference'),
+            'total_fee':'%.2f'%(values.get('amount')+values.get('fees')),
         })
-        if self.alipay_payment_method == 'standard_checkout':
+        ifself.alipay_payment_method=='standard_checkout':
             alipay_tx_values.update({
-                'service': 'create_forex_trade',
-                'product_code': 'NEW_OVERSEAS_SELLER',
-                'currency': values.get('currency').name,
+                'service':'create_forex_trade',
+                'product_code':'NEW_OVERSEAS_SELLER',
+                'currency':values.get('currency').name,
             })
         else:
             alipay_tx_values.update({
-                'service': 'create_direct_pay_by_user',
-                'payment_type': 1,
-                'seller_email': self.alipay_seller_email,
+                'service':'create_direct_pay_by_user',
+                'payment_type':1,
+                'seller_email':self.alipay_seller_email,
             })
-        sign = self._build_sign(alipay_tx_values)
+        sign=self._build_sign(alipay_tx_values)
         alipay_tx_values.update({
-            'sign_type': 'MD5',
-            'sign': sign,
+            'sign_type':'MD5',
+            'sign':sign,
         })
-        return alipay_tx_values
+        returnalipay_tx_values
 
-    def alipay_form_generate_values(self, values):
+    defalipay_form_generate_values(self,values):
         values.update(self._get_alipay_tx_values(values))
-        return values
+        returnvalues
 
-    def alipay_get_form_action_url(self):
+    defalipay_get_form_action_url(self):
         self.ensure_one()
-        environment = 'prod' if self.state == 'enabled' else 'test'
-        return self._get_alipay_urls(environment)
+        environment='prod'ifself.state=='enabled'else'test'
+        returnself._get_alipay_urls(environment)
 
 
-class PaymentTransaction(models.Model):
-    _inherit = 'payment.transaction'
+classPaymentTransaction(models.Model):
+    _inherit='payment.transaction'
 
-    def _check_alipay_configuration(self, vals):
-        acquirer_id = int(vals.get('acquirer_id'))
-        acquirer = self.env['payment.acquirer'].sudo().browse(acquirer_id)
-        if acquirer and acquirer.provider == 'alipay' and acquirer.alipay_payment_method == 'express_checkout':
-            currency_id = int(vals.get('currency_id'))
-            if currency_id:
-                currency = self.env['res.currency'].sudo().browse(currency_id)
-                if currency and currency.name != 'CNY':
-                    _logger.info("Only CNY currency is allowed for Alipay Express Checkout")
-                    raise ValidationError(_("""
-                        Only transactions in Chinese Yuan (CNY) are allowed for Alipay Express Checkout.\n
-                        If you wish to use another currency than CNY for your transactions, switch your
-                        configuration to a Cross-border account on the Alipay payment acquirer in Flectra.
+    def_check_alipay_configuration(self,vals):
+        acquirer_id=int(vals.get('acquirer_id'))
+        acquirer=self.env['payment.acquirer'].sudo().browse(acquirer_id)
+        ifacquirerandacquirer.provider=='alipay'andacquirer.alipay_payment_method=='express_checkout':
+            currency_id=int(vals.get('currency_id'))
+            ifcurrency_id:
+                currency=self.env['res.currency'].sudo().browse(currency_id)
+                ifcurrencyandcurrency.name!='CNY':
+                    _logger.info("OnlyCNYcurrencyisallowedforAlipayExpressCheckout")
+                    raiseValidationError(_("""
+                        OnlytransactionsinChineseYuan(CNY)areallowedforAlipayExpressCheckout.\n
+                        IfyouwishtouseanothercurrencythanCNYforyourtransactions,switchyour
+                        configurationtoaCross-borderaccountontheAlipaypaymentacquirerinFlectra.
                     """))
-        return True
+        returnTrue
 
-    def write(self, vals):
-        if vals.get('currency_id') or vals.get('acquirer_id'):
-            for payment in self:
-                check_vals = {
-                    'acquirer_id': vals.get('acquirer_id', payment.acquirer_id.id),
-                    'currency_id': vals.get('currency_id', payment.currency_id.id)
+    defwrite(self,vals):
+        ifvals.get('currency_id')orvals.get('acquirer_id'):
+            forpaymentinself:
+                check_vals={
+                    'acquirer_id':vals.get('acquirer_id',payment.acquirer_id.id),
+                    'currency_id':vals.get('currency_id',payment.currency_id.id)
                 }
                 payment._check_alipay_configuration(check_vals)
-        return super(PaymentTransaction, self).write(vals)
+        returnsuper(PaymentTransaction,self).write(vals)
 
     @api.model
-    def create(self, vals):
+    defcreate(self,vals):
         self._check_alipay_configuration(vals)
-        return super(PaymentTransaction, self).create(vals)
+        returnsuper(PaymentTransaction,self).create(vals)
 
-    # --------------------------------------------------
-    # FORM RELATED METHODS
-    # --------------------------------------------------
+    #--------------------------------------------------
+    #FORMRELATEDMETHODS
+    #--------------------------------------------------
 
     @api.model
-    def _alipay_form_get_tx_from_data(self, data):
-        reference, txn_id, sign = data.get('reference'), data.get('trade_no'), data.get('sign')
-        if not reference or not txn_id:
-            _logger.info('Alipay: received data with missing reference (%s) or txn_id (%s)' % (reference, txn_id))
-            raise ValidationError(_('Alipay: received data with missing reference (%s) or txn_id (%s)') % (reference, txn_id))
+    def_alipay_form_get_tx_from_data(self,data):
+        reference,txn_id,sign=data.get('reference'),data.get('trade_no'),data.get('sign')
+        ifnotreferenceornottxn_id:
+            _logger.info('Alipay:receiveddatawithmissingreference(%s)ortxn_id(%s)'%(reference,txn_id))
+            raiseValidationError(_('Alipay:receiveddatawithmissingreference(%s)ortxn_id(%s)')%(reference,txn_id))
 
-        txs = self.env['payment.transaction'].search([('reference', '=', reference)])
-        if not txs or len(txs) > 1:
-            error_msg = _('Alipay: received data for reference %s') % (reference)
-            logger_msg = 'Alipay: received data for reference %s' % (reference)
-            if not txs:
-                error_msg += _('; no order found')
-                logger_msg += '; no order found'
+        txs=self.env['payment.transaction'].search([('reference','=',reference)])
+        ifnottxsorlen(txs)>1:
+            error_msg=_('Alipay:receiveddataforreference%s')%(reference)
+            logger_msg='Alipay:receiveddataforreference%s'%(reference)
+            ifnottxs:
+                error_msg+=_(';noorderfound')
+                logger_msg+=';noorderfound'
             else:
-                error_msg += _('; multiple order found')
-                logger_msg += '; multiple order found'
+                error_msg+=_(';multipleorderfound')
+                logger_msg+=';multipleorderfound'
             _logger.info(logger_msg)
-            raise ValidationError(error_msg)
+            raiseValidationError(error_msg)
 
-        # verify sign
-        sign_check = txs.acquirer_id._build_sign(data)
-        if sign != sign_check:
-            _logger.info('Alipay: invalid sign, received %s, computed %s, for data %s' % (sign, sign_check, data))
-            raise ValidationError(_('Alipay: invalid sign, received %s, computed %s, for data %s') % (sign, sign_check, data))
+        #verifysign
+        sign_check=txs.acquirer_id._build_sign(data)
+        ifsign!=sign_check:
+            _logger.info('Alipay:invalidsign,received%s,computed%s,fordata%s'%(sign,sign_check,data))
+            raiseValidationError(_('Alipay:invalidsign,received%s,computed%s,fordata%s')%(sign,sign_check,data))
 
-        return txs
+        returntxs
 
-    def _alipay_form_get_invalid_parameters(self, data):
-        invalid_parameters = []
+    def_alipay_form_get_invalid_parameters(self,data):
+        invalid_parameters=[]
 
-        if float_compare(float(data.get('total_fee', '0.0')), (self.amount + self.fees), 2) != 0:
-            invalid_parameters.append(('total_fee', data.get('total_fee'), '%.2f' % (self.amount + self.fees)))  # mc_gross is amount + fees
-        if self.acquirer_id.alipay_payment_method == 'standard_checkout':
-            if data.get('currency') != self.currency_id.name:
-                invalid_parameters.append(('currency', data.get('currency'), self.currency_id.name))
+        iffloat_compare(float(data.get('total_fee','0.0')),(self.amount+self.fees),2)!=0:
+            invalid_parameters.append(('total_fee',data.get('total_fee'),'%.2f'%(self.amount+self.fees))) #mc_grossisamount+fees
+        ifself.acquirer_id.alipay_payment_method=='standard_checkout':
+            ifdata.get('currency')!=self.currency_id.name:
+                invalid_parameters.append(('currency',data.get('currency'),self.currency_id.name))
         else:
-            if data.get('seller_email') != self.acquirer_id.alipay_seller_email:
-                invalid_parameters.append(('seller_email', data.get('seller_email'), self.acquirer_id.alipay_seller_email))
-        return invalid_parameters
+            ifdata.get('seller_email')!=self.acquirer_id.alipay_seller_email:
+                invalid_parameters.append(('seller_email',data.get('seller_email'),self.acquirer_id.alipay_seller_email))
+        returninvalid_parameters
 
-    def _alipay_form_validate(self, data):
-        if self.state in ['done']:
-            _logger.info('Alipay: trying to validate an already validated tx (ref %s)', self.reference)
-            return True
+    def_alipay_form_validate(self,data):
+        ifself.statein['done']:
+            _logger.info('Alipay:tryingtovalidateanalreadyvalidatedtx(ref%s)',self.reference)
+            returnTrue
 
-        status = data.get('trade_status')
-        res = {
-            'acquirer_reference': data.get('trade_no'),
+        status=data.get('trade_status')
+        res={
+            'acquirer_reference':data.get('trade_no'),
         }
-        if status in ['TRADE_FINISHED', 'TRADE_SUCCESS']:
-            _logger.info('Validated Alipay payment for tx %s: set as done' % (self.reference))
-            date_validate = fields.Datetime.now()
+        ifstatusin['TRADE_FINISHED','TRADE_SUCCESS']:
+            _logger.info('ValidatedAlipaypaymentfortx%s:setasdone'%(self.reference))
+            date_validate=fields.Datetime.now()
             res.update(date=date_validate)
             self._set_transaction_done()
             self.write(res)
             self.execute_callback()
-            return True
-        elif status == 'TRADE_CLOSED':
-            _logger.info('Received notification for Alipay payment %s: set as Canceled' % (self.reference))
-            res.update(state_message=data.get('close_reason', ''))
+            returnTrue
+        elifstatus=='TRADE_CLOSED':
+            _logger.info('ReceivednotificationforAlipaypayment%s:setasCanceled'%(self.reference))
+            res.update(state_message=data.get('close_reason',''))
             self._set_transaction_cancel()
-            return self.write(res)
+            returnself.write(res)
         else:
-            error = 'Received unrecognized status for Alipay payment %s: %s, set as error' % (self.reference, status)
+            error='ReceivedunrecognizedstatusforAlipaypayment%s:%s,setaserror'%(self.reference,status)
             _logger.info(error)
             res.update(state_message=error)
             self._set_transaction_error()
-            return self.write(res)
+            returnself.write(res)

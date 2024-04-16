@@ -1,46 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <!-- Israel keep standard taxes -->
-    <record id="account_fiscal_position_israel" model="account.fiscal.position.template">
-        <field name="name">Israel</field>
-        <field name="chart_template_id" ref="il_chart_template"/>
-        <field name="country_id" ref="base.il"/>
-        <field name="auto_apply" eval="True"/>
+    <!--Israelkeepstandardtaxes-->
+    <recordid="account_fiscal_position_israel"model="account.fiscal.position.template">
+        <fieldname="name">Israel</field>
+        <fieldname="chart_template_id"ref="il_chart_template"/>
+        <fieldname="country_id"ref="base.il"/>
+        <fieldname="auto_apply"eval="True"/>
     </record>
 
-    <!-- Palestinian state -->
-    <record id="account_fiscal_position_palestinian_authority" model="account.fiscal.position.template">
-        <field name="name">Palestinian Authority (PA)</field>
-        <field name="auto_apply" eval="True"/>
-        <field name="country_id" ref="base.ps"/>
-        <field name="chart_template_id" ref="il_chart_template"/>
-        <field name="auto_apply" eval="True"/>
+    <!--Palestinianstate-->
+    <recordid="account_fiscal_position_palestinian_authority"model="account.fiscal.position.template">
+        <fieldname="name">PalestinianAuthority(PA)</field>
+        <fieldname="auto_apply"eval="True"/>
+        <fieldname="country_id"ref="base.ps"/>
+        <fieldname="chart_template_id"ref="il_chart_template"/>
+        <fieldname="auto_apply"eval="True"/>
     </record>
 
-    <record id="account_fiscal_position_palestinian_authority_01" model="account.fiscal.position.tax.template">
-        <field name="tax_src_id" ref="il_vat_sales_17"/>
-        <field name="tax_dest_id" ref="il_vat_pa_sales_17"/>
-        <field name="position_id" ref="account_fiscal_position_palestinian_authority"/>
+    <recordid="account_fiscal_position_palestinian_authority_01"model="account.fiscal.position.tax.template">
+        <fieldname="tax_src_id"ref="il_vat_sales_17"/>
+        <fieldname="tax_dest_id"ref="il_vat_pa_sales_17"/>
+        <fieldname="position_id"ref="account_fiscal_position_palestinian_authority"/>
     </record>
 
-    <record id="account_fiscal_position_palestinian_authority_02" model="account.fiscal.position.tax.template">
-        <field name="tax_src_id" ref="il_vat_inputs_17"/>
-        <field name="tax_dest_id" ref="il_vat_pa_purchase_16"/>
-        <field name="position_id" ref="account_fiscal_position_palestinian_authority"/>
+    <recordid="account_fiscal_position_palestinian_authority_02"model="account.fiscal.position.tax.template">
+        <fieldname="tax_src_id"ref="il_vat_inputs_17"/>
+        <fieldname="tax_dest_id"ref="il_vat_pa_purchase_16"/>
+        <fieldname="position_id"ref="account_fiscal_position_palestinian_authority"/>
     </record>
 
-    <!-- Export -->
-    <record id="account_fiscal_position_export" model="account.fiscal.position.template">
-        <field name="name">Import / Export</field>
-        <field name="auto_apply" eval="True"/>
-        <field name="chart_template_id" ref="il_chart_template"/>
-        <field name="auto_apply" eval="True"/>
+    <!--Export-->
+    <recordid="account_fiscal_position_export"model="account.fiscal.position.template">
+        <fieldname="name">Import/Export</field>
+        <fieldname="auto_apply"eval="True"/>
+        <fieldname="chart_template_id"ref="il_chart_template"/>
+        <fieldname="auto_apply"eval="True"/>
     </record>
 
-    <record id="account_fiscal_position_export_01" model="account.fiscal.position.tax.template">
-        <field name="tax_src_id" ref="il_vat_sales_17"/>
-        <field name="tax_dest_id" ref="il_vat_sales_exempt"/>
-        <field name="position_id" ref="account_fiscal_position_export"/>
+    <recordid="account_fiscal_position_export_01"model="account.fiscal.position.tax.template">
+        <fieldname="tax_src_id"ref="il_vat_sales_17"/>
+        <fieldname="tax_dest_id"ref="il_vat_sales_exempt"/>
+        <fieldname="position_id"ref="account_fiscal_position_export"/>
     </record>
 
 

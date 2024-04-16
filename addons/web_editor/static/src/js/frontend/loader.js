@@ -1,28 +1,28 @@
-flectra.define('web_editor.loader', function (require) {
-'use strict';
+flectra.define('web_editor.loader',function(require){
+'usestrict';
 
-var Wysiwyg = require('web_editor.wysiwyg.root');
+varWysiwyg=require('web_editor.wysiwyg.root');
 
-function load(parent, textarea, options) {
-    var loading = textarea.nextElementSibling;
-    if (loading && !loading.classList.contains('o_wysiwyg_loading')) {
-        loading = null;
+functionload(parent,textarea,options){
+    varloading=textarea.nextElementSibling;
+    if(loading&&!loading.classList.contains('o_wysiwyg_loading')){
+        loading=null;
     }
 
-    if (!textarea.value.match(/\S/)) {
-        textarea.value = '<p><br/></p>';
+    if(!textarea.value.match(/\S/)){
+        textarea.value='<p><br/></p>';
     }
 
-    var wysiwyg = new Wysiwyg(parent, options);
-    return wysiwyg.attachTo(textarea).then(() => {
-        if (loading) {
+    varwysiwyg=newWysiwyg(parent,options);
+    returnwysiwyg.attachTo(textarea).then(()=>{
+        if(loading){
             loading.parentNode.removeChild(loading);
         }
-        return wysiwyg;
+        returnwysiwyg;
     });
 }
 
-return {
-    load: load,
+return{
+    load:load,
 };
 });

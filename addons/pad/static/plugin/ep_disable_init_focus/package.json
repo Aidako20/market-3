@@ -1,7 +1,7 @@
 {
     "name":"ep_disable_init_focus",
     "version":"0.0.1",
-    "description":"Disables init focus in etherpad-lite.",
+    "description":"Disablesinitfocusinetherpad-lite.",
     "dependencies":{
 
     },
@@ -9,7 +9,7 @@
         "node":"*"
     },
     "author":{
-        "name":"FlectraHQ, Inc., Odoo S.A. - Hitesh Trivedi",
+        "name":"FlectraS.A.-HiteshTrivedi",
         "email":"thiteshm155@gmail.com"
     }
 }

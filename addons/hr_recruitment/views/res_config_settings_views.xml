@@ -1,42 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="res_config_settings_view_form" model="ir.ui.view">
-            <field name="name">res.config.settings.view.form.inherit.hr.recruitment</field>
-            <field name="model">res.config.settings</field>
-            <field name="priority" eval="75"/>
-            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//div[hasclass('settings')]" position="inside">
-                    <div class="app_settings_block" data-string="Recruitment" string="Recruitment" data-key="hr_recruitment" groups="hr_recruitment.group_hr_recruitment_manager">
-                        <h2>Job Posting</h2>
-                        <div class="row mt16 o_settings_container" name="online_posting_setting_container">
-                            <div class="col-12 col-lg-6 o_setting_box" id="publish_available_jobs_setting">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_website_hr_recruitment"/>
+        <recordid="res_config_settings_view_form"model="ir.ui.view">
+            <fieldname="name">res.config.settings.view.form.inherit.hr.recruitment</field>
+            <fieldname="model">res.config.settings</field>
+            <fieldname="priority"eval="75"/>
+            <fieldname="inherit_id"ref="base.res_config_settings_view_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//div[hasclass('settings')]"position="inside">
+                    <divclass="app_settings_block"data-string="Recruitment"string="Recruitment"data-key="hr_recruitment"groups="hr_recruitment.group_hr_recruitment_manager">
+                        <h2>JobPosting</h2>
+                        <divclass="rowmt16o_settings_container"name="online_posting_setting_container">
+                            <divclass="col-12col-lg-6o_setting_box"id="publish_available_jobs_setting">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_website_hr_recruitment"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="module_website_hr_recruitment" string="Online Posting"/>
-                                    <div class="text-muted">
-                                        Publish available jobs on your website
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="module_website_hr_recruitment"string="OnlinePosting"/>
+                                    <divclass="text-muted">
+                                        Publishavailablejobsonyourwebsite
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <h2>Recruitment Process</h2>
-                        <div class="row mt16 o_settings_container" name="recruitment_process_div">
-                            <div class="col-12 col-lg-6 o_setting_box"
+                        <h2>RecruitmentProcess</h2>
+                        <divclass="rowmt16o_settings_container"name="recruitment_process_div">
+                            <divclass="col-12col-lg-6o_setting_box"
                                 id="interview_forms_setting"
-                                title="Use interview forms tailored to each job position during the recruitment process. Select the form to use in the job position detail form. This relies on the Survey app.">
-                                <div class="o_setting_left_pane">
-                                    <field name="module_hr_recruitment_survey"/>
+                                title="Useinterviewformstailoredtoeachjobpositionduringtherecruitmentprocess.Selecttheformtouseinthejobpositiondetailform.ThisreliesontheSurveyapp.">
+                                <divclass="o_setting_left_pane">
+                                    <fieldname="module_hr_recruitment_survey"/>
                                 </div>
-                                <div class="o_setting_right_pane">
-                                    <label for="module_hr_recruitment_survey" string="Interview Forms"/>
-                                    <div class="text-muted">
-                                        Use interview forms during recruitment process
+                                <divclass="o_setting_right_pane">
+                                    <labelfor="module_hr_recruitment_survey"string="InterviewForms"/>
+                                    <divclass="text-muted">
+                                        Useinterviewformsduringrecruitmentprocess
                                     </div>
-                                    <div class="content-group" id="interview_forms"/>
+                                    <divclass="content-group"id="interview_forms"/>
                                 </div>
                             </div>
                         </div>
@@ -45,17 +45,17 @@
             </field>
         </record>
 
-        <record id="action_hr_recruitment_configuration" model="ir.actions.act_window">
-            <field name="name">Settings</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">res.config.settings</field>
-            <field name="view_mode">form</field>
-            <field name="target">inline</field>
-            <field name="context">{'module' : 'hr_recruitment', 'bin_size': False}</field>
+        <recordid="action_hr_recruitment_configuration"model="ir.actions.act_window">
+            <fieldname="name">Settings</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">res.config.settings</field>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">inline</field>
+            <fieldname="context">{'module':'hr_recruitment','bin_size':False}</field>
         </record>
 
-        <menuitem id="menu_hr_recruitment_global_settings" name="Settings"
-            parent="menu_hr_recruitment_configuration" sequence="0" action="action_hr_recruitment_configuration"
+        <menuitemid="menu_hr_recruitment_global_settings"name="Settings"
+            parent="menu_hr_recruitment_configuration"sequence="0"action="action_hr_recruitment_configuration"
             groups="base.group_system"/>
     </data>
 </flectra>

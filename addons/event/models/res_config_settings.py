@@ -1,27 +1,27 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
-    module_event_sale = fields.Boolean("Tickets")
-    module_website_event_meet = fields.Boolean("Discussion Rooms")
-    module_website_event_track = fields.Boolean("Tracks and Agenda")
-    module_website_event_track_live = fields.Boolean("Live Mode")
-    module_website_event_track_quiz = fields.Boolean("Quiz on Tracks")
-    module_website_event_track_exhibitor = fields.Boolean("Advanced Sponsors")
-    module_website_event_questions = fields.Boolean("Registration Survey")
-    module_event_barcode = fields.Boolean("Barcode")
-    module_website_event_sale = fields.Boolean("Online Ticketing")
+    module_event_sale=fields.Boolean("Tickets")
+    module_website_event_meet=fields.Boolean("DiscussionRooms")
+    module_website_event_track=fields.Boolean("TracksandAgenda")
+    module_website_event_track_live=fields.Boolean("LiveMode")
+    module_website_event_track_quiz=fields.Boolean("QuizonTracks")
+    module_website_event_track_exhibitor=fields.Boolean("AdvancedSponsors")
+    module_website_event_questions=fields.Boolean("RegistrationSurvey")
+    module_event_barcode=fields.Boolean("Barcode")
+    module_website_event_sale=fields.Boolean("OnlineTicketing")
 
     @api.onchange('module_website_event_track')
-    def _onchange_module_website_event_track(self):
-        """ Reset sub-modules, otherwise you may have track to False but still
-        have track_live or track_quiz to True, meaning track will come back due
-        to dependencies of modules. """
-        for config in self:
-            if not config.module_website_event_track:
-                config.module_website_event_track_live = False
-                config.module_website_event_track_quiz = False
-                config.module_website_event_track_exhibitor = False
+    def_onchange_module_website_event_track(self):
+        """Resetsub-modules,otherwiseyoumayhavetracktoFalsebutstill
+        havetrack_liveortrack_quiztoTrue,meaningtrackwillcomebackdue
+        todependenciesofmodules."""
+        forconfiginself:
+            ifnotconfig.module_website_event_track:
+                config.module_website_event_track_live=False
+                config.module_website_event_track_quiz=False
+                config.module_website_event_track_exhibitor=False

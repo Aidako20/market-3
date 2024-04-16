@@ -1,53 +1,53 @@
-flectra.define('survey.fields_form', function (require) {
-"use strict";
+flectra.define('survey.fields_form',function(require){
+"usestrict";
 
-var FieldRegistry = require('web.field_registry');
-var FieldChar = require('web.basic_fields').FieldChar;
+varFieldRegistry=require('web.field_registry');
+varFieldChar=require('web.basic_fields').FieldChar;
 
-var FormDescriptionPage = FieldChar.extend({
+varFormDescriptionPage=FieldChar.extend({
 
     //--------------------------------------------------------------------------
-    // Widget API
+    //WidgetAPI
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @override
+     *@private
+     *@override
      */
-    _renderEdit: function () {
-        var def = this._super.apply(this, arguments);
+    _renderEdit:function(){
+        vardef=this._super.apply(this,arguments);
         this.$el.addClass('col');
-        var $inputGroup = $('<div class="input-group">');
-        this.$el = $inputGroup.append(this.$el);
-        var $button = $(
-            '<div class="input-group-append">\
-                <button type="button" title="Open section" class="btn oe_edit_only o_icon_button">\
-                    <i class="fa fa-fw o_button_icon fa-info-circle"/>\
+        var$inputGroup=$('<divclass="input-group">');
+        this.$el=$inputGroup.append(this.$el);
+        var$button=$(
+            '<divclass="input-group-append">\
+                <buttontype="button"title="Opensection"class="btnoe_edit_onlyo_icon_button">\
+                    <iclass="fafa-fwo_button_iconfa-info-circle"/>\
                 </button>\
             </div>'
         );
-        this.$el = this.$el.append($button);
-        $button.on('click', this._onClickEdit.bind(this));
+        this.$el=this.$el.append($button);
+        $button.on('click',this._onClickEdit.bind(this));
 
-        return def;
+        returndef;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onClickEdit: function (ev) {
+    _onClickEdit:function(ev){
         ev.stopPropagation();
-        var id = this.record.id;
-        if (id) {
-            this.trigger_up('open_record', {id: id, target: ev.target});
+        varid=this.record.id;
+        if(id){
+            this.trigger_up('open_record',{id:id,target:ev.target});
         }
     },
 });
 
-FieldRegistry.add('survey_description_page', FormDescriptionPage);
+FieldRegistry.add('survey_description_page',FormDescriptionPage);
 
 });

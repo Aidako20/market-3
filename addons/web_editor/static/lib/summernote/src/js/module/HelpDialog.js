@@ -1,35 +1,35 @@
-define([], function () { // FLECTRA: remove error from Flectra define
-  var HelpDialog = function (handler) {
+define([],function(){//FLECTRA:removeerrorfromFlectradefine
+  varHelpDialog=function(handler){
     /**
-     * show help dialog
+     *showhelpdialog
      *
-     * @param {jQuery} $editable
-     * @param {jQuery} $dialog
-     * @return {Promise}
+     *@param{jQuery}$editable
+     *@param{jQuery}$dialog
+     *@return{Promise}
      */
-    this.showHelpDialog = function ($editable, $dialog) {
-      return $.Deferred(function (deferred) {
-        var $helpDialog = $dialog.find('.note-help-dialog');
+    this.showHelpDialog=function($editable,$dialog){
+      return$.Deferred(function(deferred){
+        var$helpDialog=$dialog.find('.note-help-dialog');
 
-        $helpDialog.one('hidden.bs.modal', function () {
+        $helpDialog.one('hidden.bs.modal',function(){
           deferred.resolve();
         }).modal('show');
       }).promise();
     };
 
     /**
-     * @param {Object} layoutInfo
+     *@param{Object}layoutInfo
      */
-    this.show = function (layoutInfo) {
-      var $dialog = layoutInfo.dialog(),
-          $editable = layoutInfo.editable();
+    this.show=function(layoutInfo){
+      var$dialog=layoutInfo.dialog(),
+          $editable=layoutInfo.editable();
 
-      handler.invoke('editor.saveRange', $editable, true);
-      this.showHelpDialog($editable, $dialog).then(function () {
-        handler.invoke('editor.restoreRange', $editable);
+      handler.invoke('editor.saveRange',$editable,true);
+      this.showHelpDialog($editable,$dialog).then(function(){
+        handler.invoke('editor.restoreRange',$editable);
       });
     };
   };
 
-  return HelpDialog;
+  returnHelpDialog;
 });

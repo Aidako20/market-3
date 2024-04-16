@@ -1,34 +1,34 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from random import randint
+fromrandomimportrandint
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class EventTagCategory(models.Model):
-    _name = "event.tag.category"
-    _description = "Event Tag Category"
-    _order = "sequence"
+classEventTagCategory(models.Model):
+    _name="event.tag.category"
+    _description="EventTagCategory"
+    _order="sequence"
 
-    name = fields.Char("Name", required=True, translate=True)
-    sequence = fields.Integer('Sequence', default=0)
-    tag_ids = fields.One2many('event.tag', 'category_id', string="Tags")
+    name=fields.Char("Name",required=True,translate=True)
+    sequence=fields.Integer('Sequence',default=0)
+    tag_ids=fields.One2many('event.tag','category_id',string="Tags")
 
-class EventTag(models.Model):
-    _name = "event.tag"
-    _description = "Event Tag"
-    _order = "sequence"
+classEventTag(models.Model):
+    _name="event.tag"
+    _description="EventTag"
+    _order="sequence"
 
-    def _default_color(self):
-        return randint(1, 11)
+    def_default_color(self):
+        returnrandint(1,11)
 
-    name = fields.Char("Name", required=True, translate=True)
-    sequence = fields.Integer('Sequence', default=0)
-    category_id = fields.Many2one("event.tag.category", string="Category", required=True, ondelete='cascade')
-    color = fields.Integer(
-        string='Color Index', default=lambda self: self._default_color(),
-        help='Tag color. No color means no display in kanban or front-end, to distinguish internal tags from public categorization tags.')
+    name=fields.Char("Name",required=True,translate=True)
+    sequence=fields.Integer('Sequence',default=0)
+    category_id=fields.Many2one("event.tag.category",string="Category",required=True,ondelete='cascade')
+    color=fields.Integer(
+        string='ColorIndex',default=lambdaself:self._default_color(),
+        help='Tagcolor.Nocolormeansnodisplayinkanbanorfront-end,todistinguishinternaltagsfrompubliccategorizationtags.')
 
-    def name_get(self):
-        return [(tag.id, "%s: %s" % (tag.category_id.name, tag.name)) for tag in self]
+    defname_get(self):
+        return[(tag.id,"%s:%s"%(tag.category_id.name,tag.name))fortaginself]

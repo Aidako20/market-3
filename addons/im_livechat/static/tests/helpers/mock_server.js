@@ -1,262 +1,262 @@
-flectra.define('im_livechat/static/tests/helpers/mock_server.js', function (require) {
-'use strict';
+flectra.define('im_livechat/static/tests/helpers/mock_server.js',function(require){
+'usestrict';
 
-require('mail.MockServer'); // ensure mail overrides are applied first
+require('mail.MockServer');//ensuremailoverridesareappliedfirst
 
-const MockServer = require('web.MockServer');
+constMockServer=require('web.MockServer');
 
 MockServer.include({
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    async _performRpc(route, args) {
-        if (route === '/im_livechat/get_session') {
-            const channel_id = args.channel_id;
-            const anonymous_name = args.anonymous_name;
-            const previous_operator_id = args.previous_operator_id;
-            const context = args.context;
-            return this._mockRouteImLivechatGetSession(channel_id, anonymous_name, previous_operator_id, context);
+    async_performRpc(route,args){
+        if(route==='/im_livechat/get_session'){
+            constchannel_id=args.channel_id;
+            constanonymous_name=args.anonymous_name;
+            constprevious_operator_id=args.previous_operator_id;
+            constcontext=args.context;
+            returnthis._mockRouteImLivechatGetSession(channel_id,anonymous_name,previous_operator_id,context);
         }
-        if (route === '/im_livechat/notify_typing') {
-            const uuid = args.uuid;
-            const is_typing = args.is_typing;
-            const context = args.context;
-            return this._mockRouteImLivechatNotifyTyping(uuid, is_typing, context);
+        if(route==='/im_livechat/notify_typing'){
+            constuuid=args.uuid;
+            constis_typing=args.is_typing;
+            constcontext=args.context;
+            returnthis._mockRouteImLivechatNotifyTyping(uuid,is_typing,context);
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private Mocked Routes
+    //PrivateMockedRoutes
     //--------------------------------------------------------------------------
 
     /**
-     * Simulates the `/im_livechat/get_session` route.
+     *Simulatesthe`/im_livechat/get_session`route.
      *
-     * @private
-     * @param {integer} channel_id
-     * @param {string} anonymous_name
-     * @param {integer} [previous_operator_id]
-     * @param {Object} [context={}]
-     * @returns {Object}
+     *@private
+     *@param{integer}channel_id
+     *@param{string}anonymous_name
+     *@param{integer}[previous_operator_id]
+     *@param{Object}[context={}]
+     *@returns{Object}
      */
-    _mockRouteImLivechatGetSession(channel_id, anonymous_name, previous_operator_id, context = {}) {
-        let user_id;
-        let country_id;
-        if ('mockedUserId' in context) {
-            // can be falsy to simulate not being logged in
-            user_id = context.mockedUserId;
-        } else {
-            user_id = this.currentUserId;
+    _mockRouteImLivechatGetSession(channel_id,anonymous_name,previous_operator_id,context={}){
+        letuser_id;
+        letcountry_id;
+        if('mockedUserId'incontext){
+            //canbefalsytosimulatenotbeingloggedin
+            user_id=context.mockedUserId;
+        }else{
+            user_id=this.currentUserId;
         }
-        // don't use the anonymous name if the user is logged in
-        if (user_id) {
-            const user = this._getRecords('res.users', [['id', '=', user_id]])[0];
-            country_id = user.country_id;
-        } else {
-            // simulate geoip
-            const countryCode = context.mockedCountryCode;
-            const country = this._getRecords('res.country', [['code', '=', countryCode]])[0];
-            if (country) {
-                country_id = country.id;
-                anonymous_name = anonymous_name + ' (' + country.name + ')';
+        //don'tusetheanonymousnameiftheuserisloggedin
+        if(user_id){
+            constuser=this._getRecords('res.users',[['id','=',user_id]])[0];
+            country_id=user.country_id;
+        }else{
+            //simulategeoip
+            constcountryCode=context.mockedCountryCode;
+            constcountry=this._getRecords('res.country',[['code','=',countryCode]])[0];
+            if(country){
+                country_id=country.id;
+                anonymous_name=anonymous_name+'('+country.name+')';
             }
         }
-        return this._mockImLivechatChannel_openLivechatMailChannel(channel_id, anonymous_name, previous_operator_id, user_id, country_id);
+        returnthis._mockImLivechatChannel_openLivechatMailChannel(channel_id,anonymous_name,previous_operator_id,user_id,country_id);
     },
     /**
-     * Simulates the `/im_livechat/notify_typing` route.
+     *Simulatesthe`/im_livechat/notify_typing`route.
      *
-     * @private
-     * @param {string} uuid
-     * @param {boolean} is_typing
-     * @param {Object} [context]
+     *@private
+     *@param{string}uuid
+     *@param{boolean}is_typing
+     *@param{Object}[context]
      */
-    _mockRouteImLivechatNotifyTyping(uuid, is_typing, context) {
-        const mailChannel = this._getRecords('mail.channel', [['uuid', '=', uuid]])[0];
-        this._mockMailChannelNotifyTyping([mailChannel.id], is_typing, context);
+    _mockRouteImLivechatNotifyTyping(uuid,is_typing,context){
+        constmailChannel=this._getRecords('mail.channel',[['uuid','=',uuid]])[0];
+        this._mockMailChannelNotifyTyping([mailChannel.id],is_typing,context);
     },
     /**
-     * @override
+     *@override
      */
-    _mockRouteMailInitMessaging() {
-        const initMessaging = this._super(...arguments);
+    _mockRouteMailInitMessaging(){
+        constinitMessaging=this._super(...arguments);
 
-        const livechats = this._getRecords('mail.channel', [
-            ['channel_type', '=', 'livechat'],
-            ['is_pinned', '=', true],
-            ['members', 'in', this.currentPartnerId],
+        constlivechats=this._getRecords('mail.channel',[
+            ['channel_type','=','livechat'],
+            ['is_pinned','=',true],
+            ['members','in',this.currentPartnerId],
         ]);
-        initMessaging.channel_slots.channel_livechat = this._mockMailChannelChannelInfo(
-            livechats.map(channel => channel.id)
+        initMessaging.channel_slots.channel_livechat=this._mockMailChannelChannelInfo(
+            livechats.map(channel=>channel.id)
         );
 
-        return initMessaging;
+        returninitMessaging;
     },
 
     //--------------------------------------------------------------------------
-    // Private Mocked Methods
+    //PrivateMockedMethods
     //--------------------------------------------------------------------------
 
     /**
-     * Simulates `_channel_get_livechat_visitor_info` on `mail.channel`.
+     *Simulates`_channel_get_livechat_visitor_info`on`mail.channel`.
      *
-     * @private
-     * @param {integer[]} ids
-     * @returns {Object}
+     *@private
+     *@param{integer[]}ids
+     *@returns{Object}
      */
-    _mockMailChannel_ChannelGetLivechatVisitorInfo(ids) {
-        const id = ids[0]; // ensure_one
-        const mailChannel = this._getRecords('mail.channel', [['id', '=', id]])[0];
-        // remove active test to ensure public partner is taken into account
-        let members = this._getRecords(
+    _mockMailChannel_ChannelGetLivechatVisitorInfo(ids){
+        constid=ids[0];//ensure_one
+        constmailChannel=this._getRecords('mail.channel',[['id','=',id]])[0];
+        //removeactivetesttoensurepublicpartneristakenintoaccount
+        letmembers=this._getRecords(
             'res.partner',
-            [['id', 'in', mailChannel.members]],
-            { active_test: false },
+            [['id','in',mailChannel.members]],
+            {active_test:false},
         );
-        members = members.filter(member => member.id !== mailChannel.livechat_operator_id);
-        if (members.length === 0 && mailChannel.livechat_operator_id) {
-            // operator probably testing the livechat with his own user
-            members = [mailChannel.livechat_operator_id];
+        members=members.filter(member=>member.id!==mailChannel.livechat_operator_id);
+        if(members.length===0&&mailChannel.livechat_operator_id){
+            //operatorprobablytestingthelivechatwithhisownuser
+            members=[mailChannel.livechat_operator_id];
         }
-        if (members.length > 0 && members[0].id !== this.publicPartnerId) {
-            // legit non-public partner
-            const country = this._getRecords('res.country', [['id', '=', members[0].country_id]])[0];
-            return {
-                'country': country ? [country.id, country.name] : false,
-                'id': members[0].id,
-                'name': members[0].name,
+        if(members.length>0&&members[0].id!==this.publicPartnerId){
+            //legitnon-publicpartner
+            constcountry=this._getRecords('res.country',[['id','=',members[0].country_id]])[0];
+            return{
+                'country':country?[country.id,country.name]:false,
+                'id':members[0].id,
+                'name':members[0].name,
             };
         }
-        return {
-            'country': false,
-            'id': false,
-            'name': mailChannel.anonymous_name || "Visitor",
+        return{
+            'country':false,
+            'id':false,
+            'name':mailChannel.anonymous_name||"Visitor",
         };
     },
     /**
-     * @override
+     *@override
      */
-    _mockMailChannelChannelInfo(ids, extra_info) {
-        const channelInfos = this._super(...arguments);
-        for (const channelInfo of channelInfos) {
-            const channel = this._getRecords('mail.channel', [['id', '=', channelInfo.id]])[0];
-            // add the last message date
-            if (channel.channel_type === 'livechat') {
-                // add the operator id
-                if (channel.livechat_operator_id) {
-                    const operator = this._getRecords('res.partner', [['id', '=', channel.livechat_operator_id]])[0];
-                    // livechat_username ignored for simplicity
-                    channelInfo.operator_pid = [operator.id, operator.display_name.replace(',', '')];
+    _mockMailChannelChannelInfo(ids,extra_info){
+        constchannelInfos=this._super(...arguments);
+        for(constchannelInfoofchannelInfos){
+            constchannel=this._getRecords('mail.channel',[['id','=',channelInfo.id]])[0];
+            //addthelastmessagedate
+            if(channel.channel_type==='livechat'){
+                //addtheoperatorid
+                if(channel.livechat_operator_id){
+                    constoperator=this._getRecords('res.partner',[['id','=',channel.livechat_operator_id]])[0];
+                    //livechat_usernameignoredforsimplicity
+                    channelInfo.operator_pid=[operator.id,operator.display_name.replace(',','')];
                 }
-                // add the anonymous or partner name
-                channelInfo.livechat_visitor = this._mockMailChannel_ChannelGetLivechatVisitorInfo([channel.id]);
+                //addtheanonymousorpartnername
+                channelInfo.livechat_visitor=this._mockMailChannel_ChannelGetLivechatVisitorInfo([channel.id]);
             }
         }
-        return channelInfos;
+        returnchannelInfos;
     },
     /**
-     * Simulates `_get_available_users` on `im_livechat.channel`.
+     *Simulates`_get_available_users`on`im_livechat.channel`.
      *
-     * @private
-     * @param {integer} id
-     * @returns {Object}
+     *@private
+     *@param{integer}id
+     *@returns{Object}
      */
-    _mockImLivechatChannel_getAvailableUsers(id) {
-        const livechatChannel = this._getRecords('im_livechat.channel', [['id', '=', id]])[0];
-        const users = this._getRecords('res.users', [['id', 'in', livechatChannel.user_ids]]);
-        return users.filter(user => user.im_status === 'online');
+    _mockImLivechatChannel_getAvailableUsers(id){
+        constlivechatChannel=this._getRecords('im_livechat.channel',[['id','=',id]])[0];
+        constusers=this._getRecords('res.users',[['id','in',livechatChannel.user_ids]]);
+        returnusers.filter(user=>user.im_status==='online');
     },
     /**
-     * Simulates `_get_livechat_mail_channel_vals` on `im_livechat.channel`.
+     *Simulates`_get_livechat_mail_channel_vals`on`im_livechat.channel`.
      *
-     * @private
-     * @param {integer} id
-     * @returns {Object}
+     *@private
+     *@param{integer}id
+     *@returns{Object}
      */
-    _mockImLivechatChannel_getLivechatMailChannelVals(id, anonymous_name, operator, user_id, country_id) {
-        // partner to add to the mail.channel
-        const operator_partner_id = operator.partner_id;
-        const members = [[4, operator_partner_id]];
-        let visitor_user;
-        if (user_id) {
-            const visitor_user = this._getRecords('res.users', [['id', '=', user_id]])[0];
-            if (visitor_user && visitor_user.active) {
-                // valid session user (not public)
-                members.push([4, visitor_user.partner_id.id]);
+    _mockImLivechatChannel_getLivechatMailChannelVals(id,anonymous_name,operator,user_id,country_id){
+        //partnertoaddtothemail.channel
+        constoperator_partner_id=operator.partner_id;
+        constmembers=[[4,operator_partner_id]];
+        letvisitor_user;
+        if(user_id){
+            constvisitor_user=this._getRecords('res.users',[['id','=',user_id]])[0];
+            if(visitor_user&&visitor_user.active){
+                //validsessionuser(notpublic)
+                members.push([4,visitor_user.partner_id.id]);
             }
-        } else {
-            // for simplicity of not having mocked channel.partner, add public partner here
-            members.push([4, this.publicPartnerId]);
+        }else{
+            //forsimplicityofnothavingmockedchannel.partner,addpublicpartnerhere
+            members.push([4,this.publicPartnerId]);
         }
-        const membersName = [
-            visitor_user ? visitor_user.display_name : anonymous_name,
-            operator.livechat_username ? operator.livechat_username : operator.name,
+        constmembersName=[
+            visitor_user?visitor_user.display_name:anonymous_name,
+            operator.livechat_username?operator.livechat_username:operator.name,
         ];
-        return {
-            // Limitation of mocked models not having channel.partner: is_pinned
-            // is not supposed to be false for the visitor but must be false for
-            // the operator (writing on channel_partner_ids does not trigger the
-            // defaults that would set it to true) and here operator and visitor
-            // can't be differentiated in that regard.
-            'is_pinned': false,
-            'members': members, // channel_partner_ids
-            'livechat_active': true,
-            'livechat_operator_id': operator_partner_id,
-            'livechat_channel_id': id,
-            'anonymous_name': user_id ? false : anonymous_name,
-            'country_id': country_id,
-            'channel_type': 'livechat',
-            'name': membersName.join(' '),
-            'public': 'private',
-            'mass_mailing': false, // email_send
+        return{
+            //Limitationofmockedmodelsnothavingchannel.partner:is_pinned
+            //isnotsupposedtobefalseforthevisitorbutmustbefalsefor
+            //theoperator(writingonchannel_partner_idsdoesnottriggerthe
+            //defaultsthatwouldsetittotrue)andhereoperatorandvisitor
+            //can'tbedifferentiatedinthatregard.
+            'is_pinned':false,
+            'members':members,//channel_partner_ids
+            'livechat_active':true,
+            'livechat_operator_id':operator_partner_id,
+            'livechat_channel_id':id,
+            'anonymous_name':user_id?false:anonymous_name,
+            'country_id':country_id,
+            'channel_type':'livechat',
+            'name':membersName.join(''),
+            'public':'private',
+            'mass_mailing':false,//email_send
         };
     },
     /**
-     * Simulates `_get_random_operator` on `im_livechat.channel`.
-     * Simplified mock implementation: returns the first available operator.
+     *Simulates`_get_random_operator`on`im_livechat.channel`.
+     *Simplifiedmockimplementation:returnsthefirstavailableoperator.
      *
-     * @private
-     * @param {integer} id
-     * @returns {Object}
+     *@private
+     *@param{integer}id
+     *@returns{Object}
      */
-    _mockImLivechatChannel_getRandomOperator(id) {
-        const availableUsers = this._mockImLivechatChannel_getAvailableUsers(id);
-        return availableUsers[0];
+    _mockImLivechatChannel_getRandomOperator(id){
+        constavailableUsers=this._mockImLivechatChannel_getAvailableUsers(id);
+        returnavailableUsers[0];
     },
     /**
-     * Simulates `_open_livechat_mail_channel` on `im_livechat.channel`.
+     *Simulates`_open_livechat_mail_channel`on`im_livechat.channel`.
      *
-     * @private
-     * @param {integer} id
-     * @param {string} anonymous_name
-     * @param {integer} [previous_operator_id]
-     * @param {integer} [user_id]
-     * @param {integer} [country_id]
-     * @returns {Object}
+     *@private
+     *@param{integer}id
+     *@param{string}anonymous_name
+     *@param{integer}[previous_operator_id]
+     *@param{integer}[user_id]
+     *@param{integer}[country_id]
+     *@returns{Object}
      */
-    _mockImLivechatChannel_openLivechatMailChannel(id, anonymous_name, previous_operator_id, user_id, country_id) {
-        let operator;
-        if (previous_operator_id) {
-            const availableUsers = this._mockImLivechatChannel_getAvailableUsers(id);
-            operator = availableUsers.find(user => user.partner_id === previous_operator_id);
+    _mockImLivechatChannel_openLivechatMailChannel(id,anonymous_name,previous_operator_id,user_id,country_id){
+        letoperator;
+        if(previous_operator_id){
+            constavailableUsers=this._mockImLivechatChannel_getAvailableUsers(id);
+            operator=availableUsers.find(user=>user.partner_id===previous_operator_id);
         }
-        if (!operator) {
-            operator = this._mockImLivechatChannel_getRandomOperator(id);
+        if(!operator){
+            operator=this._mockImLivechatChannel_getRandomOperator(id);
         }
-        if (!operator) {
-            // no one available
-            return false;
+        if(!operator){
+            //nooneavailable
+            returnfalse;
         }
-        // create the session, and add the link with the given channel
-        const mailChannelVals = this._mockImLivechatChannel_getLivechatMailChannelVals(id, anonymous_name, operator, user_id, country_id);
-        const mailChannelId = this._mockCreate('mail.channel', mailChannelVals);
-        this._mockMailChannel_broadcast([mailChannelId], [operator.partner_id]);
-        return this._mockMailChannelChannelInfo([mailChannelId])[0];
+        //createthesession,andaddthelinkwiththegivenchannel
+        constmailChannelVals=this._mockImLivechatChannel_getLivechatMailChannelVals(id,anonymous_name,operator,user_id,country_id);
+        constmailChannelId=this._mockCreate('mail.channel',mailChannelVals);
+        this._mockMailChannel_broadcast([mailChannelId],[operator.partner_id]);
+        returnthis._mockMailChannelChannelInfo([mailChannelId])[0];
     },
 });
 

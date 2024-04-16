@@ -1,8 +1,8 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra><data>
 
-    <menuitem id="menu_website_event_menu"
-        name="Website Menus"
+    <menuitemid="menu_website_event_menu"
+        name="WebsiteMenus"
         action="website_event_menu_action"
         parent="event.menu_event_configuration"
         groups="base.group_no_one"

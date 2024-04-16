@@ -1,14 +1,14 @@
-<?xml version='1.0' encoding='utf-8'?>
-<flectra noupdate="1">
-    <record forcecreate="True" id="purchase_send_reminder_mail" model="ir.cron">
-        <field name="name">Purchase reminder</field>
-        <field name="user_id" ref="base.user_root" />
-        <field name="interval_number">1</field>
-        <field name="interval_type">days</field>
-        <field name="numbercall">-1</field>
-        <field name="doall">1</field>
-        <field name="model_id" ref="model_purchase_order"/>
-        <field name="state">code</field>
-        <field name="code">model._send_reminder_mail()</field>
+<?xmlversion='1.0'encoding='utf-8'?>
+<flectranoupdate="1">
+    <recordforcecreate="True"id="purchase_send_reminder_mail"model="ir.cron">
+        <fieldname="name">Purchasereminder</field>
+        <fieldname="user_id"ref="base.user_root"/>
+        <fieldname="interval_number">1</field>
+        <fieldname="interval_type">days</field>
+        <fieldname="numbercall">-1</field>
+        <fieldname="doall">1</field>
+        <fieldname="model_id"ref="model_purchase_order"/>
+        <fieldname="state">code</field>
+        <fieldname="code">model._send_reminder_mail()</field>
     </record>
 </flectra>

@@ -1,78 +1,78 @@
-flectra.define('calendar.tests', function (require) {
-"use strict";
+flectra.define('calendar.tests',function(require){
+"usestrict";
 
-var FormView = require('web.FormView');
-var testUtils = require("web.test_utils");
+varFormView=require('web.FormView');
+vartestUtils=require("web.test_utils");
 
-var createView = testUtils.createView;
+varcreateView=testUtils.createView;
 
-QUnit.module('calendar', {
-    beforeEach: function () {
-        this.data = {
-            event: {
-                fields: {
-                    partner_ids: {string: "Partners", type: "many2many", relation: "partner"},
+QUnit.module('calendar',{
+    beforeEach:function(){
+        this.data={
+            event:{
+                fields:{
+                    partner_ids:{string:"Partners",type:"many2many",relation:"partner"},
                 },
-                records: [{
-                    id: 14,
-                    partner_ids: [1, 2],
+                records:[{
+                    id:14,
+                    partner_ids:[1,2],
                 }],
             },
-            partner: {
-                fields: {
-                    name: {string: "Name", type: "char"},
+            partner:{
+                fields:{
+                    name:{string:"Name",type:"char"},
                 },
-                records: [{
-                    id: 1,
-                    name: "Jesus",
-                }, {
-                    id: 2,
-                    name: "Mahomet",
+                records:[{
+                    id:1,
+                    name:"Jesus",
+                },{
+                    id:2,
+                    name:"Mahomet",
                 }],
             },
         };
     },
-}, function () {
-    QUnit.test("many2manyattendee widget: basic rendering", async function (assert) {
+},function(){
+    QUnit.test("many2manyattendeewidget:basicrendering",asyncfunction(assert){
         assert.expect(9);
 
-        var form = await createView({
-            View: FormView,
-            model: 'event',
-            data: this.data,
-            res_id: 14,
+        varform=awaitcreateView({
+            View:FormView,
+            model:'event',
+            data:this.data,
+            res_id:14,
             arch:
-                '<form>' +
-                    '<field name="partner_ids" widget="many2manyattendee"/>' +
+                '<form>'+
+                    '<fieldname="partner_ids"widget="many2manyattendee"/>'+
                 '</form>',
-            mockRPC: function (route, args) {
-                if (args.method === 'get_attendee_detail') {
-                    assert.strictEqual(args.model, 'res.partner',
-                        "the method should only be called on res.partner");
-                    assert.deepEqual(args.args[0], [1, 2],
-                        "the partner ids should be passed as argument");
-                    assert.strictEqual(args.args[1], 14,
-                        "the event id should be passed as argument");
-                    return Promise.resolve([
-                        [1, "Jesus", "accepted", 0],
-                        [2, "Mahomet", "needsAction", 0],
+            mockRPC:function(route,args){
+                if(args.method==='get_attendee_detail'){
+                    assert.strictEqual(args.model,'res.partner',
+                        "themethodshouldonlybecalledonres.partner");
+                    assert.deepEqual(args.args[0],[1,2],
+                        "thepartneridsshouldbepassedasargument");
+                    assert.strictEqual(args.args[1],14,
+                        "theeventidshouldbepassedasargument");
+                    returnPromise.resolve([
+                        [1,"Jesus","accepted",0],
+                        [2,"Mahomet","needsAction",0],
                     ]);
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
         });
 
-        assert.hasClass(form.$('.o_field_widget[name="partner_ids"]'), 'o_field_many2manytags');
-        assert.containsN(form, '.o_field_widget[name="partner_ids"] .badge', 2,
-            "there should be 2 tags");
-        assert.strictEqual(form.$('.o_field_widget[name="partner_ids"] .badge:first').text().trim(), "Jesus",
-            "the tag should be correctly named");
-        assert.hasClass(form.$('.o_field_widget[name="partner_ids"] .badge:first .o_calendar_invitation'),'accepted',
-            "Jesus should attend the meeting");
-        assert.strictEqual(form.$('.o_field_widget[name="partner_ids"] .badge[data-id="2"]').text().trim(), "Mahomet",
-            "the tag should be correctly named");
-        assert.hasClass(form.$('.o_field_widget[name="partner_ids"] .badge[data-id="2"] .o_calendar_invitation'),'needsAction',
-            "Mohamet should still confirm his attendance to the meeting");
+        assert.hasClass(form.$('.o_field_widget[name="partner_ids"]'),'o_field_many2manytags');
+        assert.containsN(form,'.o_field_widget[name="partner_ids"].badge',2,
+            "thereshouldbe2tags");
+        assert.strictEqual(form.$('.o_field_widget[name="partner_ids"].badge:first').text().trim(),"Jesus",
+            "thetagshouldbecorrectlynamed");
+        assert.hasClass(form.$('.o_field_widget[name="partner_ids"].badge:first.o_calendar_invitation'),'accepted',
+            "Jesusshouldattendthemeeting");
+        assert.strictEqual(form.$('.o_field_widget[name="partner_ids"].badge[data-id="2"]').text().trim(),"Mahomet",
+            "thetagshouldbecorrectlynamed");
+        assert.hasClass(form.$('.o_field_widget[name="partner_ids"].badge[data-id="2"].o_calendar_invitation'),'needsAction',
+            "Mohametshouldstillconfirmhisattendancetothemeeting");
 
         form.destroy();
     });

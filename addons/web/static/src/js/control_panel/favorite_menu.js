@@ -1,109 +1,109 @@
-flectra.define('web.FavoriteMenu', function (require) {
-    "use strict";
+flectra.define('web.FavoriteMenu',function(require){
+    "usestrict";
 
-    const Dialog = require('web.OwlDialog');
-    const DropdownMenu = require('web.DropdownMenu');
-    const { FACET_ICONS } = require("web.searchUtils");
-    const Registry = require('web.Registry');
-    const { useModel } = require('web/static/src/js/model.js');
+    constDialog=require('web.OwlDialog');
+    constDropdownMenu=require('web.DropdownMenu');
+    const{FACET_ICONS}=require("web.searchUtils");
+    constRegistry=require('web.Registry');
+    const{useModel}=require('web/static/src/js/model.js');
 
     /**
-     * 'Favorites' menu
+     *'Favorites'menu
      *
-     * Simple rendering of the filters of type `favorites` given by the control panel
-     * model. It uses most of the behaviours implemented by the dropdown menu Component,
-     * with the addition of a submenu registry used to display additional components.
-     * Only the favorite generator (@see CustomFavoriteItem) is registered in
-     * the `web` module.
-     * @see DropdownMenu for additional details.
-     * @extends DropdownMenu
+     *Simplerenderingofthefiltersoftype`favorites`givenbythecontrolpanel
+     *model.ItusesmostofthebehavioursimplementedbythedropdownmenuComponent,
+     *withtheadditionofasubmenuregistryusedtodisplayadditionalcomponents.
+     *Onlythefavoritegenerator(@seeCustomFavoriteItem)isregisteredin
+     *the`web`module.
+     *@seeDropdownMenuforadditionaldetails.
+     *@extendsDropdownMenu
      */
-    class FavoriteMenu extends DropdownMenu {
-        constructor() {
+    classFavoriteMenuextendsDropdownMenu{
+        constructor(){
             super(...arguments);
 
-            this.model = useModel('searchModel');
-            this.state.deletedFavorite = false;
+            this.model=useModel('searchModel');
+            this.state.deletedFavorite=false;
         }
 
         //---------------------------------------------------------------------
-        // Getters
+        //Getters
         //---------------------------------------------------------------------
 
         /**
-         * @override
+         *@override
          */
-        get icon() {
-            return FACET_ICONS.favorite;
+        geticon(){
+            returnFACET_ICONS.favorite;
         }
-        get dialogTitle() {
-            return this.env._t("Warning");
+        getdialogTitle(){
+            returnthis.env._t("Warning");
         }
         /**
-         * @override
+         *@override
          */
-        get items() {
-            const favorites = this.model.get('filters', f => f.type === 'favorite');
-            const registryMenus = this.constructor.registry.values().reduce(
-                (menus, Component) => {
-                    if (Component.shouldBeDisplayed(this.env)) {
+        getitems(){
+            constfavorites=this.model.get('filters',f=>f.type==='favorite');
+            constregistryMenus=this.constructor.registry.values().reduce(
+                (menus,Component)=>{
+                    if(Component.shouldBeDisplayed(this.env)){
                         menus.push({
-                            key: Component.name,
-                            groupNumber: Component.groupNumber,
+                            key:Component.name,
+                            groupNumber:Component.groupNumber,
                             Component,
                         });
                     }
-                    return menus;
+                    returnmenus;
                 },
                 []
             );
-            return [...favorites, ...registryMenus];
+            return[...favorites,...registryMenus];
         }
 
         /**
-         * @override
+         *@override
          */
-        get title() {
-            return this.env._t("Favorites");
+        gettitle(){
+            returnthis.env._t("Favorites");
         }
 
         //---------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //---------------------------------------------------------------------
 
         /**
-         * @private
-         * @param {OwlEvent} ev
+         *@private
+         *@param{OwlEvent}ev
          */
-        _onItemRemoved(ev) {
-            const favorite = this.items.find(fav => fav.id === ev.detail.item.id);
-            this.state.deletedFavorite = favorite;
+        _onItemRemoved(ev){
+            constfavorite=this.items.find(fav=>fav.id===ev.detail.item.id);
+            this.state.deletedFavorite=favorite;
         }
 
         /**
-         * @private
-         * @param {OwlEvent} ev
+         *@private
+         *@param{OwlEvent}ev
          */
-        _onItemSelected(ev) {
+        _onItemSelected(ev){
             ev.stopPropagation();
-            this.model.dispatch('toggleFilter', ev.detail.item.id);
+            this.model.dispatch('toggleFilter',ev.detail.item.id);
         }
 
         /**
-         * @private
+         *@private
          */
-        async _onRemoveFavorite() {
-            this.model.dispatch('deleteFavorite', this.state.deletedFavorite.id);
-            this.state.deletedFavorite = false;
+        async_onRemoveFavorite(){
+            this.model.dispatch('deleteFavorite',this.state.deletedFavorite.id);
+            this.state.deletedFavorite=false;
         }
     }
 
-    FavoriteMenu.registry = new Registry();
+    FavoriteMenu.registry=newRegistry();
 
-    FavoriteMenu.components = Object.assign({}, DropdownMenu.components, {
+    FavoriteMenu.components=Object.assign({},DropdownMenu.components,{
         Dialog,
     });
-    FavoriteMenu.template = 'web.FavoriteMenu';
+    FavoriteMenu.template='web.FavoriteMenu';
 
-    return FavoriteMenu;
+    returnFavoriteMenu;
 });

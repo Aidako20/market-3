@@ -1,56 +1,56 @@
-flectra.define('lunch.LunchListRenderer', function (require) {
-"use strict";
+flectra.define('lunch.LunchListRenderer',function(require){
+"usestrict";
 
 /**
- * This file defines the Renderer for the Lunch List view, which is an
- * override of the ListRenderer.
+ *ThisfiledefinestheRendererfortheLunchListview,whichisan
+ *overrideoftheListRenderer.
  */
 
-var ListRenderer = require('web.ListRenderer');
+varListRenderer=require('web.ListRenderer');
 
-var LunchListRenderer = ListRenderer.extend({
-    events: _.extend({}, ListRenderer.prototype.events, {
-        'click .o_data_row': '_onClickListRow',
+varLunchListRenderer=ListRenderer.extend({
+    events:_.extend({},ListRenderer.prototype.events,{
+        'click.o_data_row':'_onClickListRow',
     }),
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this.$el.addClass('o_lunch_view o_lunch_list_view');
-        return this._super.apply(this, arguments);
+    start:function(){
+        this.$el.addClass('o_lunch_viewo_lunch_list_view');
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * Override to add id of product_id in dataset.
+     *Overridetoaddidofproduct_idindataset.
      *
-     * @override
+     *@override
      */
-    _renderRow: function (record) {
-        var tr = this._super.apply(this, arguments);
-        tr.attr('data-product-id', record.data.id);
-        return tr;
+    _renderRow:function(record){
+        vartr=this._super.apply(this,arguments);
+        tr.attr('data-product-id',record.data.id);
+        returntr;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Open the add product wizard
+     *Opentheaddproductwizard
      *
-     * @private
-     * @param {MouseEvent} ev Click event
+     *@private
+     *@param{MouseEvent}evClickevent
      */
-    _onClickListRow: function (ev) {
+    _onClickListRow:function(ev){
         ev.preventDefault();
-        var productId = ev.currentTarget.dataset && ev.currentTarget.dataset.productId ? parseInt(ev.currentTarget.dataset.productId) : null;
+        varproductId=ev.currentTarget.dataset&&ev.currentTarget.dataset.productId?parseInt(ev.currentTarget.dataset.productId):null;
 
-        if (productId) {
-            this.trigger_up('open_wizard', {productId: productId});
+        if(productId){
+            this.trigger_up('open_wizard',{productId:productId});
         }
     },
 });
 
-return LunchListRenderer;
+returnLunchListRenderer;
 
 });

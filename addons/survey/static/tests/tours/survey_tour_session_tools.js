@@ -1,20 +1,20 @@
-flectra.define('survey.session_tour_tools', function (require) {
-'use strict';
+flectra.define('survey.session_tour_tools',function(require){
+'usestrict';
 
-var tour = require('web_tour.tour');
+vartour=require('web_tour.tour');
 
 /**
- * Tool that gathers common steps to every 'survey session' tours.
+ *Toolthatgatherscommonstepstoevery'surveysession'tours.
  */
-return {
-    accessSurveySteps: [tour.stepUtils.showAppsMenuItem(), {
-        trigger: '.o_app[data-menu-xmlid="survey.menu_surveys"]',
-        edition: 'community'
-    }, {
-        trigger: '.o_app[data-menu-xmlid="survey.menu_surveys"]',
-        edition: 'enterprise'
-    }, {
-        trigger: '.oe_kanban_card:contains("User Session Survey")',
+return{
+    accessSurveySteps:[tour.stepUtils.showAppsMenuItem(),{
+        trigger:'.o_app[data-menu-xmlid="survey.menu_surveys"]',
+        edition:'community'
+    },{
+        trigger:'.o_app[data-menu-xmlid="survey.menu_surveys"]',
+        edition:'enterprise'
+    },{
+        trigger:'.oe_kanban_card:contains("UserSessionSurvey")',
     }]
 };
 

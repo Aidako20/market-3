@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class MrpProduction(models.Model):
-    _inherit = 'mrp.production'
+classMrpProduction(models.Model):
+    _inherit='mrp.production'
 
-    def _cal_price(self, consumed_moves):
-        finished_move = self.move_finished_ids.filtered(lambda x: x.product_id == self.product_id and x.state not in ('done', 'cancel') and x.quantity_done > 0)
-        # Take the price unit of the reception move
-        last_done_receipt = finished_move.move_dest_ids.filtered(lambda m: m.state == 'done')[-1:]
-        if last_done_receipt.is_subcontract:
-            self.extra_cost = last_done_receipt._get_price_unit()
-        return super()._cal_price(consumed_moves=consumed_moves)
+    def_cal_price(self,consumed_moves):
+        finished_move=self.move_finished_ids.filtered(lambdax:x.product_id==self.product_idandx.statenotin('done','cancel')andx.quantity_done>0)
+        #Takethepriceunitofthereceptionmove
+        last_done_receipt=finished_move.move_dest_ids.filtered(lambdam:m.state=='done')[-1:]
+        iflast_done_receipt.is_subcontract:
+            self.extra_cost=last_done_receipt._get_price_unit()
+        returnsuper()._cal_price(consumed_moves=consumed_moves)

@@ -1,214 +1,214 @@
-flectra.define('website.tour.rte', function (require) {
-'use strict';
+flectra.define('website.tour.rte',function(require){
+'usestrict';
 
-var ajax = require('web.ajax');
-var session = require('web.session');
-var tour = require('web_tour.tour');
-var Wysiwyg = require('web_editor.wysiwyg.root');
+varajax=require('web.ajax');
+varsession=require('web.session');
+vartour=require('web_tour.tour');
+varWysiwyg=require('web_editor.wysiwyg.root');
 
-var domReady = new Promise(function (resolve) {
+vardomReady=newPromise(function(resolve){
     $(resolve);
 });
-var ready = Promise.all([domReady, session.is_bound, ajax.loadXML()]);
+varready=Promise.all([domReady,session.is_bound,ajax.loadXML()]);
 
-tour.register('rte_translator', {
-    test: true,
-    url: '/',
-    wait_for: ready,
-}, [{
-    content: "click language dropdown",
-    trigger: '.js_language_selector .dropdown-toggle',
-}, {
-    content: "click on Add a language",
-    trigger: 'a.o_add_language',
-}, {
-    content: "select Parseltongue",
-    trigger: 'select[name="lang"]',
-    run: 'text "pa_GB"',
-}, {
-    content: "load Parseltongue",
-    trigger: '.modal-footer button:first',
-    extra_trigger: '.modal select[name="lang"]:propValueContains(pa_GB)',
-}, {
-    content : "click language dropdown (2)",
-    trigger : '.js_language_selector .dropdown-toggle',
-    timeout: 60000,
-}, {
-    content: "go to english version",
-    trigger: '.js_language_selector a[data-url_code="en"]',
-    extra_trigger: 'html[lang*="pa-GB"]',
-}, {
-    content: "Open new page menu",
-    trigger: "body:has(#o_new_content_menu_choices.o_hidden) #new-content-menu > a",
-    extra_trigger: 'a[data-action="edit"]',
-    consumeVisibleOnly: true,
-}, {
-    content: "click on new page",
-    trigger: 'a[data-action="new_page"]',
-}, {
-    content: "insert page name",
-    trigger: '#editor_new_page input[type="text"]',
-    run: 'text rte_translator',
-}, {
-    content: "create page",
-    trigger: 'button.btn-continue',
-    extra_trigger: 'input[type="text"]:propValue(rte_translator)',
-}, {
-    content: "drop a snippet",
-    trigger: "#snippet_structure .oe_snippet:eq(1) .oe_snippet_thumbnail",
-    run: 'drag_and_drop #wrap',
-}, {
-    content: "change content",
-    trigger: '#wrap',
-    run: function () {
-        $("#wrap p:first").replaceWith('<p>Write one or <font style="background-color: yellow;">two paragraphs <b>describing</b></font> your product or\
-                <font style="color: rgb(255, 0, 0);">services</font>. To be successful your content needs to be\
-                useful to your <a href="/999">readers</a>.</p> <input placeholder="test translate placeholder"/>\
-                <p>&lt;b&gt;&lt;/b&gt; is an HTML&nbsp;tag &amp; is empty</p>');
-        $("#wrap img").attr("title", "test translate image title");
+tour.register('rte_translator',{
+    test:true,
+    url:'/',
+    wait_for:ready,
+},[{
+    content:"clicklanguagedropdown",
+    trigger:'.js_language_selector.dropdown-toggle',
+},{
+    content:"clickonAddalanguage",
+    trigger:'a.o_add_language',
+},{
+    content:"selectParseltongue",
+    trigger:'select[name="lang"]',
+    run:'text"pa_GB"',
+},{
+    content:"loadParseltongue",
+    trigger:'.modal-footerbutton:first',
+    extra_trigger:'.modalselect[name="lang"]:propValueContains(pa_GB)',
+},{
+    content:"clicklanguagedropdown(2)",
+    trigger:'.js_language_selector.dropdown-toggle',
+    timeout:60000,
+},{
+    content:"gotoenglishversion",
+    trigger:'.js_language_selectora[data-url_code="en"]',
+    extra_trigger:'html[lang*="pa-GB"]',
+},{
+    content:"Opennewpagemenu",
+    trigger:"body:has(#o_new_content_menu_choices.o_hidden)#new-content-menu>a",
+    extra_trigger:'a[data-action="edit"]',
+    consumeVisibleOnly:true,
+},{
+    content:"clickonnewpage",
+    trigger:'a[data-action="new_page"]',
+},{
+    content:"insertpagename",
+    trigger:'#editor_new_pageinput[type="text"]',
+    run:'textrte_translator',
+},{
+    content:"createpage",
+    trigger:'button.btn-continue',
+    extra_trigger:'input[type="text"]:propValue(rte_translator)',
+},{
+    content:"dropasnippet",
+    trigger:"#snippet_structure.oe_snippet:eq(1).oe_snippet_thumbnail",
+    run:'drag_and_drop#wrap',
+},{
+    content:"changecontent",
+    trigger:'#wrap',
+    run:function(){
+        $("#wrapp:first").replaceWith('<p>Writeoneor<fontstyle="background-color:yellow;">twoparagraphs<b>describing</b></font>yourproductor\
+                <fontstyle="color:rgb(255,0,0);">services</font>.Tobesuccessfulyourcontentneedstobe\
+                usefultoyour<ahref="/999">readers</a>.</p><inputplaceholder="testtranslateplaceholder"/>\
+                <p>&lt;b&gt;&lt;/b&gt;isanHTML&nbsp;tag&amp;isempty</p>');
+        $("#wrapimg").attr("title","testtranslateimagetitle");
     }
-}, {
-    content: "save",
-    trigger: 'button[data-action=save]',
-    extra_trigger: '#wrap p:first b',
-}, {
-    content : "click language dropdown (3)",
-    trigger : '.js_language_selector .dropdown-toggle',
-    extra_trigger: 'body:not(.o_wait_reload):not(:has(.note-editor)) a[data-action="edit"]',
-}, {
-    content: "click on Parseltongue version",
-    trigger: '.js_language_selector a[data-url_code="pa_GB"]',
-    extra_trigger: 'html[lang*="en"]:not(:has(button[data-action=save]))',
-}, {
-    content: "translate",
-    trigger: 'html:not(:has(#wrap p span)) .o_menu_systray a[data-action="translate"]',
-}, {
-    content: "close modal",
-    trigger: '.modal-footer .btn-secondary',
-}, {
-    content: "check if translation is activate",
-    trigger: '[data-oe-translation-id]',
-}, {
-    content: "translate text",
-    trigger: '#wrap p font:first',
-    run: function (action_helper) {
-        action_helper.text('translated Parseltongue text');
-        Wysiwyg.setRange(this.$anchor.contents()[0], 22);
-        this.$anchor.trigger($.Event( "keyup", {key: '_', keyCode: 95}));
+},{
+    content:"save",
+    trigger:'button[data-action=save]',
+    extra_trigger:'#wrapp:firstb',
+},{
+    content:"clicklanguagedropdown(3)",
+    trigger:'.js_language_selector.dropdown-toggle',
+    extra_trigger:'body:not(.o_wait_reload):not(:has(.note-editor))a[data-action="edit"]',
+},{
+    content:"clickonParseltongueversion",
+    trigger:'.js_language_selectora[data-url_code="pa_GB"]',
+    extra_trigger:'html[lang*="en"]:not(:has(button[data-action=save]))',
+},{
+    content:"translate",
+    trigger:'html:not(:has(#wrappspan)).o_menu_systraya[data-action="translate"]',
+},{
+    content:"closemodal",
+    trigger:'.modal-footer.btn-secondary',
+},{
+    content:"checkiftranslationisactivate",
+    trigger:'[data-oe-translation-id]',
+},{
+    content:"translatetext",
+    trigger:'#wrappfont:first',
+    run:function(action_helper){
+        action_helper.text('translatedParseltonguetext');
+        Wysiwyg.setRange(this.$anchor.contents()[0],22);
+        this.$anchor.trigger($.Event("keyup",{key:'_',keyCode:95}));
         this.$anchor.trigger('input');
     },
-}, {
-    content: "translate text with special char",
-    trigger: '#wrap input + p span:first',
-    run: function (action_helper) {
+},{
+    content:"translatetextwithspecialchar",
+    trigger:'#wrapinput+pspan:first',
+    run:function(action_helper){
         action_helper.click();
         this.$anchor.prepend('&lt;{translated}&gt;');
-        Wysiwyg.setRange(this.$anchor.contents()[0], 0);
-        this.$anchor.trigger($.Event( "keyup", {key: '_', keyCode: 95}));
+        Wysiwyg.setRange(this.$anchor.contents()[0],0);
+        this.$anchor.trigger($.Event("keyup",{key:'_',keyCode:95}));
         this.$anchor.trigger('input');
     },
-}, {
-    content: "click on input",
-    trigger: '#wrap input:first',
-    extra_trigger: '#wrap .o_dirty font:first:contains(translated Parseltongue text)',
-    run: 'click',
-}, {
-    content: "translate placeholder",
-    trigger: 'input:first',
-    run: 'text test Parseltongue placeholder',
-}, {
-    content: "close modal",
-    trigger: '.modal-footer .btn-primary',
-    extra_trigger: '.modal input:propValue(test Parseltongue placeholder)',
-}, {
-    content: "check: input marked as translated",
-    trigger: '#wrap input[placeholder="test Parseltongue placeholder"].oe_translated',
-    run: () => {},
-}, {
-    content: "save translation",
-    trigger: 'button[data-action=save]',
-}, {
-    content: "check: content is translated",
-    trigger: '#wrap p font:first:contains(translated Parseltongue text)',
-    extra_trigger: 'body:not(.o_wait_reload):not(:has(.note-editor)) a[data-action="edit_master"]',
-    run: function () {}, // it's a check
-}, {
-    content: "check: content with special char is translated",
-    trigger: "#wrap input + p:contains(<{translated}><b></b> is an HTML\xa0tag & )",
-    run: function () {}, // it's a check
+},{
+    content:"clickoninput",
+    trigger:'#wrapinput:first',
+    extra_trigger:'#wrap.o_dirtyfont:first:contains(translatedParseltonguetext)',
+    run:'click',
+},{
+    content:"translateplaceholder",
+    trigger:'input:first',
+    run:'texttestParseltongueplaceholder',
+},{
+    content:"closemodal",
+    trigger:'.modal-footer.btn-primary',
+    extra_trigger:'.modalinput:propValue(testParseltongueplaceholder)',
+},{
+    content:"check:inputmarkedastranslated",
+    trigger:'#wrapinput[placeholder="testParseltongueplaceholder"].oe_translated',
+    run:()=>{},
+},{
+    content:"savetranslation",
+    trigger:'button[data-action=save]',
+},{
+    content:"check:contentistranslated",
+    trigger:'#wrappfont:first:contains(translatedParseltonguetext)',
+    extra_trigger:'body:not(.o_wait_reload):not(:has(.note-editor))a[data-action="edit_master"]',
+    run:function(){},//it'sacheck
+},{
+    content:"check:contentwithspecialcharistranslated",
+    trigger:"#wrapinput+p:contains(<{translated}><b></b>isanHTML\xa0tag&)",
+    run:function(){},//it'sacheck
 
-}, {
-    content: "check: placeholder translation",
-    trigger: 'input[placeholder="test Parseltongue placeholder"]',
-    run: function () {}, // it's a check
+},{
+    content:"check:placeholdertranslation",
+    trigger:'input[placeholder="testParseltongueplaceholder"]',
+    run:function(){},//it'sacheck
 
-}, {
-    content: "open language selector",
-    trigger: '.js_language_selector button:first',
-    extra_trigger: 'html[lang*="pa-GB"]:not(:has(#wrap p span))',
-}, {
-    content: "return to english version",
-    trigger: '.js_language_selector a[data-url_code="en"]',
-}, {
-    content: "edit english version",
-    trigger: 'a[data-action=edit]',
-    extra_trigger: 'body:not(:has(#wrap p font:first:containsExact(paragraphs <b>describing</b>)))',
-}, {
-    content: "select text",
-    extra_trigger: '#oe_snippets.o_loaded',
-    trigger: '#wrap p',
-    run: function (action_helper) {
+},{
+    content:"openlanguageselector",
+    trigger:'.js_language_selectorbutton:first',
+    extra_trigger:'html[lang*="pa-GB"]:not(:has(#wrappspan))',
+},{
+    content:"returntoenglishversion",
+    trigger:'.js_language_selectora[data-url_code="en"]',
+},{
+    content:"editenglishversion",
+    trigger:'a[data-action=edit]',
+    extra_trigger:'body:not(:has(#wrappfont:first:containsExact(paragraphs<b>describing</b>)))',
+},{
+    content:"selecttext",
+    extra_trigger:'#oe_snippets.o_loaded',
+    trigger:'#wrapp',
+    run:function(action_helper){
         action_helper.click();
-        var el = this.$anchor[0];
-        var mousedown = document.createEvent('MouseEvents');
-        mousedown.initMouseEvent('mousedown', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, el);
+        varel=this.$anchor[0];
+        varmousedown=document.createEvent('MouseEvents');
+        mousedown.initMouseEvent('mousedown',true,true,window,0,0,0,0,0,false,false,false,false,0,el);
         el.dispatchEvent(mousedown);
-        var mouseup = document.createEvent('MouseEvents');
-        Wysiwyg.setRange(el.childNodes[2], 6, el.childNodes[2], 13);
-        mouseup.initMouseEvent('mouseup', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, el);
+        varmouseup=document.createEvent('MouseEvents');
+        Wysiwyg.setRange(el.childNodes[2],6,el.childNodes[2],13);
+        mouseup.initMouseEvent('mouseup',true,true,window,0,0,0,0,0,false,false,false,false,0,el);
         el.dispatchEvent(mouseup);
     },
-}, {
-    content: "underline",
-    trigger: '.note-air-popover button[data-event="underline"]',
-}, {
-    content: "save new change",
-    trigger: 'button[data-action=save]',
-    extra_trigger: '#wrap.o_dirty p u',
+},{
+    content:"underline",
+    trigger:'.note-air-popoverbutton[data-event="underline"]',
+},{
+    content:"savenewchange",
+    trigger:'button[data-action=save]',
+    extra_trigger:'#wrap.o_dirtypu',
 
-    }, {
-    content : "click language dropdown (4)",
-    trigger : '.js_language_selector .dropdown-toggle',
-    extra_trigger: 'body:not(.o_wait_reload):not(:has(.note-editor)) a[data-action="edit"]',
-}, {
-    content: "return in Parseltongue",
-    trigger : 'html[lang="en-US"] .js_language_selector .js_change_lang[data-url_code="pa_GB"]',
-}, {
-    content: "check bis: content is translated",
-    trigger: '#wrap p font:first:contains(translated Parseltongue text)',
-    extra_trigger: 'html[lang*="pa-GB"] body:not(:has(button[data-action=save]))',
-}, {
-    content: "check bis: placeholder translation",
-    trigger: 'input[placeholder="test Parseltongue placeholder"]',
-}, {
-    content: "Open customize menu",
-    trigger: "#customize-menu > .dropdown-toggle",
-}, {
-    content: "Open HTML editor",
-    trigger: "[data-action='ace']",
-}, {
-    content: "Check that the editor is not showing translated content (1)",
-    trigger: '.ace_text-layer .ace_line:contains("an HTML")',
-    run: function (actions) {
-        var lineEscapedText = $(this.$anchor.text()).text();
-        if (lineEscapedText !== "&lt;b&gt;&lt;/b&gt; is an HTML&nbsp;tag &amp; is empty") {
-            console.error('The HTML editor should display the correct untranslated content');
+    },{
+    content:"clicklanguagedropdown(4)",
+    trigger:'.js_language_selector.dropdown-toggle',
+    extra_trigger:'body:not(.o_wait_reload):not(:has(.note-editor))a[data-action="edit"]',
+},{
+    content:"returninParseltongue",
+    trigger:'html[lang="en-US"].js_language_selector.js_change_lang[data-url_code="pa_GB"]',
+},{
+    content:"checkbis:contentistranslated",
+    trigger:'#wrappfont:first:contains(translatedParseltonguetext)',
+    extra_trigger:'html[lang*="pa-GB"]body:not(:has(button[data-action=save]))',
+},{
+    content:"checkbis:placeholdertranslation",
+    trigger:'input[placeholder="testParseltongueplaceholder"]',
+},{
+    content:"Opencustomizemenu",
+    trigger:"#customize-menu>.dropdown-toggle",
+},{
+    content:"OpenHTMLeditor",
+    trigger:"[data-action='ace']",
+},{
+    content:"Checkthattheeditorisnotshowingtranslatedcontent(1)",
+    trigger:'.ace_text-layer.ace_line:contains("anHTML")',
+    run:function(actions){
+        varlineEscapedText=$(this.$anchor.text()).text();
+        if(lineEscapedText!=="&lt;b&gt;&lt;/b&gt;isanHTML&nbsp;tag&amp;isempty"){
+            console.error('TheHTMLeditorshoulddisplaythecorrectuntranslatedcontent');
             $('body').addClass('rte_translator_error');
         }
     },
-}, {
-    content: "Check that the editor is not showing translated content (2)",
-    trigger: 'body:not(.rte_translator_error)',
-    run: function () {},
+},{
+    content:"Checkthattheeditorisnotshowingtranslatedcontent(2)",
+    trigger:'body:not(.rte_translator_error)',
+    run:function(){},
 }]);
 });

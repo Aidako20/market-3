@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="snailmail.SnailmailNotificationPopover" owl="1">
-        <div class="o_SnailmailNotificationPopover">
-            <t t-if="message and notification">
-                <i class="o_SnailmailNotificationPopover_icon" t-att-class="iconClass" role="img"/>
-                <span t-esc="iconTitle"/>
+    <tt-name="snailmail.SnailmailNotificationPopover"owl="1">
+        <divclass="o_SnailmailNotificationPopover">
+            <tt-if="messageandnotification">
+                <iclass="o_SnailmailNotificationPopover_icon"t-att-class="iconClass"role="img"/>
+                <spant-esc="iconTitle"/>
             </t>
         </div>
     </t>

@@ -1,76 +1,76 @@
-flectra.define('purchase.product_matrix_configurator', function (require) {
+flectra.define('purchase.product_matrix_configurator',function(require){
 
-var relationalFields = require('web.relational_fields');
-var FieldsRegistry = require('web.field_registry');
-var core = require('web.core');
-var _t = core._t;
+varrelationalFields=require('web.relational_fields');
+varFieldsRegistry=require('web.field_registry');
+varcore=require('web.core');
+var_t=core._t;
 
 /**
- * The purchase.product_matrix_configurator widget is a widget extending FieldMany2One
- * It triggers the opening of the matrix edition when the product has multiple variants.
+ *Thepurchase.product_matrix_configuratorwidgetisawidgetextendingFieldMany2One
+ *Ittriggerstheopeningofthematrixeditionwhentheproducthasmultiplevariants.
  *
  *
- * !!! WARNING !!!
+ *!!!WARNING!!!
  *
- * This widget is only designed for Purchase Order Lines.
- * !!! It should only be used on a product_template field !!!
+ *ThiswidgetisonlydesignedforPurchaseOrderLines.
+ *!!!Itshouldonlybeusedonaproduct_templatefield!!!
  */
-var MatrixConfiguratorWidget = relationalFields.FieldMany2One.extend({
-    events: _.extend({}, relationalFields.FieldMany2One.prototype.events, {
-        'click .o_edit_product_configuration': '_onEditProductConfiguration'
+varMatrixConfiguratorWidget=relationalFields.FieldMany2One.extend({
+    events:_.extend({},relationalFields.FieldMany2One.prototype.events,{
+        'click.o_edit_product_configuration':'_onEditProductConfiguration'
     }),
 
     /**
-     * @override
+     *@override
      */
-    _render: function () {
-       this._super.apply(this, arguments);
-       if (this.mode === 'edit' && this.value &&
-       (this._isConfigurableProduct())) {
+    _render:function(){
+       this._super.apply(this,arguments);
+       if(this.mode==='edit'&&this.value&&
+       (this._isConfigurableProduct())){
            this._addProductLinkButton();
            this._addConfigurationEditButton();
-       } else if (this.mode === 'edit' && this.value) {
+       }elseif(this.mode==='edit'&&this.value){
            this._addProductLinkButton();
-       } else {
+       }else{
            this.$('.o_edit_product_configuration').hide();
        }
     },
 
     /**
-    * Add button linking to product_id/product_template_id form.
+    *Addbuttonlinkingtoproduct_id/product_template_idform.
     */
-    _addProductLinkButton: function () {
-       if (this.$('.o_external_button').length === 0) {
-           var $productLinkButton = $('<button>', {
-               type: 'button',
-               class: 'fa fa-external-link btn btn-secondary o_external_button',
-               tabindex: '-1',
-               draggable: false,
-               'aria-label': _t('External Link'),
-               title: _t('External Link')
+    _addProductLinkButton:function(){
+       if(this.$('.o_external_button').length===0){
+           var$productLinkButton=$('<button>',{
+               type:'button',
+               class:'fafa-external-linkbtnbtn-secondaryo_external_button',
+               tabindex:'-1',
+               draggable:false,
+               'aria-label':_t('ExternalLink'),
+               title:_t('ExternalLink')
            });
 
-           var $inputDropdown = this.$('.o_input_dropdown');
+           var$inputDropdown=this.$('.o_input_dropdown');
            $inputDropdown.after($productLinkButton);
        }
     },
 
     /**
-    * If current product is configurable,
-    * Show edit button (in Edit Mode) after the product/product_template
+    *Ifcurrentproductisconfigurable,
+    *Showeditbutton(inEditMode)aftertheproduct/product_template
     */
-    _addConfigurationEditButton: function () {
-       var $inputDropdown = this.$('.o_input_dropdown');
+    _addConfigurationEditButton:function(){
+       var$inputDropdown=this.$('.o_input_dropdown');
 
-       if ($inputDropdown.length !== 0 &&
-           this.$('.o_edit_product_configuration').length === 0) {
-           var $editConfigurationButton = $('<button>', {
-               type: 'button',
-               class: 'fa fa-pencil btn btn-secondary o_edit_product_configuration',
-               tabindex: '-1',
-               draggable: false,
-               'aria-label': _t('Edit Configuration'),
-               title: _t('Edit Configuration')
+       if($inputDropdown.length!==0&&
+           this.$('.o_edit_product_configuration').length===0){
+           var$editConfigurationButton=$('<button>',{
+               type:'button',
+               class:'fafa-pencilbtnbtn-secondaryo_edit_product_configuration',
+               tabindex:'-1',
+               draggable:false,
+               'aria-label':_t('EditConfiguration'),
+               title:_t('EditConfiguration')
            });
 
            $inputDropdown.after($editConfigurationButton);
@@ -78,106 +78,106 @@ var MatrixConfiguratorWidget = relationalFields.FieldMany2One.extend({
     },
 
     /**
-     * Hook to override with _onEditProductConfiguration
-     * to know if edit pencil button has to be put next to the field
+     *Hooktooverridewith_onEditProductConfiguration
+     *toknowifeditpencilbuttonhastobeputnexttothefield
      *
-     * @private
+     *@private
      */
-    _isConfigurableProduct: function () {
-        return this.recordData.is_configurable_product;
+    _isConfigurableProduct:function(){
+        returnthis.recordData.is_configurable_product;
     },
 
     /**
-     * Override catching changes on product_id or product_template_id.
-     * Calls _onTemplateChange in case of product_template change.
-     * Calls _onProductChange in case of product change.
-     * Shouldn't be overridden by product configurators
-     * or only to setup some data for further computation
-     * before calling super.
+     *Overridecatchingchangesonproduct_idorproduct_template_id.
+     *Calls_onTemplateChangeincaseofproduct_templatechange.
+     *Calls_onProductChangeincaseofproductchange.
+     *Shouldn'tbeoverriddenbyproductconfigurators
+     *oronlytosetupsomedataforfurthercomputation
+     *beforecallingsuper.
      *
-     * @override
+     *@override
      */
-    reset: async function (record, ev) {
-        await this._super(...arguments);
-        if (ev && ev.target === this && ev.data.changes && ev.data.changes.product_template_id && record.data.product_template_id.data.id) {
-            this._onTemplateChange(record.data.product_template_id.data.id, ev.data.dataPointID);
+    reset:asyncfunction(record,ev){
+        awaitthis._super(...arguments);
+        if(ev&&ev.target===this&&ev.data.changes&&ev.data.changes.product_template_id&&record.data.product_template_id.data.id){
+            this._onTemplateChange(record.data.product_template_id.data.id,ev.data.dataPointID);
         }
     },
 
     /**
-     * Hook for product_template based configurators
-     * (product configurator, matrix, ...).
+     *Hookforproduct_templatebasedconfigurators
+     *(productconfigurator,matrix,...).
      *
-     * @param {integer} productTemplateId
-     * @param {String} dataPointID
+     *@param{integer}productTemplateId
+     *@param{String}dataPointID
      *
-     * @private
+     *@private
      */
-    _onTemplateChange: function (productTemplateId, dataPointId) {
-        var self = this;
+    _onTemplateChange:function(productTemplateId,dataPointId){
+        varself=this;
         this._rpc({
-            model: 'product.template',
-            method: 'get_single_product_variant',
-            args: [
+            model:'product.template',
+            method:'get_single_product_variant',
+            args:[
                 productTemplateId
             ]
-        }).then(function (result) {
-            if (result.product_id) {
-                self.trigger_up('field_changed', {
-                    dataPointID: dataPointId,
-                    changes: {
-                        product_id: {id: result.product_id},
+        }).then(function(result){
+            if(result.product_id){
+                self.trigger_up('field_changed',{
+                    dataPointID:dataPointId,
+                    changes:{
+                        product_id:{id:result.product_id},
                     },
                 });
-            } else {
-                self._openMatrix(productTemplateId, dataPointId, false);
+            }else{
+                self._openMatrix(productTemplateId,dataPointId,false);
             }
         });
     },
 
     /**
-     * Hook for editing a configured line.
-     * The button triggering this function is only shown in Edit mode,
-     * when _isConfigurableProduct is True.
+     *Hookforeditingaconfiguredline.
+     *ThebuttontriggeringthisfunctionisonlyshowninEditmode,
+     *when_isConfigurableProductisTrue.
      *
-     * @private
+     *@private
      */
-    _onEditProductConfiguration: function () {
-        if (this.recordData.is_configurable_product) {
-            this._openMatrix(this.recordData.product_template_id.data.id, this.dataPointID, true);
+    _onEditProductConfiguration:function(){
+        if(this.recordData.is_configurable_product){
+            this._openMatrix(this.recordData.product_template_id.data.id,this.dataPointID,true);
         }
     },
 
-    _openMatrix: function (productTemplateId, dataPointId, edit) {
-        var attribs = edit ? this._getPTAVS() : [];
-        this.trigger_up('open_matrix', {
-            product_template_id: productTemplateId,
-            model: 'purchase.order',
-            dataPointId: dataPointId,
-            edit: edit,
-            editedCellAttributes: attribs,
-            // used to focus the cell representing the line on which the pencil was clicked.
+    _openMatrix:function(productTemplateId,dataPointId,edit){
+        varattribs=edit?this._getPTAVS():[];
+        this.trigger_up('open_matrix',{
+            product_template_id:productTemplateId,
+            model:'purchase.order',
+            dataPointId:dataPointId,
+            edit:edit,
+            editedCellAttributes:attribs,
+            //usedtofocusthecellrepresentingthelineonwhichthepencilwasclicked.
         });
     },
 
     /**
-     * Returns the list of attribute ids (product.template.attribute.value)
-     * from the current POLine.
+     *Returnsthelistofattributeids(product.template.attribute.value)
+     *fromthecurrentPOLine.
     */
-    _getPTAVS: function () {
-        var PTAVSIDS = [];
-        _.each(this.recordData.product_no_variant_attribute_value_ids.res_ids, function (id) {
+    _getPTAVS:function(){
+        varPTAVSIDS=[];
+        _.each(this.recordData.product_no_variant_attribute_value_ids.res_ids,function(id){
             PTAVSIDS.push(id);
         });
-        _.each(this.recordData.product_template_attribute_value_ids.res_ids, function (id) {
+        _.each(this.recordData.product_template_attribute_value_ids.res_ids,function(id){
             PTAVSIDS.push(id);
         });
-        return PTAVSIDS.sort(function (a, b) {return a - b;});
+        returnPTAVSIDS.sort(function(a,b){returna-b;});
     }
 });
 
-FieldsRegistry.add('matrix_configurator', MatrixConfiguratorWidget);
+FieldsRegistry.add('matrix_configurator',MatrixConfiguratorWidget);
 
-return MatrixConfiguratorWidget;
+returnMatrixConfiguratorWidget;
 
 });

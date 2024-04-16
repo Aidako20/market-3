@@ -1,54 +1,54 @@
-flectra.define('website_sale.tour_shop_deleted_archived_variants', function (require) {
-'use strict';
+flectra.define('website_sale.tour_shop_deleted_archived_variants',function(require){
+'usestrict';
 
-var tour = require('web_tour.tour');
+vartour=require('web_tour.tour');
 
-// This tour relies on a data created from the python test.
-tour.register('tour_shop_deleted_archived_variants', {
-    test: true,
-    url: '/shop?search=Test Product 2',
+//Thistourreliesonadatacreatedfromthepythontest.
+tour.register('tour_shop_deleted_archived_variants',{
+    test:true,
+    url:'/shop?search=TestProduct2',
 },
 [
     {
-        content: "check price on /shop (template price)",
-        trigger: '.oe_product_cart .oe_currency_value:contains("1.00")',
+        content:"checkpriceon/shop(templateprice)",
+        trigger:'.oe_product_cart.oe_currency_value:contains("1.00")',
     },
     {
-        content: "select Test Product 2",
-        trigger: '.oe_product_cart a:containsExact("Test Product 2")',
+        content:"selectTestProduct2",
+        trigger:'.oe_product_carta:containsExact("TestProduct2")',
     },
     {
-        content: "check price (3rd variant)",
-        trigger: '.oe_currency_value:contains("31.00")'
+        content:"checkprice(3rdvariant)",
+        trigger:'.oe_currency_value:contains("31.00")'
     },
     {
-        content: "click on the second variant",
-        trigger: 'input[data-attribute_name="My Attribute"][data-value_name="My Value 2"]',
+        content:"clickonthesecondvariant",
+        trigger:'input[data-attribute_name="MyAttribute"][data-value_name="MyValue2"]',
     },
     {
-        content: "check combination is not possible",
-        trigger: '.js_main_product.css_not_available .css_not_available_msg:contains("This combination does not exist.")'
+        content:"checkcombinationisnotpossible",
+        trigger:'.js_main_product.css_not_available.css_not_available_msg:contains("Thiscombinationdoesnotexist.")'
     },
     {
-        content: "click on the 3rd variant to reset the warning",
-        trigger: 'input[data-attribute_name="My Attribute"][data-value_name="My Value 3"]',
+        content:"clickonthe3rdvarianttoresetthewarning",
+        trigger:'input[data-attribute_name="MyAttribute"][data-value_name="MyValue3"]',
     },
     {
-        content: "check price (3rd variant)",
-        trigger: '.oe_currency_value:contains("31.00")'
+        content:"checkprice(3rdvariant)",
+        trigger:'.oe_currency_value:contains("31.00")'
     },
     {
-        content: "click on the first variant",
-        trigger: 'input[data-attribute_name="My Attribute"][data-value_name="My Value 1"]',
+        content:"clickonthefirstvariant",
+        trigger:'input[data-attribute_name="MyAttribute"][data-value_name="MyValue1"]',
     },
     {
-        content: "check combination is not possible",
-        trigger: '.js_main_product.css_not_available .css_not_available_msg:contains("This combination does not exist.")'
+        content:"checkcombinationisnotpossible",
+        trigger:'.js_main_product.css_not_available.css_not_available_msg:contains("Thiscombinationdoesnotexist.")'
     },
     {
-        content: "check add to cart not possible",
-        trigger: '#add_to_cart.disabled',
-        run: function () {},
+        content:"checkaddtocartnotpossible",
+        trigger:'#add_to_cart.disabled',
+        run:function(){},
     }
 ]);
 });

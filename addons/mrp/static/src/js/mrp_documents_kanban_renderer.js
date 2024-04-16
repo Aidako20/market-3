@@ -1,27 +1,27 @@
-flectra.define('mrp.MrpDocumentsKanbanRenderer', function (require) {
-"use strict";
+flectra.define('mrp.MrpDocumentsKanbanRenderer',function(require){
+"usestrict";
 
 /**
- * This file defines the Renderer for the MRP Documents Kanban view, which is an
- * override of the KanbanRenderer.
+ *ThisfiledefinestheRendererfortheMRPDocumentsKanbanview,whichisan
+ *overrideoftheKanbanRenderer.
  */
 
-const KanbanRenderer = require('web.KanbanRenderer');
-const MrpDocumentsKanbanRecord = require('mrp.MrpDocumentsKanbanRecord');
+constKanbanRenderer=require('web.KanbanRenderer');
+constMrpDocumentsKanbanRecord=require('mrp.MrpDocumentsKanbanRecord');
 
-const MrpDocumentsKanbanRenderer = KanbanRenderer.extend({
-    config: Object.assign({}, KanbanRenderer.prototype.config, {
-        KanbanRecord: MrpDocumentsKanbanRecord,
+constMrpDocumentsKanbanRenderer=KanbanRenderer.extend({
+    config:Object.assign({},KanbanRenderer.prototype.config,{
+        KanbanRecord:MrpDocumentsKanbanRecord,
     }),
     /**
-     * @override
+     *@override
      */
-    async start() {
+    asyncstart(){
         this.$el.addClass('o_mrp_documents_kanban_view');
-        await this._super(...arguments);
+        awaitthis._super(...arguments);
     },
 });
 
-return MrpDocumentsKanbanRenderer;
+returnMrpDocumentsKanbanRenderer;
 
 });

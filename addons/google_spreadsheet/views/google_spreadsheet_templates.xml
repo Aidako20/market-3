@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-        <template id="assets_backend" name="google_spreadsheet assets" inherit_id="web.assets_backend">
-            <xpath expr="." position="inside">
-                <script type="text/javascript" src="/google_spreadsheet/static/src/js/add_to_google_spreadsheet_menu.js"></script>
+        <templateid="assets_backend"name="google_spreadsheetassets"inherit_id="web.assets_backend">
+            <xpathexpr="."position="inside">
+                <scripttype="text/javascript"src="/google_spreadsheet/static/src/js/add_to_google_spreadsheet_menu.js"></script>
             </xpath>
         </template>
 

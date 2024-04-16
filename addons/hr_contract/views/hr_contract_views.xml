@@ -1,68 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-        <record id="act_hr_employee_2_hr_contract" model="ir.actions.act_window">
-            <field name="name">Contracts</field>
-            <field name="res_model">hr.contract</field>
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="context">{
-                'search_default_employee_id': [active_id],
-                'default_employee_id': active_id,
-                'search_default_group_by_state': 1
+        <recordid="act_hr_employee_2_hr_contract"model="ir.actions.act_window">
+            <fieldname="name">Contracts</field>
+            <fieldname="res_model">hr.contract</field>
+            <fieldname="view_mode">kanban,tree,form</field>
+            <fieldname="context">{
+                'search_default_employee_id':[active_id],
+                'default_employee_id':active_id,
+                'search_default_group_by_state':1
             }</field>
         </record>
 
-        <record id="hr_hr_employee_view_form2" model="ir.ui.view">
-            <field name="name">hr.hr.employee.view.form2</field>
-            <field name="model">hr.employee</field>
-            <field name="inherit_id" ref="hr.view_employee_form"/>
-            <field name="arch" type="xml">
+        <recordid="hr_hr_employee_view_form2"model="ir.ui.view">
+            <fieldname="name">hr.hr.employee.view.form2</field>
+            <fieldname="model">hr.employee</field>
+            <fieldname="inherit_id"ref="hr.view_employee_form"/>
+            <fieldname="arch"type="xml">
                 <data>
-                    <div name="button_box" position="inside">
-                        <field name="contract_warning" invisible="1"/>
-                        <button name="%(act_hr_employee_2_hr_contract)d"
+                    <divname="button_box"position="inside">
+                        <fieldname="contract_warning"invisible="1"/>
+                        <buttonname="%(act_hr_employee_2_hr_contract)d"
                             class="oe_stat_button"
                             icon="fa-book"
                             type="action"
                             groups="hr_contract.group_hr_contract_manager">
-                            <div attrs="{'invisible' : [('first_contract_date', '=', False)]}" class="o_stat_info">
-                                <span class="o_stat_text text-success" attrs="{'invisible' : [('contract_warning', '=', True)]}" title="In Contract Since"> In Contract Since</span>
-                                <span class="o_stat_value text-success" attrs="{'invisible' : [('contract_warning', '=', True)]}">
-                                    <field name="first_contract_date" readonly="1"/>
+                            <divattrs="{'invisible':[('first_contract_date','=',False)]}"class="o_stat_info">
+                                <spanclass="o_stat_texttext-success"attrs="{'invisible':[('contract_warning','=',True)]}"title="InContractSince">InContractSince</span>
+                                <spanclass="o_stat_valuetext-success"attrs="{'invisible':[('contract_warning','=',True)]}">
+                                    <fieldname="first_contract_date"readonly="1"/>
                                 </span>
-                                <span class="o_stat_text text-danger" attrs="{'invisible' : [('contract_warning', '=', False)]}" title="In Contract Since">
-                                    In Contract Since
+                                <spanclass="o_stat_texttext-danger"attrs="{'invisible':[('contract_warning','=',False)]}"title="InContractSince">
+                                    InContractSince
                                 </span>
-                                <span class="o_stat_value text-danger" attrs="{'invisible' : [('contract_warning', '=', False)]}">
-                                    <field name="first_contract_date" readonly="1"/>
+                                <spanclass="o_stat_valuetext-danger"attrs="{'invisible':[('contract_warning','=',False)]}">
+                                    <fieldname="first_contract_date"readonly="1"/>
                                 </span>
                             </div>
-                            <div attrs="{'invisible' : [('first_contract_date', '!=', False)]}" class="o_stat_info">
-                                <span class="o_stat_value text-danger">
-                                   <field name="contracts_count"/>
+                            <divattrs="{'invisible':[('first_contract_date','!=',False)]}"class="o_stat_info">
+                                <spanclass="o_stat_valuetext-danger">
+                                   <fieldname="contracts_count"/>
                                 </span>
-                                <span class="o_stat_text text-danger">
+                                <spanclass="o_stat_texttext-danger">
                                     Contracts
                                 </span>
                             </div>
                         </button>
                     </div>
-                    <xpath expr="//field[@name='user_id']" position="before">
-                        <field name="first_contract_date" attrs="{'invisible' : [('first_contract_date', '=', False)]}" readonly="1"/>
+                    <xpathexpr="//field[@name='user_id']"position="before">
+                        <fieldname="first_contract_date"attrs="{'invisible':[('first_contract_date','=',False)]}"readonly="1"/>
                     </xpath>
-                    <xpath expr="//field[@name='bank_account_id']" position="replace">
-                        <field name="bank_account_id" context="{'display_partner':True}" attrs="{'invisible' : [('address_home_id', '=', False)]}"/>
+                    <xpathexpr="//field[@name='bank_account_id']"position="replace">
+                        <fieldname="bank_account_id"context="{'display_partner':True}"attrs="{'invisible':[('address_home_id','=',False)]}"/>
                     </xpath>
-                    <xpath expr="//field[@name='resource_calendar_id']" position="replace">
-                        <field name="calendar_mismatch" invisible="1"/>
-                        <label for="resource_calendar_id"/>
+                    <xpathexpr="//field[@name='resource_calendar_id']"position="replace">
+                        <fieldname="calendar_mismatch"invisible="1"/>
+                        <labelfor="resource_calendar_id"/>
                         <div>
-                            <field name="resource_calendar_id" required="1" nolabel="1"/>
-                            <span attrs="{'invisible': [('calendar_mismatch', '=', False)]}"
-                                class="fa fa-exclamation-triangle text-danger o_calendar_warning pl-3">
+                            <fieldname="resource_calendar_id"required="1"nolabel="1"/>
+                            <spanattrs="{'invisible':[('calendar_mismatch','=',False)]}"
+                                class="fafa-exclamation-triangletext-dangero_calendar_warningpl-3">
                             </span>
-                            <span class="o_calendar_warning_tooltip text-danger">
-                                Calendar Mismatch : The employee's calendar does not match its current contract calendar. This could lead to unexpected behaviors.
+                            <spanclass="o_calendar_warning_tooltiptext-danger">
+                                CalendarMismatch:Theemployee'scalendardoesnotmatchitscurrentcontractcalendar.Thiscouldleadtounexpectedbehaviors.
                             </span>
                         </div>
                     </xpath>
@@ -70,200 +70,200 @@
             </field>
         </record>
 
-        <record id="hr_employee_view_search" model="ir.ui.view">
-            <field name="name">hr.employee.view.search</field>
-            <field name="model">hr.employee</field>
-            <field name="inherit_id" ref="hr.view_employee_filter"/>
-            <field name="arch" type="xml">
+        <recordid="hr_employee_view_search"model="ir.ui.view">
+            <fieldname="name">hr.employee.view.search</field>
+            <fieldname="model">hr.employee</field>
+            <fieldname="inherit_id"ref="hr.view_employee_filter"/>
+            <fieldname="arch"type="xml">
                 <data>
-                    <xpath expr="//filter[@name='message_needaction']" position="after">
+                    <xpathexpr="//filter[@name='message_needaction']"position="after">
                         <separator/>
-                        <filter string="Contract Warning" name="with_contract_warning" domain="[('contract_warning', '=', True)]"/>
+                        <filterstring="ContractWarning"name="with_contract_warning"domain="[('contract_warning','=',True)]"/>
                     </xpath>
                 </data>
             </field>
         </record>
 
-        <record id="hr_user_view_form" model="ir.ui.view">
-        <field name="name">hr.user.preferences.view.form.contract.inherit</field>
-        <field name="model">res.users</field>
-        <field name="inherit_id" ref="hr.res_users_view_form_profile"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='employee_bank_account_id']" position="replace">
-                <field name="employee_bank_account_id" context="{'display_partner':True}" attrs="{'readonly': [('can_edit', '=', False)]}"/>
+        <recordid="hr_user_view_form"model="ir.ui.view">
+        <fieldname="name">hr.user.preferences.view.form.contract.inherit</field>
+        <fieldname="model">res.users</field>
+        <fieldname="inherit_id"ref="hr.res_users_view_form_profile"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='employee_bank_account_id']"position="replace">
+                <fieldname="employee_bank_account_id"context="{'display_partner':True}"attrs="{'readonly':[('can_edit','=',False)]}"/>
             </xpath>
         </field>
     </record>
 
-        <record id="hr_contract_view_search" model="ir.ui.view">
-            <field name="name">hr.contract.search</field>
-            <field name="model">hr.contract</field>
-            <field name="arch" type="xml">
-                <search string="Search Contract">
-                    <field name="name" string="Contract"/>
-                    <field name="date_start"/>
-                    <field name="date_end"/>
-                    <field name="employee_id"/>
-                    <field name="job_id"/>
-                    <field name="department_id" operator="child_of"/>
-                    <field name="resource_calendar_id"/>
-                    <filter string="Running" name="running" domain="[('state', '=', 'open')]"/>
-                    <filter string="Need Action" name="to_renew" domain="['&amp;', ('state', '=', 'open'), ('kanban_state', '=', 'blocked')]"/>
-                    <separator />
-                    <filter string="Employed" name="current_employee" domain="[('employee_id.active', '=', True)]"/>
+        <recordid="hr_contract_view_search"model="ir.ui.view">
+            <fieldname="name">hr.contract.search</field>
+            <fieldname="model">hr.contract</field>
+            <fieldname="arch"type="xml">
+                <searchstring="SearchContract">
+                    <fieldname="name"string="Contract"/>
+                    <fieldname="date_start"/>
+                    <fieldname="date_end"/>
+                    <fieldname="employee_id"/>
+                    <fieldname="job_id"/>
+                    <fieldname="department_id"operator="child_of"/>
+                    <fieldname="resource_calendar_id"/>
+                    <filterstring="Running"name="running"domain="[('state','=','open')]"/>
+                    <filterstring="NeedAction"name="to_renew"domain="['&amp;',('state','=','open'),('kanban_state','=','blocked')]"/>
                     <separator/>
-                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <filterstring="Employed"name="current_employee"domain="[('employee_id.active','=',True)]"/>
                     <separator/>
-                    <filter string="Late Activities" name="activities_overdue"
-                        domain="[('my_activity_date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
-                        help="Show all records which have a next action date before today"/>
-                    <filter string="Today Activities" name="activities_today"
-                        domain="[('my_activity_date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
-                    <filter string="Future Activities" name="activities_upcoming_all"
-                        domain="[('my_activity_date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
-                    <group expand="0" string="Group By">
-                        <filter string="Employee" name="employee" domain="[]" context="{'group_by': 'employee_id'}"/>
-                        <filter string="Job Position" name="job" domain="[]" context="{'group_by': 'job_id'}"/>
-                        <filter string="Status" name='group_by_state' domain="[]" context="{'group_by': 'state'}"/>
+                    <filterstring="Archived"name="inactive"domain="[('active','=',False)]"/>
+                    <separator/>
+                    <filterstring="LateActivities"name="activities_overdue"
+                        domain="[('my_activity_date_deadline','&lt;',context_today().strftime('%Y-%m-%d'))]"
+                        help="Showallrecordswhichhaveanextactiondatebeforetoday"/>
+                    <filterstring="TodayActivities"name="activities_today"
+                        domain="[('my_activity_date_deadline','=',context_today().strftime('%Y-%m-%d'))]"/>
+                    <filterstring="FutureActivities"name="activities_upcoming_all"
+                        domain="[('my_activity_date_deadline','&gt;',context_today().strftime('%Y-%m-%d'))]"/>
+                    <groupexpand="0"string="GroupBy">
+                        <filterstring="Employee"name="employee"domain="[]"context="{'group_by':'employee_id'}"/>
+                        <filterstring="JobPosition"name="job"domain="[]"context="{'group_by':'job_id'}"/>
+                        <filterstring="Status"name='group_by_state'domain="[]"context="{'group_by':'state'}"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <record id="hr_contract_view_form" model="ir.ui.view">
-            <field name="name">hr.contract.form</field>
-            <field name="model">hr.contract</field>
-            <field name="arch" type="xml">
-                <form string="Current Contract">
+        <recordid="hr_contract_view_form"model="ir.ui.view">
+            <fieldname="name">hr.contract.form</field>
+            <fieldname="model">hr.contract</field>
+            <fieldname="arch"type="xml">
+                <formstring="CurrentContract">
                     <header>
-                        <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                        <fieldname="state"widget="statusbar"options="{'clickable':'1'}"/>
                     </header>
                     <sheet>
-                    <div class="oe_button_box" name="button_box"/>
-                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
-                    <div class="oe_title pr-0" name="title">
-                        <h1 class="d-flex flex-row justify-content-between">
-                            <field name="name" class="text-truncate" placeholder="Contract Reference"/>
-                            <field name="kanban_state" widget="state_selection"/>
+                    <divclass="oe_button_box"name="button_box"/>
+                    <widgetname="web_ribbon"title="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
+                    <divclass="oe_titlepr-0"name="title">
+                        <h1class="d-flexflex-rowjustify-content-between">
+                            <fieldname="name"class="text-truncate"placeholder="ContractReference"/>
+                            <fieldname="kanban_state"widget="state_selection"/>
                         </h1>
                     </div>
                     <group>
                         <group>
-                            <field name="active" invisible="1"/>
-                            <field name="employee_id"/>
-                            <field name="department_id"/>
-                            <field name="job_id"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
-                            <field name="company_country_id" invisible="1"/>
-                            <field name="structure_type_id" domain="['|', ('country_id', '=', False), ('country_id', '=', company_country_id)]"/>
+                            <fieldname="active"invisible="1"/>
+                            <fieldname="employee_id"/>
+                            <fieldname="department_id"/>
+                            <fieldname="job_id"/>
+                            <fieldname="company_id"groups="base.group_multi_company"/>
+                            <fieldname="company_country_id"invisible="1"/>
+                            <fieldname="structure_type_id"domain="['|',('country_id','=',False),('country_id','=',company_country_id)]"/>
                         </group>
-                        <group name="duration_group">
-                            <field name="date_start"/>
-                            <field name="first_contract_date" attrs="{'invisible': ['|', ('first_contract_date', '=', False), ('first_contract_date', '=', 'date_start')]}"/>
-                            <field name="date_end"/>
-                            <field name="calendar_mismatch" invisible="1"/>
-                            <label for="resource_calendar_id"/>
+                        <groupname="duration_group">
+                            <fieldname="date_start"/>
+                            <fieldname="first_contract_date"attrs="{'invisible':['|',('first_contract_date','=',False),('first_contract_date','=','date_start')]}"/>
+                            <fieldname="date_end"/>
+                            <fieldname="calendar_mismatch"invisible="1"/>
+                            <labelfor="resource_calendar_id"/>
                             <div>
-                                <field name="resource_calendar_id" required="1" nolabel="1"/>
-                                <span attrs="{'invisible': ['|', ('calendar_mismatch', '=', False), ('state', '!=', 'open')]}"
-                                    class="fa fa-exclamation-triangle text-danger o_calendar_warning pl-3">
+                                <fieldname="resource_calendar_id"required="1"nolabel="1"/>
+                                <spanattrs="{'invisible':['|',('calendar_mismatch','=',False),('state','!=','open')]}"
+                                    class="fafa-exclamation-triangletext-dangero_calendar_warningpl-3">
                                 </span>
-                                <span class="o_calendar_warning_tooltip text-danger">
-                                    Calendar Mismatch : The employee's calendar does not match this contract's calendar. This could lead to unexpected behaviors.
+                                <spanclass="o_calendar_warning_tooltiptext-danger">
+                                    CalendarMismatch:Theemployee'scalendardoesnotmatchthiscontract'scalendar.Thiscouldleadtounexpectedbehaviors.
                                 </span>
                             </div>
-                            <field name="hr_responsible_id"/>
+                            <fieldname="hr_responsible_id"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Contract Details" name="other">
-                            <group name="notes_group" string="Notes">
-                                <field name="notes" nolabel="1"/>
+                        <pagestring="ContractDetails"name="other">
+                            <groupname="notes_group"string="Notes">
+                                <fieldname="notes"nolabel="1"/>
                             </group>
                         </page>
-                        <page string="Salary Information" name="information">
-                            <group name="main_info">
-                                <group name="salary_and_advantages" string="Monthly Advantages in Cash">
-                                    <label for="wage"/>
-                                    <div class="o_row" name="wage">
-                                        <field name="wage" nolabel="1"/>
-                                        <span>/ month</span>
+                        <pagestring="SalaryInformation"name="information">
+                            <groupname="main_info">
+                                <groupname="salary_and_advantages"string="MonthlyAdvantagesinCash">
+                                    <labelfor="wage"/>
+                                    <divclass="o_row"name="wage">
+                                        <fieldname="wage"nolabel="1"/>
+                                        <span>/month</span>
                                     </div>
                                 </group>
-                                <group string="Yearly Advantages" name="yearly_advantages"/>
+                                <groupstring="YearlyAdvantages"name="yearly_advantages"/>
                             </group>
                         </page>
                     </notebook>
                     </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids" groups="base.group_user"/>
-                        <field name="activity_ids"/>
-                        <field name="message_ids"/>
+                    <divclass="oe_chatter">
+                        <fieldname="message_follower_ids"groups="base.group_user"/>
+                        <fieldname="activity_ids"/>
+                        <fieldname="message_ids"/>
                     </div>
                 </form>
             </field>
         </record>
 
-        <record id="hr_contract_view_tree" model="ir.ui.view">
-            <field name="name">hr.contract.tree</field>
-            <field name="model">hr.contract</field>
-            <field name="arch" type="xml">
-                <tree string="Contracts" multi_edit="1" sample="1">
-                    <field name="name" readonly="1"/>
-                    <field name="employee_id" readonly="1" widget="many2one_avatar_employee"/>
-                    <field name="job_id"/>
-                    <field name="resource_calendar_id"/>
-                    <field name="date_start" readonly="1"/>
-                    <field name="date_end" readonly="1"/>
-                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'close'" decoration-success="state == 'open'"/>
-                    <field name="kanban_state" widget="state_selection" readonly="1"/>
-                    <field name="wage" invisible="1"/>
-                    <field name="message_needaction" invisible="1"/>
-                    <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+        <recordid="hr_contract_view_tree"model="ir.ui.view">
+            <fieldname="name">hr.contract.tree</field>
+            <fieldname="model">hr.contract</field>
+            <fieldname="arch"type="xml">
+                <treestring="Contracts"multi_edit="1"sample="1">
+                    <fieldname="name"readonly="1"/>
+                    <fieldname="employee_id"readonly="1"widget="many2one_avatar_employee"/>
+                    <fieldname="job_id"/>
+                    <fieldname="resource_calendar_id"/>
+                    <fieldname="date_start"readonly="1"/>
+                    <fieldname="date_end"readonly="1"/>
+                    <fieldname="state"widget="badge"decoration-info="state=='draft'"decoration-warning="state=='close'"decoration-success="state=='open'"/>
+                    <fieldname="kanban_state"widget="state_selection"readonly="1"/>
+                    <fieldname="wage"invisible="1"/>
+                    <fieldname="message_needaction"invisible="1"/>
+                    <fieldname="company_id"groups="base.group_multi_company"readonly="1"/>
                 </tree>
             </field>
         </record>
 
-        <record id="hr_contract_view_kanban" model="ir.ui.view">
-            <field name="name">hr.contract.kanban</field>
-            <field name="model">hr.contract</field>
-            <field name="arch" type="xml">
-                <kanban class="o_kanban_small_column" default_order="date_end" sample="1">
-                    <field name="employee_id"/>
-                    <field name="activity_state"/>
-                    <field name="state"/>
-                    <progressbar field="activity_state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}'/>
+        <recordid="hr_contract_view_kanban"model="ir.ui.view">
+            <fieldname="name">hr.contract.kanban</field>
+            <fieldname="model">hr.contract</field>
+            <fieldname="arch"type="xml">
+                <kanbanclass="o_kanban_small_column"default_order="date_end"sample="1">
+                    <fieldname="employee_id"/>
+                    <fieldname="activity_state"/>
+                    <fieldname="state"/>
+                    <progressbarfield="activity_state"colors='{"planned":"success","today":"warning","overdue":"danger"}'/>
                     <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_card oe_kanban_global_click">
-                            <div class="o_dropdown_kanban dropdown" t-if="!selection_mode" groups="base.group_user">
-                                <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
-                                    <span class="fa fa-ellipsis-v"/>
+                    <tt-name="kanban-box">
+                        <divclass="oe_kanban_cardoe_kanban_global_click">
+                            <divclass="o_dropdown_kanbandropdown"t-if="!selection_mode"groups="base.group_user">
+                                <aclass="dropdown-toggleo-no-caretbtn"role="button"data-toggle="dropdown"data-display="static"href="#"aria-label="Dropdownmenu"title="Dropdownmenu">
+                                    <spanclass="fafa-ellipsis-v"/>
                                 </a>
-                                <div class="dropdown-menu" role="menu">
-                                    <t t-if="widget.editable"><a role="menuitem" type="edit" class="dropdown-item">Edit Contract</a></t>
-                                    <t t-if="widget.deletable"><a role="menuitem" type="delete" class="dropdown-item">Delete</a></t>
+                                <divclass="dropdown-menu"role="menu">
+                                    <tt-if="widget.editable"><arole="menuitem"type="edit"class="dropdown-item">EditContract</a></t>
+                                    <tt-if="widget.deletable"><arole="menuitem"type="delete"class="dropdown-item">Delete</a></t>
                                 </div>
                             </div>
-                            <div class="oe_kanban_content">
-                                <div class="o_hr_contract_state">
-                                    <strong class="o_kanban_record_title">
-                                        <field name="name"/>
+                            <divclass="oe_kanban_content">
+                                <divclass="o_hr_contract_state">
+                                    <strongclass="o_kanban_record_title">
+                                        <fieldname="name"/>
                                     </strong>
                                 </div>
-                                <div class="text-muted o_kanban_record_subtitle o_hr_contract_job_id">
-                                    <field name="job_id"/>
+                                <divclass="text-mutedo_kanban_record_subtitleo_hr_contract_job_id">
+                                    <fieldname="job_id"/>
                                 </div>
-                                <div class="oe_kanban_bottom_right">
-                                    <span class="float-right">
-                                        <field name="employee_id" widget="many2one_avatar_employee"/>
+                                <divclass="oe_kanban_bottom_right">
+                                    <spanclass="float-right">
+                                        <fieldname="employee_id"widget="many2one_avatar_employee"/>
                                     </span>
-                                    <span class="float-right mr4">
-                                        <field name="kanban_state" widget="state_selection"/>
+                                    <spanclass="float-rightmr4">
+                                        <fieldname="kanban_state"widget="state_selection"/>
                                     </span>
                                 </div>
                             </div>
-                            <div class="oe_clear"></div>
+                            <divclass="oe_clear"></div>
                         </div>
                     </t>
                     </templates>
@@ -271,18 +271,18 @@
             </field>
          </record>
 
-        <record id="hr_contract_view_activity" model="ir.ui.view">
-            <field name="name">hr.contract.activity</field>
-            <field name="model">hr.contract</field>
-            <field name="arch" type="xml">
-                <activity string="Contracts">
-                    <field name="employee_id"/>
+        <recordid="hr_contract_view_activity"model="ir.ui.view">
+            <fieldname="name">hr.contract.activity</field>
+            <fieldname="model">hr.contract</field>
+            <fieldname="arch"type="xml">
+                <activitystring="Contracts">
+                    <fieldname="employee_id"/>
                     <templates>
-                        <div t-name="activity-box">
-                            <img t-att-src="activity_image('hr.employee', 'image_128', record.employee_id.raw_value)" t-att-title="record.employee_id.value" t-att-alt="record.employee_id.value"/>
+                        <divt-name="activity-box">
+                            <imgt-att-src="activity_image('hr.employee','image_128',record.employee_id.raw_value)"t-att-title="record.employee_id.value"t-att-alt="record.employee_id.value"/>
                             <div>
-                                <field name="name" display="full"/>
-                                <field name="job_id" muted="1" display="full"/>
+                                <fieldname="name"display="full"/>
+                                <fieldname="job_id"muted="1"display="full"/>
                             </div>
                         </div>
                     </templates>
@@ -290,16 +290,16 @@
             </field>
         </record>
 
-        <record id="action_hr_contract" model="ir.actions.act_window">
-            <field name="name">Contracts</field>
-            <field name="res_model">hr.contract</field>
-            <field name="view_mode">kanban,tree,form,activity</field>
-            <field name="domain">[('employee_id', '!=', False)]</field>
-            <field name="context">{'search_default_current':1, 'search_default_group_by_state': 1}</field>
-            <field name="search_view_id" ref="hr_contract_view_search"/>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                Create a new contract
+        <recordid="action_hr_contract"model="ir.actions.act_window">
+            <fieldname="name">Contracts</field>
+            <fieldname="res_model">hr.contract</field>
+            <fieldname="view_mode">kanban,tree,form,activity</field>
+            <fieldname="domain">[('employee_id','!=',False)]</field>
+            <fieldname="context">{'search_default_current':1,'search_default_group_by_state':1}</field>
+            <fieldname="search_view_id"ref="hr_contract_view_search"/>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                Createanewcontract
               </p>
             </field>
         </record>

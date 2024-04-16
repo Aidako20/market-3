@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="sale_action_quotations_new" model="ir.actions.act_window">
-        <field name="name">Quotation</field>
-        <field name="res_model">sale.order</field>
-        <field name="view_mode">form,tree,graph</field>
-        <field name="domain">[('opportunity_id', '=', active_id)]</field>
-        <field name="context">{'search_default_opportunity_id': active_id, 'default_opportunity_id': active_id}</field>
+    <recordid="sale_action_quotations_new"model="ir.actions.act_window">
+        <fieldname="name">Quotation</field>
+        <fieldname="res_model">sale.order</field>
+        <fieldname="view_mode">form,tree,graph</field>
+        <fieldname="domain">[('opportunity_id','=',active_id)]</field>
+        <fieldname="context">{'search_default_opportunity_id':active_id,'default_opportunity_id':active_id}</field>
     </record>
 
-    <record id="sale_view_inherit123" model="ir.ui.view">
-        <field name="name">sale.order.form.inherit.sale</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//group[@name='technical']" position="inside">
-                <field name="opportunity_id" help="Log in the chatter from which opportunity the order originates" groups="base.group_no_one"/>
+    <recordid="sale_view_inherit123"model="ir.ui.view">
+        <fieldname="name">sale.order.form.inherit.sale</field>
+        <fieldname="model">sale.order</field>
+        <fieldname="inherit_id"ref="sale.view_order_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//group[@name='technical']"position="inside">
+                <fieldname="opportunity_id"help="Loginthechatterfromwhichopportunitytheorderoriginates"groups="base.group_no_one"/>
             </xpath>
         </field>
     </record>
 
-    <!-- This menu is display in CRM app when sale is installed-->
+    <!--ThismenuisdisplayinCRMappwhensaleisinstalled-->
     <menuitem
         id="sale_order_menu_quotations_crm"
-        name="My Quotations"
+        name="MyQuotations"
         action="sale.action_quotations"
         parent="crm.crm_menu_sales"
         sequence="2"/>

@@ -1,10 +1,10 @@
-flectra.define('mail/static/src/components/attachment_box/attachment_box_tests.js', function (require) {
-"use strict";
+flectra.define('mail/static/src/components/attachment_box/attachment_box_tests.js',function(require){
+"usestrict";
 
-const components = {
-    AttachmentBox: require('mail/static/src/components/attachment_box/attachment_box.js'),
+constcomponents={
+    AttachmentBox:require('mail/static/src/components/attachment_box/attachment_box.js'),
 };
-const {
+const{
     afterEach,
     afterNextRender,
     beforeEach,
@@ -12,226 +12,226 @@ const {
     dragenterFiles,
     dropFiles,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-const { file: { createFile } } = require('web.test_utils');
+const{file:{createFile}}=require('web.test_utils');
 
-QUnit.module('mail', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('attachment_box', {}, function () {
-QUnit.module('attachment_box_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('attachment_box',{},function(){
+QUnit.module('attachment_box_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.createAttachmentBoxComponent = async (thread, otherProps) => {
-            const props = Object.assign({ threadLocalId: thread.localId }, otherProps);
-            await createRootComponent(this, components.AttachmentBox, {
+        this.createAttachmentBoxComponent=async(thread,otherProps)=>{
+            constprops=Object.assign({threadLocalId:thread.localId},otherProps);
+            awaitcreateRootComponent(this,components.AttachmentBox,{
                 props,
-                target: this.widget.el,
+                target:this.widget.el,
             });
         };
 
-        this.start = async params => {
-            const { env, widget } = await start(Object.assign({}, params, {
-                data: this.data,
+        this.start=asyncparams=>{
+            const{env,widget}=awaitstart(Object.assign({},params,{
+                data:this.data,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('base empty rendering', async function (assert) {
+QUnit.test('baseemptyrendering',asyncfunction(assert){
     assert.expect(4);
 
-    await this.start();
-    const thread = this.env.models['mail.thread'].create({
-        id: 100,
-        model: 'res.partner',
+    awaitthis.start();
+    constthread=this.env.models['mail.thread'].create({
+        id:100,
+        model:'res.partner',
     });
-    await this.createAttachmentBoxComponent(thread);
+    awaitthis.createAttachmentBoxComponent(thread);
     assert.strictEqual(
         document.querySelectorAll(`.o_AttachmentBox`).length,
         1,
-        "should have an attachment box"
+        "shouldhaveanattachmentbox"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_AttachmentBox_buttonAdd`).length,
         1,
-        "should have a button add"
+        "shouldhaveabuttonadd"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_FileUploader_input`).length,
         1,
-        "should have a file input"
+        "shouldhaveafileinput"
     );
     assert.strictEqual(
-        document.querySelectorAll(`.o_AttachmentBox .o_Attachment`).length,
+        document.querySelectorAll(`.o_AttachmentBox.o_Attachment`).length,
         0,
-        "should not have any attachment"
+        "shouldnothaveanyattachment"
     );
 });
 
-QUnit.test('base non-empty rendering', async function (assert) {
+QUnit.test('basenon-emptyrendering',asyncfunction(assert){
     assert.expect(6);
 
     this.data['ir.attachment'].records.push(
         {
-            mimetype: 'text/plain',
-            name: 'Blah.txt',
-            res_id: 100,
-            res_model: 'res.partner',
+            mimetype:'text/plain',
+            name:'Blah.txt',
+            res_id:100,
+            res_model:'res.partner',
         },
         {
-            mimetype: 'text/plain',
-            name: 'Blu.txt',
-            res_id: 100,
-            res_model: 'res.partner',
+            mimetype:'text/plain',
+            name:'Blu.txt',
+            res_id:100,
+            res_model:'res.partner',
         }
     );
-    await this.start({
-        async mockRPC(route) {
-            if (route.includes('/mail/thread/data')) {
+    awaitthis.start({
+        asyncmockRPC(route){
+            if(route.includes('/mail/thread/data')){
                 assert.step('/mail/thread/data');
             }
-            return this._super(...arguments);
+            returnthis._super(...arguments);
         },
     });
-    const thread = this.env.models['mail.thread'].create({
-        id: 100,
-        model: 'res.partner',
+    constthread=this.env.models['mail.thread'].create({
+        id:100,
+        model:'res.partner',
     });
-    await thread.fetchAttachments();
-    await this.createAttachmentBoxComponent(thread);
+    awaitthread.fetchAttachments();
+    awaitthis.createAttachmentBoxComponent(thread);
     assert.verifySteps(
         ['/mail/thread/data'],
-        "should have fetched attachments"
+        "shouldhavefetchedattachments"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_AttachmentBox`).length,
         1,
-        "should have an attachment box"
+        "shouldhaveanattachmentbox"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_AttachmentBox_buttonAdd`).length,
         1,
-        "should have a button add"
+        "shouldhaveabuttonadd"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_FileUploader_input`).length,
         1,
-        "should have a file input"
+        "shouldhaveafileinput"
     );
     assert.strictEqual(
         document.querySelectorAll(`.o_attachmentBox_attachmentList`).length,
         1,
-        "should have an attachment list"
+        "shouldhaveanattachmentlist"
     );
 });
 
-QUnit.test('attachment box: drop attachments', async function (assert) {
+QUnit.test('attachmentbox:dropattachments',asyncfunction(assert){
     assert.expect(5);
 
-    await this.start();
-    const thread = this.env.models['mail.thread'].create({
-        id: 100,
-        model: 'res.partner',
+    awaitthis.start();
+    constthread=this.env.models['mail.thread'].create({
+        id:100,
+        model:'res.partner',
     });
-    await thread.fetchAttachments();
-    await this.createAttachmentBoxComponent(thread);
-    const files = [
-        await createFile({
-            content: 'hello, world',
-            contentType: 'text/plain',
-            name: 'text.txt',
+    awaitthread.fetchAttachments();
+    awaitthis.createAttachmentBoxComponent(thread);
+    constfiles=[
+        awaitcreateFile({
+            content:'hello,world',
+            contentType:'text/plain',
+            name:'text.txt',
         }),
     ];
     assert.strictEqual(
         document.querySelectorAll('.o_AttachmentBox').length,
         1,
-        "should have an attachment box"
+        "shouldhaveanattachmentbox"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         dragenterFiles(document.querySelector('.o_AttachmentBox'))
     );
     assert.ok(
         document.querySelector('.o_AttachmentBox_dropZone'),
-        "should have a drop zone"
+        "shouldhaveadropzone"
     );
     assert.strictEqual(
-        document.querySelectorAll(`.o_AttachmentBox .o_Attachment`).length,
+        document.querySelectorAll(`.o_AttachmentBox.o_Attachment`).length,
         0,
-        "should have no attachment before files are dropped"
+        "shouldhavenoattachmentbeforefilesaredropped"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         dropFiles(
             document.querySelector('.o_AttachmentBox_dropZone'),
             files
         )
     );
     assert.strictEqual(
-        document.querySelectorAll(`.o_AttachmentBox .o_Attachment`).length,
+        document.querySelectorAll(`.o_AttachmentBox.o_Attachment`).length,
         1,
-        "should have 1 attachment in the box after files dropped"
+        "shouldhave1attachmentintheboxafterfilesdropped"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         dragenterFiles(document.querySelector('.o_AttachmentBox'))
     );
-    const file1 = await createFile({
-        content: 'hello, world',
-        contentType: 'text/plain',
-        name: 'text2.txt',
+    constfile1=awaitcreateFile({
+        content:'hello,world',
+        contentType:'text/plain',
+        name:'text2.txt',
     });
-    const file2 = await createFile({
-        content: 'hello, world',
-        contentType: 'text/plain',
-        name: 'text3.txt',
+    constfile2=awaitcreateFile({
+        content:'hello,world',
+        contentType:'text/plain',
+        name:'text3.txt',
     });
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         dropFiles(
             document.querySelector('.o_AttachmentBox_dropZone'),
-            [file1, file2]
+            [file1,file2]
         )
     );
     assert.strictEqual(
-        document.querySelectorAll(`.o_AttachmentBox .o_Attachment`).length,
+        document.querySelectorAll(`.o_AttachmentBox.o_Attachment`).length,
         3,
-        "should have 3 attachments in the box after files dropped"
+        "shouldhave3attachmentsintheboxafterfilesdropped"
     );
 });
 
-QUnit.test('view attachments', async function (assert) {
+QUnit.test('viewattachments',asyncfunction(assert){
     assert.expect(7);
 
-    await this.start({
-        hasDialog: true,
+    awaitthis.start({
+        hasDialog:true,
     });
-    const thread = this.env.models['mail.thread'].create({
-        attachments: [
-            ['insert', {
-                id: 143,
-                mimetype: 'text/plain',
-                name: 'Blah.txt'
+    constthread=this.env.models['mail.thread'].create({
+        attachments:[
+            ['insert',{
+                id:143,
+                mimetype:'text/plain',
+                name:'Blah.txt'
             }],
-            ['insert', {
-                id: 144,
-                mimetype: 'text/plain',
-                name: 'Blu.txt'
+            ['insert',{
+                id:144,
+                mimetype:'text/plain',
+                name:'Blu.txt'
             }]
         ],
-        id: 100,
-        model: 'res.partner',
+        id:100,
+        model:'res.partner',
     });
-    const firstAttachment = this.env.models['mail.attachment'].findFromIdentifyingData({ id: 143 });
-    await this.createAttachmentBoxComponent(thread);
+    constfirstAttachment=this.env.models['mail.attachment'].findFromIdentifyingData({id:143});
+    awaitthis.createAttachmentBoxComponent(thread);
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`
             .o_Attachment[data-attachment-local-id="${firstAttachment.localId}"]
             .o_Attachment_image
@@ -240,93 +240,93 @@ QUnit.test('view attachments', async function (assert) {
     assert.containsOnce(
         document.body,
         '.o_Dialog',
-        "a dialog should have been opened once attachment image is clicked",
+        "adialogshouldhavebeenopenedonceattachmentimageisclicked",
     );
     assert.containsOnce(
         document.body,
         '.o_AttachmentViewer',
-        "an attachment viewer should have been opened once attachment image is clicked",
+        "anattachmentviewershouldhavebeenopenedonceattachmentimageisclicked",
     );
     assert.strictEqual(
         document.querySelector('.o_AttachmentViewer_name').textContent,
         'Blah.txt',
-        "attachment viewer iframe should point to clicked attachment",
+        "attachmentvieweriframeshouldpointtoclickedattachment",
     );
     assert.containsOnce(
         document.body,
         '.o_AttachmentViewer_buttonNavigationNext',
-        "attachment viewer should allow to see next attachment",
+        "attachmentviewershouldallowtoseenextattachment",
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_AttachmentViewer_buttonNavigationNext').click()
     );
     assert.strictEqual(
         document.querySelector('.o_AttachmentViewer_name').textContent,
         'Blu.txt',
-        "attachment viewer iframe should point to next attachment of attachment box",
+        "attachmentvieweriframeshouldpointtonextattachmentofattachmentbox",
     );
     assert.containsOnce(
         document.body,
         '.o_AttachmentViewer_buttonNavigationNext',
-        "attachment viewer should allow to see next attachment",
+        "attachmentviewershouldallowtoseenextattachment",
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_AttachmentViewer_buttonNavigationNext').click()
     );
     assert.strictEqual(
         document.querySelector('.o_AttachmentViewer_name').textContent,
         'Blah.txt',
-        "attachment viewer iframe should point anew to first attachment",
+        "attachmentvieweriframeshouldpointanewtofirstattachment",
     );
 });
 
-QUnit.test('remove attachment should ask for confirmation', async function (assert) {
+QUnit.test('removeattachmentshouldaskforconfirmation',asyncfunction(assert){
     assert.expect(5);
 
-    await this.start();
-    const thread = this.env.models['mail.thread'].create({
-        attachments: [
-            ['insert', {
-                id: 143,
-                mimetype: 'text/plain',
-                name: 'Blah.txt'
+    awaitthis.start();
+    constthread=this.env.models['mail.thread'].create({
+        attachments:[
+            ['insert',{
+                id:143,
+                mimetype:'text/plain',
+                name:'Blah.txt'
             }],
         ],
-        id: 100,
-        model: 'res.partner',
+        id:100,
+        model:'res.partner',
     });
-    await this.createAttachmentBoxComponent(thread);
+    awaitthis.createAttachmentBoxComponent(thread);
     assert.containsOnce(
         document.body,
         '.o_Attachment',
-        "should have an attachment",
+        "shouldhaveanattachment",
     );
     assert.containsOnce(
         document.body,
         '.o_Attachment_asideItemUnlink',
-        "attachment should have a delete button"
+        "attachmentshouldhaveadeletebutton"
     );
 
-    await afterNextRender(() => document.querySelector('.o_Attachment_asideItemUnlink').click());
+    awaitafterNextRender(()=>document.querySelector('.o_Attachment_asideItemUnlink').click());
     assert.containsOnce(
         document.body,
         '.o_AttachmentDeleteConfirmDialog',
-        "A confirmation dialog should have been opened"
+        "Aconfirmationdialogshouldhavebeenopened"
     );
     assert.strictEqual(
         document.querySelector('.o_AttachmentDeleteConfirmDialog_mainText').textContent,
-        `Do you really want to delete "Blah.txt"?`,
-        "Confirmation dialog should contain the attachment delete confirmation text"
+        `Doyoureallywanttodelete"Blah.txt"?`,
+        "Confirmationdialogshouldcontaintheattachmentdeleteconfirmationtext"
     );
 
-    // Confirm the deletion
-    await afterNextRender(() => document.querySelector('.o_AttachmentDeleteConfirmDialog_confirmButton').click());
+    //Confirmthedeletion
+    awaitafterNextRender(()=>document.querySelector('.o_AttachmentDeleteConfirmDialog_confirmButton').click());
     assert.containsNone(
         document.body,
         '.o_Attachment',
-        "should no longer have an attachment",
+        "shouldnolongerhaveanattachment",
     );
 });
 

@@ -1,58 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="snailmail.SnailmailErrorDialog" owl="1">
-        <Dialog contentClass="'o_SnailmailErrorDialog'" title="title" size="'medium'" t-ref="dialog">
-            <t t-if="message and notification">
-                <t t-if="notification.failure_type === 'sn_credit'">
-                    <p class="o_SnailmailErrorDialog_contentCredit">
-                        The letter could not be sent due to insufficient credits on your IAP account.
+    <tt-name="snailmail.SnailmailErrorDialog"owl="1">
+        <DialogcontentClass="'o_SnailmailErrorDialog'"title="title"size="'medium'"t-ref="dialog">
+            <tt-if="messageandnotification">
+                <tt-if="notification.failure_type==='sn_credit'">
+                    <pclass="o_SnailmailErrorDialog_contentCredit">
+                        ThelettercouldnotbesentduetoinsufficientcreditsonyourIAPaccount.
                     </p>
-                    <t t-if="env.messaging.snailmail_credits_url">
-                        <div class="text-right">
-                            <a class="btn btn-link" t-att-href="env.messaging.snailmail_credits_url" target="_blank">
-                                <i class="fa fa-arrow-right"/> Buy credits
+                    <tt-if="env.messaging.snailmail_credits_url">
+                        <divclass="text-right">
+                            <aclass="btnbtn-link"t-att-href="env.messaging.snailmail_credits_url"target="_blank">
+                                <iclass="fafa-arrow-right"/>Buycredits
                             </a>
                         </div>
                     </t>
                 </t>
-                <t t-elif="notification.failure_type === 'sn_trial'">
-                    <p class="o_SnailmailErrorDialog_contentTrial">
-                        You need credits on your IAP account to send a letter.
+                <tt-elif="notification.failure_type==='sn_trial'">
+                    <pclass="o_SnailmailErrorDialog_contentTrial">
+                        YouneedcreditsonyourIAPaccounttosendaletter.
                     </p>
-                    <t t-if="env.messaging.snailmail_credits_url_trial">
-                        <div class="text-right">
-                            <a class="btn btn-link" t-att-href="env.messaging.snailmail_credits_url_trial">
-                                <i class="fa fa-arrow-right"/> Buy credits
+                    <tt-if="env.messaging.snailmail_credits_url_trial">
+                        <divclass="text-right">
+                            <aclass="btnbtn-link"t-att-href="env.messaging.snailmail_credits_url_trial">
+                                <iclass="fafa-arrow-right"/>Buycredits
                             </a>
                         </div>
                     </t>
                 </t>
-                <t t-elif="notification.failure_type === 'sn_price'">
-                    <p class="o_SnailmailErrorDialog_contentPrice">
-                        The country to which you want to send the letter is not supported by our service.
+                <tt-elif="notification.failure_type==='sn_price'">
+                    <pclass="o_SnailmailErrorDialog_contentPrice">
+                        Thecountrytowhichyouwanttosendtheletterisnotsupportedbyourservice.
                     </p>
                 </t>
-                <t t-elif="notification.failure_type === 'sn_error'">
-                    <p class="o_SnailmailErrorDialog_contentError">
-                        An unknown error occurred. Please contact our <a href="https://www.flectrahq.com/help" target="new">support</a> for further assistance.
+                <tt-elif="notification.failure_type==='sn_error'">
+                    <pclass="o_SnailmailErrorDialog_contentError">
+                        Anunknownerroroccurred.Pleasecontactour<ahref="https://www.flectrahq.com/help"target="new">support</a>forfurtherassistance.
                     </p>
                 </t>
 
-                <t t-set-slot="buttons">
-                    <t t-if="hasCreditsError">
-                        <button class="o_SnailmailErrorDialog_resendLetterButton btn btn-primary" t-on-click="_onClickResendLetter">Re-send letter</button>
+                <tt-set-slot="buttons">
+                    <tt-if="hasCreditsError">
+                        <buttonclass="o_SnailmailErrorDialog_resendLetterButtonbtnbtn-primary"t-on-click="_onClickResendLetter">Re-sendletter</button>
                     </t>
-                    <button class="o_SnailmailErrorDialog_cancelLetterButton btn"
+                    <buttonclass="o_SnailmailErrorDialog_cancelLetterButtonbtn"
                         t-att-class="{
-                            'btn-primary': !hasCreditsError,
-                            'btn-secondary': hasCreditsError,
+                            'btn-primary':!hasCreditsError,
+                            'btn-secondary':hasCreditsError,
                         }"
                         t-on-click="_onClickCancelLetter"
                     >
-                        Cancel letter
+                        Cancelletter
                     </button>
-                    <button class="o_SnailmailErrorDialog_closeButton btn btn-secondary" t-on-click="_onClickClose">Close</button>
+                    <buttonclass="o_SnailmailErrorDialog_closeButtonbtnbtn-secondary"t-on-click="_onClickClose">Close</button>
                 </t>
             </t>
         </Dialog>

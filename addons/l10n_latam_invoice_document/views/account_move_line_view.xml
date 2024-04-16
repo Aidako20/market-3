@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="view_account_move_line_filter" model="ir.ui.view">
-        <field name="name">account.move.line.filter</field>
-        <field name="model">account.move.line</field>
-        <field name="inherit_id" ref="account.view_account_move_line_filter"/>
-        <field name="arch" type="xml">
-            <separator position="before">
-                <field name="l10n_latam_document_type_id"/>
+    <recordid="view_account_move_line_filter"model="ir.ui.view">
+        <fieldname="name">account.move.line.filter</field>
+        <fieldname="model">account.move.line</field>
+        <fieldname="inherit_id"ref="account.view_account_move_line_filter"/>
+        <fieldname="arch"type="xml">
+            <separatorposition="before">
+                <fieldname="l10n_latam_document_type_id"/>
             </separator>
             <group>
-                <filter string="Document Type" name="l10n_latam_document_type" domain="" context="{'group_by':'l10n_latam_document_type_id'}"/>
+                <filterstring="DocumentType"name="l10n_latam_document_type"domain=""context="{'group_by':'l10n_latam_document_type_id'}"/>
             </group>
         </field>
     </record>

@@ -1,107 +1,107 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-        <record id="res_partner_grade_platinium" model="res.partner.grade">
-            <field name="name">Platinum</field>
-            <field name="sequence">4</field>
+        <recordid="res_partner_grade_platinium"model="res.partner.grade">
+            <fieldname="name">Platinum</field>
+            <fieldname="sequence">4</field>
         </record>
-        <record id="res_partner_grade_gold" model="res.partner.grade">
-            <field name="name">Gold</field>
-            <field name="sequence">3</field>
+        <recordid="res_partner_grade_gold"model="res.partner.grade">
+            <fieldname="name">Gold</field>
+            <fieldname="sequence">3</field>
         </record>
-        <record id="res_partner_grade_silver" model="res.partner.grade">
-            <field name="name">Silver</field>
-            <field name="sequence">2</field>
+        <recordid="res_partner_grade_silver"model="res.partner.grade">
+            <fieldname="name">Silver</field>
+            <fieldname="sequence">2</field>
         </record>
-        <record id="res_partner_grade_bronze" model="res.partner.grade">
-            <field name="name">Bronze</field>
-            <field name="sequence">1</field>
-        </record>
-
-        <record id="base.res_partner_3" model="res.partner">
-            <field name="grade_id" ref="res_partner_grade_bronze"/>
-            <field name="partner_weight">10</field>
-        </record>
-        <record model="res.partner" id="base.res_partner_2">
-            <field name="assigned_partner_id" ref="base.res_partner_3"/>
-        </record>
-       <record id="base.res_partner_4" model="res.partner">
-            <field name="grade_id" ref="res_partner_grade_bronze"/>
-            <field name="partner_weight">10</field>
-        </record>
-        <record id="base.res_partner_12" model="res.partner">
-            <field name="grade_id" ref="res_partner_grade_bronze"/>
-            <field name="partner_weight">10</field>
+        <recordid="res_partner_grade_bronze"model="res.partner.grade">
+            <fieldname="name">Bronze</field>
+            <fieldname="sequence">1</field>
         </record>
 
-        <record id="base.res_partner_3" model="res.partner">
-            <field name="grade_id" ref="res_partner_grade_silver"/>
-            <field name="partner_weight">10</field>
+        <recordid="base.res_partner_3"model="res.partner">
+            <fieldname="grade_id"ref="res_partner_grade_bronze"/>
+            <fieldname="partner_weight">10</field>
         </record>
-        <record id="base.res_partner_12" model="res.partner">
-            <field name="grade_id" ref="res_partner_grade_silver"/>
-            <field name="partner_weight">10</field>
+        <recordmodel="res.partner"id="base.res_partner_2">
+            <fieldname="assigned_partner_id"ref="base.res_partner_3"/>
         </record>
-        <record id="base.res_partner_12" model="res.partner">
-            <field name="grade_id" ref="res_partner_grade_silver"/>
-            <field name="partner_weight">10</field>
+       <recordid="base.res_partner_4"model="res.partner">
+            <fieldname="grade_id"ref="res_partner_grade_bronze"/>
+            <fieldname="partner_weight">10</field>
         </record>
-
-        <record id="base.res_partner_10" model="res.partner">
-            <field name="grade_id" ref="res_partner_grade_gold"/>
-            <field name="partner_weight">10</field>
-        </record>
-        <record id="base.res_partner_18" model="res.partner">
-            <field name="grade_id" ref="res_partner_grade_gold"/>
-            <field name="partner_weight">10</field>
-        </record>
-        <record id="base.res_partner_1" model="res.partner">
-            <field name="grade_id" ref="res_partner_grade_gold"/>
-            <field name="partner_weight">10</field>
+        <recordid="base.res_partner_12"model="res.partner">
+            <fieldname="grade_id"ref="res_partner_grade_bronze"/>
+            <fieldname="partner_weight">10</field>
         </record>
 
-        <record id="base.res_partner_12" model="res.partner">
-            <field name="grade_id" ref="res_partner_grade_platinium"/>
-            <field name="partner_weight">10</field>
+        <recordid="base.res_partner_3"model="res.partner">
+            <fieldname="grade_id"ref="res_partner_grade_silver"/>
+            <fieldname="partner_weight">10</field>
         </record>
-        <record id="base.res_partner_4" model="res.partner">
-            <field name="grade_id" ref="res_partner_grade_platinium"/>
-            <field name="partner_weight">10</field>
+        <recordid="base.res_partner_12"model="res.partner">
+            <fieldname="grade_id"ref="res_partner_grade_silver"/>
+            <fieldname="partner_weight">10</field>
+        </record>
+        <recordid="base.res_partner_12"model="res.partner">
+            <fieldname="grade_id"ref="res_partner_grade_silver"/>
+            <fieldname="partner_weight">10</field>
         </record>
 
-        <record model="res.partner" id="base.res_partner_10">
-            <field name="assigned_partner_id" ref="base.res_partner_4"/>
+        <recordid="base.res_partner_10"model="res.partner">
+            <fieldname="grade_id"ref="res_partner_grade_gold"/>
+            <fieldname="partner_weight">10</field>
         </record>
-        <record model="res.partner" id="base.res_partner_12">
-            <field name="assigned_partner_id" ref="base.res_partner_10"/>
+        <recordid="base.res_partner_18"model="res.partner">
+            <fieldname="grade_id"ref="res_partner_grade_gold"/>
+            <fieldname="partner_weight">10</field>
         </record>
-        <record model="res.partner" id="base.res_partner_4">
-            <field name="assigned_partner_id" ref="base.res_partner_4"/>
+        <recordid="base.res_partner_1"model="res.partner">
+            <fieldname="grade_id"ref="res_partner_grade_gold"/>
+            <fieldname="partner_weight">10</field>
         </record>
-        <record model="res.partner" id="base.res_partner_10">
-            <field name="assigned_partner_id" ref="base.res_partner_12"/>
+
+        <recordid="base.res_partner_12"model="res.partner">
+            <fieldname="grade_id"ref="res_partner_grade_platinium"/>
+            <fieldname="partner_weight">10</field>
         </record>
-        <record model="res.partner" id="base.res_partner_3">
-            <field name="assigned_partner_id" ref="base.res_partner_3"/>
+        <recordid="base.res_partner_4"model="res.partner">
+            <fieldname="grade_id"ref="res_partner_grade_platinium"/>
+            <fieldname="partner_weight">10</field>
         </record>
-        <record model="res.partner" id="base.res_partner_2">
-            <field name="assigned_partner_id" ref="base.res_partner_1"/>
+
+        <recordmodel="res.partner"id="base.res_partner_10">
+            <fieldname="assigned_partner_id"ref="base.res_partner_4"/>
         </record>
-        <record model="res.partner" id="base.res_partner_4">
-            <field name="assigned_partner_id" ref="base.res_partner_18"/>
+        <recordmodel="res.partner"id="base.res_partner_12">
+            <fieldname="assigned_partner_id"ref="base.res_partner_10"/>
         </record>
-        <record model="res.partner" id="base.res_partner_4">
-            <field name="assigned_partner_id" ref="base.res_partner_3"/>
+        <recordmodel="res.partner"id="base.res_partner_4">
+            <fieldname="assigned_partner_id"ref="base.res_partner_4"/>
         </record>
-        <record model="res.partner" id="base.res_partner_1">
-            <field name="assigned_partner_id" ref="base.res_partner_12"/>
+        <recordmodel="res.partner"id="base.res_partner_10">
+            <fieldname="assigned_partner_id"ref="base.res_partner_12"/>
         </record>
-        <record model="res.partner" id="base.res_partner_1">
-            <field name="assigned_partner_id" ref="base.res_partner_2"/>
+        <recordmodel="res.partner"id="base.res_partner_3">
+            <fieldname="assigned_partner_id"ref="base.res_partner_3"/>
         </record>
-        <record model="res.partner" id="base.res_partner_1">
-            <field name="assigned_partner_id" ref="base.res_partner_2"/>
+        <recordmodel="res.partner"id="base.res_partner_2">
+            <fieldname="assigned_partner_id"ref="base.res_partner_1"/>
         </record>
-        <record model="res.partner" id="base.res_partner_12">
-            <field name="assigned_partner_id" ref="base.res_partner_12"/>
+        <recordmodel="res.partner"id="base.res_partner_4">
+            <fieldname="assigned_partner_id"ref="base.res_partner_18"/>
+        </record>
+        <recordmodel="res.partner"id="base.res_partner_4">
+            <fieldname="assigned_partner_id"ref="base.res_partner_3"/>
+        </record>
+        <recordmodel="res.partner"id="base.res_partner_1">
+            <fieldname="assigned_partner_id"ref="base.res_partner_12"/>
+        </record>
+        <recordmodel="res.partner"id="base.res_partner_1">
+            <fieldname="assigned_partner_id"ref="base.res_partner_2"/>
+        </record>
+        <recordmodel="res.partner"id="base.res_partner_1">
+            <fieldname="assigned_partner_id"ref="base.res_partner_2"/>
+        </record>
+        <recordmodel="res.partner"id="base.res_partner_12">
+            <fieldname="assigned_partner_id"ref="base.res_partner_12"/>
         </record>
 </flectra>

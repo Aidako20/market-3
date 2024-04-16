@@ -1,11 +1,11 @@
 <flectra>
-    <record id="stock_valuation_layer_form_inherited" model="ir.ui.view">
-        <field name="name">stock.valuation.layer.form.inherited</field>
-        <field name="model">stock.valuation.layer</field>
-        <field name="inherit_id" ref="stock_account.stock_valuation_layer_form" />
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='stock_move_id']" position="after">
-                <field name="stock_landed_cost_id" attrs="{'invisible': [('stock_landed_cost_id', '=', False)]}" />
+    <recordid="stock_valuation_layer_form_inherited"model="ir.ui.view">
+        <fieldname="name">stock.valuation.layer.form.inherited</field>
+        <fieldname="model">stock.valuation.layer</field>
+        <fieldname="inherit_id"ref="stock_account.stock_valuation_layer_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='stock_move_id']"position="after">
+                <fieldname="stock_landed_cost_id"attrs="{'invisible':[('stock_landed_cost_id','=',False)]}"/>
             </xpath>
         </field>
     </record>

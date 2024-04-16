@@ -1,45 +1,45 @@
-flectra.define('website.post_link', function (require) {
-'use strict';
+flectra.define('website.post_link',function(require){
+'usestrict';
 
-const publicWidget = require('web.public.widget');
-const wUtils = require('website.utils');
+constpublicWidget=require('web.public.widget');
+constwUtils=require('website.utils');
 
-publicWidget.registry.postLink = publicWidget.Widget.extend({
-    selector: '.post_link',
-    events: {
-        'click': '_onClickPost',
+publicWidget.registry.postLink=publicWidget.Widget.extend({
+    selector:'.post_link',
+    events:{
+        'click':'_onClickPost',
     },
 
     /**
-     * @override
+     *@override
      */
-    start() {
-        // Allows the link to be interacted with only when Javascript is loaded.
+    start(){
+        //AllowsthelinktobeinteractedwithonlywhenJavascriptisloaded.
         this.el.classList.add('o_post_link_js_loaded');
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy() {
+    destroy(){
         this._super(...arguments);
         this.el.classList.remove('o_post_link_js_loaded');
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
-    _onClickPost: function (ev) {
+    _onClickPost:function(ev){
         ev.preventDefault();
-        const url = this.el.dataset.post || this.el.href;
-        let data = {};
-        for (let [key, value] of Object.entries(this.el.dataset)) {
-            if (key.startsWith('post_')) {
-                data[key.slice(5)] = value;
+        consturl=this.el.dataset.post||this.el.href;
+        letdata={};
+        for(let[key,value]ofObject.entries(this.el.dataset)){
+            if(key.startsWith('post_')){
+                data[key.slice(5)]=value;
             }
         }
-        wUtils.sendRequest(url, data);
+        wUtils.sendRequest(url,data);
     },
 });
 

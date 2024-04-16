@@ -1,38 +1,38 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="s_references" name="References">
-    <section class="s_references pt48 pb32">
-        <div class="container">
-            <h2 style="text-align: center;">Our References</h2>
-            <p style="text-align: center;">We are in good company.</p>
-            <div class="row">
-                <div class="col-lg-2 pt16 pb16">
-                    <img src="/web/image/website.s_reference_demo_image_1" class="img img-fluid mx-auto" alt=""/>
+<templateid="s_references"name="References">
+    <sectionclass="s_referencespt48pb32">
+        <divclass="container">
+            <h2style="text-align:center;">OurReferences</h2>
+            <pstyle="text-align:center;">Weareingoodcompany.</p>
+            <divclass="row">
+                <divclass="col-lg-2pt16pb16">
+                    <imgsrc="/web/image/website.s_reference_demo_image_1"class="imgimg-fluidmx-auto"alt=""/>
                 </div>
-                <div class="col-lg-2 pt16 pb16">
-                    <img src="/web/image/website.s_reference_demo_image_2" class="img img-fluid mx-auto" alt=""/>
+                <divclass="col-lg-2pt16pb16">
+                    <imgsrc="/web/image/website.s_reference_demo_image_2"class="imgimg-fluidmx-auto"alt=""/>
                 </div>
-                <div class="col-lg-2 pt16 pb16">
-                    <img src="/web/image/website.s_reference_demo_image_3" class="img img-fluid mx-auto" alt=""/>
+                <divclass="col-lg-2pt16pb16">
+                    <imgsrc="/web/image/website.s_reference_demo_image_3"class="imgimg-fluidmx-auto"alt=""/>
                 </div>
-                <div class="col-lg-2 pt16 pb16">
-                    <img src="/web/image/website.s_reference_demo_image_4" class="img img-fluid mx-auto" alt=""/>
+                <divclass="col-lg-2pt16pb16">
+                    <imgsrc="/web/image/website.s_reference_demo_image_4"class="imgimg-fluidmx-auto"alt=""/>
                 </div>
-                <div class="col-lg-2 pt16 pb16">
-                    <img src="/web/image/website.s_reference_demo_image_5" class="img img-fluid mx-auto" alt=""/>
+                <divclass="col-lg-2pt16pb16">
+                    <imgsrc="/web/image/website.s_reference_demo_image_5"class="imgimg-fluidmx-auto"alt=""/>
                 </div>
-                <div class="col-lg-2 pt16 pb16">
-                    <img src="/web/image/website.s_reference_default_image_6" class="img img-fluid mx-auto" alt=""/>
+                <divclass="col-lg-2pt16pb16">
+                    <imgsrc="/web/image/website.s_reference_default_image_6"class="imgimg-fluidmx-auto"alt=""/>
                 </div>
             </div>
         </div>
     </section>
 </template>
 
-<template id="assets_snippet_s_references_css_000" inherit_id="website.assets_frontend">
-    <xpath expr="//link[last()]" position="after">
-        <link rel="stylesheet" type="text/scss" href="/website/static/src/snippets/s_references/000.scss"/>
+<templateid="assets_snippet_s_references_css_000"inherit_id="website.assets_frontend">
+    <xpathexpr="//link[last()]"position="after">
+        <linkrel="stylesheet"type="text/scss"href="/website/static/src/snippets/s_references/000.scss"/>
     </xpath>
 </template>
 

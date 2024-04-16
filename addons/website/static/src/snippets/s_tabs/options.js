@@ -1,47 +1,47 @@
-flectra.define('website.s_tabs_options', function (require) {
-'use strict';
+flectra.define('website.s_tabs_options',function(require){
+'usestrict';
 
-const options = require('web_editor.snippets.options');
+constoptions=require('web_editor.snippets.options');
 
-options.registry.NavTabs = options.Class.extend({
-    isTopOption: true,
+options.registry.NavTabs=options.Class.extend({
+    isTopOption:true,
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
+    start:function(){
         this._findLinksAndPanes();
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    onBuilt: function () {
+    onBuilt:function(){
         this._generateUniqueIDs();
     },
     /**
-     * @override
+     *@override
      */
-    onClone: function () {
+    onClone:function(){
         this._generateUniqueIDs();
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Creates a new tab and tab-pane.
+     *Createsanewtabandtab-pane.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    addTab: function (previewMode, widgetValue, params) {
-        var $activeItem = this.$navLinks.filter('.active').parent();
-        var $activePane = this.$tabPanes.filter('.active');
+    addTab:function(previewMode,widgetValue,params){
+        var$activeItem=this.$navLinks.filter('.active').parent();
+        var$activePane=this.$tabPanes.filter('.active');
 
-        var $navItem = $activeItem.clone();
-        var $navLink = $navItem.find('.nav-link').removeClass('active show');
-        var $tabPane = $activePane.clone().removeClass('active show');
+        var$navItem=$activeItem.clone();
+        var$navLink=$navItem.find('.nav-link').removeClass('activeshow');
+        var$tabPane=$activePane.clone().removeClass('activeshow');
         $navItem.insertAfter($activeItem);
         $tabPane.insertAfter($activePane);
         this._findLinksAndPanes();
@@ -50,20 +50,20 @@ options.registry.NavTabs = options.Class.extend({
         $navLink.tab('show');
     },
     /**
-     * Removes the current active tab and its content.
+     *Removesthecurrentactivetabanditscontent.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    removeTab: function (previewMode, widgetValue, params) {
-        var self = this;
+    removeTab:function(previewMode,widgetValue,params){
+        varself=this;
 
-        var $activeLink = this.$navLinks.filter('.active');
-        var $activePane = this.$tabPanes.filter('.active');
+        var$activeLink=this.$navLinks.filter('.active');
+        var$activePane=this.$tabPanes.filter('.active');
 
-        var $next = this.$navLinks.eq((this.$navLinks.index($activeLink) + 1) % this.$navLinks.length);
+        var$next=this.$navLinks.eq((this.$navLinks.index($activeLink)+1)%this.$navLinks.length);
 
-        return new Promise(resolve => {
-            $next.one('shown.bs.tab', function () {
+        returnnewPromise(resolve=>{
+            $next.one('shown.bs.tab',function(){
                 $activeLink.parent().remove();
                 $activePane.remove();
                 self._findLinksAndPanes();
@@ -74,94 +74,94 @@ options.registry.NavTabs = options.Class.extend({
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetVisibility: async function (widgetName, params) {
-        if (widgetName === 'remove_tab_opt') {
-            return (this.$tabPanes.length > 2);
+    _computeWidgetVisibility:asyncfunction(widgetName,params){
+        if(widgetName==='remove_tab_opt'){
+            return(this.$tabPanes.length>2);
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @private
+     *@private
      */
-    _findLinksAndPanes: function () {
-        this.$navLinks = this.$target.find('.nav:first .nav-link');
-        this.$tabPanes = this.$target.find('.tab-content:first .tab-pane');
+    _findLinksAndPanes:function(){
+        this.$navLinks=this.$target.find('.nav:first.nav-link');
+        this.$tabPanes=this.$target.find('.tab-content:first.tab-pane');
     },
     /**
-     * @private
+     *@private
      */
-    _generateUniqueIDs: function () {
-        for (var i = 0; i < this.$navLinks.length; i++) {
-            var id = _.now() + '_' + _.uniqueId();
-            var idLink = 'nav_tabs_link_' + id;
-            var idContent = 'nav_tabs_content_' + id;
+    _generateUniqueIDs:function(){
+        for(vari=0;i<this.$navLinks.length;i++){
+            varid=_.now()+'_'+_.uniqueId();
+            varidLink='nav_tabs_link_'+id;
+            varidContent='nav_tabs_content_'+id;
             this.$navLinks.eq(i).attr({
-                'id': idLink,
-                'href': '#' + idContent,
-                'aria-controls': idContent,
+                'id':idLink,
+                'href':'#'+idContent,
+                'aria-controls':idContent,
             });
             this.$tabPanes.eq(i).attr({
-                'id': idContent,
-                'aria-labelledby': idLink,
+                'id':idContent,
+                'aria-labelledby':idLink,
             });
         }
     },
 });
-options.registry.NavTabsStyle = options.Class.extend({
+options.registry.NavTabsStyle=options.Class.extend({
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Set the style of the tabs.
+     *Setthestyleofthetabs.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    setStyle: function (previewMode, widgetValue, params) {
-        const $nav = this.$target.find('.s_tabs_nav:first .nav');
-        const isPills = widgetValue === 'pills';
-        $nav.toggleClass('nav-tabs card-header-tabs', !isPills);
-        $nav.toggleClass('nav-pills', isPills);
-        this.$target.find('.s_tabs_nav:first').toggleClass('card-header', !isPills).toggleClass('mb-3', isPills);
-        this.$target.toggleClass('card', !isPills);
-        this.$target.find('.s_tabs_content:first').toggleClass('card-body', !isPills);
+    setStyle:function(previewMode,widgetValue,params){
+        const$nav=this.$target.find('.s_tabs_nav:first.nav');
+        constisPills=widgetValue==='pills';
+        $nav.toggleClass('nav-tabscard-header-tabs',!isPills);
+        $nav.toggleClass('nav-pills',isPills);
+        this.$target.find('.s_tabs_nav:first').toggleClass('card-header',!isPills).toggleClass('mb-3',isPills);
+        this.$target.toggleClass('card',!isPills);
+        this.$target.find('.s_tabs_content:first').toggleClass('card-body',!isPills);
     },
     /**
-     * Horizontal/vertical nav.
+     *Horizontal/verticalnav.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    setDirection: function (previewMode, widgetValue, params) {
-        const isVertical = widgetValue === 'vertical';
-        this.$target.toggleClass('row s_col_no_resize s_col_no_bgcolor', isVertical);
-        this.$target.find('.s_tabs_nav:first .nav').toggleClass('flex-column', isVertical);
-        this.$target.find('.s_tabs_nav:first > .nav-link').toggleClass('py-2', isVertical);
-        this.$target.find('.s_tabs_nav:first').toggleClass('col-md-3', isVertical);
-        this.$target.find('.s_tabs_content:first').toggleClass('col-md-9', isVertical);
+    setDirection:function(previewMode,widgetValue,params){
+        constisVertical=widgetValue==='vertical';
+        this.$target.toggleClass('rows_col_no_resizes_col_no_bgcolor',isVertical);
+        this.$target.find('.s_tabs_nav:first.nav').toggleClass('flex-column',isVertical);
+        this.$target.find('.s_tabs_nav:first>.nav-link').toggleClass('py-2',isVertical);
+        this.$target.find('.s_tabs_nav:first').toggleClass('col-md-3',isVertical);
+        this.$target.find('.s_tabs_content:first').toggleClass('col-md-9',isVertical);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState: function (methodName, params) {
-        switch (methodName) {
-            case 'setStyle':
-                return this.$target.find('.s_tabs_nav:first .nav').hasClass('nav-pills') ? 'pills' : 'tabs';
-            case 'setDirection':
-                return this.$target.find('.s_tabs_nav:first .nav').hasClass('flex-column') ? 'vertical' : 'horizontal';
+    _computeWidgetState:function(methodName,params){
+        switch(methodName){
+            case'setStyle':
+                returnthis.$target.find('.s_tabs_nav:first.nav').hasClass('nav-pills')?'pills':'tabs';
+            case'setDirection':
+                returnthis.$target.find('.s_tabs_nav:first.nav').hasClass('flex-column')?'vertical':'horizontal';
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 });
 });

@@ -1,5 +1,5 @@
-﻿<?xml version='1.0' encoding='UTF-8'?>
-<rsm:CrossIndustryInvoice xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100"
+﻿<?xmlversion='1.0'encoding='UTF-8'?>
+<rsm:CrossIndustryInvoicexmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100"
 xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
 xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
 xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100"
@@ -16,30 +16,30 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <ram:ID>F20220029</ram:ID>
       <ram:TypeCode>380</ram:TypeCode>
       <ram:IssueDateTime>
-         <udt:DateTimeString format="102">20220131</udt:DateTimeString>
+         <udt:DateTimeStringformat="102">20220131</udt:DateTimeString>
       </ram:IssueDateTime>
       <ram:IncludedNote>
-         <ram:Content>FOURNISSEUR F SARL au capital de 50 000 EUR</ram:Content>
+         <ram:Content>FOURNISSEURFSARLaucapitalde50000EUR</ram:Content>
          <ram:SubjectCode>REG</ram:SubjectCode>
       </ram:IncludedNote>
       <ram:IncludedNote>
-         <ram:Content>RCS MAVILLE 123 456 782</ram:Content>
+         <ram:Content>RCSMAVILLE123456782</ram:Content>
          <ram:SubjectCode>ABL</ram:SubjectCode>
       </ram:IncludedNote>
       <ram:IncludedNote>
-         <ram:Content>35 ma rue a moi, code postal Ville Pays – contact@masociete.fr - www.masociete.fr  – N° TVA : FR32 123 456 789</ram:Content>
+         <ram:Content>35marueamoi,codepostalVillePays–contact@masociete.fr-www.masociete.fr –N°TVA:FR32123456789</ram:Content>
          <ram:SubjectCode>AAI</ram:SubjectCode>
       </ram:IncludedNote>
       <ram:IncludedNote>
-         <ram:Content>Tout retard de paiement engendre une pénalité exigible à compter de la date d'échéance, calculée sur la base de trois fois le taux d'intérêt légal. </ram:Content>
+         <ram:Content>Toutretarddepaiementengendreunepénalitéexigibleàcompterdeladated'échéance,calculéesurlabasedetroisfoisletauxd'intérêtlégal.</ram:Content>
          <ram:SubjectCode>PMD</ram:SubjectCode>
       </ram:IncludedNote>
       <ram:IncludedNote>
-         <ram:Content>Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement : 40 €.</ram:Content>
+         <ram:Content>Indemnitéforfaitairepourfraisderecouvrementencasderetarddepaiement:40€.</ram:Content>
          <ram:SubjectCode>PMT</ram:SubjectCode>
       </ram:IncludedNote>
       <ram:IncludedNote>
-         <ram:Content>Les réglements reçus avant la date d'échéance ne donneront pas lieu à escompte.</ram:Content>
+         <ram:Content>Lesréglementsreçusavantladated'échéancenedonnerontpaslieuàescompte.</ram:Content>
          <ram:SubjectCode>AAB</ram:SubjectCode>
       </ram:IncludedNote>
    </rsm:ExchangedDocument>
@@ -49,8 +49,8 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <ram:LineID>1</ram:LineID>
          </ram:AssociatedDocumentLineDocument>
          <ram:SpecifiedTradeProduct>
-            <ram:GlobalID schemeID="0088">598785412598745</ram:GlobalID>
-            <ram:Name>PRESTATION SUPPORT</ram:Name>
+            <ram:GlobalIDschemeID="0088">598785412598745</ram:GlobalID>
+            <ram:Name>PRESTATIONSUPPORT</ram:Name>
             <ram:Description>Description</ram:Description>
          </ram:SpecifiedTradeProduct>
          <ram:SpecifiedLineTradeAgreement>
@@ -59,11 +59,11 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             </ram:BuyerOrderReferencedDocument>
             <ram:NetPriceProductTradePrice>
                <ram:ChargeAmount>60.0000</ram:ChargeAmount>
-               <ram:BasisQuantity unitCode="C62">1.0000</ram:BasisQuantity>
+               <ram:BasisQuantityunitCode="C62">1.0000</ram:BasisQuantity>
             </ram:NetPriceProductTradePrice>
          </ram:SpecifiedLineTradeAgreement>
          <ram:SpecifiedLineTradeDelivery>
-            <ram:BilledQuantity unitCode="C62">-1.0000</ram:BilledQuantity>
+            <ram:BilledQuantityunitCode="C62">-1.0000</ram:BilledQuantity>
          </ram:SpecifiedLineTradeDelivery>
          <ram:SpecifiedLineTradeSettlement>
             <ram:ApplicableTradeTax>
@@ -73,10 +73,10 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             </ram:ApplicableTradeTax>
             <ram:BillingSpecifiedPeriod>
                <ram:StartDateTime>
-                  <udt:DateTimeString format="102">20220101</udt:DateTimeString>
+                  <udt:DateTimeStringformat="102">20220101</udt:DateTimeString>
                </ram:StartDateTime>
                <ram:EndDateTime>
-                  <udt:DateTimeString format="102">20220131</udt:DateTimeString>
+                  <udt:DateTimeStringformat="102">20220131</udt:DateTimeString>
                </ram:EndDateTime>
             </ram:BillingSpecifiedPeriod>
             <ram:SpecifiedTradeSettlementLineMonetarySummation>
@@ -89,7 +89,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <ram:LineID>2</ram:LineID>
          </ram:AssociatedDocumentLineDocument>
          <ram:SpecifiedTradeProduct>
-            <ram:Name>FOURNITURES DIVERSES</ram:Name>
+            <ram:Name>FOURNITURESDIVERSES</ram:Name>
             <ram:Description>Description</ram:Description>
          </ram:SpecifiedTradeProduct>
          <ram:SpecifiedLineTradeAgreement>
@@ -101,7 +101,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             </ram:NetPriceProductTradePrice>
          </ram:SpecifiedLineTradeAgreement>
          <ram:SpecifiedLineTradeDelivery>
-            <ram:BilledQuantity unitCode="C62">-3.0000</ram:BilledQuantity>
+            <ram:BilledQuantityunitCode="C62">-3.0000</ram:BilledQuantity>
          </ram:SpecifiedLineTradeDelivery>
          <ram:SpecifiedLineTradeSettlement>
             <ram:ApplicableTradeTax>
@@ -111,7 +111,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             </ram:ApplicableTradeTax>
             <ram:BillingSpecifiedPeriod>
                <ram:StartDateTime>
-                  <udt:DateTimeString format="102">20220101</udt:DateTimeString>
+                  <udt:DateTimeStringformat="102">20220101</udt:DateTimeString>
                </ram:StartDateTime>
             </ram:BillingSpecifiedPeriod>
             <ram:SpecifiedTradeSettlementLineMonetarySummation>
@@ -133,7 +133,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             </ram:NetPriceProductTradePrice>
          </ram:SpecifiedLineTradeAgreement>
          <ram:SpecifiedLineTradeDelivery>
-            <ram:BilledQuantity unitCode="C62">-1.0000</ram:BilledQuantity>
+            <ram:BilledQuantityunitCode="C62">-1.0000</ram:BilledQuantity>
          </ram:SpecifiedLineTradeDelivery>
          <ram:SpecifiedLineTradeSettlement>
             <ram:ApplicableTradeTax>
@@ -143,7 +143,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             </ram:ApplicableTradeTax>
             <ram:BillingSpecifiedPeriod>
                <ram:EndDateTime>
-                  <udt:DateTimeString format="102">20220131</udt:DateTimeString>
+                  <udt:DateTimeStringformat="102">20220131</udt:DateTimeString>
                </ram:EndDateTime>
             </ram:BillingSpecifiedPeriod>
             <ram:SpecifiedTradeSettlementLineMonetarySummation>
@@ -154,48 +154,48 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <ram:ApplicableHeaderTradeAgreement>
          <ram:BuyerReference>SERVEXEC</ram:BuyerReference>
          <ram:SellerTradeParty>
-            <ram:GlobalID schemeID="0088">587451236587</ram:GlobalID>
-            <ram:Name>LE FOURNISSEUR</ram:Name>
+            <ram:GlobalIDschemeID="0088">587451236587</ram:GlobalID>
+            <ram:Name>LEFOURNISSEUR</ram:Name>
             <ram:SpecifiedLegalOrganization>
-               <ram:ID schemeID="0002">123456782</ram:ID>
-               <ram:TradingBusinessName>SELLER TRADE NAME</ram:TradingBusinessName>
+               <ram:IDschemeID="0002">123456782</ram:ID>
+               <ram:TradingBusinessName>SELLERTRADENAME</ram:TradingBusinessName>
             </ram:SpecifiedLegalOrganization>
             <ram:PostalTradeAddress>
                <ram:PostcodeCode>75018</ram:PostcodeCode>
-               <ram:LineOne>35 rue d'ici</ram:LineOne>
-               <ram:LineTwo>Seller line 2</ram:LineTwo>
+               <ram:LineOne>35rued'ici</ram:LineOne>
+               <ram:LineTwo>Sellerline2</ram:LineTwo>
                <ram:CityName>PARIS</ram:CityName>
                <ram:CountryID>FR</ram:CountryID>
             </ram:PostalTradeAddress>
             <ram:URIUniversalCommunication>
-               <ram:URIID schemeID="EM">moi@seller.com</ram:URIID>
+               <ram:URIIDschemeID="EM">moi@seller.com</ram:URIID>
             </ram:URIUniversalCommunication>
             <ram:SpecifiedTaxRegistration>
-               <ram:ID schemeID="VA">FR11123456782</ram:ID>
+               <ram:IDschemeID="VA">FR11123456782</ram:ID>
             </ram:SpecifiedTaxRegistration>
          </ram:SellerTradeParty>
          <ram:BuyerTradeParty>
-            <ram:GlobalID schemeID="0088">3654789851</ram:GlobalID>
-            <ram:Name>LE CLIENT</ram:Name>
+            <ram:GlobalIDschemeID="0088">3654789851</ram:GlobalID>
+            <ram:Name>LECLIENT</ram:Name>
             <ram:SpecifiedLegalOrganization>
-               <ram:ID schemeID="0002">987654321</ram:ID>
+               <ram:IDschemeID="0002">987654321</ram:ID>
             </ram:SpecifiedLegalOrganization>
             <ram:PostalTradeAddress>
                <ram:PostcodeCode>06000</ram:PostcodeCode>
-               <ram:LineOne>58 rue de la mer</ram:LineOne>
-               <ram:LineTwo>Buyer line 2</ram:LineTwo>
+               <ram:LineOne>58ruedelamer</ram:LineOne>
+               <ram:LineTwo>Buyerline2</ram:LineTwo>
                <ram:CityName>NICE</ram:CityName>
                <ram:CountryID>DE</ram:CountryID>
             </ram:PostalTradeAddress>
             <ram:URIUniversalCommunication>
-               <ram:URIID schemeID="EM">me@buyer.com</ram:URIID>
+               <ram:URIIDschemeID="EM">me@buyer.com</ram:URIID>
             </ram:URIUniversalCommunication>
             <ram:SpecifiedTaxRegistration>
-               <ram:ID schemeID="VA">FR 05 987 654 321</ram:ID>
+               <ram:IDschemeID="VA">FR05987654321</ram:ID>
             </ram:SpecifiedTaxRegistration>
          </ram:BuyerTradeParty>
          <ram:SellerOrderReferencedDocument>
-            <ram:IssuerAssignedID>SALES REF 2547</ram:IssuerAssignedID>
+            <ram:IssuerAssignedID>SALESREF2547</ram:IssuerAssignedID>
          </ram:SellerOrderReferencedDocument>
          <ram:BuyerOrderReferencedDocument>
             <ram:IssuerAssignedID>PO201925478</ram:IssuerAssignedID>
@@ -204,10 +204,10 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <ram:IssuerAssignedID>CT2018120802</ram:IssuerAssignedID>
          </ram:ContractReferencedDocument>
          <ram:AdditionalReferencedDocument>
-            <ram:IssuerAssignedID>SUPPort doc</ram:IssuerAssignedID>
+            <ram:IssuerAssignedID>SUPPortdoc</ram:IssuerAssignedID>
             <ram:URIID>url:gffter</ram:URIID>
             <ram:TypeCode>916</ram:TypeCode>
-            <ram:Name>support descript</ram:Name>
+            <ram:Name>supportdescript</ram:Name>
          </ram:AdditionalReferencedDocument>
          <ram:AdditionalReferencedDocument>
             <ram:IssuerAssignedID>TENDER-002</ram:IssuerAssignedID>
@@ -219,24 +219,24 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
          </ram:AdditionalReferencedDocument>
          <ram:SpecifiedProcuringProject>
             <ram:ID>PROJET2547</ram:ID>
-            <ram:Name>Project reference</ram:Name>
+            <ram:Name>Projectreference</ram:Name>
          </ram:SpecifiedProcuringProject>
       </ram:ApplicableHeaderTradeAgreement>
       <ram:ApplicableHeaderTradeDelivery>
          <ram:ShipToTradeParty>
-            <ram:GlobalID schemeID="0088">3654789851</ram:GlobalID>
-            <ram:Name>DEL Name</ram:Name>
+            <ram:GlobalIDschemeID="0088">3654789851</ram:GlobalID>
+            <ram:Name>DELName</ram:Name>
             <ram:PostalTradeAddress>
                <ram:PostcodeCode>06000</ram:PostcodeCode>
-               <ram:LineOne>DEL 58 rue de la mer</ram:LineOne>
-               <ram:LineTwo>DEL line 2</ram:LineTwo>
+               <ram:LineOne>DEL58ruedelamer</ram:LineOne>
+               <ram:LineTwo>DELline2</ram:LineTwo>
                <ram:CityName>BERLIN</ram:CityName>
                <ram:CountryID>DE</ram:CountryID>
             </ram:PostalTradeAddress>
          </ram:ShipToTradeParty>
          <ram:ActualDeliverySupplyChainEvent>
             <ram:OccurrenceDateTime>
-               <udt:DateTimeString format="102">20220128</udt:DateTimeString>
+               <udt:DateTimeStringformat="102">20220128</udt:DateTimeString>
             </ram:OccurrenceDateTime>
          </ram:ActualDeliverySupplyChainEvent>
          <ram:DespatchAdviceReferencedDocument>
@@ -252,7 +252,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
          <ram:SpecifiedTradeSettlementPaymentMeans>
             <ram:TypeCode>30</ram:TypeCode>
             <ram:PayeePartyCreditorFinancialAccount>
-               <ram:IBANID>FR76 1254 2547 2569 8542 5874 698</ram:IBANID>
+               <ram:IBANID>FR7612542547256985425874698</ram:IBANID>
             </ram:PayeePartyCreditorFinancialAccount>
          </ram:SpecifiedTradeSettlementPaymentMeans>
          <ram:ApplicableTradeTax>
@@ -266,10 +266,10 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
          </ram:ApplicableTradeTax>
          <ram:BillingSpecifiedPeriod>
             <ram:StartDateTime>
-               <udt:DateTimeString format="102">20220101</udt:DateTimeString>
+               <udt:DateTimeStringformat="102">20220101</udt:DateTimeString>
             </ram:StartDateTime>
             <ram:EndDateTime>
-               <udt:DateTimeString format="102">20221231</udt:DateTimeString>
+               <udt:DateTimeStringformat="102">20221231</udt:DateTimeString>
             </ram:EndDateTime>
          </ram:BillingSpecifiedPeriod>
          <ram:SpecifiedTradeAllowanceCharge>
@@ -277,7 +277,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                <udt:Indicator>false</udt:Indicator>
             </ram:ChargeIndicator>
             <ram:ActualAmount>-5.00</ram:ActualAmount>
-            <ram:Reason>REMISE COMMERCIALE</ram:Reason>
+            <ram:Reason>REMISECOMMERCIALE</ram:Reason>
             <ram:CategoryTradeTax>
                <ram:TypeCode>VAT</ram:TypeCode>
                <ram:CategoryCode>K</ram:CategoryCode>
@@ -289,7 +289,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                <udt:Indicator>true</udt:Indicator>
             </ram:ChargeIndicator>
             <ram:ActualAmount>-10.00</ram:ActualAmount>
-            <ram:Reason>FRAIS DEPLACEMENT</ram:Reason>
+            <ram:Reason>FRAISDEPLACEMENT</ram:Reason>
             <ram:CategoryTradeTax>
                <ram:TypeCode>VAT</ram:TypeCode>
                <ram:CategoryCode>K</ram:CategoryCode>
@@ -298,7 +298,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
          </ram:SpecifiedTradeAllowanceCharge>
          <ram:SpecifiedTradePaymentTerms>
             <ram:DueDateDateTime>
-               <udt:DateTimeString format="102">20220302</udt:DateTimeString>
+               <udt:DateTimeStringformat="102">20220302</udt:DateTimeString>
             </ram:DueDateDateTime>
          </ram:SpecifiedTradePaymentTerms>
          <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
@@ -306,7 +306,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <ram:ChargeTotalAmount>-10.00</ram:ChargeTotalAmount>
             <ram:AllowanceTotalAmount>-5.00</ram:AllowanceTotalAmount>
             <ram:TaxBasisTotalAmount>-100.00</ram:TaxBasisTotalAmount>
-            <ram:TaxTotalAmount currencyID="EUR">0.00</ram:TaxTotalAmount>
+            <ram:TaxTotalAmountcurrencyID="EUR">0.00</ram:TaxTotalAmount>
             <ram:GrandTotalAmount>-100.00</ram:GrandTotalAmount>
             <ram:TotalPrepaidAmount>-10.00</ram:TotalPrepaidAmount>
             <ram:DuePayableAmount>-90.00</ram:DuePayableAmount>
@@ -314,12 +314,12 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
          <ram:InvoiceReferencedDocument>
             <ram:IssuerAssignedID>F20220003</ram:IssuerAssignedID>
             <ram:FormattedIssueDateTime>
-               <qdt:DateTimeString format="102">20220101</qdt:DateTimeString>
+               <qdt:DateTimeStringformat="102">20220101</qdt:DateTimeString>
             </ram:FormattedIssueDateTime>
          </ram:InvoiceReferencedDocument>
          <ram:ReceivableSpecifiedTradeAccountingAccount>
-            <ram:ID>BUYER ACCOUNT REF</ram:ID>
+            <ram:ID>BUYERACCOUNTREF</ram:ID>
          </ram:ReceivableSpecifiedTradeAccountingAccount>
       </ram:ApplicableHeaderTradeSettlement>
    </rsm:SupplyChainTradeTransaction>
-</rsm:CrossIndustryInvoice> 
+</rsm:CrossIndustryInvoice>

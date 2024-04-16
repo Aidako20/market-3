@@ -1,33 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="SaleDetailsReport" owl="1">
-        <div class="pos-receipt">
-            <t t-if="pos.company_logo_base64">
-                <img class="pos-receipt-logo" t-att-src="pos.company_logo_base64" alt="Logo"/>
+    <tt-name="SaleDetailsReport"owl="1">
+        <divclass="pos-receipt">
+            <tt-if="pos.company_logo_base64">
+                <imgclass="pos-receipt-logo"t-att-src="pos.company_logo_base64"alt="Logo"/>
                 <br/>
             </t>
-            <t t-if="!pos.company_logo_base64" class="pos-receipt-center-align">
-                <h1 t-esc="pos.company.name" />
+            <tt-if="!pos.company_logo_base64"class="pos-receipt-center-align">
+                <h1t-esc="pos.company.name"/>
                 <br/>
             </t>
-            <br /><br />
+            <br/><br/>
 
-            <div class="orderlines">
-                <t t-foreach="products" t-as="line" t-key="line.product_id">
-                    <div class="responsive-price">
-                        <t t-esc="line.product_name.substr(0,20)" />
-                        <span class="pos-receipt-right-align">
-                            <t t-esc="Math.round(line.quantity * Math.pow(10, pos.dp['Product Unit of Measure'])) / Math.pow(10, pos.dp['Product Unit of Measure'])" />
-                            <t t-if="line.uom !== 'Units'">
-                                <t t-esc="line.uom" />
+            <divclass="orderlines">
+                <tt-foreach="products"t-as="line"t-key="line.product_id">
+                    <divclass="responsive-price">
+                        <tt-esc="line.product_name.substr(0,20)"/>
+                        <spanclass="pos-receipt-right-align">
+                            <tt-esc="Math.round(line.quantity*Math.pow(10,pos.dp['ProductUnitofMeasure']))/Math.pow(10,pos.dp['ProductUnitofMeasure'])"/>
+                            <tt-if="line.uom!=='Units'">
+                                <tt-esc="line.uom"/>
                             </t>
                             x
-                            <t t-esc="pos.format_currency_no_symbol(line.price_unit)" />
+                            <tt-esc="pos.format_currency_no_symbol(line.price_unit)"/>
                         </span>
                     </div>
-                    <t t-if="line.discount !== 0">
-                        <div class="pos-receipt-left-padding">Discount: <t t-esc="line.discount" />%</div>
+                    <tt-if="line.discount!==0">
+                        <divclass="pos-receipt-left-padding">Discount:<tt-esc="line.discount"/>%</div>
                     </t>
                 </t>
             </div>
@@ -39,9 +39,9 @@
             <div>
                 Payments:
             </div>
-            <div t-foreach="payments" t-as="payment">
-                <t t-esc="payment.name" />
-                <span t-esc="pos.format_currency_no_symbol(payment.total)" class="pos-receipt-right-align"/>
+            <divt-foreach="payments"t-as="payment">
+                <tt-esc="payment.name"/>
+                <spant-esc="pos.format_currency_no_symbol(payment.total)"class="pos-receipt-right-align"/>
             </div>
 
             <br/>
@@ -51,9 +51,9 @@
             <div>
                 Taxes:
             </div>
-            <div t-foreach="taxes" t-as="tax">
-                <t t-esc="tax.name" />
-                <span t-esc="pos.format_currency_no_symbol(tax.tax_amount)" class="pos-receipt-right-align"/>
+            <divt-foreach="taxes"t-as="tax">
+                <tt-esc="tax.name"/>
+                <spant-esc="pos.format_currency_no_symbol(tax.tax_amount)"class="pos-receipt-right-align"/>
             </div>
 
             <br/>
@@ -62,12 +62,12 @@
 
             <div>
                 Total:
-                <span t-esc="pos.format_currency_no_symbol(total_paid)" class="pos-receipt-right-align"/>
+                <spant-esc="pos.format_currency_no_symbol(total_paid)"class="pos-receipt-right-align"/>
             </div>
 
             <br/>
-            <div class="pos-receipt-order-data">
-                <div><t t-esc="date" /></div>
+            <divclass="pos-receipt-order-data">
+                <div><tt-esc="date"/></div>
             </div>
         </div>
     </t>

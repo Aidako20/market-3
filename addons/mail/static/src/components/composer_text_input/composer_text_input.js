@@ -1,304 +1,304 @@
-flectra.define('mail/static/src/components/composer_text_input/composer_text_input.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/composer_text_input/composer_text_input.js',function(require){
+'usestrict';
 
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
-const useUpdate = require('mail/static/src/component_hooks/use_update/use_update.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseUpdate=require('mail/static/src/component_hooks/use_update/use_update.js');
 
-const components = {
-    ComposerSuggestionList: require('mail/static/src/components/composer_suggestion_list/composer_suggestion_list.js'),
+constcomponents={
+    ComposerSuggestionList:require('mail/static/src/components/composer_suggestion_list/composer_suggestion_list.js'),
 };
-const { markEventHandled } = require('mail/static/src/utils/utils.js');
+const{markEventHandled}=require('mail/static/src/utils/utils.js');
 
-const { Component } = owl;
-const { useRef } = owl.hooks;
+const{Component}=owl;
+const{useRef}=owl.hooks;
 
-class ComposerTextInput extends Component {
+classComposerTextInputextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps({
-            compareDepth: {
-                sendShortcuts: 1,
+            compareDepth:{
+                sendShortcuts:1,
             },
         });
-        useStore(props => {
-            const composer = this.env.models['mail.composer'].get(props.composerLocalId);
-            const thread = composer && composer.thread;
-            return {
-                composerHasFocus: composer && composer.hasFocus,
-                composerHasSuggestions: composer && composer.hasSuggestions,
-                composerIsLog: composer && composer.isLog,
-                composerTextInputContent: composer && composer.textInputContent,
-                composerTextInputCursorEnd: composer && composer.textInputCursorEnd,
-                composerTextInputCursorStart: composer && composer.textInputCursorStart,
-                composerTextInputSelectionDirection: composer && composer.textInputSelectionDirection,
-                isDeviceMobile: this.env.messaging.device.isMobile,
-                threadModel: thread && thread.model,
+        useStore(props=>{
+            constcomposer=this.env.models['mail.composer'].get(props.composerLocalId);
+            constthread=composer&&composer.thread;
+            return{
+                composerHasFocus:composer&&composer.hasFocus,
+                composerHasSuggestions:composer&&composer.hasSuggestions,
+                composerIsLog:composer&&composer.isLog,
+                composerTextInputContent:composer&&composer.textInputContent,
+                composerTextInputCursorEnd:composer&&composer.textInputCursorEnd,
+                composerTextInputCursorStart:composer&&composer.textInputCursorStart,
+                composerTextInputSelectionDirection:composer&&composer.textInputSelectionDirection,
+                isDeviceMobile:this.env.messaging.device.isMobile,
+                threadModel:thread&&thread.model,
             };
         });
         /**
-         * Updates the composer text input content when composer is mounted
-         * as textarea content can't be changed from the DOM.
+         *Updatesthecomposertextinputcontentwhencomposerismounted
+         *astextareacontentcan'tbechangedfromtheDOM.
          */
-        useUpdate({ func: () => this._update() });
+        useUpdate({func:()=>this._update()});
         /**
-         * Last content of textarea from input event. Useful to determine
-         * whether the current partner is typing something.
+         *Lastcontentoftextareafrominputevent.Usefultodetermine
+         *whetherthecurrentpartneristypingsomething.
          */
-        this._textareaLastInputValue = "";
+        this._textareaLastInputValue="";
         /**
-         * Reference of the textarea. Useful to set height, selection and content.
+         *Referenceofthetextarea.Usefultosetheight,selectionandcontent.
          */
-        this._textareaRef = useRef('textarea');
+        this._textareaRef=useRef('textarea');
         /**
-         * This is the invisible textarea used to compute the composer height
-         * based on the text content. We need it to downsize the textarea
-         * properly without flicker.
+         *Thisistheinvisibletextareausedtocomputethecomposerheight
+         *basedonthetextcontent.Weneedittodownsizethetextarea
+         *properlywithoutflicker.
          */
-        this._mirroredTextareaRef = useRef('mirroredTextarea');
+        this._mirroredTextareaRef=useRef('mirroredTextarea');
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {mail.composer}
+     *@returns{mail.composer}
      */
-    get composer() {
-        return this.env.models['mail.composer'].get(this.props.composerLocalId);
+    getcomposer(){
+        returnthis.env.models['mail.composer'].get(this.props.composerLocalId);
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get textareaPlaceholder() {
-        if (!this.composer) {
-            return "";
+    gettextareaPlaceholder(){
+        if(!this.composer){
+            return"";
         }
-        if (this.composer.thread && this.composer.thread.model !== 'mail.channel') {
-            if (this.composer.isLog) {
-                return this.env._t("Log an internal note...");
+        if(this.composer.thread&&this.composer.thread.model!=='mail.channel'){
+            if(this.composer.isLog){
+                returnthis.env._t("Loganinternalnote...");
             }
-            return this.env._t("Send a message to followers...");
+            returnthis.env._t("Sendamessagetofollowers...");
         }
-        return this.env._t("Write something...");
+        returnthis.env._t("Writesomething...");
     }
 
-    focus() {
+    focus(){
         this._textareaRef.el.focus();
     }
 
-    focusout() {
+    focusout(){
         this.saveStateInStore();
         this._textareaRef.el.blur();
     }
 
     /**
-     * Saves the composer text input state in store
+     *Savesthecomposertextinputstateinstore
      */
-    saveStateInStore() {
+    saveStateInStore(){
         this.composer.update({
-            textInputContent: this._getContent(),
-            textInputCursorEnd: this._getSelectionEnd(),
-            textInputCursorStart: this._getSelectionStart(),
-            textInputSelectionDirection: this._textareaRef.el.selectionDirection,
+            textInputContent:this._getContent(),
+            textInputCursorEnd:this._getSelectionEnd(),
+            textInputCursorStart:this._getSelectionStart(),
+            textInputSelectionDirection:this._textareaRef.el.selectionDirection,
         });
     }
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Returns textarea current content.
+     *Returnstextareacurrentcontent.
      *
-     * @private
-     * @returns {string}
+     *@private
+     *@returns{string}
      */
-    _getContent() {
-        return this._textareaRef.el.value;
+    _getContent(){
+        returnthis._textareaRef.el.value;
     }
 
     /**
-     * Returns selection end position.
+     *Returnsselectionendposition.
      *
-     * @private
-     * @returns {integer}
+     *@private
+     *@returns{integer}
      */
-    _getSelectionEnd() {
-        return this._textareaRef.el.selectionEnd;
+    _getSelectionEnd(){
+        returnthis._textareaRef.el.selectionEnd;
     }
 
     /**
-     * Returns selection start position.
+     *Returnsselectionstartposition.
      *
-     * @private
-     * @returns {integer}
+     *@private
+     *@returns{integer}
      *
      */
-    _getSelectionStart() {
-        return this._textareaRef.el.selectionStart;
+    _getSelectionStart(){
+        returnthis._textareaRef.el.selectionStart;
     }
 
     /**
-     * Determines whether the textarea is empty or not.
+     *Determineswhetherthetextareaisemptyornot.
      *
-     * @private
-     * @returns {boolean}
+     *@private
+     *@returns{boolean}
      */
-    _isEmpty() {
-        return this._getContent() === "";
+    _isEmpty(){
+        returnthis._getContent()==="";
     }
 
     /**
-     * Updates the content and height of a textarea
+     *Updatesthecontentandheightofatextarea
      *
-     * @private
+     *@private
      */
-    _update() {
-        if (!this.composer) {
+    _update(){
+        if(!this.composer){
             return;
         }
-        if (this.composer.isLastStateChangeProgrammatic) {
-            this._textareaRef.el.value = this.composer.textInputContent;
-            if (this.composer.hasFocus) {
+        if(this.composer.isLastStateChangeProgrammatic){
+            this._textareaRef.el.value=this.composer.textInputContent;
+            if(this.composer.hasFocus){
                 this._textareaRef.el.setSelectionRange(
                     this.composer.textInputCursorStart,
                     this.composer.textInputCursorEnd,
                     this.composer.textInputSelectionDirection,
                 );
             }
-            this.composer.update({ isLastStateChangeProgrammatic: false });
+            this.composer.update({isLastStateChangeProgrammatic:false});
         }
         this._updateHeight();
     }
 
     /**
-     * Updates the textarea height.
+     *Updatesthetextareaheight.
      *
-     * @private
+     *@private
      */
-    _updateHeight() {
-        this._mirroredTextareaRef.el.value = this.composer.textInputContent;
-        this._textareaRef.el.style.height = (this._mirroredTextareaRef.el.scrollHeight) + "px";
+    _updateHeight(){
+        this._mirroredTextareaRef.el.value=this.composer.textInputContent;
+        this._textareaRef.el.style.height=(this._mirroredTextareaRef.el.scrollHeight)+"px";
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onClickTextarea() {
-        // clicking might change the cursor position
+    _onClickTextarea(){
+        //clickingmightchangethecursorposition
         this.saveStateInStore();
     }
 
     /**
-     * @private
+     *@private
      */
-    _onFocusinTextarea() {
+    _onFocusinTextarea(){
         this.composer.focus();
         this.trigger('o-focusin-composer');
     }
 
     /**
-     * @private
+     *@private
      */
-    _onFocusoutTextarea() {
+    _onFocusoutTextarea(){
         this.saveStateInStore();
-        this.composer.update({ hasFocus: false });
+        this.composer.update({hasFocus:false});
     }
 
     /**
-     * @private
+     *@private
      */
-    _onInputTextarea() {
+    _onInputTextarea(){
         this.saveStateInStore();
-        if (this._textareaLastInputValue !== this._textareaRef.el.value) {
+        if(this._textareaLastInputValue!==this._textareaRef.el.value){
             this.composer.handleCurrentPartnerIsTyping();
         }
-        this._textareaLastInputValue = this._textareaRef.el.value;
+        this._textareaLastInputValue=this._textareaRef.el.value;
         this._updateHeight();
     }
 
     /**
-     * @private
-     * @param {KeyboardEvent} ev
+     *@private
+     *@param{KeyboardEvent}ev
      */
-    _onKeydownTextarea(ev) {
-        switch (ev.key) {
-            case 'Escape':
-                if (this.composer.hasSuggestions) {
+    _onKeydownTextarea(ev){
+        switch(ev.key){
+            case'Escape':
+                if(this.composer.hasSuggestions){
                     ev.preventDefault();
                     this.composer.closeSuggestions();
-                    markEventHandled(ev, 'ComposerTextInput.closeSuggestions');
+                    markEventHandled(ev,'ComposerTextInput.closeSuggestions');
                 }
                 break;
-            // UP, DOWN, TAB: prevent moving cursor if navigation in mention suggestions
-            case 'ArrowUp':
-            case 'PageUp':
-            case 'ArrowDown':
-            case 'PageDown':
-            case 'Home':
-            case 'End':
-            case 'Tab':
-                if (this.composer.hasSuggestions) {
-                    // We use preventDefault here to avoid keys native actions but actions are handled in keyUp
+            //UP,DOWN,TAB:preventmovingcursorifnavigationinmentionsuggestions
+            case'ArrowUp':
+            case'PageUp':
+            case'ArrowDown':
+            case'PageDown':
+            case'Home':
+            case'End':
+            case'Tab':
+                if(this.composer.hasSuggestions){
+                    //WeusepreventDefaultheretoavoidkeysnativeactionsbutactionsarehandledinkeyUp
                     ev.preventDefault();
                 }
                 break;
-            // ENTER: submit the message only if the dropdown mention proposition is not displayed
-            case 'Enter':
+            //ENTER:submitthemessageonlyifthedropdownmentionpropositionisnotdisplayed
+            case'Enter':
                 this._onKeydownTextareaEnter(ev);
                 break;
         }
     }
 
     /**
-     * @private
-     * @param {KeyboardEvent} ev
+     *@private
+     *@param{KeyboardEvent}ev
      */
-    _onKeydownTextareaEnter(ev) {
-        if (this.composer.hasSuggestions) {
+    _onKeydownTextareaEnter(ev){
+        if(this.composer.hasSuggestions){
             ev.preventDefault();
             return;
         }
-        if (
-            this.props.sendShortcuts.includes('ctrl-enter') &&
-            !ev.altKey &&
-            ev.ctrlKey &&
-            !ev.metaKey &&
+        if(
+            this.props.sendShortcuts.includes('ctrl-enter')&&
+            !ev.altKey&&
+            ev.ctrlKey&&
+            !ev.metaKey&&
             !ev.shiftKey
-        ) {
+        ){
             this.trigger('o-composer-text-input-send-shortcut');
             ev.preventDefault();
             return;
         }
-        if (
-            this.props.sendShortcuts.includes('enter') &&
-            !ev.altKey &&
-            !ev.ctrlKey &&
-            !ev.metaKey &&
+        if(
+            this.props.sendShortcuts.includes('enter')&&
+            !ev.altKey&&
+            !ev.ctrlKey&&
+            !ev.metaKey&&
             !ev.shiftKey
-        ) {
+        ){
             this.trigger('o-composer-text-input-send-shortcut');
             ev.preventDefault();
             return;
         }
-        if (
-            this.props.sendShortcuts.includes('meta-enter') &&
-            !ev.altKey &&
-            !ev.ctrlKey &&
-            ev.metaKey &&
+        if(
+            this.props.sendShortcuts.includes('meta-enter')&&
+            !ev.altKey&&
+            !ev.ctrlKey&&
+            ev.metaKey&&
             !ev.shiftKey
-        ) {
+        ){
             this.trigger('o-composer-text-input-send-shortcut');
             ev.preventDefault();
             return;
@@ -306,78 +306,78 @@ class ComposerTextInput extends Component {
     }
 
     /**
-     * Key events management is performed in a Keyup to avoid intempestive RPC calls
+     *KeyeventsmanagementisperformedinaKeyuptoavoidintempestiveRPCcalls
      *
-     * @private
-     * @param {KeyboardEvent} ev
+     *@private
+     *@param{KeyboardEvent}ev
      */
-    _onKeyupTextarea(ev) {
-        switch (ev.key) {
-            case 'Escape':
-                // already handled in _onKeydownTextarea, break to avoid default
+    _onKeyupTextarea(ev){
+        switch(ev.key){
+            case'Escape':
+                //alreadyhandledin_onKeydownTextarea,breaktoavoiddefault
                 break;
-            // ENTER, HOME, END, UP, DOWN, PAGE UP, PAGE DOWN, TAB: check if navigation in mention suggestions
-            case 'Enter':
-                if (this.composer.hasSuggestions) {
+            //ENTER,HOME,END,UP,DOWN,PAGEUP,PAGEDOWN,TAB:checkifnavigationinmentionsuggestions
+            case'Enter':
+                if(this.composer.hasSuggestions){
                     this.composer.insertSuggestion();
                     this.composer.closeSuggestions();
                     this.focus();
                 }
                 break;
-            case 'ArrowUp':
-            case 'PageUp':
-                if (this.composer.hasSuggestions) {
+            case'ArrowUp':
+            case'PageUp':
+                if(this.composer.hasSuggestions){
                     this.composer.setPreviousSuggestionActive();
-                    this.composer.update({ hasToScrollToActiveSuggestion: true });
+                    this.composer.update({hasToScrollToActiveSuggestion:true});
                 }
                 break;
-            case 'ArrowDown':
-            case 'PageDown':
-                if (this.composer.hasSuggestions) {
+            case'ArrowDown':
+            case'PageDown':
+                if(this.composer.hasSuggestions){
                     this.composer.setNextSuggestionActive();
-                    this.composer.update({ hasToScrollToActiveSuggestion: true });
+                    this.composer.update({hasToScrollToActiveSuggestion:true});
                 }
                 break;
-            case 'Home':
-                if (this.composer.hasSuggestions) {
+            case'Home':
+                if(this.composer.hasSuggestions){
                     this.composer.setFirstSuggestionActive();
-                    this.composer.update({ hasToScrollToActiveSuggestion: true });
+                    this.composer.update({hasToScrollToActiveSuggestion:true});
                 }
                 break;
-            case 'End':
-                if (this.composer.hasSuggestions) {
+            case'End':
+                if(this.composer.hasSuggestions){
                     this.composer.setLastSuggestionActive();
-                    this.composer.update({ hasToScrollToActiveSuggestion: true });
+                    this.composer.update({hasToScrollToActiveSuggestion:true});
                 }
                 break;
-            case 'Tab':
-                if (this.composer.hasSuggestions) {
-                    if (ev.shiftKey) {
+            case'Tab':
+                if(this.composer.hasSuggestions){
+                    if(ev.shiftKey){
                         this.composer.setPreviousSuggestionActive();
-                        this.composer.update({ hasToScrollToActiveSuggestion: true });
-                    } else {
+                        this.composer.update({hasToScrollToActiveSuggestion:true});
+                    }else{
                         this.composer.setNextSuggestionActive();
-                        this.composer.update({ hasToScrollToActiveSuggestion: true });
+                        this.composer.update({hasToScrollToActiveSuggestion:true});
                     }
                 }
                 break;
-            case 'Alt':
-            case 'AltGraph':
-            case 'CapsLock':
-            case 'Control':
-            case 'Fn':
-            case 'FnLock':
-            case 'Hyper':
-            case 'Meta':
-            case 'NumLock':
-            case 'ScrollLock':
-            case 'Shift':
-            case 'ShiftSuper':
-            case 'Symbol':
-            case 'SymbolLock':
-                // prevent modifier keys from resetting the suggestion state
+            case'Alt':
+            case'AltGraph':
+            case'CapsLock':
+            case'Control':
+            case'Fn':
+            case'FnLock':
+            case'Hyper':
+            case'Meta':
+            case'NumLock':
+            case'ScrollLock':
+            case'Shift':
+            case'ShiftSuper':
+            case'Symbol':
+            case'SymbolLock':
+                //preventmodifierkeysfromresettingthesuggestionstate
                 break;
-            // Otherwise, check if a mention is typed
+            //Otherwise,checkifamentionistyped
             default:
                 this.saveStateInStore();
         }
@@ -385,35 +385,35 @@ class ComposerTextInput extends Component {
 
 }
 
-Object.assign(ComposerTextInput, {
+Object.assign(ComposerTextInput,{
     components,
-    defaultProps: {
-        hasMentionSuggestionsBelowPosition: false,
-        sendShortcuts: [],
+    defaultProps:{
+        hasMentionSuggestionsBelowPosition:false,
+        sendShortcuts:[],
     },
-    props: {
-        composerLocalId: String,
-        hasMentionSuggestionsBelowPosition: Boolean,
-        isCompact: Boolean,
+    props:{
+        composerLocalId:String,
+        hasMentionSuggestionsBelowPosition:Boolean,
+        isCompact:Boolean,
         /**
-         * Keyboard shortcuts from text input to send message.
+         *Keyboardshortcutsfromtextinputtosendmessage.
          */
-        sendShortcuts: {
-            type: Array,
-            element: String,
-            validate: prop => {
-                for (const shortcut of prop) {
-                    if (!['ctrl-enter', 'enter', 'meta-enter'].includes(shortcut)) {
-                        return false;
+        sendShortcuts:{
+            type:Array,
+            element:String,
+            validate:prop=>{
+                for(constshortcutofprop){
+                    if(!['ctrl-enter','enter','meta-enter'].includes(shortcut)){
+                        returnfalse;
                     }
                 }
-                return true;
+                returntrue;
             },
         },
     },
-    template: 'mail.ComposerTextInput',
+    template:'mail.ComposerTextInput',
 });
 
-return ComposerTextInput;
+returnComposerTextInput;
 
 });

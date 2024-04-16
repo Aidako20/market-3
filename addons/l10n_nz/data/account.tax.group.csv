@@ -1,5 +1,5 @@
 id,name
-tax_group_0,TAX 0%
-tax_group_gst_15,GST 15%
-tax_group_15,TAX 15%
-tax_group_100000000,GST 100%
+tax_group_0,TAX0%
+tax_group_gst_15,GST15%
+tax_group_15,TAX15%
+tax_group_100000000,GST100%

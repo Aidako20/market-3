@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.addons.website.tests.test_base_url import TestUrlCommon
-from flectra.tests import tagged
+fromflectra.addons.website.tests.test_base_urlimportTestUrlCommon
+fromflectra.testsimporttagged
 
 
-@tagged('-at_install', 'post_install')
-class TestUrlCanonical(TestUrlCommon):
+@tagged('-at_install','post_install')
+classTestUrlCanonical(TestUrlCommon):
 
-    def test_01_canonical_url(self):
-        self._assertCanonical('/event?date=all', self.domain + '/event')
-        self._assertCanonical('/event?date=old', self.domain + '/event?date=old')
+    deftest_01_canonical_url(self):
+        self._assertCanonical('/event?date=all',self.domain+'/event')
+        self._assertCanonical('/event?date=old',self.domain+'/event?date=old')

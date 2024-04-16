@@ -1,180 +1,180 @@
-{% extends "layout.html" %}
-{% from "loading.html" import loading_block_ui %}
-{% block head %}
+{%extends"layout.html"%}
+{%from"loading.html"importloading_block_ui%}
+{%blockhead%}
     <script>
-        $(document).ready(function () {
-            function changePage(key) {
-                $('.progressbar li[data-key=' + key + ']').prevAll().addClass('completed');
-                $('.progressbar li[data-key=' + key + ']').nextAll().removeClass('active completed');
-                $('.progressbar li[data-key=' + key + ']').addClass('active').removeClass('completed');
+        $(document).ready(function(){
+            functionchangePage(key){
+                $('.progressbarli[data-key='+key+']').prevAll().addClass('completed');
+                $('.progressbarli[data-key='+key+']').nextAll().removeClass('activecompleted');
+                $('.progressbarli[data-key='+key+']').addClass('active').removeClass('completed');
                 $('.config-steps.active').removeClass('active').addClass('o_hide');
-                $('.config-steps[data-key=' + key + ']').removeClass('o_hide').addClass('active');
+                $('.config-steps[data-key='+key+']').removeClass('o_hide').addClass('active');
             }
-            $('.next-btn').on('click', function (ev) {
+            $('.next-btn').on('click',function(ev){
                 changePage($(ev.target).data('key'));
             });
             $('#config-form').submit(function(e){
                 e.preventDefault();
                 $('.loading-block').removeClass('o_hide');
                 $.ajax({
-                    url: '/step_configure',
-                    type: 'post',
-                    data: $('#config-form').serialize(),
-                }).done(function (url) {
+                    url:'/step_configure',
+                    type:'post',
+                    data:$('#config-form').serialize(),
+                }).done(function(url){
                     $('.loading-block').addClass('o_hide');
                     changePage('done');
-                    if(url) {
-                        if ($('#iotname')[0].defaultValue == $('#iotname')[0].value){
-                            var cpt = 30;
+                    if(url){
+                        if($('#iotname')[0].defaultValue==$('#iotname')[0].value){
+                            varcpt=30;
                         }else{
-                            var cpt = 100;
+                            varcpt=100;
                         }
                         setInterval(function(){
-                            if(cpt === 0){
-                                window.location = url
-                            } else {
-                                $('.redirect-message').html('You will be redirected to <a href="'+ url +'">' + url + '</a> in <b>' + cpt + '</b> seconds');
+                            if(cpt===0){
+                                window.location=url
+                            }else{
+                                $('.redirect-message').html('Youwillberedirectedto<ahref="'+url+'">'+url+'</a>in<b>'+cpt+'</b>seconds');
                                 --cpt;
                             }
-                        } , 1000);
+                        },1000);
                     }
-                }).fail(function () {
-                    $('.error-message').text('Error in submitting data');
+                }).fail(function(){
+                    $('.error-message').text('Errorinsubmittingdata');
                     $('.loading-block').addClass('o_hide');
                 });
             });
         });
     </script>
     <style>
-        .config-steps .title {
-            font-weight: bold;
-            margin-bottom: 10px;
+        .config-steps.title{
+            font-weight:bold;
+            margin-bottom:10px;
         }
-        .progressbar {
-            counter-reset: step;
-            z-index: 1;
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            padding: 0;
-        }
-        .progressbar li{
-            list-style-type: none;
-            float: left;
-            width: 33.33%;
+        .progressbar{
+            counter-reset:step;
+            z-index:1;
             position:relative;
-            text-align: center;
-            font-size: 0.8rem;
+            display:inline-block;
+            width:100%;
+            padding:0;
         }
-        .progressbar li:before {
+        .progressbarli{
+            list-style-type:none;
+            float:left;
+            width:33.33%;
+            position:relative;
+            text-align:center;
+            font-size:0.8rem;
+        }
+        .progressbarli:before{
             content:counter(step);
-            counter-increment: step;
+            counter-increment:step;
             height:30px;
             width:30px;
-            line-height: 30px;
-            border: 2px solid #ddd;
+            line-height:30px;
+            border:2pxsolid#ddd;
             display:block;
-            text-align: center;
-            margin: 0 auto 6px auto;
-            border-radius: 50%;
-            background-color: white;
-            color: #ddd;
-            font-size: 1rem;
+            text-align:center;
+            margin:0auto6pxauto;
+            border-radius:50%;
+            background-color:white;
+            color:#ddd;
+            font-size:1rem;
         }
-        .progressbar li:after {
+        .progressbarli:after{
             content:'';
-            position: absolute;
+            position:absolute;
             width:100%;
             height:2px;
-            background-color: #ddd;
-            top: 15px;
-            left: -50%;
-            z-index: -1;
+            background-color:#ddd;
+            top:15px;
+            left:-50%;
+            z-index:-1;
         }
-        .progressbar li:first-child:after {
+        .progressbarli:first-child:after{
             content:none;
         }
-        .progressbar li.active, .progressbar li.completed {
+        .progressbarli.active,.progressbarli.completed{
             color:#009EFB;
         }
-        .progressbar li:last-child:before {
-            content: '✔';
+        .progressbarli:last-child:before{
+            content:'✔';
         }
-        .progressbar li.active:before {
+        .progressbarli.active:before{
             border-color:#009EFB;
             background-color:#009EFB;
-            color: #fff;
+            color:#fff;
         }
-        .progressbar li.completed:before{
+        .progressbarli.completed:before{
             border-color:#009EFB;
-            background-color: #fff;
-            color: #009EFB;
+            background-color:#fff;
+            color:#009EFB;
         }
-        .progressbar li.active + li:after{
+        .progressbarli.active+li:after{
             background-color:#009EFB;
         }
-        .footer-buttons {
-            display: inline-block;
-            width: 100%;
-            margin-top: 20px;
+        .footer-buttons{
+            display:inline-block;
+            width:100%;
+            margin-top:20px;
         }
     </style>
-{% endblock %}
-{% block content %}
-    <h2 class="text-center">Configure IoT Box</h2>
-    <ul class="progressbar">
-        <li class="active" data-key="server">Connect to Flectra</li>
-        <li data-key="wifi">Connect to Internet</li>
-        <li data-key="done">Done</li>
+{%endblock%}
+{%blockcontent%}
+    <h2class="text-center">ConfigureIoTBox</h2>
+    <ulclass="progressbar">
+        <liclass="active"data-key="server">ConnecttoFlectra</li>
+        <lidata-key="wifi">ConnecttoInternet</li>
+        <lidata-key="done">Done</li>
     </ul>
-    <form id="config-form" style="margin-top: 20px;" action='/step_configure' method='POST'>
+    <formid="config-form"style="margin-top:20px;"action='/step_configure'method='POST'>
         <div>
-            <div class="config-steps active" data-key="server">
-                <table align="center">
+            <divclass="config-stepsactive"data-key="server">
+                <tablealign="center">
                     <tr>
-                        <td>IoT Box Name</td>
-                        <td><input type="text" id="iotname" name="iotname" value="{{ hostname }}"></td>
+                        <td>IoTBoxName</td>
+                        <td><inputtype="text"id="iotname"name="iotname"value="{{hostname}}"></td>
                     </tr>
                     <tr>
-                        <td>Server token</td>
-                        <td><input type="text" name="token" value="{{ server }}" placeholder="Paste your copied token here"></td>
+                        <td>Servertoken</td>
+                        <td><inputtype="text"name="token"value="{{server}}"placeholder="Pasteyourcopiedtokenhere"></td>
                     </tr>
                 </table>
-                <div class="text-center font-small" style="margin: 10px auto;">
-                    Server token is not mandatory for the community version.
+                <divclass="text-centerfont-small"style="margin:10pxauto;">
+                    Servertokenisnotmandatoryforthecommunityversion.
                 </div>
-                <div class="footer-buttons">
-                    <a class="btn next-btn" style="float: right" data-key="wifi">Next</a>
+                <divclass="footer-buttons">
+                    <aclass="btnnext-btn"style="float:right"data-key="wifi">Next</a>
                 </div>
             </div>
-            <div class="config-steps wifi-step o_hide" data-key="wifi">
-                <table align="center">
+            <divclass="config-stepswifi-stepo_hide"data-key="wifi">
+                <tablealign="center">
                     <tr>
-                        <td>Wifi Network</td>
+                        <td>WifiNetwork</td>
                         <td>
-                            <select name="essid">
-                                {% for id in ssid -%}
-                                    <option value="{{ id }}">{{ id }}</option>
-                                {%- endfor %}
+                            <selectname="essid">
+                                {%foridinssid-%}
+                                    <optionvalue="{{id}}">{{id}}</option>
+                                {%-endfor%}
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>Password</td>
-                        <td><input type="password" name="password" placeholder="Optional"/></td>
+                        <td><inputtype="password"name="password"placeholder="Optional"/></td>
                     </tr>
-                    <input type="hidden" name="persistent" value="True"/>
+                    <inputtype="hidden"name="persistent"value="True"/>
                 </table>
-                <div class="footer-buttons">
-                    <a class="btn next-btn" data-key="server">Previous</a>
-                    <input class="btn" style="float: right" type="submit" value="Connect"/>
+                <divclass="footer-buttons">
+                    <aclass="btnnext-btn"data-key="server">Previous</a>
+                    <inputclass="btn"style="float:right"type="submit"value="Connect"/>
                 </div>
             </div>
-            <div class="config-steps o_hide" data-key="done">
-                <h3 class="text-center" style="margin: 0;">✔ Nice! Your configuration is done.</h3>
-                <p class="text-center redirect-message" />
+            <divclass="config-stepso_hide"data-key="done">
+                <h3class="text-center"style="margin:0;">✔Nice!Yourconfigurationisdone.</h3>
+                <pclass="text-centerredirect-message"/>
             </div>
         </div>
-        {{ loading_block_ui(loading_message) }}
+        {{loading_block_ui(loading_message)}}
     </form>
-{% endblock %}
+{%endblock%}

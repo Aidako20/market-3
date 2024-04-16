@@ -1,131 +1,131 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <menuitem id="menu_link_tracker_root"
-        name="Link Tracker"
+    <menuitemid="menu_link_tracker_root"
+        name="LinkTracker"
         sequence="30"
         web_icon="utm,static/description/icon.png"
         groups="base.group_no_one"/>
 
-    <menuitem id="marketing_utm"
+    <menuitemid="marketing_utm"
         name="UTMs"
         parent="menu_link_tracker_root"
         sequence="99"
         groups="base.group_no_one"/>
 
-    <record id="utm_campaign_action" model="ir.actions.act_window">
-        <field name="name">Campaigns</field>
-        <field name="res_model">utm.campaign</field>
-        <field name="view_mode">kanban,tree,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create a campaign
+    <recordid="utm_campaign_action"model="ir.actions.act_window">
+        <fieldname="name">Campaigns</field>
+        <fieldname="res_model">utm.campaign</field>
+        <fieldname="view_mode">kanban,tree,form</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+                Createacampaign
             </p>
             <p>
-                Campaigns are used to centralize your marketing efforts and track their results.
+                Campaignsareusedtocentralizeyourmarketingeffortsandtracktheirresults.
             </p>
         </field>
     </record>
 
-    <menuitem id="menu_utm_campaign_act"
+    <menuitemid="menu_utm_campaign_act"
         action="utm_campaign_action"
         parent="marketing_utm"
         sequence="1"
         groups="base.group_no_one"/>
 
-	<!-- utm.medium -->
-    <record id="utm_medium_view_tree" model="ir.ui.view">
-        <field name="name">utm.medium.view.tree</field>
-        <field name="model">utm.medium</field>
-        <field name="arch" type="xml">
-            <tree string="Mediums" editable="bottom">
-                <field name="name"/>
-                <field name="active" invisible="1"/>
+	<!--utm.medium-->
+    <recordid="utm_medium_view_tree"model="ir.ui.view">
+        <fieldname="name">utm.medium.view.tree</field>
+        <fieldname="model">utm.medium</field>
+        <fieldname="arch"type="xml">
+            <treestring="Mediums"editable="bottom">
+                <fieldname="name"/>
+                <fieldname="active"invisible="1"/>
             </tree>
         </field>
     </record>
 
-    <record id="utm_medium_view_form" model="ir.ui.view">
-        <field name="name">utm.medium.view.form</field>
-        <field name="model">utm.medium</field>
-        <field name="arch" type="xml">
-            <form string="Medium">
+    <recordid="utm_medium_view_form"model="ir.ui.view">
+        <fieldname="name">utm.medium.view.form</field>
+        <fieldname="model">utm.medium</field>
+        <fieldname="arch"type="xml">
+            <formstring="Medium">
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="active" widget="boolean_toggle"/>
+                        <fieldname="name"/>
+                        <fieldname="active"widget="boolean_toggle"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="utm_medium_view_search" model="ir.ui.view">
-        <field name="name">utm.medium.view.search</field>
-        <field name="model">utm.medium</field>
-        <field name="arch" type="xml">
-            <search string="Search UTM Medium">
-                <field name="name"/>
+    <recordid="utm_medium_view_search"model="ir.ui.view">
+        <fieldname="name">utm.medium.view.search</field>
+        <fieldname="model">utm.medium</field>
+        <fieldname="arch"type="xml">
+            <searchstring="SearchUTMMedium">
+                <fieldname="name"/>
                 <separator/>
-                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <filterstring="Archived"name="inactive"domain="[('active','=',False)]"/>
             </search>
         </field>
     </record>
     
-    <record id="utm_medium_action" model="ir.actions.act_window">
-        <field name="name">Mediums</field>
-        <field name="res_model">utm.medium</field>
-        <field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="utm_medium_view_search"/>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Define a new UTM medium
+    <recordid="utm_medium_action"model="ir.actions.act_window">
+        <fieldname="name">Mediums</field>
+        <fieldname="res_model">utm.medium</field>
+        <fieldname="view_mode">tree,form</field>
+        <fieldname="search_view_id"ref="utm_medium_view_search"/>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+                DefineanewUTMmedium
             </p>
         </field>
     </record>
 
-    <menuitem id="menu_utm_medium"
+    <menuitemid="menu_utm_medium"
         action="utm_medium_action"
         parent="marketing_utm"
         sequence="5"
         groups="base.group_no_one"/>
 
-    <!-- utm.source -->
-    <record id="utm_source_view_tree" model="ir.ui.view">
-        <field name="name">utm.source.view.tree</field>
-        <field name="model">utm.source</field>
-        <field name="arch" type="xml">
-            <tree string="Source" editable="bottom">
-                <field name="name"/>
+    <!--utm.source-->
+    <recordid="utm_source_view_tree"model="ir.ui.view">
+        <fieldname="name">utm.source.view.tree</field>
+        <fieldname="model">utm.source</field>
+        <fieldname="arch"type="xml">
+            <treestring="Source"editable="bottom">
+                <fieldname="name"/>
             </tree>
         </field>
     </record>
 
-    <record id="utm_source_view_form" model="ir.ui.view">
-        <field name="name">utm.source.view.form</field>
-        <field name="model">utm.source</field>
-        <field name="arch" type="xml">
-            <form string="Source">
+    <recordid="utm_source_view_form"model="ir.ui.view">
+        <fieldname="name">utm.source.view.form</field>
+        <fieldname="model">utm.source</field>
+        <fieldname="arch"type="xml">
+            <formstring="Source">
                 <sheet>
                     <group>
-                        <field name="name"/>
+                        <fieldname="name"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="utm_source_action" model="ir.actions.act_window">
-        <field name="name">Sources</field>
-        <field name="res_model">utm.source</field>
-        <field name="view_mode">tree,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Define a new UTM source
+    <recordid="utm_source_action"model="ir.actions.act_window">
+        <fieldname="name">Sources</field>
+        <fieldname="res_model">utm.source</field>
+        <fieldname="view_mode">tree,form</field>
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+                DefineanewUTMsource
             </p>
         </field>
     </record>
 
-    <menuitem id="menu_utm_source"
+    <menuitemid="menu_utm_source"
         action="utm_source_action"
         parent="marketing_utm"
         sequence="10"

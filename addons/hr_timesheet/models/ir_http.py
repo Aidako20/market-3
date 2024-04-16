@@ -1,21 +1,21 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class Http(models.AbstractModel):
-    _inherit = 'ir.http'
+classHttp(models.AbstractModel):
+    _inherit='ir.http'
 
-    def session_info(self):
-        """ The widget 'timesheet_uom' needs to know which UoM conversion factor and which javascript
-            widget to apply, depending on th ecurrent company.
+    defsession_info(self):
+        """Thewidget'timesheet_uom'needstoknowwhichUoMconversionfactorandwhichjavascript
+            widgettoapply,dependingonthecurrentcompany.
         """
-        result = super(Http, self).session_info()
-        if self.env.user.has_group('base.group_user'):
-            company = self.env.company
-            encoding_uom = company.timesheet_encode_uom_id
+        result=super(Http,self).session_info()
+        ifself.env.user.has_group('base.group_user'):
+            company=self.env.company
+            encoding_uom=company.timesheet_encode_uom_id
 
-            result['timesheet_uom'] = encoding_uom.read(['name', 'rounding', 'timesheet_widget'])[0]
-            result['timesheet_uom_factor'] = company.project_time_mode_id._compute_quantity(1.0, encoding_uom, round=False)  # convert encoding uom into stored uom to get conversion factor
-        return result
+            result['timesheet_uom']=encoding_uom.read(['name','rounding','timesheet_widget'])[0]
+            result['timesheet_uom_factor']=company.project_time_mode_id._compute_quantity(1.0,encoding_uom,round=False) #convertencodinguomintostoreduomtogetconversionfactor
+        returnresult

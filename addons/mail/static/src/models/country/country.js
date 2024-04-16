@@ -1,55 +1,55 @@
-flectra.define('mail/static/src/models/country/country.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/country/country.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr } = require('mail/static/src/model/model_field.js');
-const { clear } = require('mail/static/src/model/model_field_command.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{attr}=require('mail/static/src/model/model_field.js');
+const{clear}=require('mail/static/src/model/model_field_command.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class Country extends dependencies['mail.model'] {
+    classCountryextendsdependencies['mail.model']{
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @override
+         *@override
          */
-        static _createRecordLocalId(data) {
-            return `${this.modelName}_${data.id}`;
+        static_createRecordLocalId(data){
+            return`${this.modelName}_${data.id}`;
         }
 
         /**
-         * @private
-         * @returns {string|undefined}
+         *@private
+         *@returns{string|undefined}
          */
-        _computeFlagUrl() {
-            if (!this.code) {
-                return clear();
+        _computeFlagUrl(){
+            if(!this.code){
+                returnclear();
             }
-            return `/base/static/img/country_flags/${this.code}.png`;
+            return`/base/static/img/country_flags/${this.code}.png`;
         }
 
     }
 
-    Country.fields = {
-        code: attr(),
-        flagUrl: attr({
-            compute: '_computeFlagUrl',
-            dependencies: [
+    Country.fields={
+        code:attr(),
+        flagUrl:attr({
+            compute:'_computeFlagUrl',
+            dependencies:[
                 'code',
             ],
         }),
-        id: attr(),
-        name: attr(),
+        id:attr(),
+        name:attr(),
     };
 
-    Country.modelName = 'mail.country';
+    Country.modelName='mail.country';
 
-    return Country;
+    returnCountry;
 }
 
-registerNewModel('mail.country', factory);
+registerNewModel('mail.country',factory);
 
 });

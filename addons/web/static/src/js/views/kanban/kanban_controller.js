@@ -1,262 +1,262 @@
-flectra.define('web.KanbanController', function (require) {
-"use strict";
+flectra.define('web.KanbanController',function(require){
+"usestrict";
 
 /**
- * The KanbanController is the class that coordinates the kanban model and the
- * kanban renderer.  It also makes sure that update from the search view are
- * properly interpreted.
+ *TheKanbanControlleristheclassthatcoordinatesthekanbanmodelandthe
+ *kanbanrenderer. Italsomakessurethatupdatefromthesearchvieware
+ *properlyinterpreted.
  */
 
-var BasicController = require('web.BasicController');
-var Context = require('web.Context');
-var core = require('web.core');
-var Dialog = require('web.Dialog');
-var Domain = require('web.Domain');
-var view_dialogs = require('web.view_dialogs');
-var viewUtils = require('web.viewUtils');
+varBasicController=require('web.BasicController');
+varContext=require('web.Context');
+varcore=require('web.core');
+varDialog=require('web.Dialog');
+varDomain=require('web.Domain');
+varview_dialogs=require('web.view_dialogs');
+varviewUtils=require('web.viewUtils');
 
-var _t = core._t;
-var qweb = core.qweb;
+var_t=core._t;
+varqweb=core.qweb;
 
-var KanbanController = BasicController.extend({
-    buttons_template: 'KanbanView.buttons',
-    custom_events: _.extend({}, BasicController.prototype.custom_events, {
-        add_quick_create: '_onAddQuickCreate',
-        quick_create_add_column: '_onAddColumn',
-        quick_create_record: '_onQuickCreateRecord',
-        resequence_columns: '_onResequenceColumn',
-        button_clicked: '_onButtonClicked',
-        kanban_record_delete: '_onRecordDelete',
-        kanban_record_update: '_onUpdateRecord',
-        kanban_column_delete: '_onDeleteColumn',
-        kanban_column_add_record: '_onAddRecordToColumn',
-        kanban_column_resequence: '_onColumnResequence',
-        kanban_load_more: '_onLoadMore',
-        column_toggle_fold: '_onToggleColumn',
-        kanban_column_records_toggle_active: '_onToggleActiveRecords',
+varKanbanController=BasicController.extend({
+    buttons_template:'KanbanView.buttons',
+    custom_events:_.extend({},BasicController.prototype.custom_events,{
+        add_quick_create:'_onAddQuickCreate',
+        quick_create_add_column:'_onAddColumn',
+        quick_create_record:'_onQuickCreateRecord',
+        resequence_columns:'_onResequenceColumn',
+        button_clicked:'_onButtonClicked',
+        kanban_record_delete:'_onRecordDelete',
+        kanban_record_update:'_onUpdateRecord',
+        kanban_column_delete:'_onDeleteColumn',
+        kanban_column_add_record:'_onAddRecordToColumn',
+        kanban_column_resequence:'_onColumnResequence',
+        kanban_load_more:'_onLoadMore',
+        column_toggle_fold:'_onToggleColumn',
+        kanban_column_records_toggle_active:'_onToggleActiveRecords',
     }),
     /**
-     * @override
-     * @param {Object} params
-     * @param {boolean} params.quickCreateEnabled set to false to disable the
-     *   quick create feature
-     * @param {SearchPanel} [params.searchPanel]
-     * @param {Array[]} [params.controlPanelDomain=[]] initial domain coming
-     *   from the controlPanel
+     *@override
+     *@param{Object}params
+     *@param{boolean}params.quickCreateEnabledsettofalsetodisablethe
+     *  quickcreatefeature
+     *@param{SearchPanel}[params.searchPanel]
+     *@param{Array[]}[params.controlPanelDomain=[]]initialdomaincoming
+     *  fromthecontrolPanel
      */
-    init: function (parent, model, renderer, params) {
-        this._super.apply(this, arguments);
-        this.on_create = params.on_create;
-        this.hasButtons = params.hasButtons;
-        this.quickCreateEnabled = params.quickCreateEnabled;
+    init:function(parent,model,renderer,params){
+        this._super.apply(this,arguments);
+        this.on_create=params.on_create;
+        this.hasButtons=params.hasButtons;
+        this.quickCreateEnabled=params.quickCreateEnabled;
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @param {jQuery} [$node]
+     *@param{jQuery}[$node]
      */
-    renderButtons: function ($node) {
-        if (!this.hasButtons || !this.is_action_enabled('create')) {
+    renderButtons:function($node){
+        if(!this.hasButtons||!this.is_action_enabled('create')){
             return;
         }
-        this.$buttons = $(qweb.render(this.buttons_template, {
-            btnClass: 'btn-primary',
-            widget: this,
+        this.$buttons=$(qweb.render(this.buttons_template,{
+            btnClass:'btn-primary',
+            widget:this,
         }));
-        this.$buttons.on('click', 'button.o-kanban-button-new', this._onButtonNew.bind(this));
-        this.$buttons.on('keydown', this._onButtonsKeyDown.bind(this));
-        if ($node) {
+        this.$buttons.on('click','button.o-kanban-button-new',this._onButtonNew.bind(this));
+        this.$buttons.on('keydown',this._onButtonsKeyDown.bind(this));
+        if($node){
             this.$buttons.appendTo($node);
         }
     },
     /**
-     * In grouped mode, set 'Create' button as btn-secondary if there is no column
-     * (except if we can't create new columns)
+     *Ingroupedmode,set'Create'buttonasbtn-secondaryifthereisnocolumn
+     *(exceptifwecan'tcreatenewcolumns)
      *
-     * @override
+     *@override
      */
-    updateButtons: function () {
-        if (!this.$buttons) {
+    updateButtons:function(){
+        if(!this.$buttons){
             return;
         }
-        var state = this.model.get(this.handle, {raw: true});
-        var createHidden = this.is_action_enabled('group_create') && state.isGroupedByM2ONoColumn;
-        this.$buttons.find('.o-kanban-button-new').toggleClass('o_hidden', createHidden);
+        varstate=this.model.get(this.handle,{raw:true});
+        varcreateHidden=this.is_action_enabled('group_create')&&state.isGroupedByM2ONoColumn;
+        this.$buttons.find('.o-kanban-button-new').toggleClass('o_hidden',createHidden);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Displays the record quick create widget in the requested column, given its
-     * id (in the first column by default). Ensures that we removed sample data
-     * if any, before displaying the quick create.
+     *Displaystherecordquickcreatewidgetintherequestedcolumn,givenits
+     *id(inthefirstcolumnbydefault).Ensuresthatweremovedsampledata
+     *ifany,beforedisplayingthequickcreate.
      *
-     * @private
-     * @param {string} [groupId]
+     *@private
+     *@param{string}[groupId]
      */
-    _addQuickCreate(groupId) {
-        this._removeSampleData(async () => {
-            await this.update({ shouldUpdateSearchComponents: false }, { reload: false });
-            return this.renderer.addQuickCreate(groupId);
+    _addQuickCreate(groupId){
+        this._removeSampleData(async()=>{
+            awaitthis.update({shouldUpdateSearchComponents:false},{reload:false});
+            returnthis.renderer.addQuickCreate(groupId);
         });
     },
     /**
-     * @override method comes from field manager mixin
-     * @private
-     * @param {string} id local id from the basic record data
-     * @returns {Promise}
+     *@overridemethodcomesfromfieldmanagermixin
+     *@private
+     *@param{string}idlocalidfromthebasicrecorddata
+     *@returns{Promise}
      */
-    _confirmSave: function (id) {
-        var data = this.model.get(this.handle, {raw: true});
-        var grouped = data.groupedBy.length;
-        if (grouped) {
-            var columnState = this.model.getColumn(id);
-            return this.renderer.updateColumn(columnState.id, columnState);
+    _confirmSave:function(id){
+        vardata=this.model.get(this.handle,{raw:true});
+        vargrouped=data.groupedBy.length;
+        if(grouped){
+            varcolumnState=this.model.getColumn(id);
+            returnthis.renderer.updateColumn(columnState.id,columnState);
         }
-        return this.renderer.updateRecord(this.model.get(id));
+        returnthis.renderer.updateRecord(this.model.get(id));
     },
     /**
-     * Only display the pager in the ungrouped case, with data.
+     *Onlydisplaythepagerintheungroupedcase,withdata.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _getPagingInfo: function (state) {
-        if (!(state.count && !state.groupedBy.length)) {
-            return null;
+    _getPagingInfo:function(state){
+        if(!(state.count&&!state.groupedBy.length)){
+            returnnull;
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @private
-     * @param {Widget} kanbanRecord
-     * @param {Object} params
+     *@private
+     *@param{Widget}kanbanRecord
+     *@param{Object}params
      */
-    _reloadAfterButtonClick: function (kanbanRecord, params) {
-        var self = this;
-        var recordModel = this.model.localData[params.record.id];
-        var group = this.model.localData[recordModel.parentID];
-        var parent = this.model.localData[group.parentID];
+    _reloadAfterButtonClick:function(kanbanRecord,params){
+        varself=this;
+        varrecordModel=this.model.localData[params.record.id];
+        vargroup=this.model.localData[recordModel.parentID];
+        varparent=this.model.localData[group.parentID];
 
-        this.model.reload(params.record.id).then(function (db_id) {
-            var data = self.model.get(db_id);
+        this.model.reload(params.record.id).then(function(db_id){
+            vardata=self.model.get(db_id);
             kanbanRecord.update(data);
 
-            // Check if we still need to display the record. Some fields of the domain are
-            // not guaranteed to be in data. This is for example the case if the action
-            // contains a domain on a field which is not in the Kanban view. Therefore,
-            // we need to handle multiple cases based on 3 variables:
-            // domInData: all domain fields are in the data
-            // activeInDomain: 'active' is already in the domain
-            // activeInData: 'active' is available in the data
+            //Checkifwestillneedtodisplaytherecord.Somefieldsofthedomainare
+            //notguaranteedtobeindata.Thisisforexamplethecaseiftheaction
+            //containsadomainonafieldwhichisnotintheKanbanview.Therefore,
+            //weneedtohandlemultiplecasesbasedon3variables:
+            //domInData:alldomainfieldsareinthedata
+            //activeInDomain:'active'isalreadyinthedomain
+            //activeInData:'active'isavailableinthedata
 
-            var domain = (parent ? parent.domain : group.domain) || [];
-            var domInData = _.every(domain, function (d) {
-                return d[0] in data.data;
+            vardomain=(parent?parent.domain:group.domain)||[];
+            vardomInData=_.every(domain,function(d){
+                returnd[0]indata.data;
             });
-            var activeInDomain = _.pluck(domain, 0).indexOf('active') !== -1;
-            var activeInData = 'active' in data.data;
+            varactiveInDomain=_.pluck(domain,0).indexOf('active')!==-1;
+            varactiveInData='active'indata.data;
 
-            // Case # | domInData | activeInDomain | activeInData
-            //   1    |   true    |      true      |      true     => no domain change
-            //   2    |   true    |      true      |      false    => not possible
-            //   3    |   true    |      false     |      true     => add active in domain
-            //   4    |   true    |      false     |      false    => no domain change
-            //   5    |   false   |      true      |      true     => no evaluation
-            //   6    |   false   |      true      |      false    => no evaluation
-            //   7    |   false   |      false     |      true     => replace domain
-            //   8    |   false   |      false     |      false    => no evaluation
+            //Case#|domInData|activeInDomain|activeInData
+            //  1   |  true   |     true     |     true    =>nodomainchange
+            //  2   |  true   |     true     |     false   =>notpossible
+            //  3   |  true   |     false    |     true    =>addactiveindomain
+            //  4   |  true   |     false    |     false   =>nodomainchange
+            //  5   |  false  |     true     |     true    =>noevaluation
+            //  6   |  false  |     true     |     false   =>noevaluation
+            //  7   |  false  |     false    |     true    =>replacedomain
+            //  8   |  false  |     false    |     false   =>noevaluation
 
-            // There are 3 cases which cannot be evaluated since we don't have all the
-            // necessary information. The complete solution would be to perform a RPC in
-            // these cases, but this is out of scope. A simpler one is to do a try / catch.
+            //Thereare3caseswhichcannotbeevaluatedsincewedon'thaveallthe
+            //necessaryinformation.ThecompletesolutionwouldbetoperformaRPCin
+            //thesecases,butthisisoutofscope.Asimpleroneistodoatry/catch.
 
-            if (domInData && !activeInDomain && activeInData) {
-                domain = domain.concat([['active', '=', true]]);
-            } else if (!domInData && !activeInDomain && activeInData) {
-                domain = [['active', '=', true]];
+            if(domInData&&!activeInDomain&&activeInData){
+                domain=domain.concat([['active','=',true]]);
+            }elseif(!domInData&&!activeInDomain&&activeInData){
+                domain=[['active','=',true]];
             }
-            try {
-                var visible = new Domain(domain).compute(data.evalContext);
-            } catch (e) {
+            try{
+                varvisible=newDomain(domain).compute(data.evalContext);
+            }catch(e){
                 return;
             }
-            if (!visible) {
+            if(!visible){
                 kanbanRecord.destroy();
             }
         });
     },
     /**
-     * @param {number[]} ids
-     * @private
-     * @returns {Promise}
+     *@param{number[]}ids
+     *@private
+     *@returns{Promise}
      */
-    _resequenceColumns: function (ids) {
-        var state = this.model.get(this.handle, {raw: true});
-        var model = state.fields[state.groupedBy[0]].relation;
-        return this.model.resequence(model, ids, this.handle);
+    _resequenceColumns:function(ids){
+        varstate=this.model.get(this.handle,{raw:true});
+        varmodel=state.fields[state.groupedBy[0]].relation;
+        returnthis.model.resequence(model,ids,this.handle);
     },
     /**
-     * This method calls the server to ask for a resequence.  Note that this
-     * does not rerender the user interface, because in most case, the
-     * resequencing operation has already been displayed by the renderer.
+     *Thismethodcallstheservertoaskforaresequence. Notethatthis
+     *doesnotrerendertheuserinterface,becauseinmostcase,the
+     *resequencingoperationhasalreadybeendisplayedbytherenderer.
      *
-     * @private
-     * @param {string} column_id
-     * @param {string[]} ids
-     * @returns {Promise}
+     *@private
+     *@param{string}column_id
+     *@param{string[]}ids
+     *@returns{Promise}
      */
-    _resequenceRecords: function (column_id, ids) {
-        var self = this;
-        return this.model.resequence(this.modelName, ids, column_id);
+    _resequenceRecords:function(column_id,ids){
+        varself=this;
+        returnthis.model.resequence(this.modelName,ids,column_id);
     },
     /**
-     * @override
+     *@override
      */
-    _shouldBounceOnClick(element) {
-        const state = this.model.get(this.handle, {raw: true});
-        if (!state.count || state.isSample) {
-            const classesList = [
+    _shouldBounceOnClick(element){
+        conststate=this.model.get(this.handle,{raw:true});
+        if(!state.count||state.isSample){
+            constclassesList=[
                 'o_kanban_view',
                 'o_kanban_group',
                 'o_kanban_header',
                 'o_column_quick_create',
                 'o_view_nocontent_smiling_face',
             ];
-            return classesList.some(c => element.classList.contains(c));
+            returnclassesList.some(c=>element.classList.contains(c));
         }
-        return false;
+        returnfalse;
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * This handler is called when an event (from the quick create add column)
-     * event bubbles up. When that happens, we need to ask the model to create
-     * a group and to update the renderer
+     *Thishandleriscalledwhenanevent(fromthequickcreateaddcolumn)
+     *eventbubblesup.Whenthathappens,weneedtoaskthemodeltocreate
+     *agroupandtoupdatetherenderer
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onAddColumn: function (ev) {
-        var self = this;
-        this.mutex.exec(function () {
-            return self.model.createGroup(ev.data.value, self.handle).then(function () {
-                var state = self.model.get(self.handle, {raw: true});
-                var ids = _.pluck(state.data, 'res_id').filter(_.isNumber);
-                return self._resequenceColumns(ids);
-            }).then(function () {
-                return self.update({}, {reload: false});
-            }).then(function () {
-                let quickCreateFolded = self.renderer.quickCreate.folded;
-                if (ev.data.foldQuickCreate ? !quickCreateFolded : quickCreateFolded) {
+    _onAddColumn:function(ev){
+        varself=this;
+        this.mutex.exec(function(){
+            returnself.model.createGroup(ev.data.value,self.handle).then(function(){
+                varstate=self.model.get(self.handle,{raw:true});
+                varids=_.pluck(state.data,'res_id').filter(_.isNumber);
+                returnself._resequenceColumns(ids);
+            }).then(function(){
+                returnself.update({},{reload:false});
+            }).then(function(){
+                letquickCreateFolded=self.renderer.quickCreate.folded;
+                if(ev.data.foldQuickCreate?!quickCreateFolded:quickCreateFolded){
                     self.renderer.quickCreateToggleFold();
                 }
                 self.renderer.trigger_up("quick_create_column_created");
@@ -264,267 +264,267 @@ var KanbanController = BasicController.extend({
         });
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onAddRecordToColumn: function (ev) {
-        var self = this;
-        var record = ev.data.record;
-        var column = ev.target;
-        this.alive(this.model.moveRecord(record.db_id, column.db_id, this.handle))
-            .then(function (column_db_ids) {
-                return self._resequenceRecords(column.db_id, ev.data.ids)
-                    .then(function () {
-                        _.each(column_db_ids, function (db_id) {
-                            var data = self.model.get(db_id);
-                            self.renderer.updateColumn(db_id, data);
+    _onAddRecordToColumn:function(ev){
+        varself=this;
+        varrecord=ev.data.record;
+        varcolumn=ev.target;
+        this.alive(this.model.moveRecord(record.db_id,column.db_id,this.handle))
+            .then(function(column_db_ids){
+                returnself._resequenceRecords(column.db_id,ev.data.ids)
+                    .then(function(){
+                        _.each(column_db_ids,function(db_id){
+                            vardata=self.model.get(db_id);
+                            self.renderer.updateColumn(db_id,data);
                         });
                     });
             }).guardedCatch(this.reload.bind(this));
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
-     * @returns {string} ev.data.groupId
+     *@private
+     *@param{FlectraEvent}ev
+     *@returns{string}ev.data.groupId
      */
-    _onAddQuickCreate(ev) {
+    _onAddQuickCreate(ev){
         ev.stopPropagation();
         this._addQuickCreate(ev.data.groupId);
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onButtonClicked: function (ev) {
-        var self = this;
+    _onButtonClicked:function(ev){
+        varself=this;
         ev.stopPropagation();
-        var attrs = ev.data.attrs;
-        var record = ev.data.record;
-        var def = Promise.resolve();
-        if (attrs.context) {
-            attrs.context = new Context(attrs.context)
+        varattrs=ev.data.attrs;
+        varrecord=ev.data.record;
+        vardef=Promise.resolve();
+        if(attrs.context){
+            attrs.context=newContext(attrs.context)
                 .set_eval_context({
-                    active_id: record.res_id,
-                    active_ids: [record.res_id],
-                    active_model: record.model,
+                    active_id:record.res_id,
+                    active_ids:[record.res_id],
+                    active_model:record.model,
                 });
         }
-        if (attrs.confirm) {
-            def = new Promise(function (resolve, reject) {
-                Dialog.confirm(this, attrs.confirm, {
-                    confirm_callback: resolve,
-                    cancel_callback: reject,
-                }).on("closed", null, reject);
+        if(attrs.confirm){
+            def=newPromise(function(resolve,reject){
+                Dialog.confirm(this,attrs.confirm,{
+                    confirm_callback:resolve,
+                    cancel_callback:reject,
+                }).on("closed",null,reject);
             });
         }
-        def.then(function () {
-            self.trigger_up('execute_action', {
-                action_data: attrs,
-                env: {
-                    context: record.getContext(),
-                    currentID: record.res_id,
-                    model: record.model,
-                    resIDs: record.res_ids,
+        def.then(function(){
+            self.trigger_up('execute_action',{
+                action_data:attrs,
+                env:{
+                    context:record.getContext(),
+                    currentID:record.res_id,
+                    model:record.model,
+                    resIDs:record.res_ids,
                 },
-                on_closed: self._reloadAfterButtonClick.bind(self, ev.target, ev.data),
+                on_closed:self._reloadAfterButtonClick.bind(self,ev.target,ev.data),
             });
         });
     },
     /**
-     * @private
+     *@private
      */
-    _onButtonNew: function () {
-        var state = this.model.get(this.handle, {raw: true});
-        var quickCreateEnabled = this.quickCreateEnabled && viewUtils.isQuickCreateEnabled(state);
-        if (this.on_create === 'quick_create' && quickCreateEnabled && state.data.length) {
-            // activate the quick create in the first column when the mutex is
-            // unlocked, to ensure that there is no pending re-rendering that
-            // would remove it (e.g. if we are currently adding a new column)
-            this.mutex.getUnlockedDef().then(this._addQuickCreate.bind(this, null));
-        } else if (this.on_create && this.on_create !== 'quick_create') {
-            // Execute the given action
-            this.do_action(this.on_create, {
-                on_close: this.reload.bind(this, {}),
-                additional_context: state.context,
+    _onButtonNew:function(){
+        varstate=this.model.get(this.handle,{raw:true});
+        varquickCreateEnabled=this.quickCreateEnabled&&viewUtils.isQuickCreateEnabled(state);
+        if(this.on_create==='quick_create'&&quickCreateEnabled&&state.data.length){
+            //activatethequickcreateinthefirstcolumnwhenthemutexis
+            //unlocked,toensurethatthereisnopendingre-renderingthat
+            //wouldremoveit(e.g.ifwearecurrentlyaddinganewcolumn)
+            this.mutex.getUnlockedDef().then(this._addQuickCreate.bind(this,null));
+        }elseif(this.on_create&&this.on_create!=='quick_create'){
+            //Executethegivenaction
+            this.do_action(this.on_create,{
+                on_close:this.reload.bind(this,{}),
+                additional_context:state.context,
             });
-        } else {
-            // Open the form view
-            this.trigger_up('switch_view', {
-                view_type: 'form',
-                res_id: undefined
+        }else{
+            //Opentheformview
+            this.trigger_up('switch_view',{
+                view_type:'form',
+                res_id:undefined
             });
         }
     },
     /**
-     * Moves the focus from the controller buttons to the first kanban record
+     *Movesthefocusfromthecontrollerbuttonstothefirstkanbanrecord
      *
-     * @private
-     * @param {jQueryEvent} ev
+     *@private
+     *@param{jQueryEvent}ev
      */
-    _onButtonsKeyDown: function (ev) {
-        switch(ev.keyCode) {
-            case $.ui.keyCode.DOWN:
+    _onButtonsKeyDown:function(ev){
+        switch(ev.keyCode){
+            case$.ui.keyCode.DOWN:
                 this._giveFocus();
         }
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onColumnResequence: function (ev) {
-        this._resequenceRecords(ev.target.db_id, ev.data.ids);
+    _onColumnResequence:function(ev){
+        this._resequenceRecords(ev.target.db_id,ev.data.ids);
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onDeleteColumn: function (ev) {
-        var column = ev.target;
-        var state = this.model.get(this.handle, {raw: true});
-        var relatedModelName = state.fields[state.groupedBy[0]].relation;
+    _onDeleteColumn:function(ev){
+        varcolumn=ev.target;
+        varstate=this.model.get(this.handle,{raw:true});
+        varrelatedModelName=state.fields[state.groupedBy[0]].relation;
         this.model
-            .deleteRecords([column.db_id], relatedModelName)
-            .then(this.update.bind(this, {}, {}));
+            .deleteRecords([column.db_id],relatedModelName)
+            .then(this.update.bind(this,{},{}));
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onLoadMore: function (ev) {
-        var self = this;
-        var column = ev.target;
-        this.model.loadMore(column.db_id).then(function (db_id) {
-            var data = self.model.get(db_id);
-            self.renderer.updateColumn(db_id, data);
+    _onLoadMore:function(ev){
+        varself=this;
+        varcolumn=ev.target;
+        this.model.loadMore(column.db_id).then(function(db_id){
+            vardata=self.model.get(db_id);
+            self.renderer.updateColumn(db_id,data);
         });
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
-     * @param {KanbanColumn} ev.target the column in which the record should
-     *   be added
-     * @param {Object} ev.data.values the field values of the record to
-     *   create; if values only contains the value of the 'display_name', a
-     *   'name_create' is performed instead of 'create'
-     * @param {function} [ev.data.onFailure] called when the quick creation
-     *   failed
+     *@private
+     *@param{FlectraEvent}ev
+     *@param{KanbanColumn}ev.targetthecolumninwhichtherecordshould
+     *  beadded
+     *@param{Object}ev.data.valuesthefieldvaluesoftherecordto
+     *  create;ifvaluesonlycontainsthevalueofthe'display_name',a
+     *  'name_create'isperformedinsteadof'create'
+     *@param{function}[ev.data.onFailure]calledwhenthequickcreation
+     *  failed
      */
-    _onQuickCreateRecord: function (ev) {
-        var self = this;
-        var values = ev.data.values;
-        var column = ev.target;
-        var onFailure = ev.data.onFailure || function () {};
+    _onQuickCreateRecord:function(ev){
+        varself=this;
+        varvalues=ev.data.values;
+        varcolumn=ev.target;
+        varonFailure=ev.data.onFailure||function(){};
 
-        // function that updates the kanban view once the record has been added
-        // it receives the local id of the created record in arguments
-        var update = function (db_id) {
+        //functionthatupdatesthekanbanviewoncetherecordhasbeenadded
+        //itreceivesthelocalidofthecreatedrecordinarguments
+        varupdate=function(db_id){
 
-            var columnState = self.model.getColumn(db_id);
-            var state = self.model.get(self.handle);
-            return self.renderer
-                .updateColumn(columnState.id, columnState, {openQuickCreate: true, state: state})
-                .then(function () {
-                    if (ev.data.openRecord) {
-                        self.trigger_up('open_record', {id: db_id, mode: 'edit'});
+            varcolumnState=self.model.getColumn(db_id);
+            varstate=self.model.get(self.handle);
+            returnself.renderer
+                .updateColumn(columnState.id,columnState,{openQuickCreate:true,state:state})
+                .then(function(){
+                    if(ev.data.openRecord){
+                        self.trigger_up('open_record',{id:db_id,mode:'edit'});
                     }
                 });
         };
 
-        this.model.createRecordInGroup(column.db_id, values)
+        this.model.createRecordInGroup(column.db_id,values)
             .then(update)
-            .guardedCatch(function (reason) {
+            .guardedCatch(function(reason){
                 reason.event.preventDefault();
-                var columnState = self.model.get(column.db_id, {raw: true});
-                var context = columnState.getContext();
-                var state = self.model.get(self.handle, {raw: true});
-                var groupedBy = state.groupedBy[0];
-                context['default_' + groupedBy] = viewUtils.getGroupValue(columnState, groupedBy);
-                new view_dialogs.FormViewDialog(self, {
-                    res_model: state.model,
-                    context: _.extend({default_name: values.name || values.display_name}, context),
-                    title: _t("Create"),
-                    disable_multiple_selection: true,
-                    on_saved: function (record) {
-                        self.model.addRecordToGroup(column.db_id, record.res_id)
+                varcolumnState=self.model.get(column.db_id,{raw:true});
+                varcontext=columnState.getContext();
+                varstate=self.model.get(self.handle,{raw:true});
+                vargroupedBy=state.groupedBy[0];
+                context['default_'+groupedBy]=viewUtils.getGroupValue(columnState,groupedBy);
+                newview_dialogs.FormViewDialog(self,{
+                    res_model:state.model,
+                    context:_.extend({default_name:values.name||values.display_name},context),
+                    title:_t("Create"),
+                    disable_multiple_selection:true,
+                    on_saved:function(record){
+                        self.model.addRecordToGroup(column.db_id,record.res_id)
                             .then(update);
                     },
                 }).open().opened(onFailure);
             });
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onRecordDelete: function (ev) {
+    _onRecordDelete:function(ev){
         this._deleteRecords([ev.data.id]);
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onResequenceColumn: function (ev) {
-        var self = this;
+    _onResequenceColumn:function(ev){
+        varself=this;
         this._resequenceColumns(ev.data.ids);
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
-     * @param {boolean} [ev.data.openQuickCreate=false] if true, opens the
-     *   QuickCreate in the toggled column (it assumes that we are opening it)
+     *@private
+     *@param{FlectraEvent}ev
+     *@param{boolean}[ev.data.openQuickCreate=false]iftrue,opensthe
+     *  QuickCreateinthetoggledcolumn(itassumesthatweareopeningit)
      */
-    _onToggleColumn: function (ev) {
-        var self = this;
-        const columnID = ev.target.db_id || ev.data.db_id;
+    _onToggleColumn:function(ev){
+        varself=this;
+        constcolumnID=ev.target.db_id||ev.data.db_id;
         this.model.toggleGroup(columnID)
-            .then(function (db_id) {
-                var data = self.model.get(db_id);
-                var options = {
-                    openQuickCreate: !!ev.data.openQuickCreate,
+            .then(function(db_id){
+                vardata=self.model.get(db_id);
+                varoptions={
+                    openQuickCreate:!!ev.data.openQuickCreate,
                 };
-                return self.renderer.updateColumn(db_id, data, options);
+                returnself.renderer.updateColumn(db_id,data,options);
             })
-            .then(function () {
-                if (ev.data.onSuccess) {
+            .then(function(){
+                if(ev.data.onSuccess){
                     ev.data.onSuccess();
                 }
             });
     },
     /**
-     * @todo should simply use field_changed event...
+     *@todoshouldsimplyusefield_changedevent...
      *
-     * @private
-     * @param {FlectraEvent} ev
-     * @param {function} [ev.data.onSuccess] callback to execute after applying
-     *   changes
+     *@private
+     *@param{FlectraEvent}ev
+     *@param{function}[ev.data.onSuccess]callbacktoexecuteafterapplying
+     *  changes
      */
-    _onUpdateRecord: function (ev) {
-        var onSuccess = ev.data.onSuccess;
-        delete ev.data.onSuccess;
-        var changes = _.clone(ev.data);
-        ev.data.force_save = true;
-        this._applyChanges(ev.target.db_id, changes, ev).then(onSuccess);
+    _onUpdateRecord:function(ev){
+        varonSuccess=ev.data.onSuccess;
+        deleteev.data.onSuccess;
+        varchanges=_.clone(ev.data);
+        ev.data.force_save=true;
+        this._applyChanges(ev.target.db_id,changes,ev).then(onSuccess);
     },
     /**
-     * Allow the user to archive/restore all the records of a column.
+     *Allowtheusertoarchive/restorealltherecordsofacolumn.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onToggleActiveRecords: function (ev) {
-        var self = this;
-        var archive = ev.data.archive;
-        var column = ev.target;
-        var recordIds = _.pluck(column.records, 'id');
-        if (recordIds.length) {
-            var prom = archive ?
-              this.model.actionArchive(recordIds, column.db_id) :
-              this.model.actionUnarchive(recordIds, column.db_id);
-            prom.then(function (dbID) {
-                var data = self.model.get(dbID);
-                if (data) {  // Could be null if a wizard is returned for example
-                    self.model.reload(self.handle).then(function () {
-                        const state = self.model.get(self.handle);
-                        self.renderer.updateColumn(dbID, data, { state });
+    _onToggleActiveRecords:function(ev){
+        varself=this;
+        vararchive=ev.data.archive;
+        varcolumn=ev.target;
+        varrecordIds=_.pluck(column.records,'id');
+        if(recordIds.length){
+            varprom=archive?
+              this.model.actionArchive(recordIds,column.db_id):
+              this.model.actionUnarchive(recordIds,column.db_id);
+            prom.then(function(dbID){
+                vardata=self.model.get(dbID);
+                if(data){ //Couldbenullifawizardisreturnedforexample
+                    self.model.reload(self.handle).then(function(){
+                        conststate=self.model.get(self.handle);
+                        self.renderer.updateColumn(dbID,data,{state});
                     });
                 }
             });
@@ -532,6 +532,6 @@ var KanbanController = BasicController.extend({
     },
 });
 
-return KanbanController;
+returnKanbanController;
 
 });

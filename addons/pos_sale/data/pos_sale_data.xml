@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="sales_team.pos_sales_team" model="crm.team">
-            <field name="active" eval="True"/>
+    <datanoupdate="1">
+        <recordid="sales_team.pos_sales_team"model="crm.team">
+            <fieldname="active"eval="True"/>
         </record>
     </data>
 </flectra>

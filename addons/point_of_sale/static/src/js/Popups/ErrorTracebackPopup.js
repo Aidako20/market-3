@@ -1,44 +1,44 @@
-flectra.define('point_of_sale.ErrorTracebackPopup', function(require) {
-    'use strict';
+flectra.define('point_of_sale.ErrorTracebackPopup',function(require){
+    'usestrict';
 
-    const ErrorPopup = require('point_of_sale.ErrorPopup');
-    const Registries = require('point_of_sale.Registries');
+    constErrorPopup=require('point_of_sale.ErrorPopup');
+    constRegistries=require('point_of_sale.Registries');
 
-    // formerly ErrorTracebackPopupWidget
-    class ErrorTracebackPopup extends ErrorPopup {
-        get tracebackUrl() {
-            const blob = new Blob([this.props.body]);
-            const URL = window.URL || window.webkitURL;
-            return URL.createObjectURL(blob);
+    //formerlyErrorTracebackPopupWidget
+    classErrorTracebackPopupextendsErrorPopup{
+        gettracebackUrl(){
+            constblob=newBlob([this.props.body]);
+            constURL=window.URL||window.webkitURL;
+            returnURL.createObjectURL(blob);
         }
-        get tracebackFilename() {
-            return `${this.env._t('error')} ${moment().format('YYYY-MM-DD-HH-mm-ss')}.txt`;
+        gettracebackFilename(){
+            return`${this.env._t('error')}${moment().format('YYYY-MM-DD-HH-mm-ss')}.txt`;
         }
-        emailTraceback() {
-            const address = this.env.pos.company.email;
-            const subject = this.env._t('IMPORTANT: Bug Report From Flectra Point Of Sale');
+        emailTraceback(){
+            constaddress=this.env.pos.company.email;
+            constsubject=this.env._t('IMPORTANT:BugReportFromFlectraPointOfSale');
             window.open(
-                'mailto:' +
-                    address +
-                    '?subject=' +
-                    (subject ? window.encodeURIComponent(subject) : '') +
-                    '&body=' +
-                    (this.props.body ? window.encodeURIComponent(this.props.body) : '')
+                'mailto:'+
+                    address+
+                    '?subject='+
+                    (subject?window.encodeURIComponent(subject):'')+
+                    '&body='+
+                    (this.props.body?window.encodeURIComponent(this.props.body):'')
             );
         }
     }
-    ErrorTracebackPopup.template = 'ErrorTracebackPopup';
-    ErrorTracebackPopup.defaultProps = {
-        confirmText: 'Ok',
-        cancelText: 'Cancel',
-        title: 'Error with Traceback',
-        body: '',
-        exitButtonIsShown: false,
-        exitButtonText: 'Exit Pos',
-        exitButtonTrigger: 'close-pos'
+    ErrorTracebackPopup.template='ErrorTracebackPopup';
+    ErrorTracebackPopup.defaultProps={
+        confirmText:'Ok',
+        cancelText:'Cancel',
+        title:'ErrorwithTraceback',
+        body:'',
+        exitButtonIsShown:false,
+        exitButtonText:'ExitPos',
+        exitButtonTrigger:'close-pos'
     };
 
     Registries.Component.add(ErrorTracebackPopup);
 
-    return ErrorTracebackPopup;
+    returnErrorTracebackPopup;
 });

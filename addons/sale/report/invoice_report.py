@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class AccountInvoiceReport(models.Model):
-    _inherit = 'account.invoice.report'
+classAccountInvoiceReport(models.Model):
+    _inherit='account.invoice.report'
 
-    team_id = fields.Many2one('crm.team', string='Sales Team')
+    team_id=fields.Many2one('crm.team',string='SalesTeam')
 
-    def _select(self):
-        return super(AccountInvoiceReport, self)._select() + ", move.team_id as team_id"
+    def_select(self):
+        returnsuper(AccountInvoiceReport,self)._select()+",move.team_idasteam_id"

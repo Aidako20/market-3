@@ -1,54 +1,54 @@
-flectra.define('calendar.systray.ActivityMenu', function (require) {
-"use strict";
+flectra.define('calendar.systray.ActivityMenu',function(require){
+"usestrict";
 
-var ActivityMenu = require('mail.systray.ActivityMenu');
-var fieldUtils = require('web.field_utils');
+varActivityMenu=require('mail.systray.ActivityMenu');
+varfieldUtils=require('web.field_utils');
 
 ActivityMenu.include({
 
     //-----------------------------------------
-    // Private
+    //Private
     //-----------------------------------------
 
     /**
-     * parse date to server value
+     *parsedatetoservervalue
      *
-     * @private
-     * @override
+     *@private
+     *@override
      */
-    _getActivityData: function () {
-        var self = this;
-        return this._super.apply(this, arguments).then(function () {
-            var meeting = _.find(self._activities, {type: 'meeting'});
-            if (meeting && meeting.meetings)  {
-                _.each(meeting.meetings, function (res) {
-                    res.start = fieldUtils.parse.datetime(res.start, false, {isUTC: true});
+    _getActivityData:function(){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(function(){
+            varmeeting=_.find(self._activities,{type:'meeting'});
+            if(meeting&&meeting.meetings) {
+                _.each(meeting.meetings,function(res){
+                    res.start=fieldUtils.parse.datetime(res.start,false,{isUTC:true});
                 });
             }
         });
     },
 
     //-----------------------------------------
-    // Handlers
+    //Handlers
     //-----------------------------------------
 
     /**
-     * @private
-     * @override
+     *@private
+     *@override
      */
-    _onActivityFilterClick: function (ev) {
-        var $el = $(ev.currentTarget);
-        var data = _.extend({}, $el.data());
-        if (data.res_model === "calendar.event" && data.filter === "my") {
-            this.do_action('calendar.action_calendar_event', {
-                additional_context: {
-                    default_mode: 'day',
-                    search_default_mymeetings: 1,
+    _onActivityFilterClick:function(ev){
+        var$el=$(ev.currentTarget);
+        vardata=_.extend({},$el.data());
+        if(data.res_model==="calendar.event"&&data.filter==="my"){
+            this.do_action('calendar.action_calendar_event',{
+                additional_context:{
+                    default_mode:'day',
+                    search_default_mymeetings:1,
                 },
-               clear_breadcrumbs: true,
+               clear_breadcrumbs:true,
             });
-        } else {
-            this._super.apply(this, arguments);
+        }else{
+            this._super.apply(this,arguments);
         }
     },
 });

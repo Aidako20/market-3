@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="ErrorPopup" owl="1">
-        <div role="dialog" class="modal-dialog">
-            <div class="popup popup-error">
-                <p class="title">
-                    <t t-esc="props.title" />
+    <tt-name="ErrorPopup"owl="1">
+        <divrole="dialog"class="modal-dialog">
+            <divclass="popuppopup-error">
+                <pclass="title">
+                    <tt-esc="props.title"/>
                 </p>
-                <p class="body">
-                    <t t-esc="props.body" />
+                <pclass="body">
+                    <tt-esc="props.body"/>
                 </p>
-                <div class="footer">
-                    <div class="button cancel" t-on-click="confirm">
-                        <t t-esc="props.confirmText" />
+                <divclass="footer">
+                    <divclass="buttoncancel"t-on-click="confirm">
+                        <tt-esc="props.confirmText"/>
                     </div>
                 </div>
             </div>

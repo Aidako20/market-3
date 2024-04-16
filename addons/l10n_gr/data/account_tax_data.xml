@@ -1,319 +1,319 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <!-- tax definitions for VAT on sales (income) -->
-    <record id="ivat19" model="account.tax.template">
-        <field name="chart_template_id" ref="l10n_gr_chart_template"/>
-        <field name="name">Πωλήσεις ΦΠΑ 19%</field>
-        <field name="description">Πωλήσεις ΦΠΑ 19%</field>
-        <field eval="19" name="amount"/>
-        <field name="sequence" eval="3" />
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_19"/>
-        <field name="invoice_repartition_line_ids" eval="[(5,0,0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('account_tax_report_line_303')],
+    <!--taxdefinitionsforVATonsales(income)-->
+    <recordid="ivat19"model="account.tax.template">
+        <fieldname="chart_template_id"ref="l10n_gr_chart_template"/>
+        <fieldname="name">ΠωλήσειςΦΠΑ19%</field>
+        <fieldname="description">ΠωλήσειςΦΠΑ19%</field>
+        <fieldeval="19"name="amount"/>
+        <fieldname="sequence"eval="3"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_19"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('account_tax_report_line_303')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
-                    'plus_report_line_ids': [ref('account_tax_report_line_333')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
+                    'plus_report_line_ids':[ref('account_tax_report_line_333')],
                 }),
             ]"/>
-    </record>
-
-    <record id="ivat21" model="account.tax.template">
-        <field name="chart_template_id" ref="l10n_gr_chart_template"/>
-        <field name="name">Πωλήσεις ΦΠΑ 21%</field>
-        <field name="description">Πωλήσεις ΦΠΑ 21%</field>
-        <field eval="21" name="amount"/>
-        <field name="sequence" eval="2" />
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_21"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('account_tax_report_line_303')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
-                    'plus_report_line_ids': [ref('account_tax_report_line_333')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
                 }),
             ]"/>
     </record>
 
-    <record id="ivat23" model="account.tax.template">
-        <field name="chart_template_id" ref="l10n_gr_chart_template"/>
-        <field name="name">Πωλήσεις ΦΠΑ 23%</field>
-        <field name="description">Πωλήσεις ΦΠΑ 23%</field>
-        <field eval="23" name="amount"/>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_23"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('account_tax_report_line_303')],
+    <recordid="ivat21"model="account.tax.template">
+        <fieldname="chart_template_id"ref="l10n_gr_chart_template"/>
+        <fieldname="name">ΠωλήσειςΦΠΑ21%</field>
+        <fieldname="description">ΠωλήσειςΦΠΑ21%</field>
+        <fieldeval="21"name="amount"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_21"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('account_tax_report_line_303')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
-                    'plus_report_line_ids': [ref('account_tax_report_line_333')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
+                    'plus_report_line_ids':[ref('account_tax_report_line_333')],
                 }),
             ]"/>
-    </record>
-
-    <!-- tax definitions for return VAT from purchases -->
-    <record id="pvat19" model="account.tax.template">
-        <field name="chart_template_id" ref="l10n_gr_chart_template"/>
-        <field name="name">Αγορές ΦΠΑ19%</field>
-        <field name="description">Αγορές ΦΠΑ19%</field>
-        <field eval="19" name="amount"/>
-        <field name="sequence" eval="3" />
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_19"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('account_tax_report_line_353')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
-                    'plus_report_line_ids': [ref('account_tax_report_line_373')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
                 }),
             ]"/>
     </record>
 
-
-    <record id="pvat21" model="account.tax.template">
-        <field name="chart_template_id" ref="l10n_gr_chart_template"/>
-        <field name="name">Αγορές ΦΠΑ21%</field>
-        <field name="description">Αγορές ΦΠΑ21%</field>
-        <field eval="21" name="amount"/>
-        <field name="sequence" eval="2" />
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_21"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('account_tax_report_line_353')],
+    <recordid="ivat23"model="account.tax.template">
+        <fieldname="chart_template_id"ref="l10n_gr_chart_template"/>
+        <fieldname="name">ΠωλήσειςΦΠΑ23%</field>
+        <fieldname="description">ΠωλήσειςΦΠΑ23%</field>
+        <fieldeval="23"name="amount"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_23"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('account_tax_report_line_303')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
-                    'plus_report_line_ids': [ref('account_tax_report_line_373')],
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
+                    'plus_report_line_ids':[ref('account_tax_report_line_333')],
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
                 }),
             ]"/>
     </record>
 
-    <record id="pvat23" model="account.tax.template">
-        <field name="chart_template_id" ref="l10n_gr_chart_template"/>
-        <field name="name">Αγορές ΦΠΑ23%</field>
-        <field name="description">Αγορές ΦΠΑ23%</field>
-        <field eval="23" name="amount"/>
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_23"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('account_tax_report_line_353')],
+    <!--taxdefinitionsforreturnVATfrompurchases-->
+    <recordid="pvat19"model="account.tax.template">
+        <fieldname="chart_template_id"ref="l10n_gr_chart_template"/>
+        <fieldname="name">ΑγορέςΦΠΑ19%</field>
+        <fieldname="description">ΑγορέςΦΠΑ19%</field>
+        <fieldeval="19"name="amount"/>
+        <fieldname="sequence"eval="3"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_19"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('account_tax_report_line_353')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
-                    'plus_report_line_ids': [ref('account_tax_report_line_373')],
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
+                    'plus_report_line_ids':[ref('account_tax_report_line_373')],
                 }),
             ]"/>
-    </record>
-
-    <!-- return VAT on expenses (different from purchases ) -->
-    <record id="evat19" model="account.tax.template">
-        <field name="chart_template_id" ref="l10n_gr_chart_template"/>
-        <field name="name">Δαπάνες ΦΠΑ19%</field>
-        <field name="description">Δαπάνες ΦΠΑ19%</field>
-        <field eval="19" name="amount"/>
-        <field name="sequence" eval="3" />
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_19"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('account_tax_report_line_357')],
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
-                    'plus_report_line_ids': [ref('account_tax_report_line_377')]
-                }),
-            ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
                 }),
             ]"/>
     </record>
 
-    <record id="evat21" model="account.tax.template">
-        <field name="chart_template_id" ref="l10n_gr_chart_template"/>
-        <field name="name">Δαπάνες ΦΠΑ21%</field>
-        <field name="description">Δαπάνες ΦΠΑ21%</field>
-        <field eval="21" name="amount"/>
-        <field name="sequence" eval="2" />
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_21"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('account_tax_report_line_357')],
+
+    <recordid="pvat21"model="account.tax.template">
+        <fieldname="chart_template_id"ref="l10n_gr_chart_template"/>
+        <fieldname="name">ΑγορέςΦΠΑ21%</field>
+        <fieldname="description">ΑγορέςΦΠΑ21%</field>
+        <fieldeval="21"name="amount"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_21"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('account_tax_report_line_353')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
-                    'plus_report_line_ids': [ref('account_tax_report_line_377')]
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
+                    'plus_report_line_ids':[ref('account_tax_report_line_373')],
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
                 }),
             ]"/>
     </record>
 
-    <record id="evat23" model="account.tax.template">
-        <field name="chart_template_id" ref="l10n_gr_chart_template"/>
-        <field name="name">Δαπάνες ΦΠΑ23%</field>
-        <field name="description">Δαπάνες ΦΠΑ23%</field>
-        <field eval="23" name="amount"/>
-        <field name="sequence" eval="2" />
-        <field name="amount_type">percent</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_23"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
-                    'plus_report_line_ids': [ref('account_tax_report_line_357')]
+    <recordid="pvat23"model="account.tax.template">
+        <fieldname="chart_template_id"ref="l10n_gr_chart_template"/>
+        <fieldname="name">ΑγορέςΦΠΑ23%</field>
+        <fieldname="description">ΑγορέςΦΠΑ23%</field>
+        <fieldeval="23"name="amount"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_23"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('account_tax_report_line_353')],
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
-                    'plus_report_line_ids': [ref('account_tax_report_line_377')]
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
+                    'plus_report_line_ids':[ref('account_tax_report_line_373')],
                 }),
             ]"/>
-            <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'base',
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
                 }),
-                (0,0, {
-                    'factor_percent': 100,
-                    'repartition_type': 'tax',
-                    'account_id': ref('chartgr_54_00'),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
+                }),
+            ]"/>
+    </record>
+
+    <!--returnVATonexpenses(differentfrompurchases)-->
+    <recordid="evat19"model="account.tax.template">
+        <fieldname="chart_template_id"ref="l10n_gr_chart_template"/>
+        <fieldname="name">ΔαπάνεςΦΠΑ19%</field>
+        <fieldname="description">ΔαπάνεςΦΠΑ19%</field>
+        <fieldeval="19"name="amount"/>
+        <fieldname="sequence"eval="3"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_19"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('account_tax_report_line_357')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
+                    'plus_report_line_ids':[ref('account_tax_report_line_377')]
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
+                }),
+            ]"/>
+    </record>
+
+    <recordid="evat21"model="account.tax.template">
+        <fieldname="chart_template_id"ref="l10n_gr_chart_template"/>
+        <fieldname="name">ΔαπάνεςΦΠΑ21%</field>
+        <fieldname="description">ΔαπάνεςΦΠΑ21%</field>
+        <fieldeval="21"name="amount"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_21"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('account_tax_report_line_357')],
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
+                    'plus_report_line_ids':[ref('account_tax_report_line_377')]
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
+                }),
+            ]"/>
+    </record>
+
+    <recordid="evat23"model="account.tax.template">
+        <fieldname="chart_template_id"ref="l10n_gr_chart_template"/>
+        <fieldname="name">ΔαπάνεςΦΠΑ23%</field>
+        <fieldname="description">ΔαπάνεςΦΠΑ23%</field>
+        <fieldeval="23"name="amount"/>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_23"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                    'plus_report_line_ids':[ref('account_tax_report_line_357')]
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
+                    'plus_report_line_ids':[ref('account_tax_report_line_377')]
+                }),
+            ]"/>
+            <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'base',
+                }),
+                (0,0,{
+                    'factor_percent':100,
+                    'repartition_type':'tax',
+                    'account_id':ref('chartgr_54_00'),
                 }),
             ]"/>
     </record>

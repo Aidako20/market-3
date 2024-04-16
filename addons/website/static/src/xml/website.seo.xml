@@ -1,165 +1,165 @@
-<?xml version="1.0" encoding="utf-8"?>
-<templates id="template" xml:space="preserve">
-    <t t-name="Configurator.language_promote">
-        <t t-foreach="language" t-as="lang">
-            <option t-att-value="lang[0]" t-att-selected="lang[0] == def_lang ? 'selected' : null"><t t-esc="lang[2]" /></option>
+<?xmlversion="1.0"encoding="utf-8"?>
+<templatesid="template"xml:space="preserve">
+    <tt-name="Configurator.language_promote">
+        <tt-foreach="language"t-as="lang">
+            <optiont-att-value="lang[0]"t-att-selected="lang[0]==def_lang?'selected':null"><tt-esc="lang[2]"/></option>
         </t>
     </t>
 
-    <div t-name="website.seo_configuration" role="form">
-        <section class="js_seo_meta_title_description"/>
-        <section class="js_seo_meta_keywords"/>
-        <section class="js_seo_image"/>
+    <divt-name="website.seo_configuration"role="form">
+        <sectionclass="js_seo_meta_title_description"/>
+        <sectionclass="js_seo_meta_keywords"/>
+        <sectionclass="js_seo_image"/>
     </div>
 
-    <t t-name="website.seo_suggestion_list">
-        <ul class="list-inline mb0">
-            <!-- filled in JS -->
+    <tt-name="website.seo_suggestion_list">
+        <ulclass="list-inlinemb0">
+            <!--filledinJS-->
         </ul>
     </t>
 
-    <t t-name="website.seo_list">
+    <tt-name="website.seo_list">
         <tbody>
-            <!-- filled in JS -->
+            <!--filledinJS-->
         </tbody>
     </t>
 
-    <t t-name="website.seo_keyword">
-        <tr class="js_seo_keyword" t-att-data-keyword="widget.keyword">
-            <td t-esc="widget.keyword"/>
-            <td class="text-center"><i t-if="widget.used_h1" class="fa fa-check" t-attf-title="{{ widget.keyword }} is used in page first level heading"/></td>
-            <td class="text-center"><i t-if="widget.used_h2" class="fa fa-check" t-attf-title="{{ widget.keyword }} is used in page second level heading"/></td>
-            <td class="text-center"><i class="js_seo_keyword_title fa fa-check" style="visibility: hidden;" t-attf-title="{{ widget.keyword }} is used in page title"/></td>
-            <td class="text-center"><i class="js_seo_keyword_description fa fa-check" style="visibility: hidden;" t-attf-title="{{ widget.keyword }} is used in page description"/></td>
-            <td class="text-center"><i t-if="widget.used_content" class="fa fa-check" t-attf-title="{{ widget.keyword }} is used in page content"/></td>
-            <td class="o_seo_keyword_suggestion"/>
-            <td class="text-center"><a href="#" class="oe_remove" data-action="remove-keyword" t-attf-title="Remove {{ widget.keyword }}"><i class="fa fa-trash"/></a></td>
+    <tt-name="website.seo_keyword">
+        <trclass="js_seo_keyword"t-att-data-keyword="widget.keyword">
+            <tdt-esc="widget.keyword"/>
+            <tdclass="text-center"><it-if="widget.used_h1"class="fafa-check"t-attf-title="{{widget.keyword}}isusedinpagefirstlevelheading"/></td>
+            <tdclass="text-center"><it-if="widget.used_h2"class="fafa-check"t-attf-title="{{widget.keyword}}isusedinpagesecondlevelheading"/></td>
+            <tdclass="text-center"><iclass="js_seo_keyword_titlefafa-check"style="visibility:hidden;"t-attf-title="{{widget.keyword}}isusedinpagetitle"/></td>
+            <tdclass="text-center"><iclass="js_seo_keyword_descriptionfafa-check"style="visibility:hidden;"t-attf-title="{{widget.keyword}}isusedinpagedescription"/></td>
+            <tdclass="text-center"><it-if="widget.used_content"class="fafa-check"t-attf-title="{{widget.keyword}}isusedinpagecontent"/></td>
+            <tdclass="o_seo_keyword_suggestion"/>
+            <tdclass="text-center"><ahref="#"class="oe_remove"data-action="remove-keyword"t-attf-title="Remove{{widget.keyword}}"><iclass="fafa-trash"/></a></td>
         </tr>
     </t>
 
-    <t t-name="website.seo_suggestion">
-        <li class="list-inline-item">
-            <span class="o_seo_suggestion badge badge-info" t-att-data-keyword="widget.keyword" t-attf-title="Add {{ widget.keyword }}" t-esc="widget.keyword"/>
+    <tt-name="website.seo_suggestion">
+        <liclass="list-inline-item">
+            <spanclass="o_seo_suggestionbadgebadge-info"t-att-data-keyword="widget.keyword"t-attf-title="Add{{widget.keyword}}"t-esc="widget.keyword"/>
         </li>
     </t>
 
-    <t t-name="website.seo_preview">
-        <div class="oe_seo_preview_g">
-            <div class="rc">
-                <div class="r"><t t-esc="widget.title"/></div>
-                <div class="s">
-                    <div class="kv"><t t-esc="widget.url"/></div>
-                    <div class="st"><t t-esc="widget.description"/></div>
+    <tt-name="website.seo_preview">
+        <divclass="oe_seo_preview_g">
+            <divclass="rc">
+                <divclass="r"><tt-esc="widget.title"/></div>
+                <divclass="s">
+                    <divclass="kv"><tt-esc="widget.url"/></div>
+                    <divclass="st"><tt-esc="widget.description"/></div>
                 </div>
             </div>
         </div>
     </t>
 
-    <div t-name="website.seo_meta_title_description">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="form-group">
-                    <label for="website_meta_title">
-                        Title <i class="fa fa-question-circle-o" title="The title will take a default value unless you specify one."/>
+    <divt-name="website.seo_meta_title_description">
+        <divclass="row">
+            <divclass="col-lg-6">
+                <divclass="form-group">
+                    <labelfor="website_meta_title">
+                        Title<iclass="fafa-question-circle-o"title="Thetitlewilltakeadefaultvalueunlessyouspecifyone."/>
                     </label>
-                    <input type="text" name="website_meta_title" id="website_meta_title" class="form-control" placeholder="Keep empty to use default value" maxlength="70" size="70"/>
+                    <inputtype="text"name="website_meta_title"id="website_meta_title"class="form-control"placeholder="Keepemptytousedefaultvalue"maxlength="70"size="70"/>
                 </div>
-                <div class="form-group">
-                    <label for="website_meta_description">
-                        Description <i class="fa fa-question-circle-o" t-att-title="widget.previewDescription"/>
+                <divclass="form-group">
+                    <labelfor="website_meta_description">
+                        Description<iclass="fafa-question-circle-o"t-att-title="widget.previewDescription"/>
                     </label>
-                    <textarea name="website_meta_description" id="website_meta_description" placeholder="Keep empty to use default value" class="form-control"/>
-                    <div class="alert alert-warning mt16 mb0 small" id="website_meta_description_warning" style="display: none;"/>
+                    <textareaname="website_meta_description"id="website_meta_description"placeholder="Keepemptytousedefaultvalue"class="form-control"/>
+                    <divclass="alertalert-warningmt16mb0small"id="website_meta_description_warning"style="display:none;"/>
                 </div>
-                <div class="form-group" t-if='widget.canEditUrl'>
-                    <label for="website_seo_name">
-                        Custom Url <i class="fa fa-question-circle-o" t-att-title="widget.seoNameHelp" />
+                <divclass="form-group"t-if='widget.canEditUrl'>
+                    <labelfor="website_seo_name">
+                        CustomUrl<iclass="fafa-question-circle-o"t-att-title="widget.seoNameHelp"/>
                     </label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text seo_name_pre"></span>
+                    <divclass="input-group">
+                        <divclass="input-group-prepend">
+                            <spanclass="input-group-textseo_name_pre"></span>
                         </div>
-                        <input type="text" name="website_seo_name" id="website_seo_name" class="form-control" t-att-placeholder="widget.seoNameDefault" />
-                        <div class="input-group-append" title="Unalterable unique identifier">
-                            <span class="input-group-text seo_name_post"></span>
+                        <inputtype="text"name="website_seo_name"id="website_seo_name"class="form-control"t-att-placeholder="widget.seoNameDefault"/>
+                        <divclass="input-group-append"title="Unalterableuniqueidentifier">
+                            <spanclass="input-group-textseo_name_post"></span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="card-header">Preview</div>
-                <div class="card mb0 p-0">
-                    <div class="card-body">
-                        <div class="js_seo_preview"/>
+            <divclass="col-lg-6">
+                <divclass="card-header">Preview</div>
+                <divclass="cardmb0p-0">
+                    <divclass="card-body">
+                        <divclass="js_seo_preview"/>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <t t-name="website.seo_meta_keywords">
-        <label for="website_meta_keywords">
+    <tt-name="website.seo_meta_keywords">
+        <labelfor="website_meta_keywords">
             Keywords
         </label>
-        <div class="form-inline" role="form">
-            <div class="input-group">
-                <input type="text" name="website_meta_keywords" id="website_meta_keywords" class="form-control" placeholder="Keyword" maxlength="30"/>
-                <span title="The language of the keyword and related keywords." class="input-group-append">
-                    <select name="seo_page_language" id="language-box" class="btn form-control"/>
+        <divclass="form-inline"role="form">
+            <divclass="input-group">
+                <inputtype="text"name="website_meta_keywords"id="website_meta_keywords"class="form-control"placeholder="Keyword"maxlength="30"/>
+                <spantitle="Thelanguageofthekeywordandrelatedkeywords."class="input-group-append">
+                    <selectname="seo_page_language"id="language-box"class="btnform-control"/>
                 </span>
-                <span class="input-group-append">
-                    <button data-action="add" class="btn btn-primary btn-sm" type="button">Add</button>
+                <spanclass="input-group-append">
+                    <buttondata-action="add"class="btnbtn-primarybtn-sm"type="button">Add</button>
                 </span>
             </div>
         </div>
-        <div class="table-responsive mt16">
-            <table class="table table-sm">
+        <divclass="table-responsivemt16">
+            <tableclass="tabletable-sm">
                 <thead>
                     <tr>
                         <th>Keyword</th>
-                        <th class="text-center" title="Used in page first level heading">H1</th>
-                        <th class="text-center" title="Used in page second level heading">H2</th>
-                        <th class="text-center" title="Used in page title">T</th>
-                        <th class="text-center" title="Used in page description">D</th>
-                        <th class="text-center" title="Used in page content">C</th>
-                        <th title="Most searched topics related to your keyword, ordered by importance">Related keywords</th>
-                        <th class="text-center"></th>
+                        <thclass="text-center"title="Usedinpagefirstlevelheading">H1</th>
+                        <thclass="text-center"title="Usedinpagesecondlevelheading">H2</th>
+                        <thclass="text-center"title="Usedinpagetitle">T</th>
+                        <thclass="text-center"title="Usedinpagedescription">D</th>
+                        <thclass="text-center"title="Usedinpagecontent">C</th>
+                        <thtitle="Mostsearchedtopicsrelatedtoyourkeyword,orderedbyimportance">Relatedkeywords</th>
+                        <thclass="text-center"></th>
                     </tr>
                 </thead>
-                <!-- body inserted in JS -->
+                <!--bodyinsertedinJS-->
             </table>
         </div>
     </t>
 
-    <div t-name="website.seo_meta_image_selector" class="o_seo_og_image">
-        <t t-call="website.og_image_body"/>
+    <divt-name="website.seo_meta_image_selector"class="o_seo_og_image">
+        <tt-call="website.og_image_body"/>
     </div>
 
-    <t t-name="website.og_image_body">
-        <h4><small>Select an image for social share</small></h4>
-        <div class="row">
-            <div class="col-lg-6">
-                <t t-foreach="widget.images" t-as="image">
-                    <div t-attf-class="o_meta_img mt4 #{new window.URL(image, window.location.origin).pathname === new window.URL(widget.activeMetaImg, window.location.origin).pathname and ' o_active_image' or ''}">
-                        <img t-att-src="image"/>
+    <tt-name="website.og_image_body">
+        <h4><small>Selectanimageforsocialshare</small></h4>
+        <divclass="row">
+            <divclass="col-lg-6">
+                <tt-foreach="widget.images"t-as="image">
+                    <divt-attf-class="o_meta_imgmt4#{newwindow.URL(image,window.location.origin).pathname===newwindow.URL(widget.activeMetaImg,window.location.origin).pathnameand'o_active_image'or''}">
+                        <imgt-att-src="image"/>
                     </div>
                 </t>
-                <div t-if="widget.customImgUrl" t-attf-class="o_meta_img mt4 #{widget.customImgUrl === widget.activeMetaImg and ' o_active_image' or ''}">
-                    <span class="o-custom-label w-100 text-white text-center">Custom</span>
-                    <img t-att-src="widget.customImgUrl"/>
+                <divt-if="widget.customImgUrl"t-attf-class="o_meta_imgmt4#{widget.customImgUrl===widget.activeMetaImgand'o_active_image'or''}">
+                    <spanclass="o-custom-labelw-100text-whitetext-center">Custom</span>
+                    <imgt-att-src="widget.customImgUrl"/>
                 </div>
-                <div class="o_meta_img_upload mt4" title="Click to choose more images">
-                    <i class="fa fa-upload"/>
+                <divclass="o_meta_img_uploadmt4"title="Clicktochoosemoreimages">
+                    <iclass="fafa-upload"/>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="card p-0 mb16">
-                    <div class="card-header">Social Preview</div>
-                    <img class="card-img-top o_meta_active_img" t-att-src="widget.activeMetaImg"/>
-                    <div class="card-body px-3 py-2">
-                        <h6 class="text-primary card-title mb0"><t t-esc="widget.metaTitle"/></h6>
-                        <small class="card-subtitle text-muted"><t t-esc="widget.serverUrl"/></small>
-                        <p t-esc="widget.metaDescription"/>
+            <divclass="col-lg-6">
+                <divclass="cardp-0mb16">
+                    <divclass="card-header">SocialPreview</div>
+                    <imgclass="card-img-topo_meta_active_img"t-att-src="widget.activeMetaImg"/>
+                    <divclass="card-bodypx-3py-2">
+                        <h6class="text-primarycard-titlemb0"><tt-esc="widget.metaTitle"/></h6>
+                        <smallclass="card-subtitletext-muted"><tt-esc="widget.serverUrl"/></small>
+                        <pt-esc="widget.metaDescription"/>
                   </div>
                 </div>
             </div>

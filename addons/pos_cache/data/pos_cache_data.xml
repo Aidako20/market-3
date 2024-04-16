@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record model="ir.cron" id="refresh_pos_cache_cron">
-            <field name="name">PoS: refresh cache</field>
-            <field name="model_id" ref="model_pos_cache"/>
-            <field name="state">code</field>
-            <field name="code">model.refresh_all_caches()</field>
-            <field name="active" eval="False"/>
-            <field name="interval_number">1</field>
-            <field name="interval_type">hours</field>
-            <field name="numbercall">-1</field>
-            <field name="doall" eval="False"/>
+        <recordmodel="ir.cron"id="refresh_pos_cache_cron">
+            <fieldname="name">PoS:refreshcache</field>
+            <fieldname="model_id"ref="model_pos_cache"/>
+            <fieldname="state">code</field>
+            <fieldname="code">model.refresh_all_caches()</field>
+            <fieldname="active"eval="False"/>
+            <fieldname="interval_number">1</field>
+            <fieldname="interval_type">hours</field>
+            <fieldname="numbercall">-1</field>
+            <fieldname="doall"eval="False"/>
         </record>
     </data>
 </flectra>

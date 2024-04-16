@@ -1,574 +1,574 @@
-flectra.define('web.concurrency_tests', function (require) {
-"use strict";
+flectra.define('web.concurrency_tests',function(require){
+"usestrict";
 
-var concurrency = require('web.concurrency');
-var testUtils = require('web.test_utils');
+varconcurrency=require('web.concurrency');
+vartestUtils=require('web.test_utils');
 
-var makeTestPromise = testUtils.makeTestPromise;
-var makeTestPromiseWithAssert = testUtils.makeTestPromiseWithAssert;
+varmakeTestPromise=testUtils.makeTestPromise;
+varmakeTestPromiseWithAssert=testUtils.makeTestPromiseWithAssert;
 
-QUnit.module('core', {}, function () {
+QUnit.module('core',{},function(){
 
     QUnit.module('concurrency');
 
-    QUnit.test('mutex: simple scheduling', async function (assert) {
+    QUnit.test('mutex:simplescheduling',asyncfunction(assert){
         assert.expect(5);
-        var mutex = new concurrency.Mutex();
+        varmutex=newconcurrency.Mutex();
 
-        var prom1 = makeTestPromiseWithAssert(assert, 'prom1');
-        var prom2 = makeTestPromiseWithAssert(assert, 'prom2');
+        varprom1=makeTestPromiseWithAssert(assert,'prom1');
+        varprom2=makeTestPromiseWithAssert(assert,'prom2');
 
-        mutex.exec(function () { return prom1; });
-        mutex.exec(function () { return prom2; });
+        mutex.exec(function(){returnprom1;});
+        mutex.exec(function(){returnprom2;});
 
         assert.verifySteps([]);
 
-        await prom1.resolve();
+        awaitprom1.resolve();
 
-        assert.verifySteps(['ok prom1']);
+        assert.verifySteps(['okprom1']);
 
-        await prom2.resolve();
+        awaitprom2.resolve();
 
-        assert.verifySteps(['ok prom2']);
+        assert.verifySteps(['okprom2']);
     });
 
-    QUnit.test('mutex: simpleScheduling2', async function (assert) {
+    QUnit.test('mutex:simpleScheduling2',asyncfunction(assert){
         assert.expect(5);
-        var mutex = new concurrency.Mutex();
+        varmutex=newconcurrency.Mutex();
 
-        var prom1 = makeTestPromiseWithAssert(assert, 'prom1');
-        var prom2 = makeTestPromiseWithAssert(assert, 'prom2');
+        varprom1=makeTestPromiseWithAssert(assert,'prom1');
+        varprom2=makeTestPromiseWithAssert(assert,'prom2');
 
-        mutex.exec(function () { return prom1; });
-        mutex.exec(function () { return prom2; });
+        mutex.exec(function(){returnprom1;});
+        mutex.exec(function(){returnprom2;});
 
         assert.verifySteps([]);
 
-        await prom2.resolve();
+        awaitprom2.resolve();
 
-        assert.verifySteps(['ok prom2']);
+        assert.verifySteps(['okprom2']);
 
-        await prom1.resolve();
+        awaitprom1.resolve();
 
-        assert.verifySteps(['ok prom1']);
+        assert.verifySteps(['okprom1']);
     });
 
-    QUnit.test('mutex: reject', async function (assert) {
+    QUnit.test('mutex:reject',asyncfunction(assert){
         assert.expect(7);
-        var mutex = new concurrency.Mutex();
+        varmutex=newconcurrency.Mutex();
 
-        var prom1 = makeTestPromiseWithAssert(assert, 'prom1');
-        var prom2 = makeTestPromiseWithAssert(assert, 'prom2');
-        var prom3 = makeTestPromiseWithAssert(assert, 'prom3');
+        varprom1=makeTestPromiseWithAssert(assert,'prom1');
+        varprom2=makeTestPromiseWithAssert(assert,'prom2');
+        varprom3=makeTestPromiseWithAssert(assert,'prom3');
 
-        mutex.exec(function () { return prom1; }).catch(function () {});
-        mutex.exec(function () { return prom2; }).catch(function () {});
-        mutex.exec(function () { return prom3; }).catch(function () {});
+        mutex.exec(function(){returnprom1;}).catch(function(){});
+        mutex.exec(function(){returnprom2;}).catch(function(){});
+        mutex.exec(function(){returnprom3;}).catch(function(){});
 
         assert.verifySteps([]);
 
         prom1.resolve();
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        assert.verifySteps(['ok prom1']);
+        assert.verifySteps(['okprom1']);
 
-        prom2.catch(function () {
-           assert.verifySteps(['ko prom2']);
+        prom2.catch(function(){
+           assert.verifySteps(['koprom2']);
         });
-        prom2.reject({name: "sdkjfmqsjdfmsjkdfkljsdq"});
-        await testUtils.nextMicrotaskTick();
+        prom2.reject({name:"sdkjfmqsjdfmsjkdfkljsdq"});
+        awaittestUtils.nextMicrotaskTick();
 
         prom3.resolve();
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        assert.verifySteps(['ok prom3']);
+        assert.verifySteps(['okprom3']);
     });
 
-    QUnit.test('mutex: getUnlockedDef checks', async function (assert) {
+    QUnit.test('mutex:getUnlockedDefchecks',asyncfunction(assert){
         assert.expect(9);
 
-        var mutex = new concurrency.Mutex();
+        varmutex=newconcurrency.Mutex();
 
-        var prom1 = makeTestPromiseWithAssert(assert, 'prom1');
-        var prom2 = makeTestPromiseWithAssert(assert, 'prom2');
+        varprom1=makeTestPromiseWithAssert(assert,'prom1');
+        varprom2=makeTestPromiseWithAssert(assert,'prom2');
 
-        mutex.getUnlockedDef().then(function () {
-            assert.step('mutex unlocked (1)');
+        mutex.getUnlockedDef().then(function(){
+            assert.step('mutexunlocked(1)');
         });
 
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        assert.verifySteps(['mutex unlocked (1)']);
+        assert.verifySteps(['mutexunlocked(1)']);
 
-        mutex.exec(function () { return prom1; });
-        await testUtils.nextMicrotaskTick();
+        mutex.exec(function(){returnprom1;});
+        awaittestUtils.nextMicrotaskTick();
 
-        mutex.getUnlockedDef().then(function () {
-            assert.step('mutex unlocked (2)');
+        mutex.getUnlockedDef().then(function(){
+            assert.step('mutexunlocked(2)');
         });
 
         assert.verifySteps([]);
 
-        mutex.exec(function () { return prom2; });
-        await testUtils.nextMicrotaskTick();
+        mutex.exec(function(){returnprom2;});
+        awaittestUtils.nextMicrotaskTick();
 
         assert.verifySteps([]);
 
-        await prom1.resolve();
+        awaitprom1.resolve();
 
-        assert.verifySteps(['ok prom1']);
-
-        prom2.resolve();
-        await testUtils.nextTick();
-
-        assert.verifySteps(['ok prom2', 'mutex unlocked (2)']);
-    });
-
-    QUnit.test('DropPrevious: basic usecase', async function (assert) {
-        assert.expect(4);
-
-        var dp = new concurrency.DropPrevious();
-
-        var prom1 = makeTestPromise(assert, 'prom1');
-        var prom2 = makeTestPromise(assert, 'prom2');
-
-        dp.add(prom1).then(() => assert.step('should not go here'))
-                     .catch(()=> assert.step("rejected dp1"));
-        dp.add(prom2).then(() => assert.step("ok dp2"));
-
-        await testUtils.nextMicrotaskTick();
-        assert.verifySteps(['rejected dp1']);
+        assert.verifySteps(['okprom1']);
 
         prom2.resolve();
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextTick();
 
-        assert.verifySteps(['ok dp2']);
+        assert.verifySteps(['okprom2','mutexunlocked(2)']);
     });
 
-    QUnit.test('DropPrevious: resolve first before last', async function (assert) {
+    QUnit.test('DropPrevious:basicusecase',asyncfunction(assert){
         assert.expect(4);
 
-        var dp = new concurrency.DropPrevious();
+        vardp=newconcurrency.DropPrevious();
 
-        var prom1 = makeTestPromise(assert, 'prom1');
-        var prom2 = makeTestPromise(assert, 'prom2');
+        varprom1=makeTestPromise(assert,'prom1');
+        varprom2=makeTestPromise(assert,'prom2');
 
-        dp.add(prom1).then(() => assert.step('should not go here'))
-                     .catch(()=> assert.step("rejected dp1"));
-        dp.add(prom2).then(() => assert.step("ok dp2"));
+        dp.add(prom1).then(()=>assert.step('shouldnotgohere'))
+                     .catch(()=>assert.step("rejecteddp1"));
+        dp.add(prom2).then(()=>assert.step("okdp2"));
+
+        awaittestUtils.nextMicrotaskTick();
+        assert.verifySteps(['rejecteddp1']);
+
+        prom2.resolve();
+        awaittestUtils.nextMicrotaskTick();
+
+        assert.verifySteps(['okdp2']);
+    });
+
+    QUnit.test('DropPrevious:resolvefirstbeforelast',asyncfunction(assert){
+        assert.expect(4);
+
+        vardp=newconcurrency.DropPrevious();
+
+        varprom1=makeTestPromise(assert,'prom1');
+        varprom2=makeTestPromise(assert,'prom2');
+
+        dp.add(prom1).then(()=>assert.step('shouldnotgohere'))
+                     .catch(()=>assert.step("rejecteddp1"));
+        dp.add(prom2).then(()=>assert.step("okdp2"));
 
 
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        assert.verifySteps(['rejected dp1']);
+        assert.verifySteps(['rejecteddp1']);
 
         prom1.resolve();
         prom2.resolve();
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        assert.verifySteps(['ok dp2']);
+        assert.verifySteps(['okdp2']);
     });
 
-    QUnit.test('DropMisordered: resolve all correctly ordered, sync', async function (assert) {
+    QUnit.test('DropMisordered:resolveallcorrectlyordered,sync',asyncfunction(assert){
         assert.expect(1);
 
-        var dm = new concurrency.DropMisordered(),
-            flag = false;
+        vardm=newconcurrency.DropMisordered(),
+            flag=false;
 
-        var d1 = makeTestPromise();
-        var d2 = makeTestPromise();
+        vard1=makeTestPromise();
+        vard2=makeTestPromise();
 
-        var r1 = dm.add(d1),
-            r2 = dm.add(d2);
+        varr1=dm.add(d1),
+            r2=dm.add(d2);
 
-        Promise.all([r1, r2]).then(function () {
-            flag = true;
+        Promise.all([r1,r2]).then(function(){
+            flag=true;
         });
 
         d1.resolve();
         d2.resolve();
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
         assert.ok(flag);
     });
 
-    QUnit.test("DropMisordered: don't resolve mis-ordered, sync", async function (assert) {
+    QUnit.test("DropMisordered:don'tresolvemis-ordered,sync",asyncfunction(assert){
         assert.expect(4);
 
-        var dm = new concurrency.DropMisordered(),
-            done1 = false,
-            done2 = false,
-            fail1 = false,
-            fail2 = false;
+        vardm=newconcurrency.DropMisordered(),
+            done1=false,
+            done2=false,
+            fail1=false,
+            fail2=false;
 
-        var d1 = makeTestPromise();
-        var d2 = makeTestPromise();
+        vard1=makeTestPromise();
+        vard2=makeTestPromise();
 
-        dm.add(d1).then(function () { done1 = true; })
-                    .catch(function () { fail1 = true; });
-        dm.add(d2).then(function () { done2 = true; })
-                    .catch(function () { fail2 = true; });
+        dm.add(d1).then(function(){done1=true;})
+                    .catch(function(){fail1=true;});
+        dm.add(d2).then(function(){done2=true;})
+                    .catch(function(){fail2=true;});
 
         d2.resolve();
         d1.resolve();
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        // d1 is in limbo
+        //d1isinlimbo
         assert.ok(!done1);
         assert.ok(!fail1);
 
-        // d2 is fulfilled
+        //d2isfulfilled
         assert.ok(done2);
         assert.ok(!fail2);
     });
 
-    QUnit.test('DropMisordered: fail mis-ordered flag, sync', async function (assert) {
+    QUnit.test('DropMisordered:failmis-orderedflag,sync',asyncfunction(assert){
         assert.expect(4);
 
-        var dm = new concurrency.DropMisordered(true/* failMisordered */),
-            done1 = false,
-            done2 = false,
-            fail1 = false,
-            fail2 = false;
+        vardm=newconcurrency.DropMisordered(true/*failMisordered*/),
+            done1=false,
+            done2=false,
+            fail1=false,
+            fail2=false;
 
-        var d1 = makeTestPromise();
-        var d2 = makeTestPromise();
+        vard1=makeTestPromise();
+        vard2=makeTestPromise();
 
-        dm.add(d1).then(function () { done1 = true; })
-                    .catch(function () { fail1 = true; });
-        dm.add(d2).then(function () { done2 = true; })
-                    .catch(function () { fail2 = true; });
+        dm.add(d1).then(function(){done1=true;})
+                    .catch(function(){fail1=true;});
+        dm.add(d2).then(function(){done2=true;})
+                    .catch(function(){fail2=true;});
 
         d2.resolve();
         d1.resolve();
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        // d1 is in limbo
+        //d1isinlimbo
         assert.ok(!done1);
         assert.ok(fail1);
 
-        // d2 is resolved
+        //d2isresolved
         assert.ok(done2);
         assert.ok(!fail2);
     });
 
-    QUnit.test('DropMisordered: resolve all correctly ordered, async', function (assert) {
-        var done = assert.async();
+    QUnit.test('DropMisordered:resolveallcorrectlyordered,async',function(assert){
+        vardone=assert.async();
         assert.expect(1);
 
-        var dm = new concurrency.DropMisordered();
+        vardm=newconcurrency.DropMisordered();
 
-        var d1 = makeTestPromise();
-        var d2 = makeTestPromise();
+        vard1=makeTestPromise();
+        vard2=makeTestPromise();
 
-        var r1 = dm.add(d1),
-            r2 = dm.add(d2);
+        varr1=dm.add(d1),
+            r2=dm.add(d2);
 
-        setTimeout(function () { d1.resolve(); }, 10);
-        setTimeout(function () { d2.resolve(); }, 20);
+        setTimeout(function(){d1.resolve();},10);
+        setTimeout(function(){d2.resolve();},20);
 
-        Promise.all([r1, r2]).then(function () {
+        Promise.all([r1,r2]).then(function(){
             assert.ok(true);
             done();
         });
     });
 
-    QUnit.test("DropMisordered: don't resolve mis-ordered, async", function (assert) {
-        var done = assert.async();
+    QUnit.test("DropMisordered:don'tresolvemis-ordered,async",function(assert){
+        vardone=assert.async();
         assert.expect(4);
 
-        var dm = new concurrency.DropMisordered(),
-            done1 = false, done2 = false,
-            fail1 = false, fail2 = false;
+        vardm=newconcurrency.DropMisordered(),
+            done1=false,done2=false,
+            fail1=false,fail2=false;
 
-        var d1 = makeTestPromise();
-        var d2 = makeTestPromise();
+        vard1=makeTestPromise();
+        vard2=makeTestPromise();
 
-        dm.add(d1).then(function () { done1 = true; })
-                    .catch(function () { fail1 = true; });
-        dm.add(d2).then(function () { done2 = true; })
-                    .catch(function () { fail2 = true; });
+        dm.add(d1).then(function(){done1=true;})
+                    .catch(function(){fail1=true;});
+        dm.add(d2).then(function(){done2=true;})
+                    .catch(function(){fail2=true;});
 
-        setTimeout(function () { d1.resolve(); }, 20);
-        setTimeout(function () { d2.resolve(); }, 10);
+        setTimeout(function(){d1.resolve();},20);
+        setTimeout(function(){d2.resolve();},10);
 
-        setTimeout(function () {
-            // d1 is in limbo
+        setTimeout(function(){
+            //d1isinlimbo
             assert.ok(!done1);
             assert.ok(!fail1);
 
-            // d2 is resolved
+            //d2isresolved
             assert.ok(done2);
             assert.ok(!fail2);
             done();
-        }, 30);
+        },30);
     });
 
-    QUnit.test('DropMisordered: fail mis-ordered flag, async', function (assert) {
-        var done = assert.async();
+    QUnit.test('DropMisordered:failmis-orderedflag,async',function(assert){
+        vardone=assert.async();
         assert.expect(4);
 
-        var dm = new concurrency.DropMisordered(true),
-            done1 = false, done2 = false,
-            fail1 = false, fail2 = false;
+        vardm=newconcurrency.DropMisordered(true),
+            done1=false,done2=false,
+            fail1=false,fail2=false;
 
-        var d1 = makeTestPromise();
-        var d2 = makeTestPromise();
+        vard1=makeTestPromise();
+        vard2=makeTestPromise();
 
-        dm.add(d1).then(function () { done1 = true; })
-                    .catch(function () { fail1 = true; });
-        dm.add(d2).then(function () { done2 = true; })
-                    .catch(function () { fail2 = true; });
+        dm.add(d1).then(function(){done1=true;})
+                    .catch(function(){fail1=true;});
+        dm.add(d2).then(function(){done2=true;})
+                    .catch(function(){fail2=true;});
 
-        setTimeout(function () { d1.resolve(); }, 20);
-        setTimeout(function () { d2.resolve(); }, 10);
+        setTimeout(function(){d1.resolve();},20);
+        setTimeout(function(){d2.resolve();},10);
 
-        setTimeout(function () {
-            // d1 is failed
+        setTimeout(function(){
+            //d1isfailed
             assert.ok(!done1);
             assert.ok(fail1);
 
-            // d2 is resolved
+            //d2isresolved
             assert.ok(done2);
             assert.ok(!fail2);
             done();
-        }, 30);
+        },30);
     });
 
-    QUnit.test('MutexedDropPrevious: simple', async function (assert) {
+    QUnit.test('MutexedDropPrevious:simple',asyncfunction(assert){
         assert.expect(5);
 
-        var m = new concurrency.MutexedDropPrevious();
-        var d1 = makeTestPromise();
+        varm=newconcurrency.MutexedDropPrevious();
+        vard1=makeTestPromise();
 
-        d1.then(function () {
-            assert.step("d1 resolved");
+        d1.then(function(){
+            assert.step("d1resolved");
         });
-        m.exec(function () { return d1; }).then(function (result) {
-            assert.step("p1 done");
-            assert.strictEqual(result, 'd1');
+        m.exec(function(){returnd1;}).then(function(result){
+            assert.step("p1done");
+            assert.strictEqual(result,'d1');
         });
 
         assert.verifySteps([]);
         d1.resolve('d1');
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        assert.verifySteps(["d1 resolved","p1 done"]);
+        assert.verifySteps(["d1resolved","p1done"]);
     });
 
-    QUnit.test('MutexedDropPrevious: d2 arrives after d1 resolution', async function (assert) {
+    QUnit.test('MutexedDropPrevious:d2arrivesafterd1resolution',asyncfunction(assert){
         assert.expect(8);
 
-        var m = new concurrency.MutexedDropPrevious();
-        var d1 = makeTestPromiseWithAssert(assert, 'd1');
+        varm=newconcurrency.MutexedDropPrevious();
+        vard1=makeTestPromiseWithAssert(assert,'d1');
 
-        m.exec(function () { return d1; }).then(function () {
-            assert.step("p1 resolved");
+        m.exec(function(){returnd1;}).then(function(){
+            assert.step("p1resolved");
         });
 
         assert.verifySteps([]);
         d1.resolve('d1');
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        assert.verifySteps(['ok d1','p1 resolved']);
+        assert.verifySteps(['okd1','p1resolved']);
 
-        var d2 = makeTestPromiseWithAssert(assert, 'd2');
-        m.exec(function () { return d2; }).then(function () {
-            assert.step("p2 resolved");
+        vard2=makeTestPromiseWithAssert(assert,'d2');
+        m.exec(function(){returnd2;}).then(function(){
+            assert.step("p2resolved");
         });
 
         assert.verifySteps([]);
         d2.resolve('d2');
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        assert.verifySteps(['ok d2','p2 resolved']);
+        assert.verifySteps(['okd2','p2resolved']);
     });
 
-    QUnit.test('MutexedDropPrevious: p1 does not return a deferred', async function (assert) {
+    QUnit.test('MutexedDropPrevious:p1doesnotreturnadeferred',asyncfunction(assert){
         assert.expect(7);
 
-        var m = new concurrency.MutexedDropPrevious();
+        varm=newconcurrency.MutexedDropPrevious();
 
-        m.exec(function () { return 42; }).then(function () {
-            assert.step("p1 resolved");
+        m.exec(function(){return42;}).then(function(){
+            assert.step("p1resolved");
         });
 
         assert.verifySteps([]);
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        assert.verifySteps(['p1 resolved']);
+        assert.verifySteps(['p1resolved']);
 
-        var d2 = makeTestPromiseWithAssert(assert, 'd2');
-        m.exec(function () { return d2; }).then(function () {
-            assert.step("p2 resolved");
+        vard2=makeTestPromiseWithAssert(assert,'d2');
+        m.exec(function(){returnd2;}).then(function(){
+            assert.step("p2resolved");
         });
 
         assert.verifySteps([]);
         d2.resolve('d2');
-        await testUtils.nextMicrotaskTick();
-        assert.verifySteps(['ok d2','p2 resolved']);
+        awaittestUtils.nextMicrotaskTick();
+        assert.verifySteps(['okd2','p2resolved']);
     });
 
-    QUnit.test('MutexedDropPrevious: p2 arrives before p1 resolution', async function (assert) {
+    QUnit.test('MutexedDropPrevious:p2arrivesbeforep1resolution',asyncfunction(assert){
         assert.expect(8);
 
-        var m = new concurrency.MutexedDropPrevious();
-        var d1 = makeTestPromiseWithAssert(assert, 'd1');
+        varm=newconcurrency.MutexedDropPrevious();
+        vard1=makeTestPromiseWithAssert(assert,'d1');
 
-        m.exec(function () { return d1; }).catch(function () {
-            assert.step("p1 rejected");
+        m.exec(function(){returnd1;}).catch(function(){
+            assert.step("p1rejected");
         });
         assert.verifySteps([]);
 
-        var d2 = makeTestPromiseWithAssert(assert, 'd2');
-        m.exec(function () { return d2; }).then(function () {
-            assert.step("p2 resolved");
+        vard2=makeTestPromiseWithAssert(assert,'d2');
+        m.exec(function(){returnd2;}).then(function(){
+            assert.step("p2resolved");
         });
 
         assert.verifySteps([]);
         d1.resolve('d1');
-        await testUtils.nextMicrotaskTick();
-        assert.verifySteps(['p1 rejected', 'ok d1']);
+        awaittestUtils.nextMicrotaskTick();
+        assert.verifySteps(['p1rejected','okd1']);
 
         d2.resolve('d2');
-        await testUtils.nextMicrotaskTick();
-        assert.verifySteps(['ok d2', 'p2 resolved']);
+        awaittestUtils.nextMicrotaskTick();
+        assert.verifySteps(['okd2','p2resolved']);
     });
 
-    QUnit.test('MutexedDropPrevious: 3 arrives before 2 initialization', async function (assert) {
+    QUnit.test('MutexedDropPrevious:3arrivesbefore2initialization',asyncfunction(assert){
         assert.expect(10);
-        var m = new concurrency.MutexedDropPrevious();
+        varm=newconcurrency.MutexedDropPrevious();
 
-        var d1 = makeTestPromiseWithAssert(assert, 'd1');
-        var d3 = makeTestPromiseWithAssert(assert, 'd3');
+        vard1=makeTestPromiseWithAssert(assert,'d1');
+        vard3=makeTestPromiseWithAssert(assert,'d3');
 
-        m.exec(function () { return d1; }).catch(function () {
-            assert.step('p1 rejected');
+        m.exec(function(){returnd1;}).catch(function(){
+            assert.step('p1rejected');
         });
 
-        m.exec(function () {
-            assert.ok(false, "should not execute this function");
-        }).catch(function () {
-            assert.step('p2 rejected');
+        m.exec(function(){
+            assert.ok(false,"shouldnotexecutethisfunction");
+        }).catch(function(){
+            assert.step('p2rejected');
         });
 
-        m.exec(function () { return d3; }).then(function (result) {
-            assert.strictEqual(result, 'd3');
-            assert.step('p3 resolved');
+        m.exec(function(){returnd3;}).then(function(result){
+            assert.strictEqual(result,'d3');
+            assert.step('p3resolved');
         });
 
         assert.verifySteps([]);
 
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        assert.verifySteps(['p1 rejected', 'p2 rejected']);
+        assert.verifySteps(['p1rejected','p2rejected']);
 
         d1.resolve('d1');
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        assert.verifySteps(['ok d1']);
+        assert.verifySteps(['okd1']);
 
         d3.resolve('d3');
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
 
-        assert.verifySteps(['ok d3','p3 resolved']);
+        assert.verifySteps(['okd3','p3resolved']);
     });
 
-    QUnit.test('MutexedDropPrevious: 3 arrives after 2 initialization', async function (assert) {
+    QUnit.test('MutexedDropPrevious:3arrivesafter2initialization',asyncfunction(assert){
         assert.expect(15);
-        var m = new concurrency.MutexedDropPrevious();
+        varm=newconcurrency.MutexedDropPrevious();
 
-        var d1 = makeTestPromiseWithAssert(assert, 'd1');
-        var d2 = makeTestPromiseWithAssert(assert, 'd2');
-        var d3 = makeTestPromiseWithAssert(assert, 'd3');
+        vard1=makeTestPromiseWithAssert(assert,'d1');
+        vard2=makeTestPromiseWithAssert(assert,'d2');
+        vard3=makeTestPromiseWithAssert(assert,'d3');
 
-        m.exec(function () {
-            assert.step('execute d1');
-            return d1;
-        }).catch(function () {
-            assert.step('p1 rejected');
+        m.exec(function(){
+            assert.step('executed1');
+            returnd1;
+        }).catch(function(){
+            assert.step('p1rejected');
         });
 
-        m.exec(function () {
-            assert.step('execute d2');
-            return d2;
-        }).catch(function () {
-            assert.step('p2 rejected');
+        m.exec(function(){
+            assert.step('executed2');
+            returnd2;
+        }).catch(function(){
+            assert.step('p2rejected');
         });
 
-        assert.verifySteps(['execute d1']);
+        assert.verifySteps(['executed1']);
 
-        await testUtils.nextMicrotaskTick();
-        assert.verifySteps(['p1 rejected']);
+        awaittestUtils.nextMicrotaskTick();
+        assert.verifySteps(['p1rejected']);
 
         d1.resolve('d1');
-        await testUtils.nextMicrotaskTick();
+        awaittestUtils.nextMicrotaskTick();
 
-        assert.verifySteps(['ok d1', 'execute d2']);
+        assert.verifySteps(['okd1','executed2']);
 
-        m.exec(function () {
-            assert.step('execute d3');
-            return d3;
-        }).then(function () {
-            assert.step('p3 resolved');
+        m.exec(function(){
+            assert.step('executed3');
+            returnd3;
+        }).then(function(){
+            assert.step('p3resolved');
         });
-        await testUtils.nextMicrotaskTick();
-        assert.verifySteps(['p2 rejected']);
+        awaittestUtils.nextMicrotaskTick();
+        assert.verifySteps(['p2rejected']);
 
         d2.resolve();
-        await testUtils.nextMicrotaskTick();
-        assert.verifySteps(['ok d2', 'execute d3']);
+        awaittestUtils.nextMicrotaskTick();
+        assert.verifySteps(['okd2','executed3']);
 
         d3.resolve();
-        await testUtils.nextTick();
-        assert.verifySteps(['ok d3', 'p3 resolved']);
+        awaittestUtils.nextTick();
+        assert.verifySteps(['okd3','p3resolved']);
 
      });
 
-    QUnit.test('MutexedDropPrevious: 2 in then of 1 with 3', async function (assert) {
+    QUnit.test('MutexedDropPrevious:2inthenof1with3',asyncfunction(assert){
         assert.expect(9);
 
-        var m = new concurrency.MutexedDropPrevious();
+        varm=newconcurrency.MutexedDropPrevious();
 
-        var d1 = makeTestPromiseWithAssert(assert, 'd1');
-        var d2 = makeTestPromiseWithAssert(assert, 'd2');
-        var d3 = makeTestPromiseWithAssert(assert, 'd3');
-        var p3;
+        vard1=makeTestPromiseWithAssert(assert,'d1');
+        vard2=makeTestPromiseWithAssert(assert,'d2');
+        vard3=makeTestPromiseWithAssert(assert,'d3');
+        varp3;
 
-        m.exec(function () { return d1; })
-            .catch(function () {
-                assert.step('p1 rejected');
-                p3 = m.exec(function () {
-                    return d3;
-                }).then(function () {
-                    assert.step('p3 resolved');
+        m.exec(function(){returnd1;})
+            .catch(function(){
+                assert.step('p1rejected');
+                p3=m.exec(function(){
+                    returnd3;
+                }).then(function(){
+                    assert.step('p3resolved');
                 });
-                return p3;
+                returnp3;
             });
 
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
         assert.verifySteps([]);
 
-        m.exec(function () {
-            assert.ok(false, 'should not execute this function');
-            return d2;
-        }).catch(function () {
-            assert.step('p2 rejected');
+        m.exec(function(){
+            assert.ok(false,'shouldnotexecutethisfunction');
+            returnd2;
+        }).catch(function(){
+            assert.step('p2rejected');
         });
 
-        await testUtils.nextTick();
-        assert.verifySteps(['p1 rejected', 'p2 rejected']);
+        awaittestUtils.nextTick();
+        assert.verifySteps(['p1rejected','p2rejected']);
 
         d1.resolve('d1');
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
-        assert.verifySteps(['ok d1']);
+        assert.verifySteps(['okd1']);
 
         d3.resolve('d3');
-        await testUtils.nextTick();
+        awaittestUtils.nextTick();
 
-        assert.verifySteps(['ok d3', 'p3 resolved']);
+        assert.verifySteps(['okd3','p3resolved']);
     });
 
 });

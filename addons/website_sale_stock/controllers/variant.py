@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import http
-from flectra.addons.website_sale.controllers.variant import WebsiteSaleVariantController
+fromflectraimporthttp
+fromflectra.addons.website_sale.controllers.variantimportWebsiteSaleVariantController
 
 
-class WebsiteSaleStockVariantController(WebsiteSaleVariantController):
+classWebsiteSaleStockVariantController(WebsiteSaleVariantController):
     @http.route()
-    def get_combination_info_website(self, product_template_id, product_id, combination, add_qty, **kw):
-        kw['context'] = kw.get('context', {})
+    defget_combination_info_website(self,product_template_id,product_id,combination,add_qty,**kw):
+        kw['context']=kw.get('context',{})
         kw['context'].update(website_sale_stock_get_quantity=True)
-        return super(WebsiteSaleStockVariantController, self).get_combination_info_website(product_template_id, product_id, combination, add_qty, **kw)
+        returnsuper(WebsiteSaleStockVariantController,self).get_combination_info_website(product_template_id,product_id,combination,add_qty,**kw)

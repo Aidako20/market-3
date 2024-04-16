@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class Channel(models.Model):
-    _inherit = 'slide.channel'
+classChannel(models.Model):
+    _inherit='slide.channel'
 
-    nbr_certification = fields.Integer("Number of Certifications", compute='_compute_slides_statistics', store=True)
+    nbr_certification=fields.Integer("NumberofCertifications",compute='_compute_slides_statistics',store=True)

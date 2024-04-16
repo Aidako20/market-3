@@ -1,9 +1,9 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xmlversion='1.0'encoding='utf-8'?>
 <flectra>
     <data>
-        <record id="resume_type_certification" model="hr.resume.line.type">
-            <field name="name">Internal Certification</field>
-            <field name="sequence">25</field>
+        <recordid="resume_type_certification"model="hr.resume.line.type">
+            <fieldname="name">InternalCertification</field>
+            <fieldname="sequence">25</field>
         </record>
     </data>
 

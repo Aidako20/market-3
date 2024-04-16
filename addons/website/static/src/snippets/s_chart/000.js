@@ -1,142 +1,142 @@
-flectra.define('website.s_chart', function (require) {
-'use strict';
+flectra.define('website.s_chart',function(require){
+'usestrict';
 
-const publicWidget = require('web.public.widget');
-const weUtils = require('web_editor.utils');
+constpublicWidget=require('web.public.widget');
+constweUtils=require('web_editor.utils');
 
-const ChartWidget = publicWidget.Widget.extend({
-    selector: '.s_chart',
-    disabledInEditableMode: false,
-    jsLibs: [
+constChartWidget=publicWidget.Widget.extend({
+    selector:'.s_chart',
+    disabledInEditableMode:false,
+    jsLibs:[
         '/web/static/lib/Chart/Chart.js',
     ],
 
     /**
-     * @override
-     * @param {Object} parent
-     * @param {Object} options The default value of the chartbar.
+     *@override
+     *@param{Object}parent
+     *@param{Object}optionsThedefaultvalueofthechartbar.
      */
-    init: function (parent, options) {
-        this._super.apply(this, arguments);
-        this.style = window.getComputedStyle(document.documentElement);
+    init:function(parent,options){
+        this._super.apply(this,arguments);
+        this.style=window.getComputedStyle(document.documentElement);
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        // Convert Theme colors to css color
-        const data = JSON.parse(this.el.dataset.data);
-        data.datasets.forEach(el => {
-            if (Array.isArray(el.backgroundColor)) {
-                el.backgroundColor = el.backgroundColor.map(el => this._convertToCssColor(el));
-                el.borderColor = el.borderColor.map(el => this._convertToCssColor(el));
-            } else {
-                el.backgroundColor = this._convertToCssColor(el.backgroundColor);
-                el.borderColor = this._convertToCssColor(el.borderColor);
+    start:function(){
+        //ConvertThemecolorstocsscolor
+        constdata=JSON.parse(this.el.dataset.data);
+        data.datasets.forEach(el=>{
+            if(Array.isArray(el.backgroundColor)){
+                el.backgroundColor=el.backgroundColor.map(el=>this._convertToCssColor(el));
+                el.borderColor=el.borderColor.map(el=>this._convertToCssColor(el));
+            }else{
+                el.backgroundColor=this._convertToCssColor(el.backgroundColor);
+                el.borderColor=this._convertToCssColor(el.borderColor);
             }
-            el.borderWidth = this.el.dataset.borderWidth;
+            el.borderWidth=this.el.dataset.borderWidth;
         });
 
-        // Make chart data
-        const chartData = {
-            type: this.el.dataset.type,
-            data: data,
-            options: {
-                legend: {
-                    display: this.el.dataset.legendPosition !== 'none',
-                    position: this.el.dataset.legendPosition,
+        //Makechartdata
+        constchartData={
+            type:this.el.dataset.type,
+            data:data,
+            options:{
+                legend:{
+                    display:this.el.dataset.legendPosition!=='none',
+                    position:this.el.dataset.legendPosition,
                 },
-                tooltips: {
-                    enabled: this.el.dataset.tooltipDisplay === 'true',
+                tooltips:{
+                    enabled:this.el.dataset.tooltipDisplay==='true',
                 },
-                title: {
-                    display: !!this.el.dataset.title,
-                    text: this.el.dataset.title,
+                title:{
+                    display:!!this.el.dataset.title,
+                    text:this.el.dataset.title,
                 },
             },
         };
 
-        // Add type specific options
-        if (this.el.dataset.type === 'radar') {
-            chartData.options.scale = {
-                ticks: {
-                    beginAtZero: true,
+        //Addtypespecificoptions
+        if(this.el.dataset.type==='radar'){
+            chartData.options.scale={
+                ticks:{
+                    beginAtZero:true,
                 }
             };
-        } else if (['pie', 'doughnut'].includes(this.el.dataset.type)) {
-            chartData.options.tooltips.callbacks = {
-                label: (tooltipItem, data) => {
-                    const label = data.datasets[tooltipItem.datasetIndex].label;
-                    const secondLabel = data.labels[tooltipItem.index];
-                    let final = label;
-                    if (label) {
-                        if (secondLabel) {
-                            final = label + ' - ' + secondLabel;
+        }elseif(['pie','doughnut'].includes(this.el.dataset.type)){
+            chartData.options.tooltips.callbacks={
+                label:(tooltipItem,data)=>{
+                    constlabel=data.datasets[tooltipItem.datasetIndex].label;
+                    constsecondLabel=data.labels[tooltipItem.index];
+                    letfinal=label;
+                    if(label){
+                        if(secondLabel){
+                            final=label+'-'+secondLabel;
                         }
-                    } else if (secondLabel) {
-                        final = secondLabel;
+                    }elseif(secondLabel){
+                        final=secondLabel;
                     }
-                    return final + ':' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                    returnfinal+':'+data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                 },
             };
-        } else {
-            chartData.options.scales = {
-                xAxes: [{
-                    stacked: this.el.dataset.stacked === 'true',
-                    ticks: {
-                        beginAtZero: true
+        }else{
+            chartData.options.scales={
+                xAxes:[{
+                    stacked:this.el.dataset.stacked==='true',
+                    ticks:{
+                        beginAtZero:true
                     },
                 }],
-                yAxes: [{
-                    stacked: this.el.dataset.stacked === 'true',
-                    ticks: {
-                        beginAtZero: true
+                yAxes:[{
+                    stacked:this.el.dataset.stacked==='true',
+                    ticks:{
+                        beginAtZero:true
                     },
                 }],
             };
         }
 
-        // Disable animation in edit mode
-        if (this.editableMode) {
-            chartData.options.animation = {
-                duration: 0,
+        //Disableanimationineditmode
+        if(this.editableMode){
+            chartData.options.animation={
+                duration:0,
             };
         }
 
-        const canvas = this.el.querySelector('canvas');
-        this.chart = new window.Chart(canvas, chartData);
-        return this._super.apply(this, arguments);
+        constcanvas=this.el.querySelector('canvas');
+        this.chart=newwindow.Chart(canvas,chartData);
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
-     * Discard all library changes to reset the state of the Html.
+     *@override
+     *DiscardalllibrarychangestoresetthestateoftheHtml.
      */
-    destroy: function () {
-        if (this.chart) { // The widget can be destroyed before start has completed
+    destroy:function(){
+        if(this.chart){//Thewidgetcanbedestroyedbeforestarthascompleted
             this.chart.destroy();
-            this.el.querySelectorAll('.chartjs-size-monitor').forEach(el => el.remove());
+            this.el.querySelectorAll('.chartjs-size-monitor').forEach(el=>el.remove());
         }
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {string} color A css color or theme color string
-     * @returns {string} Css color
+     *@private
+     *@param{string}colorAcsscolororthemecolorstring
+     *@returns{string}Csscolor
      */
-    _convertToCssColor: function (color) {
-        if (!color) {
-            return 'transparent';
+    _convertToCssColor:function(color){
+        if(!color){
+            return'transparent';
         }
-        return weUtils.getCSSVariableValue(color, this.style) || color;
+        returnweUtils.getCSSVariableValue(color,this.style)||color;
     },
 });
 
-publicWidget.registry.chart = ChartWidget;
+publicWidget.registry.chart=ChartWidget;
 
-return ChartWidget;
+returnChartWidget;
 });

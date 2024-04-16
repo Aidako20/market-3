@@ -1,17 +1,17 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.tests.common import SavepointCase
+fromflectra.tests.commonimportSavepointCase
 
 
-class TestContractCommon(SavepointCase):
+classTestContractCommon(SavepointCase):
 
     @classmethod
-    def setUpClass(cls):
-        super(TestContractCommon, cls).setUpClass()
+    defsetUpClass(cls):
+        super(TestContractCommon,cls).setUpClass()
 
-        cls.employee = cls.env['hr.employee'].create({
-            'name': 'Richard',
-            'gender': 'male',
-            'country_id': cls.env.ref('base.be').id,
+        cls.employee=cls.env['hr.employee'].create({
+            'name':'Richard',
+            'gender':'male',
+            'country_id':cls.env.ref('base.be').id,
         })

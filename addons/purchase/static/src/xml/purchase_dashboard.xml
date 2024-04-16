@@ -1,65 +1,65 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <templates>
-    <!-- This template is for a table at the top of purchase views that shows some KPIs. -->
-    <t t-name="purchase.PurchaseDashboard">
-        <div class="o_purchase_dashboard container">
-        <div class="row">
-            <div class="col-sm-5">
-            <table class="table table-sm">
-                <!-- thead needed to avoid list view rendering error for some reason -->
+    <!--ThistemplateisforatableatthetopofpurchaseviewsthatshowssomeKPIs.-->
+    <tt-name="purchase.PurchaseDashboard">
+        <divclass="o_purchase_dashboardcontainer">
+        <divclass="row">
+            <divclass="col-sm-5">
+            <tableclass="tabletable-sm">
+                <!--theadneededtoavoidlistviewrenderingerrorforsomereason-->
                 <thead>
                     <tr>
-                    <!-- can't use th tag due to list rendering error when no values in list... -->
-                        <td class="o_text">
-                            <div>All RFQs</div>
+                    <!--can'tusethtagduetolistrenderingerrorwhennovaluesinlist...-->
+                        <tdclass="o_text">
+                            <div>AllRFQs</div>
                         </td>
-                        <td class="o_main o_dashboard_action" title="All Draft RFQs" name="purchase.purchase_action_dashboard" context='{"search_default_draft_rfqs": true}'>
-                            <a href="#"><t t-esc="values['all_to_send']"/><br/>To Send</a>
+                        <tdclass="o_maino_dashboard_action"title="AllDraftRFQs"name="purchase.purchase_action_dashboard"context='{"search_default_draft_rfqs":true}'>
+                            <ahref="#"><tt-esc="values['all_to_send']"/><br/>ToSend</a>
                         </td>
-                        <td class="o_main o_dashboard_action" title="All Waiting RFQs" name="purchase.purchase_action_dashboard" context='{"search_default_waiting_rfqs": true}'>
-                            <a href="#"><t t-esc="values['all_waiting']"/><br/>Waiting</a>
+                        <tdclass="o_maino_dashboard_action"title="AllWaitingRFQs"name="purchase.purchase_action_dashboard"context='{"search_default_waiting_rfqs":true}'>
+                            <ahref="#"><tt-esc="values['all_waiting']"/><br/>Waiting</a>
                         </td>
-                        <td class="o_main o_dashboard_action" title="All Late RFQs" name="purchase.purchase_action_dashboard" context='{"search_default_late_rfqs": true}'>
-                            <a href="#"><t t-esc="values['all_late']"/><br/>Late</a>
+                        <tdclass="o_maino_dashboard_action"title="AllLateRFQs"name="purchase.purchase_action_dashboard"context='{"search_default_late_rfqs":true}'>
+                            <ahref="#"><tt-esc="values['all_late']"/><br/>Late</a>
                         </td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="o_text">
-                            <div>My RFQs</div>
+                        <tdclass="o_text">
+                            <div>MyRFQs</div>
                         </td>
-                        <td class="o_main o_dashboard_action" title="My Draft RFQs" name="purchase.purchase_action_dashboard" context='{"search_default_draft_rfqs": true, "search_default_my_purchases": true}'>
-                            <a href="#"><t t-esc="values['my_to_send']"/></a>
+                        <tdclass="o_maino_dashboard_action"title="MyDraftRFQs"name="purchase.purchase_action_dashboard"context='{"search_default_draft_rfqs":true,"search_default_my_purchases":true}'>
+                            <ahref="#"><tt-esc="values['my_to_send']"/></a>
                         </td>
-                        <td class="o_main o_dashboard_action" title="My Waiting RFQs" name="purchase.purchase_action_dashboard" context='{"search_default_waiting_rfqs": true, "search_default_my_purchases": true}'>
-                            <a href="#"><t t-esc="values['my_waiting']"/></a>
+                        <tdclass="o_maino_dashboard_action"title="MyWaitingRFQs"name="purchase.purchase_action_dashboard"context='{"search_default_waiting_rfqs":true,"search_default_my_purchases":true}'>
+                            <ahref="#"><tt-esc="values['my_waiting']"/></a>
                         </td>
-                        <td class="o_main o_dashboard_action" title="My Late RFQs" name="purchase.purchase_action_dashboard" context='{"search_default_late_rfqs": true, "search_default_my_purchases": true}'>
-                            <a href="#"><t t-esc="values['my_late']"/></a>
+                        <tdclass="o_maino_dashboard_action"title="MyLateRFQs"name="purchase.purchase_action_dashboard"context='{"search_default_late_rfqs":true,"search_default_my_purchases":true}'>
+                            <ahref="#"><tt-esc="values['my_late']"/></a>
                         </td>
                     </tr>
                 </tbody>
             </table></div>
 
-            <div class="col-sm-7">
-            <table class="table table-sm">
-                <!-- thead needed to avoid list view rendering error for some reason -->
+            <divclass="col-sm-7">
+            <tableclass="tabletable-sm">
+                <!--theadneededtoavoidlistviewrenderingerrorforsomereason-->
                 <thead>
                     <tr>
-                        <!-- can't use th tag due to list rendering error when no values in list... -->
-                        <td class="o_text">Avg Order Value (<t t-esc="values['company_currency_symbol']"/>)</td>
-                        <td><span><t t-esc="values['all_avg_order_value']"/></span></td>
-                        <td class="o_text">Purchased Last 7 Days (<t t-esc="values['company_currency_symbol']"/>)</td>
-                        <td><span><t t-esc="values['all_total_last_7_days']"/></span></td>
+                        <!--can'tusethtagduetolistrenderingerrorwhennovaluesinlist...-->
+                        <tdclass="o_text">AvgOrderValue(<tt-esc="values['company_currency_symbol']"/>)</td>
+                        <td><span><tt-esc="values['all_avg_order_value']"/></span></td>
+                        <tdclass="o_text">PurchasedLast7Days(<tt-esc="values['company_currency_symbol']"/>)</td>
+                        <td><span><tt-esc="values['all_total_last_7_days']"/></span></td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="o_text">Lead Time to Purchase</td>
-                        <td><span><t t-esc="values['all_avg_days_to_purchase']"/> &#160;Days</span></td>
-                        <td class="o_text">RFQs Sent Last 7 Days</td>
-                        <td><span><t t-esc="values['all_sent_rfqs']"/></span></td>
+                        <tdclass="o_text">LeadTimetoPurchase</td>
+                        <td><span><tt-esc="values['all_avg_days_to_purchase']"/>&#160;Days</span></td>
+                        <tdclass="o_text">RFQsSentLast7Days</td>
+                        <td><span><tt-esc="values['all_sent_rfqs']"/></span></td>
                     </tr>
                 </tbody>
             </table></div>

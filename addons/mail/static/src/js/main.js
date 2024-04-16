@@ -1,126 +1,126 @@
-flectra.define('mail/static/src/js/main.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/js/main.js',function(require){
+'usestrict';
 
-const ModelManager = require('mail/static/src/model/model_manager.js');
+constModelManager=require('mail/static/src/model/model_manager.js');
 
-const env = require('web.commonEnv');
+constenv=require('web.commonEnv');
 
-const { Store } = owl;
-const { EventBus } = owl.core;
+const{Store}=owl;
+const{EventBus}=owl.core;
 
-async function createMessaging() {
-    await new Promise(resolve => {
+asyncfunctioncreateMessaging(){
+    awaitnewPromise(resolve=>{
         /**
-         * Called when all JS resources are loaded. This is useful in order
-         * to do some processing after other JS files have been parsed, for
-         * example new models or patched models that are coming from
-         * other modules, because some of those patches might need to be
-         * applied before messaging initialization.
+         *CalledwhenallJSresourcesareloaded.Thisisusefulinorder
+         *todosomeprocessingafterotherJSfileshavebeenparsed,for
+         *examplenewmodelsorpatchedmodelsthatarecomingfrom
+         *othermodules,becausesomeofthosepatchesmightneedtobe
+         *appliedbeforemessaginginitialization.
          */
-        window.addEventListener('load', resolve);
+        window.addEventListener('load',resolve);
     });
     /**
-     * All JS resources are loaded, but not necessarily processed.
-     * We assume no messaging-related modules return any Promise,
-     * therefore they should be processed *at most* asynchronously at
-     * "Promise time".
+     *AllJSresourcesareloaded,butnotnecessarilyprocessed.
+     *Weassumenomessaging-relatedmodulesreturnanyPromise,
+     *thereforetheyshouldbeprocessed*atmost*asynchronouslyat
+     *"Promisetime".
      */
-    await new Promise(resolve => setTimeout(resolve));
+    awaitnewPromise(resolve=>setTimeout(resolve));
     /**
-     * Some models require session data, like locale text direction (depends on
-     * fully loaded translation).
+     *Somemodelsrequiresessiondata,likelocaletextdirection(dependson
+     *fullyloadedtranslation).
      */
-    await env.session.is_bound;
+    awaitenv.session.is_bound;
 
     env.modelManager.start();
     /**
-     * Create the messaging singleton record.
+     *Createthemessagingsingletonrecord.
      */
-    env.messaging = env.models['mail.messaging'].create();
+    env.messaging=env.models['mail.messaging'].create();
 }
 
 /**
- * Messaging store
+ *Messagingstore
  */
-const store = new Store({
+conststore=newStore({
     env,
-    state: {
-        messagingRevNumber: 0,
+    state:{
+        messagingRevNumber:0,
     },
 });
 
 /**
- * Registry of models.
+ *Registryofmodels.
  */
-env.models = {};
+env.models={};
 /**
- * Environment keys used in messaging.
+ *Environmentkeysusedinmessaging.
  */
-Object.assign(env, {
-    autofetchPartnerImStatus: true,
-    destroyMessaging() {
-        if (env.modelManager) {
+Object.assign(env,{
+    autofetchPartnerImStatus:true,
+    destroyMessaging(){
+        if(env.modelManager){
             env.modelManager.deleteAll();
-            env.messaging = undefined;
+            env.messaging=undefined;
         }
     },
-    disableAnimation: false,
-    isMessagingInitialized() {
-        if (!this.messaging) {
-            return false;
+    disableAnimation:false,
+    isMessagingInitialized(){
+        if(!this.messaging){
+            returnfalse;
         }
-        return this.messaging.isInitialized;
+        returnthis.messaging.isInitialized;
     },
     /**
-     * States whether the environment is in QUnit test or not.
+     *StateswhethertheenvironmentisinQUnittestornot.
      *
-     * Useful to prevent some behaviour in QUnit tests, like applying
-     * style of attachment that uses url.
+     *UsefultopreventsomebehaviourinQUnittests,likeapplying
+     *styleofattachmentthatusesurl.
      */
-    isQUnitTest: false,
-    loadingBaseDelayDuration: 400,
-    messaging: undefined,
-    messagingBus: new EventBus(),
+    isQUnitTest:false,
+    loadingBaseDelayDuration:400,
+    messaging:undefined,
+    messagingBus:newEventBus(),
     /**
-     * Promise which becomes resolved when messaging is created.
+     *Promisewhichbecomesresolvedwhenmessagingiscreated.
      *
-     * Useful for discuss widget to know when messaging is created, because this
-     * is an essential condition to make it work.
+     *Usefulfordiscusswidgettoknowwhenmessagingiscreated,becausethis
+     *isanessentialconditiontomakeitwork.
      */
-    messagingCreatedPromise: createMessaging(),
-    modelManager: new ModelManager(env),
+    messagingCreatedPromise:createMessaging(),
+    modelManager:newModelManager(env),
     store,
 });
 
 /**
- * Components cannot use web.bus, because they cannot use
- * EventDispatcherMixin, and webclient cannot easily access env.
- * Communication between webclient and components by core.bus
- * (usable by webclient) and messagingBus (usable by components), which
- * the messaging service acts as mediator since it can easily use both
- * kinds of buses.
+ *Componentscannotuseweb.bus,becausetheycannotuse
+ *EventDispatcherMixin,andwebclientcannoteasilyaccessenv.
+ *Communicationbetweenwebclientandcomponentsbycore.bus
+ *(usablebywebclient)andmessagingBus(usablebycomponents),which
+ *themessagingserviceactsasmediatorsinceitcaneasilyuseboth
+ *kindsofbuses.
  */
 env.bus.on(
     'hide_home_menu',
     null,
-    () => env.messagingBus.trigger('hide_home_menu')
+    ()=>env.messagingBus.trigger('hide_home_menu')
 );
 env.bus.on(
     'show_home_menu',
     null,
-    () => env.messagingBus.trigger('show_home_menu')
+    ()=>env.messagingBus.trigger('show_home_menu')
 );
 env.bus.on(
     'will_hide_home_menu',
     null,
-    () => env.messagingBus.trigger('will_hide_home_menu')
+    ()=>env.messagingBus.trigger('will_hide_home_menu')
 );
 env.bus.on(
     'will_show_home_menu',
     null,
-    () => env.messagingBus.trigger('will_show_home_menu')
+    ()=>env.messagingBus.trigger('will_show_home_menu')
 );
 
-env.messagingCreatedPromise.then(() => env.messaging.start());
+env.messagingCreatedPromise.then(()=>env.messaging.start());
 
 });

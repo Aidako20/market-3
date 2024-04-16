@@ -1,55 +1,55 @@
-flectra.define('website_sale.utils', function (require) {
-'use strict';
+flectra.define('website_sale.utils',function(require){
+'usestrict';
 
-function animateClone($cart, $elem, offsetTop, offsetLeft) {
-    if (!$cart.length) {
-        return Promise.resolve();
+functionanimateClone($cart,$elem,offsetTop,offsetLeft){
+    if(!$cart.length){
+        returnPromise.resolve();
     }
-    $cart.find('.o_animate_blink').addClass('o_red_highlight o_shadow_animation').delay(500).queue(function () {
+    $cart.find('.o_animate_blink').addClass('o_red_highlighto_shadow_animation').delay(500).queue(function(){
         $(this).removeClass("o_shadow_animation").dequeue();
-    }).delay(2000).queue(function () {
+    }).delay(2000).queue(function(){
         $(this).removeClass("o_red_highlight").dequeue();
     });
-    return new Promise(function (resolve, reject) {
-        var $imgtodrag = $elem.find('img').eq(0);
-        if ($imgtodrag.length) {
-            var $imgclone = $imgtodrag.clone()
+    returnnewPromise(function(resolve,reject){
+        var$imgtodrag=$elem.find('img').eq(0);
+        if($imgtodrag.length){
+            var$imgclone=$imgtodrag.clone()
                 .offset({
-                    top: $imgtodrag.offset().top,
-                    left: $imgtodrag.offset().left
+                    top:$imgtodrag.offset().top,
+                    left:$imgtodrag.offset().left
                 })
                 .addClass('o_website_sale_animate')
                 .appendTo(document.body)
                 .animate({
-                    top: $cart.offset().top + offsetTop,
-                    left: $cart.offset().left + offsetLeft,
-                    width: 75,
-                    height: 75,
-                }, 1000, 'easeInOutExpo');
+                    top:$cart.offset().top+offsetTop,
+                    left:$cart.offset().left+offsetLeft,
+                    width:75,
+                    height:75,
+                },1000,'easeInOutExpo');
 
             $imgclone.animate({
-                width: 0,
-                height: 0,
-            }, function () {
+                width:0,
+                height:0,
+            },function(){
                 resolve();
                 $(this).detach();
             });
-        } else {
+        }else{
             resolve();
         }
     });
 }
 
 /**
- * Updates both navbar cart
- * @param {Object} data
+ *Updatesbothnavbarcart
+ *@param{Object}data
  */
-function updateCartNavBar(data) {
+functionupdateCartNavBar(data){
     $(".my_cart_quantity")
         .parents('li.o_wsale_my_cart').removeClass('d-none').end()
-        .toggleClass('fa fa-warning', !data.cart_quantity)
-        .attr('title', data.warning)
-        .text(data.cart_quantity || '')
+        .toggleClass('fafa-warning',!data.cart_quantity)
+        .attr('title',data.warning)
+        .text(data.cart_quantity||'')
         .hide()
         .fadeIn(600);
 
@@ -58,30 +58,30 @@ function updateCartNavBar(data) {
 }
 
 /**
- * Displays `message` in an alert box at the top of the page if it's a
- * non-empty string.
+ *Displays`message`inanalertboxatthetopofthepageifit'sa
+ *non-emptystring.
  *
- * @param {string | null} message
+ *@param{string|null}message
  */
-function showWarning(message) {
-    if (!message) {
+functionshowWarning(message){
+    if(!message){
         return;
     }
-    var $page = $('.oe_website_sale');
-    var cart_alert = $page.children('#data_warning');
-    if (!cart_alert.length) {
-        cart_alert = $(
-            '<div class="alert alert-danger alert-dismissible" role="alert" id="data_warning">' +
-                '<button type="button" class="close" data-dismiss="alert">&times;</button> ' +
-                '<span></span>' +
+    var$page=$('.oe_website_sale');
+    varcart_alert=$page.children('#data_warning');
+    if(!cart_alert.length){
+        cart_alert=$(
+            '<divclass="alertalert-dangeralert-dismissible"role="alert"id="data_warning">'+
+                '<buttontype="button"class="close"data-dismiss="alert">&times;</button>'+
+                '<span></span>'+
             '</div>').prependTo($page);
     }
     cart_alert.children('span:last-child').text(message);
 }
 
-return {
-    animateClone: animateClone,
-    updateCartNavBar: updateCartNavBar,
-    showWarning: showWarning,
+return{
+    animateClone:animateClone,
+    updateCartNavBar:updateCartNavBar,
+    showWarning:showWarning,
 };
 });

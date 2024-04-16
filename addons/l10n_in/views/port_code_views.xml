@@ -1,45 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="l10n_in_port_code_form_view" model="ir.ui.view">
-        <field name="name">l10n_in.port.code.form</field>
-        <field name="model">l10n_in.port.code</field>
-        <field name="arch" type="xml">
-            <form string="India Port Code">
+    <recordid="l10n_in_port_code_form_view"model="ir.ui.view">
+        <fieldname="name">l10n_in.port.code.form</field>
+        <fieldname="model">l10n_in.port.code</field>
+        <fieldname="arch"type="xml">
+            <formstring="IndiaPortCode">
                  <group>
                     <group>
-                        <field name="name"/>
-                        <field name="code"/>
+                        <fieldname="name"/>
+                        <fieldname="code"/>
                     </group>
                     <group>
-                        <field name="state_id"/>
+                        <fieldname="state_id"/>
                     </group>
                 </group>
             </form>
         </field>
     </record>
 
-    <record id="l10n_in_port_code_tree_view" model="ir.ui.view">
-        <field name="name">l10n_in.port.code.tree</field>
-        <field name="model">l10n_in.port.code</field>
-        <field name="arch" type="xml">
-            <tree string="India Port Code">
-                <field name="name"/>
-                <field name="code"/>
-                <field name="state_id"/>
+    <recordid="l10n_in_port_code_tree_view"model="ir.ui.view">
+        <fieldname="name">l10n_in.port.code.tree</field>
+        <fieldname="model">l10n_in.port.code</field>
+        <fieldname="arch"type="xml">
+            <treestring="IndiaPortCode">
+                <fieldname="name"/>
+                <fieldname="code"/>
+                <fieldname="state_id"/>
             </tree>
         </field>
     </record>
 
-    <record id="l10n_in_port_code_search_view" model="ir.ui.view">
-        <field name="name">l10n_in.port.code.search</field>
-        <field name="model">l10n_in.port.code</field>
-        <field name="arch" type="xml">
-            <search string="India Port Code">
-                <field name="name" string="Port" filter_domain="['|',('name', 'ilike', self),('code', 'ilike', self)]"/>
-                <field name="state_id"/>
-                <group expand="0" string="Group By">
-                    <filter string="State" name="state" domain="[]" context="{'group_by': 'state_id'}"/>
+    <recordid="l10n_in_port_code_search_view"model="ir.ui.view">
+        <fieldname="name">l10n_in.port.code.search</field>
+        <fieldname="model">l10n_in.port.code</field>
+        <fieldname="arch"type="xml">
+            <searchstring="IndiaPortCode">
+                <fieldname="name"string="Port"filter_domain="['|',('name','ilike',self),('code','ilike',self)]"/>
+                <fieldname="state_id"/>
+                <groupexpand="0"string="GroupBy">
+                    <filterstring="State"name="state"domain="[]"context="{'group_by':'state_id'}"/>
                 </group>
             </search>
         </field>

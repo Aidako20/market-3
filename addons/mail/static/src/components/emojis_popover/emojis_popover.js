@@ -1,78 +1,78 @@
-flectra.define('mail/static/src/components/emojis_popover/emojis_popover.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/emojis_popover/emojis_popover.js',function(require){
+'usestrict';
 
-const emojis = require('mail.emojis');
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useUpdate = require('mail/static/src/component_hooks/use_update/use_update.js');
+constemojis=require('mail.emojis');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseUpdate=require('mail/static/src/component_hooks/use_update/use_update.js');
 
-const { Component } = owl;
+const{Component}=owl;
 
-class EmojisPopover extends Component {
+classEmojisPopoverextendsComponent{
 
     /**
-     * @param {...any} args
+     *@param{...any}args
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
-        this.emojis = emojis;
+        this.emojis=emojis;
         useShouldUpdateBasedOnProps();
-        useUpdate({ func: () => this._update() });
+        useUpdate({func:()=>this._update()});
     }
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _update() {
+    _update(){
         this.trigger('o-popover-compute');
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
-    close() {
+    close(){
         this.trigger('o-popover-close');
     }
 
     /**
-     * Returns whether the given node is self or a children of self.
+     *Returnswhetherthegivennodeisselforachildrenofself.
      *
-     * @param {Node} node
-     * @returns {boolean}
+     *@param{Node}node
+     *@returns{boolean}
      */
-    contains(node) {
-        if (!this.el) {
-            return false;
+    contains(node){
+        if(!this.el){
+            returnfalse;
         }
-        return this.el.contains(node);
+        returnthis.el.contains(node);
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickEmoji(ev) {
+    _onClickEmoji(ev){
         this.close();
-        this.trigger('o-emoji-selection', {
-            unicode: ev.currentTarget.dataset.unicode,
+        this.trigger('o-emoji-selection',{
+            unicode:ev.currentTarget.dataset.unicode,
         });
     }
 
 }
 
-Object.assign(EmojisPopover, {
-    props: {},
-    template: 'mail.EmojisPopover',
+Object.assign(EmojisPopover,{
+    props:{},
+    template:'mail.EmojisPopover',
 });
 
-return EmojisPopover;
+returnEmojisPopover;
 
 });

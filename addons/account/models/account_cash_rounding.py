@@ -1,54 +1,54 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import models, fields, api, _
-from flectra.tools import float_round
-from flectra.exceptions import ValidationError
+fromflectraimportmodels,fields,api,_
+fromflectra.toolsimportfloat_round
+fromflectra.exceptionsimportValidationError
 
 
-class AccountCashRounding(models.Model):
+classAccountCashRounding(models.Model):
     """
-    In some countries, we need to be able to make appear on an invoice a rounding line, appearing there only because the
-    smallest coinage has been removed from the circulation. For example, in Switzerland invoices have to be rounded to
-    0.05 CHF because coins of 0.01 CHF and 0.02 CHF aren't used anymore.
-    see https://en.wikipedia.org/wiki/Cash_rounding for more details.
+    Insomecountries,weneedtobeabletomakeappearonaninvoicearoundingline,appearingthereonlybecausethe
+    smallestcoinagehasbeenremovedfromthecirculation.Forexample,inSwitzerlandinvoiceshavetoberoundedto
+    0.05CHFbecausecoinsof0.01CHFand0.02CHFaren'tusedanymore.
+    seehttps://en.wikipedia.org/wiki/Cash_roundingformoredetails.
     """
-    _name = 'account.cash.rounding'
-    _description = 'Account Cash Rounding'
+    _name='account.cash.rounding'
+    _description='AccountCashRounding'
 
-    name = fields.Char(string='Name', translate=True, required=True)
-    rounding = fields.Float(string='Rounding Precision', required=True, default=0.01,
-        help='Represent the non-zero value smallest coinage (for example, 0.05).')
-    strategy = fields.Selection([('biggest_tax', 'Modify tax amount'), ('add_invoice_line', 'Add a rounding line')],
-        string='Rounding Strategy', default='add_invoice_line', required=True,
-        help='Specify which way will be used to round the invoice amount to the rounding precision')
-    profit_account_id = fields.Many2one('account.account', string='Profit Account', company_dependent=True, domain="[('deprecated', '=', False), ('company_id', '=', current_company_id)]")
-    loss_account_id = fields.Many2one('account.account', string='Loss Account', company_dependent=True, domain="[('deprecated', '=', False), ('company_id', '=', current_company_id)]")
-    rounding_method = fields.Selection(string='Rounding Method', required=True,
-        selection=[('UP', 'UP'), ('DOWN', 'DOWN'), ('HALF-UP', 'HALF-UP')],
-        default='HALF-UP', help='The tie-breaking rule used for float rounding operations')
-    company_id = fields.Many2one('res.company', related='profit_account_id.company_id')
+    name=fields.Char(string='Name',translate=True,required=True)
+    rounding=fields.Float(string='RoundingPrecision',required=True,default=0.01,
+        help='Representthenon-zerovaluesmallestcoinage(forexample,0.05).')
+    strategy=fields.Selection([('biggest_tax','Modifytaxamount'),('add_invoice_line','Addaroundingline')],
+        string='RoundingStrategy',default='add_invoice_line',required=True,
+        help='Specifywhichwaywillbeusedtoroundtheinvoiceamounttotheroundingprecision')
+    profit_account_id=fields.Many2one('account.account',string='ProfitAccount',company_dependent=True,domain="[('deprecated','=',False),('company_id','=',current_company_id)]")
+    loss_account_id=fields.Many2one('account.account',string='LossAccount',company_dependent=True,domain="[('deprecated','=',False),('company_id','=',current_company_id)]")
+    rounding_method=fields.Selection(string='RoundingMethod',required=True,
+        selection=[('UP','UP'),('DOWN','DOWN'),('HALF-UP','HALF-UP')],
+        default='HALF-UP',help='Thetie-breakingruleusedforfloatroundingoperations')
+    company_id=fields.Many2one('res.company',related='profit_account_id.company_id')
 
     @api.constrains('rounding')
-    def validate_rounding(self):
-        for record in self:
-            if record.rounding <= 0:
-                raise ValidationError(_("Please set a strictly positive rounding value."))
+    defvalidate_rounding(self):
+        forrecordinself:
+            ifrecord.rounding<=0:
+                raiseValidationError(_("Pleasesetastrictlypositiveroundingvalue."))
 
-    def round(self, amount):
-        """Compute the rounding on the amount passed as parameter.
+    defround(self,amount):
+        """Computetheroundingontheamountpassedasparameter.
 
-        :param amount: the amount to round
-        :return: the rounded amount depending the rounding value and the rounding method
+        :paramamount:theamounttoround
+        :return:theroundedamountdependingtheroundingvalueandtheroundingmethod
         """
-        return float_round(amount, precision_rounding=self.rounding, rounding_method=self.rounding_method)
+        returnfloat_round(amount,precision_rounding=self.rounding,rounding_method=self.rounding_method)
 
-    def compute_difference(self, currency, amount):
-        """Compute the difference between the base_amount and the amount after rounding.
-        For example, base_amount=23.91, after rounding=24.00, the result will be 0.09.
+    defcompute_difference(self,currency,amount):
+        """Computethedifferencebetweenthebase_amountandtheamountafterrounding.
+        Forexample,base_amount=23.91,afterrounding=24.00,theresultwillbe0.09.
 
-        :param currency: The currency.
-        :param amount: The amount
-        :return: round(difference)
+        :paramcurrency:Thecurrency.
+        :paramamount:Theamount
+        :return:round(difference)
         """
-        difference = self.round(amount) - amount
-        return currency.round(difference)
+        difference=self.round(amount)-amount
+        returncurrency.round(difference)

@@ -1,32 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <templates>
 
     <!--
-        @param {mail.systray.ActivityMenu} widget
-        @param {Object[]} widget.activities
+        @param{mail.systray.ActivityMenu}widget
+        @param{Object[]}widget.activities
     -->
-    <t t-name="mail.systray.ActivityMenu.Previews">
-        <t t-set="activities" t-value="widget._activities"/>
-        <t t-if="_.isEmpty(activities)">
-            <div class="dropdown-item-text text-center o_no_activity">
-                <span>No activities planned.</span>
+    <tt-name="mail.systray.ActivityMenu.Previews">
+        <tt-set="activities"t-value="widget._activities"/>
+        <tt-if="_.isEmpty(activities)">
+            <divclass="dropdown-item-texttext-centero_no_activity">
+                <span>Noactivitiesplanned.</span>
             </div>
         </t>
-        <t t-foreach="activities" t-as="activity">
-            <div class="o_mail_preview o_systray_activity" t-att-data-res_model="activity.model" t-att-data-model_name="activity.name" t-att-data-domain="activity.domain" data-filter='my'>
-                <div t-if="activity.icon" class="o_mail_preview_image o_mail_preview_app">
-                    <img t-att-src="activity.icon" alt="Activity"/>
+        <tt-foreach="activities"t-as="activity">
+            <divclass="o_mail_previewo_systray_activity"t-att-data-res_model="activity.model"t-att-data-model_name="activity.name"t-att-data-domain="activity.domain"data-filter='my'>
+                <divt-if="activity.icon"class="o_mail_preview_imageo_mail_preview_app">
+                    <imgt-att-src="activity.icon"alt="Activity"/>
                 </div>
-                <div class="o_preview_info">
-                    <div class="o_preview_title">
-                        <span class="o_preview_name">
-                            <t t-esc="activity.name"/>
+                <divclass="o_preview_info">
+                    <divclass="o_preview_title">
+                        <spanclass="o_preview_name">
+                            <tt-esc="activity.name"/>
                         </span>
-                        <div t-if="activity.actions" class="o_mail_activity_action_buttons">
-                            <t t-foreach="activity.actions" t-as="action">
-                                <button type="button"
+                        <divt-if="activity.actions"class="o_mail_activity_action_buttons">
+                            <tt-foreach="activity.actions"t-as="action">
+                                <buttontype="button"
                                     t-att-title="action.name"
-                                    t-att-class="'o_mail_activity_action btn btn-link fa ' + action.icon"
+                                    t-att-class="'o_mail_activity_actionbtnbtn-linkfa'+action.icon"
                                     t-att-data-action_xmlid="action.action_xmlid"
                                     t-att-data-res_model="activity.model"
                                     t-att-data-model_name="activity.name"
@@ -35,26 +35,26 @@
                             </t>
                         </div>
                     </div>
-                    <div t-if="activity and activity.type == 'activity'">
-                        <button t-if="activity.overdue_count" type="button" class="btn btn-link o_activity_filter_button mr16" t-att-data-res_model="activity.model" t-att-data-model_name="activity.name" data-filter='overdue'><t t-esc="activity.overdue_count"/> Late </button>
-                        <span t-if="!activity.overdue_count" class="o_no_activity mr16">0 Late </span>
-                        <button t-if="activity.today_count" type="button" class="btn btn-link o_activity_filter_button mr16" t-att-data-res_model="activity.model" t-att-data-model_name="activity.name" data-filter='today'> <t t-esc="activity.today_count"/> Today </button>
-                        <span t-if="!activity.today_count" class="o_no_activity mr16">0 Today </span>
-                        <button t-if="activity.planned_count" type="button" class="btn btn-link o_activity_filter_button float-right" t-att-data-res_model="activity.model" t-att-data-model_name="activity.name" data-filter='upcoming_all'> <t t-esc="activity.planned_count"/> Future </button>
-                        <span t-if="!activity.planned_count" class="o_no_activity float-right">0 Future</span>
+                    <divt-if="activityandactivity.type=='activity'">
+                        <buttont-if="activity.overdue_count"type="button"class="btnbtn-linko_activity_filter_buttonmr16"t-att-data-res_model="activity.model"t-att-data-model_name="activity.name"data-filter='overdue'><tt-esc="activity.overdue_count"/>Late</button>
+                        <spant-if="!activity.overdue_count"class="o_no_activitymr16">0Late</span>
+                        <buttont-if="activity.today_count"type="button"class="btnbtn-linko_activity_filter_buttonmr16"t-att-data-res_model="activity.model"t-att-data-model_name="activity.name"data-filter='today'><tt-esc="activity.today_count"/>Today</button>
+                        <spant-if="!activity.today_count"class="o_no_activitymr16">0Today</span>
+                        <buttont-if="activity.planned_count"type="button"class="btnbtn-linko_activity_filter_buttonfloat-right"t-att-data-res_model="activity.model"t-att-data-model_name="activity.name"data-filter='upcoming_all'><tt-esc="activity.planned_count"/>Future</button>
+                        <spant-if="!activity.planned_count"class="o_no_activityfloat-right">0Future</span>
                     </div>
                 </div>
             </div>
         </t>
     </t>
 
-    <t t-name="mail.systray.ActivityMenu">
-        <li class="o_mail_systray_item">
-            <a class="dropdown-toggle o-no-caret" data-toggle="dropdown" data-display="static" aria-expanded="false" title="Activities" href="#" role="button">
-                <i class="fa fa-clock-o" role="img" aria-label="Activities"/> <span class="o_notification_counter badge badge-pill"/>
+    <tt-name="mail.systray.ActivityMenu">
+        <liclass="o_mail_systray_item">
+            <aclass="dropdown-toggleo-no-caret"data-toggle="dropdown"data-display="static"aria-expanded="false"title="Activities"href="#"role="button">
+                <iclass="fafa-clock-o"role="img"aria-label="Activities"/><spanclass="o_notification_counterbadgebadge-pill"/>
             </a>
-            <div class="o_mail_systray_dropdown dropdown-menu dropdown-menu-right" role="menu">
-                <div class="o_mail_systray_dropdown_items"/>
+            <divclass="o_mail_systray_dropdowndropdown-menudropdown-menu-right"role="menu">
+                <divclass="o_mail_systray_dropdown_items"/>
             </div>
         </li>
     </t>

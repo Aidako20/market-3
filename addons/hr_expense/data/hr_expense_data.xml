@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="product_product_fixed_cost" model="product.product">
-            <field name="name">Expenses</field>
-            <field name="list_price">0.0</field>
-            <field name="standard_price">1.0</field>
-            <field name="type">service</field>
-            <field name="categ_id" ref="product.cat_expense"/>
-            <field name="can_be_expensed" eval="True"/>
+    <datanoupdate="1">
+        <recordid="product_product_fixed_cost"model="product.product">
+            <fieldname="name">Expenses</field>
+            <fieldname="list_price">0.0</field>
+            <fieldname="standard_price">1.0</field>
+            <fieldname="type">service</field>
+            <fieldname="categ_id"ref="product.cat_expense"/>
+            <fieldname="can_be_expensed"eval="True"/>
         </record>
     </data>
     <data>
-        <function model="ir.config_parameter" name="set_param" eval="('hr_expense.use_mailgateway', True)"/>
+        <functionmodel="ir.config_parameter"name="set_param"eval="('hr_expense.use_mailgateway',True)"/>
     </data>
 </flectra>

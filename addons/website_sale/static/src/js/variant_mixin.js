@@ -1,23 +1,23 @@
-flectra.define('website_sale.VariantMixin', function (require) {
-'use strict';
+flectra.define('website_sale.VariantMixin',function(require){
+'usestrict';
 
-var VariantMixin = require('sale.VariantMixin');
+varVariantMixin=require('sale.VariantMixin');
 
 /**
- * Website behavior is slightly different from backend so we append
- * "_website" to URLs to lead to a different route
+ *Websitebehaviorisslightlydifferentfrombackendsoweappend
+ *"_website"toURLstoleadtoadifferentroute
  *
- * @private
- * @param {string} uri The uri to adapt
+ *@private
+ *@param{string}uriTheuritoadapt
  */
-VariantMixin._getUri = function (uri) {
-    if (this.isWebsite){
-        return uri + '_website';
-    } else {
-        return uri;
+VariantMixin._getUri=function(uri){
+    if(this.isWebsite){
+        returnuri+'_website';
+    }else{
+        returnuri;
     }
 };
 
-return VariantMixin;
+returnVariantMixin;
 
 });

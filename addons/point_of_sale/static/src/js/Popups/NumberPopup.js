@@ -1,79 +1,79 @@
-flectra.define('point_of_sale.NumberPopup', function(require) {
-    'use strict';
-    var core = require('web.core');
-    var _t = core._t;
+flectra.define('point_of_sale.NumberPopup',function(require){
+    'usestrict';
+    varcore=require('web.core');
+    var_t=core._t;
 
-    const { useState } = owl;
-    const AbstractAwaitablePopup = require('point_of_sale.AbstractAwaitablePopup');
-    const NumberBuffer = require('point_of_sale.NumberBuffer');
-    const { useListener } = require('web.custom_hooks');
-    const Registries = require('point_of_sale.Registries');
+    const{useState}=owl;
+    constAbstractAwaitablePopup=require('point_of_sale.AbstractAwaitablePopup');
+    constNumberBuffer=require('point_of_sale.NumberBuffer');
+    const{useListener}=require('web.custom_hooks');
+    constRegistries=require('point_of_sale.Registries');
 
-    // formerly NumberPopupWidget
-    class NumberPopup extends AbstractAwaitablePopup {
+    //formerlyNumberPopupWidget
+    classNumberPopupextendsAbstractAwaitablePopup{
         /**
-         * @param {Object} props
-         * @param {Boolean} props.isPassword Show password popup.
-         * @param {number|null} props.startingValue Starting value of the popup.
+         *@param{Object}props
+         *@param{Boolean}props.isPasswordShowpasswordpopup.
+         *@param{number|null}props.startingValueStartingvalueofthepopup.
          *
-         * Resolve to { confirmed, payload } when used with showPopup method.
-         * @confirmed {Boolean}
-         * @payload {String}
+         *Resolveto{confirmed,payload}whenusedwithshowPopupmethod.
+         *@confirmed{Boolean}
+         *@payload{String}
          */
-        constructor() {
+        constructor(){
             super(...arguments);
-            useListener('accept-input', this.confirm);
-            useListener('close-this-popup', this.cancel);
-            let startingBuffer = '';
-            if (typeof this.props.startingValue === 'number' && this.props.startingValue > 0) {
-                startingBuffer = this.props.startingValue.toString().replace('.', this.decimalSeparator);
+            useListener('accept-input',this.confirm);
+            useListener('close-this-popup',this.cancel);
+            letstartingBuffer='';
+            if(typeofthis.props.startingValue==='number'&&this.props.startingValue>0){
+                startingBuffer=this.props.startingValue.toString().replace('.',this.decimalSeparator);
             }
-            this.state = useState({ buffer: startingBuffer });
+            this.state=useState({buffer:startingBuffer});
             NumberBuffer.use({
-                nonKeyboardInputEvent: 'numpad-click-input',
-                triggerAtEnter: 'accept-input',
-                triggerAtEscape: 'close-this-popup',
-                state: this.state,
+                nonKeyboardInputEvent:'numpad-click-input',
+                triggerAtEnter:'accept-input',
+                triggerAtEscape:'close-this-popup',
+                state:this.state,
             });
         }
-        get decimalSeparator() {
-            return this.env._t.database.parameters.decimal_point;
+        getdecimalSeparator(){
+            returnthis.env._t.database.parameters.decimal_point;
         }
-        get inputBuffer() {
-            if (this.state.buffer === null) {
-                return '';
+        getinputBuffer(){
+            if(this.state.buffer===null){
+                return'';
             }
-            if (this.props.isPassword) {
-                return this.state.buffer.replace(/./g, '•');
-            } else {
-                return this.state.buffer;
+            if(this.props.isPassword){
+                returnthis.state.buffer.replace(/./g,'•');
+            }else{
+                returnthis.state.buffer;
             }
         }
-        confirm(event) {
-            const bufferState = event.detail;
-            if (bufferState.buffer !== '') {
+        confirm(event){
+            constbufferState=event.detail;
+            if(bufferState.buffer!==''){
                 super.confirm();
             }
         }
-        sendInput(key) {
-            this.trigger('numpad-click-input', { key });
+        sendInput(key){
+            this.trigger('numpad-click-input',{key});
         }
-        getPayload() {
-            return NumberBuffer.get();
+        getPayload(){
+            returnNumberBuffer.get();
         }
     }
-    NumberPopup.template = 'NumberPopup';
-    NumberPopup.defaultProps = {
-        confirmText: _t('Ok'),
-        cancelText: _t('Cancel'),
-        title: _t('Confirm ?'),
-        body: '',
-        cheap: false,
-        startingValue: null,
-        isPassword: false,
+    NumberPopup.template='NumberPopup';
+    NumberPopup.defaultProps={
+        confirmText:_t('Ok'),
+        cancelText:_t('Cancel'),
+        title:_t('Confirm?'),
+        body:'',
+        cheap:false,
+        startingValue:null,
+        isPassword:false,
     };
 
     Registries.Component.add(NumberPopup);
 
-    return NumberPopup;
+    returnNumberPopup;
 });

@@ -1,521 +1,521 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
     <data>
-        <record id="im_livechat_channel_rule_demo" model="im_livechat.channel.rule">
-            <field name="regex_url">/im_livechat/</field>
-            <field name="action">auto_popup</field>
-            <field name="auto_popup_timer">3</field>
-            <field name="channel_id" ref="im_livechat_channel_data"/>
+        <recordid="im_livechat_channel_rule_demo"model="im_livechat.channel.rule">
+            <fieldname="regex_url">/im_livechat/</field>
+            <fieldname="action">auto_popup</field>
+            <fieldname="auto_popup_timer">3</field>
+            <fieldname="channel_id"ref="im_livechat_channel_data"/>
         </record>
-        <record id="im_livechat.im_livechat_group_user" model="res.groups">
-            <field eval="[(4, ref('base.user_demo'))]" name="users"/>
+        <recordid="im_livechat.im_livechat_group_user"model="res.groups">
+            <fieldeval="[(4,ref('base.user_demo'))]"name="users"/>
         </record>
-        <record id="im_livechat_channel_data" model="im_livechat.channel">
-            <field eval="[(4, ref('base.user_admin'))]" name="user_ids"/>
+        <recordid="im_livechat_channel_data"model="im_livechat.channel">
+            <fieldeval="[(4,ref('base.user_admin'))]"name="user_ids"/>
         </record>
-        <record id="im_livechat_channel_data" model="im_livechat.channel">
-            <field eval="[(4, ref('base.user_demo'))]" name="user_ids"/>
+        <recordid="im_livechat_channel_data"model="im_livechat.channel">
+            <fieldeval="[(4,ref('base.user_demo'))]"name="user_ids"/>
         </record>
-        <!-- Session 0 -->
-        <record id="im_livechat_mail_channel_data_0" model="mail.channel">
-            <field name="channel_type">livechat</field>
-            <field name="livechat_channel_id" ref="im_livechat_channel_data"/>
-            <field name="livechat_operator_id" ref="base.partner_admin"/>
-            <field name="name">Visitor #234, Mitchell Admin</field>
-            <field name="anonymous_name">Visitor #234, Mitchell Admin</field>
+        <!--Session0-->
+        <recordid="im_livechat_mail_channel_data_0"model="mail.channel">
+            <fieldname="channel_type">livechat</field>
+            <fieldname="livechat_channel_id"ref="im_livechat_channel_data"/>
+            <fieldname="livechat_operator_id"ref="base.partner_admin"/>
+            <fieldname="name">Visitor#234,MitchellAdmin</field>
+            <fieldname="anonymous_name">Visitor#234,MitchellAdmin</field>
         </record>
-        <record id="im_livechat_rating_1" model="rating.rating">
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_0"/>
-            <field name="res_model_id" ref="mail.model_mail_channel"/>
-            <field name="rated_partner_id" ref="base.partner_admin"/>
-            <field eval="False" name="partner_id"/>
-            <field eval="True" name="consumed"/>
+        <recordid="im_livechat_rating_1"model="rating.rating">
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_0"/>
+            <fieldname="res_model_id"ref="mail.model_mail_channel"/>
+            <fieldname="rated_partner_id"ref="base.partner_admin"/>
+            <fieldeval="False"name="partner_id"/>
+            <fieldeval="True"name="consumed"/>
         </record>
-        <function eval="([ref('im_livechat.im_livechat_mail_channel_data_0')], 5)" model="mail.channel" name="rating_apply"/>
-        <record id="im_livechat_mail_message_5_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_0"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="body">You're welcome, have a nice day!</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_0'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-0, minutes=5)" name="date"/>
+        <functioneval="([ref('im_livechat.im_livechat_mail_channel_data_0')],5)"model="mail.channel"name="rating_apply"/>
+        <recordid="im_livechat_mail_message_5_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_0"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="body">You'rewelcome,haveaniceday!</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_0'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-0,minutes=5)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_4_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_0"/>
-            <field name="message_type">email</field>
-            <field eval="False" name="author_id"/>
-            <field name="body">Great! Thanks for the info</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_0'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-0, minutes=4)" name="date"/>
+        <recordid="im_livechat_mail_message_4_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_0"/>
+            <fieldname="message_type">email</field>
+            <fieldeval="False"name="author_id"/>
+            <fieldname="body">Great!Thanksfortheinfo</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_0'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-0,minutes=4)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_3_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_0"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="body">Yes, you can use our Timesheets application and Awesome Timesheets to record your time efficiently!</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_0'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-0, minutes=3)" name="date"/>
+        <recordid="im_livechat_mail_message_3_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_0"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="body">Yes,youcanuseourTimesheetsapplicationandAwesomeTimesheetstorecordyourtimeefficiently!</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_0'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-0,minutes=3)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_2_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_0"/>
-            <field name="message_type">email</field>
-            <field eval="False" name="author_id"/>
-            <field name="body">I'm looking for an application to record my timesheet, any tips?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_0'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-0, minutes=2)" name="date"/>
+        <recordid="im_livechat_mail_message_2_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_0"/>
+            <fieldname="message_type">email</field>
+            <fieldeval="False"name="author_id"/>
+            <fieldname="body">I'mlookingforanapplicationtorecordmytimesheet,anytips?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_0'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-0,minutes=2)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_1_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_0"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="body">Hello, how may I help you?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_0'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-0, minutes=1)" name="date"/>
+        <recordid="im_livechat_mail_message_1_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_0"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="body">Hello,howmayIhelpyou?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_0'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-0,minutes=1)"name="date"/>
         </record>
-        <!-- Session 1 -->
-        <record id="im_livechat_mail_channel_data_1" model="mail.channel">
-            <field name="channel_type">livechat</field>
-            <field name="livechat_channel_id" ref="im_livechat_channel_data"/>
-            <field name="livechat_operator_id" ref="base.partner_demo"/>
-            <field name="name">Visitor #323, Marc Demo</field>
-            <field name="anonymous_name">Visitor #323, Marc Demo</field>
+        <!--Session1-->
+        <recordid="im_livechat_mail_channel_data_1"model="mail.channel">
+            <fieldname="channel_type">livechat</field>
+            <fieldname="livechat_channel_id"ref="im_livechat_channel_data"/>
+            <fieldname="livechat_operator_id"ref="base.partner_demo"/>
+            <fieldname="name">Visitor#323,MarcDemo</field>
+            <fieldname="anonymous_name">Visitor#323,MarcDemo</field>
         </record>
-        <record id="im_livechat_rating_2" model="rating.rating">
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_1"/>
-            <field name="res_model_id" ref="mail.model_mail_channel"/>
-            <field name="rated_partner_id" ref="base.partner_demo"/>
-            <field eval="False" name="partner_id"/>
-            <field eval="True" name="consumed"/>
+        <recordid="im_livechat_rating_2"model="rating.rating">
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_1"/>
+            <fieldname="res_model_id"ref="mail.model_mail_channel"/>
+            <fieldname="rated_partner_id"ref="base.partner_demo"/>
+            <fieldeval="False"name="partner_id"/>
+            <fieldeval="True"name="consumed"/>
         </record>
-        <function eval="([ref('im_livechat.im_livechat_mail_channel_data_1')], 5)" model="mail.channel" name="rating_apply"/>
-        <record id="im_livechat_mail_message_10_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_1"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_demo"/>
-            <field name="body">You're welcome, enjoy Flectra!</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_1'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-1, minutes=10)" name="date"/>
+        <functioneval="([ref('im_livechat.im_livechat_mail_channel_data_1')],5)"model="mail.channel"name="rating_apply"/>
+        <recordid="im_livechat_mail_message_10_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_1"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_demo"/>
+            <fieldname="body">You'rewelcome,enjoyFlectra!</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_1'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-1,minutes=10)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_9_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_1"/>
-            <field name="message_type">email</field>
-            <field eval="False" name="author_id"/>
-            <field name="body">Awesome, thanks!</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_1'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-1, minutes=9)" name="date"/>
+        <recordid="im_livechat_mail_message_9_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_1"/>
+            <fieldname="message_type">email</field>
+            <fieldeval="False"name="author_id"/>
+            <fieldname="body">Awesome,thanks!</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_1'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-1,minutes=9)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_8_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_1"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_demo"/>
-            <field name="body">Yes, we just released a new application called Social Marketing that should fit your needs! Check it out :)</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_1'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-1, minutes=8)" name="date"/>
+        <recordid="im_livechat_mail_message_8_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_1"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_demo"/>
+            <fieldname="body">Yes,wejustreleasedanewapplicationcalledSocialMarketingthatshouldfityourneeds!Checkitout:)</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_1'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-1,minutes=8)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_7_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_1"/>
-            <field name="message_type">email</field>
-            <field eval="False" name="author_id"/>
-            <field name="body">I was wondering if Flectra has an application to easily manage social media for my business..</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_1'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-1, minutes=7)" name="date"/>
+        <recordid="im_livechat_mail_message_7_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_1"/>
+            <fieldname="message_type">email</field>
+            <fieldeval="False"name="author_id"/>
+            <fieldname="body">IwaswonderingifFlectrahasanapplicationtoeasilymanagesocialmediaformybusiness..</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_1'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-1,minutes=7)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_6_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_1"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_demo"/>
-            <field name="body">Hello, how may I help you?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_1'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-1, minutes=6)" name="date"/>
+        <recordid="im_livechat_mail_message_6_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_1"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_demo"/>
+            <fieldname="body">Hello,howmayIhelpyou?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_1'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-1,minutes=6)"name="date"/>
         </record>
-        <!-- Session 2 -->
-        <record id="im_livechat_mail_channel_data_2" model="mail.channel">
-            <field name="channel_type">livechat</field>
-            <field name="livechat_channel_id" ref="im_livechat_channel_data"/>
-            <field name="livechat_operator_id" ref="base.partner_admin"/>
-            <field name="name">Joel Willis, Mitchell Admin</field>
-            <field name="anonymous_name">Joel Willis, Mitchell Admin</field>
+        <!--Session2-->
+        <recordid="im_livechat_mail_channel_data_2"model="mail.channel">
+            <fieldname="channel_type">livechat</field>
+            <fieldname="livechat_channel_id"ref="im_livechat_channel_data"/>
+            <fieldname="livechat_operator_id"ref="base.partner_admin"/>
+            <fieldname="name">JoelWillis,MitchellAdmin</field>
+            <fieldname="anonymous_name">JoelWillis,MitchellAdmin</field>
         </record>
-        <record id="im_livechat_rating_3" model="rating.rating">
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_2"/>
-            <field name="res_model_id" ref="mail.model_mail_channel"/>
-            <field name="rated_partner_id" ref="base.partner_admin"/>
-            <field name="partner_id" ref="base.partner_demo_portal"/>
-            <field eval="True" name="consumed"/>
+        <recordid="im_livechat_rating_3"model="rating.rating">
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_2"/>
+            <fieldname="res_model_id"ref="mail.model_mail_channel"/>
+            <fieldname="rated_partner_id"ref="base.partner_admin"/>
+            <fieldname="partner_id"ref="base.partner_demo_portal"/>
+            <fieldeval="True"name="consumed"/>
         </record>
-        <function eval="([ref('im_livechat.im_livechat_mail_channel_data_2')], 5)" model="mail.channel" name="rating_apply"/>
-        <record id="im_livechat_mail_message_14_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_2"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_demo_portal"/>
-            <field name="body">Oh :(</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_2'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-2, minutes=14)" name="date"/>
+        <functioneval="([ref('im_livechat.im_livechat_mail_channel_data_2')],5)"model="mail.channel"name="rating_apply"/>
+        <recordid="im_livechat_mail_message_14_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_2"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_demo_portal"/>
+            <fieldname="body">Oh:(</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_2'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-2,minutes=14)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_13_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_2"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="body">Nope, sorry to disappoint :(</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_2'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-2, minutes=13)" name="date"/>
+        <recordid="im_livechat_mail_message_13_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_2"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="body">Nope,sorrytodisappoint:(</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_2'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-2,minutes=13)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_12_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_2"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_demo_portal"/>
-            <field name="body">Hello, are you single?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_2'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-2, minutes=12)" name="date"/>
+        <recordid="im_livechat_mail_message_12_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_2"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_demo_portal"/>
+            <fieldname="body">Hello,areyousingle?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_2'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-2,minutes=12)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_11_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_2"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="body">Hello, how may I help you?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_2'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-1, days=-2, minutes=11)" name="date"/>
+        <recordid="im_livechat_mail_message_11_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_2"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="body">Hello,howmayIhelpyou?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_2'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-1,days=-2,minutes=11)"name="date"/>
         </record>
-        <!-- Session 3 -->
-        <record id="im_livechat_mail_channel_data_3" model="mail.channel">
-            <field name="channel_type">livechat</field>
-            <field name="livechat_channel_id" ref="im_livechat_channel_data"/>
-            <field name="livechat_operator_id" ref="base.partner_demo"/>
-            <field name="name">Joel Willis, Marc Demo</field>
-            <field name="anonymous_name">Joel Willis, Marc Demo</field>
+        <!--Session3-->
+        <recordid="im_livechat_mail_channel_data_3"model="mail.channel">
+            <fieldname="channel_type">livechat</field>
+            <fieldname="livechat_channel_id"ref="im_livechat_channel_data"/>
+            <fieldname="livechat_operator_id"ref="base.partner_demo"/>
+            <fieldname="name">JoelWillis,MarcDemo</field>
+            <fieldname="anonymous_name">JoelWillis,MarcDemo</field>
         </record>
-        <record id="im_livechat_rating_4" model="rating.rating">
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_3"/>
-            <field name="res_model_id" ref="mail.model_mail_channel"/>
-            <field name="rated_partner_id" ref="base.partner_demo"/>
-            <field name="partner_id" ref="base.partner_demo_portal"/>
-            <field eval="True" name="consumed"/>
+        <recordid="im_livechat_rating_4"model="rating.rating">
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_3"/>
+            <fieldname="res_model_id"ref="mail.model_mail_channel"/>
+            <fieldname="rated_partner_id"ref="base.partner_demo"/>
+            <fieldname="partner_id"ref="base.partner_demo_portal"/>
+            <fieldeval="True"name="consumed"/>
         </record>
-        <function eval="([ref('im_livechat.im_livechat_mail_channel_data_3')], 5)" model="mail.channel" name="rating_apply"/>
-        <record id="im_livechat_mail_message_17_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_3"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_demo_portal"/>
-            <field name="body">Thanks for the info, I'll look into it!</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_3'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-2, days=-3, minutes=17)" name="date"/>
+        <functioneval="([ref('im_livechat.im_livechat_mail_channel_data_3')],5)"model="mail.channel"name="rating_apply"/>
+        <recordid="im_livechat_mail_message_17_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_3"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_demo_portal"/>
+            <fieldname="body">Thanksfortheinfo,I'lllookintoit!</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_3'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-2,days=-3,minutes=17)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_16_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_3"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_demo"/>
-            <field name="body">Hello Joel Willis, you're at the right place! You can customize Flectra using our Studio application in just a few clicks.</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_3'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-2, days=-3, minutes=16)" name="date"/>
+        <recordid="im_livechat_mail_message_16_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_3"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_demo"/>
+            <fieldname="body">HelloJoelWillis,you'reattherightplace!YoucancustomizeFlectrausingourStudioapplicationinjustafewclicks.</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_3'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-2,days=-3,minutes=16)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_15_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_3"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_demo_portal"/>
-            <field name="body">Hello, I'm looking for a software that can be easily updated with my needs.</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_3'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-2, days=-3, minutes=15)" name="date"/>
+        <recordid="im_livechat_mail_message_15_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_3"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_demo_portal"/>
+            <fieldname="body">Hello,I'mlookingforasoftwarethatcanbeeasilyupdatedwithmyneeds.</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_3'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-2,days=-3,minutes=15)"name="date"/>
         </record>
-        <!-- Session 4 -->
-        <record id="im_livechat_mail_channel_data_4" model="mail.channel">
-            <field name="channel_type">livechat</field>
-            <field name="livechat_channel_id" ref="im_livechat_channel_data"/>
-            <field name="livechat_operator_id" ref="base.partner_admin"/>
-            <field name="name">Visitor #532, Mitchell Admin</field>
-            <field name="anonymous_name">Visitor #532, Mitchell Admin</field>
+        <!--Session4-->
+        <recordid="im_livechat_mail_channel_data_4"model="mail.channel">
+            <fieldname="channel_type">livechat</field>
+            <fieldname="livechat_channel_id"ref="im_livechat_channel_data"/>
+            <fieldname="livechat_operator_id"ref="base.partner_admin"/>
+            <fieldname="name">Visitor#532,MitchellAdmin</field>
+            <fieldname="anonymous_name">Visitor#532,MitchellAdmin</field>
         </record>
-        <record id="im_livechat_rating_5" model="rating.rating">
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_4"/>
-            <field name="res_model_id" ref="mail.model_mail_channel"/>
-            <field name="rated_partner_id" ref="base.partner_admin"/>
-            <field eval="False" name="partner_id"/>
-            <field eval="True" name="consumed"/>
+        <recordid="im_livechat_rating_5"model="rating.rating">
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_4"/>
+            <fieldname="res_model_id"ref="mail.model_mail_channel"/>
+            <fieldname="rated_partner_id"ref="base.partner_admin"/>
+            <fieldeval="False"name="partner_id"/>
+            <fieldeval="True"name="consumed"/>
         </record>
-        <function eval="([ref('im_livechat.im_livechat_mail_channel_data_4')], 1)" model="mail.channel" name="rating_apply"/>
-        <record id="im_livechat_mail_message_21_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_4"/>
-            <field name="message_type">email</field>
-            <field eval="False" name="author_id"/>
-            <field name="body">Ok.. Will do, thanks</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_4'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-2, days=-4, minutes=21)" name="date"/>
+        <functioneval="([ref('im_livechat.im_livechat_mail_channel_data_4')],1)"model="mail.channel"name="rating_apply"/>
+        <recordid="im_livechat_mail_message_21_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_4"/>
+            <fieldname="message_type">email</field>
+            <fieldeval="False"name="author_id"/>
+            <fieldname="body">Ok..Willdo,thanks</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_4'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-2,days=-4,minutes=21)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_20_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_4"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="body">Hi, if you need help with your database, feel free to contact our support via http://www.flectrahq.com/help</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_4'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-2, days=-4, minutes=20)" name="date"/>
+        <recordid="im_livechat_mail_message_20_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_4"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="body">Hi,ifyouneedhelpwithyourdatabase,feelfreetocontactoursupportviahttp://www.flectrahq.com/help</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_4'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-2,days=-4,minutes=20)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_19_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_4"/>
-            <field name="message_type">email</field>
-            <field eval="False" name="author_id"/>
-            <field name="body">Hello, it seems that I can't log in to my database. Can you help?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_4'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-2, days=-4, minutes=19)" name="date"/>
+        <recordid="im_livechat_mail_message_19_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_4"/>
+            <fieldname="message_type">email</field>
+            <fieldeval="False"name="author_id"/>
+            <fieldname="body">Hello,itseemsthatIcan'tlogintomydatabase.Canyouhelp?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_4'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-2,days=-4,minutes=19)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_18_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_4"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="body">Hello, how may I help you?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_4'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-2, days=-4, minutes=18)" name="date"/>
+        <recordid="im_livechat_mail_message_18_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_4"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="body">Hello,howmayIhelpyou?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_4'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-2,days=-4,minutes=18)"name="date"/>
         </record>
-        <!-- Session 5 -->
-        <record id="im_livechat_mail_channel_data_5" model="mail.channel">
-            <field name="channel_type">livechat</field>
-            <field name="livechat_channel_id" ref="im_livechat_channel_data"/>
-            <field name="livechat_operator_id" ref="base.partner_admin"/>
-            <field name="name">Visitor #649, Mitchell Admin</field>
-            <field name="anonymous_name">Visitor #649, Mitchell Admin</field>
+        <!--Session5-->
+        <recordid="im_livechat_mail_channel_data_5"model="mail.channel">
+            <fieldname="channel_type">livechat</field>
+            <fieldname="livechat_channel_id"ref="im_livechat_channel_data"/>
+            <fieldname="livechat_operator_id"ref="base.partner_admin"/>
+            <fieldname="name">Visitor#649,MitchellAdmin</field>
+            <fieldname="anonymous_name">Visitor#649,MitchellAdmin</field>
         </record>
-        <record id="im_livechat_rating_6" model="rating.rating">
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_5"/>
-            <field name="res_model_id" ref="mail.model_mail_channel"/>
-            <field name="rated_partner_id" ref="base.partner_admin"/>
-            <field eval="False" name="partner_id"/>
-            <field eval="True" name="consumed"/>
+        <recordid="im_livechat_rating_6"model="rating.rating">
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_5"/>
+            <fieldname="res_model_id"ref="mail.model_mail_channel"/>
+            <fieldname="rated_partner_id"ref="base.partner_admin"/>
+            <fieldeval="False"name="partner_id"/>
+            <fieldeval="True"name="consumed"/>
         </record>
-        <function eval="([ref('im_livechat.im_livechat_mail_channel_data_5')], 5)" model="mail.channel" name="rating_apply"/>
-        <record id="im_livechat_mail_message_25_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_5"/>
-            <field name="message_type">email</field>
-            <field eval="False" name="author_id"/>
-            <field name="body">Thanks!</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_5'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-3, days=-5, minutes=25)" name="date"/>
+        <functioneval="([ref('im_livechat.im_livechat_mail_channel_data_5')],5)"model="mail.channel"name="rating_apply"/>
+        <recordid="im_livechat_mail_message_25_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_5"/>
+            <fieldname="message_type">email</field>
+            <fieldeval="False"name="author_id"/>
+            <fieldname="body">Thanks!</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_5'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-3,days=-5,minutes=25)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_24_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_5"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="body">Yes, of course, you can find it here: https://doc.flectrahq.com/2.0/</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_5'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-3, days=-5, minutes=24)" name="date"/>
+        <recordid="im_livechat_mail_message_24_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_5"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="body">Yes,ofcourse,youcanfindithere:https://doc.flectrahq.com/2.0/</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_5'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-3,days=-5,minutes=24)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_23_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_5"/>
-            <field name="message_type">email</field>
-            <field eval="False" name="author_id"/>
-            <field name="body">Hello, I'm a bit lost in the Invetory module, is there some documentation I could find?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_5'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-3, days=-5, minutes=23)" name="date"/>
+        <recordid="im_livechat_mail_message_23_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_5"/>
+            <fieldname="message_type">email</field>
+            <fieldeval="False"name="author_id"/>
+            <fieldname="body">Hello,I'mabitlostintheInvetorymodule,istheresomedocumentationIcouldfind?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_5'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-3,days=-5,minutes=23)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_22_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_5"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="body">Hello, how may I help you?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_5'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-3, days=-5, minutes=22)" name="date"/>
+        <recordid="im_livechat_mail_message_22_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_5"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="body">Hello,howmayIhelpyou?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_5'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-3,days=-5,minutes=22)"name="date"/>
         </record>
-        <!-- Session 6 -->
-        <record id="im_livechat_mail_channel_data_6" model="mail.channel">
-            <field name="channel_type">livechat</field>
-            <field name="livechat_channel_id" ref="im_livechat_channel_data"/>
-            <field name="livechat_operator_id" ref="base.partner_admin"/>
-            <field name="name">Joel Willis, Mitchell Admin</field>
-            <field name="anonymous_name">Joel Willis, Mitchell Admin</field>
+        <!--Session6-->
+        <recordid="im_livechat_mail_channel_data_6"model="mail.channel">
+            <fieldname="channel_type">livechat</field>
+            <fieldname="livechat_channel_id"ref="im_livechat_channel_data"/>
+            <fieldname="livechat_operator_id"ref="base.partner_admin"/>
+            <fieldname="name">JoelWillis,MitchellAdmin</field>
+            <fieldname="anonymous_name">JoelWillis,MitchellAdmin</field>
         </record>
-        <record id="im_livechat_rating_7" model="rating.rating">
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_6"/>
-            <field name="res_model_id" ref="mail.model_mail_channel"/>
-            <field name="rated_partner_id" ref="base.partner_admin"/>
-            <field name="partner_id" ref="base.partner_demo_portal"/>
-            <field eval="True" name="consumed"/>
+        <recordid="im_livechat_rating_7"model="rating.rating">
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_6"/>
+            <fieldname="res_model_id"ref="mail.model_mail_channel"/>
+            <fieldname="rated_partner_id"ref="base.partner_admin"/>
+            <fieldname="partner_id"ref="base.partner_demo_portal"/>
+            <fieldeval="True"name="consumed"/>
         </record>
-        <function eval="([ref('im_livechat.im_livechat_mail_channel_data_6')], 5)" model="mail.channel" name="rating_apply"/>
-        <record id="im_livechat_mail_message_29_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_6"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_demo_portal"/>
-            <field name="body">Good to hear, thanks!</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_6'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-3, days=-6, minutes=29)" name="date"/>
+        <functioneval="([ref('im_livechat.im_livechat_mail_channel_data_6')],5)"model="mail.channel"name="rating_apply"/>
+        <recordid="im_livechat_mail_message_29_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_6"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_demo_portal"/>
+            <fieldname="body">Goodtohear,thanks!</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_6'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-3,days=-6,minutes=29)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_28_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_6"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="body">Joel Willis, you'll need our Inventory and Sales application to do so. You can try them for 15 days, FOR FREE :)</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_6'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-3, days=-6, minutes=28)" name="date"/>
+        <recordid="im_livechat_mail_message_28_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_6"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="body">JoelWillis,you'llneedourInventoryandSalesapplicationtodoso.Youcantrythemfor15days,FORFREE:)</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_6'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-3,days=-6,minutes=28)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_27_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_6"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_demo_portal"/>
-            <field name="body">Hi, I need a software to easily manage my stock, and generate sales orders.</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_6'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-3, days=-6, minutes=27)" name="date"/>
+        <recordid="im_livechat_mail_message_27_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_6"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_demo_portal"/>
+            <fieldname="body">Hi,Ineedasoftwaretoeasilymanagemystock,andgeneratesalesorders.</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_6'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-3,days=-6,minutes=27)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_26_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_6"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="body">Hello, how may I help you?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_6'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-3, days=-6, minutes=26)" name="date"/>
+        <recordid="im_livechat_mail_message_26_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_6"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="body">Hello,howmayIhelpyou?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_6'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-3,days=-6,minutes=26)"name="date"/>
         </record>
-        <!-- Session 7 -->
-        <record id="im_livechat_mail_channel_data_7" model="mail.channel">
-            <field name="channel_type">livechat</field>
-            <field name="livechat_channel_id" ref="im_livechat_channel_data"/>
-            <field name="livechat_operator_id" ref="base.partner_demo"/>
-            <field name="name">Visitor #722, Marc Demo</field>
-            <field name="anonymous_name">Visitor #722, Marc Demo</field>
+        <!--Session7-->
+        <recordid="im_livechat_mail_channel_data_7"model="mail.channel">
+            <fieldname="channel_type">livechat</field>
+            <fieldname="livechat_channel_id"ref="im_livechat_channel_data"/>
+            <fieldname="livechat_operator_id"ref="base.partner_demo"/>
+            <fieldname="name">Visitor#722,MarcDemo</field>
+            <fieldname="anonymous_name">Visitor#722,MarcDemo</field>
         </record>
-        <record id="im_livechat_rating_8" model="rating.rating">
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_7"/>
-            <field name="res_model_id" ref="mail.model_mail_channel"/>
-            <field name="rated_partner_id" ref="base.partner_demo"/>
-            <field eval="False" name="partner_id"/>
-            <field eval="True" name="consumed"/>
+        <recordid="im_livechat_rating_8"model="rating.rating">
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_7"/>
+            <fieldname="res_model_id"ref="mail.model_mail_channel"/>
+            <fieldname="rated_partner_id"ref="base.partner_demo"/>
+            <fieldeval="False"name="partner_id"/>
+            <fieldeval="True"name="consumed"/>
         </record>
-        <function eval="([ref('im_livechat.im_livechat_mail_channel_data_7')], 5)" model="mail.channel" name="rating_apply"/>
-        <record id="im_livechat_mail_message_33_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_7"/>
-            <field name="message_type">email</field>
-            <field eval="False" name="author_id"/>
-            <field name="body">I'm great, thanks for asking!</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_7'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-3, days=-7, minutes=33)" name="date"/>
+        <functioneval="([ref('im_livechat.im_livechat_mail_channel_data_7')],5)"model="mail.channel"name="rating_apply"/>
+        <recordid="im_livechat_mail_message_33_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_7"/>
+            <fieldname="message_type">email</field>
+            <fieldeval="False"name="author_id"/>
+            <fieldname="body">I'mgreat,thanksforasking!</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_7'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-3,days=-7,minutes=33)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_32_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_7"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_demo"/>
-            <field name="body">I'm fine, and you?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_7'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-3, days=-7, minutes=32)" name="date"/>
+        <recordid="im_livechat_mail_message_32_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_7"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_demo"/>
+            <fieldname="body">I'mfine,andyou?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_7'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-3,days=-7,minutes=32)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_31_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_7"/>
-            <field name="message_type">email</field>
-            <field eval="False" name="author_id"/>
-            <field name="body">Heeeey Marc, how are you?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_7'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-3, days=-7, minutes=31)" name="date"/>
+        <recordid="im_livechat_mail_message_31_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_7"/>
+            <fieldname="message_type">email</field>
+            <fieldeval="False"name="author_id"/>
+            <fieldname="body">HeeeeyMarc,howareyou?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_7'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-3,days=-7,minutes=31)"name="date"/>
         </record>
-        <record id="im_livechat_mail_message_30_data" model="mail.message">
-            <field name="model">mail.channel</field>
-            <field name="res_id" ref="im_livechat.im_livechat_mail_channel_data_7"/>
-            <field name="message_type">email</field>
-            <field name="author_id" ref="base.partner_demo"/>
-            <field name="body">Hello, how may I help you?</field>
-            <field eval="[(4, ref('im_livechat.im_livechat_mail_channel_data_7'))]" name="channel_ids"/>
-            <field eval="DateTime.today() + relativedelta(months=-3, days=-7, minutes=30)" name="date"/>
-        </record>
-
-        <record id="mail_channel_livechat_1" model="mail.channel">
-            <field name="name">Visitor, Mitchell Admin</field>
-            <field name="livechat_operator_id" ref="base.partner_admin"/>
-            <field name="livechat_channel_id" ref="im_livechat.im_livechat_channel_data"/>
-            <field name="create_date" eval="datetime.now() - timedelta(days=1)"/>
-            <field name="channel_type">livechat</field>
+        <recordid="im_livechat_mail_message_30_data"model="mail.message">
+            <fieldname="model">mail.channel</field>
+            <fieldname="res_id"ref="im_livechat.im_livechat_mail_channel_data_7"/>
+            <fieldname="message_type">email</field>
+            <fieldname="author_id"ref="base.partner_demo"/>
+            <fieldname="body">Hello,howmayIhelpyou?</field>
+            <fieldeval="[(4,ref('im_livechat.im_livechat_mail_channel_data_7'))]"name="channel_ids"/>
+            <fieldeval="DateTime.today()+relativedelta(months=-3,days=-7,minutes=30)"name="date"/>
         </record>
 
-        <record id="mail_message_livechat_1" model="mail.message">
-            <field name="author_id" eval="False"/>
-            <field name="record_name">Visitor</field>
-            <field name="date" eval="datetime.now() - timedelta(days=1)"/>
-            <field name="create_date" eval="datetime.now() - timedelta(days=1)"/>
-            <field name="body">Hi</field>
-            <field name="res_id" ref="im_livechat.mail_channel_livechat_1"/>
-            <field name="model">mail.channel</field>
-            <field name="channel_ids" eval="[(6, False, [mail_channel_livechat_1])]"/>
+        <recordid="mail_channel_livechat_1"model="mail.channel">
+            <fieldname="name">Visitor,MitchellAdmin</field>
+            <fieldname="livechat_operator_id"ref="base.partner_admin"/>
+            <fieldname="livechat_channel_id"ref="im_livechat.im_livechat_channel_data"/>
+            <fieldname="create_date"eval="datetime.now()-timedelta(days=1)"/>
+            <fieldname="channel_type">livechat</field>
         </record>
-        <record id="mail_message_livechat_2" model="mail.message">
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="date" eval="datetime.now() - timedelta(days=1, seconds=-15)"/>
-            <field name="create_date" eval="datetime.now() - timedelta(days=1, seconds=-15)"/>
-            <field name="body">Hello, how may I help you?</field>
-            <field name="res_id" ref="im_livechat.mail_channel_livechat_1"/>
-            <field name="model">mail.channel</field>
-            <field name="channel_ids" eval="[(6, False, [mail_channel_livechat_1])]"/>
+
+        <recordid="mail_message_livechat_1"model="mail.message">
+            <fieldname="author_id"eval="False"/>
+            <fieldname="record_name">Visitor</field>
+            <fieldname="date"eval="datetime.now()-timedelta(days=1)"/>
+            <fieldname="create_date"eval="datetime.now()-timedelta(days=1)"/>
+            <fieldname="body">Hi</field>
+            <fieldname="res_id"ref="im_livechat.mail_channel_livechat_1"/>
+            <fieldname="model">mail.channel</field>
+            <fieldname="channel_ids"eval="[(6,False,[mail_channel_livechat_1])]"/>
         </record>
-        <record id="mail_message_livechat_3" model="mail.message">
-            <field name="author_id" eval="False"/>
-            <field name="record_name">Visitor</field>
-            <field name="date" eval="datetime.now() - timedelta(days=1, seconds=-25)"/>
-            <field name="create_date" eval="datetime.now() - timedelta(days=1, seconds=-25)"/>
-            <field name="body">I would like to know more about the CRM application</field>
-            <field name="res_id" ref="im_livechat.mail_channel_livechat_1"/>
-            <field name="model">mail.channel</field>
-            <field name="channel_ids" eval="[(6, False, [mail_channel_livechat_1])]"/>
+        <recordid="mail_message_livechat_2"model="mail.message">
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="date"eval="datetime.now()-timedelta(days=1,seconds=-15)"/>
+            <fieldname="create_date"eval="datetime.now()-timedelta(days=1,seconds=-15)"/>
+            <fieldname="body">Hello,howmayIhelpyou?</field>
+            <fieldname="res_id"ref="im_livechat.mail_channel_livechat_1"/>
+            <fieldname="model">mail.channel</field>
+            <fieldname="channel_ids"eval="[(6,False,[mail_channel_livechat_1])]"/>
         </record>
-        <record id="mail_message_livechat_4" model="mail.message">
-            <field name="author_id" ref="base.partner_admin"/>
-            <field name="date" eval="datetime.now() - timedelta(days=1, seconds=-33)"/>
-            <field name="create_date" eval="datetime.now() - timedelta(days=1, seconds=-33)"/>
-            <field name="body">The CRM application helps you to track leads, close opportunities and get accurate forecasts. You can test it for free on our website.</field>
-            <field name="res_id" ref="im_livechat.mail_channel_livechat_1"/>
-            <field name="model">mail.channel</field>
-            <field name="channel_ids" eval="[(6, False, [mail_channel_livechat_1])]"/>
+        <recordid="mail_message_livechat_3"model="mail.message">
+            <fieldname="author_id"eval="False"/>
+            <fieldname="record_name">Visitor</field>
+            <fieldname="date"eval="datetime.now()-timedelta(days=1,seconds=-25)"/>
+            <fieldname="create_date"eval="datetime.now()-timedelta(days=1,seconds=-25)"/>
+            <fieldname="body">IwouldliketoknowmoreabouttheCRMapplication</field>
+            <fieldname="res_id"ref="im_livechat.mail_channel_livechat_1"/>
+            <fieldname="model">mail.channel</field>
+            <fieldname="channel_ids"eval="[(6,False,[mail_channel_livechat_1])]"/>
         </record>
-        <record id="mail_message_livechat_5" model="mail.message">
-            <field name="author_id" eval="False"/>
-            <field name="record_name">Visitor</field>
-            <field name="date" eval="datetime.now() - timedelta(days=1, seconds=-42)"/>
-            <field name="create_date" eval="datetime.now() - timedelta(days=1, seconds=-42)"/>
-            <field name="body">Great, thanks!</field>
-            <field name="res_id" ref="im_livechat.mail_channel_livechat_1"/>
-            <field name="model">mail.channel</field>
-            <field name="channel_ids" eval="[(6, False, [mail_channel_livechat_1])]"/>
+        <recordid="mail_message_livechat_4"model="mail.message">
+            <fieldname="author_id"ref="base.partner_admin"/>
+            <fieldname="date"eval="datetime.now()-timedelta(days=1,seconds=-33)"/>
+            <fieldname="create_date"eval="datetime.now()-timedelta(days=1,seconds=-33)"/>
+            <fieldname="body">TheCRMapplicationhelpsyoutotrackleads,closeopportunitiesandgetaccurateforecasts.Youcantestitforfreeonourwebsite.</field>
+            <fieldname="res_id"ref="im_livechat.mail_channel_livechat_1"/>
+            <fieldname="model">mail.channel</field>
+            <fieldname="channel_ids"eval="[(6,False,[mail_channel_livechat_1])]"/>
         </record>
-        <record id="mail_message_livechat_6" model="mail.message">
-            <field name="author_id" eval="False"/>
-            <field name="record_name">Visitor</field>
-            <field name="date" eval="datetime.now() - timedelta(days=1, seconds=-53)"/>
-            <field name="create_date" eval="datetime.now() - timedelta(days=1, seconds=-53)"/>
-            <field name="body">Rating: :-)</field>
-            <field name="res_id" ref="im_livechat.mail_channel_livechat_1"/>
-            <field name="model">mail.channel</field>
-            <field name="channel_ids" eval="[(6, False, [mail_channel_livechat_1])]"/>
+        <recordid="mail_message_livechat_5"model="mail.message">
+            <fieldname="author_id"eval="False"/>
+            <fieldname="record_name">Visitor</field>
+            <fieldname="date"eval="datetime.now()-timedelta(days=1,seconds=-42)"/>
+            <fieldname="create_date"eval="datetime.now()-timedelta(days=1,seconds=-42)"/>
+            <fieldname="body">Great,thanks!</field>
+            <fieldname="res_id"ref="im_livechat.mail_channel_livechat_1"/>
+            <fieldname="model">mail.channel</field>
+            <fieldname="channel_ids"eval="[(6,False,[mail_channel_livechat_1])]"/>
         </record>
-        <record id="rating_rating_livechat_1" model="rating.rating">
-            <field name="res_model_id" ref="mail.model_mail_channel"/>
-            <field name="rated_partner_id" ref="base.partner_admin"/>
-            <field name="partner_id" ref="base.partner_admin"/>
-            <field name="create_date" eval="datetime.now() - timedelta(days=1, seconds=-53)"/>
-            <field name="res_id" ref="im_livechat.mail_channel_livechat_1"/>
-            <field name="rating" eval="5"/>
-            <field name="consumed" eval="True"/>
+        <recordid="mail_message_livechat_6"model="mail.message">
+            <fieldname="author_id"eval="False"/>
+            <fieldname="record_name">Visitor</field>
+            <fieldname="date"eval="datetime.now()-timedelta(days=1,seconds=-53)"/>
+            <fieldname="create_date"eval="datetime.now()-timedelta(days=1,seconds=-53)"/>
+            <fieldname="body">Rating::-)</field>
+            <fieldname="res_id"ref="im_livechat.mail_channel_livechat_1"/>
+            <fieldname="model">mail.channel</field>
+            <fieldname="channel_ids"eval="[(6,False,[mail_channel_livechat_1])]"/>
+        </record>
+        <recordid="rating_rating_livechat_1"model="rating.rating">
+            <fieldname="res_model_id"ref="mail.model_mail_channel"/>
+            <fieldname="rated_partner_id"ref="base.partner_admin"/>
+            <fieldname="partner_id"ref="base.partner_admin"/>
+            <fieldname="create_date"eval="datetime.now()-timedelta(days=1,seconds=-53)"/>
+            <fieldname="res_id"ref="im_livechat.mail_channel_livechat_1"/>
+            <fieldname="rating"eval="5"/>
+            <fieldname="consumed"eval="True"/>
         </record>
 
     </data>

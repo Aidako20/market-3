@@ -1,94 +1,94 @@
-flectra.define('web.ListModel', function (require) {
-    "use strict";
+flectra.define('web.ListModel',function(require){
+    "usestrict";
 
-    var BasicModel = require('web.BasicModel');
+    varBasicModel=require('web.BasicModel');
 
-    var ListModel = BasicModel.extend({
+    varListModel=BasicModel.extend({
 
         /**
-         * @override
-         * @param {Object} params.groupbys
+         *@override
+         *@param{Object}params.groupbys
          */
-        init: function (parent, params) {
-            this._super.apply(this, arguments);
+        init:function(parent,params){
+            this._super.apply(this,arguments);
 
-            this.groupbys = params.groupbys;
+            this.groupbys=params.groupbys;
         },
 
         //--------------------------------------------------------------------------
-        // Public
+        //Public
         //--------------------------------------------------------------------------
 
         /**
-         * overridden to add `groupData` when performing get on list datapoints.
+         *overriddentoadd`groupData`whenperforminggetonlistdatapoints.
          *
-         * @override
-         * @see _readGroupExtraFields
+         *@override
+         *@see_readGroupExtraFields
          */
-        __get: function () {
-            var result = this._super.apply(this, arguments);
-            var dp = result && this.localData[result.id];
-            if (dp && dp.groupData) {
-                result.groupData = this.get(dp.groupData);
+        __get:function(){
+            varresult=this._super.apply(this,arguments);
+            vardp=result&&this.localData[result.id];
+            if(dp&&dp.groupData){
+                result.groupData=this.get(dp.groupData);
             }
-            return result;
+            returnresult;
         },
         /**
-         * For a list of records, performs a write with all changes and fetches
-         * all data.
+         *Foralistofrecords,performsawritewithallchangesandfetches
+         *alldata.
          *
-         * @param {string} listDatapointId id of the parent list
-         * @param {string} referenceRecordId the record datapoint used to
-         *  generate the changes to apply to recordIds
-         * @param {string[]} recordIds a list of record datapoint ids
-         * @param {string} fieldName the field to write
+         *@param{string}listDatapointIdidoftheparentlist
+         *@param{string}referenceRecordIdtherecorddatapointusedto
+         * generatethechangestoapplytorecordIds
+         *@param{string[]}recordIdsalistofrecorddatapointids
+         *@param{string}fieldNamethefieldtowrite
          */
-        saveRecords: function (listDatapointId, referenceRecordId, recordIds, fieldName) {
-            var self = this;
-            var referenceRecord = this.localData[referenceRecordId];
-            var list = this.localData[listDatapointId];
-            // generate all record values to ensure that we'll write something
-            // (e.g. 2 records selected, edit a many2one in the first one, but
-            // reset same value, we still want to save this value on the other
-            // record)
-            var allChanges = this._generateChanges(referenceRecord, {changesOnly: false});
-            var changes = _.pick(allChanges, fieldName);
-            var records = recordIds.map(function (recordId) {
-                return self.localData[recordId];
+        saveRecords:function(listDatapointId,referenceRecordId,recordIds,fieldName){
+            varself=this;
+            varreferenceRecord=this.localData[referenceRecordId];
+            varlist=this.localData[listDatapointId];
+            //generateallrecordvaluestoensurethatwe'llwritesomething
+            //(e.g.2recordsselected,editamany2oneinthefirstone,but
+            //resetsamevalue,westillwanttosavethisvalueontheother
+            //record)
+            varallChanges=this._generateChanges(referenceRecord,{changesOnly:false});
+            varchanges=_.pick(allChanges,fieldName);
+            varrecords=recordIds.map(function(recordId){
+                returnself.localData[recordId];
             });
-            var model = records[0].model;
-            var recordResIds = _.pluck(records, 'res_id');
-            var fieldNames = records[0].getFieldNames();
-            var context = records[0].getContext();
+            varmodel=records[0].model;
+            varrecordResIds=_.pluck(records,'res_id');
+            varfieldNames=records[0].getFieldNames();
+            varcontext=records[0].getContext();
 
-            return this._rpc({
-                model: model,
-                method: 'write',
-                args: [recordResIds, changes],
-                context: context,
-            }).then(function () {
-                return self._rpc({
-                    model: model,
-                    method: 'read',
-                    args: [recordResIds, fieldNames],
-                    context: context,
+            returnthis._rpc({
+                model:model,
+                method:'write',
+                args:[recordResIds,changes],
+                context:context,
+            }).then(function(){
+                returnself._rpc({
+                    model:model,
+                    method:'read',
+                    args:[recordResIds,fieldNames],
+                    context:context,
                 });
-            }).then(function (results) {
-                results.forEach(function (data) {
-                    var record = _.findWhere(records, {res_id: data.id});
-                    record.data = _.extend({}, record.data, data);
-                    record._changes = {};
-                    record._isDirty = false;
-                    self._parseServerData(fieldNames, record, record.data);
+            }).then(function(results){
+                results.forEach(function(data){
+                    varrecord=_.findWhere(records,{res_id:data.id});
+                    record.data=_.extend({},record.data,data);
+                    record._changes={};
+                    record._isDirty=false;
+                    self._parseServerData(fieldNames,record,record.data);
                 });
-            }).then(function () {
-                if (!list.groupedBy.length) {
-                    return Promise.all([
+            }).then(function(){
+                if(!list.groupedBy.length){
+                    returnPromise.all([
                         self._fetchX2ManysBatched(list),
                         self._fetchReferencesBatched(list)
                     ]);
-                } else {
-                    return Promise.all([
+                }else{
+                    returnPromise.all([
                         self._fetchX2ManysSingleBatch(list),
                         self._fetchReferencesSingleBatch(list)
                     ]);
@@ -97,79 +97,79 @@ flectra.define('web.ListModel', function (require) {
         },
 
         //--------------------------------------------------------------------------
-        // Private
+        //Private
         //--------------------------------------------------------------------------
 
         /**
          *
-         * @override
-         * @private
+         *@override
+         *@private
          */
-        _readGroup: function (list, options) {
-            var self = this;
-            options = options || {};
-            options.fetchRecordsWithGroups = true;
-            return this._super(list, options).then(function (result) {
-                return self._readGroupExtraFields(list).then(_.constant(result));
+        _readGroup:function(list,options){
+            varself=this;
+            options=options||{};
+            options.fetchRecordsWithGroups=true;
+            returnthis._super(list,options).then(function(result){
+                returnself._readGroupExtraFields(list).then(_.constant(result));
             });
         },
         /**
-         * Fetches group specific fields on the group by relation and stores it
-         * in the column datapoint in a special key `groupData`.
-         * Data for the groups are fetched in batch for all groups, to avoid
-         * doing multiple calls.
-         * Note that the option is only for m2o fields.
+         *Fetchesgroupspecificfieldsonthegroupbyrelationandstoresit
+         *inthecolumndatapointinaspecialkey`groupData`.
+         *Dataforthegroupsarefetchedinbatchforallgroups,toavoid
+         *doingmultiplecalls.
+         *Notethattheoptionisonlyform2ofields.
          *
-         * @private
-         * @param {Object} list
-         * @returns {Promise}
+         *@private
+         *@param{Object}list
+         *@returns{Promise}
          */
-        _readGroupExtraFields: function (list) {
-            var self = this;
-            var groupByFieldName = list.groupedBy[0].split(':')[0];
-            var groupedByField = list.fields[groupByFieldName];
-            if (groupedByField.type !== 'many2one' || !this.groupbys[groupByFieldName]) {
-                return Promise.resolve();
+        _readGroupExtraFields:function(list){
+            varself=this;
+            vargroupByFieldName=list.groupedBy[0].split(':')[0];
+            vargroupedByField=list.fields[groupByFieldName];
+            if(groupedByField.type!=='many2one'||!this.groupbys[groupByFieldName]){
+                returnPromise.resolve();
             }
-            var groupIds = _.reduce(list.data, function (groupIds, id) {
-                var resId = self.get(id, { raw: true }).res_id;
-                if (resId) { // the field might be undefined when grouping
+            vargroupIds=_.reduce(list.data,function(groupIds,id){
+                varresId=self.get(id,{raw:true}).res_id;
+                if(resId){//thefieldmightbeundefinedwhengrouping
                     groupIds.push(resId);
                 }
-                return groupIds;
-            }, []);
-            var groupFields = Object.keys(this.groupbys[groupByFieldName].viewFields);
-            var prom;
-            if (groupIds.length && groupFields.length) {
-                prom = this._rpc({
-                    model: groupedByField.relation,
-                    method: 'read',
-                    args: [groupIds, groupFields],
-                    context: list.context,
+                returngroupIds;
+            },[]);
+            vargroupFields=Object.keys(this.groupbys[groupByFieldName].viewFields);
+            varprom;
+            if(groupIds.length&&groupFields.length){
+                prom=this._rpc({
+                    model:groupedByField.relation,
+                    method:'read',
+                    args:[groupIds,groupFields],
+                    context:list.context,
                 });
             }
-            return Promise.resolve(prom).then(function (result) {
-                var fvg = self.groupbys[groupByFieldName];
-                _.each(list.data, function (id) {
-                    var dp = self.localData[id];
-                    var groupData = result && _.findWhere(result, {
-                        id: dp.res_id,
+            returnPromise.resolve(prom).then(function(result){
+                varfvg=self.groupbys[groupByFieldName];
+                _.each(list.data,function(id){
+                    vardp=self.localData[id];
+                    vargroupData=result&&_.findWhere(result,{
+                        id:dp.res_id,
                     });
-                    var groupDp = self._makeDataPoint({
-                        context: dp.context,
-                        data: groupData,
-                        fields: fvg.fields,
-                        fieldsInfo: fvg.fieldsInfo,
-                        modelName: groupedByField.relation,
-                        parentID: dp.id,
-                        res_id: dp.res_id,
-                        viewType: 'groupby',
+                    vargroupDp=self._makeDataPoint({
+                        context:dp.context,
+                        data:groupData,
+                        fields:fvg.fields,
+                        fieldsInfo:fvg.fieldsInfo,
+                        modelName:groupedByField.relation,
+                        parentID:dp.id,
+                        res_id:dp.res_id,
+                        viewType:'groupby',
                     });
-                    dp.groupData = groupDp.id;
-                    self._parseServerData(groupFields, groupDp, groupDp.data);
+                    dp.groupData=groupDp.id;
+                    self._parseServerData(groupFields,groupDp,groupDp.data);
                 });
             });
         },
     });
-    return ListModel;
+    returnListModel;
 });

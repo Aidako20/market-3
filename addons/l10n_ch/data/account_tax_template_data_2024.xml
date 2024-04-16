@@ -1,707 +1,707 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <!-- Account Tax Templates (post-2024 rates change) -->
-    <record model="account.tax.template" id="vat_sale_26">
-        <field name="name">TVA due a 2.6% (TR)</field>
-        <field name="description">2.6%</field>
-        <field name="amount" eval="2.6"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_vat_26"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_313a')],
+    <!--AccountTaxTemplates(post-2024rateschange)-->
+    <recordmodel="account.tax.template"id="vat_sale_26">
+        <fieldname="name">TVAduea2.6%(TR)</field>
+        <fieldname="description">2.6%</field>
+        <fieldname="amount"eval="2.6"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_26"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_313a')],
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_2200'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_313b')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_313a')],
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_2200'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_313b')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_2200'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_313b')],
             }),
         ]"/>
-    </record>
-
-    <record model="account.tax.template" id="vat_sale_26_incl">
-        <field name="name">TVA due à 2.6% (Incl. TR)</field>
-        <field name="description">2.6% Incl.</field>
-        <field name="price_include" eval="1"/>
-        <field name="amount" eval="2.6"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_vat_26"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_313a')],
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_313a')],
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_2200'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_313b')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_313a')],
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_2200'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_313b')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_2200'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_313b')],
             }),
         ]"/>
     </record>
 
-    <record model="account.tax.template" id="vat_purchase_26">
-        <field name="name">TVA 2.6% sur achat B&amp;S (TR)</field>
-        <field name="description">2.6% achat</field>
-        <field name="amount" eval="2.6"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_26"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordmodel="account.tax.template"id="vat_sale_26_incl">
+        <fieldname="name">TVAdueà2.6%(Incl.TR)</field>
+        <fieldname="description">2.6%Incl.</field>
+        <fieldname="price_include"eval="1"/>
+        <fieldname="amount"eval="2.6"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_26"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_313a')],
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_400')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_400')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_2200'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_313b')],
             }),
         ]"/>
-    </record>
-
-    <record model="account.tax.template" id="vat_purchase_26_incl">
-        <field name="name">TVA 2.6% sur achat B&amp;S (Incl. TR)</field>
-        <field name="description">2.6% achat Incl.</field>
-        <field name="price_include" eval="1"/>
-        <field name="amount" eval="2.6"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_26"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_313a')],
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_400')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_400')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_2200'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_313b')],
             }),
         ]"/>
     </record>
 
-    <record model="account.tax.template" id="vat_purchase_26_invest">
-        <field name="name">TVA 2.6% sur invest. et autres ch. (TR)</field>
-        <field name="description">2.6% invest.</field>
-        <field name="amount" eval="2.6"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_26"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordmodel="account.tax.template"id="vat_purchase_26">
+        <fieldname="name">TVA2.6%surachatB&amp;S(TR)</field>
+        <fieldname="description">2.6%achat</field>
+        <fieldname="amount"eval="2.6"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_26"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1171'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_405')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1171'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_405')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_400')],
             }),
         ]"/>
-    </record>
-
-    <record model="account.tax.template" id="vat_purchase_26_invest_incl">
-        <field name="name">TVA 2.6% sur invest. et autres ch. (Incl. TR)</field>
-        <field name="description">2.6% invest. Incl.</field>
-        <field name="price_include" eval="1"/>
-        <field name="amount" eval="2.6"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_26"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1171'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_405')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1171'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_405')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_400')],
             }),
         ]"/>
     </record>
 
-    <record model="account.tax.template" id="vat_sale_38">
-        <field name="name">TVA due a 3.8% (TS)</field>
-        <field name="description">3.8%</field>
-        <field name="amount" eval="3.8"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_vat_38"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_343a')],
+    <recordmodel="account.tax.template"id="vat_purchase_26_incl">
+        <fieldname="name">TVA2.6%surachatB&amp;S(Incl.TR)</field>
+        <fieldname="description">2.6%achatIncl.</field>
+        <fieldname="price_include"eval="1"/>
+        <fieldname="amount"eval="2.6"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_26"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_2200'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_343b')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_343a')],
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_2200'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_343b')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_400')],
             }),
         ]"/>
-    </record>
-
-    <record model="account.tax.template" id="vat_sale_38_incl">
-        <field name="name">TVA due à 3.8% (Incl. TS)</field>
-        <field name="description">3.8% Incl.</field>
-        <field name="price_include" eval="1"/>
-        <field name="amount" eval="3.8"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_vat_38"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_343a')],
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_2200'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_343b')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_343a')],
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_2200'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_343b')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_400')],
             }),
         ]"/>
     </record>
 
-    <record model="account.tax.template" id="vat_purchase_38">
-        <field name="name">TVA 3.8% sur achat B&amp;S (TS)</field>
-        <field name="description">3.8% achat</field>
-        <field name="amount" eval="3.8"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_38"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordmodel="account.tax.template"id="vat_purchase_26_invest">
+        <fieldname="name">TVA2.6%surinvest.etautresch.(TR)</field>
+        <fieldname="description">2.6%invest.</field>
+        <fieldname="amount"eval="2.6"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_26"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_400')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_400')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1171'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_405')],
             }),
         ]"/>
-    </record>
-
-    <record model="account.tax.template" id="vat_purchase_38_incl">
-        <field name="name">TVA 3.8% sur achat B&amp;S (Incl. TS)</field>
-        <field name="description">3.8% achat Incl.</field>
-        <field name="price_include" eval="1"/>
-        <field name="amount" eval="3.8"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_38"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_400')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_400')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1171'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_405')],
             }),
         ]"/>
     </record>
 
-    <record model="account.tax.template" id="vat_purchase_38_invest">
-        <field name="name">TVA 3.8% sur invest. et autres ch. (TS)</field>
-        <field name="description">3.8% invest</field>
-        <field name="amount" eval="3.8"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_38"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordmodel="account.tax.template"id="vat_purchase_26_invest_incl">
+        <fieldname="name">TVA2.6%surinvest.etautresch.(Incl.TR)</field>
+        <fieldname="description">2.6%invest.Incl.</field>
+        <fieldname="price_include"eval="1"/>
+        <fieldname="amount"eval="2.6"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_26"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1171'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_405')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1171'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_405')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1171'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_405')],
             }),
         ]"/>
-    </record>
-
-    <record model="account.tax.template" id="vat_purchase_38_invest_incl">
-        <field name="name">TVA 3.8% sur invest. et autres ch. (Incl. TS)</field>
-        <field name="description">3.8% invest Incl.</field>
-        <field name="price_include" eval="1"/>
-        <field name="amount" eval="3.8"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_38"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1171'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_405')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1171'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_405')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1171'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_405')],
             }),
         ]"/>
     </record>
 
-    <record model="account.tax.template" id="vat_sale_81">
-        <field name="name">TVA due a 8.1% (TN)</field>
-        <field name="description">8.1%</field>
-        <field name="amount" eval="8.1"/>
-        <field name="sequence" eval="0"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_vat_81"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_303a')],
+    <recordmodel="account.tax.template"id="vat_sale_38">
+        <fieldname="name">TVAduea3.8%(TS)</field>
+        <fieldname="description">3.8%</field>
+        <fieldname="amount"eval="3.8"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_38"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_343a')],
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_2200'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_303b')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_303a')],
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_2200'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_303b')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_2200'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_343b')],
             }),
         ]"/>
-    </record>
-
-    <record model="account.tax.template" id="vat_sale_81_incl">
-        <field name="name">TVA due à 8.1% (Incl. TN)</field>
-        <field name="description">8.1% Incl.</field>
-        <field name="price_include" eval="1"/>
-        <field name="amount" eval="8.1"/>
-        <field name="sequence" eval="0"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">sale</field>
-        <field name="tax_group_id" ref="tax_group_vat_81"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_303a')],
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_343a')],
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_2200'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_303b')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_303a')],
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_2200'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_303b')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_2200'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_343b')],
             }),
         ]"/>
     </record>
 
-    <record model="account.tax.template" id="vat_purchase_81">
-        <field name="name">TVA 8.1% sur achat B&amp;S (TN)</field>
-        <field name="description">8.1% achat</field>
-        <field name="amount" eval="8.1"/>
-        <field name="amount_type">percent</field>
-        <field name="sequence" eval="0"/>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_81"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordmodel="account.tax.template"id="vat_sale_38_incl">
+        <fieldname="name">TVAdueà3.8%(Incl.TS)</field>
+        <fieldname="description">3.8%Incl.</field>
+        <fieldname="price_include"eval="1"/>
+        <fieldname="amount"eval="3.8"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_38"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_343a')],
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_400')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_400')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_2200'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_343b')],
             }),
         ]"/>
-    </record>
-
-    <record model="account.tax.template" id="vat_purchase_81_incl">
-        <field name="name">TVA 8.1% sur achat B&amp;S (Incl. TN)</field>
-        <field name="description">8.1% achat Incl.</field>
-        <field name="price_include" eval="1"/>
-        <field name="amount" eval="8.1"/>
-        <field name="amount_type">percent</field>
-        <field name="sequence" eval="0"/>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_81"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_343a')],
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_400')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_400')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_2200'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_343b')],
             }),
         ]"/>
     </record>
 
-    <record model="account.tax.template" id="vat_purchase_81_invest">
-        <field name="name">TVA 8.1% sur invest. et autres ch. (TN)</field>
-        <field name="description">8.1% invest.</field>
-        <field name="amount" eval="8.1"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_81"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordmodel="account.tax.template"id="vat_purchase_38">
+        <fieldname="name">TVA3.8%surachatB&amp;S(TS)</field>
+        <fieldname="description">3.8%achat</field>
+        <fieldname="amount"eval="3.8"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_38"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1171'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_405')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1171'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_405')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_400')],
             }),
         ]"/>
-    </record>
-
-    <record model="account.tax.template" id="vat_purchase_81_invest_incl">
-        <field name="name">TVA 8.1% sur invest. et autres ch. (Incl. TN)</field>
-        <field name="description">8.1% invest. Incl.</field>
-        <field name="price_include" eval="1"/>
-        <field name="amount" eval="8.1"/>
-        <field name="amount_type">percent</field>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_81"/>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1171'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_405')],
-            }),
-        ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1171'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_405')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_400')],
             }),
         ]"/>
     </record>
 
-    <record model="account.tax.template" id="vat_purchase_81_return">
-        <field name="name">TVA due a 8.1% (TN) (return)</field>
-        <field name="description">8.1% achat (return)</field>
-        <field name="amount" eval="-8.1"/>
-        <field name="amount_type">percent</field>
-        <field name="sequence" eval="0"/>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="type_tax_use">none</field>
-        <field name="active" eval="False"/>
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_383a')],
+    <recordmodel="account.tax.template"id="vat_purchase_38_incl">
+        <fieldname="name">TVA3.8%surachatB&amp;S(Incl.TS)</field>
+        <fieldname="description">3.8%achatIncl.</field>
+        <fieldname="price_include"eval="1"/>
+        <fieldname="amount"eval="3.8"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_38"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'minus_report_line_ids': [ref('account_tax_report_line_chtax_383b')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_400')],
             }),
         ]"/>
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_383a')],
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0,0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('ch_coa_1170'),
-                'plus_report_line_ids': [ref('account_tax_report_line_chtax_383b')],
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_400')],
             }),
         ]"/>
     </record>
 
-    <!--# for reverse charge or VAT on Acquisition (group of taxes)-->
-    <record model="account.tax.template" id="vat_purchase_81_reverse">
-        <field name="name">TVA 8.1% sur achat service a l'etranger (reverse charge)</field>
-        <field name="description">8.1% achat</field>
-        <field name="amount_type">group</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="tax_group_id" ref="tax_group_vat_81"/>
-        <field name="chart_template_id" ref="l10nch_chart_template"/>
-        <field name="active" eval="False"/>
-        <field name="children_tax_ids" eval="[(6, 0, [ref('vat_purchase_81'), ref('vat_purchase_81_return')])]"/>
+    <recordmodel="account.tax.template"id="vat_purchase_38_invest">
+        <fieldname="name">TVA3.8%surinvest.etautresch.(TS)</field>
+        <fieldname="description">3.8%invest</field>
+        <fieldname="amount"eval="3.8"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_38"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1171'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_405')],
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1171'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_405')],
+            }),
+        ]"/>
+    </record>
+
+    <recordmodel="account.tax.template"id="vat_purchase_38_invest_incl">
+        <fieldname="name">TVA3.8%surinvest.etautresch.(Incl.TS)</field>
+        <fieldname="description">3.8%investIncl.</field>
+        <fieldname="price_include"eval="1"/>
+        <fieldname="amount"eval="3.8"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_38"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1171'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_405')],
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1171'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_405')],
+            }),
+        ]"/>
+    </record>
+
+    <recordmodel="account.tax.template"id="vat_sale_81">
+        <fieldname="name">TVAduea8.1%(TN)</field>
+        <fieldname="description">8.1%</field>
+        <fieldname="amount"eval="8.1"/>
+        <fieldname="sequence"eval="0"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_81"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_303a')],
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_2200'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_303b')],
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_303a')],
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_2200'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_303b')],
+            }),
+        ]"/>
+    </record>
+
+    <recordmodel="account.tax.template"id="vat_sale_81_incl">
+        <fieldname="name">TVAdueà8.1%(Incl.TN)</field>
+        <fieldname="description">8.1%Incl.</field>
+        <fieldname="price_include"eval="1"/>
+        <fieldname="amount"eval="8.1"/>
+        <fieldname="sequence"eval="0"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_81"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_303a')],
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_2200'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_303b')],
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_303a')],
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_2200'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_303b')],
+            }),
+        ]"/>
+    </record>
+
+    <recordmodel="account.tax.template"id="vat_purchase_81">
+        <fieldname="name">TVA8.1%surachatB&amp;S(TN)</field>
+        <fieldname="description">8.1%achat</field>
+        <fieldname="amount"eval="8.1"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="sequence"eval="0"/>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_81"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_400')],
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_400')],
+            }),
+        ]"/>
+    </record>
+
+    <recordmodel="account.tax.template"id="vat_purchase_81_incl">
+        <fieldname="name">TVA8.1%surachatB&amp;S(Incl.TN)</field>
+        <fieldname="description">8.1%achatIncl.</field>
+        <fieldname="price_include"eval="1"/>
+        <fieldname="amount"eval="8.1"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="sequence"eval="0"/>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_81"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_400')],
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_400')],
+            }),
+        ]"/>
+    </record>
+
+    <recordmodel="account.tax.template"id="vat_purchase_81_invest">
+        <fieldname="name">TVA8.1%surinvest.etautresch.(TN)</field>
+        <fieldname="description">8.1%invest.</field>
+        <fieldname="amount"eval="8.1"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_81"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1171'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_405')],
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1171'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_405')],
+            }),
+        ]"/>
+    </record>
+
+    <recordmodel="account.tax.template"id="vat_purchase_81_invest_incl">
+        <fieldname="name">TVA8.1%surinvest.etautresch.(Incl.TN)</field>
+        <fieldname="description">8.1%invest.Incl.</field>
+        <fieldname="price_include"eval="1"/>
+        <fieldname="amount"eval="8.1"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_81"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1171'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_405')],
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1171'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_405')],
+            }),
+        ]"/>
+    </record>
+
+    <recordmodel="account.tax.template"id="vat_purchase_81_return">
+        <fieldname="name">TVAduea8.1%(TN)(return)</field>
+        <fieldname="description">8.1%achat(return)</field>
+        <fieldname="amount"eval="-8.1"/>
+        <fieldname="amount_type">percent</field>
+        <fieldname="sequence"eval="0"/>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="type_tax_use">none</field>
+        <fieldname="active"eval="False"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_383a')],
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'minus_report_line_ids':[ref('account_tax_report_line_chtax_383b')],
+            }),
+        ]"/>
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_383a')],
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('ch_coa_1170'),
+                'plus_report_line_ids':[ref('account_tax_report_line_chtax_383b')],
+            }),
+        ]"/>
+    </record>
+
+    <!--#forreversechargeorVATonAcquisition(groupoftaxes)-->
+    <recordmodel="account.tax.template"id="vat_purchase_81_reverse">
+        <fieldname="name">TVA8.1%surachatserviceal'etranger(reversecharge)</field>
+        <fieldname="description">8.1%achat</field>
+        <fieldname="amount_type">group</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="tax_group_id"ref="tax_group_vat_81"/>
+        <fieldname="chart_template_id"ref="l10nch_chart_template"/>
+        <fieldname="active"eval="False"/>
+        <fieldname="children_tax_ids"eval="[(6,0,[ref('vat_purchase_81'),ref('vat_purchase_81_return')])]"/>
     </record>
 </flectra>

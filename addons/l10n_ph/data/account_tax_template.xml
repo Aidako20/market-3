@@ -1,1047 +1,1047 @@
-<?xml version='1.0' encoding='utf-8' ?>
+<?xmlversion='1.0'encoding='utf-8'?>
 <flectra>
-    <record id="l10n_ph_tax_sale_vat_12" model="account.tax.template">
-        <field name="sequence">10</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">12% VAT</field>
-        <field name="description">12% VAT</field>
-        <field name="type_tax_use">sale</field>
-        <field name="amount">12</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_vat_12" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_sale_vat_12"model="account.tax.template">
+        <fieldname="sequence">10</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">12%VAT</field>
+        <fieldname="description">12%VAT</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="amount">12</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_vat_12"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200300'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200300'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200300'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_sale_vat_exempt" model="account.tax.template">
-        <field name="sequence">10</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">VAT Exempt</field>
-        <field name="description">VAT Exempt</field>
-        <field name="type_tax_use">sale</field>
-        <field name="amount">0</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_vat_exempt" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200300'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200300'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200300'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_vat_12" model="account.tax.template">
-        <field name="sequence">20</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">12% VAT</field>
-        <field name="description">12% VAT</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">12</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_vat_12" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_sale_vat_exempt"model="account.tax.template">
+        <fieldname="sequence">10</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">VATExempt</field>
+        <fieldname="description">VATExempt</field>
+        <fieldname="type_tax_use">sale</field>
+        <fieldname="amount">0</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_vat_exempt"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_110201'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_110201'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200300'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_vat_exempt" model="account.tax.template">
-        <field name="sequence">20</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">VAT Exempt</field>
-        <field name="description">VAT Exempt</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">0</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_vat_exempt" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_110201'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_110201'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200300'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wi010" model="account.tax.template">
-        <field name="sequence">30</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">5% WI010 - Prof Fees</field>
-        <field name="description">Prof Fees</field>
-        <field name="l10n_ph_atc">WI010</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-5</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_5" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_vat_12"model="account.tax.template">
+        <fieldname="sequence">20</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">12%VAT</field>
+        <fieldname="description">12%VAT</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">12</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_vat_12"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_110201'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_wi011" model="account.tax.template">
-        <field name="sequence">30</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">10% WI011 - Prof Fees</field>
-        <field name="description">Prof Fees</field>
-        <field name="l10n_ph_atc">WI011</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-10</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_10" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_110201'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wi100" model="account.tax.template">
-        <field name="sequence">40</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">5% WI100 - Gross rental of property</field>
-        <field name="description">Gross rental of property</field>
-        <field name="l10n_ph_atc">WI100</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-5</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_5" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_vat_exempt"model="account.tax.template">
+        <fieldname="sequence">20</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">VATExempt</field>
+        <fieldname="description">VATExempt</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">0</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_vat_exempt"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_110201'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_wi120" model="account.tax.template">
-        <field name="sequence">50</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">2% WI120 - Contractors</field>
-        <field name="description">Contractors</field>
-        <field name="l10n_ph_atc">WI120</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-2</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_2" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_110201'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wi139" model="account.tax.template">
-        <field name="sequence">60</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">5% WI139 - Commission of service fees</field>
-        <field name="description">Commission of service fees</field>
-        <field name="l10n_ph_atc">WI139</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-5</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_5" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_wi010"model="account.tax.template">
+        <fieldname="sequence">30</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">5%WI010-ProfFees</field>
+        <fieldname="description">ProfFees</field>
+        <fieldname="l10n_ph_atc">WI010</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-5</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_5"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_wi140" model="account.tax.template">
-        <field name="sequence">60</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">10% WI140 - Commission of service fees</field>
-        <field name="description">Commission of service fees</field>
-        <field name="l10n_ph_atc">WI140</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-10</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_10" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wi158_p5" model="account.tax.template">
-        <field name="sequence">70</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">0.5% WI158 - Credit card companies</field>
-        <field name="description">Credit card companies</field>
-        <field name="l10n_ph_atc">WI158</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-0.5</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_p5" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_wi011"model="account.tax.template">
+        <fieldname="sequence">30</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">10%WI011-ProfFees</field>
+        <fieldname="description">ProfFees</field>
+        <fieldname="l10n_ph_atc">WI011</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-10</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_10"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_wi640" model="account.tax.template">
-        <field name="sequence">80</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">1% WI640 - Supplier of goods</field>
-        <field name="description">Supplier of goods</field>
-        <field name="l10n_ph_atc">WI640</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-1</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_1" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wi157" model="account.tax.template">
-        <field name="sequence">80</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">2% WI157 - Supplier of services</field>
-        <field name="description">Supplier of services</field>
-        <field name="l10n_ph_atc">WI157</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-2</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_2" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_wi100"model="account.tax.template">
+        <fieldname="sequence">40</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">5%WI100-Grossrentalofproperty</field>
+        <fieldname="description">Grossrentalofproperty</field>
+        <fieldname="l10n_ph_atc">WI100</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-5</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_5"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_wi158_1" model="account.tax.template">
-        <field name="sequence">90</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">1% WI158 - Supplier of goods by top w/holding agents</field>
-        <field name="description">Supplier of goods by top w/holding agents</field>
-        <field name="l10n_ph_atc">WI158</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-1</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_1" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wi160" model="account.tax.template">
-        <field name="sequence">90</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">2% WI160 - Supplier of goods by top w/holding agents</field>
-        <field name="description">Supplier of goods by top w/holding agents</field>
-        <field name="l10n_ph_atc">WI160</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-2</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_2" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_wi120"model="account.tax.template">
+        <fieldname="sequence">50</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">2%WI120-Contractors</field>
+        <fieldname="description">Contractors</field>
+        <fieldname="l10n_ph_atc">WI120</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-2</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_2"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_wi515" model="account.tax.template">
-        <field name="sequence">100</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">5% WI515 - Commission, rebates, discounts</field>
-        <field name="description">Commission, rebates, discounts</field>
-        <field name="l10n_ph_atc">WI515</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-5</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_5" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wi516" model="account.tax.template">
-        <field name="sequence">100</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">10% WI516 - Commission, rebates, discounts</field>
-        <field name="description">Commission, rebates, discounts</field>
-        <field name="l10n_ph_atc">WI516</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-10</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_10" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_wi139"model="account.tax.template">
+        <fieldname="sequence">60</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">5%WI139-Commissionofservicefees</field>
+        <fieldname="description">Commissionofservicefees</field>
+        <fieldname="l10n_ph_atc">WI139</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-5</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_5"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_wc010" model="account.tax.template">
-        <field name="sequence">110</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">10% WC010 - Prof Fees</field>
-        <field name="description">Prof Fees</field>
-        <field name="l10n_ph_atc">WC010</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-10</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_10" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wc011" model="account.tax.template">
-        <field name="sequence">110</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">15% WC011 - Prof Fees</field>
-        <field name="description">Prof Fees</field>
-        <field name="l10n_ph_atc">WC011</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-15</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_15" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_wi140"model="account.tax.template">
+        <fieldname="sequence">60</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">10%WI140-Commissionofservicefees</field>
+        <fieldname="description">Commissionofservicefees</field>
+        <fieldname="l10n_ph_atc">WI140</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-10</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_10"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_wc100" model="account.tax.template">
-        <field name="sequence">120</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">5% WC100 - Gross rental of property</field>
-        <field name="description">Gross rental of property</field>
-        <field name="l10n_ph_atc">WC100</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-5</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_5" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wc120" model="account.tax.template">
-        <field name="sequence">130</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">2% WC120 - Contractors</field>
-        <field name="description">Contractors</field>
-        <field name="l10n_ph_atc">WC120</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-2</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_2" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_wi158_p5"model="account.tax.template">
+        <fieldname="sequence">70</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">0.5%WI158-Creditcardcompanies</field>
+        <fieldname="description">Creditcardcompanies</field>
+        <fieldname="l10n_ph_atc">WI158</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-0.5</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_p5"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_wc139" model="account.tax.template">
-        <field name="sequence">140</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">10% WC139 - Commission of service fees</field>
-        <field name="description">Commission of service fees</field>
-        <field name="l10n_ph_atc">WC139</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-10</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_10" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wc140" model="account.tax.template">
-        <field name="sequence">140</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">15% WC140 - Commission of service fees</field>
-        <field name="description">Commission of service fees</field>
-        <field name="l10n_ph_atc">WC140</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-15</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_15" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_wi640"model="account.tax.template">
+        <fieldname="sequence">80</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">1%WI640-Supplierofgoods</field>
+        <fieldname="description">Supplierofgoods</field>
+        <fieldname="l10n_ph_atc">WI640</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-1</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_1"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_wc158_p5" model="account.tax.template">
-        <field name="sequence">150</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">0.5% WC158 - Credit card companies</field>
-        <field name="description">Credit card companies</field>
-        <field name="l10n_ph_atc">WC158</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-0.5</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_p5" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wc640" model="account.tax.template">
-        <field name="sequence">160</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">1% WC640 - Supplier of goods</field>
-        <field name="description">Supplier of goods</field>
-        <field name="l10n_ph_atc">WC640</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-1</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_1" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_wi157"model="account.tax.template">
+        <fieldname="sequence">80</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">2%WI157-Supplierofservices</field>
+        <fieldname="description">Supplierofservices</field>
+        <fieldname="l10n_ph_atc">WI157</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-2</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_2"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_wc157" model="account.tax.template">
-        <field name="sequence">160</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">2% WC157 - Supplier of services</field>
-        <field name="description">Supplier of services</field>
-        <field name="l10n_ph_atc">WC157</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-2</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_2" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wc158_1" model="account.tax.template">
-        <field name="sequence">170</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">1% WC158 - Supplier of goods by top w/holding agents</field>
-        <field name="description">Supplier of goods by top w/holding agents</field>
-        <field name="l10n_ph_atc">WC158</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-1</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_1" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_wi158_1"model="account.tax.template">
+        <fieldname="sequence">90</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">1%WI158-Supplierofgoodsbytopw/holdingagents</field>
+        <fieldname="description">Supplierofgoodsbytopw/holdingagents</field>
+        <fieldname="l10n_ph_atc">WI158</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-1</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_1"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
-    </record>
-    <record id="l10n_ph_tax_purchase_wc160" model="account.tax.template">
-        <field name="sequence">170</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">2% WC160 - Supplier of goods by top w/holding agents</field>
-        <field name="description">Supplier of goods by top w/holding agents</field>
-        <field name="l10n_ph_atc">WC160</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-2</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_2" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
-            }),
-        ]"
-        />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
-            }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wc515" model="account.tax.template">
-        <field name="sequence">180</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">5% WC515 - Commission, rebates, discounts</field>
-        <field name="description">Commission, rebates, discounts</field>
-        <field name="l10n_ph_atc">WC515</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-5</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_5" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_wi160"model="account.tax.template">
+        <fieldname="sequence">90</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">2%WI160-Supplierofgoodsbytopw/holdingagents</field>
+        <fieldname="description">Supplierofgoodsbytopw/holdingagents</field>
+        <fieldname="l10n_ph_atc">WI160</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-2</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_2"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
     </record>
-    <record id="l10n_ph_tax_purchase_wc516" model="account.tax.template">
-        <field name="sequence">180</field>
-        <field name="chart_template_id" ref="l10n_ph_chart_template" />
-        <field name="name">10% WC516 - Commission, rebates, discounts</field>
-        <field name="description">Commission, rebates, discounts</field>
-        <field name="l10n_ph_atc">WC516</field>
-        <field name="type_tax_use">purchase</field>
-        <field name="amount">-10</field>
-        <field name="amount_type">percent</field>
-        <field name="tax_group_id" ref="l10n_ph_tax_group_wht_10" />
-        <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+    <recordid="l10n_ph_tax_purchase_wi515"model="account.tax.template">
+        <fieldname="sequence">100</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">5%WI515-Commission,rebates,discounts</field>
+        <fieldname="description">Commission,rebates,discounts</field>
+        <fieldname="l10n_ph_atc">WI515</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-5</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_5"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />
-        <field name="refund_repartition_line_ids" eval="[(5, 0, 0),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'base',
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
             }),
-            (0, 0, {
-                'factor_percent': 100,
-                'repartition_type': 'tax',
-                'account_id': ref('l10n_ph_200303'),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wi516"model="account.tax.template">
+        <fieldname="sequence">100</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">10%WI516-Commission,rebates,discounts</field>
+        <fieldname="description">Commission,rebates,discounts</field>
+        <fieldname="l10n_ph_atc">WI516</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-10</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_10"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc010"model="account.tax.template">
+        <fieldname="sequence">110</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">10%WC010-ProfFees</field>
+        <fieldname="description">ProfFees</field>
+        <fieldname="l10n_ph_atc">WC010</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-10</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_10"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc011"model="account.tax.template">
+        <fieldname="sequence">110</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">15%WC011-ProfFees</field>
+        <fieldname="description">ProfFees</field>
+        <fieldname="l10n_ph_atc">WC011</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-15</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_15"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc100"model="account.tax.template">
+        <fieldname="sequence">120</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">5%WC100-Grossrentalofproperty</field>
+        <fieldname="description">Grossrentalofproperty</field>
+        <fieldname="l10n_ph_atc">WC100</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-5</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_5"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc120"model="account.tax.template">
+        <fieldname="sequence">130</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">2%WC120-Contractors</field>
+        <fieldname="description">Contractors</field>
+        <fieldname="l10n_ph_atc">WC120</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-2</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_2"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc139"model="account.tax.template">
+        <fieldname="sequence">140</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">10%WC139-Commissionofservicefees</field>
+        <fieldname="description">Commissionofservicefees</field>
+        <fieldname="l10n_ph_atc">WC139</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-10</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_10"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc140"model="account.tax.template">
+        <fieldname="sequence">140</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">15%WC140-Commissionofservicefees</field>
+        <fieldname="description">Commissionofservicefees</field>
+        <fieldname="l10n_ph_atc">WC140</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-15</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_15"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc158_p5"model="account.tax.template">
+        <fieldname="sequence">150</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">0.5%WC158-Creditcardcompanies</field>
+        <fieldname="description">Creditcardcompanies</field>
+        <fieldname="l10n_ph_atc">WC158</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-0.5</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_p5"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc640"model="account.tax.template">
+        <fieldname="sequence">160</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">1%WC640-Supplierofgoods</field>
+        <fieldname="description">Supplierofgoods</field>
+        <fieldname="l10n_ph_atc">WC640</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-1</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_1"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc157"model="account.tax.template">
+        <fieldname="sequence">160</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">2%WC157-Supplierofservices</field>
+        <fieldname="description">Supplierofservices</field>
+        <fieldname="l10n_ph_atc">WC157</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-2</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_2"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc158_1"model="account.tax.template">
+        <fieldname="sequence">170</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">1%WC158-Supplierofgoodsbytopw/holdingagents</field>
+        <fieldname="description">Supplierofgoodsbytopw/holdingagents</field>
+        <fieldname="l10n_ph_atc">WC158</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-1</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_1"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc160"model="account.tax.template">
+        <fieldname="sequence">170</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">2%WC160-Supplierofgoodsbytopw/holdingagents</field>
+        <fieldname="description">Supplierofgoodsbytopw/holdingagents</field>
+        <fieldname="l10n_ph_atc">WC160</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-2</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_2"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc515"model="account.tax.template">
+        <fieldname="sequence">180</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">5%WC515-Commission,rebates,discounts</field>
+        <fieldname="description">Commission,rebates,discounts</field>
+        <fieldname="l10n_ph_atc">WC515</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-5</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_5"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+    </record>
+    <recordid="l10n_ph_tax_purchase_wc516"model="account.tax.template">
+        <fieldname="sequence">180</field>
+        <fieldname="chart_template_id"ref="l10n_ph_chart_template"/>
+        <fieldname="name">10%WC516-Commission,rebates,discounts</field>
+        <fieldname="description">Commission,rebates,discounts</field>
+        <fieldname="l10n_ph_atc">WC516</field>
+        <fieldname="type_tax_use">purchase</field>
+        <fieldname="amount">-10</field>
+        <fieldname="amount_type">percent</field>
+        <fieldname="tax_group_id"ref="l10n_ph_tax_group_wht_10"/>
+        <fieldname="invoice_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
+            }),
+        ]"
+        />
+        <fieldname="refund_repartition_line_ids"eval="[(5,0,0),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'base',
+            }),
+            (0,0,{
+                'factor_percent':100,
+                'repartition_type':'tax',
+                'account_id':ref('l10n_ph_200303'),
             }),
         ]"
         />

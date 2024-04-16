@@ -1,34 +1,34 @@
-flectra.define('mail_bot/static/src/models/messaging_initializer/messaging_initializer.js', function (require) {
-'use strict';
+flectra.define('mail_bot/static/src/models/messaging_initializer/messaging_initializer.js',function(require){
+'usestrict';
 
-const { registerInstancePatchModel } = require('mail/static/src/model/model_core.js');
+const{registerInstancePatchModel}=require('mail/static/src/model/model_core.js');
 
-registerInstancePatchModel('mail.messaging_initializer', 'mail_bot/static/src/models/messaging_initializer/messaging_initializer.js', {
+registerInstancePatchModel('mail.messaging_initializer','mail_bot/static/src/models/messaging_initializer/messaging_initializer.js',{
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    async _initializeFlectraBot() {
-        const data = await this.async(() => this.env.services.rpc({
-            model: 'mail.channel',
-            method: 'init_flectrabot',
+    async_initializeFlectraBot(){
+        constdata=awaitthis.async(()=>this.env.services.rpc({
+            model:'mail.channel',
+            method:'init_flectrabot',
         }));
-        if (!data) {
+        if(!data){
             return;
         }
-        this.env.session.flectrabot_initialized = true;
+        this.env.session.flectrabot_initialized=true;
     },
 
     /**
-     * @override
+     *@override
      */
-    async start() {
-        await this.async(() => this._super());
+    asyncstart(){
+        awaitthis.async(()=>this._super());
 
-        if ('flectrabot_initialized' in this.env.session && !this.env.session.flectrabot_initialized) {
+        if('flectrabot_initialized'inthis.env.session&&!this.env.session.flectrabot_initialized){
             this._initializeFlectraBot();
         }
     },

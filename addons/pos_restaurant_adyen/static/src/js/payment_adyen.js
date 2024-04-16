@@ -1,44 +1,44 @@
-flectra.define('pos_restaurant_adyen.payment', function (require) {
-    "use strict";
+flectra.define('pos_restaurant_adyen.payment',function(require){
+    "usestrict";
 
-    var PaymentAdyen = require('pos_adyen.payment');
-    var models = require('point_of_sale.models');
+    varPaymentAdyen=require('pos_adyen.payment');
+    varmodels=require('point_of_sale.models');
 
     PaymentAdyen.include({
-        _adyen_pay_data: function () {
-            var data = this._super();
+        _adyen_pay_data:function(){
+            vardata=this._super();
 
-            if (data.SaleToPOIRequest.PaymentRequest.SaleData.SaleToAcquirerData) {
-                data.SaleToPOIRequest.PaymentRequest.SaleData.SaleToAcquirerData += "&authorisationType=PreAuth";
-            } else {
-                data.SaleToPOIRequest.PaymentRequest.SaleData.SaleToAcquirerData = "authorisationType=PreAuth";
+            if(data.SaleToPOIRequest.PaymentRequest.SaleData.SaleToAcquirerData){
+                data.SaleToPOIRequest.PaymentRequest.SaleData.SaleToAcquirerData+="&authorisationType=PreAuth";
+            }else{
+                data.SaleToPOIRequest.PaymentRequest.SaleData.SaleToAcquirerData="authorisationType=PreAuth";
             }
     
-            return data;
+            returndata;
         },
 
-        send_payment_adjust: function (cid) {
-            var order = this.pos.get_order();
-            var line = order.get_paymentline(cid);
-            var data = {
-                originalReference: line.transaction_id,
-                modificationAmount: {
-                    value: parseInt(line.amount * Math.pow(10, this.pos.currency.decimals)),
-                    currency: this.pos.currency.name,
+        send_payment_adjust:function(cid){
+            varorder=this.pos.get_order();
+            varline=order.get_paymentline(cid);
+            vardata={
+                originalReference:line.transaction_id,
+                modificationAmount:{
+                    value:parseInt(line.amount*Math.pow(10,this.pos.currency.decimals)),
+                    currency:this.pos.currency.name,
                 },
-                merchantAccount: this.payment_method.adyen_merchant_account,
-                additionalData: {
-                    industryUsage: 'DelayedCharge',
+                merchantAccount:this.payment_method.adyen_merchant_account,
+                additionalData:{
+                    industryUsage:'DelayedCharge',
                 },
             };
 
-            return this._call_adyen(data, 'adjust');
+            returnthis._call_adyen(data,'adjust');
         },
 
-        canBeAdjusted: function (cid) {
-            var order = this.pos.get_order();
-            var line = order.get_paymentline(cid);
-            return ['mc', 'visa', 'amex', 'discover'].includes(line.card_type);
+        canBeAdjusted:function(cid){
+            varorder=this.pos.get_order();
+            varline=order.get_paymentline(cid);
+            return['mc','visa','amex','discover'].includes(line.card_type);
         }
     });
 });

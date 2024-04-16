@@ -1,9 +1,9 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xmlversion='1.0'encoding='utf-8'?>
 <flectra>
     <data>
-        <record id="resume_type_training" model="hr.resume.line.type">
-            <field name="name">Internal Training</field>
-            <field name="sequence">26</field>
+        <recordid="resume_type_training"model="hr.resume.line.type">
+            <fieldname="name">InternalTraining</field>
+            <fieldname="sequence">26</field>
         </record>
     </data>
 

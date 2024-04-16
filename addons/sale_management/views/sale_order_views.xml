@@ -1,61 +1,61 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-    <record id="sale_order_form_quote" model="ir.ui.view">
-        <field name="name">sale.order.form.payment</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
-        <field name="arch" type="xml">
+    <recordid="sale_order_form_quote"model="ir.ui.view">
+        <fieldname="name">sale.order.form.payment</field>
+        <fieldname="model">sale.order</field>
+        <fieldname="inherit_id"ref="sale.view_order_form"/>
+        <fieldname="arch"type="xml">
 
-            <xpath expr="//page/field[@name='order_line']/.." position="after">
-                <page string="Optional Products" name="optional_products" attrs="{'invisible': [('state', 'not in', ['draft', 'sent'])]}">
-                    <field name="sale_order_option_ids" mode="tree,form,kanban">
-                        <form string="Optional Products">
+            <xpathexpr="//page/field[@name='order_line']/.."position="after">
+                <pagestring="OptionalProducts"name="optional_products"attrs="{'invisible':[('state','notin',['draft','sent'])]}">
+                    <fieldname="sale_order_option_ids"mode="tree,form,kanban">
+                        <formstring="OptionalProducts">
                             <group>
-                                <field name="product_id" domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"/>
-                                <field name="name"/>
-                                <field name="quantity"/>
-                                <field name="product_uom_category_id" invisible="1"/>
-                                <field name="uom_id" groups="uom.group_uom"/>
-                                <field name="price_unit"/>
-                                <field name="discount" groups="product.group_discount_per_so_line"/>
-                                <field name="is_present" />
+                                <fieldname="product_id"domain="[('sale_ok','=',True),'|',('company_id','=',False),('company_id','=',parent.company_id)]"/>
+                                <fieldname="name"/>
+                                <fieldname="quantity"/>
+                                <fieldname="product_uom_category_id"invisible="1"/>
+                                <fieldname="uom_id"groups="uom.group_uom"/>
+                                <fieldname="price_unit"/>
+                                <fieldname="discount"groups="product.group_discount_per_so_line"/>
+                                <fieldname="is_present"/>
                             </group>
                         </form>
-                        <kanban class="o_kanban_mobile">
-                            <field name="product_id"/>
-                            <field name="quantity"/>
-                            <field name="uom_id" groups="uom.group_uom"/>
-                            <field name="price_unit"/>
-                            <field name="is_present" />
+                        <kanbanclass="o_kanban_mobile">
+                            <fieldname="product_id"/>
+                            <fieldname="quantity"/>
+                            <fieldname="uom_id"groups="uom.group_uom"/>
+                            <fieldname="price_unit"/>
+                            <fieldname="is_present"/>
                             <templates>
-                                <t t-name="kanban-box">
-                                    <div class="oe_kanban_card oe_kanban_global_click">
-                                        <div class="row">
-                                            <div class="col-10">
+                                <tt-name="kanban-box">
+                                    <divclass="oe_kanban_cardoe_kanban_global_click">
+                                        <divclass="row">
+                                            <divclass="col-10">
                                                 <strong>
                                                     <span>
-                                                        <t t-esc="record.product_id.value"/>
+                                                        <tt-esc="record.product_id.value"/>
                                                     </span>
                                                 </strong>
                                             </div>
-                                            <div class="col-2">
-                                                <button name="button_add_to_order" class="btn btn-link oe_link fa fa-shopping-cart" title="Add to order lines" type="object" attrs="{'invisible': [('is_present', '=', True)]}"/>
+                                            <divclass="col-2">
+                                                <buttonname="button_add_to_order"class="btnbtn-linkoe_linkfafa-shopping-cart"title="Addtoorderlines"type="object"attrs="{'invisible':[('is_present','=',True)]}"/>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-12 text-muted">
+                                        <divclass="row">
+                                            <divclass="col-12text-muted">
                                                 <span>
                                                     Quantity:
-                                                    <t t-esc="record.quantity.value"/>
-                                                    <t t-esc="record.uom_id.value"/>
+                                                    <tt-esc="record.quantity.value"/>
+                                                    <tt-esc="record.uom_id.value"/>
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-12 text-muted">
+                                        <divclass="row">
+                                            <divclass="col-12text-muted">
                                                 <span>
-                                                    Unit Price:
-                                                    <t t-esc="record.price_unit.value"/>
+                                                    UnitPrice:
+                                                    <tt-esc="record.price_unit.value"/>
                                                 </span>
                                             </div>
                                         </div>
@@ -63,28 +63,28 @@
                                 </t>
                             </templates>
                         </kanban>
-                        <tree string="Sales Quotation Template Lines" editable="bottom" decoration-success="is_present == True">
+                        <treestring="SalesQuotationTemplateLines"editable="bottom"decoration-success="is_present==True">
                             <control>
-                                <create name="add_product_control" string="Add a product"/>
+                                <createname="add_product_control"string="Addaproduct"/>
                             </control>
-                            <field name="sequence" widget="handle"/>
-                            <field name="product_id" domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"/>
-                            <field name="name" optional="show"/>
-                            <field name="quantity"/>
-                            <field name="uom_id" string="UoM" groups="uom.group_uom" optional="show"/>
-                            <field name="product_uom_category_id" invisible="1"/>
-                            <field name="price_unit"/>
-                            <field name="discount" string="Disc.%" groups="product.group_discount_per_so_line" optional="show"/>
-                            <field name="is_present" invisible="1" />
-                            <button name="button_add_to_order" class="oe_link" icon="fa-shopping-cart" title="Add to order lines" type="object" attrs="{'invisible': [('is_present', '=', True)]}"/>
+                            <fieldname="sequence"widget="handle"/>
+                            <fieldname="product_id"domain="[('sale_ok','=',True),'|',('company_id','=',False),('company_id','=',parent.company_id)]"/>
+                            <fieldname="name"optional="show"/>
+                            <fieldname="quantity"/>
+                            <fieldname="uom_id"string="UoM"groups="uom.group_uom"optional="show"/>
+                            <fieldname="product_uom_category_id"invisible="1"/>
+                            <fieldname="price_unit"/>
+                            <fieldname="discount"string="Disc.%"groups="product.group_discount_per_so_line"optional="show"/>
+                            <fieldname="is_present"invisible="1"/>
+                            <buttonname="button_add_to_order"class="oe_link"icon="fa-shopping-cart"title="Addtoorderlines"type="object"attrs="{'invisible':[('is_present','=',True)]}"/>
                         </tree>
                     </field>
                 </page>
             </xpath>
 
-            <xpath expr="//field[@name='partner_shipping_id']" position="after">
-                <field name="sale_order_template_id" context="{'company_id': company_id}"
-                    options="{'no_create': True, 'no_open': True}"
+            <xpathexpr="//field[@name='partner_shipping_id']"position="after">
+                <fieldname="sale_order_template_id"context="{'company_id':company_id}"
+                    options="{'no_create':True,'no_open':True}"
                     groups="sale_management.group_sale_order_template"
                 />
             </xpath>
@@ -92,18 +92,18 @@
         </field>
     </record>
 
-    <record id="sale.action_quotations" model="ir.actions.act_window">
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create a new quotation, the first step of a new sale!
+    <recordid="sale.action_quotations"model="ir.actions.act_window">
+        <fieldname="help"type="html">
+            <pclass="o_view_nocontent_smiling_face">
+                Createanewquotation,thefirststepofanewsale!
             </p>
             <p>
-                Once the quotation is confirmed by the customer, it becomes a sales order.<br/> You will be able to create an invoice and collect the payment.
+                Oncethequotationisconfirmedbythecustomer,itbecomesasalesorder.<br/>Youwillbeabletocreateaninvoiceandcollectthepayment.
             </p>
         </field>
     </record>
 
-    <menuitem id="menu_product_attribute_action"
+    <menuitemid="menu_product_attribute_action"
         action="product.attribute_action"
-        parent="sale.prod_config_main"  groups="product.group_product_variant" sequence="1"/>
+        parent="sale.prod_config_main" groups="product.group_product_variant"sequence="1"/>
 </flectra>

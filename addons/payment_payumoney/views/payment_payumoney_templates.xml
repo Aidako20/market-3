@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <template id="payumoney_form">
-        <input type="hidden" name="data_set" t-att-data-action-url="tx_url" data-remove-me=""/>
-        <input type="hidden" name="key" t-att-value='key' />
-        <input type="hidden" name="txnid" t-att-value='txnid' />
-        <input type="hidden" name="amount" t-att-value='amount' />
-        <input type="hidden" name="productinfo" t-att-value='productinfo' />
-        <input type="hidden" name="firstname" t-att-value='firstname' />
-        <input type="hidden" name="email" t-att-value='email' />
-        <input type="hidden" name="phone" t-att-value='phone'/>
-        <input type="hidden" name="service_provider" t-att-value='service_provider' />
-        <input type="hidden" name="hash" t-att-value='hash' />
-        <input type="hidden" name="surl" t-att-value='surl' />
-        <input type="hidden" name="furl" t-att-value='furl' />
-        <input type="hidden" name="curl" t-att-value='curl' />
-        <input type="hidden" name="udf1" t-att-value='udf1'/>
+    <templateid="payumoney_form">
+        <inputtype="hidden"name="data_set"t-att-data-action-url="tx_url"data-remove-me=""/>
+        <inputtype="hidden"name="key"t-att-value='key'/>
+        <inputtype="hidden"name="txnid"t-att-value='txnid'/>
+        <inputtype="hidden"name="amount"t-att-value='amount'/>
+        <inputtype="hidden"name="productinfo"t-att-value='productinfo'/>
+        <inputtype="hidden"name="firstname"t-att-value='firstname'/>
+        <inputtype="hidden"name="email"t-att-value='email'/>
+        <inputtype="hidden"name="phone"t-att-value='phone'/>
+        <inputtype="hidden"name="service_provider"t-att-value='service_provider'/>
+        <inputtype="hidden"name="hash"t-att-value='hash'/>
+        <inputtype="hidden"name="surl"t-att-value='surl'/>
+        <inputtype="hidden"name="furl"t-att-value='furl'/>
+        <inputtype="hidden"name="curl"t-att-value='curl'/>
+        <inputtype="hidden"name="udf1"t-att-value='udf1'/>
     </template>
 </flectra>

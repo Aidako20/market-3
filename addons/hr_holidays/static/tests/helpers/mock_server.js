@@ -1,28 +1,28 @@
-flectra.define('hr_holidays/static/tests/helpers/mock_server.js', function (require) {
-'use strict';
+flectra.define('hr_holidays/static/tests/helpers/mock_server.js',function(require){
+'usestrict';
 
-require('mail.MockServer'); // ensure mail overrides are applied first
+require('mail.MockServer');//ensuremailoverridesareappliedfirst
 
-const MockServer = require('web.MockServer');
+constMockServer=require('web.MockServer');
 
 MockServer.include({
     /**
-     * Overrides to add visitor information to livechat channels.
+     *Overridestoaddvisitorinformationtolivechatchannels.
      *
-     * @override
+     *@override
      */
-    _mockMailChannelPartnerInfo(ids, extra_info) {
-        const partnerInfos = this._super(...arguments);
-        const partners = this._getRecords(
+    _mockMailChannelPartnerInfo(ids,extra_info){
+        constpartnerInfos=this._super(...arguments);
+        constpartners=this._getRecords(
             'res.partner',
-            [['id', 'in', ids]],
-            { active_test: false },
+            [['id','in',ids]],
+            {active_test:false},
         );
-        for (const partner of partners) {
-            // Not a real field but ease the testing
-            partnerInfos[partner.id].out_of_office_date_end = partner.out_of_office_date_end;
+        for(constpartnerofpartners){
+            //Notarealfieldbuteasethetesting
+            partnerInfos[partner.id].out_of_office_date_end=partner.out_of_office_date_end;
         }
-        return partnerInfos;
+        returnpartnerInfos;
     },
 });
 

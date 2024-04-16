@@ -1,37 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
-<templates id="template" xml:space="preserve">
-    <t t-name="website.ThemePreview.Buttons">
+<?xmlversion="1.0"encoding="utf-8"?>
+<templatesid="template"xml:space="preserve">
+    <tt-name="website.ThemePreview.Buttons">
         <div>
-            <div class="o_form_buttons_view" role="toolbar" aria-label="Main actions">
-                <button type="object" name="button_choose_theme" class="btn btn-primary o_use_theme">
-                    Start Now
+            <divclass="o_form_buttons_view"role="toolbar"aria-label="Mainactions">
+                <buttontype="object"name="button_choose_theme"class="btnbtn-primaryo_use_theme">
+                    StartNow
                 </button>
-                <button class="btn btn-link o_switch_theme">
-                    Choose another theme
+                <buttonclass="btnbtn-linko_switch_theme">
+                    Chooseanothertheme
                 </button>
             </div>
         </div>
     </t>
 
-    <t t-name="website.ThemePreview.SwitchModeButton">
-        <div class="btn-group btn-group-toggle ml-1" data-toggle="buttons">
-            <label class="btn btn-secondary active">
-                <input type="radio" name="viewer" data-mode='desktop' autocomplete="off" checked='checked'/> Desktop
+    <tt-name="website.ThemePreview.SwitchModeButton">
+        <divclass="btn-groupbtn-group-toggleml-1"data-toggle="buttons">
+            <labelclass="btnbtn-secondaryactive">
+                <inputtype="radio"name="viewer"data-mode='desktop'autocomplete="off"checked='checked'/>Desktop
             </label>
-            <label class="btn btn-secondary">
-                <input type="radio" name="viewer" data-mode='mobile' autocomplete="off"/> Mobile
+            <labelclass="btnbtn-secondary">
+                <inputtype="radio"name="viewer"data-mode='mobile'autocomplete="off"/>Mobile
             </label>
         </div>
     </t>
-    <t t-name="website.ThemePreview.Loader">
-        <div class="o_theme_install_loader_container position-fixed fixed-top fixed-left
-            h-100 w-100 d-flex flex-column align-items-center text-white font-weight-bold">
-            <t t-if="showTips">Building your website...</t>
-            <div class="o_theme_install_loader"></div>
-            <p t-if="showTips" class="o_theme_install_loader_tip text-center w-25">
-                TIP: Follow the
-                <span class="o_tooltip o_tooltip_visible top o_animated position-relative"></span>
-                to build the perfect page in 5 steps.
+    <tt-name="website.ThemePreview.Loader">
+        <divclass="o_theme_install_loader_containerposition-fixedfixed-topfixed-left
+            h-100w-100d-flexflex-columnalign-items-centertext-whitefont-weight-bold">
+            <tt-if="showTips">Buildingyourwebsite...</t>
+            <divclass="o_theme_install_loader"></div>
+            <pt-if="showTips"class="o_theme_install_loader_tiptext-centerw-25">
+                TIP:Followthe
+                <spanclass="o_tooltipo_tooltip_visibletopo_animatedposition-relative"></span>
+                tobuildtheperfectpagein5steps.
             </p>
         </div>
     </t>

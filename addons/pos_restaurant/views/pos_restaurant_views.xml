@@ -1,25 +1,25 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-        <!--     RESTAURANTS FLOORS  -->
+        <!--    RESTAURANTSFLOORS -->
 
-        <record id="view_restaurant_floor_form" model="ir.ui.view">
-            <field name="name">Restaurant Floors</field>
-            <field name="model">restaurant.floor</field>
-            <field name="arch" type="xml">
-                <form string="Restaurant Floor">
+        <recordid="view_restaurant_floor_form"model="ir.ui.view">
+            <fieldname="name">RestaurantFloors</field>
+            <fieldname="model">restaurant.floor</field>
+            <fieldname="arch"type="xml">
+                <formstring="RestaurantFloor">
                     <sheet>
-                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
-                        <field name="active" invisible="1"/>
-                        <group col="4">
-                            <field name="name" />
-                            <field name="pos_config_id" />
-                            <field name="background_color" groups="base.group_no_one" />
+                        <widgetname="web_ribbon"title="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
+                        <fieldname="active"invisible="1"/>
+                        <groupcol="4">
+                            <fieldname="name"/>
+                            <fieldname="pos_config_id"/>
+                            <fieldname="background_color"groups="base.group_no_one"/>
                         </group>
-                        <field name="table_ids">
-                            <tree string='Tables'>
-                                <field name="name" />
-                                <field name="seats" />
-                                <field name="shape" />
+                        <fieldname="table_ids">
+                            <treestring='Tables'>
+                                <fieldname="name"/>
+                                <fieldname="seats"/>
+                                <fieldname="shape"/>
                             </tree>
                         </field>
                     </sheet>
@@ -27,41 +27,41 @@
             </field>
         </record>
 
-        <record id="view_restaurant_floor_tree" model="ir.ui.view">
-            <field name="name">Restaurant Floors</field>
-            <field name="model">restaurant.floor</field>
-            <field name="arch" type="xml">
-                <tree string="Restaurant Floors">
-                    <field name="sequence" widget="handle" />
-                    <field name="name" />
-                    <field name="pos_config_id" />
+        <recordid="view_restaurant_floor_tree"model="ir.ui.view">
+            <fieldname="name">RestaurantFloors</field>
+            <fieldname="model">restaurant.floor</field>
+            <fieldname="arch"type="xml">
+                <treestring="RestaurantFloors">
+                    <fieldname="sequence"widget="handle"/>
+                    <fieldname="name"/>
+                    <fieldname="pos_config_id"/>
                 </tree>
             </field>
         </record>
 
-        <record id="view_restaurant_floor_search" model="ir.ui.view">
-            <field name="name">restaurant.floor.search</field>
-            <field name="model">restaurant.floor</field>
-            <field name="arch" type="xml">
+        <recordid="view_restaurant_floor_search"model="ir.ui.view">
+            <fieldname="name">restaurant.floor.search</field>
+            <fieldname="model">restaurant.floor</field>
+            <fieldname="arch"type="xml">
                 <search>
-                    <field name="name"/>
-                    <filter string="Archived" name="active" domain="[('active', '=', False)]"/>
+                    <fieldname="name"/>
+                    <filterstring="Archived"name="active"domain="[('active','=',False)]"/>
                 </search>
             </field>
         </record>
 
-        <record id="view_restaurant_floor_kanban" model="ir.ui.view">
-            <field name="name">restaurant.floor.kanban</field>
-            <field name="model">restaurant.floor</field>
-            <field name="arch" type="xml">
-                <kanban class="o_kanban_mobile">
-                    <field name="name"/>
-                    <field name="pos_config_id" />
+        <recordid="view_restaurant_floor_kanban"model="ir.ui.view">
+            <fieldname="name">restaurant.floor.kanban</field>
+            <fieldname="model">restaurant.floor</field>
+            <fieldname="arch"type="xml">
+                <kanbanclass="o_kanban_mobile">
+                    <fieldname="name"/>
+                    <fieldname="pos_config_id"/>
                     <templates>
-                        <t t-name="kanban-box">
-                            <div t-attf-class="oe_kanban_global_click">
-                                <div><strong>Floor Name: </strong><t t-esc="record.name.value"/></div>
-                                <div><strong>Point of Sale: </strong><t t-esc="record.pos_config_id.value"/></div>
+                        <tt-name="kanban-box">
+                            <divt-attf-class="oe_kanban_global_click">
+                                <div><strong>FloorName:</strong><tt-esc="record.name.value"/></div>
+                                <div><strong>PointofSale:</strong><tt-esc="record.pos_config_id.value"/></div>
                             </div>
                         </t>
                     </templates>
@@ -69,100 +69,100 @@
             </field>
         </record>
 
-        <record id="action_restaurant_floor_form" model="ir.actions.act_window">
-            <field name="name">Floor Plans</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">restaurant.floor</field>
-            <field name="view_mode">tree,kanban,form</field>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                Add a new restaurant floor
+        <recordid="action_restaurant_floor_form"model="ir.actions.act_window">
+            <fieldname="name">FloorPlans</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">restaurant.floor</field>
+            <fieldname="view_mode">tree,kanban,form</field>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                Addanewrestaurantfloor
               </p><p>
-                A restaurant floor represents the place where customers are served, this is where you can
-                define and position the tables.
+                Arestaurantfloorrepresentstheplacewherecustomersareserved,thisiswhereyoucan
+                defineandpositionthetables.
               </p>
             </field>
         </record>
 
-        <record id="view_restaurant_table_form" model="ir.ui.view">
-            <field name="name">Restaurant Table</field>
-            <field name="model">restaurant.table</field>
-            <field name="arch" type="xml">
-                <form string="Restaurant Table">
-                    <group col="2">
-                        <field name="name" />
-                        <field name="seats" />
+        <recordid="view_restaurant_table_form"model="ir.ui.view">
+            <fieldname="name">RestaurantTable</field>
+            <fieldname="model">restaurant.table</field>
+            <fieldname="arch"type="xml">
+                <formstring="RestaurantTable">
+                    <groupcol="2">
+                        <fieldname="name"/>
+                        <fieldname="seats"/>
                     </group>
-                    <group col="4" string="Appearance" groups="base.group_no_one">
-                        <field name="shape" />
-                        <field name="color" />
-                        <field name="position_h" />
-                        <field name="position_v" />
-                        <field name="width" />
-                        <field name="height" />
+                    <groupcol="4"string="Appearance"groups="base.group_no_one">
+                        <fieldname="shape"/>
+                        <fieldname="color"/>
+                        <fieldname="position_h"/>
+                        <fieldname="position_v"/>
+                        <fieldname="width"/>
+                        <fieldname="height"/>
                     </group>
                 </form>
             </field>
         </record>
 
-        <menuitem id="menu_restaurant_floor_all"
+        <menuitemid="menu_restaurant_floor_all"
              parent="point_of_sale.menu_point_config_product"
              action="action_restaurant_floor_form"
              sequence="10"
              groups="base.group_no_one"/>
 
-        <!--     RESTAURANT PRINTERS     -->
+        <!--    RESTAURANTPRINTERS    -->
 
-        <record id="view_restaurant_printer_form" model="ir.ui.view">
-            <field name="name">Order Printer</field>
-            <field name="model">restaurant.printer</field>
-            <field name="arch" type="xml">
-                <form string="POS Printer">
+        <recordid="view_restaurant_printer_form"model="ir.ui.view">
+            <fieldname="name">OrderPrinter</field>
+            <fieldname="model">restaurant.printer</field>
+            <fieldname="arch"type="xml">
+                <formstring="POSPrinter">
                     <sheet>
                         <group>
-                            <field name="name" />
-                            <field name="printer_type" widget="radio"/>
-                            <field name="proxy_ip" attrs="{'invisible': [('printer_type', '!=', 'iot')]}"/>
-                            <field name="product_categories_ids" />
+                            <fieldname="name"/>
+                            <fieldname="printer_type"widget="radio"/>
+                            <fieldname="proxy_ip"attrs="{'invisible':[('printer_type','!=','iot')]}"/>
+                            <fieldname="product_categories_ids"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <record id="action_restaurant_printer_form" model="ir.actions.act_window">
-            <field name="name">Order Printers</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">restaurant.printer</field>
-            <field name="view_mode">tree,kanban,form</field>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                Add a new restaurant order printer
+        <recordid="action_restaurant_printer_form"model="ir.actions.act_window">
+            <fieldname="name">OrderPrinters</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">restaurant.printer</field>
+            <fieldname="view_mode">tree,kanban,form</field>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                Addanewrestaurantorderprinter
               </p><p>
-                Order Printers are used by restaurants and bars to print the
-                order updates in the kitchen/bar when the waiter updates the order.
+                OrderPrintersareusedbyrestaurantsandbarstoprintthe
+                orderupdatesinthekitchen/barwhenthewaiterupdatestheorder.
               </p><p>
-                Each Order Printer has an IP Address that defines the IoT Box/Hardware
-                Proxy where the printer can be found, and a list of product categories.
-                An Order Printer will only print updates for products belonging to one of
-                its categories.
+                EachOrderPrinterhasanIPAddressthatdefinestheIoTBox/Hardware
+                Proxywheretheprintercanbefound,andalistofproductcategories.
+                AnOrderPrinterwillonlyprintupdatesforproductsbelongingtooneof
+                itscategories.
               </p>
             </field>
         </record>
 
-        <record id="view_restaurant_printer" model="ir.ui.view">
-            <field name="name">Order Printers</field>
-            <field name="model">restaurant.printer</field>
-            <field name="arch" type="xml">
-                <tree string="Restaurant Order Printers">
-                    <field name="name" />
-                    <field name="proxy_ip" />
-                    <field name="product_categories_ids" widget="many2many_tags"/>
+        <recordid="view_restaurant_printer"model="ir.ui.view">
+            <fieldname="name">OrderPrinters</field>
+            <fieldname="model">restaurant.printer</field>
+            <fieldname="arch"type="xml">
+                <treestring="RestaurantOrderPrinters">
+                    <fieldname="name"/>
+                    <fieldname="proxy_ip"/>
+                    <fieldname="product_categories_ids"widget="many2many_tags"/>
                 </tree>
             </field>
         </record>
 
-        <menuitem id="menu_restaurant_printer_all"
+        <menuitemid="menu_restaurant_printer_all"
              parent="point_of_sale.menu_point_config_product"
              action="action_restaurant_printer_form"
              sequence="15"

@@ -1,57 +1,57 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, api
+fromflectraimportfields,models,api
 
 
-class Employee(models.Model):
-    _inherit = 'hr.employee'
+classEmployee(models.Model):
+    _inherit='hr.employee'
 
-    def _group_hr_expense_user_domain(self):
-        # We return the domain only if the group exists for the following reason:
-        # When a group is created (at module installation), the `res.users` form view is
-        # automatically modifiedto add application accesses. When modifiying the view, it
-        # reads the related field `expense_manager_id` of `res.users` and retrieve its domain.
-        # This is a problem because the `group_hr_expense_user` record has already been created but
-        # not its associated `ir.model.data` which makes `self.env.ref(...)` fail.
-        group = self.env.ref('hr_expense.group_hr_expense_team_approver', raise_if_not_found=False)
-        return [('groups_id', 'in', group.ids)] if group else []
+    def_group_hr_expense_user_domain(self):
+        #Wereturnthedomainonlyifthegroupexistsforthefollowingreason:
+        #Whenagroupiscreated(atmoduleinstallation),the`res.users`formviewis
+        #automaticallymodifiedtoaddapplicationaccesses.Whenmodifiyingtheview,it
+        #readstherelatedfield`expense_manager_id`of`res.users`andretrieveitsdomain.
+        #Thisisaproblembecausethe`group_hr_expense_user`recordhasalreadybeencreatedbut
+        #notitsassociated`ir.model.data`whichmakes`self.env.ref(...)`fail.
+        group=self.env.ref('hr_expense.group_hr_expense_team_approver',raise_if_not_found=False)
+        return[('groups_id','in',group.ids)]ifgroupelse[]
 
-    expense_manager_id = fields.Many2one(
-        'res.users', string='Expense',
+    expense_manager_id=fields.Many2one(
+        'res.users',string='Expense',
         domain=_group_hr_expense_user_domain,
-        compute='_compute_expense_manager', store=True, readonly=False,
-        help='Select the user responsible for approving "Expenses" of this employee.\n'
-             'If empty, the approval is done by an Administrator or Approver (determined in settings/users).')
+        compute='_compute_expense_manager',store=True,readonly=False,
+        help='Selecttheuserresponsibleforapproving"Expenses"ofthisemployee.\n'
+             'Ifempty,theapprovalisdonebyanAdministratororApprover(determinedinsettings/users).')
 
     @api.depends('parent_id')
-    def _compute_expense_manager(self):
-        for employee in self:
-            previous_manager = employee._origin.parent_id.user_id
-            manager = employee.parent_id.user_id
-            if manager and manager.has_group('hr_expense.group_hr_expense_user') and (employee.expense_manager_id == previous_manager or not employee.expense_manager_id):
-                employee.expense_manager_id = manager
-            elif not employee.expense_manager_id:
-                employee.expense_manager_id = False
+    def_compute_expense_manager(self):
+        foremployeeinself:
+            previous_manager=employee._origin.parent_id.user_id
+            manager=employee.parent_id.user_id
+            ifmanagerandmanager.has_group('hr_expense.group_hr_expense_user')and(employee.expense_manager_id==previous_managerornotemployee.expense_manager_id):
+                employee.expense_manager_id=manager
+            elifnotemployee.expense_manager_id:
+                employee.expense_manager_id=False
 
 
-class EmployeePublic(models.Model):
-    _inherit = 'hr.employee.public'
+classEmployeePublic(models.Model):
+    _inherit='hr.employee.public'
 
-    expense_manager_id = fields.Many2one('res.users', readonly=True)
+    expense_manager_id=fields.Many2one('res.users',readonly=True)
 
 
-class User(models.Model):
-    _inherit = ['res.users']
+classUser(models.Model):
+    _inherit=['res.users']
 
-    expense_manager_id = fields.Many2one(related='employee_id.expense_manager_id', readonly=False)
+    expense_manager_id=fields.Many2one(related='employee_id.expense_manager_id',readonly=False)
 
-    def __init__(self, pool, cr):
-        """ Override of __init__ to add access rights.
-            Access rights are disabled by default, but allowed
-            on some specific fields defined in self.SELF_{READ/WRITE}ABLE_FIELDS.
+    def__init__(self,pool,cr):
+        """Overrideof__init__toaddaccessrights.
+            Accessrightsaredisabledbydefault,butallowed
+            onsomespecificfieldsdefinedinself.SELF_{READ/WRITE}ABLE_FIELDS.
         """
-        init_res = super(User, self).__init__(pool, cr)
-        # duplicate list to avoid modifying the original reference
-        pool[self._name].SELF_READABLE_FIELDS = pool[self._name].SELF_READABLE_FIELDS + ['expense_manager_id']
-        return init_res
+        init_res=super(User,self).__init__(pool,cr)
+        #duplicatelisttoavoidmodifyingtheoriginalreference
+        pool[self._name].SELF_READABLE_FIELDS=pool[self._name].SELF_READABLE_FIELDS+['expense_manager_id']
+        returninit_res

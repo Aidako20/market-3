@@ -1,56 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template name="Items" id="s_product_list">
-    <section class="s_product_list" >
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-2 col-md-4 col-6">
-                    <a href="http://www.flectrahq.com">
-                        <img src="/web/image/website.s_product_list_default_image_1" alt="" class="img img-fluid"/>
+<templatename="Items"id="s_product_list">
+    <sectionclass="s_product_list">
+        <divclass="container-fluid">
+            <divclass="row">
+                <divclass="col-lg-2col-md-4col-6">
+                    <ahref="http://www.flectrahq.com">
+                        <imgsrc="/web/image/website.s_product_list_default_image_1"alt=""class="imgimg-fluid"/>
                     </a>
-                    <div class="s_product_list_item_link">
-                        <a href="http://www.flectrahq.com" class="btn btn-primary">View item</a>
+                    <divclass="s_product_list_item_link">
+                        <ahref="http://www.flectrahq.com"class="btnbtn-primary">Viewitem</a>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-4 col-6">
-                    <a href="http://www.flectrahq.com">
-                        <img src="/web/image/website.s_product_list_default_image_2" alt="" class="img img-fluid"/>
+                <divclass="col-lg-2col-md-4col-6">
+                    <ahref="http://www.flectrahq.com">
+                        <imgsrc="/web/image/website.s_product_list_default_image_2"alt=""class="imgimg-fluid"/>
                     </a>
-                    <div class="s_product_list_item_link">
-                        <a href="http://www.flectrahq.com" class="btn btn-primary">View item</a>
+                    <divclass="s_product_list_item_link">
+                        <ahref="http://www.flectrahq.com"class="btnbtn-primary">Viewitem</a>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-4 col-6">
-                    <a href="http://www.flectrahq.com">
-                        <img src="/web/image/website.s_product_list_default_image_3" alt="" class="img img-fluid"/>
+                <divclass="col-lg-2col-md-4col-6">
+                    <ahref="http://www.flectrahq.com">
+                        <imgsrc="/web/image/website.s_product_list_default_image_3"alt=""class="imgimg-fluid"/>
                     </a>
-                    <div class="s_product_list_item_link">
-                        <a href="http://www.flectrahq.com" class="btn btn-primary">View item</a>
+                    <divclass="s_product_list_item_link">
+                        <ahref="http://www.flectrahq.com"class="btnbtn-primary">Viewitem</a>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-4 col-6">
-                    <a href="http://www.flectrahq.com">
-                        <img src="/web/image/website.s_product_list_default_image_4" alt="" class="img img-fluid"/>
+                <divclass="col-lg-2col-md-4col-6">
+                    <ahref="http://www.flectrahq.com">
+                        <imgsrc="/web/image/website.s_product_list_default_image_4"alt=""class="imgimg-fluid"/>
                     </a>
-                    <div class="s_product_list_item_link">
-                        <a href="http://www.flectrahq.com" class="btn btn-primary">View item</a>
+                    <divclass="s_product_list_item_link">
+                        <ahref="http://www.flectrahq.com"class="btnbtn-primary">Viewitem</a>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-4 col-6">
-                    <a href="http://www.flectrahq.com">
-                        <img src="/web/image/website.s_product_list_default_image_5" alt="" class="img img-fluid"/>
+                <divclass="col-lg-2col-md-4col-6">
+                    <ahref="http://www.flectrahq.com">
+                        <imgsrc="/web/image/website.s_product_list_default_image_5"alt=""class="imgimg-fluid"/>
                     </a>
-                    <div class="s_product_list_item_link">
-                        <a href="http://www.flectrahq.com" class="btn btn-primary">View item</a>
+                    <divclass="s_product_list_item_link">
+                        <ahref="http://www.flectrahq.com"class="btnbtn-primary">Viewitem</a>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-4 col-6">
-                    <a href="http://www.flectrahq.com">
-                        <img src="/web/image/website.s_product_list_default_image_6" alt="" class="img img-fluid"/>
+                <divclass="col-lg-2col-md-4col-6">
+                    <ahref="http://www.flectrahq.com">
+                        <imgsrc="/web/image/website.s_product_list_default_image_6"alt=""class="imgimg-fluid"/>
                     </a>
-                    <div class="s_product_list_item_link">
-                        <a href="http://www.flectrahq.com" class="btn btn-primary">View item</a>
+                    <divclass="s_product_list_item_link">
+                        <ahref="http://www.flectrahq.com"class="btnbtn-primary">Viewitem</a>
                     </div>
                 </div>
             </div>
@@ -58,14 +58,14 @@
     </section>
 </template>
 
-<template id="_assets_snippet_s_product_list_css_000_variables" inherit_id="website._assets_primary_variables">
-    <xpath expr="//link[last()]" position="after">
-        <link rel="stylesheet" type="text/scss" href="/website/static/src/snippets/s_product_list/000_variables.scss"/>
+<templateid="_assets_snippet_s_product_list_css_000_variables"inherit_id="website._assets_primary_variables">
+    <xpathexpr="//link[last()]"position="after">
+        <linkrel="stylesheet"type="text/scss"href="/website/static/src/snippets/s_product_list/000_variables.scss"/>
     </xpath>
 </template>
-<template id="assets_snippet_s_product_list_css_000" inherit_id="website.assets_frontend">
-    <xpath expr="//link[last()]" position="after">
-        <link rel="stylesheet" type="text/scss" href="/website/static/src/snippets/s_product_list/000.scss"/>
+<templateid="assets_snippet_s_product_list_css_000"inherit_id="website.assets_frontend">
+    <xpathexpr="//link[last()]"position="after">
+        <linkrel="stylesheet"type="text/scss"href="/website/static/src/snippets/s_product_list/000.scss"/>
     </xpath>
 </template>
 

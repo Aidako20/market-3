@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="account_tag_retention_tax_vendor_account" model="account.account.tag">
-        <field name="name">Withholding Vendor Tax Account</field>
+    <recordid="account_tag_retention_tax_vendor_account"model="account.account.tag">
+        <fieldname="name">WithholdingVendorTaxAccount</field>
     </record>
 
-	<record id="account_tag_dividend_account" model="account.account.tag">
-        <field name="name">Dividend Account</field>
+	<recordid="account_tag_dividend_account"model="account.account.tag">
+        <fieldname="name">DividendAccount</field>
     </record>
 
-    <record id="account_tag_retention_tax_dividend_account" model="account.account.tag">
-        <field name="name">Withholding Dividend Tax Account</field>
+    <recordid="account_tag_retention_tax_dividend_account"model="account.account.tag">
+        <fieldname="name">WithholdingDividendTaxAccount</field>
     </record>
-</flectra> 
+</flectra>

@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <template id="sale_stock_report_invoice_document" inherit_id="account.report_invoice_document">
-        <xpath expr="//div[@id='total']" position="after">
-          <t groups="sale_stock.group_lot_on_invoice">
-            <t t-set="lot_values" t-value="o._get_invoiced_lot_values()"/>
-            <t t-if="lot_values">
+    <templateid="sale_stock_report_invoice_document"inherit_id="account.report_invoice_document">
+        <xpathexpr="//div[@id='total']"position="after">
+          <tgroups="sale_stock.group_lot_on_invoice">
+            <tt-set="lot_values"t-value="o._get_invoiced_lot_values()"/>
+            <tt-if="lot_values">
                 <br/>
-                <table class="table table-sm" style="width: 50%;" name="invoice_snln_table">
+                <tableclass="tabletable-sm"style="width:50%;"name="invoice_snln_table">
                     <thead>
                         <tr>
                             <th><span>Product</span></th>
-                            <th class="text-right"><span>Quantity</span></th>
-                            <th class="text-right"><span>SN/LN</span></th>
+                            <thclass="text-right"><span>Quantity</span></th>
+                            <thclass="text-right"><span>SN/LN</span></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <t t-foreach="lot_values" t-as="snln_line">
+                        <tt-foreach="lot_values"t-as="snln_line">
                             <tr>
-                                <td><t t-esc="snln_line['product_name']"/></td>
-                                <td class="text-right">
-                                    <t t-esc="snln_line['quantity']"/>
-                                    <t t-esc="snln_line['uom_name']" groups="uom.group_uom"/>
+                                <td><tt-esc="snln_line['product_name']"/></td>
+                                <tdclass="text-right">
+                                    <tt-esc="snln_line['quantity']"/>
+                                    <tt-esc="snln_line['uom_name']"groups="uom.group_uom"/>
                                 </td>
-                                <td class="text-right"><t t-esc="snln_line['lot_name']"/></td>
+                                <tdclass="text-right"><tt-esc="snln_line['lot_name']"/></td>
                             </tr>
                         </t>
                     </tbody>

@@ -1,40 +1,40 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <template id="assets_common" name="report_stock_rule assets" inherit_id="web.report_assets_common">
-        <xpath expr="." position="inside">
-            <link rel="stylesheet" type="text/scss" href="/stock/static/src/scss/report_stock_rule.scss"/>
+    <templateid="assets_common"name="report_stock_ruleassets"inherit_id="web.report_assets_common">
+        <xpathexpr="."position="inside">
+            <linkrel="stylesheet"type="text/scss"href="/stock/static/src/scss/report_stock_rule.scss"/>
         </xpath>
     </template>
 
-    <template id="report_stock_rule">
-        <t t-set="data_report_landscape" t-value="True"/>
-        <t t-set="full_width" t-value="True"/>
-        <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="o">
-                <div class="article o_report_stock_rule">
-                    <div class="page">
-                        <h2 t-field="o.name"/>
+    <templateid="report_stock_rule">
+        <tt-set="data_report_landscape"t-value="True"/>
+        <tt-set="full_width"t-value="True"/>
+        <tt-call="web.html_container">
+            <tt-foreach="docs"t-as="o">
+                <divclass="articleo_report_stock_rule">
+                    <divclass="page">
+                        <h2t-field="o.name"/>
 
-                        <table class="table table-condensed table-bordered">
+                        <tableclass="tabletable-condensedtable-bordered">
                             <thead>
                                 <tr>
-                                    <t t-foreach="locations" t-as="location">
-                                        <th class="o_report_stock_rule_location_header">
-                                            <div t-att-res-id="location.id" t-att-res-model="location._name" view-type="form">
-                                                <t t-esc="location.display_name"/>
+                                    <tt-foreach="locations"t-as="location">
+                                        <thclass="o_report_stock_rule_location_header">
+                                            <divt-att-res-id="location.id"t-att-res-model="location._name"view-type="form">
+                                                <tt-esc="location.display_name"/>
                                             </div>
-                                            <t t-if="header_lines.get(location.id)">
-                                                <t t-foreach="header_lines[location.id]['putaway']" t-as="lines">
-                                                    <t t-foreach="lines" t-as="line">
-                                                        <div class="o_report_stock_rule_putaway" t-att-res-id="location.id" t-att-res-model="location._name" view-type="form">
-                                                            <p>Putaway: <t t-esc="line.location_out_id.display_name"/></p>
+                                            <tt-if="header_lines.get(location.id)">
+                                                <tt-foreach="header_lines[location.id]['putaway']"t-as="lines">
+                                                    <tt-foreach="lines"t-as="line">
+                                                        <divclass="o_report_stock_rule_putaway"t-att-res-id="location.id"t-att-res-model="location._name"view-type="form">
+                                                            <p>Putaway:<tt-esc="line.location_out_id.display_name"/></p>
                                                         </div>
                                                     </t>
                                                 </t>
-                                                <t t-foreach="header_lines[location.id]['orderpoint']" t-as="lines">
-                                                    <t t-foreach="lines" t-as="line">
-                                                        <div class="o_report_stock_rule_putaway" t-att-res-id="line.id" t-att-res-model="line._name" view-type="form">
-                                                            <p>[<t t-esc="line.display_name"/>]<br/>min: <t t-esc="line.product_min_qty"/>, max:<t t-esc="line.product_max_qty"/></p>
+                                                <tt-foreach="header_lines[location.id]['orderpoint']"t-as="lines">
+                                                    <tt-foreach="lines"t-as="line">
+                                                        <divclass="o_report_stock_rule_putaway"t-att-res-id="line.id"t-att-res-model="line._name"view-type="form">
+                                                            <p>[<tt-esc="line.display_name"/>]<br/>min:<tt-esc="line.product_min_qty"/>,max:<tt-esc="line.product_max_qty"/></p>
                                                         </div>
                                                     </t>
                                                 </t>
@@ -44,64 +44,64 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <t t-foreach="route_lines" t-as="route_line">
+                                <tt-foreach="route_lines"t-as="route_line">
                                     <tr>
-                                        <t t-set="acc" t-value="0"/>
-                                        <t t-foreach="route_line" t-as="rule">
-                                            <t t-if="rule">
-                                                <t t-if="rule[0]._name == 'stock.rule'">
-                                                    <t t-set="color" t-value="rule[2]"/>
-                                                    <t t-if="acc > 0">
-                                                        <t t-set="acc" t-value="acc+1"/>
-                                                        <td t-att-colspan="acc" class="o_report_stock_rule_rule_cell">
-                                                            <t t-set="padding" t-value="50.0/acc"/>
-                                                            <div class="o_report_stock_rule_rule_main" t-att-res-id="rule[0].id" t-att-res-model="rule[0]._name" view-type="form" t-att-title="rule[0].route_id.display_name">
-                                                                <div class="o_report_stock_rule_rule"  t-attf-style="padding-left: #{padding}%; padding-right: #{padding}%;">
-                                                                    <t t-if="rule[1] == 'destination'">
-                                                                        <t t-if="rule[0].procure_method == 'make_to_order'">
-                                                                            <t t-call="stock.report_stock_rule_suspension_points"/>
+                                        <tt-set="acc"t-value="0"/>
+                                        <tt-foreach="route_line"t-as="rule">
+                                            <tt-if="rule">
+                                                <tt-if="rule[0]._name=='stock.rule'">
+                                                    <tt-set="color"t-value="rule[2]"/>
+                                                    <tt-if="acc>0">
+                                                        <tt-set="acc"t-value="acc+1"/>
+                                                        <tdt-att-colspan="acc"class="o_report_stock_rule_rule_cell">
+                                                            <tt-set="padding"t-value="50.0/acc"/>
+                                                            <divclass="o_report_stock_rule_rule_main"t-att-res-id="rule[0].id"t-att-res-model="rule[0]._name"view-type="form"t-att-title="rule[0].route_id.display_name">
+                                                                <divclass="o_report_stock_rule_rule" t-attf-style="padding-left:#{padding}%;padding-right:#{padding}%;">
+                                                                    <tt-if="rule[1]=='destination'">
+                                                                        <tt-if="rule[0].procure_method=='make_to_order'">
+                                                                            <tt-call="stock.report_stock_rule_suspension_points"/>
                                                                         </t>
-                                                                        <t t-if="rule[0].procure_method == 'mts_else_mto'">
-                                                                            <t t-call="stock.report_stock_rule_suspension_points"/>
-                                                                            <t t-call="stock.report_stock_rule_vertical_bar"/>
+                                                                        <tt-if="rule[0].procure_method=='mts_else_mto'">
+                                                                            <tt-call="stock.report_stock_rule_suspension_points"/>
+                                                                            <tt-call="stock.report_stock_rule_vertical_bar"/>
                                                                         </t>
-                                                                        <t t-if="rule[0].action in ('push', 'pull_push')">
-                                                                            <t t-call="stock.report_stock_rule_right_arrow"/>
+                                                                        <tt-if="rule[0].actionin('push','pull_push')">
+                                                                            <tt-call="stock.report_stock_rule_right_arrow"/>
                                                                         </t>
                                                                     </t>
-                                                                    <t t-if="rule[1] == 'origin' and rule[0].action in ('pull', 'pull_push')">
-                                                                        <t t-call="stock.report_stock_rule_left_arrow"/>
+                                                                    <tt-if="rule[1]=='origin'andrule[0].actionin('pull','pull_push')">
+                                                                        <tt-call="stock.report_stock_rule_left_arrow"/>
                                                                     </t>
-                                                                    <t t-call="stock.report_stock_rule_line"/>
-                                                                    <t t-if="rule[1] == 'destination' and rule[0].action in ('pull', 'pull_push')">
-                                                                        <t t-call="stock.report_stock_rule_right_arrow"/>
+                                                                    <tt-call="stock.report_stock_rule_line"/>
+                                                                    <tt-if="rule[1]=='destination'andrule[0].actionin('pull','pull_push')">
+                                                                        <tt-call="stock.report_stock_rule_right_arrow"/>
                                                                     </t>
-                                                                    <t t-if="rule[1] == 'origin'">
-                                                                        <t t-if="rule[0].action in ('push', 'pull_push')">
-                                                                            <t t-call="stock.report_stock_rule_left_arrow"/>
+                                                                    <tt-if="rule[1]=='origin'">
+                                                                        <tt-if="rule[0].actionin('push','pull_push')">
+                                                                            <tt-call="stock.report_stock_rule_left_arrow"/>
                                                                         </t>
-                                                                        <t t-if="rule[0].procure_method == 'make_to_order'">
-                                                                            <t t-call="stock.report_stock_rule_suspension_points"/>
+                                                                        <tt-if="rule[0].procure_method=='make_to_order'">
+                                                                            <tt-call="stock.report_stock_rule_suspension_points"/>
                                                                         </t>
                                                                     </t>
                                                                 </div>
-                                                                <div class="o_report_stock_rule_rule_name">
-                                                                    <span t-attf-style="color: #{color};"><t t-esc="rule[0].picking_type_id.name"/></span>
+                                                                <divclass="o_report_stock_rule_rule_name">
+                                                                    <spant-attf-style="color:#{color};"><tt-esc="rule[0].picking_type_id.name"/></span>
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <t t-set="acc" t-value="0"/>
+                                                        <tt-set="acc"t-value="0"/>
                                                     </t>
-                                                    <t t-else="">
-                                                        <t t-set="acc" t-value="acc+1"/>
+                                                    <tt-else="">
+                                                        <tt-set="acc"t-value="acc+1"/>
                                                     </t>
                                                 </t>
                                             </t>
-                                            <t t-else="">
-                                                <t t-if="acc > 0">
-                                                    <t t-set="acc" t-value="acc+1"/>
+                                            <tt-else="">
+                                                <tt-if="acc>0">
+                                                    <tt-set="acc"t-value="acc+1"/>
                                                 </t>
-                                                <t t-if="acc == 0">
+                                                <tt-if="acc==0">
                                                     <td>
                                                     </td>
                                                 </t>
@@ -112,35 +112,35 @@
                             </tbody>
                         </table>
                         <h3>Legend</h3>
-                        <div class="o_report_stock_rule_legend">
-                            <t t-set="color" t-value="'black'"/>
-                            <div class="o_report_stock_rule_legend_line">
-                                <div class="o_report_stock_rule_legend_label">Push Rule</div>
-                                <div class="o_report_stock_rule_rule o_report_stock_rule_legend_symbol">
-                                    <t t-call="stock.report_stock_rule_right_arrow"/>
-                                    <t t-call="stock.report_stock_rule_line"/>
+                        <divclass="o_report_stock_rule_legend">
+                            <tt-set="color"t-value="'black'"/>
+                            <divclass="o_report_stock_rule_legend_line">
+                                <divclass="o_report_stock_rule_legend_label">PushRule</div>
+                                <divclass="o_report_stock_rule_ruleo_report_stock_rule_legend_symbol">
+                                    <tt-call="stock.report_stock_rule_right_arrow"/>
+                                    <tt-call="stock.report_stock_rule_line"/>
                                 </div>
                             </div>
-                            <div class="o_report_stock_rule_legend_line">
-                                <div class="o_report_stock_rule_legend_label">Pull Rule</div>
-                                <div class="o_report_stock_rule_rule o_report_stock_rule_legend_symbol">
-                                    <t t-call="stock.report_stock_rule_line"/>
-                                    <t t-call="stock.report_stock_rule_right_arrow"/>
+                            <divclass="o_report_stock_rule_legend_line">
+                                <divclass="o_report_stock_rule_legend_label">PullRule</div>
+                                <divclass="o_report_stock_rule_ruleo_report_stock_rule_legend_symbol">
+                                    <tt-call="stock.report_stock_rule_line"/>
+                                    <tt-call="stock.report_stock_rule_right_arrow"/>
                                 </div>
                             </div>
-                            <div class="o_report_stock_rule_legend_line">
-                                <div class="o_report_stock_rule_legend_label">Trigger Another Rule</div>
-                                <div class="o_report_stock_rule_rule o_report_stock_rule_legend_symbol">
-                                    <t t-call="stock.report_stock_rule_suspension_points"/>
-                                    <t t-call="stock.report_stock_rule_line"/>
+                            <divclass="o_report_stock_rule_legend_line">
+                                <divclass="o_report_stock_rule_legend_label">TriggerAnotherRule</div>
+                                <divclass="o_report_stock_rule_ruleo_report_stock_rule_legend_symbol">
+                                    <tt-call="stock.report_stock_rule_suspension_points"/>
+                                    <tt-call="stock.report_stock_rule_line"/>
                                 </div>
                             </div>
-                            <div class="o_report_stock_rule_legend_line">
-                                <div class="o_report_stock_rule_legend_label">Trigger Another Rule If No Stock</div>
-                                <div class="o_report_stock_rule_rule o_report_stock_rule_legend_symbol">
-                                    <t t-call="stock.report_stock_rule_suspension_points"/>
-                                    <t t-call="stock.report_stock_rule_vertical_bar"/>
-                                    <t t-call="stock.report_stock_rule_line"/>
+                            <divclass="o_report_stock_rule_legend_line">
+                                <divclass="o_report_stock_rule_legend_label">TriggerAnotherRuleIfNoStock</div>
+                                <divclass="o_report_stock_rule_ruleo_report_stock_rule_legend_symbol">
+                                    <tt-call="stock.report_stock_rule_suspension_points"/>
+                                    <tt-call="stock.report_stock_rule_vertical_bar"/>
+                                    <tt-call="stock.report_stock_rule_line"/>
                                 </div>
                             </div>
                         </div>
@@ -149,39 +149,39 @@
             </t>
         </t>
     </template>
-    <template id="report_stock_rule_line">
-        <div class="o_report_stock_rule_line">
-            <svg width="100%" height="100%" viewBox="0 0 100 10" preserveAspectRatio="none">
-                <line x1="0" y1="5" x2="100" y2="5" t-attf-style="stroke: #{color};"/>
+    <templateid="report_stock_rule_line">
+        <divclass="o_report_stock_rule_line">
+            <svgwidth="100%"height="100%"viewBox="0010010"preserveAspectRatio="none">
+                <linex1="0"y1="5"x2="100"y2="5"t-attf-style="stroke:#{color};"/>
             </svg>
         </div>
     </template>
-    <template id="report_stock_rule_vertical_bar">
-        <div class="o_report_stock_rule_vertical_bar">
-            <svg width="100%" height="100%" viewBox="0 0 1 1">
-                <line y1="-12" x2="0" y2="12" x1="0" t-attf-style="stroke: #{color};"/>
+    <templateid="report_stock_rule_vertical_bar">
+        <divclass="o_report_stock_rule_vertical_bar">
+            <svgwidth="100%"height="100%"viewBox="0011">
+                <liney1="-12"x2="0"y2="12"x1="0"t-attf-style="stroke:#{color};"/>
             </svg>
         </div>
     </template>
-    <template id="report_stock_rule_right_arrow">
-        <div class="o_report_stock_rule_arrow">
-            <svg width="100%" height="100%" viewBox="0 0 10 10">
-                <polygon points="0,0 0,10 10,5" t-attf-style="stroke: #{color}; fill: #{color};"/>
+    <templateid="report_stock_rule_right_arrow">
+        <divclass="o_report_stock_rule_arrow">
+            <svgwidth="100%"height="100%"viewBox="001010">
+                <polygonpoints="0,00,1010,5"t-attf-style="stroke:#{color};fill:#{color};"/>
             </svg>
         </div>
     </template>
-    <template id="report_stock_rule_left_arrow">
-        <div class="o_report_stock_rule_arrow">
-            <svg width="100%" height="100%" viewBox="0 0 10 10">
-                <polygon points="0,5 10,10 10,0" t-attf-style="stroke: #{color}; fill: #{color};"/>
+    <templateid="report_stock_rule_left_arrow">
+        <divclass="o_report_stock_rule_arrow">
+            <svgwidth="100%"height="100%"viewBox="001010">
+                <polygonpoints="0,510,1010,0"t-attf-style="stroke:#{color};fill:#{color};"/>
             </svg>
         </div>
     </template>
-    <template id="report_stock_rule_suspension_points">
-        <div class="o_report_stock_rule_arrow">
-            <svg width="100%" height="100%" viewBox="0 0 10 10" >
-                <line x1="1" y1="5" x2="4.5" y2="5" t-attf-style="stroke: #{color};"/>
-                <line x1="5.5" y1="5" x2="9" y2="5" t-attf-style="stroke: #{color};"/>
+    <templateid="report_stock_rule_suspension_points">
+        <divclass="o_report_stock_rule_arrow">
+            <svgwidth="100%"height="100%"viewBox="001010">
+                <linex1="1"y1="5"x2="4.5"y2="5"t-attf-style="stroke:#{color};"/>
+                <linex1="5.5"y1="5"x2="9"y2="5"t-attf-style="stroke:#{color};"/>
             </svg>
         </div>
     </template>

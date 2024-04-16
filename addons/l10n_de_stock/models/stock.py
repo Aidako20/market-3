@@ -1,14 +1,14 @@
-from flectra import models, fields, api, _
-from flectra.tools import format_date
+fromflectraimportmodels,fields,api,_
+fromflectra.toolsimportformat_date
 
 
-class StockInventory(models.Model):
-    _inherit = 'stock.inventory'
+classStockInventory(models.Model):
+    _inherit='stock.inventory'
 
-    l10n_de_template_data = fields.Binary(compute='_compute_l10n_de_template_data')
+    l10n_de_template_data=fields.Binary(compute='_compute_l10n_de_template_data')
 
-    def _compute_l10n_de_template_data(self):
-        for record in self:
-            record.l10n_de_template_data = data = []
-            if record.date:
-                data.append((_("Date"), format_date(self.env, record.date)))
+    def_compute_l10n_de_template_data(self):
+        forrecordinself:
+            record.l10n_de_template_data=data=[]
+            ifrecord.date:
+                data.append((_("Date"),format_date(self.env,record.date)))

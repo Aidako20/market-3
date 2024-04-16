@@ -1,60 +1,60 @@
-{% extends "layout.html" %}
-{% from "loading.html" import loading_block_ui %}
-{% block head %}
+{%extends"layout.html"%}
+{%from"loading.html"importloading_block_ui%}
+{%blockhead%}
     <script>
-        $(document).ready(function () {
+        $(document).ready(function(){
             $('#server-config').submit(function(e){
                 e.preventDefault();
                 $('.loading-block').removeClass('o_hide');
                 $.ajax({
-                    url: '/server_connect',
-                    type: 'post',
-                    data: $('#server-config').serialize(),
-                }).fail(function () {
-                    $('.message-status').html('Configure Domain Server <br> Redirect to IoT Box');
-                    if ($('#iotname')[0].defaultValue == $('#iotname')[0].value){
-                        var rebootTime = 30000;
+                    url:'/server_connect',
+                    type:'post',
+                    data:$('#server-config').serialize(),
+                }).fail(function(){
+                    $('.message-status').html('ConfigureDomainServer<br>RedirecttoIoTBox');
+                    if($('#iotname')[0].defaultValue==$('#iotname')[0].value){
+                        varrebootTime=30000;
                     }else{
-                        var rebootTime = 100000;
+                        varrebootTime=100000;
                     }
-                    setTimeout(function () {
+                    setTimeout(function(){
                             location.reload(true);
-                    }, rebootTime);
+                    },rebootTime);
                 });
             });
         });
     </script>
-{% endblock %}
-{% block content %}
-    <h2 class="text-center">Configure Flectra Server</h2>
+{%endblock%}
+{%blockcontent%}
+    <h2class="text-center">ConfigureFlectraServer</h2>
     <p>
-        Paste the token from the Connect wizard in your Flectra instance in the Server Token field.  If you change the IoT Box Name,
-        your IoT Box will need a reboot.
+        PastethetokenfromtheConnectwizardinyourFlectrainstanceintheServerTokenfield. IfyouchangetheIoTBoxName,
+        yourIoTBoxwillneedareboot.
     </p>
-    <form id="server-config" action='/server_connect' method='POST'>
-        <table align="center">
+    <formid="server-config"action='/server_connect'method='POST'>
+        <tablealign="center">
             <tr>
-                <td>IoT Box Name</td>
-                <td><input type="text" id="iotname" name="iotname" value="{{ hostname }}"></td>
+                <td>IoTBoxName</td>
+                <td><inputtype="text"id="iotname"name="iotname"value="{{hostname}}"></td>
             </tr>
             <tr>
-                <td>Server Token</td>
-                <td><input type="text" name="token"></td>
+                <td>ServerToken</td>
+                <td><inputtype="text"name="token"></td>
             </tr>
             <tr>
                 <td/>
-                <td><input class="btn" type="submit" value="Connect"/></td>
+                <td><inputclass="btn"type="submit"value="Connect"/></td>
             </tr>
         </table>
-        <p class="text-center font-small">
-            Your current server <strong>{{ server_status }}</strong>
+        <pclass="text-centerfont-small">
+            Yourcurrentserver<strong>{{server_status}}</strong>
         </p>
-        {{ loading_block_ui(loading_message) }}
+        {{loading_block_ui(loading_message)}}
     </form>
-    <div class="text-center font-small" style="margin: 10px auto;">
-        You can clear the server configuration
-        <form style="display: inline-block;margin-left: 4px;" action='/server_clear'>
-            <input class="btn btn-sm" type="submit" value="Clear"/>
+    <divclass="text-centerfont-small"style="margin:10pxauto;">
+        Youcancleartheserverconfiguration
+        <formstyle="display:inline-block;margin-left:4px;"action='/server_clear'>
+            <inputclass="btnbtn-sm"type="submit"value="Clear"/>
         </form>
     </div>
-{% endblock %}
+{%endblock%}

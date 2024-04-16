@@ -1,36 +1,36 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, api
+fromflectraimportfields,models,api
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
-    inventory_availability = fields.Selection([
-        ('never', 'Sell regardless of inventory'),
-        ('always', 'Show inventory on website and prevent sales if not enough stock'),
-        ('threshold', 'Show inventory when below the threshold and prevent sales if not enough stock'),
-        ('custom', 'Show product-specific notifications'),
-    ], string='Inventory Availability', default='never')
-    available_threshold = fields.Float(string='Availability Threshold')
-    website_warehouse_id = fields.Many2one('stock.warehouse', related='website_id.warehouse_id', domain="[('company_id', '=', website_company_id)]", readonly=False)
+    inventory_availability=fields.Selection([
+        ('never','Sellregardlessofinventory'),
+        ('always','Showinventoryonwebsiteandpreventsalesifnotenoughstock'),
+        ('threshold','Showinventorywhenbelowthethresholdandpreventsalesifnotenoughstock'),
+        ('custom','Showproduct-specificnotifications'),
+    ],string='InventoryAvailability',default='never')
+    available_threshold=fields.Float(string='AvailabilityThreshold')
+    website_warehouse_id=fields.Many2one('stock.warehouse',related='website_id.warehouse_id',domain="[('company_id','=',website_company_id)]",readonly=False)
 
-    def set_values(self):
-        super(ResConfigSettings, self).set_values()
-        IrDefault = self.env['ir.default'].sudo()
-        IrDefault.set('product.template', 'inventory_availability', self.inventory_availability)
-        IrDefault.set('product.template', 'available_threshold', self.available_threshold if self.inventory_availability == 'threshold' else None)
+    defset_values(self):
+        super(ResConfigSettings,self).set_values()
+        IrDefault=self.env['ir.default'].sudo()
+        IrDefault.set('product.template','inventory_availability',self.inventory_availability)
+        IrDefault.set('product.template','available_threshold',self.available_thresholdifself.inventory_availability=='threshold'elseNone)
 
     @api.model
-    def get_values(self):
-        res = super(ResConfigSettings, self).get_values()
-        IrDefault = self.env['ir.default'].sudo()
-        res.update(inventory_availability=IrDefault.get('product.template', 'inventory_availability') or 'never',
-                   available_threshold=IrDefault.get('product.template', 'available_threshold') or 5.0)
-        return res
+    defget_values(self):
+        res=super(ResConfigSettings,self).get_values()
+        IrDefault=self.env['ir.default'].sudo()
+        res.update(inventory_availability=IrDefault.get('product.template','inventory_availability')or'never',
+                   available_threshold=IrDefault.get('product.template','available_threshold')or5.0)
+        returnres
 
     @api.onchange('website_company_id')
-    def _onchange_website_company_id(self):
-        if self.website_warehouse_id.company_id != self.website_company_id:
-            return {'value': {'website_warehouse_id': False}}
+    def_onchange_website_company_id(self):
+        ifself.website_warehouse_id.company_id!=self.website_company_id:
+            return{'value':{'website_warehouse_id':False}}

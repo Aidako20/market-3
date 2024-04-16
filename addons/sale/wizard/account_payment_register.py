@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import models
+fromflectraimportmodels
 
 
-class AccountPaymentRegister(models.TransientModel):
-    _inherit = 'account.payment.register'
+classAccountPaymentRegister(models.TransientModel):
+    _inherit='account.payment.register'
 
-    def _create_payment_vals_from_wizard(self):
-        vals = super()._create_payment_vals_from_wizard()
-        # Make sure the account move linked to generated payment
-        # belongs to the expected sales team
-        # team_id field on account.payment comes from the `_inherits` on account.move model
-        vals.update({'team_id': self.line_ids.move_id[0].team_id.id})
-        return vals
+    def_create_payment_vals_from_wizard(self):
+        vals=super()._create_payment_vals_from_wizard()
+        #Makesuretheaccountmovelinkedtogeneratedpayment
+        #belongstotheexpectedsalesteam
+        #team_idfieldonaccount.paymentcomesfromthe`_inherits`onaccount.movemodel
+        vals.update({'team_id':self.line_ids.move_id[0].team_id.id})
+        returnvals

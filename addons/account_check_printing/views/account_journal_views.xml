@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <record id="account_journal_dashboard_kanban_view_inherited" model="ir.ui.view">
-            <field name="name">account.journal.dashboard.kanban.inherited</field>
-            <field name="model">account.journal</field>
-            <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view" />
-            <field name="arch" type="xml">
-                <xpath expr="//t[@t-name='JournalBodyBankCash']//div[hasclass('o_kanban_primary_right')]" position="inside">
-                    <div t-if="journal_type == 'bank' and dashboard.num_checks_to_print != 0">
-                        <div class="row">
-                            <div class="col-12">
-                                <a type="object" name="action_checks_to_print">
-                                    <t t-esc="dashboard.num_checks_to_print"/>
-                                    <t t-if="dashboard.num_checks_to_print == 1">Check to print</t>
-                                    <t t-if="dashboard.num_checks_to_print != 1">Checks to print</t>
+        <recordid="account_journal_dashboard_kanban_view_inherited"model="ir.ui.view">
+            <fieldname="name">account.journal.dashboard.kanban.inherited</field>
+            <fieldname="model">account.journal</field>
+            <fieldname="inherit_id"ref="account.account_journal_dashboard_kanban_view"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//t[@t-name='JournalBodyBankCash']//div[hasclass('o_kanban_primary_right')]"position="inside">
+                    <divt-if="journal_type=='bank'anddashboard.num_checks_to_print!=0">
+                        <divclass="row">
+                            <divclass="col-12">
+                                <atype="object"name="action_checks_to_print">
+                                    <tt-esc="dashboard.num_checks_to_print"/>
+                                    <tt-if="dashboard.num_checks_to_print==1">Checktoprint</t>
+                                    <tt-if="dashboard.num_checks_to_print!=1">Checkstoprint</t>
                                 </a>
                             </div>
                         </div>
@@ -21,20 +21,20 @@
             </field>
         </record>
 
-        <record id="view_account_journal_form_inherited" model="ir.ui.view">
-            <field name="name">account.journal.form.inherited</field>
-            <field name="model">account.journal</field>
-            <field name="inherit_id" ref="account.view_account_journal_form" />
-            <field name="arch" type="xml">
-                <xpath expr="//page[@name='journal_entries']//group[@name='outgoing_payment']" position="after">
-                    <group string="Check Printing"
-                           attrs="{'invisible': ['|', ('type', '!=', 'bank'), ('check_printing_payment_method_selected', '=', False)]}">
-                        <field name="check_printing_payment_method_selected" invisible="1"/>
-                        <field name="check_sequence_id" invisible="1"/>
-                        <field name="check_manual_sequencing"
+        <recordid="view_account_journal_form_inherited"model="ir.ui.view">
+            <fieldname="name">account.journal.form.inherited</field>
+            <fieldname="model">account.journal</field>
+            <fieldname="inherit_id"ref="account.view_account_journal_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//page[@name='journal_entries']//group[@name='outgoing_payment']"position="after">
+                    <groupstring="CheckPrinting"
+                           attrs="{'invisible':['|',('type','!=','bank'),('check_printing_payment_method_selected','=',False)]}">
+                        <fieldname="check_printing_payment_method_selected"invisible="1"/>
+                        <fieldname="check_sequence_id"invisible="1"/>
+                        <fieldname="check_manual_sequencing"
                         />
-                        <field name="check_next_number"
-                               attrs="{'invisible': [('check_manual_sequencing', '=', False)]}"/>
+                        <fieldname="check_next_number"
+                               attrs="{'invisible':[('check_manual_sequencing','=',False)]}"/>
                     </group>
                 </xpath>
             </field>

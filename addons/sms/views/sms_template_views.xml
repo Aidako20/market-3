@@ -1,60 +1,60 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra><data>
-    <record id="sms_template_view_form" model="ir.ui.view">
-        <field name="name">sms.template.view.form</field>
-        <field name="model">sms.template</field>
-        <field name="arch" type="xml">
-            <form string="SMS Templates">
+    <recordid="sms_template_view_form"model="ir.ui.view">
+        <fieldname="name">sms.template.view.form</field>
+        <fieldname="model">sms.template</field>
+        <fieldname="arch"type="xml">
+            <formstring="SMSTemplates">
                 <sheet>
-                    <div class="oe_button_box" name="button_box">
-                        <field name="sidebar_action_id" invisible="1"/>
-                        <button name="action_create_sidebar_action" type="object"
+                    <divclass="oe_button_box"name="button_box">
+                        <fieldname="sidebar_action_id"invisible="1"/>
+                        <buttonname="action_create_sidebar_action"type="object"
                                 groups="base.group_system"
                                 class="oe_stat_button"
-                                attrs="{'invisible':[('sidebar_action_id','!=',False)]}" icon="fa-plus"
-                                help="Add a contextual action on the related model to open a sms composer with this template">
-                            <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_text">Add</span>
-                                <span class="o_stat_text">Context Action</span>
+                                attrs="{'invisible':[('sidebar_action_id','!=',False)]}"icon="fa-plus"
+                                help="Addacontextualactionontherelatedmodeltoopenasmscomposerwiththistemplate">
+                            <divclass="o_field_widgeto_stat_info">
+                                <spanclass="o_stat_text">Add</span>
+                                <spanclass="o_stat_text">ContextAction</span>
                             </div>
                         </button>
-                        <button name="action_unlink_sidebar_action" type="object"
+                        <buttonname="action_unlink_sidebar_action"type="object"
                                 groups="base.group_system"
-                                class="oe_stat_button" icon="fa-minus"
+                                class="oe_stat_button"icon="fa-minus"
                                 attrs="{'invisible':[('sidebar_action_id','=',False)]}"
-                                help="Remove the contextual action of the related model" widget="statinfo">
-                            <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_text">Remove</span>
-                                <span class="o_stat_text">Context Action</span>
+                                help="Removethecontextualactionoftherelatedmodel"widget="statinfo">
+                            <divclass="o_field_widgeto_stat_info">
+                                <spanclass="o_stat_text">Remove</span>
+                                <spanclass="o_stat_text">ContextAction</span>
                             </div>
                         </button>
-                        <button class="oe_stat_button" name="%(sms_template_preview_action)d" icon="fa-search-plus" string="Preview" type="action" target="new"/>
+                        <buttonclass="oe_stat_button"name="%(sms_template_preview_action)d"icon="fa-search-plus"string="Preview"type="action"target="new"/>
                     </div>
-                    <div class="oe_title">
-                        <label for="name" class="oe_edit_only" string="SMS Template"/>
-                        <h1><field name="name" required="1"/></h1>
+                    <divclass="oe_title">
+                        <labelfor="name"class="oe_edit_only"string="SMSTemplate"/>
+                        <h1><fieldname="name"required="1"/></h1>
                         <group>
-                            <field name="model_id" required="1" options="{'no_create': True}"/>
-                            <field name="model" invisible="1"/>
-                            <field name="lang" groups="base.group_no_one" placeholder="e.g. en_US or ${object.partner_id.lang}"/>
+                            <fieldname="model_id"required="1"options="{'no_create':True}"/>
+                            <fieldname="model"invisible="1"/>
+                            <fieldname="lang"groups="base.group_no_one"placeholder="e.g.en_USor${object.partner_id.lang}"/>
                         </group>
                     </div>
                     <notebook>
-                        <page string="Content" name="content">
+                        <pagestring="Content"name="content">
                             <group>
-                                <field name="body" widget="sms_widget" nolabel="1"/>
+                                <fieldname="body"widget="sms_widget"nolabel="1"/>
                             </group>
                         </page>
-                        <page string="Dynamic Placeholder Generator" name="dynamic_placeholder_generator" groups="base.group_no_one">
+                        <pagestring="DynamicPlaceholderGenerator"name="dynamic_placeholder_generator"groups="base.group_no_one">
                             <group>
-                                <field name="model_object_field"
+                                <fieldname="model_object_field"
                                         domain="[('model_id','=',model_id),('ttype','!=','one2many'),('ttype','!=','many2many')]"/>
-                                <field name="sub_object" readonly="1"/>
-                                <field name="sub_model_object_field"
+                                <fieldname="sub_object"readonly="1"/>
+                                <fieldname="sub_model_object_field"
                                         domain="[('model_id','=',sub_object),('ttype','!=','one2many'),('ttype','!=','many2many')]"
                                         attrs="{'readonly':[('sub_object','=',False)],'required':[('sub_object','!=',False)]}"/>
-                                <field name="null_value"/>
-                                <field name="copyvalue"/>
+                                <fieldname="null_value"/>
+                                <fieldname="copyvalue"/>
                             </group>
                         </page>
                     </notebook>
@@ -63,36 +63,36 @@
         </field>
     </record>
 
-    <record id="sms_template_view_tree" model="ir.ui.view">
-        <field name="name">sms.template.view.tree</field>
-        <field name="model">sms.template</field>
-        <field name="arch" type="xml">
-            <tree string="SMS Templates">
-                <field name="name"/>
-                <field name="model_id"/>
+    <recordid="sms_template_view_tree"model="ir.ui.view">
+        <fieldname="name">sms.template.view.tree</field>
+        <fieldname="model">sms.template</field>
+        <fieldname="arch"type="xml">
+            <treestring="SMSTemplates">
+                <fieldname="name"/>
+                <fieldname="model_id"/>
             </tree>
         </field>
     </record>
 
-    <record id="sms_template_view_search" model="ir.ui.view">
-        <field name="name">sms.template.view.search</field>
-        <field name="model">sms.template</field>
-        <field name="arch" type="xml">
-            <search string="Search SMS Templates">
-                <field name="name"/>
-                <field name="model_id"/>
+    <recordid="sms_template_view_search"model="ir.ui.view">
+        <fieldname="name">sms.template.view.search</field>
+        <fieldname="model">sms.template</field>
+        <fieldname="arch"type="xml">
+            <searchstring="SearchSMSTemplates">
+                <fieldname="name"/>
+                <fieldname="model_id"/>
             </search>
         </field>
     </record>
 
-    <record id="sms_template_action" model="ir.actions.act_window">
-        <field name="name">Templates</field>
-        <field name="res_model">sms.template</field>
-        <field name="view_mode">tree,form</field>
+    <recordid="sms_template_action"model="ir.actions.act_window">
+        <fieldname="name">Templates</field>
+        <fieldname="res_model">sms.template</field>
+        <fieldname="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="sms_template_menu"
-        name="SMS Templates"
+    <menuitemid="sms_template_menu"
+        name="SMSTemplates"
         parent="phone_validation.phone_menu_main"
         sequence="2"
         action="sms_template_action"/>

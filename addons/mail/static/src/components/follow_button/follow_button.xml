@@ -1,20 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.FollowButton" owl="1">
-        <div class="o_FollowButton">
-            <t t-if="thread.isCurrentPartnerFollowing">
-                <button class="o_FollowButton_unfollow btn btn-link" t-att-class="{ 'o-following': !state.isUnfollowButtonHighlighted, 'o-unfollow': state.isUnfollowButtonHighlighted }" t-att-disabled="props.isDisabled" t-on-click="_onClickUnfollow" t-on-mouseenter="_onMouseEnterUnfollow" t-on-mouseleave="_onMouseLeaveUnfollow">
-                    <t t-if="state.isUnfollowButtonHighlighted">
-                        <i class="fa fa-times"/> Unfollow
+    <tt-name="mail.FollowButton"owl="1">
+        <divclass="o_FollowButton">
+            <tt-if="thread.isCurrentPartnerFollowing">
+                <buttonclass="o_FollowButton_unfollowbtnbtn-link"t-att-class="{'o-following':!state.isUnfollowButtonHighlighted,'o-unfollow':state.isUnfollowButtonHighlighted}"t-att-disabled="props.isDisabled"t-on-click="_onClickUnfollow"t-on-mouseenter="_onMouseEnterUnfollow"t-on-mouseleave="_onMouseLeaveUnfollow">
+                    <tt-if="state.isUnfollowButtonHighlighted">
+                        <iclass="fafa-times"/>Unfollow
                     </t>
-                    <t t-else="">
-                        <i class="fa fa-check"/> Following
+                    <tt-else="">
+                        <iclass="fafa-check"/>Following
                     </t>
                 </button>
             </t>
-            <t t-else="">
-                <button class="o_FollowButton_follow btn btn-link" t-att-disabled="props.isDisabled" t-on-click="_onClickFollow">
+            <tt-else="">
+                <buttonclass="o_FollowButton_followbtnbtn-link"t-att-disabled="props.isDisabled"t-on-click="_onClickFollow">
                     Follow
                 </button>
             </t>

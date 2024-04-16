@@ -1,153 +1,153 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra.addons.hr_expense.tests.common import TestExpenseCommon
-from flectra.tests import tagged
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectra.addons.hr_expense.tests.commonimportTestExpenseCommon
+fromflectra.testsimporttagged
 
 
-@tagged('-at_install', 'post_install')
-class TestExpensesMailImport(TestExpenseCommon):
+@tagged('-at_install','post_install')
+classTestExpensesMailImport(TestExpenseCommon):
 
     @classmethod
-    def setUpClass(cls, chart_template_ref=None):
+    defsetUpClass(cls,chart_template_ref=None):
         super().setUpClass(chart_template_ref=chart_template_ref)
 
-        cls.product_a.default_code = 'product_a'
-        cls.product_b.default_code = 'product_b'
+        cls.product_a.default_code='product_a'
+        cls.product_b.default_code='product_b'
 
-    def test_import_expense_from_email(self):
-        message_parsed = {
-            'message_id': "the-world-is-a-ghetto",
-            'subject': '%s %s' % (self.product_a.default_code, self.product_a.standard_price),
-            'email_from': self.expense_user_employee.email,
-            'to': 'catchall@yourcompany.com',
-            'body': "Don't you know, that for me, and for you",
-            'attachments': [],
+    deftest_import_expense_from_email(self):
+        message_parsed={
+            'message_id':"the-world-is-a-ghetto",
+            'subject':'%s%s'%(self.product_a.default_code,self.product_a.standard_price),
+            'email_from':self.expense_user_employee.email,
+            'to':'catchall@yourcompany.com',
+            'body':"Don'tyouknow,thatforme,andforyou",
+            'attachments':[],
         }
 
-        expense = self.env['hr.expense'].message_new(message_parsed)
+        expense=self.env['hr.expense'].message_new(message_parsed)
 
-        self.assertRecordValues(expense, [{
-            'product_id': self.product_a.id,
-            'total_amount': 920.0,
-            'employee_id': self.expense_employee.id,
+        self.assertRecordValues(expense,[{
+            'product_id':self.product_a.id,
+            'total_amount':920.0,
+            'employee_id':self.expense_employee.id,
         }])
 
-    def test_import_expense_from_email_no_product(self):
-        message_parsed = {
-            'message_id': "the-world-is-a-ghetto",
-            'subject': 'no product code 800',
-            'email_from': self.expense_user_employee.email,
-            'to': 'catchall@yourcompany.com',
-            'body': "Don't you know, that for me, and for you",
-            'attachments': [],
+    deftest_import_expense_from_email_no_product(self):
+        message_parsed={
+            'message_id':"the-world-is-a-ghetto",
+            'subject':'noproductcode800',
+            'email_from':self.expense_user_employee.email,
+            'to':'catchall@yourcompany.com',
+            'body':"Don'tyouknow,thatforme,andforyou",
+            'attachments':[],
         }
 
-        expense = self.env['hr.expense'].message_new(message_parsed)
+        expense=self.env['hr.expense'].message_new(message_parsed)
 
-        self.assertRecordValues(expense, [{
-            'product_id': False,
-            'total_amount': 800.0,
-            'employee_id': self.expense_employee.id,
+        self.assertRecordValues(expense,[{
+            'product_id':False,
+            'total_amount':800.0,
+            'employee_id':self.expense_employee.id,
         }])
 
-    def test_import_expense_from_mail_parsing_subjects(self):
+    deftest_import_expense_from_mail_parsing_subjects(self):
 
-        def assertParsedValues(subject, currencies, exp_description, exp_amount, exp_product):
-            product, amount, currency_id, description = self.env['hr.expense']\
+        defassertParsedValues(subject,currencies,exp_description,exp_amount,exp_product):
+            product,amount,currency_id,description=self.env['hr.expense']\
                 .with_user(self.expense_user_employee)\
-                ._parse_expense_subject(subject, currencies)
+                ._parse_expense_subject(subject,currencies)
 
-            self.assertEqual(product, exp_product)
-            self.assertAlmostEqual(amount, exp_amount)
-            self.assertEqual(description, exp_description)
+            self.assertEqual(product,exp_product)
+            self.assertAlmostEqual(amount,exp_amount)
+            self.assertEqual(description,exp_description)
 
-        # Without Multi currency access
+        #WithoutMulticurrencyaccess
         assertParsedValues(
-            "product_a bar $1205.91 electro wizard",
+            "product_abar$1205.91electrowizard",
             self.company_data['currency'],
-            "bar electro wizard",
+            "barelectrowizard",
             1205.91,
             self.product_a,
         )
 
-        # subject having other currency then company currency, it should ignore other currency then company currency
+        #subjecthavingothercurrencythencompanycurrency,itshouldignoreothercurrencythencompanycurrency
         assertParsedValues(
-            "foo bar %s1406.91 royal giant" % self.currency_data['currency'].symbol,
+            "foobar%s1406.91royalgiant"%self.currency_data['currency'].symbol,
             self.company_data['currency'],
-            "foo bar %s royal giant" % self.currency_data['currency'].symbol,
+            "foobar%sroyalgiant"%self.currency_data['currency'].symbol,
             1406.91,
             self.env['product.product'],
         )
 
-        # With Multi currency access
-        self.expense_user_employee.groups_id |= self.env.ref('base.group_multi_currency')
+        #WithMulticurrencyaccess
+        self.expense_user_employee.groups_id|=self.env.ref('base.group_multi_currency')
 
         assertParsedValues(
-            "product_a foo bar $2205.92 elite barbarians",
+            "product_afoobar$2205.92elitebarbarians",
             self.company_data['currency'],
-            "foo bar elite barbarians",
+            "foobarelitebarbarians",
             2205.92,
             self.product_a,
         )
 
-        # subject having other currency then company currency, it should accept other currency because multi currency is activated
+        #subjecthavingothercurrencythencompanycurrency,itshouldacceptothercurrencybecausemulticurrencyisactivated
         assertParsedValues(
-            "product_a %s2510.90 chhota bheem" % self.currency_data['currency'].symbol,
-            self.company_data['currency'] + self.currency_data['currency'],
-            "chhota bheem",
+            "product_a%s2510.90chhotabheem"%self.currency_data['currency'].symbol,
+            self.company_data['currency']+self.currency_data['currency'],
+            "chhotabheem",
             2510.90,
             self.product_a,
         )
 
-        # subject without product and currency, should take company currency and default product
+        #subjectwithoutproductandcurrency,shouldtakecompanycurrencyanddefaultproduct
         assertParsedValues(
-            "foo bar 109.96 spear goblins",
-            self.company_data['currency'] + self.currency_data['currency'],
-            "foo bar spear goblins",
+            "foobar109.96speargoblins",
+            self.company_data['currency']+self.currency_data['currency'],
+            "foobarspeargoblins",
             109.96,
             self.env['product.product'],
         )
 
-        # subject with currency symbol at end
+        #subjectwithcurrencysymbolatend
         assertParsedValues(
-            "product_a foo bar 2910.94$ inferno dragon",
-            self.company_data['currency'] + self.currency_data['currency'],
-            "foo bar inferno dragon",
+            "product_afoobar2910.94$infernodragon",
+            self.company_data['currency']+self.currency_data['currency'],
+            "foobarinfernodragon",
             2910.94,
             self.product_a,
         )
 
-        # subject with no amount and product
+        #subjectwithnoamountandproduct
         assertParsedValues(
-            "foo bar mega knight",
-            self.company_data['currency'] + self.currency_data['currency'],
-            "foo bar mega knight",
+            "foobarmegaknight",
+            self.company_data['currency']+self.currency_data['currency'],
+            "foobarmegaknight",
             0.0,
             self.env['product.product'],
         )
 
-        # price with a comma
+        #pricewithacomma
         assertParsedValues(
-            "foo bar 291,56$ mega knight",
-            self.company_data['currency'] + self.currency_data['currency'],
-            "foo bar mega knight",
+            "foobar291,56$megaknight",
+            self.company_data['currency']+self.currency_data['currency'],
+            "foobarmegaknight",
             291.56,
             self.env['product.product'],
         )
 
-        # price without decimals
+        #pricewithoutdecimals
         assertParsedValues(
-            "foo bar 291$ mega knight",
-            self.company_data['currency'] + self.currency_data['currency'],
-            "foo bar mega knight",
+            "foobar291$megaknight",
+            self.company_data['currency']+self.currency_data['currency'],
+            "foobarmegaknight",
             291.0,
             self.env['product.product'],
         )
 
         assertParsedValues(
-            "product_a foo bar 291.5$ mega knight",
-            self.company_data['currency'] + self.currency_data['currency'],
-            "foo bar mega knight",
+            "product_afoobar291.5$megaknight",
+            self.company_data['currency']+self.currency_data['currency'],
+            "foobarmegaknight",
             291.5,
             self.product_a,
         )

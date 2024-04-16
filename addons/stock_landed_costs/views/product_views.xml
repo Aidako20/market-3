@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="view_product_landed_cost_form" model="ir.ui.view">
-            <field name="name">product.template.landed.cost.form</field>
-            <field name="model">product.template</field>
-            <field name="inherit_id" ref="account.product_template_form_view"/>
-            <field name="arch" type="xml">
-                <group name="bill" position="after">
-                    <div attrs="{'invisible':[('type', '!=', 'service')]}">
-                        <group string="Landed Costs" name="landedcosts">
-                            <field name="landed_cost_ok"/>
-                            <field name="split_method_landed_cost" attrs="{'invisible': [('landed_cost_ok', '=', False)]}" class="col-4"/>
+        <recordid="view_product_landed_cost_form"model="ir.ui.view">
+            <fieldname="name">product.template.landed.cost.form</field>
+            <fieldname="model">product.template</field>
+            <fieldname="inherit_id"ref="account.product_template_form_view"/>
+            <fieldname="arch"type="xml">
+                <groupname="bill"position="after">
+                    <divattrs="{'invisible':[('type','!=','service')]}">
+                        <groupstring="LandedCosts"name="landedcosts">
+                            <fieldname="landed_cost_ok"/>
+                            <fieldname="split_method_landed_cost"attrs="{'invisible':[('landed_cost_ok','=',False)]}"class="col-4"/>
                         </group>
                     </div>
                 </group>

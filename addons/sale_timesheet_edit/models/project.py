@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class Project(models.Model):
-    _inherit = 'project.project'
+classProject(models.Model):
+    _inherit='project.project'
 
-    def _get_not_billed_timesheets(self):
-        """ Get the timesheets not invoiced and the SOL has not manually been edited
-            FIXME: [XBO] this change must be done in the _update_timesheets_sale_line_id
-                rather than this method in master to keep the initial behaviour of this method.
+    def_get_not_billed_timesheets(self):
+        """GetthetimesheetsnotinvoicedandtheSOLhasnotmanuallybeenedited
+            FIXME:[XBO]thischangemustbedoneinthe_update_timesheets_sale_line_id
+                ratherthanthismethodinmastertokeeptheinitialbehaviourofthismethod.
         """
-        return super(Project, self)._get_not_billed_timesheets() - self.mapped('timesheet_ids').filtered('is_so_line_edited')
+        returnsuper(Project,self)._get_not_billed_timesheets()-self.mapped('timesheet_ids').filtered('is_so_line_edited')

@@ -1,223 +1,223 @@
-flectra.define('website_mass_mailing.editor', function (require) {
-'use strict';
+flectra.define('website_mass_mailing.editor',function(require){
+'usestrict';
 
-var core = require('web.core');
-var rpc = require('web.rpc');
-var WysiwygMultizone = require('web_editor.wysiwyg.multizone');
-var WysiwygTranslate = require('web_editor.wysiwyg.multizone.translate');
-var options = require('web_editor.snippets.options');
-var wUtils = require('website.utils');
+varcore=require('web.core');
+varrpc=require('web.rpc');
+varWysiwygMultizone=require('web_editor.wysiwyg.multizone');
+varWysiwygTranslate=require('web_editor.wysiwyg.multizone.translate');
+varoptions=require('web_editor.snippets.options');
+varwUtils=require('website.utils');
 
-const qweb = core.qweb;
-var _t = core._t;
+constqweb=core.qweb;
+var_t=core._t;
 
 
-options.registry.mailing_list_subscribe = options.Class.extend({
-    popup_template_id: "editor_new_mailing_list_subscribe_button",
-    popup_title: _t("Add a Newsletter Subscribe Button"),
+options.registry.mailing_list_subscribe=options.Class.extend({
+    popup_template_id:"editor_new_mailing_list_subscribe_button",
+    popup_title:_t("AddaNewsletterSubscribeButton"),
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * Allows to select mailing list.
+     *Allowstoselectmailinglist.
      *
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    select_mailing_list: function (previewMode, value) {
-        var self = this;
-        var def = wUtils.prompt({
-            'id': this.popup_template_id,
-            'window_title': this.popup_title,
-            'select': _t("Newsletter"),
-            'init': function (field, dialog) {
-                return rpc.query({
-                    model: 'mailing.list',
-                    method: 'name_search',
-                    args: ['', [['is_public', '=', true]]],
-                    context: self.options.recordInfo.context,
-                }).then(function (data) {
-                    $(dialog).find('.btn-primary').prop('disabled', !data.length);
-                    var list_id = self.$target.attr("data-list-id");
-                    $(dialog).on('show.bs.modal', function () {
-                        if (list_id !== "0"){
+    select_mailing_list:function(previewMode,value){
+        varself=this;
+        vardef=wUtils.prompt({
+            'id':this.popup_template_id,
+            'window_title':this.popup_title,
+            'select':_t("Newsletter"),
+            'init':function(field,dialog){
+                returnrpc.query({
+                    model:'mailing.list',
+                    method:'name_search',
+                    args:['',[['is_public','=',true]]],
+                    context:self.options.recordInfo.context,
+                }).then(function(data){
+                    $(dialog).find('.btn-primary').prop('disabled',!data.length);
+                    varlist_id=self.$target.attr("data-list-id");
+                    $(dialog).on('show.bs.modal',function(){
+                        if(list_id!=="0"){
                             $(dialog).find('select').val(list_id);
                         };
                     });
-                    return data;
+                    returndata;
                 });
             },
         });
-        def.then(function (result) {
-            self.$target.attr("data-list-id", result.val);
+        def.then(function(result){
+            self.$target.attr("data-list-id",result.val);
         });
-        return def;
+        returndef;
     },
     /**
-     * @see this.selectClass for parameters
+     *@seethis.selectClassforparameters
      */
-    toggleThanksButton(previewMode, widgetValue, params) {
-        const subscribeBtnEl = this.$target[0].querySelector('.js_subscribe_btn');
-        const thanksBtnEl = this.$target[0].querySelector('.js_subscribed_btn');
+    toggleThanksButton(previewMode,widgetValue,params){
+        constsubscribeBtnEl=this.$target[0].querySelector('.js_subscribe_btn');
+        constthanksBtnEl=this.$target[0].querySelector('.js_subscribed_btn');
 
-        thanksBtnEl.classList.toggle('o_disable_preview', !widgetValue);
-        thanksBtnEl.classList.toggle('o_enable_preview', widgetValue);
-        subscribeBtnEl.classList.toggle('o_enable_preview', !widgetValue);
-        subscribeBtnEl.classList.toggle('o_disable_preview', widgetValue);
+        thanksBtnEl.classList.toggle('o_disable_preview',!widgetValue);
+        thanksBtnEl.classList.toggle('o_enable_preview',widgetValue);
+        subscribeBtnEl.classList.toggle('o_enable_preview',!widgetValue);
+        subscribeBtnEl.classList.toggle('o_disable_preview',widgetValue);
     },
     /**
-     * @override
+     *@override
      */
-    onBuilt: function () {
-        var self = this;
+    onBuilt:function(){
+        varself=this;
         this._super();
-        this.select_mailing_list('click').guardedCatch(function () {
-            self.getParent()._onRemoveClick($.Event( "click" ));
+        this.select_mailing_list('click').guardedCatch(function(){
+            self.getParent()._onRemoveClick($.Event("click"));
         });
     },
     /**
-     * @override
+     *@override
      */
-    cleanForSave() {
-        const previewClasses = ['o_disable_preview', 'o_enable_preview'];
+    cleanForSave(){
+        constpreviewClasses=['o_disable_preview','o_enable_preview'];
         this.$target[0].querySelector('.js_subscribe_btn').classList.remove(...previewClasses);
         this.$target[0].querySelector('.js_subscribed_btn').classList.remove(...previewClasses);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState(methodName, params) {
-        if (methodName !== 'toggleThanksButton') {
-            return this._super(...arguments);
+    _computeWidgetState(methodName,params){
+        if(methodName!=='toggleThanksButton'){
+            returnthis._super(...arguments);
         }
-        const subscribeBtnEl = this.$target[0].querySelector('.js_subscribe_btn');
-        return subscribeBtnEl && subscribeBtnEl.classList.contains('o_disable_preview') ?
-            'true' : '';
+        constsubscribeBtnEl=this.$target[0].querySelector('.js_subscribe_btn');
+        returnsubscribeBtnEl&&subscribeBtnEl.classList.contains('o_disable_preview')?
+            'true':'';
     },
     /**
-     * @override
+     *@override
      */
-    _renderCustomXML(uiFragment) {
-        const checkboxEl = document.createElement('we-checkbox');
-        checkboxEl.setAttribute('string', _t("Display Thanks Button"));
-        checkboxEl.dataset.toggleThanksButton = 'true';
-        checkboxEl.dataset.noPreview = 'true';
-        // Prevent this option from triggering a refresh of the public widget.
-        checkboxEl.dataset.noWidgetRefresh = 'true';
+    _renderCustomXML(uiFragment){
+        constcheckboxEl=document.createElement('we-checkbox');
+        checkboxEl.setAttribute('string',_t("DisplayThanksButton"));
+        checkboxEl.dataset.toggleThanksButton='true';
+        checkboxEl.dataset.noPreview='true';
+        //Preventthisoptionfromtriggeringarefreshofthepublicwidget.
+        checkboxEl.dataset.noWidgetRefresh='true';
         uiFragment.appendChild(checkboxEl);
     },
 });
 
-options.registry.recaptchaSubscribe = options.Class.extend({
-    xmlDependencies: ['/google_recaptcha/static/src/xml/recaptcha.xml'],
+options.registry.recaptchaSubscribe=options.Class.extend({
+    xmlDependencies:['/google_recaptcha/static/src/xml/recaptcha.xml'],
 
     /**
-     * Toggle the recaptcha legal terms
+     *Toggletherecaptchalegalterms
      */
-    toggleRecaptchaLegal: function (previewMode, value, params) {
-        const recaptchaLegalEl = this.$target[0].querySelector('.o_recaptcha_legal_terms');
-        if (recaptchaLegalEl) {
+    toggleRecaptchaLegal:function(previewMode,value,params){
+        constrecaptchaLegalEl=this.$target[0].querySelector('.o_recaptcha_legal_terms');
+        if(recaptchaLegalEl){
             recaptchaLegalEl.remove();
-        } else {
-            const template = document.createElement('template');
-            template.innerHTML = qweb.render("google_recaptcha.recaptcha_legal_terms");
+        }else{
+            consttemplate=document.createElement('template');
+            template.innerHTML=qweb.render("google_recaptcha.recaptcha_legal_terms");
             this.$target[0].appendChild(template.content.firstElementChild);
         }
     },
 
     //----------------------------------------------------------------------
-    // Private
+    //Private
     //----------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _computeWidgetState: function (methodName, params) {
-        switch (methodName) {
-            case 'toggleRecaptchaLegal':
-                return !this.$target[0].querySelector('.o_recaptcha_legal_terms') || '';
+    _computeWidgetState:function(methodName,params){
+        switch(methodName){
+            case'toggleRecaptchaLegal':
+                return!this.$target[0].querySelector('.o_recaptcha_legal_terms')||'';
         }
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
 });
 
-options.registry.newsletter_popup = options.registry.mailing_list_subscribe.extend({
-    popup_template_id: "editor_new_mailing_list_subscribe_popup",
-    popup_title: _t("Add a Newsletter Subscribe Popup"),
+options.registry.newsletter_popup=options.registry.mailing_list_subscribe.extend({
+    popup_template_id:"editor_new_mailing_list_subscribe_popup",
+    popup_title:_t("AddaNewsletterSubscribePopup"),
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this.$target.on('hidden.bs.modal.newsletter_popup_option', () => {
-            this.trigger_up('snippet_option_visibility_update', {show: false});
+    start:function(){
+        this.$target.on('hidden.bs.modal.newsletter_popup_option',()=>{
+            this.trigger_up('snippet_option_visibility_update',{show:false});
         });
-        return this._super(...arguments);
+        returnthis._super(...arguments);
     },
     /**
-     * @override
+     *@override
      */
-    onTargetShow: function () {
-        // Open the modal
-        this.$target.data('quick-open', true);
-        return this._refreshPublicWidgets();
+    onTargetShow:function(){
+        //Openthemodal
+        this.$target.data('quick-open',true);
+        returnthis._refreshPublicWidgets();
     },
     /**
-     * @override
+     *@override
      */
-    onTargetHide: function () {
-        // Close the modal
-        const $modal = this.$('.modal');
-        if ($modal.length && $modal.is('.modal_shown')) {
+    onTargetHide:function(){
+        //Closethemodal
+        const$modal=this.$('.modal');
+        if($modal.length&&$modal.is('.modal_shown')){
             $modal.modal('hide');
         }
     },
     /**
-     * @override
+     *@override
      */
-    cleanForSave: function () {
-        var self = this;
-        var content = this.$target.data('content');
-        if (content) {
-            const $layout = $('<div/>', {html: content});
-            const previewClasses = ['o_disable_preview', 'o_enable_preview'];
+    cleanForSave:function(){
+        varself=this;
+        varcontent=this.$target.data('content');
+        if(content){
+            const$layout=$('<div/>',{html:content});
+            constpreviewClasses=['o_disable_preview','o_enable_preview'];
             $layout[0].querySelector('.js_subscribe_btn').classList.remove(...previewClasses);
             $layout[0].querySelector('.js_subscribed_btn').classList.remove(...previewClasses);
-            this.trigger_up('get_clean_html', {
-                $layout: $layout,
-                callback: function (html) {
-                    self.$target.data('content', html);
+            this.trigger_up('get_clean_html',{
+                $layout:$layout,
+                callback:function(html){
+                    self.$target.data('content',html);
                 },
             });
         }
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
+    destroy:function(){
         this.$target.off('.newsletter_popup_option');
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Options
+    //Options
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    select_mailing_list: function () {
-        var self = this;
-        return this._super.apply(this, arguments).then(function () {
-            self.$target.data('quick-open', true);
+    select_mailing_list:function(){
+        varself=this;
+        returnthis._super.apply(this,arguments).then(function(){
+            self.$target.data('quick-open',true);
             self.$target.removeData('content');
-            return self._refreshPublicWidgets();
+            returnself._refreshPublicWidgets();
         });
     },
 });
@@ -225,66 +225,66 @@ options.registry.newsletter_popup = options.registry.mailing_list_subscribe.exte
 WysiwygMultizone.include({
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _saveElement: function (outerHTML, recordInfo, editable) {
-        var self = this;
-        var defs = [this._super.apply(this, arguments)];
-        var $popups = $(editable).find('.o_newsletter_popup');
-        _.each($popups, function (popup) {
-            var $popup = $(popup);
-            var content = $popup.data('content');
-            if (content) {
+    _saveElement:function(outerHTML,recordInfo,editable){
+        varself=this;
+        vardefs=[this._super.apply(this,arguments)];
+        var$popups=$(editable).find('.o_newsletter_popup');
+        _.each($popups,function(popup){
+            var$popup=$(popup);
+            varcontent=$popup.data('content');
+            if(content){
                 defs.push(self._rpc({
-                    route: '/website_mass_mailing/set_content',
-                    params: {
-                        'newsletter_id': parseInt($popup.attr('data-list-id')),
-                        'content': content,
+                    route:'/website_mass_mailing/set_content',
+                    params:{
+                        'newsletter_id':parseInt($popup.attr('data-list-id')),
+                        'content':content,
                     },
                 }));
             }
         });
-        return Promise.all(defs);
+        returnPromise.all(defs);
     },
 });
 
 WysiwygTranslate.include({
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        this.$target.on('click.newsletter_popup_option', '.o_edit_popup', function (ev) {
-            alert(_t('Website popups can only be translated through mailing list configuration in the Email Marketing app.'));
+    start:function(){
+        this.$target.on('click.newsletter_popup_option','.o_edit_popup',function(ev){
+            alert(_t('WebsitepopupscanonlybetranslatedthroughmailinglistconfigurationintheEmailMarketingapp.'));
         });
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 });
 
 options.registry.Parallax.include({
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    async _computeVisibility() {
-        // Hides parallax options for snippets that are inside a "Newsletter"
-        // popup because the parallax effect is not working in this case. This
-        // is due to the scrollbar which is on the "modal-body" element and not
-        // on the "modal" element.
-        // TODO in master: Make sure that the scrollbar is in the same place as
-        // for the "s_popup" snippet for the "Newsletter" popup and make the
-        // parallax effect work.
-        if (this.$target[0].closest('.o_newsletter_popup')) {
-            return false;
+    async_computeVisibility(){
+        //Hidesparallaxoptionsforsnippetsthatareinsidea"Newsletter"
+        //popupbecausetheparallaxeffectisnotworkinginthiscase.This
+        //isduetothescrollbarwhichisonthe"modal-body"elementandnot
+        //onthe"modal"element.
+        //TODOinmaster:Makesurethatthescrollbarisinthesameplaceas
+        //forthe"s_popup"snippetforthe"Newsletter"popupandmakethe
+        //parallaxeffectwork.
+        if(this.$target[0].closest('.o_newsletter_popup')){
+            returnfalse;
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 });
 

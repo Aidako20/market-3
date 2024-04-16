@@ -1,24 +1,24 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
-CODE_EXEC_DEFAULT = '''\
-res = []
-cr.execute("select id, code from account_journal")
-for record in cr.dictfetchall():
+CODE_EXEC_DEFAULT='''\
+res=[]
+cr.execute("selectid,codefromaccount_journal")
+forrecordincr.dictfetchall():
     res.append(record['code'])
-result = res
+result=res
 '''
 
 
-class AccountingAssertTest(models.Model):
-    _name = "accounting.assert.test"
-    _description = 'Accounting Assert Test'
-    _order = "sequence"
+classAccountingAssertTest(models.Model):
+    _name="accounting.assert.test"
+    _description='AccountingAssertTest'
+    _order="sequence"
 
-    name = fields.Char(string='Test Name', required=True, index=True, translate=True)
-    desc = fields.Text(string='Test Description', index=True, translate=True)
-    code_exec = fields.Text(string='Python code', required=True, default=CODE_EXEC_DEFAULT)
-    active = fields.Boolean(default=True)
-    sequence = fields.Integer(default=10)
+    name=fields.Char(string='TestName',required=True,index=True,translate=True)
+    desc=fields.Text(string='TestDescription',index=True,translate=True)
+    code_exec=fields.Text(string='Pythoncode',required=True,default=CODE_EXEC_DEFAULT)
+    active=fields.Boolean(default=True)
+    sequence=fields.Integer(default=10)

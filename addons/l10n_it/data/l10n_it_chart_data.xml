@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <!-- Chart Template -->
-        <record id="l10n_it_chart_template_generic" model="account.chart.template">
-            <field name="name">Italy - Generic Chart of Accounts</field>
-            <field name="cash_account_code_prefix">180</field>
-            <field name="bank_account_code_prefix">182</field>
-            <field name="transfer_account_code_prefix">183</field>
-            <field name="currency_id" ref="base.EUR"/>
+        <!--ChartTemplate-->
+        <recordid="l10n_it_chart_template_generic"model="account.chart.template">
+            <fieldname="name">Italy-GenericChartofAccounts</field>
+            <fieldname="cash_account_code_prefix">180</field>
+            <fieldname="bank_account_code_prefix">182</field>
+            <fieldname="transfer_account_code_prefix">183</field>
+            <fieldname="currency_id"ref="base.EUR"/>
         </record>
 
 </flectra>

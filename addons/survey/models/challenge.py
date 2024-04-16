@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields
+fromflectraimportmodels,fields
 
 
-class Challenge(models.Model):
-    _inherit = 'gamification.challenge'
+classChallenge(models.Model):
+    _inherit='gamification.challenge'
 
-    challenge_category = fields.Selection(selection_add=[
-        ('certification', 'Certifications')
-    ], ondelete={'certification': 'set default'})
+    challenge_category=fields.Selection(selection_add=[
+        ('certification','Certifications')
+    ],ondelete={'certification':'setdefault'})

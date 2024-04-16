@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class MailBlacklistRemove(models.TransientModel):
-    _name = 'mail.blacklist.remove'
-    _description = 'Remove email from blacklist wizard'
+classMailBlacklistRemove(models.TransientModel):
+    _name='mail.blacklist.remove'
+    _description='Removeemailfromblacklistwizard'
 
-    email = fields.Char(name="Email", readonly=True, required=True)
-    reason = fields.Char(name="Reason")
+    email=fields.Char(name="Email",readonly=True,required=True)
+    reason=fields.Char(name="Reason")
 
-    def action_unblacklist_apply(self):
-        return self.env['mail.blacklist'].action_remove_with_reason(self.email, self.reason)
+    defaction_unblacklist_apply(self):
+        returnself.env['mail.blacklist'].action_remove_with_reason(self.email,self.reason)

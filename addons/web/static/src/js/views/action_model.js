@@ -1,236 +1,236 @@
-flectra.define("web/static/src/js/views/action_model.js", function (require) {
-    "use strict";
+flectra.define("web/static/src/js/views/action_model.js",function(require){
+    "usestrict";
 
-    const Domain = require("web.Domain");
-    const { FACET_ICONS } = require("web.searchUtils");
-    const { Model } = require("web/static/src/js/model.js");
-    const { parseArch } = require("web.viewUtils");
-    const pyUtils = require("web.py_utils");
-    const Registry = require("web.Registry");
+    constDomain=require("web.Domain");
+    const{FACET_ICONS}=require("web.searchUtils");
+    const{Model}=require("web/static/src/js/model.js");
+    const{parseArch}=require("web.viewUtils");
+    constpyUtils=require("web.py_utils");
+    constRegistry=require("web.Registry");
 
-    const isNotNull = (value) => value !== null && value !== undefined;
-    const isObject = (obj) => typeof obj === "object" && obj !== null;
+    constisNotNull=(value)=>value!==null&&value!==undefined;
+    constisObject=(obj)=>typeofobj==="object"&&obj!==null;
 
     /**
-     * @extends Model.Extension
+     *@extendsModel.Extension
      */
-    class ActionModelExtension extends Model.Extension {
+    classActionModelExtensionextendsModel.Extension{
 
         //---------------------------------------------------------------------
-        // Public
+        //Public
         //---------------------------------------------------------------------
 
         /**
-         * Initiates the asynchronous tasks of the extension and returns a
-         * promise resolved as soon as all the informations necessary to build
-         * the search query are ready.
-         * @returns {Promise}
+         *Initiatestheasynchronoustasksoftheextensionandreturnsa
+         *promiseresolvedassoonasalltheinformationsnecessarytobuild
+         *thesearchqueryareready.
+         *@returns{Promise}
          */
-        async callLoad() {
-            this.loadPromise = super.callLoad(...arguments);
-            await this.loadPromise;
+        asynccallLoad(){
+            this.loadPromise=super.callLoad(...arguments);
+            awaitthis.loadPromise;
         }
 
         /**
-         * Returns a promise resolved when the extension is completely ready.
-         * @returns {Promise}
+         *Returnsapromiseresolvedwhentheextensioniscompletelyready.
+         *@returns{Promise}
          */
-        async isReady() {
-            await this.loadPromise;
+        asyncisReady(){
+            awaitthis.loadPromise;
         }
 
         //---------------------------------------------------------------------
-        // Static
+        //Static
         //---------------------------------------------------------------------
 
         /**
-         * @abstract
-         * @param {Object} archs
-         * @param {string | null} [viewType=null]
-         * @returns {null}
+         *@abstract
+         *@param{Object}archs
+         *@param{string|null}[viewType=null]
+         *@returns{null}
          */
-        static extractArchInfo() {
-            return null;
+        staticextractArchInfo(){
+            returnnull;
         }
     }
 
     /**
-     * @extends Model
+     *@extendsModel
      */
-    class ActionModel extends Model {
+    classActionModelextendsModel{
 
         //---------------------------------------------------------------------
-        // Public
+        //Public
         //---------------------------------------------------------------------
 
         /**
-         * @override
+         *@override
          */
-        get(property) {
-            switch (property) {
-                case "query": return this.config.searchQuery || this._getQuery();
-                case "facets": return this._getFacets();
+        get(property){
+            switch(property){
+                case"query":returnthis.config.searchQuery||this._getQuery();
+                case"facets":returnthis._getFacets();
             }
-            return super.get(...arguments);
+            returnsuper.get(...arguments);
         }
 
         /**
-         * Returns a promise resolved when all extensions are completely ready.
-         * @returns {Promise}
+         *Returnsapromiseresolvedwhenallextensionsarecompletelyready.
+         *@returns{Promise}
          */
-        async isReady() {
-            await this._awaitExtensions();
+        asyncisReady(){
+            awaitthis._awaitExtensions();
         }
 
         //---------------------------------------------------------------------
-        // Private
+        //Private
         //---------------------------------------------------------------------
 
         /**
-         * @private
-         * @returns {Promise}
+         *@private
+         *@returns{Promise}
          */
-        async _awaitExtensions() {
-            await Promise.all(this.extensions.flat().map(
-                (extension) => extension.isReady()
+        async_awaitExtensions(){
+            awaitPromise.all(this.extensions.flat().map(
+                (extension)=>extension.isReady()
             ));
         }
 
         /**
-         * @override
+         *@override
          */
-        __get(excluded, property) {
-            const results = super.__get(...arguments);
-            switch (property) {
-                case "domain": return [this.config.domain, ...results];
-                case "context": return [this.config.context, ...results];
+        __get(excluded,property){
+            constresults=super.__get(...arguments);
+            switch(property){
+                case"domain":return[this.config.domain,...results];
+                case"context":return[this.config.context,...results];
             }
-            return results;
+            returnresults;
         }
 
         /**
-         * Validates and formats all facets given by the extensions. This is
-         * done here rather than in the search bar because the searchMenuTypes
-         * are available only to the model.
-         * @private
-         * @returns {Object[]}
+         *Validatesandformatsallfacetsgivenbytheextensions.Thisis
+         *donehereratherthaninthesearchbarbecausethesearchMenuTypes
+         *areavailableonlytothemodel.
+         *@private
+         *@returns{Object[]}
          */
-        _getFacets() {
-            const types = this.config.searchMenuTypes || [];
-            const isValidType = (type) => (
-                !['groupBy', 'comparison'].includes(type) || types.includes(type)
+        _getFacets(){
+            consttypes=this.config.searchMenuTypes||[];
+            constisValidType=(type)=>(
+                !['groupBy','comparison'].includes(type)||types.includes(type)
             );
-            const facets = [];
-            for (const extension of this.extensions.flat()) {
-                for (const facet of extension.get("facets") || []) {
-                    if (!isValidType(facet.type)) {
+            constfacets=[];
+            for(constextensionofthis.extensions.flat()){
+                for(constfacetofextension.get("facets")||[]){
+                    if(!isValidType(facet.type)){
                         continue;
                     }
-                    facet.separator = facet.type === 'groupBy' ? ">" : this.env._t("or");
-                    if (facet.type in FACET_ICONS) {
-                        facet.icon = FACET_ICONS[facet.type];
+                    facet.separator=facet.type==='groupBy'?">":this.env._t("or");
+                    if(facet.typeinFACET_ICONS){
+                        facet.icon=FACET_ICONS[facet.type];
                     }
                     facets.push(facet);
                 }
             }
-            return facets;
+            returnfacets;
         }
 
         /**
-         * @typedef TimeRanges
-         * @property {string} fieldName
-         * @property {string} comparisonRangeId
-         * @property {Array[]} range
-         * @property {string} rangeDescription
-         * @property {Array[]} comparisonRange
-         * @property {string} comparisonRangeDescription
+         *@typedefTimeRanges
+         *@property{string}fieldName
+         *@property{string}comparisonRangeId
+         *@property{Array[]}range
+         *@property{string}rangeDescription
+         *@property{Array[]}comparisonRange
+         *@property{string}comparisonRangeDescription
          */
         /**
-         * @typedef Query
-         * @property {Object} context
-         * @property {Array[]} domain
-         * @property {string[]} groupBy
-         * @property {string[]} orderedBy
-         * @property {TimeRanges?} timeRanges
+         *@typedefQuery
+         *@property{Object}context
+         *@property{Array[]}domain
+         *@property{string[]}groupBy
+         *@property{string[]}orderedBy
+         *@property{TimeRanges?}timeRanges
          */
         /**
-         * @private
-         * @returns {Query}
+         *@private
+         *@returns{Query}
          */
-        _getQuery() {
-            const evalContext = this.env.session.user_context;
-            const contexts = this.__get(null, "context");
-            const domains = this.__get(null, "domain");
-            const query = {
-                context: pyUtils.eval("contexts", contexts, evalContext),
-                domain: Domain.prototype.normalizeArray(
-                    pyUtils.eval("domains", domains, evalContext)
+        _getQuery(){
+            constevalContext=this.env.session.user_context;
+            constcontexts=this.__get(null,"context");
+            constdomains=this.__get(null,"domain");
+            constquery={
+                context:pyUtils.eval("contexts",contexts,evalContext),
+                domain:Domain.prototype.normalizeArray(
+                    pyUtils.eval("domains",domains,evalContext)
                 ),
-                orderedBy: this.get("orderedBy") || [],
+                orderedBy:this.get("orderedBy")||[],
             };
-            const searchMenuTypes = this.config.searchMenuTypes || [];
-            if (searchMenuTypes.includes("groupBy")) {
-                query.groupBy = this.get("groupBy") || [];
-            } else {
-                query.groupBy = [];
+            constsearchMenuTypes=this.config.searchMenuTypes||[];
+            if(searchMenuTypes.includes("groupBy")){
+                query.groupBy=this.get("groupBy")||[];
+            }else{
+                query.groupBy=[];
             }
-            if (searchMenuTypes.includes("comparison")) {
-                query.timeRanges = this.get("timeRanges") || {};
+            if(searchMenuTypes.includes("comparison")){
+                query.timeRanges=this.get("timeRanges")||{};
             }
-            return query;
+            returnquery;
         }
 
         /**
-         * Overridden to trigger a "search" event as soon as the query data
-         * are ready.
-         * @override
+         *Overriddentotriggera"search"eventassoonasthequerydata
+         *areready.
+         *@override
          */
-        async _loadExtensions({ isInitialLoad }) {
-            await super._loadExtensions(...arguments);
-            if (!isInitialLoad) {
-                this.trigger("search", this.get("query"));
-                await this._awaitExtensions();
+        async_loadExtensions({isInitialLoad}){
+            awaitsuper._loadExtensions(...arguments);
+            if(!isInitialLoad){
+                this.trigger("search",this.get("query"));
+                awaitthis._awaitExtensions();
             }
         }
 
         //---------------------------------------------------------------------
-        // Static
+        //Static
         //---------------------------------------------------------------------
 
         /**
-         * @param {Object} archs
-         * @param {string | null} [viewType=null]
-         * @returns {Object}
+         *@param{Object}archs
+         *@param{string|null}[viewType=null]
+         *@returns{Object}
          */
-        static extractArchInfo(archs, viewType = null) {
-            const parsedArchs = {};
-            if (!archs.search) {
-                archs.search = "<search/>";
+        staticextractArchInfo(archs,viewType=null){
+            constparsedArchs={};
+            if(!archs.search){
+                archs.search="<search/>";
             }
-            for (const key in archs) {
-                const { attrs, children } = parseArch(archs[key]);
-                const objectChildren = children.filter(isObject);
-                parsedArchs[key] = {
+            for(constkeyinarchs){
+                const{attrs,children}=parseArch(archs[key]);
+                constobjectChildren=children.filter(isObject);
+                parsedArchs[key]={
                     attrs,
-                    children: objectChildren,
+                    children:objectChildren,
                 };
             }
-            const archInfo = {};
-            for (const key of this.registry.keys()) {
-                const extension = this.registry.get(key);
-                const result = extension.extractArchInfo(parsedArchs, viewType);
-                if (isNotNull(result)) {
-                    archInfo[key] = result;
+            constarchInfo={};
+            for(constkeyofthis.registry.keys()){
+                constextension=this.registry.get(key);
+                constresult=extension.extractArchInfo(parsedArchs,viewType);
+                if(isNotNull(result)){
+                    archInfo[key]=result;
                 }
             }
-            return archInfo;
+            returnarchInfo;
         }
     }
 
-    ActionModel.Extension = ActionModelExtension;
-    ActionModel.registry = new Registry(null,
-        (value) => value.prototype instanceof ActionModel.Extension
+    ActionModel.Extension=ActionModelExtension;
+    ActionModel.registry=newRegistry(null,
+        (value)=>value.prototypeinstanceofActionModel.Extension
     );
 
-    return ActionModel;
+    returnActionModel;
 });

@@ -1,63 +1,63 @@
-flectra.define('base_import.ImportMenu', function (require) {
-    "use strict";
+flectra.define('base_import.ImportMenu',function(require){
+    "usestrict";
 
-    const DropdownMenuItem = require('web.DropdownMenuItem');
-    const FavoriteMenu = require('web.FavoriteMenu');
-    const { useModel } = require('web/static/src/js/model.js');
+    constDropdownMenuItem=require('web.DropdownMenuItem');
+    constFavoriteMenu=require('web.FavoriteMenu');
+    const{useModel}=require('web/static/src/js/model.js');
 
     /**
-     * Import Records menu
+     *ImportRecordsmenu
      *
-     * This component is used to import the records for particular model.
+     *Thiscomponentisusedtoimporttherecordsforparticularmodel.
      *
-     * @extends DropdownMenuItem
+     *@extendsDropdownMenuItem
      */
-    class ImportMenu extends DropdownMenuItem {
-        constructor() {
+    classImportMenuextendsDropdownMenuItem{
+        constructor(){
             super(...arguments);
-            this.model = useModel('searchModel');
+            this.model=useModel('searchModel');
         }
 
         //---------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //---------------------------------------------------------------------
 
         /**
-         * @private
+         *@private
          */
-        _onImportClick() {
-            const action = {
-                type: 'ir.actions.client',
-                tag: 'import',
-                params: {
-                    model: this.model.config.modelName,
-                    context: this.model.config.context,
+        _onImportClick(){
+            constaction={
+                type:'ir.actions.client',
+                tag:'import',
+                params:{
+                    model:this.model.config.modelName,
+                    context:this.model.config.context,
                 }
             };
-            this.trigger('do-action', {action: action});
+            this.trigger('do-action',{action:action});
         }
 
         //---------------------------------------------------------------------
-        // Static
+        //Static
         //---------------------------------------------------------------------
 
         /**
-         * @param {Object} env
-         * @returns {boolean}
+         *@param{Object}env
+         *@returns{boolean}
          */
-        static shouldBeDisplayed(env) {
-            return env.view &&
-                ['kanban', 'list'].includes(env.view.type) &&
-                !env.device.isMobile &&
-                !!JSON.parse(env.view.arch.attrs.import || '1') &&
-                !!JSON.parse(env.view.arch.attrs.create || '1');
+        staticshouldBeDisplayed(env){
+            returnenv.view&&
+                ['kanban','list'].includes(env.view.type)&&
+                !env.device.isMobile&&
+                !!JSON.parse(env.view.arch.attrs.import||'1')&&
+                !!JSON.parse(env.view.arch.attrs.create||'1');
         }
     }
 
-    ImportMenu.props = {};
-    ImportMenu.template = 'base_import.ImportMenu';
+    ImportMenu.props={};
+    ImportMenu.template='base_import.ImportMenu';
 
-    FavoriteMenu.registry.add('import-menu', ImportMenu, 1);
+    FavoriteMenu.registry.add('import-menu',ImportMenu,1);
 
-    return ImportMenu;
+    returnImportMenu;
 });

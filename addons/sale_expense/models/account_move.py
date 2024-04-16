@@ -1,39 +1,39 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
+fromflectraimportapi,models
 
 
-class AccountMoveLine(models.Model):
-    _inherit = 'account.move.line'
+classAccountMoveLine(models.Model):
+    _inherit='account.move.line'
 
-    def _sale_can_be_reinvoice(self):
-        """ determine if the generated analytic line should be reinvoiced or not.
-            For Expense flow, if the product has a 'reinvoice policy' and a Sales Order is set on the expense, then we will reinvoice the AAL
+    def_sale_can_be_reinvoice(self):
+        """determineifthegeneratedanalyticlineshouldbereinvoicedornot.
+            ForExpenseflow,iftheproducthasa'reinvoicepolicy'andaSalesOrderissetontheexpense,thenwewillreinvoicetheAAL
         """
         self.ensure_one()
-        if self.expense_id:  # expense flow is different from vendor bill reinvoice flow
-            return self.expense_id.product_id.expense_policy in ['sales_price', 'cost'] and self.expense_id.sale_order_id
-        return super(AccountMoveLine, self)._sale_can_be_reinvoice()
+        ifself.expense_id: #expenseflowisdifferentfromvendorbillreinvoiceflow
+            returnself.expense_id.product_id.expense_policyin['sales_price','cost']andself.expense_id.sale_order_id
+        returnsuper(AccountMoveLine,self)._sale_can_be_reinvoice()
 
-    def _sale_determine_order(self):
-        """ For move lines created from expense, we override the normal behavior.
-            Note: if no SO but an AA is given on the expense, we will determine anyway the SO from the AA, using the same
-            mecanism as in Vendor Bills.
+    def_sale_determine_order(self):
+        """Formovelinescreatedfromexpense,weoverridethenormalbehavior.
+            Note:ifnoSObutanAAisgivenontheexpense,wewilldetermineanywaytheSOfromtheAA,usingthesame
+            mecanismasinVendorBills.
         """
-        mapping_from_invoice = super(AccountMoveLine, self)._sale_determine_order()
+        mapping_from_invoice=super(AccountMoveLine,self)._sale_determine_order()
 
-        mapping_from_expense = {}
-        for move_line in self.filtered(lambda move_line: move_line.expense_id):
-            mapping_from_expense[move_line.id] = move_line.expense_id.sale_order_id or None
+        mapping_from_expense={}
+        formove_lineinself.filtered(lambdamove_line:move_line.expense_id):
+            mapping_from_expense[move_line.id]=move_line.expense_id.sale_order_idorNone
 
         mapping_from_invoice.update(mapping_from_expense)
-        return mapping_from_invoice
+        returnmapping_from_invoice
 
-    def _sale_prepare_sale_line_values(self, order, price):
-        # Add expense quantity to sales order line and update the sales order price because it will be charged to the customer in the end.
+    def_sale_prepare_sale_line_values(self,order,price):
+        #Addexpensequantitytosalesorderlineandupdatethesalesorderpricebecauseitwillbechargedtothecustomerintheend.
         self.ensure_one()
-        res = super()._sale_prepare_sale_line_values(order, price)
-        if self.expense_id:
-            res.update({'product_uom_qty': self.expense_id.quantity})
-        return res
+        res=super()._sale_prepare_sale_line_values(order,price)
+        ifself.expense_id:
+            res.update({'product_uom_qty':self.expense_id.quantity})
+        returnres

@@ -1,14 +1,14 @@
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import fields, models
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportfields,models
 
 
-class L10nPeResCityDistrict(models.Model):
-    _name = 'l10n_pe.res.city.district'
-    _description = 'District'
-    _order = 'name'
+classL10nPeResCityDistrict(models.Model):
+    _name='l10n_pe.res.city.district'
+    _description='District'
+    _order='name'
 
-    name = fields.Char(translate=True)
-    city_id = fields.Many2one('res.city', 'City')
-    code = fields.Char(
-        help='This code will help with the identification of each district '
-        'in Peru.')
+    name=fields.Char(translate=True)
+    city_id=fields.Many2one('res.city','City')
+    code=fields.Char(
+        help='Thiscodewillhelpwiththeidentificationofeachdistrict'
+        'inPeru.')

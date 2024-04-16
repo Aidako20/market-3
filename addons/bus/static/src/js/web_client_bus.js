@@ -1,104 +1,104 @@
-flectra.define('bus.WebClient', function (require) {
-    "use strict";
+flectra.define('bus.WebClient',function(require){
+    "usestrict";
 
-    const core = require('web.core');
-    const WebClient = require('web.WebClient');
+    constcore=require('web.core');
+    constWebClient=require('web.WebClient');
 
-    const _t = core._t;
+    const_t=core._t;
 
     WebClient.include({
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * Detects the presence of assets in DOM's HEAD
+         *DetectsthepresenceofassetsinDOM'sHEAD
          *
-         * @override
+         *@override
          */
-        async start() {
-            this._assetsChangedNotificationId = null;
-            this._assets = {};
-            await this._super(...arguments);
+        asyncstart(){
+            this._assetsChangedNotificationId=null;
+            this._assets={};
+            awaitthis._super(...arguments);
         },
         /**
-         * Assigns handler to bus notification
+         *Assignshandlertobusnotification
          *
-         * @override
+         *@override
          */
-        show_application() {
-            const shown = this._super(...arguments);
-            document.querySelectorAll('*[data-asset-xmlid]').forEach(el => {
-                this._assets[el.getAttribute('data-asset-xmlid')] = el.getAttribute('data-asset-version');
+        show_application(){
+            constshown=this._super(...arguments);
+            document.querySelectorAll('*[data-asset-xmlid]').forEach(el=>{
+                this._assets[el.getAttribute('data-asset-xmlid')]=el.getAttribute('data-asset-version');
             });
-            this.call('bus_service', 'onNotification', this, this._onNotification);
-            this.call('bus_service', 'addChannel', 'bundle_changed');
-            return shown;
+            this.call('bus_service','onNotification',this,this._onNotification);
+            this.call('bus_service','addChannel','bundle_changed');
+            returnshown;
         },
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * Displays one notification on user's screen when assets have changed
+         *Displaysonenotificationonuser'sscreenwhenassetshavechanged
          *
-         * @private
+         *@private
          */
-        _displayBundleChangedNotification() {
-            if (!this._assetsChangedNotificationId) {
-                // Wrap the notification inside a delay.
-                // The server may be overwhelmed with recomputing assets
-                // We wait until things settle down
+        _displayBundleChangedNotification(){
+            if(!this._assetsChangedNotificationId){
+                //Wrapthenotificationinsideadelay.
+                //Theservermaybeoverwhelmedwithrecomputingassets
+                //Wewaituntilthingssettledown
                 clearTimeout(this._bundleNotifTimerID);
-                this._bundleNotifTimerID = setTimeout(() => {
-                    this._assetsChangedNotificationId = this.call('notification', 'notify', {
-                        title: _t('Refresh'),
-                        message: _t('The page appears to be out of date.'),
-                        sticky: true,
-                        onClose: () => {
-                            this._assetsChangedNotificationId = null;
+                this._bundleNotifTimerID=setTimeout(()=>{
+                    this._assetsChangedNotificationId=this.call('notification','notify',{
+                        title:_t('Refresh'),
+                        message:_t('Thepageappearstobeoutofdate.'),
+                        sticky:true,
+                        onClose:()=>{
+                            this._assetsChangedNotificationId=null;
                         },
-                        buttons: [{
-                            text: _t('Refresh'),
-                            primary: true,
-                            click: () => {
+                        buttons:[{
+                            text:_t('Refresh'),
+                            primary:true,
+                            click:()=>{
                                 window.location.reload(true);
                             }
                         }],
                     });
-                }, this._getBundleNotificationDelay());
+                },this._getBundleNotificationDelay());
             }
         },
         /**
-         * Computes a random delay to avoid hammering the server
-         * when bundles change with all the users reloading
-         * at the same time
+         *Computesarandomdelaytoavoidhammeringtheserver
+         *whenbundleschangewithalltheusersreloading
+         *atthesametime
          *
-         * @private
-         * @return {number} delay in milliseconds
+         *@private
+         *@return{number}delayinmilliseconds
          */
-        _getBundleNotificationDelay() {
-            return 10000 + Math.floor(Math.random()*50) * 1000;
+        _getBundleNotificationDelay(){
+            return10000+Math.floor(Math.random()*50)*1000;
         },
 
         //--------------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //--------------------------------------------------------------------------
 
         /**
-         * Reacts to bus's notification
+         *Reactstobus'snotification
          *
-         * @private
-         * @param {Array} notifications: list of received notifications
+         *@private
+         *@param{Array}notifications:listofreceivednotifications
          */
-        _onNotification(notifications) {
-            for (const notif of notifications) {
-                if (notif[0][1] === 'bundle_changed') {
-                    const bundleXmlId = notif[1][0];
-                    const bundleVersion = notif[1][1];
-                    if (bundleXmlId in this._assets && bundleVersion !== this._assets[bundleXmlId]) {
+        _onNotification(notifications){
+            for(constnotifofnotifications){
+                if(notif[0][1]==='bundle_changed'){
+                    constbundleXmlId=notif[1][0];
+                    constbundleVersion=notif[1][1];
+                    if(bundleXmlIdinthis._assets&&bundleVersion!==this._assets[bundleXmlId]){
                         this._displayBundleChangedNotification();
                         break;
                     }

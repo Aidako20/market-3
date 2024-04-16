@@ -1,57 +1,57 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="stock_report_view_graph" model="ir.ui.view">
-        <field name="name">stock_report_view_graph</field>
-        <field name="model">report.stock.quantity</field>
-        <field name="arch" type="xml">
-            <graph string="report_stock_quantity_graph" type="line" sample="1" disable_linking="1">
-                    <field name="date" interval="day"/>
-                    <field name="product_id" type="row"/>
-                    <field name="product_qty" type="measure"/>
+    <recordid="stock_report_view_graph"model="ir.ui.view">
+        <fieldname="name">stock_report_view_graph</field>
+        <fieldname="model">report.stock.quantity</field>
+        <fieldname="arch"type="xml">
+            <graphstring="report_stock_quantity_graph"type="line"sample="1"disable_linking="1">
+                    <fieldname="date"interval="day"/>
+                    <fieldname="product_id"type="row"/>
+                    <fieldname="product_qty"type="measure"/>
             </graph>
         </field>
     </record>
 
-    <record id="stock_report_view_search" model="ir.ui.view">
-        <field name="name">report.stock.quantity.search</field>
-        <field name="model">report.stock.quantity</field>
-        <field name="arch" type="xml">
-            <search string="Report Quantity">
-                <field name="product_id"/>
-                <field name="state"/>
-                <field name="product_tmpl_id"/>
-                <field name="warehouse_id"/>
-                <group expand="0" string="State">
-                    <filter string="Forecasted Stock" name="filter_forecast" domain="[('state', '=', 'forecast')]"/>
-                    <filter string="Forecasted Receipts" name="filter_in" domain="[('state', '=', 'in')]"/>
-                    <filter string="Forecasted Deliveries" name="filter_out" domain="[('state', '=', 'out')]"/>
+    <recordid="stock_report_view_search"model="ir.ui.view">
+        <fieldname="name">report.stock.quantity.search</field>
+        <fieldname="model">report.stock.quantity</field>
+        <fieldname="arch"type="xml">
+            <searchstring="ReportQuantity">
+                <fieldname="product_id"/>
+                <fieldname="state"/>
+                <fieldname="product_tmpl_id"/>
+                <fieldname="warehouse_id"/>
+                <groupexpand="0"string="State">
+                    <filterstring="ForecastedStock"name="filter_forecast"domain="[('state','=','forecast')]"/>
+                    <filterstring="ForecastedReceipts"name="filter_in"domain="[('state','=','in')]"/>
+                    <filterstring="ForecastedDeliveries"name="filter_out"domain="[('state','=','out')]"/>
                     <separator/>
-                    <filter string="Date" name="filter_date" date="date"/>
+                    <filterstring="Date"name="filter_date"date="date"/>
                 </group>
-                <group expand="0" string="Group By">
-                    <filter string="Date" name="groupby_date" domain="[]" context="{'group_by':'date:day'}"/>
+                <groupexpand="0"string="GroupBy">
+                    <filterstring="Date"name="groupby_date"domain="[]"context="{'group_by':'date:day'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <record id="report_stock_quantity_action_product" model="ir.actions.act_window">
-        <field name="name">Forecasted Inventory</field>
-        <field name="res_model">report.stock.quantity</field>
-        <field name="view_mode">graph</field>
-        <field name="context">{
-            'search_default_filter_forecast': 1,
-            'graph_groupbys': ['date:day', 'state',  'product_id'],
+    <recordid="report_stock_quantity_action_product"model="ir.actions.act_window">
+        <fieldname="name">ForecastedInventory</field>
+        <fieldname="res_model">report.stock.quantity</field>
+        <fieldname="view_mode">graph</field>
+        <fieldname="context">{
+            'search_default_filter_forecast':1,
+            'graph_groupbys':['date:day','state', 'product_id'],
         }</field>
     </record>
 
-    <record id="report_stock_quantity_action" model="ir.actions.act_window">
-        <field name="name">Forecasted Inventory</field>
-        <field name="res_model">report.stock.quantity</field>
-        <field name="view_mode">graph</field>
-        <field name="context">{
-            'search_default_filter_forecast': 1,
-            'graph_groupbys': ['date:day', 'state', 'product_id'],
+    <recordid="report_stock_quantity_action"model="ir.actions.act_window">
+        <fieldname="name">ForecastedInventory</field>
+        <fieldname="res_model">report.stock.quantity</field>
+        <fieldname="view_mode">graph</field>
+        <fieldname="context">{
+            'search_default_filter_forecast':1,
+            'graph_groupbys':['date:day','state','product_id'],
         }</field>
     </record>
 </flectra>

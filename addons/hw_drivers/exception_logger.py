@@ -1,23 +1,23 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
-import sys
+importlogging
+importsys
 
 
-class ExceptionLogger:
+classExceptionLogger:
     """
-    Redirect Exceptions to the logger to keep track of them in the log file.
+    RedirectExceptionstotheloggertokeeptrackoftheminthelogfile.
     """
 
-    def __init__(self):
-        self.logger = logging.getLogger()
+    def__init__(self):
+        self.logger=logging.getLogger()
 
-    def write(self, message):
-        if message != '\n':
+    defwrite(self,message):
+        ifmessage!='\n':
             self.logger.error(message)
 
-    def flush(self):
+    defflush(self):
         pass
 
-sys.stderr = ExceptionLogger()
+sys.stderr=ExceptionLogger()

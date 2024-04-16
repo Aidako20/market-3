@@ -1,22 +1,22 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import http
+fromflectraimporthttp
 
-proxy_drivers = {}
+proxy_drivers={}
 
-class ProxyController(http.Controller):
-    @http.route('/hw_proxy/hello', type='http', auth='none', cors='*')
-    def hello(self):
-        return "ping"
+classProxyController(http.Controller):
+    @http.route('/hw_proxy/hello',type='http',auth='none',cors='*')
+    defhello(self):
+        return"ping"
 
-    @http.route('/hw_proxy/handshake', type='json', auth='none', cors='*')
-    def handshake(self):
-        return True
+    @http.route('/hw_proxy/handshake',type='json',auth='none',cors='*')
+    defhandshake(self):
+        returnTrue
 
-    @http.route('/hw_proxy/status_json', type='json', auth='none', cors='*')
-    def status_json(self):
-        statuses = {}
-        for driver in proxy_drivers:
-            statuses[driver] = proxy_drivers[driver].get_status()
-        return statuses
+    @http.route('/hw_proxy/status_json',type='json',auth='none',cors='*')
+    defstatus_json(self):
+        statuses={}
+        fordriverinproxy_drivers:
+            statuses[driver]=proxy_drivers[driver].get_status()
+        returnstatuses

@@ -1,72 +1,72 @@
-flectra.define('mail/static/src/models/discuss.discuss.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/discuss.discuss.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr, many2one, one2many, one2one } = require('mail/static/src/model/model_field.js');
-const { clear } = require('mail/static/src/model/model_field_command.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{attr,many2one,one2many,one2one}=require('mail/static/src/model/model_field.js');
+const{clear}=require('mail/static/src/model/model_field_command.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class Discuss extends dependencies['mail.model'] {
+    classDiscussextendsdependencies['mail.model']{
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * @param {mail.thread} thread
+         *@param{mail.thread}thread
          */
-        cancelThreadRenaming(thread) {
-            this.update({ renamingThreads: [['unlink', thread]] });
+        cancelThreadRenaming(thread){
+            this.update({renamingThreads:[['unlink',thread]]});
         }
 
-        clearIsAddingItem() {
+        clearIsAddingItem(){
             this.update({
-                addingChannelValue: "",
-                isAddingChannel: false,
-                isAddingChat: false,
+                addingChannelValue:"",
+                isAddingChannel:false,
+                isAddingChat:false,
             });
         }
 
-        clearReplyingToMessage() {
-            this.update({ replyingToMessage: [['unlink-all']] });
+        clearReplyingToMessage(){
+            this.update({replyingToMessage:[['unlink-all']]});
         }
 
         /**
-         * Close the discuss app. Should reset its internal state.
+         *Closethediscussapp.Shouldresetitsinternalstate.
          */
-        close() {
-            this.update({ isOpen: false });
+        close(){
+            this.update({isOpen:false});
         }
 
-        focus() {
-            this.update({ isDoFocus: true });
+        focus(){
+            this.update({isDoFocus:true});
         }
 
         /**
-         * @param {Event} ev
-         * @param {Object} ui
-         * @param {Object} ui.item
-         * @param {integer} ui.item.id
+         *@param{Event}ev
+         *@param{Object}ui
+         *@param{Object}ui.item
+         *@param{integer}ui.item.id
          */
-        async handleAddChannelAutocompleteSelect(ev, ui) {
-            // Necessary in order to prevent AutocompleteSelect event's default
-            // behaviour as html tags visible for a split second in text area
+        asynchandleAddChannelAutocompleteSelect(ev,ui){
+            //NecessaryinordertopreventAutocompleteSelectevent'sdefault
+            //behaviourashtmltagsvisibleforasplitsecondintextarea
             ev.preventDefault();
-            const name = this.addingChannelValue;
+            constname=this.addingChannelValue;
             this.clearIsAddingItem();
-            if (ui.item.special) {
-                const channel = await this.async(() =>
+            if(ui.item.special){
+                constchannel=awaitthis.async(()=>
                     this.env.models['mail.thread'].performRpcCreateChannel({
                         name,
-                        privacy: ui.item.special === 'private' ? 'private' : 'groups',
+                        privacy:ui.item.special==='private'?'private':'groups',
                     })
                 );
                 channel.open();
-            } else {
-                const channel = await this.async(() =>
+            }else{
+                constchannel=awaitthis.async(()=>
                     this.env.models['mail.thread'].performRpcJoinChannel({
-                        channelId: ui.item.id,
+                        channelId:ui.item.id,
                     })
                 );
                 channel.open();
@@ -74,345 +74,345 @@ function factory(dependencies) {
         }
 
         /**
-         * @param {Object} req
-         * @param {string} req.term
-         * @param {function} res
+         *@param{Object}req
+         *@param{string}req.term
+         *@param{function}res
          */
-        async handleAddChannelAutocompleteSource(req, res) {
-            const value = req.term;
-            const escapedValue = owl.utils.escape(value);
-            this.update({ addingChannelValue: value });
-            const domain = [
-                ['channel_type', '=', 'channel'],
-                ['name', 'ilike', value],
+        asynchandleAddChannelAutocompleteSource(req,res){
+            constvalue=req.term;
+            constescapedValue=owl.utils.escape(value);
+            this.update({addingChannelValue:value});
+            constdomain=[
+                ['channel_type','=','channel'],
+                ['name','ilike',value],
             ];
-            const fields = ['channel_type', 'name', 'public', 'uuid'];
-            const result = await this.async(() => this.env.services.rpc({
-                model: "mail.channel",
-                method: "search_read",
-                kwargs: {
+            constfields=['channel_type','name','public','uuid'];
+            constresult=awaitthis.async(()=>this.env.services.rpc({
+                model:"mail.channel",
+                method:"search_read",
+                kwargs:{
                     domain,
                     fields,
                 },
             }));
-            const items = result.map(data => {
-                let escapedName = owl.utils.escape(data.name);
-                return Object.assign(data, {
-                    label: escapedName,
-                    value: escapedName
+            constitems=result.map(data=>{
+                letescapedName=owl.utils.escape(data.name);
+                returnObject.assign(data,{
+                    label:escapedName,
+                    value:escapedName
                 });
             });
-            // XDU FIXME could use a component but be careful with owl's
-            // renderToString https://github.com/flectra/owl/issues/708
+            //XDUFIXMEcoulduseacomponentbutbecarefulwithowl's
+            //renderToStringhttps://github.com/flectra/owl/issues/708
             items.push({
-                label: _.str.sprintf(
-                    `<strong>${this.env._t('Create %s')}</strong>`,
-                    `<em><span class="fa fa-hashtag"/>${escapedValue}</em>`,
+                label:_.str.sprintf(
+                    `<strong>${this.env._t('Create%s')}</strong>`,
+                    `<em><spanclass="fafa-hashtag"/>${escapedValue}</em>`,
                 ),
                 escapedValue,
-                special: 'public'
-            }, {
-                label: _.str.sprintf(
-                    `<strong>${this.env._t('Create %s')}</strong>`,
-                    `<em><span class="fa fa-lock"/>${escapedValue}</em>`,
+                special:'public'
+            },{
+                label:_.str.sprintf(
+                    `<strong>${this.env._t('Create%s')}</strong>`,
+                    `<em><spanclass="fafa-lock"/>${escapedValue}</em>`,
                 ),
                 escapedValue,
-                special: 'private'
+                special:'private'
             });
             res(items);
         }
 
         /**
-         * @param {Event} ev
-         * @param {Object} ui
-         * @param {Object} ui.item
-         * @param {integer} ui.item.id
+         *@param{Event}ev
+         *@param{Object}ui
+         *@param{Object}ui.item
+         *@param{integer}ui.item.id
          */
-        handleAddChatAutocompleteSelect(ev, ui) {
-            this.env.messaging.openChat({ partnerId: ui.item.id });
+        handleAddChatAutocompleteSelect(ev,ui){
+            this.env.messaging.openChat({partnerId:ui.item.id});
             this.clearIsAddingItem();
         }
 
         /**
-         * @param {Object} req
-         * @param {string} req.term
-         * @param {function} res
+         *@param{Object}req
+         *@param{string}req.term
+         *@param{function}res
          */
-        handleAddChatAutocompleteSource(req, res) {
-            const value = owl.utils.escape(req.term);
+        handleAddChatAutocompleteSource(req,res){
+            constvalue=owl.utils.escape(req.term);
             this.env.models['mail.partner'].imSearch({
-                callback: partners => {
-                    const suggestions = partners.map(partner => {
-                        return {
-                            id: partner.id,
-                            value: partner.nameOrDisplayName,
-                            label: partner.nameOrDisplayName,
+                callback:partners=>{
+                    constsuggestions=partners.map(partner=>{
+                        return{
+                            id:partner.id,
+                            value:partner.nameOrDisplayName,
+                            label:partner.nameOrDisplayName,
                         };
                     });
-                    res(_.sortBy(suggestions, 'label'));
+                    res(_.sortBy(suggestions,'label'));
                 },
-                keyword: value,
-                limit: 10,
+                keyword:value,
+                limit:10,
             });
         }
 
         /**
-         * Open thread from init active id. `initActiveId` is used to refer to
-         * a thread that we may not have full data yet, such as when messaging
-         * is not yet initialized.
+         *Openthreadfrominitactiveid.`initActiveId`isusedtoreferto
+         *athreadthatwemaynothavefulldatayet,suchaswhenmessaging
+         *isnotyetinitialized.
          */
-        openInitThread() {
-            const [model, id] = typeof this.initActiveId === 'number'
-                ? ['mail.channel', this.initActiveId]
-                : this.initActiveId.split('_');
-            const thread = this.env.models['mail.thread'].findFromIdentifyingData({
-                id: model !== 'mail.box' ? Number(id) : id,
+        openInitThread(){
+            const[model,id]=typeofthis.initActiveId==='number'
+                ?['mail.channel',this.initActiveId]
+                :this.initActiveId.split('_');
+            constthread=this.env.models['mail.thread'].findFromIdentifyingData({
+                id:model!=='mail.box'?Number(id):id,
                 model,
             });
-            if (!thread) {
+            if(!thread){
                 return;
             }
             thread.open();
-            if (this.env.messaging.device.isMobile && thread.channel_type) {
-                this.update({ activeMobileNavbarTabId: thread.channel_type });
+            if(this.env.messaging.device.isMobile&&thread.channel_type){
+                this.update({activeMobileNavbarTabId:thread.channel_type});
             }
         }
 
 
         /**
-         * Opens the given thread in Discuss, and opens Discuss if necessary.
+         *OpensthegiventhreadinDiscuss,andopensDiscussifnecessary.
          *
-         * @param {mail.thread} thread
+         *@param{mail.thread}thread
          */
-        async openThread(thread) {
+        asyncopenThread(thread){
             this.update({
-                thread: [['link', thread]],
+                thread:[['link',thread]],
             });
             this.focus();
-            if (!this.isOpen) {
-                this.env.bus.trigger('do-action', {
-                    action: 'mail.action_discuss',
-                    options: {
-                        name: this.env._t("Discuss"),
-                        active_id: this.threadToActiveId(this),
-                        clear_breadcrumbs: false,
-                        on_reverse_breadcrumb: () => this.close(),
+            if(!this.isOpen){
+                this.env.bus.trigger('do-action',{
+                    action:'mail.action_discuss',
+                    options:{
+                        name:this.env._t("Discuss"),
+                        active_id:this.threadToActiveId(this),
+                        clear_breadcrumbs:false,
+                        on_reverse_breadcrumb:()=>this.close(),
                     },
                 });
             }
         }
 
         /**
-         * @param {mail.thread} thread
-         * @param {string} newName
+         *@param{mail.thread}thread
+         *@param{string}newName
          */
-        async renameThread(thread, newName) {
-            await this.async(() => thread.rename(newName));
-            this.update({ renamingThreads: [['unlink', thread]] });
+        asyncrenameThread(thread,newName){
+            awaitthis.async(()=>thread.rename(newName));
+            this.update({renamingThreads:[['unlink',thread]]});
         }
 
         /**
-         * Action to initiate reply to given message in Inbox. Assumes that
-         * Discuss and Inbox are already opened.
+         *ActiontoinitiatereplytogivenmessageinInbox.Assumesthat
+         *DiscussandInboxarealreadyopened.
          *
-         * @param {mail.message} message
+         *@param{mail.message}message
          */
-        replyToMessage(message) {
-            this.update({ replyingToMessage: [['link', message]] });
-            // avoid to reply to a note by a message and vice-versa.
-            // subject to change later by allowing subtype choice.
+        replyToMessage(message){
+            this.update({replyingToMessage:[['link',message]]});
+            //avoidtoreplytoanotebyamessageandvice-versa.
+            //subjecttochangelaterbyallowingsubtypechoice.
             this.replyingToMessageOriginThreadComposer.update({
-                isLog: !message.is_discussion && !message.is_notification
+                isLog:!message.is_discussion&&!message.is_notification
             });
             this.focus();
         }
 
         /**
-         * @param {mail.thread} thread
+         *@param{mail.thread}thread
          */
-        setThreadRenaming(thread) {
-            this.update({ renamingThreads: [['link', thread]] });
+        setThreadRenaming(thread){
+            this.update({renamingThreads:[['link',thread]]});
         }
 
         /**
-         * @param {mail.thread} thread
-         * @returns {string}
+         *@param{mail.thread}thread
+         *@returns{string}
          */
-        threadToActiveId(thread) {
-            return `${thread.model}_${thread.id}`;
+        threadToActiveId(thread){
+            return`${thread.model}_${thread.id}`;
         }
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @private
-         * @returns {string|undefined}
+         *@private
+         *@returns{string|undefined}
          */
-        _computeActiveId() {
-            if (!this.thread) {
-                return clear();
+        _computeActiveId(){
+            if(!this.thread){
+                returnclear();
             }
-            return this.threadToActiveId(this.thread);
+            returnthis.threadToActiveId(this.thread);
         }
 
         /**
-         * @private
-         * @returns {string}
+         *@private
+         *@returns{string}
          */
-        _computeAddingChannelValue() {
-            if (!this.isOpen) {
-                return "";
+        _computeAddingChannelValue(){
+            if(!this.isOpen){
+                return"";
             }
-            return this.addingChannelValue;
+            returnthis.addingChannelValue;
         }
 
         /**
-         * @private
-         * @returns {boolean}
+         *@private
+         *@returns{boolean}
          */
-        _computeHasThreadView() {
-            if (!this.thread || !this.isOpen) {
-                return false;
+        _computeHasThreadView(){
+            if(!this.thread||!this.isOpen){
+                returnfalse;
             }
-            if (
-                this.env.messaging.device.isMobile &&
+            if(
+                this.env.messaging.device.isMobile&&
                 (
-                    this.activeMobileNavbarTabId !== 'mailbox' ||
-                    this.thread.model !== 'mail.box'
+                    this.activeMobileNavbarTabId!=='mailbox'||
+                    this.thread.model!=='mail.box'
                 )
-            ) {
-                return false;
+            ){
+                returnfalse;
             }
-            return true;
+            returntrue;
         }
 
         /**
-         * @private
-         * @returns {boolean}
+         *@private
+         *@returns{boolean}
          */
-        _computeIsAddingChannel() {
-            if (!this.isOpen) {
-                return false;
+        _computeIsAddingChannel(){
+            if(!this.isOpen){
+                returnfalse;
             }
-            return this.isAddingChannel;
+            returnthis.isAddingChannel;
         }
 
         /**
-         * @private
-         * @returns {boolean}
+         *@private
+         *@returns{boolean}
          */
-        _computeIsAddingChat() {
-            if (!this.isOpen) {
-                return false;
+        _computeIsAddingChat(){
+            if(!this.isOpen){
+                returnfalse;
             }
-            return this.isAddingChat;
+            returnthis.isAddingChat;
         }
 
         /**
-         * @private
-         * @returns {boolean}
+         *@private
+         *@returns{boolean}
          */
-        _computeIsReplyingToMessage() {
-            return !!this.replyingToMessage;
+        _computeIsReplyingToMessage(){
+            return!!this.replyingToMessage;
         }
 
         /**
-         * Ensures the reply feature is disabled if discuss is not open.
+         *Ensuresthereplyfeatureisdisabledifdiscussisnotopen.
          *
-         * @private
-         * @returns {mail.message|undefined}
+         *@private
+         *@returns{mail.message|undefined}
          */
-        _computeReplyingToMessage() {
-            if (!this.isOpen) {
-                return [['unlink-all']];
+        _computeReplyingToMessage(){
+            if(!this.isOpen){
+                return[['unlink-all']];
             }
-            return [];
+            return[];
         }
 
 
         /**
-         * Only pinned threads are allowed in discuss.
+         *Onlypinnedthreadsareallowedindiscuss.
          *
-         * @private
-         * @returns {mail.thread|undefined}
+         *@private
+         *@returns{mail.thread|undefined}
          */
-        _computeThread() {
-            let thread = this.thread;
-            if (this.env.messaging &&
-                this.env.messaging.inbox &&
-                this.env.messaging.device.isMobile &&
-                this.activeMobileNavbarTabId === 'mailbox' &&
-                this.initActiveId !== 'mail.box_inbox' &&
+        _computeThread(){
+            letthread=this.thread;
+            if(this.env.messaging&&
+                this.env.messaging.inbox&&
+                this.env.messaging.device.isMobile&&
+                this.activeMobileNavbarTabId==='mailbox'&&
+                this.initActiveId!=='mail.box_inbox'&&
                 !thread
-            ) {
-                // After loading Discuss from an arbitrary tab other then 'mailbox',
-                // switching to 'mailbox' requires to also set its inner-tab ;
-                // by default the 'inbox'.
-                return [['replace', this.env.messaging.inbox]];
+            ){
+                //AfterloadingDiscussfromanarbitrarytabotherthen'mailbox',
+                //switchingto'mailbox'requirestoalsosetitsinner-tab;
+                //bydefaultthe'inbox'.
+                return[['replace',this.env.messaging.inbox]];
             }
-            if (!thread || !thread.isPinned) {
-                return [['unlink']];
+            if(!thread||!thread.isPinned){
+                return[['unlink']];
             }
-            return [];
+            return[];
         }
 
     }
 
-    Discuss.fields = {
-        activeId: attr({
-            compute: '_computeActiveId',
-            dependencies: [
+    Discuss.fields={
+        activeId:attr({
+            compute:'_computeActiveId',
+            dependencies:[
                 'thread',
                 'threadId',
                 'threadModel',
             ],
         }),
         /**
-         * Active mobile navbar tab, either 'mailbox', 'chat', or 'channel'.
+         *Activemobilenavbartab,either'mailbox','chat',or'channel'.
          */
-        activeMobileNavbarTabId: attr({
-            default: 'mailbox',
+        activeMobileNavbarTabId:attr({
+            default:'mailbox',
         }),
         /**
-         * Value that is used to create a channel from the sidebar.
+         *Valuethatisusedtocreateachannelfromthesidebar.
          */
-        addingChannelValue: attr({
-            compute: '_computeAddingChannelValue',
-            default: "",
-            dependencies: ['isOpen'],
+        addingChannelValue:attr({
+            compute:'_computeAddingChannelValue',
+            default:"",
+            dependencies:['isOpen'],
         }),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        device: one2one('mail.device', {
-            related: 'messaging.device',
+        device:one2one('mail.device',{
+            related:'messaging.device',
         }),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        deviceIsMobile: attr({
-            related: 'device.isMobile',
+        deviceIsMobile:attr({
+            related:'device.isMobile',
         }),
         /**
-         * Determine if the moderation discard dialog is displayed.
+         *Determineifthemoderationdiscarddialogisdisplayed.
          */
-        hasModerationDiscardDialog: attr({
-            default: false,
+        hasModerationDiscardDialog:attr({
+            default:false,
         }),
         /**
-         * Determine if the moderation reject dialog is displayed.
+         *Determineifthemoderationrejectdialogisdisplayed.
          */
-        hasModerationRejectDialog: attr({
-            default: false,
+        hasModerationRejectDialog:attr({
+            default:false,
         }),
         /**
-         * Determines whether `this.thread` should be displayed.
+         *Determineswhether`this.thread`shouldbedisplayed.
          */
-        hasThreadView: attr({
-            compute: '_computeHasThreadView',
-            dependencies: [
+        hasThreadView:attr({
+            compute:'_computeHasThreadView',
+            dependencies:[
                 'activeMobileNavbarTabId',
                 'deviceIsMobile',
                 'isOpen',
@@ -421,116 +421,116 @@ function factory(dependencies) {
             ],
         }),
         /**
-         * Formatted init thread on opening discuss for the first time,
-         * when no active thread is defined. Useful to set a thread to
-         * open without knowing its local id in advance.
-         * Support two formats:
-         *    {string} <threadModel>_<threadId>
-         *    {int} <channelId> with default model of 'mail.channel'
+         *Formattedinitthreadonopeningdiscussforthefirsttime,
+         *whennoactivethreadisdefined.Usefultosetathreadto
+         *openwithoutknowingitslocalidinadvance.
+         *Supporttwoformats:
+         *   {string}<threadModel>_<threadId>
+         *   {int}<channelId>withdefaultmodelof'mail.channel'
          */
-        initActiveId: attr({
-            default: 'mail.box_inbox',
+        initActiveId:attr({
+            default:'mail.box_inbox',
         }),
         /**
-         * Determine whether current user is currently adding a channel from
-         * the sidebar.
+         *Determinewhethercurrentuseriscurrentlyaddingachannelfrom
+         *thesidebar.
          */
-        isAddingChannel: attr({
-            compute: '_computeIsAddingChannel',
-            default: false,
-            dependencies: ['isOpen'],
+        isAddingChannel:attr({
+            compute:'_computeIsAddingChannel',
+            default:false,
+            dependencies:['isOpen'],
         }),
         /**
-         * Determine whether current user is currently adding a chat from
-         * the sidebar.
+         *Determinewhethercurrentuseriscurrentlyaddingachatfrom
+         *thesidebar.
          */
-        isAddingChat: attr({
-            compute: '_computeIsAddingChat',
-            default: false,
-            dependencies: ['isOpen'],
+        isAddingChat:attr({
+            compute:'_computeIsAddingChat',
+            default:false,
+            dependencies:['isOpen'],
         }),
         /**
-         * Determine whether this discuss should be focused at next render.
+         *Determinewhetherthisdiscussshouldbefocusedatnextrender.
          */
-        isDoFocus: attr({
-            default: false,
+        isDoFocus:attr({
+            default:false,
         }),
         /**
-         * Whether the discuss app is open or not. Useful to determine
-         * whether the discuss or chat window logic should be applied.
+         *Whetherthediscussappisopenornot.Usefultodetermine
+         *whetherthediscussorchatwindowlogicshouldbeapplied.
          */
-        isOpen: attr({
-            default: false,
+        isOpen:attr({
+            default:false,
         }),
-        isReplyingToMessage: attr({
-            compute: '_computeIsReplyingToMessage',
-            default: false,
-            dependencies: ['replyingToMessage'],
+        isReplyingToMessage:attr({
+            compute:'_computeIsReplyingToMessage',
+            default:false,
+            dependencies:['replyingToMessage'],
         }),
-        isThreadPinned: attr({
-            related: 'thread.isPinned',
+        isThreadPinned:attr({
+            related:'thread.isPinned',
         }),
         /**
-         * The menu_id of discuss app, received on mail/init_messaging and
-         * used to open discuss from elsewhere.
+         *Themenu_idofdiscussapp,receivedonmail/init_messagingand
+         *usedtoopendiscussfromelsewhere.
          */
-        menu_id: attr({
-            default: null,
+        menu_id:attr({
+            default:null,
         }),
-        messaging: one2one('mail.messaging', {
-            inverse: 'discuss',
+        messaging:one2one('mail.messaging',{
+            inverse:'discuss',
         }),
-        messagingInbox: many2one('mail.thread', {
-            related: 'messaging.inbox',
+        messagingInbox:many2one('mail.thread',{
+            related:'messaging.inbox',
         }),
-        renamingThreads: one2many('mail.thread'),
+        renamingThreads:one2many('mail.thread'),
         /**
-         * The message that is currently selected as being replied to in Inbox.
-         * There is only one reply composer shown at a time, which depends on
-         * this selected message.
+         *ThemessagethatiscurrentlyselectedasbeingrepliedtoinInbox.
+         *Thereisonlyonereplycomposershownatatime,whichdependson
+         *thisselectedmessage.
          */
-        replyingToMessage: many2one('mail.message', {
-            compute: '_computeReplyingToMessage',
-            dependencies: [
+        replyingToMessage:many2one('mail.message',{
+            compute:'_computeReplyingToMessage',
+            dependencies:[
                 'isOpen',
                 'replyingToMessage',
             ],
         }),
         /**
-         * The thread concerned by the reply feature in Inbox. It depends on the
-         * message set to be replied, and should be considered read-only.
+         *ThethreadconcernedbythereplyfeatureinInbox.Itdependsonthe
+         *messagesettobereplied,andshouldbeconsideredread-only.
          */
-        replyingToMessageOriginThread: many2one('mail.thread', {
-            related: 'replyingToMessage.originThread',
+        replyingToMessageOriginThread:many2one('mail.thread',{
+            related:'replyingToMessage.originThread',
         }),
         /**
-         * The composer to display for the reply feature in Inbox. It depends
-         * on the message set to be replied, and should be considered read-only.
+         *ThecomposertodisplayforthereplyfeatureinInbox.Itdepends
+         *onthemessagesettobereplied,andshouldbeconsideredread-only.
          */
-        replyingToMessageOriginThreadComposer: one2one('mail.composer', {
-            inverse: 'discussAsReplying',
-            related: 'replyingToMessageOriginThread.composer',
+        replyingToMessageOriginThreadComposer:one2one('mail.composer',{
+            inverse:'discussAsReplying',
+            related:'replyingToMessageOriginThread.composer',
         }),
         /**
-         * Quick search input value in the discuss sidebar (desktop). Useful
-         * to filter channels and chats based on this input content.
+         *Quicksearchinputvalueinthediscusssidebar(desktop).Useful
+         *tofilterchannelsandchatsbasedonthisinputcontent.
          */
-        sidebarQuickSearchValue: attr({
-            default: "",
+        sidebarQuickSearchValue:attr({
+            default:"",
         }),
         /**
-         * Determines the domain to apply when fetching messages for `this.thread`.
-         * This value should only be written by the control panel.
+         *Determinesthedomaintoapplywhenfetchingmessagesfor`this.thread`.
+         *Thisvalueshouldonlybewrittenbythecontrolpanel.
          */
-        stringifiedDomain: attr({
-            default: '[]',
+        stringifiedDomain:attr({
+            default:'[]',
         }),
         /**
-         * Determines the `mail.thread` that should be displayed by `this`.
+         *Determinesthe`mail.thread`thatshouldbedisplayedby`this`.
          */
-        thread: many2one('mail.thread', {
-            compute: '_computeThread',
-            dependencies: [
+        thread:many2one('mail.thread',{
+            compute:'_computeThread',
+            dependencies:[
                 'activeMobileNavbarTabId',
                 'deviceIsMobile',
                 'isThreadPinned',
@@ -540,33 +540,33 @@ function factory(dependencies) {
                 'threadModel',
             ],
         }),
-        threadId: attr({
-            related: 'thread.id',
+        threadId:attr({
+            related:'thread.id',
         }),
-        threadModel: attr({
-            related: 'thread.model',
-        }),
-        /**
-         * States the `mail.thread_view` displaying `this.thread`.
-         */
-        threadView: one2one('mail.thread_view', {
-            related: 'threadViewer.threadView',
+        threadModel:attr({
+            related:'thread.model',
         }),
         /**
-         * Determines the `mail.thread_viewer` managing the display of `this.thread`.
+         *Statesthe`mail.thread_view`displaying`this.thread`.
          */
-        threadViewer: one2one('mail.thread_viewer', {
-            default: [['create']],
-            inverse: 'discuss',
-            isCausal: true,
+        threadView:one2one('mail.thread_view',{
+            related:'threadViewer.threadView',
+        }),
+        /**
+         *Determinesthe`mail.thread_viewer`managingthedisplayof`this.thread`.
+         */
+        threadViewer:one2one('mail.thread_viewer',{
+            default:[['create']],
+            inverse:'discuss',
+            isCausal:true,
         }),
     };
 
-    Discuss.modelName = 'mail.discuss';
+    Discuss.modelName='mail.discuss';
 
-    return Discuss;
+    returnDiscuss;
 }
 
-registerNewModel('mail.discuss', factory);
+registerNewModel('mail.discuss',factory);
 
 });

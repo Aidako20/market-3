@@ -1,65 +1,65 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportUserError
 
 
-class EventQuestion(models.Model):
-    _name = 'event.question'
-    _rec_name = 'title'
-    _order = 'sequence,id'
-    _description = 'Event Question'
+classEventQuestion(models.Model):
+    _name='event.question'
+    _rec_name='title'
+    _order='sequence,id'
+    _description='EventQuestion'
 
-    title = fields.Char(required=True, translate=True)
-    question_type = fields.Selection([
-        ('simple_choice', 'Selection'),
-        ('text_box', 'Text Input')], default='simple_choice', string="Question Type", required=True)
-    event_type_id = fields.Many2one('event.type', 'Event Type', ondelete='cascade')
-    event_id = fields.Many2one('event.event', 'Event', ondelete='cascade')
-    answer_ids = fields.One2many('event.question.answer', 'question_id', "Answers", copy=True)
-    sequence = fields.Integer(default=10)
-    once_per_order = fields.Boolean('Ask only once per order',
-                                    help="If True, this question will be asked only once and its value will be propagated to every attendees."
-                                         "If not it will be asked for every attendee of a reservation.")
+    title=fields.Char(required=True,translate=True)
+    question_type=fields.Selection([
+        ('simple_choice','Selection'),
+        ('text_box','TextInput')],default='simple_choice',string="QuestionType",required=True)
+    event_type_id=fields.Many2one('event.type','EventType',ondelete='cascade')
+    event_id=fields.Many2one('event.event','Event',ondelete='cascade')
+    answer_ids=fields.One2many('event.question.answer','question_id',"Answers",copy=True)
+    sequence=fields.Integer(default=10)
+    once_per_order=fields.Boolean('Askonlyonceperorder',
+                                    help="IfTrue,thisquestionwillbeaskedonlyonceanditsvaluewillbepropagatedtoeveryattendees."
+                                         "Ifnotitwillbeaskedforeveryattendeeofareservation.")
 
-    @api.constrains('event_type_id', 'event_id')
-    def _constrains_event(self):
-        if any(question.event_type_id and question.event_id for question in self):
-            raise UserError(_('Question cannot belong to both the event category and itself.'))
+    @api.constrains('event_type_id','event_id')
+    def_constrains_event(self):
+        ifany(question.event_type_idandquestion.event_idforquestioninself):
+            raiseUserError(_('Questioncannotbelongtoboththeeventcategoryanditself.'))
 
-    def write(self, vals):
-        """ We add a check to prevent changing the question_type of a question that already has answers.
-        Indeed, it would mess up the event.registration.answer (answer type not matching the question type). """
+    defwrite(self,vals):
+        """Weaddachecktopreventchangingthequestion_typeofaquestionthatalreadyhasanswers.
+        Indeed,itwouldmessuptheevent.registration.answer(answertypenotmatchingthequestiontype)."""
 
-        if 'question_type' in vals:
-            questions_new_type = self.filtered(lambda question: question.question_type != vals['question_type'])
-            if questions_new_type:
-                answer_count = self.env['event.registration.answer'].search_count([('question_id', 'in', questions_new_type.ids)])
-                if answer_count > 0:
-                    raise UserError(_("You cannot change the question type of a question that already has answers!"))
-        return super(EventQuestion, self).write(vals)
+        if'question_type'invals:
+            questions_new_type=self.filtered(lambdaquestion:question.question_type!=vals['question_type'])
+            ifquestions_new_type:
+                answer_count=self.env['event.registration.answer'].search_count([('question_id','in',questions_new_type.ids)])
+                ifanswer_count>0:
+                    raiseUserError(_("Youcannotchangethequestiontypeofaquestionthatalreadyhasanswers!"))
+        returnsuper(EventQuestion,self).write(vals)
 
-    def action_view_question_answers(self):
-        """ Allow analyzing the attendees answers to event questions in a convenient way:
-        - A graph view showing counts of each suggestions for simple_choice questions
-          (Along with secondary pivot and tree views)
-        - A tree view showing textual answers values for text_box questions. """
+    defaction_view_question_answers(self):
+        """Allowanalyzingtheattendeesanswerstoeventquestionsinaconvenientway:
+        -Agraphviewshowingcountsofeachsuggestionsforsimple_choicequestions
+          (Alongwithsecondarypivotandtreeviews)
+        -Atreeviewshowingtextualanswersvaluesfortext_boxquestions."""
         self.ensure_one()
-        action = self.env["ir.actions.actions"]._for_xml_id("website_event_questions.action_event_registration_report")
-        action['domain'] = [('question_id', '=', self.id)]
-        if self.question_type == 'simple_choice':
-            action['views'] = [(False, 'graph'), (False, 'pivot'), (False, 'tree')]
-        elif self.question_type == 'text_box':
-            action['views'] = [(False, 'tree')]
-        return action
+        action=self.env["ir.actions.actions"]._for_xml_id("website_event_questions.action_event_registration_report")
+        action['domain']=[('question_id','=',self.id)]
+        ifself.question_type=='simple_choice':
+            action['views']=[(False,'graph'),(False,'pivot'),(False,'tree')]
+        elifself.question_type=='text_box':
+            action['views']=[(False,'tree')]
+        returnaction
 
-class EventQuestionAnswer(models.Model):
-    """ Contains suggested answers to a 'simple_choice' event.question. """
-    _name = 'event.question.answer'
-    _order = 'sequence,id'
-    _description = 'Event Question Answer'
+classEventQuestionAnswer(models.Model):
+    """Containssuggestedanswerstoa'simple_choice'event.question."""
+    _name='event.question.answer'
+    _order='sequence,id'
+    _description='EventQuestionAnswer'
 
-    name = fields.Char('Answer', required=True, translate=True)
-    question_id = fields.Many2one('event.question', required=True, ondelete='cascade')
-    sequence = fields.Integer(default=10)
+    name=fields.Char('Answer',required=True,translate=True)
+    question_id=fields.Many2one('event.question',required=True,ondelete='cascade')
+    sequence=fields.Integer(default=10)

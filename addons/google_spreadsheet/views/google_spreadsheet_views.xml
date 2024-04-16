@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-        <!-- add google drive config field in user form -->
+        <!--addgoogledriveconfigfieldinuserform-->
 
-        <record id="view_ir_attachment_google_spreadsheet_tree" model="ir.ui.view">
-            <field name="name">ir.attachment.google.spreadsheet.tree</field>
-            <field name="model">ir.attachment</field>
-            <field name="priority">100</field>
-            <field name="arch" type="xml">
-                <tree string="Google Spreadsheets">
-                    <field name="name" string="Name"/>
-                    <field name="url" widget="url" />
+        <recordid="view_ir_attachment_google_spreadsheet_tree"model="ir.ui.view">
+            <fieldname="name">ir.attachment.google.spreadsheet.tree</field>
+            <fieldname="model">ir.attachment</field>
+            <fieldname="priority">100</field>
+            <fieldname="arch"type="xml">
+                <treestring="GoogleSpreadsheets">
+                    <fieldname="name"string="Name"/>
+                    <fieldname="url"widget="url"/>
                 </tree>
             </field>
         </record>
 
-        <record id="view_ir_attachment_google_spreadsheet_form" model="ir.ui.view">
-            <field name="name">ir.attachment.google.spreadsheet.form</field>
-            <field name="model">ir.attachment</field>
-            <field name="priority">100</field>
-            <field name="arch" type="xml">
-                <form string="Google Spreadsheets">
+        <recordid="view_ir_attachment_google_spreadsheet_form"model="ir.ui.view">
+            <fieldname="name">ir.attachment.google.spreadsheet.form</field>
+            <fieldname="model">ir.attachment</field>
+            <fieldname="priority">100</field>
+            <fieldname="arch"type="xml">
+                <formstring="GoogleSpreadsheets">
                     <sheet>
                         <group>
                             <group>
-                                <field name="name" string="Name"/>
-                                <field name="url" widget="url"/>
+                                <fieldname="name"string="Name"/>
+                                <fieldname="url"widget="url"/>
                             </group>
-                            <group colspan="2">
-                                <label for="description" colspan="2"/>
-                                <field name="description" nolabel="1" colspan="2"/>
+                            <groupcolspan="2">
+                                <labelfor="description"colspan="2"/>
+                                <fieldname="description"nolabel="1"colspan="2"/>
                             </group>
                         </group>
                     </sheet>
@@ -37,27 +37,27 @@
             </field>
         </record>
 
-        <record id="action_ir_attachment_google_spreadsheet_tree" model="ir.actions.act_window">
-            <field name="name">Google Spreadsheets</field>
-            <field name="res_model">ir.attachment</field>
-            <field name="view_mode">tree,form</field>
-            <field name="context">{'default_res_model': 'res.users', 'default_res_id': uid}</field>
-            <field name="domain">[('url', '=ilike', '%google%/spreadsheet%')]</field>
-            <field name="help">Google Spreadsheets</field>
+        <recordid="action_ir_attachment_google_spreadsheet_tree"model="ir.actions.act_window">
+            <fieldname="name">GoogleSpreadsheets</field>
+            <fieldname="res_model">ir.attachment</field>
+            <fieldname="view_mode">tree,form</field>
+            <fieldname="context">{'default_res_model':'res.users','default_res_id':uid}</field>
+            <fieldname="domain">[('url','=ilike','%google%/spreadsheet%')]</field>
+            <fieldname="help">GoogleSpreadsheets</field>
         </record>
 
-        <record id="action_ir_attachment_google_spreadsheet_tree_view" model="ir.actions.act_window.view">
-            <field eval="1" name="sequence"/>
-            <field name="view_mode">tree</field>
-            <field name="view_id" ref="view_ir_attachment_google_spreadsheet_tree"/>
-            <field name="act_window_id" ref="action_ir_attachment_google_spreadsheet_tree"/>
+        <recordid="action_ir_attachment_google_spreadsheet_tree_view"model="ir.actions.act_window.view">
+            <fieldeval="1"name="sequence"/>
+            <fieldname="view_mode">tree</field>
+            <fieldname="view_id"ref="view_ir_attachment_google_spreadsheet_tree"/>
+            <fieldname="act_window_id"ref="action_ir_attachment_google_spreadsheet_tree"/>
         </record>
 
-        <record id="action_ir_attachment_google_spreadsheet_form_view" model="ir.actions.act_window.view">
-            <field eval="2" name="sequence"/>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="view_ir_attachment_google_spreadsheet_form"/>
-            <field name="act_window_id" ref="action_ir_attachment_google_spreadsheet_tree"/>
+        <recordid="action_ir_attachment_google_spreadsheet_form_view"model="ir.actions.act_window.view">
+            <fieldeval="2"name="sequence"/>
+            <fieldname="view_mode">form</field>
+            <fieldname="view_id"ref="view_ir_attachment_google_spreadsheet_form"/>
+            <fieldname="act_window_id"ref="action_ir_attachment_google_spreadsheet_tree"/>
         </record>
 
         <menuitem

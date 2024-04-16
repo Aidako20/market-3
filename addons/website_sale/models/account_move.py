@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models, api
+fromflectraimportfields,models,api
 
 
-class AccountMove(models.Model):
-    _inherit = 'account.move'
+classAccountMove(models.Model):
+    _inherit='account.move'
 
-    website_id = fields.Many2one('website', related='partner_id.website_id', string='Website',
-                                 help='Website through which this invoice was created.',
-                                 store=True, readonly=True, tracking=True)
+    website_id=fields.Many2one('website',related='partner_id.website_id',string='Website',
+                                 help='Websitethroughwhichthisinvoicewascreated.',
+                                 store=True,readonly=True,tracking=True)

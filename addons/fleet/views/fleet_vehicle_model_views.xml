@@ -1,41 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
-    <record id='fleet_vehicle_model_view_form' model='ir.ui.view'>
-        <field name="name">fleet.vehicle.model.form</field>
-        <field name="model">fleet.vehicle.model</field>
-        <field name="arch" type="xml">
-            <form string="Model">
+    <recordid='fleet_vehicle_model_view_form'model='ir.ui.view'>
+        <fieldname="name">fleet.vehicle.model.form</field>
+        <fieldname="model">fleet.vehicle.model</field>
+        <fieldname="arch"type="xml">
+            <formstring="Model">
                 <sheet>
-                    <widget name="web_ribbon" text="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
-                    <field name="image_128" widget='image' class="oe_avatar"/>
-                    <div class="oe_title">
-                        <label for="name" class="oe_edit_only"/>
+                    <widgetname="web_ribbon"text="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
+                    <fieldname="image_128"widget='image'class="oe_avatar"/>
+                    <divclass="oe_title">
+                        <labelfor="name"class="oe_edit_only"/>
                         <h1>
-                            <field name="name" placeholder="e.g. Model S"/>
+                            <fieldname="name"placeholder="e.g.ModelS"/>
                         </h1>
-                        <label for="brand_id" class="oe_edit_only"/>
+                        <labelfor="brand_id"class="oe_edit_only"/>
                         <h2>
-                            <field name="brand_id" placeholder="e.g. Tesla"/>
+                            <fieldname="brand_id"placeholder="e.g.Tesla"/>
                         </h2>
                     </div>
                     <group>
                         <group>
-                            <field name="active" invisible="1"/>
-                            <field name="vehicle_type"/>
-                            <field name="manager_id" groups="fleet.fleet_group_manager"/>
+                            <fieldname="active"invisible="1"/>
+                            <fieldname="vehicle_type"/>
+                            <fieldname="manager_id"groups="fleet.fleet_group_manager"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Vendors" name="vendors">
-                            <field name="vendors">
-                                <kanban quick_create="false" create="true">
-                                    <field name="name"/>
+                        <pagestring="Vendors"name="vendors">
+                            <fieldname="vendors">
+                                <kanbanquick_create="false"create="true">
+                                    <fieldname="name"/>
                                     <templates>
-                                        <t t-name="kanban-box">
-                                            <div style="position: relative" class="oe_kanban_global_click">
-                                                <div class="oe_module_vignette">
-                                                    <div class="oe_module_desc o_kanban_record_title">
-                                                        <field name="name"/>
+                                        <tt-name="kanban-box">
+                                            <divstyle="position:relative"class="oe_kanban_global_click">
+                                                <divclass="oe_module_vignette">
+                                                    <divclass="oe_module_desco_kanban_record_title">
+                                                        <fieldname="name"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -50,28 +50,28 @@
         </field>
     </record>
 
-    <record id='fleet_vehicle_model_view_tree' model='ir.ui.view'>
-        <field name="name">fleet.vehicle.model.tree</field>
-        <field name="model">fleet.vehicle.model</field>
-        <field name="arch" type="xml">
-            <tree string="Models">
-                <field name="brand_id" />
-                <field name="name" />
-                <field name="vehicle_type"/>
+    <recordid='fleet_vehicle_model_view_tree'model='ir.ui.view'>
+        <fieldname="name">fleet.vehicle.model.tree</field>
+        <fieldname="model">fleet.vehicle.model</field>
+        <fieldname="arch"type="xml">
+            <treestring="Models">
+                <fieldname="brand_id"/>
+                <fieldname="name"/>
+                <fieldname="vehicle_type"/>
             </tree>
         </field>
     </record>
 
-    <record id='fleet_vehicle_model_view_kanban' model='ir.ui.view'>
-        <field name="name">fleet.vehicle.model.kanban</field>
-        <field name="model">fleet.vehicle.model</field>
-        <field name="arch" type="xml">
-            <kanban string="Models">
+    <recordid='fleet_vehicle_model_view_kanban'model='ir.ui.view'>
+        <fieldname="name">fleet.vehicle.model.kanban</field>
+        <fieldname="model">fleet.vehicle.model</field>
+        <fieldname="arch"type="xml">
+            <kanbanstring="Models">
                 <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_details">
-                            <div><strong><field name="name"/></strong></div>
-                            <div><field name="brand_id"/></div>
+                    <tt-name="kanban-box">
+                        <divclass="oe_kanban_details">
+                            <div><strong><fieldname="name"/></strong></div>
+                            <div><fieldname="brand_id"/></div>
                         </div>
                     </t>
                 </templates>
@@ -79,58 +79,58 @@
         </field>
     </record>
 
-    <record id='fleet_vehicle_model_view_search' model='ir.ui.view'>
-        <field name="name">fleet.vehicle.model.search</field>
-        <field name="model">fleet.vehicle.model</field>
-        <field name="arch" type="xml">
-            <search string="Vehicles costs" >
-                <field name="brand_id" />
-                <group expand="1" string="Group By">
-                    <filter name="groupby_brand" context="{'group_by' : 'brand_id'}" string="Make"/>
+    <recordid='fleet_vehicle_model_view_search'model='ir.ui.view'>
+        <fieldname="name">fleet.vehicle.model.search</field>
+        <fieldname="model">fleet.vehicle.model</field>
+        <fieldname="arch"type="xml">
+            <searchstring="Vehiclescosts">
+                <fieldname="brand_id"/>
+                <groupexpand="1"string="GroupBy">
+                    <filtername="groupby_brand"context="{'group_by':'brand_id'}"string="Make"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <record id='fleet_vehicle_model_action' model='ir.actions.act_window'>
-        <field name="name">Vehicles Model</field>
-        <field name="res_model">fleet.vehicle.model</field>
-        <field name="view_mode">tree,form</field>
-        <field name="context">{"search_default_groupby_brand" : True,}</field>
-        <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            Create a new model
+    <recordid='fleet_vehicle_model_action'model='ir.actions.act_window'>
+        <fieldname="name">VehiclesModel</field>
+        <fieldname="res_model">fleet.vehicle.model</field>
+        <fieldname="view_mode">tree,form</field>
+        <fieldname="context">{"search_default_groupby_brand":True,}</field>
+        <fieldname="help"type="html">
+          <pclass="o_view_nocontent_smiling_face">
+            Createanewmodel
           </p><p>
-            You can define several models (e.g. A3, A4) for each make (Audi).
+            Youcandefineseveralmodels(e.g.A3,A4)foreachmake(Audi).
           </p>
         </field>
     </record>
 
-    <menuitem name="Fleet" id="menu_root" sequence="115" groups="fleet_group_user" web_icon="fleet,static/description/icon.png"/>
-    <menuitem name="Configuration" parent="menu_root" id="fleet_configuration" sequence="100" groups="fleet_group_manager"/>
+    <menuitemname="Fleet"id="menu_root"sequence="115"groups="fleet_group_user"web_icon="fleet,static/description/icon.png"/>
+    <menuitemname="Configuration"parent="menu_root"id="fleet_configuration"sequence="100"groups="fleet_group_manager"/>
 
-    <record id='fleet_vehicle_model_brand_view_tree' model='ir.ui.view'>
-        <field name="name">fleet.vehicle.model.brand.tree</field>
-        <field name="model">fleet.vehicle.model.brand</field>
-        <field name="arch" type="xml">
-            <tree string="Model Make">
-                <field name="name" />
+    <recordid='fleet_vehicle_model_brand_view_tree'model='ir.ui.view'>
+        <fieldname="name">fleet.vehicle.model.brand.tree</field>
+        <fieldname="model">fleet.vehicle.model.brand</field>
+        <fieldname="arch"type="xml">
+            <treestring="ModelMake">
+                <fieldname="name"/>
             </tree>
         </field>
     </record>
 
-    <record id='fleet_vehicle_model_brand_view_form' model='ir.ui.view'>
-        <field name="name">fleet.vehicle.model.brand.form</field>
-        <field name="model">fleet.vehicle.model.brand</field>
-        <field name="arch" type="xml">
-            <form string="Model Make">
+    <recordid='fleet_vehicle_model_brand_view_form'model='ir.ui.view'>
+        <fieldname="name">fleet.vehicle.model.brand.form</field>
+        <fieldname="model">fleet.vehicle.model.brand</field>
+        <fieldname="arch"type="xml">
+            <formstring="ModelMake">
                 <sheet>
                     <group>
                         <div>
-                            <field name="image_128" widget="image" class="oe_avatar"/>
-                            <label for="name" class="oe_edit_only"/>
+                            <fieldname="image_128"widget="image"class="oe_avatar"/>
+                            <labelfor="name"class="oe_edit_only"/>
                             <h1>
-                                <field name="name"/>
+                                <fieldname="name"/>
                             </h1>
                         </div>
                     </group>
@@ -139,29 +139,29 @@
         </field>
     </record>
 
-    <record id='fleet_vehicle_model_brand_view_kanban' model='ir.ui.view'>
-        <field name="name">fleet.vehicle.model.brandkanban</field>
-        <field name="model">fleet.vehicle.model.brand</field>
-        <field name="arch" type="xml">
+    <recordid='fleet_vehicle_model_brand_view_kanban'model='ir.ui.view'>
+        <fieldname="name">fleet.vehicle.model.brandkanban</field>
+        <fieldname="model">fleet.vehicle.model.brand</field>
+        <fieldname="arch"type="xml">
             <kanban>
-                <field name="id"/>
-                <field name="name" />
+                <fieldname="id"/>
+                <fieldname="name"/>
                 <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_vignette oe_semantic_html_override oe_kanban_global_click">
-                            <a type="open" href="#" class="o_kanban_image oe_kanban_action">
-                                <img alt="Open" t-att-src="kanban_image('fleet.vehicle.model.brand', 'image_128', record.id.raw_value)" class="img-fluid" style="width:100px;"/>
+                    <tt-name="kanban-box">
+                        <divclass="oe_kanban_vignetteoe_semantic_html_overrideoe_kanban_global_click">
+                            <atype="open"href="#"class="o_kanban_imageoe_kanban_action">
+                                <imgalt="Open"t-att-src="kanban_image('fleet.vehicle.model.brand','image_128',record.id.raw_value)"class="img-fluid"style="width:100px;"/>
                             </a>
-                            <div class="oe_kanban_details">
-                                <h4 class="oe_partner_heading">
-                                    <a type="open" class="o_kanban_record_title">
-                                        <field name="name"/>
+                            <divclass="oe_kanban_details">
+                                <h4class="oe_partner_heading">
+                                    <atype="open"class="o_kanban_record_title">
+                                        <fieldname="name"/>
                                     </a>
                                 </h4>
                             </div>
-                            <div class="o_kanban_button">
-                                <a type="object" name="action_brand_model" class="oe_kanban_action oe_kanban_action_a">
-                                    <field name="model_count"/>
+                            <divclass="o_kanban_button">
+                                <atype="object"name="action_brand_model"class="oe_kanban_actionoe_kanban_action_a">
+                                    <fieldname="model_count"/>
                                 MODELS
                                 </a>
                             </div>
@@ -172,17 +172,17 @@
         </field>
     </record>
 
-    <record id='fleet_vehicle_model_brand_action' model='ir.actions.act_window'>
-        <field name="name">Manufacturers</field>
-        <field name="res_model">fleet.vehicle.model.brand</field>
-        <field name="view_mode">kanban,tree,form</field>
-        <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            Create a new manufacturer
+    <recordid='fleet_vehicle_model_brand_action'model='ir.actions.act_window'>
+        <fieldname="name">Manufacturers</field>
+        <fieldname="res_model">fleet.vehicle.model.brand</field>
+        <fieldname="view_mode">kanban,tree,form</field>
+        <fieldname="help"type="html">
+          <pclass="o_view_nocontent_smiling_face">
+            Createanewmanufacturer
           </p>
         </field>
     </record>
 
-    <menuitem action="fleet_vehicle_model_brand_action" parent="fleet_configuration" id="fleet_vehicle_model_brand_menu" sequence="2"/>
-    <menuitem action="fleet_vehicle_model_action" parent="fleet_configuration" id="fleet_vehicle_model_menu" sequence="2"/>
+    <menuitemaction="fleet_vehicle_model_brand_action"parent="fleet_configuration"id="fleet_vehicle_model_brand_menu"sequence="2"/>
+    <menuitemaction="fleet_vehicle_model_action"parent="fleet_configuration"id="fleet_vehicle_model_menu"sequence="2"/>
 </flectra>

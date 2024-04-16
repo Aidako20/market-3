@@ -1,86 +1,86 @@
-flectra.define('snailmail/static/src/components/message/message.js', function (require) {
-'use strict';
+flectra.define('snailmail/static/src/components/message/message.js',function(require){
+'usestrict';
 
-const components = {
-    Message: require('mail/static/src/components/message/message.js'),
-    SnailmailErrorDialog: require('snailmail/static/src/components/snailmail_error_dialog/snailmail_error_dialog.js'),
-    SnailmailNotificationPopover: require('snailmail/static/src/components/snailmail_notification_popover/snailmail_notification_popover.js'),
+constcomponents={
+    Message:require('mail/static/src/components/message/message.js'),
+    SnailmailErrorDialog:require('snailmail/static/src/components/snailmail_error_dialog/snailmail_error_dialog.js'),
+    SnailmailNotificationPopover:require('snailmail/static/src/components/snailmail_notification_popover/snailmail_notification_popover.js'),
 };
 
-const { patch } = require('web.utils');
+const{patch}=require('web.utils');
 
-const { useState } = owl;
+const{useState}=owl;
 
-Object.assign(components.Message.components, {
-    SnailmailErrorDialog: components.SnailmailErrorDialog,
-    SnailmailNotificationPopover: components.SnailmailNotificationPopover,
+Object.assign(components.Message.components,{
+    SnailmailErrorDialog:components.SnailmailErrorDialog,
+    SnailmailNotificationPopover:components.SnailmailNotificationPopover,
 });
 
-patch(components.Message, 'snailmail/static/src/components/message/message.js', {
+patch(components.Message,'snailmail/static/src/components/message/message.js',{
     /**
-     * @override
+     *@override
      */
-    _constructor() {
+    _constructor(){
         this._super(...arguments);
-        this.snailmailState = useState({
-            // Determine if the error dialog is displayed.
-            hasDialog: false,
+        this.snailmailState=useState({
+            //Determineiftheerrordialogisdisplayed.
+            hasDialog:false,
         });
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _onClickFailure() {
-        if (this.message.message_type === 'snailmail') {
+    _onClickFailure(){
+        if(this.message.message_type==='snailmail'){
             /**
-             * Messages from snailmail are considered to have at most one
-             * notification. The failure type of the whole message is considered
-             * to be the same as the one from that first notification, and the
-             * click action will depend on it.
+             *Messagesfromsnailmailareconsideredtohaveatmostone
+             *notification.Thefailuretypeofthewholemessageisconsidered
+             *tobethesameastheonefromthatfirstnotification,andthe
+             *clickactionwilldependonit.
              */
-            switch (this.message.notifications[0].failure_type) {
-                case 'sn_credit':
-                    // URL only used in this component, not received at init
+            switch(this.message.notifications[0].failure_type){
+                case'sn_credit':
+                    //URLonlyusedinthiscomponent,notreceivedatinit
                     this.env.messaging.fetchSnailmailCreditsUrl();
-                    this.snailmailState.hasDialog = true;
+                    this.snailmailState.hasDialog=true;
                     break;
-                case 'sn_error':
-                    this.snailmailState.hasDialog = true;
+                case'sn_error':
+                    this.snailmailState.hasDialog=true;
                     break;
-                case 'sn_fields':
+                case'sn_fields':
                     this.message.openMissingFieldsLetterAction();
                     break;
-                case 'sn_format':
+                case'sn_format':
                     this.message.openFormatLetterAction();
                     break;
-                case 'sn_price':
-                    this.snailmailState.hasDialog = true;
+                case'sn_price':
+                    this.snailmailState.hasDialog=true;
                     break;
-                case 'sn_trial':
-                    // URL only used in this component, not received at init
+                case'sn_trial':
+                    //URLonlyusedinthiscomponent,notreceivedatinit
                     this.env.messaging.fetchSnailmailCreditsUrlTrial();
-                    this.snailmailState.hasDialog = true;
+                    this.snailmailState.hasDialog=true;
                     break;
             }
-        } else {
+        }else{
             this._super(...arguments);
         }
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onDialogClosedSnailmailError() {
-        this.snailmailState.hasDialog = false;
+    _onDialogClosedSnailmailError(){
+        this.snailmailState.hasDialog=false;
     },
 });
 

@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
-class MembershipLine(models.Model):
+classMembershipLine(models.Model):
 
-    _inherit = 'membership.membership_line'
+    _inherit='membership.membership_line'
 
-    def get_published_companies(self, limit=None):
-        if not self.ids:
-            return []
-        limit_clause = '' if limit is None else ' LIMIT %d' % limit
+    defget_published_companies(self,limit=None):
+        ifnotself.ids:
+            return[]
+        limit_clause=''iflimitisNoneelse'LIMIT%d'%limit
         self.env.cr.execute("""
-            SELECT DISTINCT p.id
-            FROM res_partner p INNER JOIN membership_membership_line m
-            ON  p.id = m.partner
-            WHERE is_published AND is_company AND m.id IN %s """ + limit_clause, (tuple(self.ids),))
-        return [partner_id[0] for partner_id in self.env.cr.fetchall()]
+            SELECTDISTINCTp.id
+            FROMres_partnerpINNERJOINmembership_membership_linem
+            ON p.id=m.partner
+            WHEREis_publishedANDis_companyANDm.idIN%s"""+limit_clause,(tuple(self.ids),))
+        return[partner_id[0]forpartner_idinself.env.cr.fetchall()]

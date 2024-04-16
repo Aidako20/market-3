@@ -1,26 +1,26 @@
-flectra.define('pos_mercury.ProductScreen', function (require) {
-    'use strict';
+flectra.define('pos_mercury.ProductScreen',function(require){
+    'usestrict';
 
-    const ProductScreen = require('point_of_sale.ProductScreen');
-    const Registries = require('point_of_sale.Registries');
-    const { useBarcodeReader } = require('point_of_sale.custom_hooks');
+    constProductScreen=require('point_of_sale.ProductScreen');
+    constRegistries=require('point_of_sale.Registries');
+    const{useBarcodeReader}=require('point_of_sale.custom_hooks');
 
-    const PosMercuryProductScreen = (ProductScreen) =>
-        class extends ProductScreen {
-            constructor() {
+    constPosMercuryProductScreen=(ProductScreen)=>
+        classextendsProductScreen{
+            constructor(){
                 super(...arguments);
                 useBarcodeReader({
-                    credit: this.credit_error_action,
+                    credit:this.credit_error_action,
                 });
             }
-            credit_error_action() {
-                this.showPopup('ErrorPopup', {
-                    body: this.env._t('Go to payment screen to use cards'),
+            credit_error_action(){
+                this.showPopup('ErrorPopup',{
+                    body:this.env._t('Gotopaymentscreentousecards'),
                 });
             }
         };
 
-    Registries.Component.extend(ProductScreen, PosMercuryProductScreen);
+    Registries.Component.extend(ProductScreen,PosMercuryProductScreen);
 
-    return ProductScreen;
+    returnProductScreen;
 });

@@ -1,85 +1,85 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-import re
-from collections import OrderedDict
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+importre
+fromcollectionsimportOrderedDict
 
-from flectra import models
-from flectra.http import request
-from flectra.addons.base.models.assetsbundle import AssetsBundle
-from flectra.addons.http_routing.models.ir_http import url_for
-from flectra.osv import expression
-from flectra.addons.website.models import ir_http
-from flectra.tools import html_escape as escape
+fromflectraimportmodels
+fromflectra.httpimportrequest
+fromflectra.addons.base.models.assetsbundleimportAssetsBundle
+fromflectra.addons.http_routing.models.ir_httpimporturl_for
+fromflectra.osvimportexpression
+fromflectra.addons.website.modelsimportir_http
+fromflectra.toolsimporthtml_escapeasescape
 
-re_background_image = re.compile(r"(background-image\s*:\s*url\(\s*['\"]?\s*)([^)'\"]+)")
+re_background_image=re.compile(r"(background-image\s*:\s*url\(\s*['\"]?\s*)([^)'\"]+)")
 
 
-class AssetsBundleMultiWebsite(AssetsBundle):
-    def _get_asset_url_values(self, id, unique, extra, name, sep, type):
-        website_id = self.env.context.get('website_id')
-        website_id_path = website_id and ('%s/' % website_id) or ''
-        extra = website_id_path + extra
-        res = super(AssetsBundleMultiWebsite, self)._get_asset_url_values(id, unique, extra, name, sep, type)
-        return res
+classAssetsBundleMultiWebsite(AssetsBundle):
+    def_get_asset_url_values(self,id,unique,extra,name,sep,type):
+        website_id=self.env.context.get('website_id')
+        website_id_path=website_idand('%s/'%website_id)or''
+        extra=website_id_path+extra
+        res=super(AssetsBundleMultiWebsite,self)._get_asset_url_values(id,unique,extra,name,sep,type)
+        returnres
 
-    def _get_assets_domain_for_already_processed_css(self, assets):
-        res = super(AssetsBundleMultiWebsite, self)._get_assets_domain_for_already_processed_css(assets)
-        current_website = self.env['website'].get_current_website(fallback=False)
-        res = expression.AND([res, current_website.website_domain()])
-        return res
+    def_get_assets_domain_for_already_processed_css(self,assets):
+        res=super(AssetsBundleMultiWebsite,self)._get_assets_domain_for_already_processed_css(assets)
+        current_website=self.env['website'].get_current_website(fallback=False)
+        res=expression.AND([res,current_website.website_domain()])
+        returnres
 
-class QWeb(models.AbstractModel):
-    """ QWeb object for rendering stuff in the website context """
+classQWeb(models.AbstractModel):
+    """QWebobjectforrenderingstuffinthewebsitecontext"""
 
-    _inherit = 'ir.qweb'
+    _inherit='ir.qweb'
 
-    URL_ATTRS = {
-        'form':   'action',
-        'a':      'href',
-        'link':   'href',
-        'script': 'src',
-        'img':    'src',
+    URL_ATTRS={
+        'form':  'action',
+        'a':     'href',
+        'link':  'href',
+        'script':'src',
+        'img':   'src',
     }
 
-    def get_asset_bundle(self, xmlid, files, env=None):
-        return AssetsBundleMultiWebsite(xmlid, files, env=env)
+    defget_asset_bundle(self,xmlid,files,env=None):
+        returnAssetsBundleMultiWebsite(xmlid,files,env=env)
 
-    def _post_processing_att(self, tagName, atts, options):
-        if atts.get('data-no-post-process'):
-            return atts
+    def_post_processing_att(self,tagName,atts,options):
+        ifatts.get('data-no-post-process'):
+            returnatts
 
-        atts = super(QWeb, self)._post_processing_att(tagName, atts, options)
+        atts=super(QWeb,self)._post_processing_att(tagName,atts,options)
 
-        if tagName == 'img' and 'loading' not in atts:
-            atts['loading'] = 'lazy'  # default is auto
+        iftagName=='img'and'loading'notinatts:
+            atts['loading']='lazy' #defaultisauto
 
-        if options.get('inherit_branding') or options.get('rendering_bundle') or \
-           options.get('edit_translations') or options.get('debug') or (request and request.session.debug):
-            return atts
+        ifoptions.get('inherit_branding')oroptions.get('rendering_bundle')or\
+           options.get('edit_translations')oroptions.get('debug')or(requestandrequest.session.debug):
+            returnatts
 
-        website = ir_http.get_request_website()
-        if not website and options.get('website_id'):
-            website = self.env['website'].browse(options['website_id'])
+        website=ir_http.get_request_website()
+        ifnotwebsiteandoptions.get('website_id'):
+            website=self.env['website'].browse(options['website_id'])
 
-        if not website:
-            return atts
+        ifnotwebsite:
+            returnatts
 
-        name = self.URL_ATTRS.get(tagName)
-        if request and name and name in atts:
-            atts[name] = url_for(atts[name])
+        name=self.URL_ATTRS.get(tagName)
+        ifrequestandnameandnameinatts:
+            atts[name]=url_for(atts[name])
 
-        if not website.cdn_activated:
-            return atts
+        ifnotwebsite.cdn_activated:
+            returnatts
 
-        data_name = f'data-{name}'
-        if name and (name in atts or data_name in atts):
-            atts = OrderedDict(atts)
-            if name in atts:
-                atts[name] = website.get_cdn_url(atts[name])
-            if data_name in atts:
-                atts[data_name] = website.get_cdn_url(atts[data_name])
-        if isinstance(atts.get('style'), str) and 'background-image' in atts['style']:
-            atts = OrderedDict(atts)
-            atts['style'] = re_background_image.sub(lambda m: '%s%s' % (m.group(1), website.get_cdn_url(m.group(2))), atts['style'])
+        data_name=f'data-{name}'
+        ifnameand(nameinattsordata_nameinatts):
+            atts=OrderedDict(atts)
+            ifnameinatts:
+                atts[name]=website.get_cdn_url(atts[name])
+            ifdata_nameinatts:
+                atts[data_name]=website.get_cdn_url(atts[data_name])
+        ifisinstance(atts.get('style'),str)and'background-image'inatts['style']:
+            atts=OrderedDict(atts)
+            atts['style']=re_background_image.sub(lambdam:'%s%s'%(m.group(1),website.get_cdn_url(m.group(2))),atts['style'])
 
-        return atts
+        returnatts

@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-    <record id="view_res_country_city_extended_form" model="ir.ui.view">
-        <field name="model">res.country</field>
-        <field name="inherit_id" ref="base.view_country_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
-                <button name="%(action_res_city_tree)d"
+    <recordid="view_res_country_city_extended_form"model="ir.ui.view">
+        <fieldname="model">res.country</field>
+        <fieldname="inherit_id"ref="base.view_country_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[hasclass('oe_button_box')]"position="inside">
+                <buttonname="%(action_res_city_tree)d"
                     class="oe_stat_button"
                     icon="fa-globe"
                     type="action"
-                    context="{'default_country_id': active_id, 'search_default_country_id': active_id}"
+                    context="{'default_country_id':active_id,'search_default_country_id':active_id}"
                     string="Cities">
                 </button>
             </xpath>
-            <xpath expr="//field[@name='phone_code']" position="after">
-                <field name="enforce_cities"/>
+            <xpathexpr="//field[@name='phone_code']"position="after">
+                <fieldname="enforce_cities"/>
             </xpath>
         </field>
     </record>

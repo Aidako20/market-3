@@ -1,20 +1,20 @@
-flectra.define('l10n_fr_pos_cert.NumpadWidget', function(require) {
-    'use strict';
+flectra.define('l10n_fr_pos_cert.NumpadWidget',function(require){
+    'usestrict';
 
-    const NumpadWidget = require('point_of_sale.NumpadWidget');
-    const Registries = require('point_of_sale.Registries');
+    constNumpadWidget=require('point_of_sale.NumpadWidget');
+    constRegistries=require('point_of_sale.Registries');
 
-    const PosFrNumpadWidget = NumpadWidget => class extends NumpadWidget {
-        get hasPriceControlRights() {
-            if (this.env.pos.is_french_country()) {
-                return false;
-            } else {
-                return super.hasPriceControlRights;
+    constPosFrNumpadWidget=NumpadWidget=>classextendsNumpadWidget{
+        gethasPriceControlRights(){
+            if(this.env.pos.is_french_country()){
+                returnfalse;
+            }else{
+                returnsuper.hasPriceControlRights;
             }
         }
     };
 
-    Registries.Component.extend(NumpadWidget, PosFrNumpadWidget);
+    Registries.Component.extend(NumpadWidget,PosFrNumpadWidget);
 
-    return NumpadWidget;
+    returnNumpadWidget;
  });

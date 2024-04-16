@@ -1,77 +1,77 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <!-- Sample stage-related template -->
-        <record id="mail_template_data_project_task" model="mail.template">
-            <field name="name">Task: Reception Acknowledgment</field>
-            <field name="model_id" ref="project.model_project_task"/>
-            <field name="subject">Reception of ${object.name}</field>
-            <field name="use_default_to" eval="True"/>
-            <field name="body_html" type="html">
+    <datanoupdate="1">
+        <!--Samplestage-relatedtemplate-->
+        <recordid="mail_template_data_project_task"model="mail.template">
+            <fieldname="name">Task:ReceptionAcknowledgment</field>
+            <fieldname="model_id"ref="project.model_project_task"/>
+            <fieldname="subject">Receptionof${object.name}</field>
+            <fieldname="use_default_to"eval="True"/>
+            <fieldname="body_html"type="html">
 <div>
-    Dear ${object.partner_id.name or 'customer'},<br/>
-    Thank you for your enquiry.<br />
-    If you have any questions, please let us know.
+    Dear${object.partner_id.nameor'customer'},<br/>
+    Thankyouforyourenquiry.<br/>
+    Ifyouhaveanyquestions,pleaseletusknow.
     <br/><br/>
-    Thank you,
-    % if user.signature
-        <br />
-        ${user.signature | safe}
-    % endif
+    Thankyou,
+    %ifuser.signature
+        <br/>
+        ${user.signature|safe}
+    %endif
 </div>
         </field>
-            <field name="lang">${object.partner_id.lang}</field>
-            <field name="auto_delete" eval="True"/>
+            <fieldname="lang">${object.partner_id.lang}</field>
+            <fieldname="auto_delete"eval="True"/>
         </record>
 
-        <!-- Mail sent to request a rating for a task -->
-        <record id="rating_project_request_email_template" model="mail.template">
-            <field name="name">Task: Rating Request</field>
-            <field name="model_id" ref="project.model_project_task"/>
-            <field name="subject">${object.project_id.company_id.name}: Satisfaction Survey</field>
-            <field name="email_from">${(object.rating_get_rated_partner_id().email_formatted if object.rating_get_rated_partner_id() else user.email_formatted) | safe}</field>
-            <field name="partner_to" >${object.rating_get_partner_id().id}</field>
-            <field name="body_html" type="html">
+        <!--Mailsenttorequestaratingforatask-->
+        <recordid="rating_project_request_email_template"model="mail.template">
+            <fieldname="name">Task:RatingRequest</field>
+            <fieldname="model_id"ref="project.model_project_task"/>
+            <fieldname="subject">${object.project_id.company_id.name}:SatisfactionSurvey</field>
+            <fieldname="email_from">${(object.rating_get_rated_partner_id().email_formattedifobject.rating_get_rated_partner_id()elseuser.email_formatted)|safe}</field>
+            <fieldname="partner_to">${object.rating_get_partner_id().id}</field>
+            <fieldname="body_html"type="html">
 <div>
-    % set access_token = object.rating_get_access_token()
-    % set partner = object.rating_get_partner_id()
-    <table border="0" cellpadding="0" cellspacing="0" width="590" style="width:100%; margin:0px auto;">
+    %setaccess_token=object.rating_get_access_token()
+    %setpartner=object.rating_get_partner_id()
+    <tableborder="0"cellpadding="0"cellspacing="0"width="590"style="width:100%;margin:0pxauto;">
     <tbody>
-        <tr><td valign="top" style="font-size: 13px;">
-            % if partner.name:
-                Hello ${partner.name},<br/><br/>
-            % else:
+        <tr><tdvalign="top"style="font-size:13px;">
+            %ifpartner.name:
+                Hello${partner.name},<br/><br/>
+            %else:
                 Hello,<br/><br/>
-            % endif
-            Please take a moment to rate our services related to the task "<strong>${object.name}</strong>"
-            % if object.rating_get_rated_partner_id().name:
-                assigned to <strong>${object.rating_get_rated_partner_id().name}</strong>.<br/>
-            % else:
+            %endif
+            Pleasetakeamomenttorateourservicesrelatedtothetask"<strong>${object.name}</strong>"
+            %ifobject.rating_get_rated_partner_id().name:
+                assignedto<strong>${object.rating_get_rated_partner_id().name}</strong>.<br/>
+            %else:
                 .<br/>
-            % endif
+            %endif
         </td></tr>
-        <tr><td style="text-align: center;">
-            <table border="0" cellpadding="0" cellspacing="0" width="590" summary="o_mail_notification" style="width:100%; margin: 32px 0px 32px 0px;">
-                <tr><td style="font-size: 13px;">
-                    <strong>Tell us how you feel about our service</strong><br/>
-                    <span style="text-color: #888888">(click on one of these smileys)</span>
+        <tr><tdstyle="text-align:center;">
+            <tableborder="0"cellpadding="0"cellspacing="0"width="590"summary="o_mail_notification"style="width:100%;margin:32px0px32px0px;">
+                <tr><tdstyle="font-size:13px;">
+                    <strong>Tellushowyoufeelaboutourservice</strong><br/>
+                    <spanstyle="text-color:#888888">(clickononeofthesesmileys)</span>
                 </td></tr>
-                <tr><td style="font-size: 13px;">
-                    <table style="width:100%;text-align:center;">
+                <tr><tdstyle="font-size:13px;">
+                    <tablestyle="width:100%;text-align:center;">
                         <tr>
                             <td>
-                                <a href="/rate/${access_token}/5">
-                                    <img alt="Satisfied" src="/rating/static/src/img/rating_5.png" title="Satisfied"/>
+                                <ahref="/rate/${access_token}/5">
+                                    <imgalt="Satisfied"src="/rating/static/src/img/rating_5.png"title="Satisfied"/>
                                 </a>
                             </td>
                             <td>
-                                <a href="/rate/${access_token}/3">
-                                    <img alt="Not satisfied" src="/rating/static/src/img/rating_3.png" title="Not satisfied"/>
+                                <ahref="/rate/${access_token}/3">
+                                    <imgalt="Notsatisfied"src="/rating/static/src/img/rating_3.png"title="Notsatisfied"/>
                                 </a>
                             </td>
                             <td>
-                                <a href="/rate/${access_token}/1">
-                                    <img alt="Highly Dissatisfied" src="/rating/static/src/img/rating_1.png" title="Highly Dissatisfied"/>
+                                <ahref="/rate/${access_token}/1">
+                                    <imgalt="HighlyDissatisfied"src="/rating/static/src/img/rating_1.png"title="HighlyDissatisfied"/>
                                 </a>
                             </td>
                         </tr>
@@ -79,21 +79,21 @@
                 </td></tr>
             </table>
         </td></tr>
-        <tr><td valign="top" style="font-size: 13px;">
-            We appreciate your feedback. It helps us to improve continuously.
-            % if object.project_id.rating_status == 'stage':
-                <br/><span style="margin: 0px 0px 0px 0px; font-size: 12px; opacity: 0.5; color: #454748;">This customer survey has been sent because your task has been moved to the stage <b>${object.stage_id.name}</b></span>
-            % endif
-            % if object.project_id.rating_status == 'periodic':
-                <br/><span style="margin: 0px 0px 0px 0px; font-size: 12px; opacity: 0.5; color: #454748;">This customer survey is sent <b>${object.project_id.rating_status_period}</b> as long as the task is in the <b>${object.stage_id.name}</b> stage.</span>
-            % endif
+        <tr><tdvalign="top"style="font-size:13px;">
+            Weappreciateyourfeedback.Ithelpsustoimprovecontinuously.
+            %ifobject.project_id.rating_status=='stage':
+                <br/><spanstyle="margin:0px0px0px0px;font-size:12px;opacity:0.5;color:#454748;">Thiscustomersurveyhasbeensentbecauseyourtaskhasbeenmovedtothestage<b>${object.stage_id.name}</b></span>
+            %endif
+            %ifobject.project_id.rating_status=='periodic':
+                <br/><spanstyle="margin:0px0px0px0px;font-size:12px;opacity:0.5;color:#454748;">Thiscustomersurveyissent<b>${object.project_id.rating_status_period}</b>aslongasthetaskisinthe<b>${object.stage_id.name}</b>stage.</span>
+            %endif
         </td></tr>
     </tbody>
     </table>
 </div>
             </field>
-            <field name="lang">${object.rating_get_partner_id().lang}</field>
-            <field name="auto_delete" eval="True"/>
+            <fieldname="lang">${object.rating_get_partner_id().lang}</field>
+            <fieldname="auto_delete"eval="True"/>
         </record>
     </data>
 </flectra>

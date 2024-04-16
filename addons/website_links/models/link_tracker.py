@@ -1,23 +1,23 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, _
+fromflectraimportmodels,_
 
-from werkzeug import urls
+fromwerkzeugimporturls
 
 
-class LinkTracker(models.Model):
-    _inherit = ['link.tracker']
+classLinkTracker(models.Model):
+    _inherit=['link.tracker']
 
-    def action_visit_page_statistics(self):
-        return {
-            'name': _("Visit Webpage Statistics"),
-            'type': 'ir.actions.act_url',
-            'url': '%s+' % (self.short_url),
-            'target': 'new',
+    defaction_visit_page_statistics(self):
+        return{
+            'name':_("VisitWebpageStatistics"),
+            'type':'ir.actions.act_url',
+            'url':'%s+'%(self.short_url),
+            'target':'new',
         }
 
-    def _compute_short_url_host(self):
-        for tracker in self:
-            base_url = self.env['website'].get_current_website().get_base_url()
-            tracker.short_url_host = urls.url_join(base_url, '/r/')
+    def_compute_short_url_host(self):
+        fortrackerinself:
+            base_url=self.env['website'].get_current_website().get_base_url()
+            tracker.short_url_host=urls.url_join(base_url,'/r/')

@@ -1,646 +1,646 @@
-flectra.define('web.filter_menu_generator_tests', function (require) {
-    "use strict";
+flectra.define('web.filter_menu_generator_tests',function(require){
+    "usestrict";
 
-    const Domain = require('web.Domain');
-    const CustomFilterItem = require('web.CustomFilterItem');
-    const ActionModel = require('web/static/src/js/views/action_model.js');
-    const pyUtils = require('web.py_utils');
-    const testUtils = require('web.test_utils');
+    constDomain=require('web.Domain');
+    constCustomFilterItem=require('web.CustomFilterItem');
+    constActionModel=require('web/static/src/js/views/action_model.js');
+    constpyUtils=require('web.py_utils');
+    consttestUtils=require('web.test_utils');
 
-    const cpHelpers = testUtils.controlPanel;
-    const { createComponent } = testUtils;
+    constcpHelpers=testUtils.controlPanel;
+    const{createComponent}=testUtils;
 
-    QUnit.module('Components', {
-        beforeEach: function () {
-            this.fields = {
-                date_field: { name: 'date_field', string: "A date", type: 'date', searchable: true },
-                date_time_field: { name: 'date_time_field', string: "DateTime", type: 'datetime', searchable: true },
-                boolean_field: { name: 'boolean_field', string: "Boolean Field", type: 'boolean', default: true, searchable: true },
-                binary_field: { name: 'binary_field', string: "Binary Field", type: 'binary', searchable: true },
-                char_field: { name: 'char_field', string: "Char Field", type: 'char', default: "foo", trim: true, searchable: true },
-                float_field: { name: 'float_field', string: "Floaty McFloatface", type: 'float', searchable: true },
-                color: { name: 'color', string: "Color", type: 'selection', selection: [['black', "Black"], ['white', "White"]], searchable: true },
+    QUnit.module('Components',{
+        beforeEach:function(){
+            this.fields={
+                date_field:{name:'date_field',string:"Adate",type:'date',searchable:true},
+                date_time_field:{name:'date_time_field',string:"DateTime",type:'datetime',searchable:true},
+                boolean_field:{name:'boolean_field',string:"BooleanField",type:'boolean',default:true,searchable:true},
+                binary_field:{name:'binary_field',string:"BinaryField",type:'binary',searchable:true},
+                char_field:{name:'char_field',string:"CharField",type:'char',default:"foo",trim:true,searchable:true},
+                float_field:{name:'float_field',string:"FloatyMcFloatface",type:'float',searchable:true},
+                color:{name:'color',string:"Color",type:'selection',selection:[['black',"Black"],['white',"White"]],searchable:true},
             };
         },
-    }, function () {
+    },function(){
 
         QUnit.module('CustomFilterItem');
 
-        QUnit.test('basic rendering', async function (assert) {
+        QUnit.test('basicrendering',asyncfunction(assert){
             assert.expect(17);
 
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                env: {
-                    searchModel: new ActionModel(),
+                env:{
+                    searchModel:newActionModel(),
                 },
             });
 
-            assert.strictEqual(cfi.el.innerText.trim(), "Add Custom Filter");
-            assert.hasClass(cfi.el, 'o_generator_menu');
-            assert.strictEqual(cfi.el.children.length, 1);
+            assert.strictEqual(cfi.el.innerText.trim(),"AddCustomFilter");
+            assert.hasClass(cfi.el,'o_generator_menu');
+            assert.strictEqual(cfi.el.children.length,1);
 
-            await cpHelpers.toggleAddCustomFilter(cfi);
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
 
-            // Single condition
-            assert.containsOnce(cfi, 'div.o_filter_condition');
-            assert.containsOnce(cfi, 'div.o_filter_condition > select.o_generator_menu_field');
-            assert.containsOnce(cfi, 'div.o_filter_condition > select.o_generator_menu_operator');
-            assert.containsOnce(cfi, 'div.o_filter_condition > span.o_generator_menu_value');
-            assert.containsNone(cfi, 'div.o_filter_condition .o_or_filter');
-            assert.containsNone(cfi, 'div.o_filter_condition .o_generator_menu_delete');
+            //Singlecondition
+            assert.containsOnce(cfi,'div.o_filter_condition');
+            assert.containsOnce(cfi,'div.o_filter_condition>select.o_generator_menu_field');
+            assert.containsOnce(cfi,'div.o_filter_condition>select.o_generator_menu_operator');
+            assert.containsOnce(cfi,'div.o_filter_condition>span.o_generator_menu_value');
+            assert.containsNone(cfi,'div.o_filter_condition.o_or_filter');
+            assert.containsNone(cfi,'div.o_filter_condition.o_generator_menu_delete');
 
-            // no deletion allowed on single condition
-            assert.containsNone(cfi, 'div.o_filter_condition > i.o_generator_menu_delete');
+            //nodeletionallowedonsinglecondition
+            assert.containsNone(cfi,'div.o_filter_condition>i.o_generator_menu_delete');
 
-            // Buttons
-            assert.containsOnce(cfi, 'div.o_add_filter_menu');
-            assert.containsOnce(cfi, 'div.o_add_filter_menu > button.o_apply_filter');
-            assert.containsOnce(cfi, 'div.o_add_filter_menu > button.o_add_condition');
+            //Buttons
+            assert.containsOnce(cfi,'div.o_add_filter_menu');
+            assert.containsOnce(cfi,'div.o_add_filter_menu>button.o_apply_filter');
+            assert.containsOnce(cfi,'div.o_add_filter_menu>button.o_add_condition');
 
-            assert.containsOnce(cfi, 'div.o_filter_condition');
+            assert.containsOnce(cfi,'div.o_filter_condition');
 
-            await testUtils.dom.click('button.o_add_condition');
+            awaittestUtils.dom.click('button.o_add_condition');
 
-            assert.containsN(cfi, 'div.o_filter_condition', 2);
-            assert.containsOnce(cfi, 'div.o_filter_condition .o_or_filter');
-            assert.containsN(cfi, 'div.o_filter_condition .o_generator_menu_delete', 2);
+            assert.containsN(cfi,'div.o_filter_condition',2);
+            assert.containsOnce(cfi,'div.o_filter_condition.o_or_filter');
+            assert.containsN(cfi,'div.o_filter_condition.o_generator_menu_delete',2);
 
             cfi.destroy();
         });
 
-        QUnit.test('binary field: basic search', async function (assert) {
+        QUnit.test('binaryfield:basicsearch',asyncfunction(assert){
             assert.expect(4);
 
-            let expectedFilters;
-            class MockedSearchModel extends ActionModel {
-                dispatch(method, ...args) {
-                    assert.strictEqual(method, 'createNewFilters');
-                    const preFilters = args[0];
-                    assert.deepEqual(preFilters, expectedFilters);
+            letexpectedFilters;
+            classMockedSearchModelextendsActionModel{
+                dispatch(method,...args){
+                    assert.strictEqual(method,'createNewFilters');
+                    constpreFilters=args[0];
+                    assert.deepEqual(preFilters,expectedFilters);
                 }
             }
-            const searchModel = new MockedSearchModel();
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constsearchModel=newMockedSearchModel();
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                env: { searchModel },
+                env:{searchModel},
             });
 
-            // Default value
-            expectedFilters = [{
-                description: 'Binary Field is set',
-                domain: '[["binary_field","!=",False]]',
-                type: 'filter',
+            //Defaultvalue
+            expectedFilters=[{
+                description:'BinaryFieldisset',
+                domain:'[["binary_field","!=",False]]',
+                type:'filter',
             }];
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'), 'binary_field');
-            await cpHelpers.applyFilter(cfi);
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'),'binary_field');
+            awaitcpHelpers.applyFilter(cfi);
 
-            // Updated value
-            expectedFilters = [{
-                description: 'Binary Field is not set',
-                domain: '[["binary_field","=",False]]',
-                type: 'filter',
+            //Updatedvalue
+            expectedFilters=[{
+                description:'BinaryFieldisnotset',
+                domain:'[["binary_field","=",False]]',
+                type:'filter',
             }];
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'), 'binary_field');
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_operator'), '=');
-            await cpHelpers.applyFilter(cfi);
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'),'binary_field');
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_operator'),'=');
+            awaitcpHelpers.applyFilter(cfi);
 
             cfi.destroy();
         });
 
-        QUnit.test('selection field: default and updated value', async function (assert) {
+        QUnit.test('selectionfield:defaultandupdatedvalue',asyncfunction(assert){
             assert.expect(4);
 
-            let expectedFilters;
-            class MockedSearchModel extends ActionModel {
-                dispatch(method, ...args) {
-                    assert.strictEqual(method, 'createNewFilters');
-                    const preFilters = args[0];
-                    assert.deepEqual(preFilters, expectedFilters);
+            letexpectedFilters;
+            classMockedSearchModelextendsActionModel{
+                dispatch(method,...args){
+                    assert.strictEqual(method,'createNewFilters');
+                    constpreFilters=args[0];
+                    assert.deepEqual(preFilters,expectedFilters);
                 }
             }
-            const searchModel = new MockedSearchModel();
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constsearchModel=newMockedSearchModel();
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                env: { searchModel },
+                env:{searchModel},
             });
 
-            // Default value
-            expectedFilters = [{
-                description: 'Color is "Black"',
-                domain: '[["color","=","black"]]',
-                type: 'filter',
+            //Defaultvalue
+            expectedFilters=[{
+                description:'Coloris"Black"',
+                domain:'[["color","=","black"]]',
+                type:'filter',
             }];
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'), 'color');
-            await cpHelpers.applyFilter(cfi);
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'),'color');
+            awaitcpHelpers.applyFilter(cfi);
 
-            // Updated value
-            expectedFilters = [{
-                description: 'Color is "White"',
-                domain: '[["color","=","white"]]',
-                type: 'filter',
+            //Updatedvalue
+            expectedFilters=[{
+                description:'Coloris"White"',
+                domain:'[["color","=","white"]]',
+                type:'filter',
             }];
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'), 'color');
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_value select'), 'white');
-            await cpHelpers.applyFilter(cfi);
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'),'color');
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_valueselect'),'white');
+            awaitcpHelpers.applyFilter(cfi);
 
             cfi.destroy();
         });
-        QUnit.test('selection field: no value', async function (assert) {
+        QUnit.test('selectionfield:novalue',asyncfunction(assert){
             assert.expect(2);
 
-            this.fields.color.selection = [];
-            let expectedFilters;
-            class MockedSearchModel extends ActionModel {
-                dispatch(method, ...args) {
-                    assert.strictEqual(method, 'createNewFilters');
-                    const preFilters = args[0];
-                    assert.deepEqual(preFilters, expectedFilters);
+            this.fields.color.selection=[];
+            letexpectedFilters;
+            classMockedSearchModelextendsActionModel{
+                dispatch(method,...args){
+                    assert.strictEqual(method,'createNewFilters');
+                    constpreFilters=args[0];
+                    assert.deepEqual(preFilters,expectedFilters);
                 }
             }
-            const searchModel = new MockedSearchModel();
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constsearchModel=newMockedSearchModel();
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                env: { searchModel },
+                env:{searchModel},
             });
 
-            // Default value
-            expectedFilters = [{
-                description: 'Color is ""',
-                domain: '[["color","=",""]]',
-                type: 'filter',
+            //Defaultvalue
+            expectedFilters=[{
+                description:'Coloris""',
+                domain:'[["color","=",""]]',
+                type:'filter',
             }];
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'), 'color');
-            await cpHelpers.applyFilter(cfi);
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'),'color');
+            awaitcpHelpers.applyFilter(cfi);
 
             cfi.destroy();
         })
 
-        QUnit.test('adding a simple filter works', async function (assert) {
+        QUnit.test('addingasimplefilterworks',asyncfunction(assert){
             assert.expect(6);
 
-            delete this.fields.date_field;
+            deletethis.fields.date_field;
 
-            class MockedSearchModel extends ActionModel {
-                dispatch(method, ...args) {
-                    assert.strictEqual(method, 'createNewFilters');
-                    const preFilters = args[0];
-                    const preFilter = preFilters[0];
-                    assert.strictEqual(preFilter.type, 'filter');
-                    assert.strictEqual(preFilter.description, 'Boolean Field is true');
-                    assert.strictEqual(preFilter.domain, '[["boolean_field","=",True]]');
+            classMockedSearchModelextendsActionModel{
+                dispatch(method,...args){
+                    assert.strictEqual(method,'createNewFilters');
+                    constpreFilters=args[0];
+                    constpreFilter=preFilters[0];
+                    assert.strictEqual(preFilter.type,'filter');
+                    assert.strictEqual(preFilter.description,'BooleanFieldistrue');
+                    assert.strictEqual(preFilter.domain,'[["boolean_field","=",True]]');
                 }
             }
-            const searchModel = new MockedSearchModel();
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constsearchModel=newMockedSearchModel();
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                env: { searchModel },
+                env:{searchModel},
             });
 
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'), 'boolean_field');
-            await cpHelpers.applyFilter(cfi);
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'),'boolean_field');
+            awaitcpHelpers.applyFilter(cfi);
 
-            // The only thing visible should be the button 'Add Custome Filter';
-            assert.strictEqual(cfi.el.children.length, 1);
-            assert.containsOnce(cfi, 'button.o_add_custom_filter');
+            //Theonlythingvisibleshouldbethebutton'AddCustomeFilter';
+            assert.strictEqual(cfi.el.children.length,1);
+            assert.containsOnce(cfi,'button.o_add_custom_filter');
 
             cfi.destroy();
         });
 
-        QUnit.test('filtering by ID interval works', async function (assert) {
+        QUnit.test('filteringbyIDintervalworks',asyncfunction(assert){
             assert.expect(2);
-            this.fields.id_field = { name: 'id_field', string: "ID", type: "id", searchable: true };
+            this.fields.id_field={name:'id_field',string:"ID",type:"id",searchable:true};
 
-            const expectedDomains = [
-                [['id_field','>', 10]],
-                [['id_field','<=', 20]],
+            constexpectedDomains=[
+                [['id_field','>',10]],
+                [['id_field','<=',20]],
             ];
 
-            class MockedSearchModel extends ActionModel {
-                dispatch(method, ...args) {
-                    assert.strictEqual(method, 'createNewFilters');
-                    const preFilters = args[0];
-                    const preFilter = preFilters[0];
-                    // this step combine a tokenization/parsing followed by a string formatting
-                    let domain = pyUtils.assembleDomains([preFilter.domain]);
-                    domain = Domain.prototype.stringToArray(domain);
-                    assert.deepEqual(domain, expectedDomains.shift());
+            classMockedSearchModelextendsActionModel{
+                dispatch(method,...args){
+                    assert.strictEqual(method,'createNewFilters');
+                    constpreFilters=args[0];
+                    constpreFilter=preFilters[0];
+                    //thisstepcombineatokenization/parsingfollowedbyastringformatting
+                    letdomain=pyUtils.assembleDomains([preFilter.domain]);
+                    domain=Domain.prototype.stringToArray(domain);
+                    assert.deepEqual(domain,expectedDomains.shift());
                 }
             }
-            const searchModel = new MockedSearchModel();
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constsearchModel=newMockedSearchModel();
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                env: { searchModel },
+                env:{searchModel},
             });
 
-            async function testValue(operator, value) {
-                // open filter menu generator, select ID field, switch operator, type value, then click apply
-                await cpHelpers.toggleAddCustomFilter(cfi);
-                await testUtils.fields.editSelect(cfi.el.querySelector('select.o_generator_menu_field'), 'id_field');
-                await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_operator'), operator);
-                await testUtils.fields.editInput(cfi.el.querySelector(
-                    'div.o_filter_condition > span.o_generator_menu_value input'),
+            asyncfunctiontestValue(operator,value){
+                //openfiltermenugenerator,selectIDfield,switchoperator,typevalue,thenclickapply
+                awaitcpHelpers.toggleAddCustomFilter(cfi);
+                awaittestUtils.fields.editSelect(cfi.el.querySelector('select.o_generator_menu_field'),'id_field');
+                awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_operator'),operator);
+                awaittestUtils.fields.editInput(cfi.el.querySelector(
+                    'div.o_filter_condition>span.o_generator_menu_valueinput'),
                     value
                 );
-                await cpHelpers.applyFilter(cfi);
+                awaitcpHelpers.applyFilter(cfi);
             }
 
-            for (const domain of expectedDomains) {
-                await testValue(domain[0][1], domain[0][2]);
+            for(constdomainofexpectedDomains){
+                awaittestValue(domain[0][1],domain[0][2]);
             }
 
             cfi.destroy();
         });
 
 
-        QUnit.test('commit search with an extended proposition with field char does not cause a crash', async function (assert) {
+        QUnit.test('commitsearchwithanextendedpropositionwithfieldchardoesnotcauseacrash',asyncfunction(assert){
             assert.expect(12);
 
-            this.fields.many2one_field = { name: 'many2one_field', string: "Trululu", type: "many2one", searchable: true };
-            const expectedDomains = [
-                [['many2one_field', 'ilike', `a`]],
-                [['many2one_field', 'ilike', `"a"`]],
-                [['many2one_field', 'ilike', `'a'`]],
-                [['many2one_field', 'ilike', `'`]],
-                [['many2one_field', 'ilike', `"`]],
-                [['many2one_field', 'ilike', `\\`]],
+            this.fields.many2one_field={name:'many2one_field',string:"Trululu",type:"many2one",searchable:true};
+            constexpectedDomains=[
+                [['many2one_field','ilike',`a`]],
+                [['many2one_field','ilike',`"a"`]],
+                [['many2one_field','ilike',`'a'`]],
+                [['many2one_field','ilike',`'`]],
+                [['many2one_field','ilike',`"`]],
+                [['many2one_field','ilike',`\\`]],
             ];
-            const testedValues = [`a`, `"a"`, `'a'`, `'`, `"`, `\\`];
+            consttestedValues=[`a`,`"a"`,`'a'`,`'`,`"`,`\\`];
 
-            class MockedSearchModel extends ActionModel {
-                dispatch(method, ...args) {
-                    assert.strictEqual(method, 'createNewFilters');
-                    const preFilters = args[0];
-                    const preFilter = preFilters[0];
-                    // this step combine a tokenization/parsing followed by a string formatting
-                    let domain = pyUtils.assembleDomains([preFilter.domain]);
-                    domain = Domain.prototype.stringToArray(domain);
-                    assert.deepEqual(domain, expectedDomains.shift());
+            classMockedSearchModelextendsActionModel{
+                dispatch(method,...args){
+                    assert.strictEqual(method,'createNewFilters');
+                    constpreFilters=args[0];
+                    constpreFilter=preFilters[0];
+                    //thisstepcombineatokenization/parsingfollowedbyastringformatting
+                    letdomain=pyUtils.assembleDomains([preFilter.domain]);
+                    domain=Domain.prototype.stringToArray(domain);
+                    assert.deepEqual(domain,expectedDomains.shift());
                 }
             }
-            const searchModel = new MockedSearchModel();
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constsearchModel=newMockedSearchModel();
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                env: { searchModel },
+                env:{searchModel},
             });
 
-            async function testValue(value) {
-                // open filter menu generator, select trululu field and enter string `a`, then click apply
-                await cpHelpers.toggleAddCustomFilter(cfi);
-                await testUtils.fields.editSelect(cfi.el.querySelector('select.o_generator_menu_field'), 'many2one_field');
-                await testUtils.fields.editInput(cfi.el.querySelector(
-                    'div.o_filter_condition > span.o_generator_menu_value input'),
+            asyncfunctiontestValue(value){
+                //openfiltermenugenerator,selecttrululufieldandenterstring`a`,thenclickapply
+                awaitcpHelpers.toggleAddCustomFilter(cfi);
+                awaittestUtils.fields.editSelect(cfi.el.querySelector('select.o_generator_menu_field'),'many2one_field');
+                awaittestUtils.fields.editInput(cfi.el.querySelector(
+                    'div.o_filter_condition>span.o_generator_menu_valueinput'),
                     value
                 );
-                await cpHelpers.applyFilter(cfi);
+                awaitcpHelpers.applyFilter(cfi);
             }
 
-            for (const value of testedValues) {
-                await testValue(value);
+            for(constvalueoftestedValues){
+                awaittestValue(value);
             }
 
-            delete ActionModel.registry.map.testExtension;
+            deleteActionModel.registry.map.testExtension;
             cfi.destroy();
         });
 
-        QUnit.test('custom filter datetime with equal operator', async function (assert) {
+        QUnit.test('customfilterdatetimewithequaloperator',asyncfunction(assert){
             assert.expect(5);
 
-            class MockedSearchModel extends ActionModel {
-                dispatch(method, ...args) {
-                    assert.strictEqual(method, 'createNewFilters');
-                    const preFilters = args[0];
-                    const preFilter = preFilters[0];
+            classMockedSearchModelextendsActionModel{
+                dispatch(method,...args){
+                    assert.strictEqual(method,'createNewFilters');
+                    constpreFilters=args[0];
+                    constpreFilter=preFilters[0];
                     assert.strictEqual(preFilter.description,
-                        'DateTime is equal to "02/22/2017 11:00:00"',
-                        "description should be in localized format");
+                        'DateTimeisequalto"02/22/201711:00:00"',
+                        "descriptionshouldbeinlocalizedformat");
                     assert.deepEqual(preFilter.domain,
-                        '[["date_time_field","=","2017-02-22 15:00:00"]]',
-                        "domain should be in UTC format");
+                        '[["date_time_field","=","2017-02-2215:00:00"]]',
+                        "domainshouldbeinUTCformat");
                     }
                 }
-            const searchModel = new MockedSearchModel();
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constsearchModel=newMockedSearchModel();
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                session: {
-                    getTZOffset() {
-                        return -240;
+                session:{
+                    getTZOffset(){
+                        return-240;
                     },
                 },
-                env: { searchModel },
+                env:{searchModel},
             });
 
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'), 'date_time_field');
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'),'date_time_field');
 
-            assert.strictEqual(cfi.el.querySelector('.o_generator_menu_field').value, 'date_time_field');
-            assert.strictEqual(cfi.el.querySelector('.o_generator_menu_operator').value, 'between');
+            assert.strictEqual(cfi.el.querySelector('.o_generator_menu_field').value,'date_time_field');
+            assert.strictEqual(cfi.el.querySelector('.o_generator_menu_operator').value,'between');
 
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_operator'), '=');
-            await testUtils.fields.editSelect(cfi.el.querySelector('div.o_filter_condition > span.o_generator_menu_value input'), '02/22/2017 11:00:00'); // in TZ
-            await cpHelpers.applyFilter(cfi);
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_operator'),'=');
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('div.o_filter_condition>span.o_generator_menu_valueinput'),'02/22/201711:00:00');//inTZ
+            awaitcpHelpers.applyFilter(cfi);
 
             cfi.destroy();
         });
 
-        QUnit.test('custom filter datetime between operator', async function (assert) {
+        QUnit.test('customfilterdatetimebetweenoperator',asyncfunction(assert){
             assert.expect(5);
 
-            class MockedSearchModel extends ActionModel {
-                dispatch(method, ...args) {
-                    assert.strictEqual(method, 'createNewFilters');
-                    const preFilters = args[0];
-                    const preFilter = preFilters[0];
+            classMockedSearchModelextendsActionModel{
+                dispatch(method,...args){
+                    assert.strictEqual(method,'createNewFilters');
+                    constpreFilters=args[0];
+                    constpreFilter=preFilters[0];
                     assert.strictEqual(preFilter.description,
-                        'DateTime is between "02/22/2017 11:00:00 and 02/22/2017 17:00:00"',
-                        "description should be in localized format");
+                        'DateTimeisbetween"02/22/201711:00:00and02/22/201717:00:00"',
+                        "descriptionshouldbeinlocalizedformat");
                     assert.deepEqual(preFilter.domain,
-                        '[["date_time_field",">=","2017-02-22 15:00:00"]' +
-                        ',["date_time_field","<=","2017-02-22 21:00:00"]]',
-                        "domain should be in UTC format");
+                        '[["date_time_field",">=","2017-02-2215:00:00"]'+
+                        ',["date_time_field","<=","2017-02-2221:00:00"]]',
+                        "domainshouldbeinUTCformat");
                 }
             }
-            const searchModel = new MockedSearchModel();
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constsearchModel=newMockedSearchModel();
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                session: {
-                    getTZOffset() {
-                        return -240;
+                session:{
+                    getTZOffset(){
+                        return-240;
                     },
                 },
-                env: { searchModel },
+                env:{searchModel},
             });
 
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'), 'date_time_field');
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'),'date_time_field');
 
-            assert.strictEqual(cfi.el.querySelector('.o_generator_menu_field').value, 'date_time_field');
-            assert.strictEqual(cfi.el.querySelector('.o_generator_menu_operator').value, 'between');
+            assert.strictEqual(cfi.el.querySelector('.o_generator_menu_field').value,'date_time_field');
+            assert.strictEqual(cfi.el.querySelector('.o_generator_menu_operator').value,'between');
 
-            const valueInputs = cfi.el.querySelectorAll('.o_generator_menu_value .o_input');
-            await testUtils.fields.editSelect(valueInputs[0], '02/22/2017 11:00:00'); // in TZ
-            await testUtils.fields.editSelect(valueInputs[1], '02-22-2017 17:00:00'); // in TZ
-            await cpHelpers.applyFilter(cfi);
+            constvalueInputs=cfi.el.querySelectorAll('.o_generator_menu_value.o_input');
+            awaittestUtils.fields.editSelect(valueInputs[0],'02/22/201711:00:00');//inTZ
+            awaittestUtils.fields.editSelect(valueInputs[1],'02-22-201717:00:00');//inTZ
+            awaitcpHelpers.applyFilter(cfi);
 
             cfi.destroy();
         });
 
-        QUnit.test('default custom filter datetime', async function (assert) {
+        QUnit.test('defaultcustomfilterdatetime',asyncfunction(assert){
             assert.expect(5);
 
-            class MockedSearchModel extends ActionModel {
-                dispatch(method, ...args) {
-                    assert.strictEqual(method, 'createNewFilters');
-                    const domain = JSON.parse(args[0][0].domain);
-                    assert.strictEqual(domain[0][2].split(' ')[1],
+            classMockedSearchModelextendsActionModel{
+                dispatch(method,...args){
+                    assert.strictEqual(method,'createNewFilters');
+                    constdomain=JSON.parse(args[0][0].domain);
+                    assert.strictEqual(domain[0][2].split('')[1],
                         '04:00:00',
-                        "domain should be in UTC format");
-                    assert.strictEqual(domain[1][2].split(' ')[1],
+                        "domainshouldbeinUTCformat");
+                    assert.strictEqual(domain[1][2].split('')[1],
                         '03:59:59',
-                        "domain should be in UTC format");
+                        "domainshouldbeinUTCformat");
                 }
             }
-            const searchModel = new MockedSearchModel();
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constsearchModel=newMockedSearchModel();
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                session: {
-                    getTZOffset() {
-                        return -240;
+                session:{
+                    getTZOffset(){
+                        return-240;
                     },
                 },
-                env: { searchModel },
+                env:{searchModel},
             });
 
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'), 'date_time_field');
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.fields.editSelect(cfi.el.querySelector('.o_generator_menu_field'),'date_time_field');
 
-            assert.strictEqual(cfi.el.querySelector('.o_generator_menu_field').value, 'date_time_field');
-            assert.strictEqual(cfi.el.querySelector('.o_generator_menu_operator').value, 'between');
+            assert.strictEqual(cfi.el.querySelector('.o_generator_menu_field').value,'date_time_field');
+            assert.strictEqual(cfi.el.querySelector('.o_generator_menu_operator').value,'between');
 
-            await cpHelpers.applyFilter(cfi);
+            awaitcpHelpers.applyFilter(cfi);
 
             cfi.destroy();
         });
 
-        QUnit.test('input value parsing', async function (assert) {
+        QUnit.test('inputvalueparsing',asyncfunction(assert){
             assert.expect(7);
 
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                env: {
-                    searchModel: new ActionModel(),
+                env:{
+                    searchModel:newActionModel(),
                 },
             });
 
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.dom.click('button.o_add_condition');
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.dom.click('button.o_add_condition');
 
-            const [floatSelect, idSelect] = cfi.el.querySelectorAll('.o_generator_menu_field');
-            await testUtils.fields.editSelect(floatSelect, 'float_field');
-            await testUtils.fields.editSelect(idSelect, 'id');
+            const[floatSelect,idSelect]=cfi.el.querySelectorAll('.o_generator_menu_field');
+            awaittestUtils.fields.editSelect(floatSelect,'float_field');
+            awaittestUtils.fields.editSelect(idSelect,'id');
 
-            const [floatInput, idInput] = cfi.el.querySelectorAll('.o_generator_menu_value .o_input');
+            const[floatInput,idInput]=cfi.el.querySelectorAll('.o_generator_menu_value.o_input');
 
-            // Default values
-            assert.strictEqual(floatInput.value, "0.0");
-            assert.strictEqual(idInput.value, "0");
+            //Defaultvalues
+            assert.strictEqual(floatInput.value,"0.0");
+            assert.strictEqual(idInput.value,"0");
 
-            // Float parsing
-            await testUtils.fields.editAndTrigger(floatInput, "4.2", ["input", "change"]);
-            assert.strictEqual(floatInput.value, "4.2");
-            await testUtils.fields.editAndTrigger(floatInput, "DefinitelyValidFloat", ["input", "change"]);
-            // String input in a number input gives "", which is parsed as 0
-            assert.strictEqual(floatInput.value, "0.0");
+            //Floatparsing
+            awaittestUtils.fields.editAndTrigger(floatInput,"4.2",["input","change"]);
+            assert.strictEqual(floatInput.value,"4.2");
+            awaittestUtils.fields.editAndTrigger(floatInput,"DefinitelyValidFloat",["input","change"]);
+            //Stringinputinanumberinputgives"",whichisparsedas0
+            assert.strictEqual(floatInput.value,"0.0");
 
-            // Number parsing
-            await testUtils.fields.editAndTrigger(idInput, "4", ["input", "change"]);
-            assert.strictEqual(idInput.value, "4");
-            await testUtils.fields.editAndTrigger(idInput, "4.2", ["input", "change"]);
-            assert.strictEqual(idInput.value, "4");
-            await testUtils.fields.editAndTrigger(idInput, "DefinitelyValidID", ["input", "change"]);
-            // String input in a number input gives "", which is parsed as 0
-            assert.strictEqual(idInput.value, "0");
+            //Numberparsing
+            awaittestUtils.fields.editAndTrigger(idInput,"4",["input","change"]);
+            assert.strictEqual(idInput.value,"4");
+            awaittestUtils.fields.editAndTrigger(idInput,"4.2",["input","change"]);
+            assert.strictEqual(idInput.value,"4");
+            awaittestUtils.fields.editAndTrigger(idInput,"DefinitelyValidID",["input","change"]);
+            //Stringinputinanumberinputgives"",whichisparsedas0
+            assert.strictEqual(idInput.value,"0");
 
             cfi.destroy();
         });
 
-        QUnit.test('input value parsing with language', async function (assert) {
+        QUnit.test('inputvalueparsingwithlanguage',asyncfunction(assert){
             assert.expect(5);
 
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                env: {
-                    searchModel: new ActionModel(),
-                    _t: Object.assign(s => s, { database: { parameters: { decimal_point: "," } }}),
+                env:{
+                    searchModel:newActionModel(),
+                    _t:Object.assign(s=>s,{database:{parameters:{decimal_point:","}}}),
                 },
-                translateParameters: {
-                    decimal_point: ",",
-                    thousands_sep: "",
-                    grouping: [3, 0],
+                translateParameters:{
+                    decimal_point:",",
+                    thousands_sep:"",
+                    grouping:[3,0],
                 },
             });
 
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.dom.click('button.o_add_condition');
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.dom.click('button.o_add_condition');
 
-            const [floatSelect] = cfi.el.querySelectorAll('.o_generator_menu_field');
-            await testUtils.fields.editSelect(floatSelect, 'float_field');
+            const[floatSelect]=cfi.el.querySelectorAll('.o_generator_menu_field');
+            awaittestUtils.fields.editSelect(floatSelect,'float_field');
 
-            const [floatInput] = cfi.el.querySelectorAll('.o_generator_menu_value .o_input');
+            const[floatInput]=cfi.el.querySelectorAll('.o_generator_menu_value.o_input');
 
-            // Default values
-            assert.strictEqual(floatInput.value, "0,0");
+            //Defaultvalues
+            assert.strictEqual(floatInput.value,"0,0");
 
-            // Float parsing
-            await testUtils.fields.editInput(floatInput, '4,');
-            assert.strictEqual(floatInput.value, "4,");
-            await testUtils.fields.editAndTrigger(floatInput, '4,2',["input", "change"]);
-            assert.strictEqual(floatInput.value, "4,2");
-            await testUtils.fields.editAndTrigger(floatInput, '4,2,',["input", "change"]);
-            assert.strictEqual(floatInput.value, "4,2");
-            await testUtils.fields.editAndTrigger(floatInput, "DefinitelyValidFloat", ["input", "change"]);
-            // The input here is a string, resulting in a parsing error instead of 0
-            assert.strictEqual(floatInput.value, "4,2");
+            //Floatparsing
+            awaittestUtils.fields.editInput(floatInput,'4,');
+            assert.strictEqual(floatInput.value,"4,");
+            awaittestUtils.fields.editAndTrigger(floatInput,'4,2',["input","change"]);
+            assert.strictEqual(floatInput.value,"4,2");
+            awaittestUtils.fields.editAndTrigger(floatInput,'4,2,',["input","change"]);
+            assert.strictEqual(floatInput.value,"4,2");
+            awaittestUtils.fields.editAndTrigger(floatInput,"DefinitelyValidFloat",["input","change"]);
+            //Theinputhereisastring,resultinginaparsingerrorinsteadof0
+            assert.strictEqual(floatInput.value,"4,2");
 
             cfi.destroy();
         });
 
-        QUnit.test('add custom filter with multiple values', async function (assert) {
+        QUnit.test('addcustomfilterwithmultiplevalues',asyncfunction(assert){
             assert.expect(2);
 
-            class MockedSearchModel extends ActionModel {
-                dispatch(method, ...args) {
-                    assert.strictEqual(method, 'createNewFilters');
-                    const preFilters = args[0];
-                    const expected = [
+            classMockedSearchModelextendsActionModel{
+                dispatch(method,...args){
+                    assert.strictEqual(method,'createNewFilters');
+                    constpreFilters=args[0];
+                    constexpected=[
                         {
-                            description: 'A date is equal to "01/09/1997"',
-                            domain: '[["date_field","=","1997-01-09"]]',
-                            type: "filter",
+                            description:'Adateisequalto"01/09/1997"',
+                            domain:'[["date_field","=","1997-01-09"]]',
+                            type:"filter",
                         },
                         {
-                            description: 'Boolean Field is true',
-                            domain: '[["boolean_field","=",True]]',
-                            type: "filter",
+                            description:'BooleanFieldistrue',
+                            domain:'[["boolean_field","=",True]]',
+                            type:"filter",
                         },
                         {
-                            description: 'Floaty McFloatface is equal to "7.2"',
-                            domain: '[["float_field","=",7.2]]',
-                            type: "filter",
+                            description:'FloatyMcFloatfaceisequalto"7.2"',
+                            domain:'[["float_field","=",7.2]]',
+                            type:"filter",
                         },
                         {
-                            description: 'ID is "9"',
-                            domain: '[["id","=",9]]',
-                            type: "filter",
+                            description:'IDis"9"',
+                            domain:'[["id","=",9]]',
+                            type:"filter",
                         },
                     ];
-                    assert.deepEqual(preFilters, expected,
-                        "Conditions should be in the correct order witht the right values.");
+                    assert.deepEqual(preFilters,expected,
+                        "Conditionsshouldbeinthecorrectorderwithttherightvalues.");
                 }
             }
-            const searchModel = new MockedSearchModel();
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constsearchModel=newMockedSearchModel();
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                env: { searchModel },
+                env:{searchModel},
             });
 
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.dom.click('button.o_add_condition');
-            await testUtils.dom.click('button.o_add_condition');
-            await testUtils.dom.click('button.o_add_condition');
-            await testUtils.dom.click('button.o_add_condition');
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.dom.click('button.o_add_condition');
+            awaittestUtils.dom.click('button.o_add_condition');
+            awaittestUtils.dom.click('button.o_add_condition');
+            awaittestUtils.dom.click('button.o_add_condition');
 
-            function getCondition(index, selector) {
-                const condition = cfi.el.querySelectorAll('.o_filter_condition')[index];
-                return condition.querySelector(selector);
+            functiongetCondition(index,selector){
+                constcondition=cfi.el.querySelectorAll('.o_filter_condition')[index];
+                returncondition.querySelector(selector);
             }
 
-            await testUtils.fields.editSelect(getCondition(0, '.o_generator_menu_field'), 'date_field');
-            await testUtils.fields.editSelect(getCondition(0, '.o_generator_menu_value .o_input'), '01/09/1997');
+            awaittestUtils.fields.editSelect(getCondition(0,'.o_generator_menu_field'),'date_field');
+            awaittestUtils.fields.editSelect(getCondition(0,'.o_generator_menu_value.o_input'),'01/09/1997');
 
-            await testUtils.fields.editSelect(getCondition(1, '.o_generator_menu_field'), 'boolean_field');
-            await testUtils.fields.editInput(getCondition(1, '.o_generator_menu_operator'), '!=');
+            awaittestUtils.fields.editSelect(getCondition(1,'.o_generator_menu_field'),'boolean_field');
+            awaittestUtils.fields.editInput(getCondition(1,'.o_generator_menu_operator'),'!=');
 
-            await testUtils.fields.editSelect(getCondition(2, '.o_generator_menu_field'), 'char_field');
-            await testUtils.fields.editInput(getCondition(2, '.o_generator_menu_value .o_input'), "I will be deleted anyway");
+            awaittestUtils.fields.editSelect(getCondition(2,'.o_generator_menu_field'),'char_field');
+            awaittestUtils.fields.editInput(getCondition(2,'.o_generator_menu_value.o_input'),"Iwillbedeletedanyway");
 
-            await testUtils.fields.editSelect(getCondition(3, '.o_generator_menu_field'), 'float_field');
-            await testUtils.fields.editAndTrigger(getCondition(3, '.o_generator_menu_value .o_input'), 7.2, ["input", "change"]);
+            awaittestUtils.fields.editSelect(getCondition(3,'.o_generator_menu_field'),'float_field');
+            awaittestUtils.fields.editAndTrigger(getCondition(3,'.o_generator_menu_value.o_input'),7.2,["input","change"]);
 
-            await testUtils.fields.editSelect(getCondition(4, '.o_generator_menu_field'), 'id');
-            await testUtils.fields.editInput(getCondition(4, '.o_generator_menu_value .o_input'), 9);
+            awaittestUtils.fields.editSelect(getCondition(4,'.o_generator_menu_field'),'id');
+            awaittestUtils.fields.editInput(getCondition(4,'.o_generator_menu_value.o_input'),9);
 
-            await testUtils.dom.click(getCondition(2, '.o_generator_menu_delete'));
+            awaittestUtils.dom.click(getCondition(2,'.o_generator_menu_delete'));
 
-            await cpHelpers.applyFilter(cfi);
+            awaitcpHelpers.applyFilter(cfi);
 
             cfi.destroy();
         });
 
-        QUnit.test('float input can be empty', async function (assert) {
+        QUnit.test('floatinputcanbeempty',asyncfunction(assert){
             assert.expect(2);
 
-            const cfi = await createComponent(CustomFilterItem, {
-                props: {
-                    fields: this.fields,
+            constcfi=awaitcreateComponent(CustomFilterItem,{
+                props:{
+                    fields:this.fields,
                 },
-                env: {
-                    searchModel: new ActionModel(),
-                    _t: Object.assign(s => s, { database: { parameters: { decimal_point: "," } }}),
+                env:{
+                    searchModel:newActionModel(),
+                    _t:Object.assign(s=>s,{database:{parameters:{decimal_point:","}}}),
                 },
-                translateParameters: {
-                    decimal_point: ",",
-                    thousands_sep: "",
-                    grouping: [3, 0],
+                translateParameters:{
+                    decimal_point:",",
+                    thousands_sep:"",
+                    grouping:[3,0],
                 },
             });
 
-            await cpHelpers.toggleAddCustomFilter(cfi);
-            await testUtils.dom.click('button.o_add_condition');
+            awaitcpHelpers.toggleAddCustomFilter(cfi);
+            awaittestUtils.dom.click('button.o_add_condition');
 
-            const [floatSelect] = cfi.el.querySelectorAll('.o_generator_menu_field');
-            await testUtils.fields.editSelect(floatSelect, 'float_field');
+            const[floatSelect]=cfi.el.querySelectorAll('.o_generator_menu_field');
+            awaittestUtils.fields.editSelect(floatSelect,'float_field');
 
-            const [floatInput] = cfi.el.querySelectorAll('.o_generator_menu_value .o_input');
+            const[floatInput]=cfi.el.querySelectorAll('.o_generator_menu_value.o_input');
 
-            // We introduce a previous value in case we don't have a default value
-            await testUtils.fields.editInput(floatInput, '3,14');
-            assert.strictEqual(floatInput.value, '3,14');
-            // Input value can be completely cleared
-            await testUtils.fields.editInput(floatInput, '');
-            assert.strictEqual(floatInput.value, '');
+            //Weintroduceapreviousvalueincasewedon'thaveadefaultvalue
+            awaittestUtils.fields.editInput(floatInput,'3,14');
+            assert.strictEqual(floatInput.value,'3,14');
+            //Inputvaluecanbecompletelycleared
+            awaittestUtils.fields.editInput(floatInput,'');
+            assert.strictEqual(floatInput.value,'');
 
             cfi.destroy();
         });

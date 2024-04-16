@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="rating_rating_view_form" model="ir.ui.view">
-        <field name="name">rating.rating.view.form</field>
-        <field name="model">rating.rating</field>
-        <field name="inherit_id" ref="rating.rating_rating_view_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='rating_text']" position="after">
-                <field name="publisher_comment" string="Comment"/>
+    <recordid="rating_rating_view_form"model="ir.ui.view">
+        <fieldname="name">rating.rating.view.form</field>
+        <fieldname="model">rating.rating</field>
+        <fieldname="inherit_id"ref="rating.rating_rating_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='rating_text']"position="after">
+                <fieldname="publisher_comment"string="Comment"/>
             </xpath>
         </field>
     </record>

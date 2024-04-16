@@ -1,487 +1,487 @@
-flectra.define('web.BasicController', function (require) {
-"use strict";
+flectra.define('web.BasicController',function(require){
+"usestrict";
 
 /**
- * The BasicController is mostly here to share code between views that will use
- * a BasicModel (or a subclass).  Currently, the BasicViews are the form, list
- * and kanban views.
+ *TheBasicControllerismostlyheretosharecodebetweenviewsthatwilluse
+ *aBasicModel(orasubclass). Currently,theBasicViewsaretheform,list
+ *andkanbanviews.
  */
 
-var AbstractController = require('web.AbstractController');
-var core = require('web.core');
-var Dialog = require('web.Dialog');
-var FieldManagerMixin = require('web.FieldManagerMixin');
-var TranslationDialog = require('web.TranslationDialog');
+varAbstractController=require('web.AbstractController');
+varcore=require('web.core');
+varDialog=require('web.Dialog');
+varFieldManagerMixin=require('web.FieldManagerMixin');
+varTranslationDialog=require('web.TranslationDialog');
 
-var _t = core._t;
+var_t=core._t;
 
-var BasicController = AbstractController.extend(FieldManagerMixin, {
-    events: Object.assign({}, AbstractController.prototype.events, {
-        'click .o_content': '_onContentClicked',
+varBasicController=AbstractController.extend(FieldManagerMixin,{
+    events:Object.assign({},AbstractController.prototype.events,{
+        'click.o_content':'_onContentClicked',
     }),
-    custom_events: _.extend({}, AbstractController.prototype.custom_events, FieldManagerMixin.custom_events, {
-        discard_changes: '_onDiscardChanges',
-        pager_changed: '_onPagerChanged',
-        reload: '_onReload',
-        resequence_records: '_onResequenceRecords',
-        set_dirty: '_onSetDirty',
-        load_optional_fields: '_onLoadOptionalFields',
-        save_optional_fields: '_onSaveOptionalFields',
-        translate: '_onTranslate',
+    custom_events:_.extend({},AbstractController.prototype.custom_events,FieldManagerMixin.custom_events,{
+        discard_changes:'_onDiscardChanges',
+        pager_changed:'_onPagerChanged',
+        reload:'_onReload',
+        resequence_records:'_onResequenceRecords',
+        set_dirty:'_onSetDirty',
+        load_optional_fields:'_onLoadOptionalFields',
+        save_optional_fields:'_onSaveOptionalFields',
+        translate:'_onTranslate',
     }),
     /**
-     * @override
-     * @param {Object} params
-     * @param {boolean} params.archiveEnabled
-     * @param {boolean} params.confirmOnDelete
-     * @param {boolean} params.hasButtons
+     *@override
+     *@param{Object}params
+     *@param{boolean}params.archiveEnabled
+     *@param{boolean}params.confirmOnDelete
+     *@param{boolean}params.hasButtons
      */
-    init: function (parent, model, renderer, params) {
-        this._super.apply(this, arguments);
-        this.archiveEnabled = params.archiveEnabled;
-        this.confirmOnDelete = params.confirmOnDelete;
-        this.hasButtons = params.hasButtons;
-        FieldManagerMixin.init.call(this, this.model);
-        this.mode = params.mode || 'readonly';
-        // savingDef is used to ensure that we always wait for pending save
-        // operations to complete before checking if there are changes to
-        // discard when discardChanges is called
-        this.savingDef = Promise.resolve();
-        // discardingDef is used to ensure that we don't ask twice the user if
-        // he wants to discard changes, when 'canBeDiscarded' is called several
-        // times "in parallel"
-        this.discardingDef = null;
-        this.viewId = params.viewId;
+    init:function(parent,model,renderer,params){
+        this._super.apply(this,arguments);
+        this.archiveEnabled=params.archiveEnabled;
+        this.confirmOnDelete=params.confirmOnDelete;
+        this.hasButtons=params.hasButtons;
+        FieldManagerMixin.init.call(this,this.model);
+        this.mode=params.mode||'readonly';
+        //savingDefisusedtoensurethatwealwayswaitforpendingsave
+        //operationstocompletebeforecheckingiftherearechangesto
+        //discardwhendiscardChangesiscalled
+        this.savingDef=Promise.resolve();
+        //discardingDefisusedtoensurethatwedon'tasktwicetheuserif
+        //hewantstodiscardchanges,when'canBeDiscarded'iscalledseveral
+        //times"inparallel"
+        this.discardingDef=null;
+        this.viewId=params.viewId;
     },
     /**
-     * @override
-     * @returns {Promise}
+     *@override
+     *@returns{Promise}
      */
-    start: async function () {
-        // add classname to reflect the (absence of) access rights (used to
-        // correctly display the nocontent helper)
-        this.$el.toggleClass('o_cannot_create', !this.activeActions.create);
-        await this._super(...arguments);
+    start:asyncfunction(){
+        //addclassnametoreflectthe(absenceof)accessrights(usedto
+        //correctlydisplaythenocontenthelper)
+        this.$el.toggleClass('o_cannot_create',!this.activeActions.create);
+        awaitthis._super(...arguments);
     },
     /**
-     * Called each time the controller is dettached into the DOM
+     *CalledeachtimethecontrollerisdettachedintotheDOM
      */
-    on_detach_callback() {
-        this._super.apply(this, arguments);
+    on_detach_callback(){
+        this._super.apply(this,arguments);
         this.renderer.resetLocalState();
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Determines if we can discard the current changes. If the model is not
-     * dirty, that is not a problem. However, if it is dirty, we have to ask
-     * the user for confirmation.
+     *Determinesifwecandiscardthecurrentchanges.Ifthemodelisnot
+     *dirty,thatisnotaproblem.However,ifitisdirty,wehavetoask
+     *theuserforconfirmation.
      *
-     * @override
-     * @param {string} [recordID] - default to main recordID
-     * @returns {Promise<boolean>}
-     *          resolved if can be discarded, a boolean value is given to tells
-     *          if there is something to discard or not
-     *          rejected otherwise
+     *@override
+     *@param{string}[recordID]-defaulttomainrecordID
+     *@returns{Promise<boolean>}
+     *         resolvedifcanbediscarded,abooleanvalueisgiventotells
+     *         ifthereissomethingtodiscardornot
+     *         rejectedotherwise
      */
-    canBeDiscarded: function (recordID) {
-        var self = this;
-        if (this.discardingDef) {
-            // discard dialog is already open
-            return this.discardingDef;
+    canBeDiscarded:function(recordID){
+        varself=this;
+        if(this.discardingDef){
+            //discarddialogisalreadyopen
+            returnthis.discardingDef;
         }
-        if (!this.isDirty(recordID)) {
-            return Promise.resolve(false);
+        if(!this.isDirty(recordID)){
+            returnPromise.resolve(false);
         }
 
-        var message = _t("The record has been modified, your changes will be discarded. Do you want to proceed?");
-        this.discardingDef = new Promise(function (resolve, reject) {
-            var dialog = Dialog.confirm(self, message, {
-                title: _t("Warning"),
-                confirm_callback: () => {
+        varmessage=_t("Therecordhasbeenmodified,yourchangeswillbediscarded.Doyouwanttoproceed?");
+        this.discardingDef=newPromise(function(resolve,reject){
+            vardialog=Dialog.confirm(self,message,{
+                title:_t("Warning"),
+                confirm_callback:()=>{
                     resolve(true);
-                    self.discardingDef = null;
+                    self.discardingDef=null;
                 },
-                cancel_callback: () => {
+                cancel_callback:()=>{
                     reject();
-                    self.discardingDef = null;
+                    self.discardingDef=null;
                 },
             });
-            dialog.on('closed', self.discardingDef, reject);
+            dialog.on('closed',self.discardingDef,reject);
         });
-        return this.discardingDef;
+        returnthis.discardingDef;
     },
     /**
-     * Ask the renderer if all associated field widget are in a valid state for
-     * saving (valid value and non-empty value for required fields). If this is
-     * not the case, this notifies the user with a warning containing the names
-     * of the invalid fields.
+     *Asktherendererifallassociatedfieldwidgetareinavalidstatefor
+     *saving(validvalueandnon-emptyvalueforrequiredfields).Ifthisis
+     *notthecase,thisnotifiestheuserwithawarningcontainingthenames
+     *oftheinvalidfields.
      *
-     * Note: changing the style of invalid fields is the renderer's job.
+     *Note:changingthestyleofinvalidfieldsistherenderer'sjob.
      *
-     * @param {string} [recordID] - default to main recordID
-     * @return {boolean}
+     *@param{string}[recordID]-defaulttomainrecordID
+     *@return{boolean}
      */
-    canBeSaved: function (recordID) {
-        var fieldNames = this.renderer.canBeSaved(recordID || this.handle);
-        if (fieldNames.length) {
+    canBeSaved:function(recordID){
+        varfieldNames=this.renderer.canBeSaved(recordID||this.handle);
+        if(fieldNames.length){
             this._notifyInvalidFields(fieldNames);
-            return false;
+            returnfalse;
         }
-        return true;
+        returntrue;
     },
     /**
-     * Waits for the mutex to be unlocked and for changes to be saved, then
-     * calls _.discardChanges.
-     * This ensures that the confirm dialog isn't displayed directly if there is
-     * a pending 'write' rpc.
+     *Waitsforthemutextobeunlockedandforchangestobesaved,then
+     *calls_.discardChanges.
+     *Thisensuresthattheconfirmdialogisn'tdisplayeddirectlyifthereis
+     *apending'write'rpc.
      *
-     * @see _.discardChanges
+     *@see_.discardChanges
      */
-    discardChanges: function (recordID, options) {
-        return Promise.all([this.mutex.getUnlockedDef(), this.savingDef])
-            .then(this._discardChanges.bind(this, recordID || this.handle, options));
+    discardChanges:function(recordID,options){
+        returnPromise.all([this.mutex.getUnlockedDef(),this.savingDef])
+            .then(this._discardChanges.bind(this,recordID||this.handle,options));
     },
     /**
-     * Method that will be overridden by the views with the ability to have selected ids
+     *Methodthatwillbeoverriddenbytheviewswiththeabilitytohaveselectedids
      *
-     * @returns {Array}
+     *@returns{Array}
      */
-    getSelectedIds: function () {
-        return [];
+    getSelectedIds:function(){
+        return[];
     },
     /**
-     * Returns true iff the given recordID (or the main recordID) is dirty.
+     *ReturnstrueiffthegivenrecordID(orthemainrecordID)isdirty.
      *
-     * @param {string} [recordID] - default to main recordID
-     * @returns {boolean}
+     *@param{string}[recordID]-defaulttomainrecordID
+     *@returns{boolean}
      */
-    isDirty: function (recordID) {
-        return this.model.isDirty(recordID || this.handle);
+    isDirty:function(recordID){
+        returnthis.model.isDirty(recordID||this.handle);
     },
     /**
-     * Saves the record whose ID is given if necessary (@see _saveRecord).
+     *SavestherecordwhoseIDisgivenifnecessary(@see_saveRecord).
      *
-     * @param {string} [recordID] - default to main recordID
-     * @param {Object} [options]
-     * @returns {Promise}
-     *        Resolved with the list of field names (whose value has been modified)
-     *        Rejected if the record can't be saved
+     *@param{string}[recordID]-defaulttomainrecordID
+     *@param{Object}[options]
+     *@returns{Promise}
+     *       Resolvedwiththelistoffieldnames(whosevaluehasbeenmodified)
+     *       Rejectediftherecordcan'tbesaved
      */
-    saveRecord: function (recordID, options) {
-        var self = this;
-        // Some field widgets can't detect (all) their changes immediately or
-        // may have to validate them before notifying them, so we ask them to
-        // commit their current value before saving. This has to be done outside
-        // of the mutex protection of saving because commitChanges will trigger
-        // changes and these are also protected. However, we must wait for the
-        // mutex to be idle to ensure that onchange RPCs returned before asking
-        // field widgets to commit their value (and validate it, for instance
-        // for one2many with required fields). So the actual saving has to be
-        // done after these changes. Also the commitChanges operation might not
-        // be synchronous for other reason (e.g. the x2m fields will ask the
-        // user if some discarding has to be made). This operation must also be
-        // mutex-protected as commitChanges function of x2m has to be aware of
-        // all final changes made to a row.
-        var unlockedMutex = this.mutex.getUnlockedDef()
-            .then(function () {
-                return self.renderer.commitChanges(recordID || self.handle);
+    saveRecord:function(recordID,options){
+        varself=this;
+        //Somefieldwidgetscan'tdetect(all)theirchangesimmediatelyor
+        //mayhavetovalidatethembeforenotifyingthem,soweaskthemto
+        //committheircurrentvaluebeforesaving.Thishastobedoneoutside
+        //ofthemutexprotectionofsavingbecausecommitChangeswilltrigger
+        //changesandthesearealsoprotected.However,wemustwaitforthe
+        //mutextobeidletoensurethatonchangeRPCsreturnedbeforeasking
+        //fieldwidgetstocommittheirvalue(andvalidateit,forinstance
+        //forone2manywithrequiredfields).Sotheactualsavinghastobe
+        //doneafterthesechanges.AlsothecommitChangesoperationmightnot
+        //besynchronousforotherreason(e.g.thex2mfieldswillaskthe
+        //userifsomediscardinghastobemade).Thisoperationmustalsobe
+        //mutex-protectedascommitChangesfunctionofx2mhastobeawareof
+        //allfinalchangesmadetoarow.
+        varunlockedMutex=this.mutex.getUnlockedDef()
+            .then(function(){
+                returnself.renderer.commitChanges(recordID||self.handle);
             })
-            .then(function () {
-                return self.mutex.exec(self._saveRecord.bind(self, recordID, options));
+            .then(function(){
+                returnself.mutex.exec(self._saveRecord.bind(self,recordID,options));
             });
-        this.savingDef = new Promise(function (resolve) {
+        this.savingDef=newPromise(function(resolve){
             unlockedMutex.then(resolve).guardedCatch(resolve);
         });
 
-        return unlockedMutex;
+        returnunlockedMutex;
     },
     /**
-     * @override
-     * @returns {Promise}
+     *@override
+     *@returns{Promise}
      */
-    update: async function (params, options) {
-        this.mode = params.mode || this.mode;
-        return this._super(params, options);
+    update:asyncfunction(params,options){
+        this.mode=params.mode||this.mode;
+        returnthis._super(params,options);
     },
     /**
-     * @override
+     *@override
      */
-    reload: function (params) {
-        if (params && params.controllerState) {
-            if (params.controllerState.currentId) {
-                params.currentId = params.controllerState.currentId;
+    reload:function(params){
+        if(params&&params.controllerState){
+            if(params.controllerState.currentId){
+                params.currentId=params.controllerState.currentId;
             }
-            params.ids = params.controllerState.resIds;
+            params.ids=params.controllerState.resIds;
         }
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Does the necessary action when trying to "abandon" a given record (e.g.
-     * when trying to make a new record readonly without having saved it). By
-     * default, if the abandoned record is the main view one, the only possible
-     * action is to leave the current view. Otherwise, it is a x2m line, ask the
-     * model to remove it.
+     *Doesthenecessaryactionwhentryingto"abandon"agivenrecord(e.g.
+     *whentryingtomakeanewrecordreadonlywithouthavingsavedit).By
+     *default,iftheabandonedrecordisthemainviewone,theonlypossible
+     *actionistoleavethecurrentview.Otherwise,itisax2mline,askthe
+     *modeltoremoveit.
      *
-     * @private
-     * @param {string} [recordID] - default to main recordID
+     *@private
+     *@param{string}[recordID]-defaulttomainrecordID
      */
-    _abandonRecord: function (recordID) {
-        recordID = recordID || this.handle;
-        if (recordID === this.handle) {
+    _abandonRecord:function(recordID){
+        recordID=recordID||this.handle;
+        if(recordID===this.handle){
             this.trigger_up('history_back');
-        } else {
+        }else{
             this.model.removeLine(recordID);
         }
     },
     /**
-     * We override applyChanges (from the field manager mixin) to protect it
-     * with a mutex.
+     *WeoverrideapplyChanges(fromthefieldmanagermixin)toprotectit
+     *withamutex.
      *
-     * @override
+     *@override
      */
-    _applyChanges: function (dataPointID, changes, event) {
-        var _super = FieldManagerMixin._applyChanges.bind(this);
-        return this.mutex.exec(function () {
-            return _super(dataPointID, changes, event);
+    _applyChanges:function(dataPointID,changes,event){
+        var_super=FieldManagerMixin._applyChanges.bind(this);
+        returnthis.mutex.exec(function(){
+            return_super(dataPointID,changes,event);
         });
     },
     /**
-     * Archive the current selection
+     *Archivethecurrentselection
      *
-     * @private
-     * @param {number[]} ids
-     * @param {boolean} archive
-     * @returns {Promise}
+     *@private
+     *@param{number[]}ids
+     *@param{boolean}archive
+     *@returns{Promise}
      */
-    _archive: async function (ids, archive) {
-        if (ids.length === 0) {
-            return Promise.resolve();
+    _archive:asyncfunction(ids,archive){
+        if(ids.length===0){
+            returnPromise.resolve();
         }
-        if (archive) {
-            await this.model.actionArchive(ids, this.handle);
-        } else {
-            await this.model.actionUnarchive(ids, this.handle);
+        if(archive){
+            awaitthis.model.actionArchive(ids,this.handle);
+        }else{
+            awaitthis.model.actionUnarchive(ids,this.handle);
         }
-        return this.update({}, {reload: false});
+        returnthis.update({},{reload:false});
     },
     /**
-     * When the user clicks on a 'action button', this function determines what
-     * should happen.
+     *Whentheuserclicksona'actionbutton',thisfunctiondetermineswhat
+     *shouldhappen.
      *
-     * @private
-     * @param {Object} attrs the attrs of the button clicked
-     * @param {Object} [record] the current state of the view
-     * @returns {Promise}
+     *@private
+     *@param{Object}attrstheattrsofthebuttonclicked
+     *@param{Object}[record]thecurrentstateoftheview
+     *@returns{Promise}
      */
-    _callButtonAction: function (attrs, record) {
-        record = record || this.model.get(this.handle);
-        const actionData = Object.assign({}, attrs, {
-            context: record.getContext({additionalContext: attrs.context || {}})
+    _callButtonAction:function(attrs,record){
+        record=record||this.model.get(this.handle);
+        constactionData=Object.assign({},attrs,{
+            context:record.getContext({additionalContext:attrs.context||{}})
         });
-        const recordData = {
-            context: record.getContext(),
-            currentID: record.data.id,
-            model: record.model,
-            resIDs: record.res_ids,
+        constrecordData={
+            context:record.getContext(),
+            currentID:record.data.id,
+            model:record.model,
+            resIDs:record.res_ids,
         };
-        return this._executeButtonAction(actionData, recordData);
+        returnthis._executeButtonAction(actionData,recordData);
     },
     /**
-     * Called by the field manager mixin to confirm that a change just occured
-     * (after that potential onchanges have been applied).
+     *Calledbythefieldmanagermixintoconfirmthatachangejustoccured
+     *(afterthatpotentialonchangeshavebeenapplied).
      *
-     * Basically, this only relays the notification to the renderer with the
-     * new state.
+     *Basically,thisonlyrelaysthenotificationtotherendererwiththe
+     *newstate.
      *
-     * @param {string} id - the id of one of the view's records
-     * @param {string[]} fields - the changed fields
-     * @param {FlectraEvent} e - the event that triggered the change
-     * @returns {Promise}
+     *@param{string}id-theidofoneoftheview'srecords
+     *@param{string[]}fields-thechangedfields
+     *@param{FlectraEvent}e-theeventthattriggeredthechange
+     *@returns{Promise}
      */
-    _confirmChange: function (id, fields, e) {
-        if (e.name === 'discard_changes' && e.target.reset) {
-            // the target of the discard event is a field widget.  In that
-            // case, we simply want to reset the specific field widget,
-            // not the full view
-            return  e.target.reset(this.model.get(e.target.dataPointID), e, true);
+    _confirmChange:function(id,fields,e){
+        if(e.name==='discard_changes'&&e.target.reset){
+            //thetargetofthediscardeventisafieldwidget. Inthat
+            //case,wesimplywanttoresetthespecificfieldwidget,
+            //notthefullview
+            return e.target.reset(this.model.get(e.target.dataPointID),e,true);
         }
 
-        var state = this.model.get(this.handle);
-        return this.renderer.confirmChange(state, id, fields, e);
+        varstate=this.model.get(this.handle);
+        returnthis.renderer.confirmChange(state,id,fields,e);
     },
     /**
-     * Ask the user to confirm he wants to save the record
-     * @private
+     *Asktheusertoconfirmhewantstosavetherecord
+     *@private
      */
-    _confirmSaveNewRecord: function () {
-        var self = this;
-        var def = new Promise(function (resolve, reject) {
-            var message = _t("You need to save this new record before editing the translation. Do you want to proceed?");
-            var dialog = Dialog.confirm(self, message, {
-                title: _t("Warning"),
-                confirm_callback: resolve.bind(self, true),
-                cancel_callback: reject,
+    _confirmSaveNewRecord:function(){
+        varself=this;
+        vardef=newPromise(function(resolve,reject){
+            varmessage=_t("Youneedtosavethisnewrecordbeforeeditingthetranslation.Doyouwanttoproceed?");
+            vardialog=Dialog.confirm(self,message,{
+                title:_t("Warning"),
+                confirm_callback:resolve.bind(self,true),
+                cancel_callback:reject,
             });
-            dialog.on('closed', self, reject);
+            dialog.on('closed',self,reject);
         });
-        return def;
+        returndef;
     },
     /**
-     * Delete records (and ask for confirmation if necessary)
+     *Deleterecords(andaskforconfirmationifnecessary)
      *
-     * @param {string[]} ids list of local record ids
+     *@param{string[]}idslistoflocalrecordids
      */
-    _deleteRecords: function (ids) {
-        var self = this;
-        function doIt() {
-            return self.model
-                .deleteRecords(ids, self.modelName)
-                .then(self._onDeletedRecords.bind(self, ids));
+    _deleteRecords:function(ids){
+        varself=this;
+        functiondoIt(){
+            returnself.model
+                .deleteRecords(ids,self.modelName)
+                .then(self._onDeletedRecords.bind(self,ids));
         }
-        if (this.confirmOnDelete) {
-            const message = ids.length > 1 ?
-                            _t("Are you sure you want to delete these records?") :
-                            _t("Are you sure you want to delete this record?");
-            Dialog.confirm(this, message, { confirm_callback: doIt });
-        } else {
+        if(this.confirmOnDelete){
+            constmessage=ids.length>1?
+                            _t("Areyousureyouwanttodeletetheserecords?"):
+                            _t("Areyousureyouwanttodeletethisrecord?");
+            Dialog.confirm(this,message,{confirm_callback:doIt});
+        }else{
             doIt();
         }
     },
     /**
-     * Disables buttons so that they can't be clicked anymore.
+     *Disablesbuttonssothattheycan'tbeclickedanymore.
      *
-     * @private
+     *@private
      */
-    _disableButtons: function () {
-        if (this.$buttons) {
-            this.$buttons.find('button').attr('disabled', true);
+    _disableButtons:function(){
+        if(this.$buttons){
+            this.$buttons.find('button').attr('disabled',true);
         }
     },
     /**
-     * Discards the changes made to the record whose ID is given, if necessary.
-     * Automatically leaves to default mode for the given record.
+     *DiscardsthechangesmadetotherecordwhoseIDisgiven,ifnecessary.
+     *Automaticallyleavestodefaultmodeforthegivenrecord.
      *
-     * @private
-     * @param {string} [recordID] - default to main recordID
-     * @param {Object} [options]
-     * @param {boolean} [options.readonlyIfRealDiscard=false]
-     *        After discarding record changes, the usual option is to make the
-     *        record readonly. However, the action manager calls this function
-     *        at inappropriate times in the current code and in that case, we
-     *        don't want to go back to readonly if there is nothing to discard
-     *        (e.g. when switching record in edit mode in form view, we expect
-     *        the new record to be in edit mode too, but the view manager calls
-     *        this function as the URL changes...) @todo get rid of this when
-     *        the webclient/action_manager's hashchange mechanism is improved.
-     * @param {boolean} [options.noAbandon=false]
-     * @returns {Promise}
+     *@private
+     *@param{string}[recordID]-defaulttomainrecordID
+     *@param{Object}[options]
+     *@param{boolean}[options.readonlyIfRealDiscard=false]
+     *       Afterdiscardingrecordchanges,theusualoptionistomakethe
+     *       recordreadonly.However,theactionmanagercallsthisfunction
+     *       atinappropriatetimesinthecurrentcodeandinthatcase,we
+     *       don'twanttogobacktoreadonlyifthereisnothingtodiscard
+     *       (e.g.whenswitchingrecordineditmodeinformview,weexpect
+     *       thenewrecordtobeineditmodetoo,buttheviewmanagercalls
+     *       thisfunctionastheURLchanges...)@todogetridofthiswhen
+     *       thewebclient/action_manager'shashchangemechanismisimproved.
+     *@param{boolean}[options.noAbandon=false]
+     *@returns{Promise}
      */
-    _discardChanges: function (recordID, options) {
-        var self = this;
-        recordID = recordID || this.handle;
-        options = options || {};
-        return this.canBeDiscarded(recordID)
-            .then(function (needDiscard) {
-                if (options.readonlyIfRealDiscard && !needDiscard) {
+    _discardChanges:function(recordID,options){
+        varself=this;
+        recordID=recordID||this.handle;
+        options=options||{};
+        returnthis.canBeDiscarded(recordID)
+            .then(function(needDiscard){
+                if(options.readonlyIfRealDiscard&&!needDiscard){
                     return;
                 }
                 self.model.discardChanges(recordID);
-                if (options.noAbandon) {
+                if(options.noAbandon){
                     return;
                 }
-                if (self.model.canBeAbandoned(recordID)) {
+                if(self.model.canBeAbandoned(recordID)){
                     self._abandonRecord(recordID);
                     return;
                 }
-                return self._confirmSave(recordID);
+                returnself._confirmSave(recordID);
             });
     },
     /**
-     * Enables buttons so they can be clicked again.
+     *Enablesbuttonssotheycanbeclickedagain.
      *
-     * @private
+     *@private
      */
-    _enableButtons: function () {
-        if (this.$buttons) {
+    _enableButtons:function(){
+        if(this.$buttons){
             this.$buttons.find('button').removeAttr('disabled');
         }
     },
     /**
-     * Executes the action associated with a button
+     *Executestheactionassociatedwithabutton
      *
-     * @private
-     * @param {Object} actionData: the descriptor of the action
-     * @param {string} actionData.type: the button's action's type, accepts "object" or "action"
-     * @param {string} actionData.name: the button's action's name
-     *    either the model method's name for type "object"
-     *    or the action's id in database, or xml_id
-     * @param {string} actionData.context: the action's execution context
+     *@private
+     *@param{Object}actionData:thedescriptoroftheaction
+     *@param{string}actionData.type:thebutton'saction'stype,accepts"object"or"action"
+     *@param{string}actionData.name:thebutton'saction'sname
+     *   eitherthemodelmethod'snamefortype"object"
+     *   ortheaction'sidindatabase,orxml_id
+     *@param{string}actionData.context:theaction'sexecutioncontext
      *
-     * @param {Object} recordData: basic information on the current record(s)
-     * @param {number[]} recordData.resIDs: record ids:
-     *     - on which an object method applies
-     *     - that will be used as active_ids to load an action
-     * @param {string} recordData.model: model name
-     * @param {Object} recordData.context: the records' context, will be used to load
-     *     the action, and merged into actionData.context at execution time
+     *@param{Object}recordData:basicinformationonthecurrentrecord(s)
+     *@param{number[]}recordData.resIDs:recordids:
+     *    -onwhichanobjectmethodapplies
+     *    -thatwillbeusedasactive_idstoloadanaction
+     *@param{string}recordData.model:modelname
+     *@param{Object}recordData.context:therecords'context,willbeusedtoload
+     *    theaction,andmergedintoactionData.contextatexecutiontime
      *
-     * @returns {Promise}
+     *@returns{Promise}
      */
-    async _executeButtonAction(actionData, recordData) {
-        const prom = new Promise((resolve, reject) => {
-            this.trigger_up('execute_action', {
-                action_data: actionData,
-                env: recordData,
-                on_closed: () => this.isDestroyed() ? Promise.resolve() : this.reload(),
-                on_success: resolve,
-                on_fail: () => this.update({}, { reload: false }).then(reject).guardedCatch(reject)
+    async_executeButtonAction(actionData,recordData){
+        constprom=newPromise((resolve,reject)=>{
+            this.trigger_up('execute_action',{
+                action_data:actionData,
+                env:recordData,
+                on_closed:()=>this.isDestroyed()?Promise.resolve():this.reload(),
+                on_success:resolve,
+                on_fail:()=>this.update({},{reload:false}).then(reject).guardedCatch(reject)
             });
         });
-        return this.alive(prom);
+        returnthis.alive(prom);
     },
     /**
-     * Override to add the current record ID (currentId) and the list of ids
-     * (resIds) in the current dataPoint to the exported state.
+     *OverridetoaddthecurrentrecordID(currentId)andthelistofids
+     *(resIds)inthecurrentdataPointtotheexportedstate.
      *
-     * @override
+     *@override
      */
-    exportState: function () {
-        var state = this._super.apply(this, arguments);
-        var env = this.model.get(this.handle, {env: true});
-        return _.extend(state, {
-            currentId: env.currentId,
-            resIds: env.ids,
+    exportState:function(){
+        varstate=this._super.apply(this,arguments);
+        varenv=this.model.get(this.handle,{env:true});
+        return_.extend(state,{
+            currentId:env.currentId,
+            resIds:env.ids,
         });
     },
     /**
-     * Compute the optional fields local storage key using the given parts.
+     *Computetheoptionalfieldslocalstoragekeyusingthegivenparts.
      *
-     * @param {Object} keyParts
-     * @param {string} keyParts.viewType view type
-     * @param {string} [keyParts.relationalField] name of the field with subview
-     * @param {integer} [keyParts.subViewId] subview id
-     * @param {string} [keyParts.subViewType] type of the subview
-     * @param {Object} keyParts.fields fields
-     * @param {string} keyParts.fields.name field name
-     * @param {string} keyParts.fields.type field type
-     * @returns {string} local storage key for optional fields in this view
-     * @private
+     *@param{Object}keyParts
+     *@param{string}keyParts.viewTypeviewtype
+     *@param{string}[keyParts.relationalField]nameofthefieldwithsubview
+     *@param{integer}[keyParts.subViewId]subviewid
+     *@param{string}[keyParts.subViewType]typeofthesubview
+     *@param{Object}keyParts.fieldsfields
+     *@param{string}keyParts.fields.namefieldname
+     *@param{string}keyParts.fields.typefieldtype
+     *@returns{string}localstoragekeyforoptionalfieldsinthisview
+     *@private
      */
-    _getOptionalFieldsLocalStorageKey: function (keyParts) {
-        keyParts.model = this.modelName;
-        keyParts.viewType = this.viewType;
-        keyParts.viewId = this.viewId;
+    _getOptionalFieldsLocalStorageKey:function(keyParts){
+        keyParts.model=this.modelName;
+        keyParts.viewType=this.viewType;
+        keyParts.viewId=this.viewId;
 
-        var parts = [
+        varparts=[
             'model',
             'viewType',
             'viewId',
@@ -490,324 +490,324 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
             'subViewId',
         ];
 
-        var viewIdentifier = parts.reduce(function (identifier, partName) {
-            if (partName in keyParts) {
-                return identifier + ',' + keyParts[partName];
+        varviewIdentifier=parts.reduce(function(identifier,partName){
+            if(partNameinkeyParts){
+                returnidentifier+','+keyParts[partName];
             }
-            return identifier;
-        }, 'optional_fields');
+            returnidentifier;
+        },'optional_fields');
 
-        viewIdentifier =
+        viewIdentifier=
             keyParts.fields.sort(this._nameSortComparer)
-                           .reduce(function (identifier, field) {
-                                return identifier + ',' + field.name;
-                            }, viewIdentifier);
+                           .reduce(function(identifier,field){
+                                returnidentifier+','+field.name;
+                            },viewIdentifier);
 
-        return viewIdentifier;
+        returnviewIdentifier;
     },
     /**
-     * Return the params (currentMinimum, limit and size) to pass to the pager,
-     * according to the current state.
+     *Returntheparams(currentMinimum,limitandsize)topasstothepager,
+     *accordingtothecurrentstate.
      *
-     * @private
-     * @returns {Object}
+     *@private
+     *@returns{Object}
      */
-    _getPagingInfo: function (state) {
-        const isGrouped = state.groupedBy && state.groupedBy.length;
-        return {
-            currentMinimum: (isGrouped ? state.groupsOffset : state.offset) + 1,
-            limit: isGrouped ? state.groupsLimit : state.limit,
-            size: isGrouped ? state.groupsCount : state.count,
+    _getPagingInfo:function(state){
+        constisGrouped=state.groupedBy&&state.groupedBy.length;
+        return{
+            currentMinimum:(isGrouped?state.groupsOffset:state.offset)+1,
+            limit:isGrouped?state.groupsLimit:state.limit,
+            size:isGrouped?state.groupsCount:state.count,
         };
     },
     /**
-     * Return the new actionMenus props.
+     *ReturnthenewactionMenusprops.
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _getActionMenuItems: function (state) {
-        return {
-            activeIds: this.getSelectedIds(),
-            context: state.getContext(),
+    _getActionMenuItems:function(state){
+        return{
+            activeIds:this.getSelectedIds(),
+            context:state.getContext(),
         };
     },
     /**
-     *  Sort function used to sort the fields by names, to compute the optional fields keys
+     * Sortfunctionusedtosortthefieldsbynames,tocomputetheoptionalfieldskeys
      *
-     *  @param {Object} left
-     *  @param {Object} right
-     *  @private
+     * @param{Object}left
+     * @param{Object}right
+     * @private
       */
-    _nameSortComparer: function(left, right) {
-        return left.name < right.name ? -1 : 1;
+    _nameSortComparer:function(left,right){
+        returnleft.name<right.name?-1:1;
     },
     /**
-     * Helper function to display a warning that some fields have an invalid
-     * value. This is used when a save operation cannot be completed.
+     *Helperfunctiontodisplayawarningthatsomefieldshaveaninvalid
+     *value.Thisisusedwhenasaveoperationcannotbecompleted.
      *
-     * @private
-     * @param {string[]} invalidFields - list of field names
+     *@private
+     *@param{string[]}invalidFields-listoffieldnames
      */
-    _notifyInvalidFields: function (invalidFields) {
-        var record = this.model.get(this.handle, {raw: true});
-        var fields = record.fields;
-        var warnings = invalidFields.map(function (fieldName) {
-            var fieldStr = fields[fieldName].string;
-            return _.str.sprintf('<li>%s</li>', _.escape(fieldStr));
+    _notifyInvalidFields:function(invalidFields){
+        varrecord=this.model.get(this.handle,{raw:true});
+        varfields=record.fields;
+        varwarnings=invalidFields.map(function(fieldName){
+            varfieldStr=fields[fieldName].string;
+            return_.str.sprintf('<li>%s</li>',_.escape(fieldStr));
         });
         warnings.unshift('<ul>');
         warnings.push('</ul>');
-        this.do_warn(_t("Invalid fields:"), warnings.join(''));
+        this.do_warn(_t("Invalidfields:"),warnings.join(''));
     },
     /**
-     * Hook method, called when record(s) has been deleted.
+     *Hookmethod,calledwhenrecord(s)hasbeendeleted.
      *
-     * @see _deleteRecord
-     * @param {string[]} ids list of deleted ids (basic model local handles)
+     *@see_deleteRecord
+     *@param{string[]}idslistofdeletedids(basicmodellocalhandles)
      */
-    _onDeletedRecords: function (ids) {
+    _onDeletedRecords:function(ids){
         this.update({});
     },
     /**
-     * Saves the record whose ID is given, if necessary. Automatically leaves
-     * edit mode for the given record, unless told otherwise.
+     *SavestherecordwhoseIDisgiven,ifnecessary.Automaticallyleaves
+     *editmodeforthegivenrecord,unlesstoldotherwise.
      *
-     * @param {string} [recordID] - default to main recordID
-     * @param {Object} [options]
-     * @param {boolean} [options.stayInEdit=false]
-     *        if true, leave the record in edit mode after save
-     * @param {boolean} [options.reload=true]
-     *        if true, reload the record after (real) save
-     * @param {boolean} [options.savePoint=false]
-     *        if true, the record will only be 'locally' saved: its changes
-     *        will move from the _changes key to the data key
-     * @returns {Promise}
-     *        Resolved with the list of field names (whose value has been modified)
-     *        Rejected if the record can't be saved
+     *@param{string}[recordID]-defaulttomainrecordID
+     *@param{Object}[options]
+     *@param{boolean}[options.stayInEdit=false]
+     *       iftrue,leavetherecordineditmodeaftersave
+     *@param{boolean}[options.reload=true]
+     *       iftrue,reloadtherecordafter(real)save
+     *@param{boolean}[options.savePoint=false]
+     *       iftrue,therecordwillonlybe'locally'saved:itschanges
+     *       willmovefromthe_changeskeytothedatakey
+     *@returns{Promise}
+     *       Resolvedwiththelistoffieldnames(whosevaluehasbeenmodified)
+     *       Rejectediftherecordcan'tbesaved
      */
-    _saveRecord: function (recordID, options) {
-        recordID = recordID || this.handle;
-        options = _.defaults(options || {}, {
-            stayInEdit: false,
-            reload: true,
-            savePoint: false,
+    _saveRecord:function(recordID,options){
+        recordID=recordID||this.handle;
+        options=_.defaults(options||{},{
+            stayInEdit:false,
+            reload:true,
+            savePoint:false,
         });
 
-        // Check if the view is in a valid state for saving
-        // Note: it is the model's job to do nothing if there is nothing to save
-        if (this.canBeSaved(recordID)) {
-            var self = this;
-            var saveDef = this.model.save(recordID, { // Save then leave edit mode
-                reload: options.reload,
-                savePoint: options.savePoint,
-                viewType: options.viewType,
+        //Checkiftheviewisinavalidstateforsaving
+        //Note:itisthemodel'sjobtodonothingifthereisnothingtosave
+        if(this.canBeSaved(recordID)){
+            varself=this;
+            varsaveDef=this.model.save(recordID,{//Savethenleaveeditmode
+                reload:options.reload,
+                savePoint:options.savePoint,
+                viewType:options.viewType,
             });
-            if (!options.stayInEdit) {
-                saveDef = saveDef.then(function (fieldNames) {
-                    var def = fieldNames.length ? self._confirmSave(recordID) : self._setMode('readonly', recordID);
-                    return def.then(function () {
-                        return fieldNames;
+            if(!options.stayInEdit){
+                saveDef=saveDef.then(function(fieldNames){
+                    vardef=fieldNames.length?self._confirmSave(recordID):self._setMode('readonly',recordID);
+                    returndef.then(function(){
+                        returnfieldNames;
                     });
                 });
             }
-            return saveDef;
-        } else {
-            return Promise.reject("SaveRecord: this.canBeSave is false"); // Cannot be saved
+            returnsaveDef;
+        }else{
+            returnPromise.reject("SaveRecord:this.canBeSaveisfalse");//Cannotbesaved
         }
     },
     /**
-     * Change the mode for the record associated to the given ID.
-     * If the given recordID is the view's main one, then the whole view mode is
-     * changed (@see BasicController.update).
+     *ChangethemodefortherecordassociatedtothegivenID.
+     *IfthegivenrecordIDistheview'smainone,thenthewholeviewmodeis
+     *changed(@seeBasicController.update).
      *
-     * @private
-     * @param {string} mode - 'readonly' or 'edit'
-     * @param {string} [recordID]
-     * @returns {Promise}
+     *@private
+     *@param{string}mode-'readonly'or'edit'
+     *@param{string}[recordID]
+     *@returns{Promise}
      */
-    _setMode: function (mode, recordID) {
-        if ((recordID || this.handle) === this.handle) {
-            return this.update({mode: mode}, {reload: false}).then(function () {
-                // necessary to allow all sub widgets to use their dimensions in
-                // layout related activities, such as autoresize on fieldtexts
+    _setMode:function(mode,recordID){
+        if((recordID||this.handle)===this.handle){
+            returnthis.update({mode:mode},{reload:false}).then(function(){
+                //necessarytoallowallsubwidgetstousetheirdimensionsin
+                //layoutrelatedactivities,suchasautoresizeonfieldtexts
                 core.bus.trigger('DOM_updated');
             });
         }
-        return Promise.resolve();
+        returnPromise.resolve();
     },
     /**
-     * To override such that it returns true iff the primary action button must
-     * bounce when the user clicked on the given element, according to the
-     * current state of the view.
+     *Tooverridesuchthatitreturnstrueifftheprimaryactionbuttonmust
+     *bouncewhentheuserclickedonthegivenelement,accordingtothe
+     *currentstateoftheview.
      *
-     * @private
-     * @param {HTMLElement} element the node the user clicked on
-     * @returns {boolean}
+     *@private
+     *@param{HTMLElement}elementthenodetheuserclickedon
+     *@returns{boolean}
      */
-    _shouldBounceOnClick: function (/* element */) {
-        return false;
+    _shouldBounceOnClick:function(/*element*/){
+        returnfalse;
     },
     /**
-     * Helper method, to get the current environment variables from the model
-     * and notifies the component chain (by bubbling an event up)
+     *Helpermethod,togetthecurrentenvironmentvariablesfromthemodel
+     *andnotifiesthecomponentchain(bybubblinganeventup)
      *
-     * @private
-     * @param {Object} [newProps={}]
+     *@private
+     *@param{Object}[newProps={}]
      */
-    _updateControlPanel: function (newProps = {}) {
-        const state = this.model.get(this.handle);
-        const props = Object.assign(newProps, {
-            actionMenus: this._getActionMenuItems(state),
-            pager: this._getPagingInfo(state),
-            title: this.getTitle(),
+    _updateControlPanel:function(newProps={}){
+        conststate=this.model.get(this.handle);
+        constprops=Object.assign(newProps,{
+            actionMenus:this._getActionMenuItems(state),
+            pager:this._getPagingInfo(state),
+            title:this.getTitle(),
         });
-        return this.updateControlPanel(props);
+        returnthis.updateControlPanel(props);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the user clicks on the 'content' part of the controller
-     * (typically the renderer area). Makes the first primary button in the
-     * control panel bounce, in some situations (see _shouldBounceOnClick).
+     *Calledwhentheuserclicksonthe'content'partofthecontroller
+     *(typicallytherendererarea).Makesthefirstprimarybuttoninthe
+     *controlpanelbounce,insomesituations(see_shouldBounceOnClick).
      *
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onContentClicked(ev) {
-        if (this.$buttons && this._shouldBounceOnClick(ev.target)) {
+    _onContentClicked(ev){
+        if(this.$buttons&&this._shouldBounceOnClick(ev.target)){
             this.$buttons.find('.btn-primary:visible:first').flectraBounce();
         }
     },
     /**
-     * Called when a list element asks to discard the changes made to one of
-     * its rows.  It can happen with a x2many (if we are in a form view) or with
-     * a list view.
+     *Calledwhenalistelementaskstodiscardthechangesmadetooneof
+     *itsrows. Itcanhappenwithax2many(ifweareinaformview)orwith
+     *alistview.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onDiscardChanges: function (ev) {
-        var self = this;
+    _onDiscardChanges:function(ev){
+        varself=this;
         ev.stopPropagation();
-        var recordID = ev.data.recordID;
+        varrecordID=ev.data.recordID;
         this._discardChanges(recordID)
-            .then(function () {
-                // TODO this will tell the renderer to rerender the widget that
-                // asked for the discard but will unfortunately lose the click
-                // made on another row if any
-                self._confirmChange(recordID, [ev.data.fieldName], ev)
+            .then(function(){
+                //TODOthiswilltelltherenderertorerenderthewidgetthat
+                //askedforthediscardbutwillunfortunatelylosetheclick
+                //madeonanotherrowifany
+                self._confirmChange(recordID,[ev.data.fieldName],ev)
                     .then(ev.data.onSuccess).guardedCatch(ev.data.onSuccess);
             })
             .guardedCatch(ev.data.onFailure);
     },
     /**
-     * Forces to save directly the changes if the controller is in readonly,
-     * because in that case the changes come from widgets that are editable even
-     * in readonly (e.g. Priority).
+     *Forcestosavedirectlythechangesifthecontrollerisinreadonly,
+     *becauseinthatcasethechangescomefromwidgetsthatareeditableeven
+     *inreadonly(e.g.Priority).
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onFieldChanged: function (ev) {
-        if (this.mode === 'readonly' && !('force_save' in ev.data)) {
-            ev.data.force_save = true;
+    _onFieldChanged:function(ev){
+        if(this.mode==='readonly'&&!('force_save'inev.data)){
+            ev.data.force_save=true;
         }
-        FieldManagerMixin._onFieldChanged.apply(this, arguments);
+        FieldManagerMixin._onFieldChanged.apply(this,arguments);
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onPagerChanged: async function (ev) {
+    _onPagerChanged:asyncfunction(ev){
         ev.stopPropagation();
-        const { currentMinimum, limit } = ev.data;
-        const state = this.model.get(this.handle, { raw: true });
-        const reloadParams = state.groupedBy && state.groupedBy.length ? {
-                groupsLimit: limit,
-                groupsOffset: currentMinimum - 1,
-            } : {
+        const{currentMinimum,limit}=ev.data;
+        conststate=this.model.get(this.handle,{raw:true});
+        constreloadParams=state.groupedBy&&state.groupedBy.length?{
+                groupsLimit:limit,
+                groupsOffset:currentMinimum-1,
+            }:{
                 limit,
-                offset: currentMinimum - 1,
+                offset:currentMinimum-1,
             };
-        await this.reload(reloadParams);
-        // reset the scroll position to the top on page changed only
-        if (state.limit === limit) {
-            this.trigger_up('scrollTo', { top: 0 });
+        awaitthis.reload(reloadParams);
+        //resetthescrollpositiontothetoponpagechangedonly
+        if(state.limit===limit){
+            this.trigger_up('scrollTo',{top:0});
         }
     },
     /**
-     * When a reload event triggers up, we need to reload the full view.
-     * For example, after a form view dialog saved some data.
+     *Whenareloadeventtriggersup,weneedtoreloadthefullview.
+     *Forexample,afteraformviewdialogsavedsomedata.
      *
-     * @todo: rename db_id into handle
+     *@todo:renamedb_idintohandle
      *
-     * @param {FlectraEvent} ev
-     * @param {Object} ev.data
-     * @param {string} [ev.data.db_id] handle of the data to reload and
-     *   re-render (reload the whole form by default)
-     * @param {string[]} [ev.data.fieldNames] list of the record's fields to
-     *   reload
-     * @param {Function} [ev.data.onSuccess] callback executed after reload is resolved
-     * @param {Function} [ev.data.onFailure] callback executed when reload is rejected
+     *@param{FlectraEvent}ev
+     *@param{Object}ev.data
+     *@param{string}[ev.data.db_id]handleofthedatatoreloadand
+     *  re-render(reloadthewholeformbydefault)
+     *@param{string[]}[ev.data.fieldNames]listoftherecord'sfieldsto
+     *  reload
+     *@param{Function}[ev.data.onSuccess]callbackexecutedafterreloadisresolved
+     *@param{Function}[ev.data.onFailure]callbackexecutedwhenreloadisrejected
      */
-    _onReload: function (ev) {
-        ev.stopPropagation(); // prevent other controllers from handling this request
-        var data = ev && ev.data || {};
-        var handle = data.db_id;
-        var prom;
-        if (handle) {
-            // reload the relational field given its db_id
-            prom = this.model.reload(handle).then(this._confirmSave.bind(this, handle));
-        } else {
-            // no db_id given, so reload the main record
-            prom = this.reload({
-                fieldNames: data.fieldNames,
-                keepChanges: data.keepChanges || false,
+    _onReload:function(ev){
+        ev.stopPropagation();//preventothercontrollersfromhandlingthisrequest
+        vardata=ev&&ev.data||{};
+        varhandle=data.db_id;
+        varprom;
+        if(handle){
+            //reloadtherelationalfieldgivenitsdb_id
+            prom=this.model.reload(handle).then(this._confirmSave.bind(this,handle));
+        }else{
+            //nodb_idgiven,soreloadthemainrecord
+            prom=this.reload({
+                fieldNames:data.fieldNames,
+                keepChanges:data.keepChanges||false,
             });
         }
         prom.then(ev.data.onSuccess).guardedCatch(ev.data.onFailure);
     },
     /**
-     * Resequence records in the given order.
+     *Resequencerecordsinthegivenorder.
      *
-     * @private
-     * @param {FlectraEvent} ev
-     * @param {string[]} ev.data.recordIds
-     * @param {integer} ev.data.offset
-     * @param {string} ev.data.handleField
+     *@private
+     *@param{FlectraEvent}ev
+     *@param{string[]}ev.data.recordIds
+     *@param{integer}ev.data.offset
+     *@param{string}ev.data.handleField
      */
-    _onResequenceRecords: function (ev) {
-        ev.stopPropagation(); // prevent other controllers from handling this request
-        this.trigger_up('mutexify', {
-            action: async () => {
-                let state = this.model.get(this.handle);
-                const resIDs = ev.data.recordIds
-                    .map(recordID => state.data.find(d => d.id === recordID).res_id);
-                const options = {
-                    offset: ev.data.offset,
-                    field: ev.data.handleField,
+    _onResequenceRecords:function(ev){
+        ev.stopPropagation();//preventothercontrollersfromhandlingthisrequest
+        this.trigger_up('mutexify',{
+            action:async()=>{
+                letstate=this.model.get(this.handle);
+                constresIDs=ev.data.recordIds
+                    .map(recordID=>state.data.find(d=>d.id===recordID).res_id);
+                constoptions={
+                    offset:ev.data.offset,
+                    field:ev.data.handleField,
                 };
-                await this.model.resequence(this.modelName, resIDs, this.handle, options);
+                awaitthis.model.resequence(this.modelName,resIDs,this.handle,options);
                 this._updateControlPanel();
-                state = this.model.get(this.handle);
-                return this._updateRendererState(state, { noRender: true });
+                state=this.model.get(this.handle);
+                returnthis._updateRendererState(state,{noRender:true});
             },
         });
     },
     /**
-     * Load the optional columns settings in local storage for this view
+     *Loadtheoptionalcolumnssettingsinlocalstorageforthisview
      *
-     * @param {FlectraEvent} ev
-     * @param {Object} ev.data.keyParts see _getLocalStorageKey
-     * @param {function} ev.data.callback function to call with the result
-     * @private
+     *@param{FlectraEvent}ev
+     *@param{Object}ev.data.keyPartssee_getLocalStorageKey
+     *@param{function}ev.data.callbackfunctiontocallwiththeresult
+     *@private
      */
-    _onLoadOptionalFields: function (ev) {
-        var res = this.call(
+    _onLoadOptionalFields:function(ev){
+        varres=this.call(
             'local_storage',
             'getItem',
             this._getOptionalFieldsLocalStorageKey(ev.data.keyParts)
@@ -815,15 +815,15 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
         ev.data.callback(res);
     },
     /**
-     * Save the optional columns settings in local storage for this view
+     *Savetheoptionalcolumnssettingsinlocalstorageforthisview
      *
-     * @param {FlectraEvent} ev
-     * @param {Object} ev.data.keyParts see _getLocalStorageKey
-     * @param {Array<string>} ev.data.optionalColumnsEnabled list of optional
-     *   field names that have been enabled
-     * @private
+     *@param{FlectraEvent}ev
+     *@param{Object}ev.data.keyPartssee_getLocalStorageKey
+     *@param{Array<string>}ev.data.optionalColumnsEnabledlistofoptional
+     *  fieldnamesthathavebeenenabled
+     *@private
      */
-    _onSaveOptionalFields: function (ev) {
+    _onSaveOptionalFields:function(ev){
         this.call(
             'local_storage',
             'setItem',
@@ -832,53 +832,53 @@ var BasicController = AbstractController.extend(FieldManagerMixin, {
         );
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onSetDirty: function (ev) {
-        ev.stopPropagation(); // prevent other controllers from handling this request
+    _onSetDirty:function(ev){
+        ev.stopPropagation();//preventothercontrollersfromhandlingthisrequest
         this.model.setDirty(ev.data.dataPointID);
     },
     /**
-     * open the translation view for the current field
+     *openthetranslationviewforthecurrentfield
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onTranslate: async function (ev) {
+    _onTranslate:asyncfunction(ev){
         ev.stopPropagation();
 
-        if (this.model.isNew(ev.data.id)) {
-            await this._confirmSaveNewRecord();
-            var updatedFields = await this.saveRecord(ev.data.id, { stayInEdit: true });
-            await this._confirmChange(ev.data.id, updatedFields, ev);
+        if(this.model.isNew(ev.data.id)){
+            awaitthis._confirmSaveNewRecord();
+            varupdatedFields=awaitthis.saveRecord(ev.data.id,{stayInEdit:true});
+            awaitthis._confirmChange(ev.data.id,updatedFields,ev);
         }
-        var record = this.model.get(ev.data.id, { raw: true });
-        var res_id = record.res_id || record.res_ids[0];
-        var result = await this._rpc({
-            route: '/web/dataset/call_button',
-            params: {
-                model: 'ir.translation',
-                method: 'translate_fields',
-                args: [record.model, res_id, ev.data.fieldName],
-                kwargs: { context: record.getContext() },
+        varrecord=this.model.get(ev.data.id,{raw:true});
+        varres_id=record.res_id||record.res_ids[0];
+        varresult=awaitthis._rpc({
+            route:'/web/dataset/call_button',
+            params:{
+                model:'ir.translation',
+                method:'translate_fields',
+                args:[record.model,res_id,ev.data.fieldName],
+                kwargs:{context:record.getContext()},
             }
         });
 
-        this.translationDialog = new TranslationDialog(this, {
-            domain: result.domain,
-            searchName: result.context.search_default_name,
-            fieldName: ev.data.fieldName,
-            userLanguageValue: ev.target.value || '',
-            dataPointID: record.id,
-            isComingFromTranslationAlert: ev.data.isComingFromTranslationAlert,
-            isText: result.context.translation_type === 'text',
-            showSrc: result.context.translation_show_src,
-            node: ev.target && ev.target.__node,
+        this.translationDialog=newTranslationDialog(this,{
+            domain:result.domain,
+            searchName:result.context.search_default_name,
+            fieldName:ev.data.fieldName,
+            userLanguageValue:ev.target.value||'',
+            dataPointID:record.id,
+            isComingFromTranslationAlert:ev.data.isComingFromTranslationAlert,
+            isText:result.context.translation_type==='text',
+            showSrc:result.context.translation_show_src,
+            node:ev.target&&ev.target.__node,
         });
-        return this.translationDialog.open();
+        returnthis.translationDialog.open();
     },
 });
 
-return BasicController;
+returnBasicController;
 });

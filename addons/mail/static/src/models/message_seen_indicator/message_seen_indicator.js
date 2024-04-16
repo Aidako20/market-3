@@ -1,358 +1,358 @@
-flectra.define('mail/static/src/models/message_seen_indicator/message_seen_indicator.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/message_seen_indicator/message_seen_indicator.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr, many2many, many2one, one2many } = require('mail/static/src/model/model_field.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{attr,many2many,many2one,one2many}=require('mail/static/src/model/model_field.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class MessageSeenIndicator extends dependencies['mail.model'] {
+    classMessageSeenIndicatorextendsdependencies['mail.model']{
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * @static
-         * @param {mail.thread} [channel] the concerned thread
+         *@static
+         *@param{mail.thread}[channel]theconcernedthread
          */
-        static recomputeFetchedValues(channel = undefined) {
-            const indicatorFindFunction = channel ? localIndicator => localIndicator.thread === channel : undefined;
-            const indicators = this.env.models['mail.message_seen_indicator'].all(indicatorFindFunction);
-            for (const indicator of indicators) {
+        staticrecomputeFetchedValues(channel=undefined){
+            constindicatorFindFunction=channel?localIndicator=>localIndicator.thread===channel:undefined;
+            constindicators=this.env.models['mail.message_seen_indicator'].all(indicatorFindFunction);
+            for(constindicatorofindicators){
                 indicator.update({
-                    hasEveryoneFetched: indicator._computeHasEveryoneFetched(),
-                    hasSomeoneFetched: indicator._computeHasSomeoneFetched(),
-                    partnersThatHaveFetched: indicator._computePartnersThatHaveFetched(),
+                    hasEveryoneFetched:indicator._computeHasEveryoneFetched(),
+                    hasSomeoneFetched:indicator._computeHasSomeoneFetched(),
+                    partnersThatHaveFetched:indicator._computePartnersThatHaveFetched(),
                 });
             }
         }
 
         /**
-         * @static
-         * @param {mail.thread} [channel] the concerned thread
+         *@static
+         *@param{mail.thread}[channel]theconcernedthread
          */
-        static recomputeSeenValues(channel = undefined) {
-            const indicatorFindFunction = channel ? localIndicator => localIndicator.thread === channel : undefined;
-            const indicators = this.env.models['mail.message_seen_indicator'].all(indicatorFindFunction);
-            for (const indicator of indicators) {
+        staticrecomputeSeenValues(channel=undefined){
+            constindicatorFindFunction=channel?localIndicator=>localIndicator.thread===channel:undefined;
+            constindicators=this.env.models['mail.message_seen_indicator'].all(indicatorFindFunction);
+            for(constindicatorofindicators){
                 indicator.update({
-                    hasEveryoneSeen: indicator._computeHasEveryoneSeen(),
-                    hasSomeoneFetched: indicator._computeHasSomeoneFetched(),
-                    hasSomeoneSeen: indicator._computeHasSomeoneSeen(),
+                    hasEveryoneSeen:indicator._computeHasEveryoneSeen(),
+                    hasSomeoneFetched:indicator._computeHasSomeoneFetched(),
+                    hasSomeoneSeen:indicator._computeHasSomeoneSeen(),
                     isMessagePreviousToLastCurrentPartnerMessageSeenByEveryone:
                         indicator._computeIsMessagePreviousToLastCurrentPartnerMessageSeenByEveryone(),
-                    partnersThatHaveFetched: indicator._computePartnersThatHaveFetched(),
-                    partnersThatHaveSeen: indicator._computePartnersThatHaveSeen(),
+                    partnersThatHaveFetched:indicator._computePartnersThatHaveFetched(),
+                    partnersThatHaveSeen:indicator._computePartnersThatHaveSeen(),
                 });
             }
         }
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @override
+         *@override
          */
-        static _createRecordLocalId(data) {
-            const { channelId, messageId } = data;
-            return `${this.modelName}_${channelId}_${messageId}`;
+        static_createRecordLocalId(data){
+            const{channelId,messageId}=data;
+            return`${this.modelName}_${channelId}_${messageId}`;
         }
 
         /**
-         * Manually called as not always called when necessary
+         *Manuallycalledasnotalwayscalledwhennecessary
          *
-         * @private
-         * @returns {boolean}
-         * @see computeFetchedValues
-         * @see computeSeenValues
+         *@private
+         *@returns{boolean}
+         *@seecomputeFetchedValues
+         *@seecomputeSeenValues
          */
-        _computeHasEveryoneFetched() {
-            if (!this.message || !this.thread || !this.thread.partnerSeenInfos) {
-                return false;
+        _computeHasEveryoneFetched(){
+            if(!this.message||!this.thread||!this.thread.partnerSeenInfos){
+                returnfalse;
             }
-            const otherPartnerSeenInfosDidNotFetch =
-                this.thread.partnerSeenInfos.filter(partnerSeenInfo =>
-                    partnerSeenInfo.partner !== this.message.author &&
+            constotherPartnerSeenInfosDidNotFetch=
+                this.thread.partnerSeenInfos.filter(partnerSeenInfo=>
+                    partnerSeenInfo.partner!==this.message.author&&
                     (
-                        !partnerSeenInfo.lastFetchedMessage ||
-                        partnerSeenInfo.lastFetchedMessage.id < this.message.id
+                        !partnerSeenInfo.lastFetchedMessage||
+                        partnerSeenInfo.lastFetchedMessage.id<this.message.id
                     )
             );
-            return otherPartnerSeenInfosDidNotFetch.length === 0;
+            returnotherPartnerSeenInfosDidNotFetch.length===0;
         }
 
         /**
-         * Manually called as not always called when necessary
+         *Manuallycalledasnotalwayscalledwhennecessary
          *
-         * @private
-         * @returns {boolean}
-         * @see computeSeenValues
+         *@private
+         *@returns{boolean}
+         *@seecomputeSeenValues
          */
-        _computeHasEveryoneSeen() {
-            if (!this.message || !this.thread || !this.thread.partnerSeenInfos) {
-                return false;
+        _computeHasEveryoneSeen(){
+            if(!this.message||!this.thread||!this.thread.partnerSeenInfos){
+                returnfalse;
             }
-            const otherPartnerSeenInfosDidNotSee =
-                this.thread.partnerSeenInfos.filter(partnerSeenInfo =>
-                    partnerSeenInfo.partner !== this.message.author &&
+            constotherPartnerSeenInfosDidNotSee=
+                this.thread.partnerSeenInfos.filter(partnerSeenInfo=>
+                    partnerSeenInfo.partner!==this.message.author&&
                     (
-                        !partnerSeenInfo.lastSeenMessage ||
-                        partnerSeenInfo.lastSeenMessage.id < this.message.id
+                        !partnerSeenInfo.lastSeenMessage||
+                        partnerSeenInfo.lastSeenMessage.id<this.message.id
                     )
             );
-            return otherPartnerSeenInfosDidNotSee.length === 0;
+            returnotherPartnerSeenInfosDidNotSee.length===0;
         }
 
         /**
-         * Manually called as not always called when necessary
+         *Manuallycalledasnotalwayscalledwhennecessary
          *
-         * @private
-         * @returns {boolean}
-         * @see computeFetchedValues
-         * @see computeSeenValues
+         *@private
+         *@returns{boolean}
+         *@seecomputeFetchedValues
+         *@seecomputeSeenValues
          */
-        _computeHasSomeoneFetched() {
-            if (!this.message || !this.thread || !this.thread.partnerSeenInfos) {
-                return false;
+        _computeHasSomeoneFetched(){
+            if(!this.message||!this.thread||!this.thread.partnerSeenInfos){
+                returnfalse;
             }
-            const otherPartnerSeenInfosFetched =
-                this.thread.partnerSeenInfos.filter(partnerSeenInfo =>
-                    partnerSeenInfo.partner !== this.message.author &&
-                    partnerSeenInfo.lastFetchedMessage &&
-                    partnerSeenInfo.lastFetchedMessage.id >= this.message.id
+            constotherPartnerSeenInfosFetched=
+                this.thread.partnerSeenInfos.filter(partnerSeenInfo=>
+                    partnerSeenInfo.partner!==this.message.author&&
+                    partnerSeenInfo.lastFetchedMessage&&
+                    partnerSeenInfo.lastFetchedMessage.id>=this.message.id
             );
-            return otherPartnerSeenInfosFetched.length > 0;
+            returnotherPartnerSeenInfosFetched.length>0;
         }
 
         /**
-         * Manually called as not always called when necessary
+         *Manuallycalledasnotalwayscalledwhennecessary
          *
-         * @private
-         * @returns {boolean}
-         * @see computeSeenValues
+         *@private
+         *@returns{boolean}
+         *@seecomputeSeenValues
          */
-        _computeHasSomeoneSeen() {
-            if (!this.message || !this.thread || !this.thread.partnerSeenInfos) {
-                return false;
+        _computeHasSomeoneSeen(){
+            if(!this.message||!this.thread||!this.thread.partnerSeenInfos){
+                returnfalse;
             }
-            const otherPartnerSeenInfosSeen =
-                this.thread.partnerSeenInfos.filter(partnerSeenInfo =>
-                    partnerSeenInfo.partner !== this.message.author &&
-                    partnerSeenInfo.lastSeenMessage &&
-                    partnerSeenInfo.lastSeenMessage.id >= this.message.id
+            constotherPartnerSeenInfosSeen=
+                this.thread.partnerSeenInfos.filter(partnerSeenInfo=>
+                    partnerSeenInfo.partner!==this.message.author&&
+                    partnerSeenInfo.lastSeenMessage&&
+                    partnerSeenInfo.lastSeenMessage.id>=this.message.id
             );
-            return otherPartnerSeenInfosSeen.length > 0;
+            returnotherPartnerSeenInfosSeen.length>0;
         }
 
         /**
-         * Manually called as not always called when necessary
+         *Manuallycalledasnotalwayscalledwhennecessary
          *
-         * @private
-         * @returns {boolean}
-         * @see computeSeenValues
+         *@private
+         *@returns{boolean}
+         *@seecomputeSeenValues
          */
-        _computeIsMessagePreviousToLastCurrentPartnerMessageSeenByEveryone() {
-            if (
-                !this.message ||
-                !this.thread ||
+        _computeIsMessagePreviousToLastCurrentPartnerMessageSeenByEveryone(){
+            if(
+                !this.message||
+                !this.thread||
                 !this.thread.lastCurrentPartnerMessageSeenByEveryone
-            ) {
-                return false;
+            ){
+                returnfalse;
             }
-            return this.message.id < this.thread.lastCurrentPartnerMessageSeenByEveryone.id;
+            returnthis.message.id<this.thread.lastCurrentPartnerMessageSeenByEveryone.id;
         }
 
         /**
-         * Manually called as not always called when necessary
+         *Manuallycalledasnotalwayscalledwhennecessary
          *
-         * @private
-         * @returns {mail.partner[]}
-         * @see computeFetchedValues
-         * @see computeSeenValues
+         *@private
+         *@returns{mail.partner[]}
+         *@seecomputeFetchedValues
+         *@seecomputeSeenValues
          */
-        _computePartnersThatHaveFetched() {
-            if (!this.message || !this.thread || !this.thread.partnerSeenInfos) {
-                return [['unlink-all']];
+        _computePartnersThatHaveFetched(){
+            if(!this.message||!this.thread||!this.thread.partnerSeenInfos){
+                return[['unlink-all']];
             }
-            const otherPartnersThatHaveFetched = this.thread.partnerSeenInfos
-                .filter(partnerSeenInfo =>
+            constotherPartnersThatHaveFetched=this.thread.partnerSeenInfos
+                .filter(partnerSeenInfo=>
                     /**
-                     * Relation may not be set yet immediately
-                     * @see mail.thread_partner_seen_info:partnerId field
-                     * FIXME task-2278551
+                     *Relationmaynotbesetyetimmediately
+                     *@seemail.thread_partner_seen_info:partnerIdfield
+                     *FIXMEtask-2278551
                      */
-                    partnerSeenInfo.partner &&
-                    partnerSeenInfo.partner !== this.message.author &&
-                    partnerSeenInfo.lastFetchedMessage &&
-                    partnerSeenInfo.lastFetchedMessage.id >= this.message.id
+                    partnerSeenInfo.partner&&
+                    partnerSeenInfo.partner!==this.message.author&&
+                    partnerSeenInfo.lastFetchedMessage&&
+                    partnerSeenInfo.lastFetchedMessage.id>=this.message.id
                 )
-                .map(partnerSeenInfo => partnerSeenInfo.partner);
-            if (otherPartnersThatHaveFetched.length === 0) {
-                return [['unlink-all']];
+                .map(partnerSeenInfo=>partnerSeenInfo.partner);
+            if(otherPartnersThatHaveFetched.length===0){
+                return[['unlink-all']];
             }
-            return [['replace', otherPartnersThatHaveFetched]];
+            return[['replace',otherPartnersThatHaveFetched]];
         }
 
         /**
-         * Manually called as not always called when necessary
+         *Manuallycalledasnotalwayscalledwhennecessary
          *
-         * @private
-         * @returns {mail.partner[]}
-         * @see computeSeenValues
+         *@private
+         *@returns{mail.partner[]}
+         *@seecomputeSeenValues
          */
-        _computePartnersThatHaveSeen() {
-            if (!this.message || !this.thread || !this.thread.partnerSeenInfos) {
-                return [['unlink-all']];
+        _computePartnersThatHaveSeen(){
+            if(!this.message||!this.thread||!this.thread.partnerSeenInfos){
+                return[['unlink-all']];
             }
-            const otherPartnersThatHaveSeen = this.thread.partnerSeenInfos
-                .filter(partnerSeenInfo =>
+            constotherPartnersThatHaveSeen=this.thread.partnerSeenInfos
+                .filter(partnerSeenInfo=>
                     /**
-                     * Relation may not be set yet immediately
-                     * @see mail.thread_partner_seen_info:partnerId field
-                     * FIXME task-2278551
+                     *Relationmaynotbesetyetimmediately
+                     *@seemail.thread_partner_seen_info:partnerIdfield
+                     *FIXMEtask-2278551
                      */
-                    partnerSeenInfo.partner &&
-                    partnerSeenInfo.partner !== this.message.author &&
-                    partnerSeenInfo.lastSeenMessage &&
-                    partnerSeenInfo.lastSeenMessage.id >= this.message.id)
-                .map(partnerSeenInfo => partnerSeenInfo.partner);
-            if (otherPartnersThatHaveSeen.length === 0) {
-                return [['unlink-all']];
+                    partnerSeenInfo.partner&&
+                    partnerSeenInfo.partner!==this.message.author&&
+                    partnerSeenInfo.lastSeenMessage&&
+                    partnerSeenInfo.lastSeenMessage.id>=this.message.id)
+                .map(partnerSeenInfo=>partnerSeenInfo.partner);
+            if(otherPartnersThatHaveSeen.length===0){
+                return[['unlink-all']];
             }
-            return [['replace', otherPartnersThatHaveSeen]];
+            return[['replace',otherPartnersThatHaveSeen]];
         }
 
         /**
-         * @private
-         * @returns {mail.message}
+         *@private
+         *@returns{mail.message}
          */
-        _computeMessage() {
-            return [['insert', { id: this.messageId }]];
+        _computeMessage(){
+            return[['insert',{id:this.messageId}]];
         }
 
         /**
-         * @private
-         * @returns {mail.thread}
+         *@private
+         *@returns{mail.thread}
          */
-        _computeThread() {
-            return [['insert', {
-                id: this.channelId,
-                model: 'mail.channel',
+        _computeThread(){
+            return[['insert',{
+                id:this.channelId,
+                model:'mail.channel',
             }]];
         }
     }
 
-    MessageSeenIndicator.modelName = 'mail.message_seen_indicator';
+    MessageSeenIndicator.modelName='mail.message_seen_indicator';
 
-    MessageSeenIndicator.fields = {
+    MessageSeenIndicator.fields={
         /**
-         * The id of the channel this seen indicator is related to.
+         *Theidofthechannelthisseenindicatorisrelatedto.
          *
-         * Should write on this field to set relation between the channel and
-         * this seen indicator, not on `thread`.
+         *Shouldwriteonthisfieldtosetrelationbetweenthechanneland
+         *thisseenindicator,noton`thread`.
          *
-         * Reason for not setting the relation directly is the necessity to
-         * uniquely identify a seen indicator based on channel and message from data.
-         * Relational data are list of commands, which is problematic to deduce
-         * identifying records.
+         *Reasonfornotsettingtherelationdirectlyisthenecessityto
+         *uniquelyidentifyaseenindicatorbasedonchannelandmessagefromdata.
+         *Relationaldataarelistofcommands,whichisproblematictodeduce
+         *identifyingrecords.
          *
-         * TODO: task-2322536 (normalize relational data) & task-2323665
-         * (required fields) should improve and let us just use the relational
-         * fields.
+         *TODO:task-2322536(normalizerelationaldata)&task-2323665
+         *(requiredfields)shouldimproveandletusjustusetherelational
+         *fields.
          */
-        channelId: attr(),
-        hasEveryoneFetched: attr({
-            compute: '_computeHasEveryoneFetched',
-            default: false,
-            dependencies: ['messageAuthor', 'messageId', 'threadPartnerSeenInfos'],
+        channelId:attr(),
+        hasEveryoneFetched:attr({
+            compute:'_computeHasEveryoneFetched',
+            default:false,
+            dependencies:['messageAuthor','messageId','threadPartnerSeenInfos'],
         }),
-        hasEveryoneSeen: attr({
-            compute: '_computeHasEveryoneSeen',
-            default: false,
-            dependencies: ['messageAuthor', 'messageId', 'threadPartnerSeenInfos'],
+        hasEveryoneSeen:attr({
+            compute:'_computeHasEveryoneSeen',
+            default:false,
+            dependencies:['messageAuthor','messageId','threadPartnerSeenInfos'],
         }),
-        hasSomeoneFetched: attr({
-            compute: '_computeHasSomeoneFetched',
-            default: false,
-            dependencies: ['messageAuthor', 'messageId', 'threadPartnerSeenInfos'],
+        hasSomeoneFetched:attr({
+            compute:'_computeHasSomeoneFetched',
+            default:false,
+            dependencies:['messageAuthor','messageId','threadPartnerSeenInfos'],
         }),
-        hasSomeoneSeen: attr({
-            compute: '_computeHasSomeoneSeen',
-            default: false,
-            dependencies: ['messageAuthor', 'messageId', 'threadPartnerSeenInfos'],
+        hasSomeoneSeen:attr({
+            compute:'_computeHasSomeoneSeen',
+            default:false,
+            dependencies:['messageAuthor','messageId','threadPartnerSeenInfos'],
         }),
-        id: attr(),
-        isMessagePreviousToLastCurrentPartnerMessageSeenByEveryone: attr({
-            compute: '_computeIsMessagePreviousToLastCurrentPartnerMessageSeenByEveryone',
-            default: false,
-            dependencies: [
+        id:attr(),
+        isMessagePreviousToLastCurrentPartnerMessageSeenByEveryone:attr({
+            compute:'_computeIsMessagePreviousToLastCurrentPartnerMessageSeenByEveryone',
+            default:false,
+            dependencies:[
                 'messageId',
                 'threadLastCurrentPartnerMessageSeenByEveryone',
             ],
         }),
         /**
-         * The message concerned by this seen indicator.
-         * This is automatically computed based on messageId field.
-         * @see messageId
+         *Themessageconcernedbythisseenindicator.
+         *ThisisautomaticallycomputedbasedonmessageIdfield.
+         *@seemessageId
          */
-        message: many2one('mail.message', {
-            compute: '_computeMessage',
-            dependencies: [
+        message:many2one('mail.message',{
+            compute:'_computeMessage',
+            dependencies:[
                 'messageId',
             ],
         }),
-        messageAuthor: many2one('mail.partner', {
-            related: 'message.author',
+        messageAuthor:many2one('mail.partner',{
+            related:'message.author',
         }),
         /**
-         * The id of the message this seen indicator is related to.
+         *Theidofthemessagethisseenindicatorisrelatedto.
          *
-         * Should write on this field to set relation between the channel and
-         * this seen indicator, not on `message`.
+         *Shouldwriteonthisfieldtosetrelationbetweenthechanneland
+         *thisseenindicator,noton`message`.
          *
-         * Reason for not setting the relation directly is the necessity to
-         * uniquely identify a seen indicator based on channel and message from data.
-         * Relational data are list of commands, which is problematic to deduce
-         * identifying records.
+         *Reasonfornotsettingtherelationdirectlyisthenecessityto
+         *uniquelyidentifyaseenindicatorbasedonchannelandmessagefromdata.
+         *Relationaldataarelistofcommands,whichisproblematictodeduce
+         *identifyingrecords.
          *
-         * TODO: task-2322536 (normalize relational data) & task-2323665
-         * (required fields) should improve and let us just use the relational
-         * fields.
+         *TODO:task-2322536(normalizerelationaldata)&task-2323665
+         *(requiredfields)shouldimproveandletusjustusetherelational
+         *fields.
          */
-        messageId: attr(),
-        partnersThatHaveFetched: many2many('mail.partner', {
-            compute: '_computePartnersThatHaveFetched',
-            dependencies: ['messageAuthor', 'messageId', 'threadPartnerSeenInfos'],
+        messageId:attr(),
+        partnersThatHaveFetched:many2many('mail.partner',{
+            compute:'_computePartnersThatHaveFetched',
+            dependencies:['messageAuthor','messageId','threadPartnerSeenInfos'],
         }),
-        partnersThatHaveSeen: many2many('mail.partner', {
-            compute: '_computePartnersThatHaveSeen',
-            dependencies: ['messageAuthor', 'messageId', 'threadPartnerSeenInfos'],
+        partnersThatHaveSeen:many2many('mail.partner',{
+            compute:'_computePartnersThatHaveSeen',
+            dependencies:['messageAuthor','messageId','threadPartnerSeenInfos'],
         }),
         /**
-         * The thread concerned by this seen indicator.
-         * This is automatically computed based on channelId field.
-         * @see channelId
+         *Thethreadconcernedbythisseenindicator.
+         *ThisisautomaticallycomputedbasedonchannelIdfield.
+         *@seechannelId
          */
-        thread: many2one('mail.thread', {
-            compute: '_computeThread',
-            dependencies: [
+        thread:many2one('mail.thread',{
+            compute:'_computeThread',
+            dependencies:[
                 'channelId',
             ],
-            inverse: 'messageSeenIndicators'
+            inverse:'messageSeenIndicators'
         }),
-        threadPartnerSeenInfos: one2many('mail.thread_partner_seen_info', {
-            related: 'thread.partnerSeenInfos',
+        threadPartnerSeenInfos:one2many('mail.thread_partner_seen_info',{
+            related:'thread.partnerSeenInfos',
         }),
-        threadLastCurrentPartnerMessageSeenByEveryone: many2one('mail.message', {
-            related: 'thread.lastCurrentPartnerMessageSeenByEveryone',
+        threadLastCurrentPartnerMessageSeenByEveryone:many2one('mail.message',{
+            related:'thread.lastCurrentPartnerMessageSeenByEveryone',
         }),
     };
 
-    return MessageSeenIndicator;
+    returnMessageSeenIndicator;
 }
 
-registerNewModel('mail.message_seen_indicator', factory);
+registerNewModel('mail.message_seen_indicator',factory);
 
 });

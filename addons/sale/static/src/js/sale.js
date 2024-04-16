@@ -1,55 +1,55 @@
-flectra.define('sale.sales_team_dashboard', function (require) {
-"use strict";
+flectra.define('sale.sales_team_dashboard',function(require){
+"usestrict";
 
-var core = require('web.core');
-var KanbanRecord = require('web.KanbanRecord');
-var _t = core._t;
+varcore=require('web.core');
+varKanbanRecord=require('web.KanbanRecord');
+var_t=core._t;
 
 KanbanRecord.include({
-    events: _.defaults({
-        'click .sales_team_target_definition': '_onSalesTeamTargetClick',
-    }, KanbanRecord.prototype.events),
+    events:_.defaults({
+        'click.sales_team_target_definition':'_onSalesTeamTargetClick',
+    },KanbanRecord.prototype.events),
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @param {MouseEvent} ev
+     *@param{MouseEvent}ev
      */
-    _onSalesTeamTargetClick: function (ev) {
+    _onSalesTeamTargetClick:function(ev){
         ev.preventDefault();
-        var self = this;
+        varself=this;
 
-        this.$target_input = $('<input>');
+        this.$target_input=$('<input>');
         this.$('.o_kanban_primary_bottom:last').html(this.$target_input);
-        this.$('.o_kanban_primary_bottom:last').prepend(_t("Set an invoicing target: "));
+        this.$('.o_kanban_primary_bottom:last').prepend(_t("Setaninvoicingtarget:"));
         this.$target_input.focus();
 
         this.$target_input.on({
-            blur: this._onSalesTeamTargetSet.bind(this),
-            keydown: function (ev) {
-                if (ev.keyCode === $.ui.keyCode.ENTER) {
+            blur:this._onSalesTeamTargetSet.bind(this),
+            keydown:function(ev){
+                if(ev.keyCode===$.ui.keyCode.ENTER){
                     self._onSalesTeamTargetSet();
                 }
             },
         });
     },
     /**
-     * Mostly a handler for what happens to the input "this.$target_input"
+     *Mostlyahandlerforwhathappenstotheinput"this.$target_input"
      *
-     * @private
+     *@private
      *
      */
-    _onSalesTeamTargetSet: function () {
-        var self = this;
-        var value = Number(this.$target_input.val());
-        if (isNaN(value)) {
-            this.do_warn(false, _t("Please enter an integer value"));
-        } else {
-            this.trigger_up('kanban_record_update', {
-                invoiced_target: value,
-                onSuccess: function () {
+    _onSalesTeamTargetSet:function(){
+        varself=this;
+        varvalue=Number(this.$target_input.val());
+        if(isNaN(value)){
+            this.do_warn(false,_t("Pleaseenteranintegervalue"));
+        }else{
+            this.trigger_up('kanban_record_update',{
+                invoiced_target:value,
+                onSuccess:function(){
                     self.trigger_up('reload');
                 },
             });

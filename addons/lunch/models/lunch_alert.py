@@ -1,119 +1,119 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-import pytz
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+importpytz
 
-from flectra import api, fields, models
-from flectra.osv import expression
+fromflectraimportapi,fields,models
+fromflectra.osvimportexpression
 
-from .lunch_supplier import float_to_time
-from datetime import datetime, timedelta
+from.lunch_supplierimportfloat_to_time
+fromdatetimeimportdatetime,timedelta
 
-from flectra.addons.base.models.res_partner import _tz_get
+fromflectra.addons.base.models.res_partnerimport_tz_get
 
-WEEKDAY_TO_NAME = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+WEEKDAY_TO_NAME=['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
 
-class LunchAlert(models.Model):
-    """ Alerts to display during a lunch order. An alert can be specific to a
-    given day, weekly or daily. The alert is displayed from start to end hour. """
-    _name = 'lunch.alert'
-    _description = 'Lunch Alert'
-    _order = 'write_date desc, id'
+classLunchAlert(models.Model):
+    """Alertstodisplayduringalunchorder.Analertcanbespecifictoa
+    givenday,weeklyordaily.Thealertisdisplayedfromstarttoendhour."""
+    _name='lunch.alert'
+    _description='LunchAlert'
+    _order='write_datedesc,id'
 
-    name = fields.Char('Alert Name', required=True, translate=True)
-    message = fields.Html('Message', required=True, translate=True)
+    name=fields.Char('AlertName',required=True,translate=True)
+    message=fields.Html('Message',required=True,translate=True)
 
-    mode = fields.Selection([
-        ('alert', 'Alert in app'),
-        ('chat', 'Chat notification')], string='Display', default='alert')
-    recipients = fields.Selection([
-        ('everyone', 'Everyone'),
-        ('last_week', 'Employee who ordered last week'),
-        ('last_month', 'Employee who ordered last month'),
-        ('last_year', 'Employee who ordered last year')], string='Recipients', default='everyone')
-    notification_time = fields.Float(default=10.0, string='Notification Time')
-    notification_moment = fields.Selection([
-        ('am', 'AM'),
-        ('pm', 'PM')], default='am', required=True)
-    tz = fields.Selection(_tz_get, string='Timezone', required=True, default=lambda self: self.env.user.tz or 'UTC')
+    mode=fields.Selection([
+        ('alert','Alertinapp'),
+        ('chat','Chatnotification')],string='Display',default='alert')
+    recipients=fields.Selection([
+        ('everyone','Everyone'),
+        ('last_week','Employeewhoorderedlastweek'),
+        ('last_month','Employeewhoorderedlastmonth'),
+        ('last_year','Employeewhoorderedlastyear')],string='Recipients',default='everyone')
+    notification_time=fields.Float(default=10.0,string='NotificationTime')
+    notification_moment=fields.Selection([
+        ('am','AM'),
+        ('pm','PM')],default='am',required=True)
+    tz=fields.Selection(_tz_get,string='Timezone',required=True,default=lambdaself:self.env.user.tzor'UTC')
 
-    until = fields.Date('Show Until')
-    recurrency_monday = fields.Boolean('Monday', default=True)
-    recurrency_tuesday = fields.Boolean('Tuesday', default=True)
-    recurrency_wednesday = fields.Boolean('Wednesday', default=True)
-    recurrency_thursday = fields.Boolean('Thursday', default=True)
-    recurrency_friday = fields.Boolean('Friday', default=True)
-    recurrency_saturday = fields.Boolean('Saturday', default=True)
-    recurrency_sunday = fields.Boolean('Sunday', default=True)
+    until=fields.Date('ShowUntil')
+    recurrency_monday=fields.Boolean('Monday',default=True)
+    recurrency_tuesday=fields.Boolean('Tuesday',default=True)
+    recurrency_wednesday=fields.Boolean('Wednesday',default=True)
+    recurrency_thursday=fields.Boolean('Thursday',default=True)
+    recurrency_friday=fields.Boolean('Friday',default=True)
+    recurrency_saturday=fields.Boolean('Saturday',default=True)
+    recurrency_sunday=fields.Boolean('Sunday',default=True)
 
-    available_today = fields.Boolean('Is Displayed Today',
-                                     compute='_compute_available_today', search='_search_available_today')
+    available_today=fields.Boolean('IsDisplayedToday',
+                                     compute='_compute_available_today',search='_search_available_today')
 
-    active = fields.Boolean('Active', default=True)
+    active=fields.Boolean('Active',default=True)
 
-    location_ids = fields.Many2many('lunch.location', string='Location')
+    location_ids=fields.Many2many('lunch.location',string='Location')
 
-    _sql_constraints = [
+    _sql_constraints=[
         ('notification_time_range',
-            'CHECK(notification_time >= 0 and notification_time <= 12)',
-            'Notification time must be between 0 and 12')
+            'CHECK(notification_time>=0andnotification_time<=12)',
+            'Notificationtimemustbebetween0and12')
     ]
 
-    @api.depends('recurrency_monday', 'recurrency_tuesday', 'recurrency_wednesday',
-                 'recurrency_thursday', 'recurrency_friday', 'recurrency_saturday',
+    @api.depends('recurrency_monday','recurrency_tuesday','recurrency_wednesday',
+                 'recurrency_thursday','recurrency_friday','recurrency_saturday',
                  'recurrency_sunday')
-    def _compute_available_today(self):
-        today = fields.Date.context_today(self)
-        fieldname = 'recurrency_%s' % (WEEKDAY_TO_NAME[today.weekday()])
+    def_compute_available_today(self):
+        today=fields.Date.context_today(self)
+        fieldname='recurrency_%s'%(WEEKDAY_TO_NAME[today.weekday()])
 
-        for alert in self:
-            alert.available_today = alert.until > today if alert.until else True and alert[fieldname]
+        foralertinself:
+            alert.available_today=alert.until>todayifalert.untilelseTrueandalert[fieldname]
 
-    def _search_available_today(self, operator, value):
-        if (not operator in ['=', '!=']) or (not value in [True, False]):
-            return []
+    def_search_available_today(self,operator,value):
+        if(notoperatorin['=','!='])or(notvaluein[True,False]):
+            return[]
 
-        searching_for_true = (operator == '=' and value) or (operator == '!=' and not value)
-        today = fields.Date.context_today(self)
-        fieldname = 'recurrency_%s' % (WEEKDAY_TO_NAME[today.weekday()])
+        searching_for_true=(operator=='='andvalue)or(operator=='!='andnotvalue)
+        today=fields.Date.context_today(self)
+        fieldname='recurrency_%s'%(WEEKDAY_TO_NAME[today.weekday()])
 
-        return expression.AND([
-            [(fieldname, operator, value)],
+        returnexpression.AND([
+            [(fieldname,operator,value)],
             expression.OR([
-                [('until', '=', False)],
-                [('until', '>' if searching_for_true else '<', today)],
+                [('until','=',False)],
+                [('until','>'ifsearching_for_trueelse'<',today)],
             ])
         ])
 
-    def _notify_chat(self):
-        records = self.search([('mode', '=', 'chat'), ('active', '=', True)])
+    def_notify_chat(self):
+        records=self.search([('mode','=','chat'),('active','=',True)])
 
-        today = fields.Date.today()
-        now = fields.Datetime.now()
+        today=fields.Date.today()
+        now=fields.Datetime.now()
 
-        for alert in records:
-            notification_to = now.astimezone(pytz.timezone(alert.tz)).replace(second=0, microsecond=0, tzinfo=None)
-            notification_from = notification_to - timedelta(minutes=5)
-            send_at = datetime.combine(fields.Date.today(),
-                float_to_time(alert.notification_time, alert.notification_moment))
+        foralertinrecords:
+            notification_to=now.astimezone(pytz.timezone(alert.tz)).replace(second=0,microsecond=0,tzinfo=None)
+            notification_from=notification_to-timedelta(minutes=5)
+            send_at=datetime.combine(fields.Date.today(),
+                float_to_time(alert.notification_time,alert.notification_moment))
 
-            if alert.available_today and send_at > notification_from and send_at <= notification_to:
-                order_domain = [('state', '!=', 'cancelled')]
+            ifalert.available_todayandsend_at>notification_fromandsend_at<=notification_to:
+                order_domain=[('state','!=','cancelled')]
 
-                if alert.location_ids.ids:
-                    order_domain = expression.AND([order_domain, [('user_id.last_lunch_location_id', 'in', alert.location_ids.ids)]])
+                ifalert.location_ids.ids:
+                    order_domain=expression.AND([order_domain,[('user_id.last_lunch_location_id','in',alert.location_ids.ids)]])
 
-                if alert.recipients != 'everyone':
-                    weeks = 1
+                ifalert.recipients!='everyone':
+                    weeks=1
 
-                    if alert.recipients == 'last_month':
-                        weeks = 4
-                    else:  # last_year
-                        weeks = 52
+                    ifalert.recipients=='last_month':
+                        weeks=4
+                    else: #last_year
+                        weeks=52
 
-                    delta = timedelta(weeks=weeks)
-                    order_domain = expression.AND([order_domain, [('date', '>=', today - delta)]])
+                    delta=timedelta(weeks=weeks)
+                    order_domain=expression.AND([order_domain,[('date','>=',today-delta)]])
 
-                orders = self.env['lunch.order'].search(order_domain).mapped('user_id')
-                partner_ids = [user.partner_id.id for user in orders]
-                if partner_ids:
-                    self.env['mail.thread'].message_notify(body=alert.message, partner_ids=partner_ids)
+                orders=self.env['lunch.order'].search(order_domain).mapped('user_id')
+                partner_ids=[user.partner_id.idforuserinorders]
+                ifpartner_ids:
+                    self.env['mail.thread'].message_notify(body=alert.message,partner_ids=partner_ids)

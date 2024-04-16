@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.AttachmentList" owl="1">
-        <div class="o_AttachmentList">
-            <div class="o_AttachmentList_partialList o_AttachmentList_partialListImages">
-                <t t-foreach="imageAttachments" t-as="attachment" t-key="attachment.localId">
+    <tt-name="mail.AttachmentList"owl="1">
+        <divclass="o_AttachmentList">
+            <divclass="o_AttachmentList_partialListo_AttachmentList_partialListImages">
+                <tt-foreach="imageAttachments"t-as="attachment"t-key="attachment.localId">
                     <Attachment
-                        class="o_AttachmentList_attachment o_AttachmentList_imageAttachment"
+                        class="o_AttachmentList_attachmento_AttachmentList_imageAttachment"
                         attachmentLocalId="attachment.localId"
-                        attachmentLocalIds="viewableAttachments.map(attachment => attachment.localId)"
+                        attachmentLocalIds="viewableAttachments.map(attachment=>attachment.localId)"
                         detailsMode="props.attachmentsDetailsMode"
                         imageSize="props.attachmentsImageSize"
                         isDownloadable="props.areAttachmentsDownloadable"
@@ -18,12 +18,12 @@
                     />
                 </t>
             </div>
-            <div class="o_AttachmentList_partialList o_AttachmentList_partialListNonImages">
-                <t t-foreach="nonImageAttachments" t-as="attachment" t-key="attachment.localId">
+            <divclass="o_AttachmentList_partialListo_AttachmentList_partialListNonImages">
+                <tt-foreach="nonImageAttachments"t-as="attachment"t-key="attachment.localId">
                     <Attachment
-                        class="o_AttachmentList_attachment o_AttachmentList_nonImageAttachment"
+                        class="o_AttachmentList_attachmento_AttachmentList_nonImageAttachment"
                         attachmentLocalId="attachment.localId"
-                        attachmentLocalIds="viewableAttachments.map(attachment => attachment.localId)"
+                        attachmentLocalIds="viewableAttachments.map(attachment=>attachment.localId)"
                         detailsMode="'card'"
                         imageSize="props.attachmentsImageSize"
                         isDownloadable="props.areAttachmentsDownloadable"

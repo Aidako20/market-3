@@ -1,57 +1,57 @@
-flectra.define('point_of_sale.tour.ClientListScreenTourMethods', function (require) {
-    'use strict';
+flectra.define('point_of_sale.tour.ClientListScreenTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        clickClient(name) {
-            return [
+    classDo{
+        clickClient(name){
+            return[
                 {
-                    content: `click client '${name}' from client list screen`,
-                    trigger: `.clientlist-screen .client-list-contents .client-line td:contains("${name}")`,
+                    content:`clickclient'${name}'fromclientlistscreen`,
+                    trigger:`.clientlist-screen.client-list-contents.client-linetd:contains("${name}")`,
                 },
                 {
-                    content: `check if client '${name}' is highlighted`,
-                    trigger: `.clientlist-screen .client-list-contents .client-line.highlight td:contains("${name}")`,
-                    run: () => {},
+                    content:`checkifclient'${name}'ishighlighted`,
+                    trigger:`.clientlist-screen.client-list-contents.client-line.highlighttd:contains("${name}")`,
+                    run:()=>{},
                 },
             ];
         }
-        clickSet() {
-            return [
+        clickSet(){
+            return[
                 {
-                    content: 'check if set button shown',
-                    trigger: '.clientlist-screen .button.next.highlight',
-                    run: () => {},
+                    content:'checkifsetbuttonshown',
+                    trigger:'.clientlist-screen.button.next.highlight',
+                    run:()=>{},
                 },
                 {
-                    content: 'click set button',
-                    trigger: '.clientlist-screen .button.next.highlight',
-                },
-            ];
-        }
-    }
-
-    class Check {
-        isShown() {
-            return [
-                {
-                    content: 'client list screen is shown',
-                    trigger: '.pos-content .clientlist-screen',
-                    run: () => {},
+                    content:'clicksetbutton',
+                    trigger:'.clientlist-screen.button.next.highlight',
                 },
             ];
         }
     }
 
-    class Execute {
-        setClient(name) {
-            const steps = [];
+    classCheck{
+        isShown(){
+            return[
+                {
+                    content:'clientlistscreenisshown',
+                    trigger:'.pos-content.clientlist-screen',
+                    run:()=>{},
+                },
+            ];
+        }
+    }
+
+    classExecute{
+        setClient(name){
+            conststeps=[];
             steps.push(...this._do.clickClient(name));
             steps.push(...this._do.clickSet());
-            return steps;
+            returnsteps;
         }
     }
 
-    return createTourMethods('ClientListScreen', Do, Check, Execute);
+    returncreateTourMethods('ClientListScreen',Do,Check,Execute);
 });

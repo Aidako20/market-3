@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 
-<templates xml:space="preserve">
+<templatesxml:space="preserve">
 
-    <t t-name="website.slides.tag.add">
-        <div class="form-group">
-            <form action="/slides/channel/tag/add" method="POST" id="slides_channel_tag_add_form">
-                <div class="form-group">
-                    <label for="tag_id" class="col-form-label">Tag</label>
-                    <input class="form-control" id="tag_id" required="required"/>
+    <tt-name="website.slides.tag.add">
+        <divclass="form-group">
+            <formaction="/slides/channel/tag/add"method="POST"id="slides_channel_tag_add_form">
+                <divclass="form-group">
+                    <labelfor="tag_id"class="col-form-label">Tag</label>
+                    <inputclass="form-control"id="tag_id"required="required"/>
                 </div>
-                <div class="form-group">
-                    <label id="tag_group_label" for="tag_group_id" class="col-form-label">Tag Group</label>
-                    <input class="form-control" id="tag_group_id"/>
+                <divclass="form-group">
+                    <labelid="tag_group_label"for="tag_group_id"class="col-form-label">TagGroup</label>
+                    <inputclass="form-control"id="tag_group_id"/>
                 </div>
             </form>
         </div>

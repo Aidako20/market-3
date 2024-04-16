@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="payment.payment_acquirer_stripe" model="payment.acquirer">
-            <field name="name">Stripe</field>
-            <field name="image_128" type="base64" file="payment_stripe/static/src/img/stripe_icon.png"/>
-            <field name="provider">stripe</field>
-            <field name="company_id" ref="base.main_company"/>
-            <field name="view_template_id" ref="stripe_form"/>
-            <field name="registration_view_template_id" ref="stripe_s2s_form"/>
+    <datanoupdate="1">
+        <recordid="payment.payment_acquirer_stripe"model="payment.acquirer">
+            <fieldname="name">Stripe</field>
+            <fieldname="image_128"type="base64"file="payment_stripe/static/src/img/stripe_icon.png"/>
+            <fieldname="provider">stripe</field>
+            <fieldname="company_id"ref="base.main_company"/>
+            <fieldname="view_template_id"ref="stripe_form"/>
+            <fieldname="registration_view_template_id"ref="stripe_s2s_form"/>
         </record>
     </data>
 </flectra>

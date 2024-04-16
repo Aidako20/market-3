@@ -1,20 +1,20 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class SnailmailConfirmInvoiceSend(models.TransientModel):
-    _name = 'snailmail.confirm.invoice'
-    _inherit = ['snailmail.confirm']
-    _description = 'Snailmail Confirm Invoice'
+classSnailmailConfirmInvoiceSend(models.TransientModel):
+    _name='snailmail.confirm.invoice'
+    _inherit=['snailmail.confirm']
+    _description='SnailmailConfirmInvoice'
 
-    invoice_send_id = fields.Many2one('account.invoice.send')
+    invoice_send_id=fields.Many2one('account.invoice.send')
 
-    def _confirm(self):
+    def_confirm(self):
         self.ensure_one()
         self.invoice_send_id._print_action()
 
-    def _continue(self):
+    def_continue(self):
         self.ensure_one()
-        return self.invoice_send_id.send_and_print()
+        returnself.invoice_send_id.send_and_print()

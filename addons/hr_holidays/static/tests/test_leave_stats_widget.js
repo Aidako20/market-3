@@ -1,154 +1,154 @@
-flectra.define('hr_holidays.leave_stats_widget_tests', function (require) {
-    "use strict";
+flectra.define('hr_holidays.leave_stats_widget_tests',function(require){
+    "usestrict";
 
-    var FormView = require("web.FormView");
-    var testUtils = require('web.test_utils');
+    varFormView=require("web.FormView");
+    vartestUtils=require('web.test_utils');
 
-    var createView = testUtils.createView;
+    varcreateView=testUtils.createView;
 
-    QUnit.module('leave_stats_widget', {
-        beforeEach: function () {
-            this.data = {
-                department: {
-                    fields: {
-                        name: { string: "Name", type: "char" },
+    QUnit.module('leave_stats_widget',{
+        beforeEach:function(){
+            this.data={
+                department:{
+                    fields:{
+                        name:{string:"Name",type:"char"},
                     },
-                    records: [{id:11, name: "R&D"}],
+                    records:[{id:11,name:"R&D"}],
                 },
-                employee: {
-                    fields: {
-                        name: { string: "Name", type: "char" },
-                        department_id: { string: "Department", type: "many2one", relation: 'department' },
+                employee:{
+                    fields:{
+                        name:{string:"Name",type:"char"},
+                        department_id:{string:"Department",type:"many2one",relation:'department'},
                     },
-                    records: [{
-                        id: 100,
-                        name: "Richard",
-                        department_id: 11,
+                    records:[{
+                        id:100,
+                        name:"Richard",
+                        department_id:11,
                     },{
-                        id: 200,
-                        name: "Jesus",
-                        department_id: 11,
+                        id:200,
+                        name:"Jesus",
+                        department_id:11,
                     }],
                 },
-                'hr.leave.type': {
-                    fields: {
-                        name: { string: "Name", type: "char" }
+                'hr.leave.type':{
+                    fields:{
+                        name:{string:"Name",type:"char"}
                     },
-                    records: [{
-                        id: 55,
-                        name: "Legal Leave",
+                    records:[{
+                        id:55,
+                        name:"LegalLeave",
                     }]
                 },
-                'hr.leave': {
-                    fields: {
-                        employee_id: { string: "Employee", type: "many2one", relation: 'employee' },
-                        department_id: { string: "Department", type: "many2one", relation: 'department' },
-                        date_from: { string: "From", type: "datetime" },
-                        date_to: { string: "To", type: "datetime" },
-                        holiday_status_id: { string: "Leave type", type: "many2one", relation: 'hr.leave.type' },
-                        state: { string: "State", type: "char" },
-                        holiday_type: { string: "Holiday Type", type: "char" },
-                        number_of_days: { string: "State", type: "integer" },
+                'hr.leave':{
+                    fields:{
+                        employee_id:{string:"Employee",type:"many2one",relation:'employee'},
+                        department_id:{string:"Department",type:"many2one",relation:'department'},
+                        date_from:{string:"From",type:"datetime"},
+                        date_to:{string:"To",type:"datetime"},
+                        holiday_status_id:{string:"Leavetype",type:"many2one",relation:'hr.leave.type'},
+                        state:{string:"State",type:"char"},
+                        holiday_type:{string:"HolidayType",type:"char"},
+                        number_of_days:{string:"State",type:"integer"},
                     },
-                    records: [{
-                        id: 12,
-                        employee_id: 100,
-                        department_id: 11,
-                        date_from: "2016-10-20 09:00:00",
-                        date_to:  "2016-10-25 18:00:00",
-                        holiday_status_id: 55,
-                        state: 'validate',
-                        number_of_days: 5,
-                        holiday_type: 'employee',
+                    records:[{
+                        id:12,
+                        employee_id:100,
+                        department_id:11,
+                        date_from:"2016-10-2009:00:00",
+                        date_to: "2016-10-2518:00:00",
+                        holiday_status_id:55,
+                        state:'validate',
+                        number_of_days:5,
+                        holiday_type:'employee',
                     },{
-                        id: 13,
-                        employee_id: 100,
-                        department_id: 11,
-                        date_from: "2016-10-02 09:00:00",
-                        date_to:  "2016-10-02 18:00:00",
-                        holiday_status_id: 55,
-                        state: 'validate',
-                        number_of_days: 1,
-                        holiday_type: 'employee',
+                        id:13,
+                        employee_id:100,
+                        department_id:11,
+                        date_from:"2016-10-0209:00:00",
+                        date_to: "2016-10-0218:00:00",
+                        holiday_status_id:55,
+                        state:'validate',
+                        number_of_days:1,
+                        holiday_type:'employee',
                     },{
-                        id: 14,
-                        employee_id: 200,
-                        department_id: 11,
-                        date_from:  "2016-10-15 09:00:00",
-                        date_to:  "2016-10-20 18:00:00",
-                        holiday_status_id: 55,
-                        state: 'validate',
-                        number_of_days: 8,
-                        holiday_type: 'employee',
+                        id:14,
+                        employee_id:200,
+                        department_id:11,
+                        date_from: "2016-10-1509:00:00",
+                        date_to: "2016-10-2018:00:00",
+                        holiday_status_id:55,
+                        state:'validate',
+                        number_of_days:8,
+                        holiday_type:'employee',
                     }]
                 }
             };
         }
-    }, function () {
-        QUnit.test('leave stats renders correctly', async function (assert) {
+    },function(){
+        QUnit.test('leavestatsrenderscorrectly',asyncfunction(assert){
             assert.expect(5);
-            var self = this;
-            var form = await createView({
-                View: FormView,
-                model: 'hr.leave',
-                data: this.data,
-                arch: '<form string="Leave">' +
-                    '<field name="employee_id"/>' +
-                    '<field name="department_id"/>' +
-                    '<field name="date_from"/>' +
-                    '<widget name="hr_leave_stats"/>' +
+            varself=this;
+            varform=awaitcreateView({
+                View:FormView,
+                model:'hr.leave',
+                data:this.data,
+                arch:'<formstring="Leave">'+
+                    '<fieldname="employee_id"/>'+
+                    '<fieldname="department_id"/>'+
+                    '<fieldname="date_from"/>'+
+                    '<widgetname="hr_leave_stats"/>'+
                 '</form>',
-                res_id: 12,
-                mockRPC: function (route, args) {
-                    if (args.model === 'hr.leave' && args.method === 'search') {
-                        return Promise.resolve(self.data['hr.leave'].records.map(function (record) { return record.id; }));
+                res_id:12,
+                mockRPC:function(route,args){
+                    if(args.model==='hr.leave'&&args.method==='search'){
+                        returnPromise.resolve(self.data['hr.leave'].records.map(function(record){returnrecord.id;}));
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
-            var $leaveTypeBody = form.$('.o_leave_stats table:first > tbody');
-            var $leavesDepartmentBody = form.$('.o_leave_stats table:nth-child(2) > tbody');
-            var $leavesDepartmentHeader = form.$('.o_leave_stats table:nth-child(2) > thead');
+            var$leaveTypeBody=form.$('.o_leave_statstable:first>tbody');
+            var$leavesDepartmentBody=form.$('.o_leave_statstable:nth-child(2)>tbody');
+            var$leavesDepartmentHeader=form.$('.o_leave_statstable:nth-child(2)>thead');
 
-            assert.strictEqual($leaveTypeBody.find('td:contains(Legal Leave)').length, 1, "it should have leave type");
-            assert.strictEqual($leaveTypeBody.find('td:contains(6)').length, 1, "it should have 6 days");
+            assert.strictEqual($leaveTypeBody.find('td:contains(LegalLeave)').length,1,"itshouldhaveleavetype");
+            assert.strictEqual($leaveTypeBody.find('td:contains(6)').length,1,"itshouldhave6days");
 
-            assert.strictEqual($leavesDepartmentBody.find('td:contains(Richard)').length, 2, "it should have 2 leaves for Richard");
-            assert.strictEqual($leavesDepartmentBody.find('td:contains(Jesus)').length, 1, "it should have 1 leaves for Jesus");
-            assert.strictEqual($leavesDepartmentHeader.find('td:contains(R&D)').length, 1, "it should have R&D title");
+            assert.strictEqual($leavesDepartmentBody.find('td:contains(Richard)').length,2,"itshouldhave2leavesforRichard");
+            assert.strictEqual($leavesDepartmentBody.find('td:contains(Jesus)').length,1,"itshouldhave1leavesforJesus");
+            assert.strictEqual($leavesDepartmentHeader.find('td:contains(R&D)').length,1,"itshouldhaveR&Dtitle");
             form.destroy();
         });
-        QUnit.test('leave stats reload when employee/department changes', async function (assert) {
+        QUnit.test('leavestatsreloadwhenemployee/departmentchanges',asyncfunction(assert){
             assert.expect(2);
-            var form = await createView({
-                View: FormView,
-                model: 'hr.leave',
-                mode: 'edit',
-                data: this.data,
-                arch: '<form string="Leave">' +
-                    '<field name="employee_id"/>' +
-                    '<field name="department_id"/>' +
-                    '<field name="date_from"/>' +
-                    '<widget name="hr_leave_stats"/>' +
+            varform=awaitcreateView({
+                View:FormView,
+                model:'hr.leave',
+                mode:'edit',
+                data:this.data,
+                arch:'<formstring="Leave">'+
+                    '<fieldname="employee_id"/>'+
+                    '<fieldname="department_id"/>'+
+                    '<fieldname="date_from"/>'+
+                    '<widgetname="hr_leave_stats"/>'+
                 '</form>',
-                mockRPC: function (route, args) {
-                    if (args.model === 'hr.leave' && args.method === 'search_read') {
-                        assert.ok(_.some(args.args[0], ['department_id', '=', 11]), "It should load department's leaves data");
+                mockRPC:function(route,args){
+                    if(args.model==='hr.leave'&&args.method==='search_read'){
+                        assert.ok(_.some(args.args[0],['department_id','=',11]),"Itshouldloaddepartment'sleavesdata");
                     }
-                    if (args.model === 'hr.leave' && args.method === 'read_group') {
-                        assert.ok(_.some(args.kwargs.domain, ['employee_id', '=', 200]), "It should load employee's leaves data");
+                    if(args.model==='hr.leave'&&args.method==='read_group'){
+                        assert.ok(_.some(args.kwargs.domain,['employee_id','=',200]),"Itshouldloademployee'sleavesdata");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
-            // Set date => shouldn't load data yet (no employee nor department defined)
-            await testUtils.fields.editSelect($('input[name="date_from"]'), '2016-10-12 09:00:00');
-            // Set employee => should load employee's date
-            await testUtils.fields.many2one.clickOpenDropdown("employee_id");
-            await testUtils.fields.many2one.clickItem("employee_id", "Jesus");
-            // Set department => should load department's data
-            await testUtils.fields.many2one.clickOpenDropdown("department_id");
-            await testUtils.fields.many2one.clickItem("department_id", "R&D");
+            //Setdate=>shouldn'tloaddatayet(noemployeenordepartmentdefined)
+            awaittestUtils.fields.editSelect($('input[name="date_from"]'),'2016-10-1209:00:00');
+            //Setemployee=>shouldloademployee'sdate
+            awaittestUtils.fields.many2one.clickOpenDropdown("employee_id");
+            awaittestUtils.fields.many2one.clickItem("employee_id","Jesus");
+            //Setdepartment=>shouldloaddepartment'sdata
+            awaittestUtils.fields.many2one.clickOpenDropdown("department_id");
+            awaittestUtils.fields.many2one.clickItem("department_id","R&D");
 
             form.destroy();
         });

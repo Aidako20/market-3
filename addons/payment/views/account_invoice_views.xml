@@ -1,26 +1,26 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
     <data>
-        <record id="account_invoice_view_form_inherit_payment" model="ir.ui.view">
-            <field name="name">account.move.view.form.inherit.payment</field>
-            <field name="model">account.move</field>
-            <field name="inherit_id" ref="account.view_move_form"/>
-            <field name="arch" type="xml">
+        <recordid="account_invoice_view_form_inherit_payment"model="ir.ui.view">
+            <fieldname="name">account.move.view.form.inherit.payment</field>
+            <fieldname="model">account.move</field>
+            <fieldname="inherit_id"ref="account.view_move_form"/>
+            <fieldname="arch"type="xml">
                 <!--
-                The user must capture/void the authorized transactions before registering a new payment.
+                Theusermustcapture/voidtheauthorizedtransactionsbeforeregisteringanewpayment.
                 -->
-                <xpath expr="//button[@id='account_invoice_payment_btn']" position="attributes">
-                    <attribute name="attrs">{'invisible': ['|', '|', '|', ('state', '!=', 'posted'), ('payment_state', 'not in', ('partial', 'not_paid')), ('move_type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt')), ('authorized_transaction_ids', '!=', [])]}</attribute>
+                <xpathexpr="//button[@id='account_invoice_payment_btn']"position="attributes">
+                    <attributename="attrs">{'invisible':['|','|','|',('state','!=','posted'),('payment_state','notin',('partial','not_paid')),('move_type','notin',('out_invoice','out_refund','in_invoice','in_refund','out_receipt','in_receipt')),('authorized_transaction_ids','!=',[])]}</attribute>
                 </xpath>
-                <xpath expr="//button[@id='account_invoice_payment_btn']" position="after">
-                    <field name="authorized_transaction_ids" invisible="1"/>
-                    <button name="payment_action_capture" type="object"
-                            string="Capture Transaction" class="oe_highlight"
-                            attrs="{'invisible': ['|', '|', ('move_type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund')), ('state', '!=', 'posted'), ('authorized_transaction_ids', '=', [])]}"/>
-                    <button name="payment_action_void" type="object"
-                            string="Void Transaction"
-                            confirm="Are you sure you want to void the authorized transaction? This action can't be undone."
-                            attrs="{'invisible': ['|', '|', ('move_type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund')), ('state', '!=', 'posted'), ('authorized_transaction_ids', '=', [])]}"/>
+                <xpathexpr="//button[@id='account_invoice_payment_btn']"position="after">
+                    <fieldname="authorized_transaction_ids"invisible="1"/>
+                    <buttonname="payment_action_capture"type="object"
+                            string="CaptureTransaction"class="oe_highlight"
+                            attrs="{'invisible':['|','|',('move_type','notin',('out_invoice','out_refund','in_invoice','in_refund')),('state','!=','posted'),('authorized_transaction_ids','=',[])]}"/>
+                    <buttonname="payment_action_void"type="object"
+                            string="VoidTransaction"
+                            confirm="Areyousureyouwanttovoidtheauthorizedtransaction?Thisactioncan'tbeundone."
+                            attrs="{'invisible':['|','|',('move_type','notin',('out_invoice','out_refund','in_invoice','in_refund')),('state','!=','posted'),('authorized_transaction_ids','=',[])]}"/>
                 </xpath>
             </field>
         </record>

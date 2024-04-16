@@ -1,92 +1,92 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="hr.job_marketing" model="hr.job">
-        <field name="is_published">True</field>
-        <field name="website_description" type="html">
-            <!-- Description text and ratings -->
-            <section class="pt32">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8 pb32">
-                            <p class="lead">
-                                As an employee of our company, you will <b>collaborate with each department to create and deploy
-                                disruptive products.</b> Come work at a growing company that offers great benefits with opportunities to
-                                moving forward and learn alongside accomplished leaders. We're seeking an experienced and outstanding member of staff.
+    <recordid="hr.job_marketing"model="hr.job">
+        <fieldname="is_published">True</field>
+        <fieldname="website_description"type="html">
+            <!--Descriptiontextandratings-->
+            <sectionclass="pt32">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-8pb32">
+                            <pclass="lead">
+                                Asanemployeeofourcompany,youwill<b>collaboratewitheachdepartmenttocreateanddeploy
+                                disruptiveproducts.</b>Comeworkatagrowingcompanythatoffersgreatbenefitswithopportunitiesto
+                                movingforwardandlearnalongsideaccomplishedleaders.We'reseekinganexperiencedandoutstandingmemberofstaff.
                                 <br/><br/>
-                                This position is both <b>creative and rigorous</b> by nature you need to think outside the box.
-                                We expect the candidate to be proactive and have a "get it done" spirit. To be successful,
-                                you will have solid solving problem skills.
+                                Thispositionisboth<b>creativeandrigorous</b>bynatureyouneedtothinkoutsidethebox.
+                                Weexpectthecandidatetobeproactiveandhavea"getitdone"spirit.Tobesuccessful,
+                                youwillhavesolidsolvingproblemskills.
                             </p>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb32">
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Customer Relationship</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                        <divclass="col-lg-3offset-lg-1pb32">
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">CustomerRelationship</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Personal Evolution</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Autonomy</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">PersonalEvolution</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Administrative Work</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Technical Expertise</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">Autonomy</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">AdministrativeWork</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">TechnicalExpertise</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
@@ -94,133 +94,133 @@
                     </div>
                 </div>
             </section>
-            <!-- Responsabilities, Must Have and Nice to have -->
-            <section class="s_comparisons pt24 pb24 bg-200" data-snippet="s_comparisons">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Responsibilities</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Lead the entire sales cycle</li>
-                                    <li class="list-group-item">Achieve monthly sales objectives</li>
-                                    <li class="list-group-item">Qualify the customer needs</li>
-                                    <li class="list-group-item">Negotiate and contract</li>
-                                    <li class="list-group-item">Master demos of our software</li>
+            <!--Responsabilities,MustHaveandNicetohave-->
+            <sectionclass="s_comparisonspt24pb24bg-200"data-snippet="s_comparisons">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Responsibilities</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Leadtheentiresalescycle</li>
+                                    <liclass="list-group-item">Achievemonthlysalesobjectives</li>
+                                    <liclass="list-group-item">Qualifythecustomerneeds</li>
+                                    <liclass="list-group-item">Negotiateandcontract</li>
+                                    <liclass="list-group-item">Masterdemosofoursoftware</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Must Have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Bachelor Degree or Higher</li>
-                                    <li class="list-group-item">Passion for software products</li>
-                                    <li class="list-group-item">Perfect written English</li>
-                                    <li class="list-group-item">Highly creative and autonomous</li>
-                                    <li class="list-group-item">Valid work permit for Belgium</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">MustHave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">BachelorDegreeorHigher</li>
+                                    <liclass="list-group-item">Passionforsoftwareproducts</li>
+                                    <liclass="list-group-item">PerfectwrittenEnglish</li>
+                                    <liclass="list-group-item">Highlycreativeandautonomous</li>
+                                    <liclass="list-group-item">ValidworkpermitforBelgium</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Nice to have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Experience in writing online content</li>
-                                    <li class="list-group-item">Additional languages</li>
-                                    <li class="list-group-item">Google Adwords experience</li>
-                                    <li class="list-group-item">Strong analytical skills</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Nicetohave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Experienceinwritingonlinecontent</li>
+                                    <liclass="list-group-item">Additionallanguages</li>
+                                    <liclass="list-group-item">GoogleAdwordsexperience</li>
+                                    <liclass="list-group-item">Stronganalyticalskills</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What's great -->
-            <section class="pt40">
-                <div class="container">
-                    <h2>What's great in the job?</h2>
+            <!--What'sgreat-->
+            <sectionclass="pt40">
+                <divclass="container">
+                    <h2>What'sgreatinthejob?</h2>
                     <br/>
-                    <div class="row">
-                        <div class="col-lg-8 pb40">
-                            <ul class="lead">
-                                <li>Great team of smart people, in a friendly and open culture</li>
-                                <li>No dumb managers, no stupid tools to use, no rigid working hours</li>
-                                <li>No waste of time in enterprise processes, real responsibilities and autonomy</li>
-                                <li>Expand your knowledge of various business industries</li>
-                                <li>Create content that will help our users on a daily basis</li>
-                                <li>Real responsibilities and challenges in a fast evolving company</li>
+                    <divclass="row">
+                        <divclass="col-lg-8pb40">
+                            <ulclass="lead">
+                                <li>Greatteamofsmartpeople,inafriendlyandopenculture</li>
+                                <li>Nodumbmanagers,nostupidtoolstouse,norigidworkinghours</li>
+                                <li>Nowasteoftimeinenterpriseprocesses,realresponsibilitiesandautonomy</li>
+                                <li>Expandyourknowledgeofvariousbusinessindustries</li>
+                                <li>Createcontentthatwillhelpourusersonadailybasis</li>
+                                <li>Realresponsibilitiesandchallengesinafastevolvingcompany</li>
                             </ul>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb40">
+                        <divclass="col-lg-3offset-lg-1pb40">
                             <div>
-                                <h5>Our Product</h5>
-                                <p>Discover our products.</p>
-                                <p><a href="/" class="btn btn-outline-primary" target="_blank"><small><b>READ</b></small></a></p>
+                                <h5>OurProduct</h5>
+                                <p>Discoverourproducts.</p>
+                                <p><ahref="/"class="btnbtn-outline-primary"target="_blank"><small><b>READ</b></small></a></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What we offer -->
-            <section class="s_features pt40 pb40 bg-200" data-name="Features" data-snippet="s_features">
-                <div class="container">
-                    <h2>What We Offer</h2>
+            <!--Whatweoffer-->
+            <sectionclass="s_featurespt40pb40bg-200"data-name="Features"data-snippet="s_features">
+                <divclass="container">
+                    <h2>WhatWeOffer</h2>
                     <br/>
-                    <p class="lead">
-                        Each employee has a chance to see the impact of his work.
-                        You can make a real contribution to the success of the company.
+                    <pclass="lead">
+                        Eachemployeehasachancetoseetheimpactofhiswork.
+                        Youcanmakearealcontributiontothesuccessofthecompany.
                         <br/>
-                        Several activities are often organized all over the year, such as weekly
-                        sports sessions, team building events, monthly drink, and much more
+                        Severalactivitiesareoftenorganizedallovertheyear,suchasweekly
+                        sportssessions,teambuildingevents,monthlydrink,andmuchmore
                     </p>
-                    <div class="row pt16">
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-gift rounded-circle bg-primary m-3"></i>
+                    <divclass="rowpt16">
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-giftrounded-circlebg-primarym-3"></i>
                             <h3>Perks</h3>
-                            <p>A full-time position <br/>Attractive salary package.</p>
+                            <p>Afull-timeposition<br/>Attractivesalarypackage.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-bar-chart rounded-circle bg-primary m-3"></i>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-bar-chartrounded-circlebg-primarym-3"></i>
                             <h3>Trainings</h3>
-                            <p>12 days / year, including <br/>6 of your choice.</p>
+                            <p>12days/year,including<br/>6ofyourchoice.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-futbol-o rounded-circle bg-primary m-3"></i>
-                            <h3>Sport Activity</h3>
-                            <p>Play any sport with colleagues, <br/>the bill is covered.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-futbol-orounded-circlebg-primarym-3"></i>
+                            <h3>SportActivity</h3>
+                            <p>Playanysportwithcolleagues,<br/>thebilliscovered.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-coffee rounded-circle bg-primary m-3"></i>
-                            <h3>Eat &amp; Drink</h3>
-                            <p>Fruit, coffee and <br/>snacks provided.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-coffeerounded-circlebg-primarym-3"></i>
+                            <h3>Eat&amp;Drink</h3>
+                            <p>Fruit,coffeeand<br/>snacksprovided.</p>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- Photos -->
-            <section class="pt24 pb16">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
+            <!--Photos-->
+            <sectionclass="pt24pb16">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
+                    <divclass="row">
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
                         </div>
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
                         </div>
                     </div>
                 </div>
@@ -228,92 +228,92 @@
         </field>
     </record>
 
-    <record id="hr.job_developer" model="hr.job">
-        <field name="is_published">True</field>
-        <field name="website_description" type="html">
-            <!-- Description text and ratings -->
-            <section class="pt32">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8 pb32">
-                            <p class="lead">
-                                As an employee of our company, you will <b>collaborate with each department to create and deploy
-                                disruptive products.</b> Come work at a growing company that offers great benefits with opportunities to
-                                moving forward and learn alongside accomplished leaders. We're seeking an experienced and outstanding member of staff.
+    <recordid="hr.job_developer"model="hr.job">
+        <fieldname="is_published">True</field>
+        <fieldname="website_description"type="html">
+            <!--Descriptiontextandratings-->
+            <sectionclass="pt32">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-8pb32">
+                            <pclass="lead">
+                                Asanemployeeofourcompany,youwill<b>collaboratewitheachdepartmenttocreateanddeploy
+                                disruptiveproducts.</b>Comeworkatagrowingcompanythatoffersgreatbenefitswithopportunitiesto
+                                movingforwardandlearnalongsideaccomplishedleaders.We'reseekinganexperiencedandoutstandingmemberofstaff.
                                 <br/><br/>
-                                This position is both <b>creative and rigorous</b> by nature you need to think outside the box.
-                                We expect the candidate to be proactive and have a "get it done" spirit. To be successful,
-                                you will have solid solving problem skills.
+                                Thispositionisboth<b>creativeandrigorous</b>bynatureyouneedtothinkoutsidethebox.
+                                Weexpectthecandidatetobeproactiveandhavea"getitdone"spirit.Tobesuccessful,
+                                youwillhavesolidsolvingproblemskills.
                             </p>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb32">
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Customer Relationship</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                        <divclass="col-lg-3offset-lg-1pb32">
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">CustomerRelationship</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Personal Evolution</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Autonomy</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">PersonalEvolution</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Administrative Work</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Technical Expertise</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">Autonomy</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">AdministrativeWork</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">TechnicalExpertise</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
@@ -321,133 +321,133 @@
                     </div>
                 </div>
             </section>
-            <!-- Responsabilities, Must Have and Nice to have -->
-            <section class="s_comparisons pt24 pb24 bg-200" data-snippet="s_comparisons">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Responsibilities</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Lead the entire sales cycle</li>
-                                    <li class="list-group-item">Achieve monthly sales objectives</li>
-                                    <li class="list-group-item">Qualify the customer needs</li>
-                                    <li class="list-group-item">Negotiate and contract</li>
-                                    <li class="list-group-item">Master demos of our software</li>
+            <!--Responsabilities,MustHaveandNicetohave-->
+            <sectionclass="s_comparisonspt24pb24bg-200"data-snippet="s_comparisons">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Responsibilities</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Leadtheentiresalescycle</li>
+                                    <liclass="list-group-item">Achievemonthlysalesobjectives</li>
+                                    <liclass="list-group-item">Qualifythecustomerneeds</li>
+                                    <liclass="list-group-item">Negotiateandcontract</li>
+                                    <liclass="list-group-item">Masterdemosofoursoftware</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Must Have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Bachelor Degree or Higher</li>
-                                    <li class="list-group-item">Passion for software products</li>
-                                    <li class="list-group-item">Perfect written English</li>
-                                    <li class="list-group-item">Highly creative and autonomous</li>
-                                    <li class="list-group-item">Valid work permit for Belgium</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">MustHave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">BachelorDegreeorHigher</li>
+                                    <liclass="list-group-item">Passionforsoftwareproducts</li>
+                                    <liclass="list-group-item">PerfectwrittenEnglish</li>
+                                    <liclass="list-group-item">Highlycreativeandautonomous</li>
+                                    <liclass="list-group-item">ValidworkpermitforBelgium</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Nice to have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Experience in writing online content</li>
-                                    <li class="list-group-item">Additional languages</li>
-                                    <li class="list-group-item">Google Adwords experience</li>
-                                    <li class="list-group-item">Strong analytical skills</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Nicetohave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Experienceinwritingonlinecontent</li>
+                                    <liclass="list-group-item">Additionallanguages</li>
+                                    <liclass="list-group-item">GoogleAdwordsexperience</li>
+                                    <liclass="list-group-item">Stronganalyticalskills</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What's great -->
-            <section class="pt40">
-                <div class="container">
-                    <h2>What's great in the job?</h2>
+            <!--What'sgreat-->
+            <sectionclass="pt40">
+                <divclass="container">
+                    <h2>What'sgreatinthejob?</h2>
                     <br/>
-                    <div class="row">
-                        <div class="col-lg-8 pb40">
-                            <ul class="lead">
-                                <li>Great team of smart people, in a friendly and open culture</li>
-                                <li>No dumb managers, no stupid tools to use, no rigid working hours</li>
-                                <li>No waste of time in enterprise processes, real responsibilities and autonomy</li>
-                                <li>Expand your knowledge of various business industries</li>
-                                <li>Create content that will help our users on a daily basis</li>
-                                <li>Real responsibilities and challenges in a fast evolving company</li>
+                    <divclass="row">
+                        <divclass="col-lg-8pb40">
+                            <ulclass="lead">
+                                <li>Greatteamofsmartpeople,inafriendlyandopenculture</li>
+                                <li>Nodumbmanagers,nostupidtoolstouse,norigidworkinghours</li>
+                                <li>Nowasteoftimeinenterpriseprocesses,realresponsibilitiesandautonomy</li>
+                                <li>Expandyourknowledgeofvariousbusinessindustries</li>
+                                <li>Createcontentthatwillhelpourusersonadailybasis</li>
+                                <li>Realresponsibilitiesandchallengesinafastevolvingcompany</li>
                             </ul>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb40">
+                        <divclass="col-lg-3offset-lg-1pb40">
                             <div>
-                                <h5>Our Product</h5>
-                                <p>Discover our products.</p>
-                                <p><a href="/" class="btn btn-outline-primary" target="_blank"><small><b>READ</b></small></a></p>
+                                <h5>OurProduct</h5>
+                                <p>Discoverourproducts.</p>
+                                <p><ahref="/"class="btnbtn-outline-primary"target="_blank"><small><b>READ</b></small></a></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What we offer -->
-            <section class="s_features pt40 pb40 bg-200" data-name="Features" data-snippet="s_features">
-                <div class="container">
-                    <h2>What We Offer</h2>
+            <!--Whatweoffer-->
+            <sectionclass="s_featurespt40pb40bg-200"data-name="Features"data-snippet="s_features">
+                <divclass="container">
+                    <h2>WhatWeOffer</h2>
                     <br/>
-                    <p class="lead">
-                        Each employee has a chance to see the impact of his work.
-                        You can make a real contribution to the success of the company.
+                    <pclass="lead">
+                        Eachemployeehasachancetoseetheimpactofhiswork.
+                        Youcanmakearealcontributiontothesuccessofthecompany.
                         <br/>
-                        Several activities are often organized all over the year, such as weekly
-                        sports sessions, team building events, monthly drink, and much more
+                        Severalactivitiesareoftenorganizedallovertheyear,suchasweekly
+                        sportssessions,teambuildingevents,monthlydrink,andmuchmore
                     </p>
-                    <div class="row pt16">
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-gift rounded-circle bg-primary m-3"></i>
+                    <divclass="rowpt16">
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-giftrounded-circlebg-primarym-3"></i>
                             <h3>Perks</h3>
-                            <p>A full-time position <br/>Attractive salary package.</p>
+                            <p>Afull-timeposition<br/>Attractivesalarypackage.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-bar-chart rounded-circle bg-primary m-3"></i>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-bar-chartrounded-circlebg-primarym-3"></i>
                             <h3>Trainings</h3>
-                            <p>12 days / year, including <br/>6 of your choice.</p>
+                            <p>12days/year,including<br/>6ofyourchoice.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-futbol-o rounded-circle bg-primary m-3"></i>
-                            <h3>Sport Activity</h3>
-                            <p>Play any sport with colleagues, <br/>the bill is covered.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-futbol-orounded-circlebg-primarym-3"></i>
+                            <h3>SportActivity</h3>
+                            <p>Playanysportwithcolleagues,<br/>thebilliscovered.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-coffee rounded-circle bg-primary m-3"></i>
-                            <h3>Eat &amp; Drink</h3>
-                            <p>Fruit, coffee and <br/>snacks provided.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-coffeerounded-circlebg-primarym-3"></i>
+                            <h3>Eat&amp;Drink</h3>
+                            <p>Fruit,coffeeand<br/>snacksprovided.</p>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- Photos -->
-            <section class="pt24 pb16">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
+            <!--Photos-->
+            <sectionclass="pt24pb16">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
+                    <divclass="row">
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
                         </div>
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
                         </div>
                     </div>
                 </div>
@@ -455,92 +455,92 @@
         </field>
     </record>
 
-    <record id="hr.job_consultant" model="hr.job">
-        <field name="is_published">True</field>
-        <field name="website_description" type="html">
-            <!-- Description text and ratings -->
-            <section class="pt32">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8 pb32">
-                            <p class="lead">
-                                As an employee of our company, you will <b>collaborate with each department to create and deploy
-                                disruptive products.</b> Come work at a growing company that offers great benefits with opportunities to
-                                moving forward and learn alongside accomplished leaders. We're seeking an experienced and outstanding member of staff.
+    <recordid="hr.job_consultant"model="hr.job">
+        <fieldname="is_published">True</field>
+        <fieldname="website_description"type="html">
+            <!--Descriptiontextandratings-->
+            <sectionclass="pt32">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-8pb32">
+                            <pclass="lead">
+                                Asanemployeeofourcompany,youwill<b>collaboratewitheachdepartmenttocreateanddeploy
+                                disruptiveproducts.</b>Comeworkatagrowingcompanythatoffersgreatbenefitswithopportunitiesto
+                                movingforwardandlearnalongsideaccomplishedleaders.We'reseekinganexperiencedandoutstandingmemberofstaff.
                                 <br/><br/>
-                                This position is both <b>creative and rigorous</b> by nature you need to think outside the box.
-                                We expect the candidate to be proactive and have a "get it done" spirit. To be successful,
-                                you will have solid solving problem skills.
+                                Thispositionisboth<b>creativeandrigorous</b>bynatureyouneedtothinkoutsidethebox.
+                                Weexpectthecandidatetobeproactiveandhavea"getitdone"spirit.Tobesuccessful,
+                                youwillhavesolidsolvingproblemskills.
                             </p>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb32">
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Customer Relationship</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                        <divclass="col-lg-3offset-lg-1pb32">
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">CustomerRelationship</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Personal Evolution</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Autonomy</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">PersonalEvolution</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Administrative Work</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Technical Expertise</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">Autonomy</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">AdministrativeWork</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">TechnicalExpertise</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
@@ -548,133 +548,133 @@
                     </div>
                 </div>
             </section>
-            <!-- Responsabilities, Must Have and Nice to have -->
-            <section class="s_comparisons pt24 pb24 bg-200" data-snippet="s_comparisons">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Responsibilities</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Lead the entire sales cycle</li>
-                                    <li class="list-group-item">Achieve monthly sales objectives</li>
-                                    <li class="list-group-item">Qualify the customer needs</li>
-                                    <li class="list-group-item">Negotiate and contract</li>
-                                    <li class="list-group-item">Master demos of our software</li>
+            <!--Responsabilities,MustHaveandNicetohave-->
+            <sectionclass="s_comparisonspt24pb24bg-200"data-snippet="s_comparisons">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Responsibilities</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Leadtheentiresalescycle</li>
+                                    <liclass="list-group-item">Achievemonthlysalesobjectives</li>
+                                    <liclass="list-group-item">Qualifythecustomerneeds</li>
+                                    <liclass="list-group-item">Negotiateandcontract</li>
+                                    <liclass="list-group-item">Masterdemosofoursoftware</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Must Have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Bachelor Degree or Higher</li>
-                                    <li class="list-group-item">Passion for software products</li>
-                                    <li class="list-group-item">Perfect written English</li>
-                                    <li class="list-group-item">Highly creative and autonomous</li>
-                                    <li class="list-group-item">Valid work permit for Belgium</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">MustHave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">BachelorDegreeorHigher</li>
+                                    <liclass="list-group-item">Passionforsoftwareproducts</li>
+                                    <liclass="list-group-item">PerfectwrittenEnglish</li>
+                                    <liclass="list-group-item">Highlycreativeandautonomous</li>
+                                    <liclass="list-group-item">ValidworkpermitforBelgium</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Nice to have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Experience in writing online content</li>
-                                    <li class="list-group-item">Additional languages</li>
-                                    <li class="list-group-item">Google Adwords experience</li>
-                                    <li class="list-group-item">Strong analytical skills</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Nicetohave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Experienceinwritingonlinecontent</li>
+                                    <liclass="list-group-item">Additionallanguages</li>
+                                    <liclass="list-group-item">GoogleAdwordsexperience</li>
+                                    <liclass="list-group-item">Stronganalyticalskills</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What's great -->
-            <section class="pt40">
-                <div class="container">
-                    <h2>What's great in the job?</h2>
+            <!--What'sgreat-->
+            <sectionclass="pt40">
+                <divclass="container">
+                    <h2>What'sgreatinthejob?</h2>
                     <br/>
-                    <div class="row">
-                        <div class="col-lg-8 pb40">
-                            <ul class="lead">
-                                <li>Great team of smart people, in a friendly and open culture</li>
-                                <li>No dumb managers, no stupid tools to use, no rigid working hours</li>
-                                <li>No waste of time in enterprise processes, real responsibilities and autonomy</li>
-                                <li>Expand your knowledge of various business industries</li>
-                                <li>Create content that will help our users on a daily basis</li>
-                                <li>Real responsibilities and challenges in a fast evolving company</li>
+                    <divclass="row">
+                        <divclass="col-lg-8pb40">
+                            <ulclass="lead">
+                                <li>Greatteamofsmartpeople,inafriendlyandopenculture</li>
+                                <li>Nodumbmanagers,nostupidtoolstouse,norigidworkinghours</li>
+                                <li>Nowasteoftimeinenterpriseprocesses,realresponsibilitiesandautonomy</li>
+                                <li>Expandyourknowledgeofvariousbusinessindustries</li>
+                                <li>Createcontentthatwillhelpourusersonadailybasis</li>
+                                <li>Realresponsibilitiesandchallengesinafastevolvingcompany</li>
                             </ul>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb40">
+                        <divclass="col-lg-3offset-lg-1pb40">
                             <div>
-                                <h5>Our Product</h5>
-                                <p>Discover our products.</p>
-                                <p><a href="/" class="btn btn-outline-primary" target="_blank"><small><b>READ</b></small></a></p>
+                                <h5>OurProduct</h5>
+                                <p>Discoverourproducts.</p>
+                                <p><ahref="/"class="btnbtn-outline-primary"target="_blank"><small><b>READ</b></small></a></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What we offer -->
-            <section class="s_features pt40 pb40 bg-200" data-name="Features" data-snippet="s_features">
-                <div class="container">
-                    <h2>What We Offer</h2>
+            <!--Whatweoffer-->
+            <sectionclass="s_featurespt40pb40bg-200"data-name="Features"data-snippet="s_features">
+                <divclass="container">
+                    <h2>WhatWeOffer</h2>
                     <br/>
-                    <p class="lead">
-                        Each employee has a chance to see the impact of his work.
-                        You can make a real contribution to the success of the company.
+                    <pclass="lead">
+                        Eachemployeehasachancetoseetheimpactofhiswork.
+                        Youcanmakearealcontributiontothesuccessofthecompany.
                         <br/>
-                        Several activities are often organized all over the year, such as weekly
-                        sports sessions, team building events, monthly drink, and much more
+                        Severalactivitiesareoftenorganizedallovertheyear,suchasweekly
+                        sportssessions,teambuildingevents,monthlydrink,andmuchmore
                     </p>
-                    <div class="row pt16">
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-gift rounded-circle bg-primary m-3"></i>
+                    <divclass="rowpt16">
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-giftrounded-circlebg-primarym-3"></i>
                             <h3>Perks</h3>
-                            <p>A full-time position <br/>Attractive salary package.</p>
+                            <p>Afull-timeposition<br/>Attractivesalarypackage.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-bar-chart rounded-circle bg-primary m-3"></i>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-bar-chartrounded-circlebg-primarym-3"></i>
                             <h3>Trainings</h3>
-                            <p>12 days / year, including <br/>6 of your choice.</p>
+                            <p>12days/year,including<br/>6ofyourchoice.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-futbol-o rounded-circle bg-primary m-3"></i>
-                            <h3>Sport Activity</h3>
-                            <p>Play any sport with colleagues, <br/>the bill is covered.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-futbol-orounded-circlebg-primarym-3"></i>
+                            <h3>SportActivity</h3>
+                            <p>Playanysportwithcolleagues,<br/>thebilliscovered.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-coffee rounded-circle bg-primary m-3"></i>
-                            <h3>Eat &amp; Drink</h3>
-                            <p>Fruit, coffee and <br/>snacks provided.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-coffeerounded-circlebg-primarym-3"></i>
+                            <h3>Eat&amp;Drink</h3>
+                            <p>Fruit,coffeeand<br/>snacksprovided.</p>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- Photos -->
-            <section class="pt24 pb16">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
+            <!--Photos-->
+            <sectionclass="pt24pb16">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
+                    <divclass="row">
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
                         </div>
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
                         </div>
                     </div>
                 </div>
@@ -682,91 +682,91 @@
         </field>
     </record>
 
-    <record id="hr.job_ceo" model="hr.job">
-        <field name="website_description" type="html">
-            <!-- Description text and ratings -->
-            <section class="pt32">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8 pb32">
-                            <p class="lead">
-                                As an employee of our company, you will <b>collaborate with each department to create and deploy
-                                disruptive products.</b> Come work at a growing company that offers great benefits with opportunities to
-                                moving forward and learn alongside accomplished leaders. We're seeking an experienced and outstanding member of staff.
+    <recordid="hr.job_ceo"model="hr.job">
+        <fieldname="website_description"type="html">
+            <!--Descriptiontextandratings-->
+            <sectionclass="pt32">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-8pb32">
+                            <pclass="lead">
+                                Asanemployeeofourcompany,youwill<b>collaboratewitheachdepartmenttocreateanddeploy
+                                disruptiveproducts.</b>Comeworkatagrowingcompanythatoffersgreatbenefitswithopportunitiesto
+                                movingforwardandlearnalongsideaccomplishedleaders.We'reseekinganexperiencedandoutstandingmemberofstaff.
                                 <br/><br/>
-                                This position is both <b>creative and rigorous</b> by nature you need to think outside the box.
-                                We expect the candidate to be proactive and have a "get it done" spirit. To be successful,
-                                you will have solid solving problem skills.
+                                Thispositionisboth<b>creativeandrigorous</b>bynatureyouneedtothinkoutsidethebox.
+                                Weexpectthecandidatetobeproactiveandhavea"getitdone"spirit.Tobesuccessful,
+                                youwillhavesolidsolvingproblemskills.
                             </p>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb32">
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Customer Relationship</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                        <divclass="col-lg-3offset-lg-1pb32">
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">CustomerRelationship</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Personal Evolution</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Autonomy</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">PersonalEvolution</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Administrative Work</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Technical Expertise</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">Autonomy</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">AdministrativeWork</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">TechnicalExpertise</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
@@ -774,133 +774,133 @@
                     </div>
                 </div>
             </section>
-            <!-- Responsabilities, Must Have and Nice to have -->
-            <section class="s_comparisons pt24 pb24 bg-200" data-snippet="s_comparisons">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Responsibilities</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Lead the entire sales cycle</li>
-                                    <li class="list-group-item">Achieve monthly sales objectives</li>
-                                    <li class="list-group-item">Qualify the customer needs</li>
-                                    <li class="list-group-item">Negotiate and contract</li>
-                                    <li class="list-group-item">Master demos of our software</li>
+            <!--Responsabilities,MustHaveandNicetohave-->
+            <sectionclass="s_comparisonspt24pb24bg-200"data-snippet="s_comparisons">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Responsibilities</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Leadtheentiresalescycle</li>
+                                    <liclass="list-group-item">Achievemonthlysalesobjectives</li>
+                                    <liclass="list-group-item">Qualifythecustomerneeds</li>
+                                    <liclass="list-group-item">Negotiateandcontract</li>
+                                    <liclass="list-group-item">Masterdemosofoursoftware</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Must Have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Bachelor Degree or Higher</li>
-                                    <li class="list-group-item">Passion for software products</li>
-                                    <li class="list-group-item">Perfect written English</li>
-                                    <li class="list-group-item">Highly creative and autonomous</li>
-                                    <li class="list-group-item">Valid work permit for Belgium</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">MustHave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">BachelorDegreeorHigher</li>
+                                    <liclass="list-group-item">Passionforsoftwareproducts</li>
+                                    <liclass="list-group-item">PerfectwrittenEnglish</li>
+                                    <liclass="list-group-item">Highlycreativeandautonomous</li>
+                                    <liclass="list-group-item">ValidworkpermitforBelgium</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Nice to have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Experience in writing online content</li>
-                                    <li class="list-group-item">Additional languages</li>
-                                    <li class="list-group-item">Google Adwords experience</li>
-                                    <li class="list-group-item">Strong analytical skills</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Nicetohave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Experienceinwritingonlinecontent</li>
+                                    <liclass="list-group-item">Additionallanguages</li>
+                                    <liclass="list-group-item">GoogleAdwordsexperience</li>
+                                    <liclass="list-group-item">Stronganalyticalskills</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What's great -->
-            <section class="pt40">
-                <div class="container">
-                    <h2>What's great in the job?</h2>
+            <!--What'sgreat-->
+            <sectionclass="pt40">
+                <divclass="container">
+                    <h2>What'sgreatinthejob?</h2>
                     <br/>
-                    <div class="row">
-                        <div class="col-lg-8 pb40">
-                            <ul class="lead">
-                                <li>Great team of smart people, in a friendly and open culture</li>
-                                <li>No dumb managers, no stupid tools to use, no rigid working hours</li>
-                                <li>No waste of time in enterprise processes, real responsibilities and autonomy</li>
-                                <li>Expand your knowledge of various business industries</li>
-                                <li>Create content that will help our users on a daily basis</li>
-                                <li>Real responsibilities and challenges in a fast evolving company</li>
+                    <divclass="row">
+                        <divclass="col-lg-8pb40">
+                            <ulclass="lead">
+                                <li>Greatteamofsmartpeople,inafriendlyandopenculture</li>
+                                <li>Nodumbmanagers,nostupidtoolstouse,norigidworkinghours</li>
+                                <li>Nowasteoftimeinenterpriseprocesses,realresponsibilitiesandautonomy</li>
+                                <li>Expandyourknowledgeofvariousbusinessindustries</li>
+                                <li>Createcontentthatwillhelpourusersonadailybasis</li>
+                                <li>Realresponsibilitiesandchallengesinafastevolvingcompany</li>
                             </ul>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb40">
+                        <divclass="col-lg-3offset-lg-1pb40">
                             <div>
-                                <h5>Our Product</h5>
-                                <p>Discover our products.</p>
-                                <p><a href="/" class="btn btn-outline-primary" target="_blank"><small><b>READ</b></small></a></p>
+                                <h5>OurProduct</h5>
+                                <p>Discoverourproducts.</p>
+                                <p><ahref="/"class="btnbtn-outline-primary"target="_blank"><small><b>READ</b></small></a></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What we offer -->
-            <section class="s_features pt40 pb40 bg-200" data-name="Features" data-snippet="s_features">
-                <div class="container">
-                    <h2>What We Offer</h2>
+            <!--Whatweoffer-->
+            <sectionclass="s_featurespt40pb40bg-200"data-name="Features"data-snippet="s_features">
+                <divclass="container">
+                    <h2>WhatWeOffer</h2>
                     <br/>
-                    <p class="lead">
-                        Each employee has a chance to see the impact of his work.
-                        You can make a real contribution to the success of the company.
+                    <pclass="lead">
+                        Eachemployeehasachancetoseetheimpactofhiswork.
+                        Youcanmakearealcontributiontothesuccessofthecompany.
                         <br/>
-                        Several activities are often organized all over the year, such as weekly
-                        sports sessions, team building events, monthly drink, and much more
+                        Severalactivitiesareoftenorganizedallovertheyear,suchasweekly
+                        sportssessions,teambuildingevents,monthlydrink,andmuchmore
                     </p>
-                    <div class="row pt16">
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-gift rounded-circle bg-primary m-3"></i>
+                    <divclass="rowpt16">
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-giftrounded-circlebg-primarym-3"></i>
                             <h3>Perks</h3>
-                            <p>A full-time position <br/>Attractive salary package.</p>
+                            <p>Afull-timeposition<br/>Attractivesalarypackage.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-bar-chart rounded-circle bg-primary m-3"></i>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-bar-chartrounded-circlebg-primarym-3"></i>
                             <h3>Trainings</h3>
-                            <p>12 days / year, including <br/>6 of your choice.</p>
+                            <p>12days/year,including<br/>6ofyourchoice.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-futbol-o rounded-circle bg-primary m-3"></i>
-                            <h3>Sport Activity</h3>
-                            <p>Play any sport with colleagues, <br/>the bill is covered.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-futbol-orounded-circlebg-primarym-3"></i>
+                            <h3>SportActivity</h3>
+                            <p>Playanysportwithcolleagues,<br/>thebilliscovered.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-coffee rounded-circle bg-primary m-3"></i>
-                            <h3>Eat &amp; Drink</h3>
-                            <p>Fruit, coffee and <br/>snacks provided.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-coffeerounded-circlebg-primarym-3"></i>
+                            <h3>Eat&amp;Drink</h3>
+                            <p>Fruit,coffeeand<br/>snacksprovided.</p>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- Photos -->
-            <section class="pt24 pb16">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
+            <!--Photos-->
+            <sectionclass="pt24pb16">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
+                    <divclass="row">
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
                         </div>
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
                         </div>
                     </div>
                 </div>
@@ -908,91 +908,91 @@
         </field>
     </record>
 
-    <record id="hr.job_cto" model="hr.job">
-        <field name="website_description" type="html">
-            <!-- Description text and ratings -->
-            <section class="pt32">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8 pb32">
-                            <p class="lead">
-                                As an employee of our company, you will <b>collaborate with each department to create and deploy
-                                disruptive products.</b> Come work at a growing company that offers great benefits with opportunities to
-                                moving forward and learn alongside accomplished leaders. We're seeking an experienced and outstanding member of staff.
+    <recordid="hr.job_cto"model="hr.job">
+        <fieldname="website_description"type="html">
+            <!--Descriptiontextandratings-->
+            <sectionclass="pt32">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-8pb32">
+                            <pclass="lead">
+                                Asanemployeeofourcompany,youwill<b>collaboratewitheachdepartmenttocreateanddeploy
+                                disruptiveproducts.</b>Comeworkatagrowingcompanythatoffersgreatbenefitswithopportunitiesto
+                                movingforwardandlearnalongsideaccomplishedleaders.We'reseekinganexperiencedandoutstandingmemberofstaff.
                                 <br/><br/>
-                                This position is both <b>creative and rigorous</b> by nature you need to think outside the box.
-                                We expect the candidate to be proactive and have a "get it done" spirit. To be successful,
-                                you will have solid solving problem skills.
+                                Thispositionisboth<b>creativeandrigorous</b>bynatureyouneedtothinkoutsidethebox.
+                                Weexpectthecandidatetobeproactiveandhavea"getitdone"spirit.Tobesuccessful,
+                                youwillhavesolidsolvingproblemskills.
                             </p>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb32">
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Customer Relationship</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                        <divclass="col-lg-3offset-lg-1pb32">
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">CustomerRelationship</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Personal Evolution</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Autonomy</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">PersonalEvolution</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Administrative Work</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Technical Expertise</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">Autonomy</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">AdministrativeWork</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">TechnicalExpertise</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
@@ -1000,133 +1000,133 @@
                     </div>
                 </div>
             </section>
-            <!-- Responsabilities, Must Have and Nice to have -->
-            <section class="s_comparisons pt24 pb24 bg-200" data-snippet="s_comparisons">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Responsibilities</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Lead the entire sales cycle</li>
-                                    <li class="list-group-item">Achieve monthly sales objectives</li>
-                                    <li class="list-group-item">Qualify the customer needs</li>
-                                    <li class="list-group-item">Negotiate and contract</li>
-                                    <li class="list-group-item">Master demos of our software</li>
+            <!--Responsabilities,MustHaveandNicetohave-->
+            <sectionclass="s_comparisonspt24pb24bg-200"data-snippet="s_comparisons">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Responsibilities</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Leadtheentiresalescycle</li>
+                                    <liclass="list-group-item">Achievemonthlysalesobjectives</li>
+                                    <liclass="list-group-item">Qualifythecustomerneeds</li>
+                                    <liclass="list-group-item">Negotiateandcontract</li>
+                                    <liclass="list-group-item">Masterdemosofoursoftware</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Must Have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Bachelor Degree or Higher</li>
-                                    <li class="list-group-item">Passion for software products</li>
-                                    <li class="list-group-item">Perfect written English</li>
-                                    <li class="list-group-item">Highly creative and autonomous</li>
-                                    <li class="list-group-item">Valid work permit for Belgium</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">MustHave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">BachelorDegreeorHigher</li>
+                                    <liclass="list-group-item">Passionforsoftwareproducts</li>
+                                    <liclass="list-group-item">PerfectwrittenEnglish</li>
+                                    <liclass="list-group-item">Highlycreativeandautonomous</li>
+                                    <liclass="list-group-item">ValidworkpermitforBelgium</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Nice to have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Experience in writing online content</li>
-                                    <li class="list-group-item">Additional languages</li>
-                                    <li class="list-group-item">Google Adwords experience</li>
-                                    <li class="list-group-item">Strong analytical skills</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Nicetohave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Experienceinwritingonlinecontent</li>
+                                    <liclass="list-group-item">Additionallanguages</li>
+                                    <liclass="list-group-item">GoogleAdwordsexperience</li>
+                                    <liclass="list-group-item">Stronganalyticalskills</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What's great -->
-            <section class="pt40">
-                <div class="container">
-                    <h2>What's great in the job?</h2>
+            <!--What'sgreat-->
+            <sectionclass="pt40">
+                <divclass="container">
+                    <h2>What'sgreatinthejob?</h2>
                     <br/>
-                    <div class="row">
-                        <div class="col-lg-8 pb40">
-                            <ul class="lead">
-                                <li>Great team of smart people, in a friendly and open culture</li>
-                                <li>No dumb managers, no stupid tools to use, no rigid working hours</li>
-                                <li>No waste of time in enterprise processes, real responsibilities and autonomy</li>
-                                <li>Expand your knowledge of various business industries</li>
-                                <li>Create content that will help our users on a daily basis</li>
-                                <li>Real responsibilities and challenges in a fast evolving company</li>
+                    <divclass="row">
+                        <divclass="col-lg-8pb40">
+                            <ulclass="lead">
+                                <li>Greatteamofsmartpeople,inafriendlyandopenculture</li>
+                                <li>Nodumbmanagers,nostupidtoolstouse,norigidworkinghours</li>
+                                <li>Nowasteoftimeinenterpriseprocesses,realresponsibilitiesandautonomy</li>
+                                <li>Expandyourknowledgeofvariousbusinessindustries</li>
+                                <li>Createcontentthatwillhelpourusersonadailybasis</li>
+                                <li>Realresponsibilitiesandchallengesinafastevolvingcompany</li>
                             </ul>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb40">
+                        <divclass="col-lg-3offset-lg-1pb40">
                             <div>
-                                <h5>Our Product</h5>
-                                <p>Discover our products.</p>
-                                <p><a href="/" class="btn btn-outline-primary" target="_blank"><small><b>READ</b></small></a></p>
+                                <h5>OurProduct</h5>
+                                <p>Discoverourproducts.</p>
+                                <p><ahref="/"class="btnbtn-outline-primary"target="_blank"><small><b>READ</b></small></a></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What we offer -->
-            <section class="s_features pt40 pb40 bg-200" data-name="Features" data-snippet="s_features">
-                <div class="container">
-                    <h2>What We Offer</h2>
+            <!--Whatweoffer-->
+            <sectionclass="s_featurespt40pb40bg-200"data-name="Features"data-snippet="s_features">
+                <divclass="container">
+                    <h2>WhatWeOffer</h2>
                     <br/>
-                    <p class="lead">
-                        Each employee has a chance to see the impact of his work.
-                        You can make a real contribution to the success of the company.
+                    <pclass="lead">
+                        Eachemployeehasachancetoseetheimpactofhiswork.
+                        Youcanmakearealcontributiontothesuccessofthecompany.
                         <br/>
-                        Several activities are often organized all over the year, such as weekly
-                        sports sessions, team building events, monthly drink, and much more
+                        Severalactivitiesareoftenorganizedallovertheyear,suchasweekly
+                        sportssessions,teambuildingevents,monthlydrink,andmuchmore
                     </p>
-                    <div class="row pt16">
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-gift rounded-circle bg-primary m-3"></i>
+                    <divclass="rowpt16">
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-giftrounded-circlebg-primarym-3"></i>
                             <h3>Perks</h3>
-                            <p>A full-time position <br/>Attractive salary package.</p>
+                            <p>Afull-timeposition<br/>Attractivesalarypackage.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-bar-chart rounded-circle bg-primary m-3"></i>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-bar-chartrounded-circlebg-primarym-3"></i>
                             <h3>Trainings</h3>
-                            <p>12 days / year, including <br/>6 of your choice.</p>
+                            <p>12days/year,including<br/>6ofyourchoice.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-futbol-o rounded-circle bg-primary m-3"></i>
-                            <h3>Sport Activity</h3>
-                            <p>Play any sport with colleagues, <br/>the bill is covered.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-futbol-orounded-circlebg-primarym-3"></i>
+                            <h3>SportActivity</h3>
+                            <p>Playanysportwithcolleagues,<br/>thebilliscovered.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-coffee rounded-circle bg-primary m-3"></i>
-                            <h3>Eat &amp; Drink</h3>
-                            <p>Fruit, coffee and <br/>snacks provided.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-coffeerounded-circlebg-primarym-3"></i>
+                            <h3>Eat&amp;Drink</h3>
+                            <p>Fruit,coffeeand<br/>snacksprovided.</p>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- Photos -->
-            <section class="pt24 pb16">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
+            <!--Photos-->
+            <sectionclass="pt24pb16">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
+                    <divclass="row">
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
                         </div>
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
                         </div>
                     </div>
                 </div>
@@ -1134,91 +1134,91 @@
         </field>
     </record>
 
-    <record id="hr.job_trainee" model="hr.job">
-        <field name="website_description" type="html">
-            <!-- Description text and ratings -->
-            <section class="pt32">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8 pb32">
-                            <p class="lead">
-                                As an employee of our company, you will <b>collaborate with each department to create and deploy
-                                disruptive products.</b> Come work at a growing company that offers great benefits with opportunities to
-                                moving forward and learn alongside accomplished leaders. We're seeking an experienced and outstanding member of staff.
+    <recordid="hr.job_trainee"model="hr.job">
+        <fieldname="website_description"type="html">
+            <!--Descriptiontextandratings-->
+            <sectionclass="pt32">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-8pb32">
+                            <pclass="lead">
+                                Asanemployeeofourcompany,youwill<b>collaboratewitheachdepartmenttocreateanddeploy
+                                disruptiveproducts.</b>Comeworkatagrowingcompanythatoffersgreatbenefitswithopportunitiesto
+                                movingforwardandlearnalongsideaccomplishedleaders.We'reseekinganexperiencedandoutstandingmemberofstaff.
                                 <br/><br/>
-                                This position is both <b>creative and rigorous</b> by nature you need to think outside the box.
-                                We expect the candidate to be proactive and have a "get it done" spirit. To be successful,
-                                you will have solid solving problem skills.
+                                Thispositionisboth<b>creativeandrigorous</b>bynatureyouneedtothinkoutsidethebox.
+                                Weexpectthecandidatetobeproactiveandhavea"getitdone"spirit.Tobesuccessful,
+                                youwillhavesolidsolvingproblemskills.
                             </p>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb32">
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Customer Relationship</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                        <divclass="col-lg-3offset-lg-1pb32">
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">CustomerRelationship</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Personal Evolution</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Autonomy</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">PersonalEvolution</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Administrative Work</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Technical Expertise</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">Autonomy</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">AdministrativeWork</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">TechnicalExpertise</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
@@ -1226,133 +1226,133 @@
                     </div>
                 </div>
             </section>
-            <!-- Responsabilities, Must Have and Nice to have -->
-            <section class="s_comparisons pt24 pb24 bg-200" data-snippet="s_comparisons">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Responsibilities</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Lead the entire sales cycle</li>
-                                    <li class="list-group-item">Achieve monthly sales objectives</li>
-                                    <li class="list-group-item">Qualify the customer needs</li>
-                                    <li class="list-group-item">Negotiate and contract</li>
-                                    <li class="list-group-item">Master demos of our software</li>
+            <!--Responsabilities,MustHaveandNicetohave-->
+            <sectionclass="s_comparisonspt24pb24bg-200"data-snippet="s_comparisons">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Responsibilities</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Leadtheentiresalescycle</li>
+                                    <liclass="list-group-item">Achievemonthlysalesobjectives</li>
+                                    <liclass="list-group-item">Qualifythecustomerneeds</li>
+                                    <liclass="list-group-item">Negotiateandcontract</li>
+                                    <liclass="list-group-item">Masterdemosofoursoftware</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Must Have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Bachelor Degree or Higher</li>
-                                    <li class="list-group-item">Passion for software products</li>
-                                    <li class="list-group-item">Perfect written English</li>
-                                    <li class="list-group-item">Highly creative and autonomous</li>
-                                    <li class="list-group-item">Valid work permit for Belgium</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">MustHave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">BachelorDegreeorHigher</li>
+                                    <liclass="list-group-item">Passionforsoftwareproducts</li>
+                                    <liclass="list-group-item">PerfectwrittenEnglish</li>
+                                    <liclass="list-group-item">Highlycreativeandautonomous</li>
+                                    <liclass="list-group-item">ValidworkpermitforBelgium</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Nice to have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Experience in writing online content</li>
-                                    <li class="list-group-item">Additional languages</li>
-                                    <li class="list-group-item">Google Adwords experience</li>
-                                    <li class="list-group-item">Strong analytical skills</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Nicetohave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Experienceinwritingonlinecontent</li>
+                                    <liclass="list-group-item">Additionallanguages</li>
+                                    <liclass="list-group-item">GoogleAdwordsexperience</li>
+                                    <liclass="list-group-item">Stronganalyticalskills</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What's great -->
-            <section class="pt40">
-                <div class="container">
-                    <h2>What's great in the job?</h2>
+            <!--What'sgreat-->
+            <sectionclass="pt40">
+                <divclass="container">
+                    <h2>What'sgreatinthejob?</h2>
                     <br/>
-                    <div class="row">
-                        <div class="col-lg-8 pb40">
-                            <ul class="lead">
-                                <li>Great team of smart people, in a friendly and open culture</li>
-                                <li>No dumb managers, no stupid tools to use, no rigid working hours</li>
-                                <li>No waste of time in enterprise processes, real responsibilities and autonomy</li>
-                                <li>Expand your knowledge of various business industries</li>
-                                <li>Create content that will help our users on a daily basis</li>
-                                <li>Real responsibilities and challenges in a fast evolving company</li>
+                    <divclass="row">
+                        <divclass="col-lg-8pb40">
+                            <ulclass="lead">
+                                <li>Greatteamofsmartpeople,inafriendlyandopenculture</li>
+                                <li>Nodumbmanagers,nostupidtoolstouse,norigidworkinghours</li>
+                                <li>Nowasteoftimeinenterpriseprocesses,realresponsibilitiesandautonomy</li>
+                                <li>Expandyourknowledgeofvariousbusinessindustries</li>
+                                <li>Createcontentthatwillhelpourusersonadailybasis</li>
+                                <li>Realresponsibilitiesandchallengesinafastevolvingcompany</li>
                             </ul>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb40">
+                        <divclass="col-lg-3offset-lg-1pb40">
                             <div>
-                                <h5>Our Product</h5>
-                                <p>Discover our products.</p>
-                                <p><a href="/" class="btn btn-outline-primary" target="_blank"><small><b>READ</b></small></a></p>
+                                <h5>OurProduct</h5>
+                                <p>Discoverourproducts.</p>
+                                <p><ahref="/"class="btnbtn-outline-primary"target="_blank"><small><b>READ</b></small></a></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What we offer -->
-            <section class="s_features pt40 pb40 bg-200" data-name="Features" data-snippet="s_features">
-                <div class="container">
-                    <h2>What We Offer</h2>
+            <!--Whatweoffer-->
+            <sectionclass="s_featurespt40pb40bg-200"data-name="Features"data-snippet="s_features">
+                <divclass="container">
+                    <h2>WhatWeOffer</h2>
                     <br/>
-                    <p class="lead">
-                        Each employee has a chance to see the impact of his work.
-                        You can make a real contribution to the success of the company.
+                    <pclass="lead">
+                        Eachemployeehasachancetoseetheimpactofhiswork.
+                        Youcanmakearealcontributiontothesuccessofthecompany.
                         <br/>
-                        Several activities are often organized all over the year, such as weekly
-                        sports sessions, team building events, monthly drink, and much more
+                        Severalactivitiesareoftenorganizedallovertheyear,suchasweekly
+                        sportssessions,teambuildingevents,monthlydrink,andmuchmore
                     </p>
-                    <div class="row pt16">
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-gift rounded-circle bg-primary m-3"></i>
+                    <divclass="rowpt16">
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-giftrounded-circlebg-primarym-3"></i>
                             <h3>Perks</h3>
-                            <p>A full-time position <br/>Attractive salary package.</p>
+                            <p>Afull-timeposition<br/>Attractivesalarypackage.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-bar-chart rounded-circle bg-primary m-3"></i>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-bar-chartrounded-circlebg-primarym-3"></i>
                             <h3>Trainings</h3>
-                            <p>12 days / year, including <br/>6 of your choice.</p>
+                            <p>12days/year,including<br/>6ofyourchoice.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-futbol-o rounded-circle bg-primary m-3"></i>
-                            <h3>Sport Activity</h3>
-                            <p>Play any sport with colleagues, <br/>the bill is covered.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-futbol-orounded-circlebg-primarym-3"></i>
+                            <h3>SportActivity</h3>
+                            <p>Playanysportwithcolleagues,<br/>thebilliscovered.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-coffee rounded-circle bg-primary m-3"></i>
-                            <h3>Eat &amp; Drink</h3>
-                            <p>Fruit, coffee and <br/>snacks provided.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-coffeerounded-circlebg-primarym-3"></i>
+                            <h3>Eat&amp;Drink</h3>
+                            <p>Fruit,coffeeand<br/>snacksprovided.</p>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- Photos -->
-            <section class="pt24 pb16">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
+            <!--Photos-->
+            <sectionclass="pt24pb16">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
+                    <divclass="row">
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
                         </div>
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
                         </div>
                     </div>
                 </div>
@@ -1360,91 +1360,91 @@
         </field>
     </record>
 
-    <record id="hr.job_hrm" model="hr.job">
-        <field name="website_description" type="html">
-            <!-- Description text and ratings -->
-            <section class="pt32">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8 pb32">
-                            <p class="lead">
-                                As an employee of our company, you will <b>collaborate with each department to create and deploy
-                                disruptive products.</b> Come work at a growing company that offers great benefits with opportunities to
-                                moving forward and learn alongside accomplished leaders. We're seeking an experienced and outstanding member of staff.
+    <recordid="hr.job_hrm"model="hr.job">
+        <fieldname="website_description"type="html">
+            <!--Descriptiontextandratings-->
+            <sectionclass="pt32">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-8pb32">
+                            <pclass="lead">
+                                Asanemployeeofourcompany,youwill<b>collaboratewitheachdepartmenttocreateanddeploy
+                                disruptiveproducts.</b>Comeworkatagrowingcompanythatoffersgreatbenefitswithopportunitiesto
+                                movingforwardandlearnalongsideaccomplishedleaders.We'reseekinganexperiencedandoutstandingmemberofstaff.
                                 <br/><br/>
-                                This position is both <b>creative and rigorous</b> by nature you need to think outside the box.
-                                We expect the candidate to be proactive and have a "get it done" spirit. To be successful,
-                                you will have solid solving problem skills.
+                                Thispositionisboth<b>creativeandrigorous</b>bynatureyouneedtothinkoutsidethebox.
+                                Weexpectthecandidatetobeproactiveandhavea"getitdone"spirit.Tobesuccessful,
+                                youwillhavesolidsolvingproblemskills.
                             </p>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb32">
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Customer Relationship</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                        <divclass="col-lg-3offset-lg-1pb32">
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">CustomerRelationship</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Personal Evolution</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Autonomy</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">PersonalEvolution</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Administrative Work</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                    </span>
-                                    <span class="s_rating_inactive_icons text-primary">
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
-                                        <i class="fa fa-star-o"/>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
-                            <div class="s_rating pb8" data-vcss="001" data-icon="fa-star" data-snippet="s_rating">
-                                <h6 class="s_rating_title">Technical Expertise</h6>
-                                <div class="s_rating_icons o_not_editable">
-                                    <span class="s_rating_active_icons text-primary">
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
-                                        <i class="fa fa-star"/>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">Autonomy</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
                                     </span>
-                                    <span class="s_rating_inactive_icons text-primary">
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">AdministrativeWork</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                        <iclass="fafa-star-o"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <divclass="s_ratingpb8"data-vcss="001"data-icon="fa-star"data-snippet="s_rating">
+                                <h6class="s_rating_title">TechnicalExpertise</h6>
+                                <divclass="s_rating_iconso_not_editable">
+                                    <spanclass="s_rating_active_iconstext-primary">
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                        <iclass="fafa-star"/>
+                                    </span>
+                                    <spanclass="s_rating_inactive_iconstext-primary">
                                     </span>
                                 </div>
                             </div>
@@ -1452,133 +1452,133 @@
                     </div>
                 </div>
             </section>
-            <!-- Responsabilities, Must Have and Nice to have -->
-            <section class="s_comparisons pt24 pb24 bg-200" data-snippet="s_comparisons">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Responsibilities</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Lead the entire sales cycle</li>
-                                    <li class="list-group-item">Achieve monthly sales objectives</li>
-                                    <li class="list-group-item">Qualify the customer needs</li>
-                                    <li class="list-group-item">Negotiate and contract</li>
-                                    <li class="list-group-item">Master demos of our software</li>
+            <!--Responsabilities,MustHaveandNicetohave-->
+            <sectionclass="s_comparisonspt24pb24bg-200"data-snippet="s_comparisons">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Responsibilities</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Leadtheentiresalescycle</li>
+                                    <liclass="list-group-item">Achievemonthlysalesobjectives</li>
+                                    <liclass="list-group-item">Qualifythecustomerneeds</li>
+                                    <liclass="list-group-item">Negotiateandcontract</li>
+                                    <liclass="list-group-item">Masterdemosofoursoftware</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Must Have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Bachelor Degree or Higher</li>
-                                    <li class="list-group-item">Passion for software products</li>
-                                    <li class="list-group-item">Perfect written English</li>
-                                    <li class="list-group-item">Highly creative and autonomous</li>
-                                    <li class="list-group-item">Valid work permit for Belgium</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">MustHave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">BachelorDegreeorHigher</li>
+                                    <liclass="list-group-item">Passionforsoftwareproducts</li>
+                                    <liclass="list-group-item">PerfectwrittenEnglish</li>
+                                    <liclass="list-group-item">Highlycreativeandautonomous</li>
+                                    <liclass="list-group-item">ValidworkpermitforBelgium</li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-4 s_col_no_bgcolor pt16 pb16" data-name="Box">
-                            <div class="card bg-primary">
-                                <h4 class="card-header">Nice to have</h4>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Experience in writing online content</li>
-                                    <li class="list-group-item">Additional languages</li>
-                                    <li class="list-group-item">Google Adwords experience</li>
-                                    <li class="list-group-item">Strong analytical skills</li>
+                        <divclass="col-lg-4s_col_no_bgcolorpt16pb16"data-name="Box">
+                            <divclass="cardbg-primary">
+                                <h4class="card-header">Nicetohave</h4>
+                                <ulclass="list-grouplist-group-flush">
+                                    <liclass="list-group-item">Experienceinwritingonlinecontent</li>
+                                    <liclass="list-group-item">Additionallanguages</li>
+                                    <liclass="list-group-item">GoogleAdwordsexperience</li>
+                                    <liclass="list-group-item">Stronganalyticalskills</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What's great -->
-            <section class="pt40">
-                <div class="container">
-                    <h2>What's great in the job?</h2>
+            <!--What'sgreat-->
+            <sectionclass="pt40">
+                <divclass="container">
+                    <h2>What'sgreatinthejob?</h2>
                     <br/>
-                    <div class="row">
-                        <div class="col-lg-8 pb40">
-                            <ul class="lead">
-                                <li>Great team of smart people, in a friendly and open culture</li>
-                                <li>No dumb managers, no stupid tools to use, no rigid working hours</li>
-                                <li>No waste of time in enterprise processes, real responsibilities and autonomy</li>
-                                <li>Expand your knowledge of various business industries</li>
-                                <li>Create content that will help our users on a daily basis</li>
-                                <li>Real responsibilities and challenges in a fast evolving company</li>
+                    <divclass="row">
+                        <divclass="col-lg-8pb40">
+                            <ulclass="lead">
+                                <li>Greatteamofsmartpeople,inafriendlyandopenculture</li>
+                                <li>Nodumbmanagers,nostupidtoolstouse,norigidworkinghours</li>
+                                <li>Nowasteoftimeinenterpriseprocesses,realresponsibilitiesandautonomy</li>
+                                <li>Expandyourknowledgeofvariousbusinessindustries</li>
+                                <li>Createcontentthatwillhelpourusersonadailybasis</li>
+                                <li>Realresponsibilitiesandchallengesinafastevolvingcompany</li>
                             </ul>
                         </div>
-                        <div class="col-lg-3 offset-lg-1 pb40">
+                        <divclass="col-lg-3offset-lg-1pb40">
                             <div>
-                                <h5>Our Product</h5>
-                                <p>Discover our products.</p>
-                                <p><a href="/" class="btn btn-outline-primary" target="_blank"><small><b>READ</b></small></a></p>
+                                <h5>OurProduct</h5>
+                                <p>Discoverourproducts.</p>
+                                <p><ahref="/"class="btnbtn-outline-primary"target="_blank"><small><b>READ</b></small></a></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- What we offer -->
-            <section class="s_features pt40 pb40 bg-200" data-name="Features" data-snippet="s_features">
-                <div class="container">
-                    <h2>What We Offer</h2>
+            <!--Whatweoffer-->
+            <sectionclass="s_featurespt40pb40bg-200"data-name="Features"data-snippet="s_features">
+                <divclass="container">
+                    <h2>WhatWeOffer</h2>
                     <br/>
-                    <p class="lead">
-                        Each employee has a chance to see the impact of his work.
-                        You can make a real contribution to the success of the company.
+                    <pclass="lead">
+                        Eachemployeehasachancetoseetheimpactofhiswork.
+                        Youcanmakearealcontributiontothesuccessofthecompany.
                         <br/>
-                        Several activities are often organized all over the year, such as weekly
-                        sports sessions, team building events, monthly drink, and much more
+                        Severalactivitiesareoftenorganizedallovertheyear,suchasweekly
+                        sportssessions,teambuildingevents,monthlydrink,andmuchmore
                     </p>
-                    <div class="row pt16">
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-gift rounded-circle bg-primary m-3"></i>
+                    <divclass="rowpt16">
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-giftrounded-circlebg-primarym-3"></i>
                             <h3>Perks</h3>
-                            <p>A full-time position <br/>Attractive salary package.</p>
+                            <p>Afull-timeposition<br/>Attractivesalarypackage.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-bar-chart rounded-circle bg-primary m-3"></i>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-bar-chartrounded-circlebg-primarym-3"></i>
                             <h3>Trainings</h3>
-                            <p>12 days / year, including <br/>6 of your choice.</p>
+                            <p>12days/year,including<br/>6ofyourchoice.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-futbol-o rounded-circle bg-primary m-3"></i>
-                            <h3>Sport Activity</h3>
-                            <p>Play any sport with colleagues, <br/>the bill is covered.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-futbol-orounded-circlebg-primarym-3"></i>
+                            <h3>SportActivity</h3>
+                            <p>Playanysportwithcolleagues,<br/>thebilliscovered.</p>
                         </div>
-                        <div class="col-lg-3 text-center pt16 pb32">
-                            <i class="fa fa-2x fa-coffee rounded-circle bg-primary m-3"></i>
-                            <h3>Eat &amp; Drink</h3>
-                            <p>Fruit, coffee and <br/>snacks provided.</p>
+                        <divclass="col-lg-3text-centerpt16pb32">
+                            <iclass="fafa-2xfa-coffeerounded-circlebg-primarym-3"></i>
+                            <h3>Eat&amp;Drink</h3>
+                            <p>Fruit,coffeeand<br/>snacksprovided.</p>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- Photos -->
-            <section class="pt24 pb16">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
+            <!--Photos-->
+            <sectionclass="pt24pb16">
+                <divclass="container">
+                    <divclass="row">
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_3.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_2.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_4.jpg"/>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
+                    <divclass="row">
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_6.jpg"/>
                         </div>
-                        <div class="col-md-6 col-lg-3 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
+                        <divclass="col-md-6col-lg-3mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_5.jpg"/>
                         </div>
-                        <div class="col-md-12 col-lg-6 mt16 mb16">
-                            <img alt="" class="img img-fluid" src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
+                        <divclass="col-md-12col-lg-6mt16mb16">
+                            <imgalt=""class="imgimg-fluid"src="/website_hr_recruitment/static/src/img/job_image_1.jpg"/>
                         </div>
                     </div>
                 </div>

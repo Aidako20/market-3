@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <template id="assets" inherit_id="point_of_sale.assets">
-          <xpath expr="." position="inside">
-              <script type="text/javascript" src="/pos_discount/static/src/js/DiscountButton.js"></script>
-              <script type="text/javascript" src="/pos_discount/static/src/js/models.js"></script>
+        <templateid="assets"inherit_id="point_of_sale.assets">
+          <xpathexpr="."position="inside">
+              <scripttype="text/javascript"src="/pos_discount/static/src/js/DiscountButton.js"></script>
+              <scripttype="text/javascript"src="/pos_discount/static/src/js/models.js"></script>
           </xpath>
         </template>
 

@@ -1,102 +1,102 @@
-flectra.define('web.test_utils_kanban', function (require) {
-"use strict";
+flectra.define('web.test_utils_kanban',function(require){
+"usestrict";
 
 /**
- * Kanban Test Utils
+ *KanbanTestUtils
  *
- * This module defines various utility functions to help testing kanban views.
+ *Thismoduledefinesvariousutilityfunctionstohelptestingkanbanviews.
  *
- * Note that all methods defined in this module are exported in the main
- * testUtils file.
+ *Notethatallmethodsdefinedinthismoduleareexportedinthemain
+ *testUtilsfile.
  */
 
-var testUtilsDom = require('web.test_utils_dom');
-var testUtilsFields = require('web.test_utils_fields');
+vartestUtilsDom=require('web.test_utils_dom');
+vartestUtilsFields=require('web.test_utils_fields');
 
 /**
- * Clicks on the Create button in a kanban view. Note that this method checks that
- * the Create button is visible.
+ *ClicksontheCreatebuttoninakanbanview.Notethatthismethodchecksthat
+ *theCreatebuttonisvisible.
  *
- * @param {KanbanController} kanban
- * @returns {Promise}
+ *@param{KanbanController}kanban
+ *@returns{Promise}
  */
-function clickCreate(kanban) {
-    return testUtilsDom.click(kanban.$buttons.find('.o-kanban-button-new'));
+functionclickCreate(kanban){
+    returntestUtilsDom.click(kanban.$buttons.find('.o-kanban-button-new'));
 }
 
 /**
- * Open the settings menu for a column (in a grouped kanban view)
+ *Openthesettingsmenuforacolumn(inagroupedkanbanview)
  *
- * @param {jQuery} $column
- * @returns {Promise}
+ *@param{jQuery}$column
+ *@returns{Promise}
  */
-function toggleGroupSettings($column) {
-    var $dropdownToggler = $column.find('.o_kanban_config > a.dropdown-toggle');
-    if (!$dropdownToggler.is(':visible')) {
-        $dropdownToggler.css('display', 'block');
+functiontoggleGroupSettings($column){
+    var$dropdownToggler=$column.find('.o_kanban_config>a.dropdown-toggle');
+    if(!$dropdownToggler.is(':visible')){
+        $dropdownToggler.css('display','block');
     }
-    return testUtilsDom.click($dropdownToggler);
+    returntestUtilsDom.click($dropdownToggler);
 }
 
 /**
- * Edit a value in a quickcreate form view (this method assumes that the quick
- * create feature is active, and a sub form view is open)
+ *Editavalueinaquickcreateformview(thismethodassumesthatthequick
+ *createfeatureisactive,andasubformviewisopen)
  *
- * @param {kanbanController} kanban
- * @param {string|number} value
- * @param {[string]} fieldName
- * @returns {Promise}
+ *@param{kanbanController}kanban
+ *@param{string|number}value
+ *@param{[string]}fieldName
+ *@returns{Promise}
  */
-function quickCreate(kanban, value, fieldName) {
-    var additionalSelector = fieldName ? ('[name=' + fieldName + ']'): '';
-    var enterEvent = $.Event(
+functionquickCreate(kanban,value,fieldName){
+    varadditionalSelector=fieldName?('[name='+fieldName+']'):'';
+    varenterEvent=$.Event(
         'keydown',
         {
-            which: $.ui.keyCode.ENTER,
-            keyCode: $.ui.keyCode.ENTER,
+            which:$.ui.keyCode.ENTER,
+            keyCode:$.ui.keyCode.ENTER,
         }
     );
-    return testUtilsFields.editAndTrigger(
-        kanban.$('.o_kanban_quick_create input' + additionalSelector),
+    returntestUtilsFields.editAndTrigger(
+        kanban.$('.o_kanban_quick_createinput'+additionalSelector),
         value,
-        ['input', enterEvent]
+        ['input',enterEvent]
     );
 }
 
 /**
- * Reloads a kanban view.
+ *Reloadsakanbanview.
  *
- * @param {KanbanController} kanban
- * @param {[Object]} params given to the controller reload method
- * @returns {Promise}
+ *@param{KanbanController}kanban
+ *@param{[Object]}paramsgiventothecontrollerreloadmethod
+ *@returns{Promise}
  */
-function reload(kanban, params) {
-    return kanban.reload(params);
+functionreload(kanban,params){
+    returnkanban.reload(params);
 }
 
 /**
- * Open the setting dropdown of a kanban record.  Note that the template of a
- * kanban record is not standardized, so this method will fail if the template
- * does not comply with the usual dom structure.
+ *Openthesettingdropdownofakanbanrecord. Notethatthetemplateofa
+ *kanbanrecordisnotstandardized,sothismethodwillfailifthetemplate
+ *doesnotcomplywiththeusualdomstructure.
  *
- * @param {jQuery} $record
- * @returns {Promise}
+ *@param{jQuery}$record
+ *@returns{Promise}
  */
-function toggleRecordDropdown($record) {
-    var $dropdownToggler = $record.find('.o_dropdown_kanban > a.dropdown-toggle');
-    if (!$dropdownToggler.is(':visible')) {
-        $dropdownToggler.css('display', 'block');
+functiontoggleRecordDropdown($record){
+    var$dropdownToggler=$record.find('.o_dropdown_kanban>a.dropdown-toggle');
+    if(!$dropdownToggler.is(':visible')){
+        $dropdownToggler.css('display','block');
     }
-    return testUtilsDom.click($dropdownToggler);
+    returntestUtilsDom.click($dropdownToggler);
 }
 
 
-return {
-    clickCreate: clickCreate,
-    quickCreate: quickCreate,
-    reload: reload,
-    toggleGroupSettings: toggleGroupSettings,
-    toggleRecordDropdown: toggleRecordDropdown,
+return{
+    clickCreate:clickCreate,
+    quickCreate:quickCreate,
+    reload:reload,
+    toggleGroupSettings:toggleGroupSettings,
+    toggleRecordDropdown:toggleRecordDropdown,
 };
 
 });

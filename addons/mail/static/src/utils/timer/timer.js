@@ -1,165 +1,165 @@
-flectra.define('mail/static/src/utils/timer/timer.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/utils/timer/timer.js',function(require){
+'usestrict';
 
-const { makeDeferred } = require('mail/static/src/utils/deferred/deferred.js');
+const{makeDeferred}=require('mail/static/src/utils/deferred/deferred.js');
 
 //------------------------------------------------------------------------------
-// Errors
+//Errors
 //------------------------------------------------------------------------------
 
 /**
- * List of Timer errors.
+ *ListofTimererrors.
  */
 
  /**
-  * Error when timer has been cleared with `.clear()` or `.reset()`. Used to
-  * let know caller of timer that the countdown has been aborted, which
-  * means the inner function will not be called. Usually caller should just
-  * accept it and kindly treated this error as a polite warning.
+  *Errorwhentimerhasbeenclearedwith`.clear()`or`.reset()`.Usedto
+  *letknowcalleroftimerthatthecountdownhasbeenaborted,which
+  *meanstheinnerfunctionwillnotbecalled.Usuallycallershouldjust
+  *acceptitandkindlytreatedthiserrorasapolitewarning.
   */
- class TimerClearedError extends Error {
+ classTimerClearedErrorextendsError{
     /**
-     * @override
+     *@override
      */
-    constructor(timerId, ...args) {
+    constructor(timerId,...args){
         super(...args);
-        this.name = 'TimerClearedError';
-        this.timerId = timerId;
+        this.name='TimerClearedError';
+        this.timerId=timerId;
     }
 }
 
 //------------------------------------------------------------------------------
-// Private
+//Private
 //------------------------------------------------------------------------------
 
 /**
- * This class creates a timer which, when times out, calls a function.
- * Note that the timer is not started on initialization (@see start method).
+ *Thisclasscreatesatimerwhich,whentimesout,callsafunction.
+ *Notethatthetimerisnotstartedoninitialization(@seestartmethod).
  */
-class Timer {
+classTimer{
 
     /**
-     * @param {Object} env the OWL env
-     * @param {function} onTimeout
-     * @param {integer} duration
-     * @param {Object} [param3={}]
-     * @param {boolean} [param3.silentCancelationErrors=true] if unset, caller
-     *   of timer will observe some errors that come from current timer calls
-     *   that has been cleared with `.clear()` or `.reset()`.
-     *   @see TimerClearedError for when timer has been aborted from `.clear()`
-     *     or `.reset()`.
+     *@param{Object}envtheOWLenv
+     *@param{function}onTimeout
+     *@param{integer}duration
+     *@param{Object}[param3={}]
+     *@param{boolean}[param3.silentCancelationErrors=true]ifunset,caller
+     *  oftimerwillobservesomeerrorsthatcomefromcurrenttimercalls
+     *  thathasbeenclearedwith`.clear()`or`.reset()`.
+     *  @seeTimerClearedErrorforwhentimerhasbeenabortedfrom`.clear()`
+     *    or`.reset()`.
      */
-    constructor(env, onTimeout, duration, { silentCancelationErrors = true } = {}) {
-        this.env = env;
+    constructor(env,onTimeout,duration,{silentCancelationErrors=true}={}){
+        this.env=env;
         /**
-         * Determine whether the timer has a pending timeout.
+         *Determinewhetherthetimerhasapendingtimeout.
          */
-        this.isRunning = false;
+        this.isRunning=false;
         /**
-         * Duration, in milliseconds, until timer times out and calls the
-         * timeout function.
+         *Duration,inmilliseconds,untiltimertimesoutandcallsthe
+         *timeoutfunction.
          */
-        this._duration = duration;
+        this._duration=duration;
         /**
-         * Determine whether the caller of timer `.start()` and `.reset()`
-         * should observe cancelation errors from `.clear()` or `.reset()`.
+         *Determinewhetherthecalleroftimer`.start()`and`.reset()`
+         *shouldobservecancelationerrorsfrom`.clear()`or`.reset()`.
          */
-        this._hasSilentCancelationErrors = silentCancelationErrors;
+        this._hasSilentCancelationErrors=silentCancelationErrors;
         /**
-         * The function that is called when the timer times out.
+         *Thefunctionthatiscalledwhenthetimertimesout.
          */
-        this._onTimeout = onTimeout;
+        this._onTimeout=onTimeout;
         /**
-         * Deferred of a currently pending invocation to inner function on
-         * timeout.
+         *Deferredofacurrentlypendinginvocationtoinnerfunctionon
+         *timeout.
          */
-        this._timeoutDeferred = undefined;
+        this._timeoutDeferred=undefined;
         /**
-         * Internal reference of `setTimeout()` that is used to invoke function
-         * when timer times out. Useful to clear it when timer is cleared/reset.
+         *Internalreferenceof`setTimeout()`thatisusedtoinvokefunction
+         *whentimertimesout.Usefultoclearitwhentimeriscleared/reset.
          */
-        this._timeoutId = undefined;
+        this._timeoutId=undefined;
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Clear the timer, which basically sets the state of timer as if it was
-     * just instantiated, without being started. This function makes sense only
-     * when this timer is running.
+     *Clearthetimer,whichbasicallysetsthestateoftimerasifitwas
+     *justinstantiated,withoutbeingstarted.Thisfunctionmakessenseonly
+     *whenthistimerisrunning.
      */
-    clear() {
+    clear(){
         this.env.browser.clearTimeout(this._timeoutId);
-        this.isRunning = false;
-        if (!this._timeoutDeferred) {
+        this.isRunning=false;
+        if(!this._timeoutDeferred){
             return;
         }
-        this._timeoutDeferred.reject(new TimerClearedError(this.id));
+        this._timeoutDeferred.reject(newTimerClearedError(this.id));
     }
 
     /**
-     * Reset the timer, i.e. the pending timeout is refreshed with initial
-     * duration. This function makes sense only when this timer is running.
+     *Resetthetimer,i.e.thependingtimeoutisrefreshedwithinitial
+     *duration.Thisfunctionmakessenseonlywhenthistimerisrunning.
      */
-    async reset() {
+    asyncreset(){
         this.clear();
-        await this.start();
+        awaitthis.start();
     }
 
     /**
-     * Starts the timer, i.e. after a certain duration, it times out and calls
-     * a function back. This function makes sense only when this timer is not
-     * yet running.
+     *Startsthetimer,i.e.afteracertainduration,ittimesoutandcalls
+     *afunctionback.Thisfunctionmakessenseonlywhenthistimerisnot
+     *yetrunning.
      *
-     * @throws {Error} in case the timer is already running.
+     *@throws{Error}incasethetimerisalreadyrunning.
      */
-    async start() {
-        if (this.isRunning) {
-            throw new Error("Cannot start a timer that is currently running.");
+    asyncstart(){
+        if(this.isRunning){
+            thrownewError("Cannotstartatimerthatiscurrentlyrunning.");
         }
-        this.isRunning = true;
-        const timeoutDeferred = makeDeferred();
-        this._timeoutDeferred = timeoutDeferred;
-        const timeoutId = this.env.browser.setTimeout(
-            () => {
-                this.isRunning = false;
+        this.isRunning=true;
+        consttimeoutDeferred=makeDeferred();
+        this._timeoutDeferred=timeoutDeferred;
+        consttimeoutId=this.env.browser.setTimeout(
+            ()=>{
+                this.isRunning=false;
                 timeoutDeferred.resolve(this._onTimeout());
             },
             this._duration
         );
-        this._timeoutId = timeoutId;
-        let result;
-        try {
-            result = await timeoutDeferred;
-        } catch (error) {
-            if (
-                !this._hasSilentCancelationErrors ||
-                !(error instanceof TimerClearedError) ||
-                error.timerId !== this.id
-            ) {
-                // This branching should never happens.
-                // Still defined in case of programming error.
-                throw error;
+        this._timeoutId=timeoutId;
+        letresult;
+        try{
+            result=awaittimeoutDeferred;
+        }catch(error){
+            if(
+                !this._hasSilentCancelationErrors||
+                !(errorinstanceofTimerClearedError)||
+                error.timerId!==this.id
+            ){
+                //Thisbranchingshouldneverhappens.
+                //Stilldefinedincaseofprogrammingerror.
+                throwerror;
             }
-        } finally {
+        }finally{
             this.env.browser.clearTimeout(timeoutId);
-            this._timeoutDeferred = undefined;
-            this.isRunning = false;
+            this._timeoutDeferred=undefined;
+            this.isRunning=false;
         }
-        return result;
+        returnresult;
     }
 
 }
 
 /**
- * Make external timer errors accessible from timer class.
+ *Makeexternaltimererrorsaccessiblefromtimerclass.
  */
-Object.assign(Timer, {
+Object.assign(Timer,{
     TimerClearedError,
 });
 
-return Timer;
+returnTimer;
 
 });

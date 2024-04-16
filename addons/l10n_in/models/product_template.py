@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models, fields
+fromflectraimportmodels,fields
 
 
-class ProductTemplate(models.Model):
-    _inherit = 'product.template'
+classProductTemplate(models.Model):
+    _inherit='product.template'
 
-    l10n_in_hsn_code = fields.Char(string="HSN/SAC Code", help="Harmonized System Nomenclature/Services Accounting Code")
-    l10n_in_hsn_description = fields.Char(string="HSN/SAC Description", help="HSN/SAC description is required if HSN/SAC code is not provided.")
+    l10n_in_hsn_code=fields.Char(string="HSN/SACCode",help="HarmonizedSystemNomenclature/ServicesAccountingCode")
+    l10n_in_hsn_description=fields.Char(string="HSN/SACDescription",help="HSN/SACdescriptionisrequiredifHSN/SACcodeisnotprovided.")

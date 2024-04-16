@@ -1,126 +1,126 @@
-flectra.define('mrp.controllerMixin', function (require) {
-'use strict';
+flectra.define('mrp.controllerMixin',function(require){
+'usestrict';
 
-const { _t, qweb } = require('web.core');
-const fileUploadMixin = require('web.fileUploadMixin');
-const DocumentViewer = require('mrp.MrpDocumentViewer');
+const{_t,qweb}=require('web.core');
+constfileUploadMixin=require('web.fileUploadMixin');
+constDocumentViewer=require('mrp.MrpDocumentViewer');
 
-const MrpDocumentsControllerMixin = Object.assign({}, fileUploadMixin, {
-    events: {
-        'click .o_mrp_documents_kanban_upload': '_onClickMrpDocumentsUpload',
+constMrpDocumentsControllerMixin=Object.assign({},fileUploadMixin,{
+    events:{
+        'click.o_mrp_documents_kanban_upload':'_onClickMrpDocumentsUpload',
     },
-    custom_events: Object.assign({}, fileUploadMixin.custom_events, {
-        kanban_image_clicked: '_onKanbanPreview',
-        upload_file: '_onUploadFile',
+    custom_events:Object.assign({},fileUploadMixin.custom_events,{
+        kanban_image_clicked:'_onKanbanPreview',
+        upload_file:'_onUploadFile',
     }),
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Called right after the reload of the view.
+     *Calledrightafterthereloadoftheview.
      */
-    async reload() {
-        await this._renderFileUploads();
+    asyncreload(){
+        awaitthis._renderFileUploads();
     },
 
     /**
-     * @override
-     * @param {jQueryElement} $node
+     *@override
+     *@param{jQueryElement}$node
      */
-    renderButtons($node) {
-        this.$buttons = $(qweb.render('MrpDocumentsKanbanView.buttons'));
+    renderButtons($node){
+        this.$buttons=$(qweb.render('MrpDocumentsKanbanView.buttons'));
         this.$buttons.appendTo($node);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _getFileUploadRoute() {
-        return '/mrp/upload_attachment';
+    _getFileUploadRoute(){
+        return'/mrp/upload_attachment';
     },
 
     /**
-     * @override
-     * @param {integer} param0.recordId
+     *@override
+     *@param{integer}param0.recordId
      */
-    _makeFileUploadFormDataKeys() {
-        const context = this.model.get(this.handle, { raw: true }).getContext();
-        return {
-            res_id: context.default_res_id,
-            res_model: context.default_res_model,
+    _makeFileUploadFormDataKeys(){
+        constcontext=this.model.get(this.handle,{raw:true}).getContext();
+        return{
+            res_id:context.default_res_id,
+            res_model:context.default_res_model,
         };
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onClickMrpDocumentsUpload() {
-        const $uploadInput = $('<input>', {
-            type: 'file',
-            name: 'files[]',
-            multiple: 'multiple'
+    _onClickMrpDocumentsUpload(){
+        const$uploadInput=$('<input>',{
+            type:'file',
+            name:'files[]',
+            multiple:'multiple'
         });
-        $uploadInput.on('change', async ev => {
-            await this._uploadFiles(ev.target.files);
+        $uploadInput.on('change',asyncev=>{
+            awaitthis._uploadFiles(ev.target.files);
             $uploadInput.remove();
         });
         $uploadInput.click();
     },
 
     /**
-     * Handles custom event to display the document viewer.
+     *Handlescustomeventtodisplaythedocumentviewer.
      *
-     * @private
-     * @param {FlectraEvent} ev
-     * @param {integer} ev.data.recordID
-     * @param {Array<Object>} ev.data.recordList
+     *@private
+     *@param{FlectraEvent}ev
+     *@param{integer}ev.data.recordID
+     *@param{Array<Object>}ev.data.recordList
      */
-    _onKanbanPreview(ev) {
+    _onKanbanPreview(ev){
         ev.stopPropagation();
-        const documents = ev.data.recordList;
-        const documentID = ev.data.recordID;
-        const documentViewer = new DocumentViewer(this, documents, documentID);
+        constdocuments=ev.data.recordList;
+        constdocumentID=ev.data.recordID;
+        constdocumentViewer=newDocumentViewer(this,documents,documentID);
         documentViewer.appendTo(this.$('.o_mrp_documents_kanban_view'));
     },
 
     /**
-     * Specially created to call `_uploadFiles` method from tests.
+     *Speciallycreatedtocall`_uploadFiles`methodfromtests.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    async _onUploadFile(ev) {
-        await this._uploadFiles(ev.data.files);
+    async_onUploadFile(ev){
+        awaitthis._uploadFiles(ev.data.files);
     },
 
     /**
-     * @override
-     * @param {Object} param0
-     * @param {XMLHttpRequest} param0.xhr
+     *@override
+     *@param{Object}param0
+     *@param{XMLHttpRequest}param0.xhr
      */
-    _onUploadLoad({ xhr }) {
-        const result = xhr.status === 200
-            ? JSON.parse(xhr.response)
-            : {
-                error: _.str.sprintf(_t("status code: %s </br> message: %s"), xhr.status, xhr.response)
+    _onUploadLoad({xhr}){
+        constresult=xhr.status===200
+            ?JSON.parse(xhr.response)
+            :{
+                error:_.str.sprintf(_t("statuscode:%s</br>message:%s"),xhr.status,xhr.response)
             };
-        if (result.error) {
-            this.do_notify(_t("Error"), result.error, true);
+        if(result.error){
+            this.do_notify(_t("Error"),result.error,true);
         }
-        fileUploadMixin._onUploadLoad.apply(this, arguments);
+        fileUploadMixin._onUploadLoad.apply(this,arguments);
     },
 });
 
-return MrpDocumentsControllerMixin;
+returnMrpDocumentsControllerMixin;
 
 });

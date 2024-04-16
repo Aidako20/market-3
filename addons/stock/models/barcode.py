@@ -1,20 +1,20 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class BarcodeRule(models.Model):
-    _inherit = 'barcode.rule'
+classBarcodeRule(models.Model):
+    _inherit='barcode.rule'
 
-    type = fields.Selection(selection_add=[
-        ('weight', 'Weighted Product'),
-        ('location', 'Location'),
-        ('lot', 'Lot'),
-        ('package', 'Package')
-    ], ondelete={
-        'weight': 'set default',
-        'location': 'set default',
-        'lot': 'set default',
-        'package': 'set default',
+    type=fields.Selection(selection_add=[
+        ('weight','WeightedProduct'),
+        ('location','Location'),
+        ('lot','Lot'),
+        ('package','Package')
+    ],ondelete={
+        'weight':'setdefault',
+        'location':'setdefault',
+        'lot':'setdefault',
+        'package':'setdefault',
     })

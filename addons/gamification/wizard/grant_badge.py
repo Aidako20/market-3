@@ -1,34 +1,34 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _, exceptions
+fromflectraimportapi,fields,models,_,exceptions
 
 
-class grant_badge_wizard(models.TransientModel):
-    """ Wizard allowing to grant a badge to a user"""
-    _name = 'gamification.badge.user.wizard'
-    _description = 'Gamification User Badge Wizard'
+classgrant_badge_wizard(models.TransientModel):
+    """Wizardallowingtograntabadgetoauser"""
+    _name='gamification.badge.user.wizard'
+    _description='GamificationUserBadgeWizard'
 
-    user_id = fields.Many2one("res.users", string='User', required=True)
-    badge_id = fields.Many2one("gamification.badge", string='Badge', required=True)
-    comment = fields.Text('Comment')
+    user_id=fields.Many2one("res.users",string='User',required=True)
+    badge_id=fields.Many2one("gamification.badge",string='Badge',required=True)
+    comment=fields.Text('Comment')
 
-    def action_grant_badge(self):
-        """Wizard action for sending a badge to a chosen user"""
+    defaction_grant_badge(self):
+        """Wizardactionforsendingabadgetoachosenuser"""
 
-        BadgeUser = self.env['gamification.badge.user']
+        BadgeUser=self.env['gamification.badge.user']
 
-        uid = self.env.uid
-        for wiz in self:
-            if uid == wiz.user_id.id:
-                raise exceptions.UserError(_('You can not grant a badge to yourself.'))
+        uid=self.env.uid
+        forwizinself:
+            ifuid==wiz.user_id.id:
+                raiseexceptions.UserError(_('Youcannotgrantabadgetoyourself.'))
 
-            #create the badge
+            #createthebadge
             BadgeUser.create({
-                'user_id': wiz.user_id.id,
-                'sender_id': uid,
-                'badge_id': wiz.badge_id.id,
-                'comment': wiz.comment,
+                'user_id':wiz.user_id.id,
+                'sender_id':uid,
+                'badge_id':wiz.badge_id.id,
+                'comment':wiz.comment,
             })._send_badge()
 
-        return True
+        returnTrue

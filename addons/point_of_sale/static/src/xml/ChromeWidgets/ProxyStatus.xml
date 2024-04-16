@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="ProxyStatus" owl="1">
-        <div class="oe_status js_proxy" t-on-click="onClick">
-            <span t-if="state.msg and !env.isMobile" class="js_msg">
-                <t t-esc="state.msg" />
+    <tt-name="ProxyStatus"owl="1">
+        <divclass="oe_statusjs_proxy"t-on-click="onClick">
+            <spant-if="state.msgand!env.isMobile"class="js_msg">
+                <tt-esc="state.msg"/>
             </span>
-            <span t-if="state.status === 'connected'" class="js_connected oe_green">
-                <i class="fa fa-fw fa-sitemap" role="img" aria-label="Proxy Connected"
-                   title="Proxy Connected"></i>
+            <spant-if="state.status==='connected'"class="js_connectedoe_green">
+                <iclass="fafa-fwfa-sitemap"role="img"aria-label="ProxyConnected"
+                   title="ProxyConnected"></i>
             </span>
-            <span t-if="state.status === 'connecting'" class="js_connecting">
-                <i class="fa fa-fw fa-spin fa-spinner" role="img" aria-label="Connecting to Proxy"
-                   title="Connecting to Proxy"></i>
+            <spant-if="state.status==='connecting'"class="js_connecting">
+                <iclass="fafa-fwfa-spinfa-spinner"role="img"aria-label="ConnectingtoProxy"
+                   title="ConnectingtoProxy"></i>
             </span>
-            <span t-if="state.status === 'warning'" class="js_warning oe_orange">
-                <i class="fa fa-fw fa-sitemap" role="img" aria-label="Proxy Warning"
-                   title="Proxy Warning"></i>
+            <spant-if="state.status==='warning'"class="js_warningoe_orange">
+                <iclass="fafa-fwfa-sitemap"role="img"aria-label="ProxyWarning"
+                   title="ProxyWarning"></i>
             </span>
-            <span t-if="state.status === 'disconnected'" class="js_disconnected oe_red">
-                <i class="fa fa-fw fa-sitemap" role="img" aria-label="Proxy Disconnected"
-                   title="Proxy Disconnected"></i>
+            <spant-if="state.status==='disconnected'"class="js_disconnectedoe_red">
+                <iclass="fafa-fwfa-sitemap"role="img"aria-label="ProxyDisconnected"
+                   title="ProxyDisconnected"></i>
             </span>
         </div>
     </t>

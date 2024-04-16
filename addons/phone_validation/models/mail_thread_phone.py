@@ -1,164 +1,164 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.addons.phone_validation.tools import phone_validation
-from flectra.exceptions import AccessError, UserError
+fromflectraimportapi,fields,models,_
+fromflectra.addons.phone_validation.toolsimportphone_validation
+fromflectra.exceptionsimportAccessError,UserError
 
 
-class PhoneMixin(models.AbstractModel):
-    """ Purpose of this mixin is to offer two services
+classPhoneMixin(models.AbstractModel):
+    """Purposeofthismixinistooffertwoservices
 
-      * compute a sanitized phone number based on ´´_sms_get_number_fields´´.
-        It takes first sanitized value, trying each field returned by the
-        method (see ``MailThread._sms_get_number_fields()´´ for more details
-        about the usage of this method);
-      * compute blacklist state of records. It is based on phone.blacklist
-        model and give an easy-to-use field and API to manipulate blacklisted
+      *computeasanitizedphonenumberbasedon´´_sms_get_number_fields´´.
+        Ittakesfirstsanitizedvalue,tryingeachfieldreturnedbythe
+        method(see``MailThread._sms_get_number_fields()´´formoredetails
+        abouttheusageofthismethod);
+      *computeblackliststateofrecords.Itisbasedonphone.blacklist
+        modelandgiveaneasy-to-usefieldandAPItomanipulateblacklisted
         records;
 
-    Main API methods
+    MainAPImethods
 
-      * ``_phone_set_blacklisted``: set recordset as blacklisted;
-      * ``_phone_reset_blacklisted``: reactivate recordset (even if not blacklisted
-        this method can be called safely);
+      *``_phone_set_blacklisted``:setrecordsetasblacklisted;
+      *``_phone_reset_blacklisted``:reactivaterecordset(evenifnotblacklisted
+        thismethodcanbecalledsafely);
     """
-    _name = 'mail.thread.phone'
-    _description = 'Phone Blacklist Mixin'
-    _inherit = ['mail.thread']
+    _name='mail.thread.phone'
+    _description='PhoneBlacklistMixin'
+    _inherit=['mail.thread']
 
-    phone_sanitized = fields.Char(
-        string='Sanitized Number', compute="_compute_phone_sanitized", compute_sudo=True, store=True,
-        help="Field used to store sanitized phone number. Helps speeding up searches and comparisons.")
-    phone_sanitized_blacklisted = fields.Boolean(
-        string='Phone Blacklisted', compute="_compute_blacklisted", compute_sudo=True, store=False,
-        search="_search_phone_sanitized_blacklisted", groups="base.group_user",
-        help="If the sanitized phone number is on the blacklist, the contact won't receive mass mailing sms anymore, from any list")
-    phone_blacklisted = fields.Boolean(
-        string='Blacklisted Phone is Phone', compute="_compute_blacklisted", compute_sudo=True, store=False, groups="base.group_user",
-        help="Indicates if a blacklisted sanitized phone number is a phone number. Helps distinguish which number is blacklisted \
-            when there is both a mobile and phone field in a model.")
-    mobile_blacklisted = fields.Boolean(
-        string='Blacklisted Phone Is Mobile', compute="_compute_blacklisted", compute_sudo=True, store=False, groups="base.group_user",
-        help="Indicates if a blacklisted sanitized phone number is a mobile number. Helps distinguish which number is blacklisted \
-            when there is both a mobile and phone field in a model.")
+    phone_sanitized=fields.Char(
+        string='SanitizedNumber',compute="_compute_phone_sanitized",compute_sudo=True,store=True,
+        help="Fieldusedtostoresanitizedphonenumber.Helpsspeedingupsearchesandcomparisons.")
+    phone_sanitized_blacklisted=fields.Boolean(
+        string='PhoneBlacklisted',compute="_compute_blacklisted",compute_sudo=True,store=False,
+        search="_search_phone_sanitized_blacklisted",groups="base.group_user",
+        help="Ifthesanitizedphonenumberisontheblacklist,thecontactwon'treceivemassmailingsmsanymore,fromanylist")
+    phone_blacklisted=fields.Boolean(
+        string='BlacklistedPhoneisPhone',compute="_compute_blacklisted",compute_sudo=True,store=False,groups="base.group_user",
+        help="Indicatesifablacklistedsanitizedphonenumberisaphonenumber.Helpsdistinguishwhichnumberisblacklisted\
+            whenthereisbothamobileandphonefieldinamodel.")
+    mobile_blacklisted=fields.Boolean(
+        string='BlacklistedPhoneIsMobile',compute="_compute_blacklisted",compute_sudo=True,store=False,groups="base.group_user",
+        help="Indicatesifablacklistedsanitizedphonenumberisamobilenumber.Helpsdistinguishwhichnumberisblacklisted\
+            whenthereisbothamobileandphonefieldinamodel.")
 
-    @api.depends(lambda self: self._phone_get_sanitize_triggers())
-    def _compute_phone_sanitized(self):
+    @api.depends(lambdaself:self._phone_get_sanitize_triggers())
+    def_compute_phone_sanitized(self):
         self._assert_phone_field()
-        number_fields = self._phone_get_number_fields()
-        for record in self:
-            for fname in number_fields:
-                sanitized = record.phone_get_sanitized_number(number_fname=fname)
-                if sanitized:
+        number_fields=self._phone_get_number_fields()
+        forrecordinself:
+            forfnameinnumber_fields:
+                sanitized=record.phone_get_sanitized_number(number_fname=fname)
+                ifsanitized:
                     break
-            record.phone_sanitized = sanitized
+            record.phone_sanitized=sanitized
 
     @api.depends('phone_sanitized')
-    def _compute_blacklisted(self):
-        # TODO : Should remove the sudo as compute_sudo defined on methods.
-        # But if user doesn't have access to mail.blacklist, doen't work without sudo().
-        blacklist = set(self.env['phone.blacklist'].sudo().search([
-            ('number', 'in', self.mapped('phone_sanitized'))]).mapped('number'))
-        number_fields = self._phone_get_number_fields()
-        for record in self:
-            record.phone_sanitized_blacklisted = record.phone_sanitized in blacklist
-            mobile_blacklisted = phone_blacklisted = False
-            # This is a bit of a hack. Assume that any "mobile" numbers will have the word 'mobile'
-            # in them due to varying field names and assume all others are just "phone" numbers.
-            # Note that the limitation of only having 1 phone_sanitized value means that a phone/mobile number
-            # may not be calculated as blacklisted even though it is if both field values exist in a model.
-            for number_field in number_fields:
-                if 'mobile' in number_field:
-                    mobile_blacklisted = record.phone_sanitized_blacklisted and record.phone_get_sanitized_number(number_fname=number_field) == record.phone_sanitized
+    def_compute_blacklisted(self):
+        #TODO:Shouldremovethesudoascompute_sudodefinedonmethods.
+        #Butifuserdoesn'thaveaccesstomail.blacklist,doen'tworkwithoutsudo().
+        blacklist=set(self.env['phone.blacklist'].sudo().search([
+            ('number','in',self.mapped('phone_sanitized'))]).mapped('number'))
+        number_fields=self._phone_get_number_fields()
+        forrecordinself:
+            record.phone_sanitized_blacklisted=record.phone_sanitizedinblacklist
+            mobile_blacklisted=phone_blacklisted=False
+            #Thisisabitofahack.Assumethatany"mobile"numberswillhavetheword'mobile'
+            #inthemduetovaryingfieldnamesandassumeallothersarejust"phone"numbers.
+            #Notethatthelimitationofonlyhaving1phone_sanitizedvaluemeansthataphone/mobilenumber
+            #maynotbecalculatedasblacklistedeventhoughitisifbothfieldvaluesexistinamodel.
+            fornumber_fieldinnumber_fields:
+                if'mobile'innumber_field:
+                    mobile_blacklisted=record.phone_sanitized_blacklistedandrecord.phone_get_sanitized_number(number_fname=number_field)==record.phone_sanitized
                 else:
-                    phone_blacklisted = record.phone_sanitized_blacklisted and record.phone_get_sanitized_number(number_fname=number_field) == record.phone_sanitized
-            record.mobile_blacklisted = mobile_blacklisted
-            record.phone_blacklisted = phone_blacklisted
+                    phone_blacklisted=record.phone_sanitized_blacklistedandrecord.phone_get_sanitized_number(number_fname=number_field)==record.phone_sanitized
+            record.mobile_blacklisted=mobile_blacklisted
+            record.phone_blacklisted=phone_blacklisted
 
     @api.model
-    def _search_phone_sanitized_blacklisted(self, operator, value):
-        # Assumes operator is '=' or '!=' and value is True or False
+    def_search_phone_sanitized_blacklisted(self,operator,value):
+        #Assumesoperatoris'='or'!='andvalueisTrueorFalse
         self._assert_phone_field()
-        if operator != '=':
-            if operator == '!=' and isinstance(value, bool):
-                value = not value
+        ifoperator!='=':
+            ifoperator=='!='andisinstance(value,bool):
+                value=notvalue
             else:
-                raise NotImplementedError()
+                raiseNotImplementedError()
 
-        if value:
-            query = """
-                SELECT m.id
-                    FROM phone_blacklist bl
-                    JOIN %s m
-                    ON m.phone_sanitized = bl.number AND bl.active
+        ifvalue:
+            query="""
+                SELECTm.id
+                    FROMphone_blacklistbl
+                    JOIN%sm
+                    ONm.phone_sanitized=bl.numberANDbl.active
             """
         else:
-            query = """
-                SELECT m.id
-                    FROM %s m
-                    LEFT JOIN phone_blacklist bl
-                    ON m.phone_sanitized = bl.number AND bl.active
-                    WHERE bl.id IS NULL
+            query="""
+                SELECTm.id
+                    FROM%sm
+                    LEFTJOINphone_blacklistbl
+                    ONm.phone_sanitized=bl.numberANDbl.active
+                    WHEREbl.idISNULL
             """
-        self._cr.execute(query % self._table)
-        res = self._cr.fetchall()
-        if not res:
-            return [(0, '=', 1)]
-        return [('id', 'in', [r[0] for r in res])]
+        self._cr.execute(query%self._table)
+        res=self._cr.fetchall()
+        ifnotres:
+            return[(0,'=',1)]
+        return[('id','in',[r[0]forrinres])]
 
-    def _assert_phone_field(self):
-        if not hasattr(self, "_phone_get_number_fields"):
-            raise UserError(_('Invalid primary phone field on model %s', self._name))
-        if not any(fname in self and self._fields[fname].type == 'char' for fname in self._phone_get_number_fields()):
-            raise UserError(_('Invalid primary phone field on model %s', self._name))
+    def_assert_phone_field(self):
+        ifnothasattr(self,"_phone_get_number_fields"):
+            raiseUserError(_('Invalidprimaryphonefieldonmodel%s',self._name))
+        ifnotany(fnameinselfandself._fields[fname].type=='char'forfnameinself._phone_get_number_fields()):
+            raiseUserError(_('Invalidprimaryphonefieldonmodel%s',self._name))
 
-    def _phone_get_sanitize_triggers(self):
-        """ Tool method to get all triggers for sanitize """
-        res = [self._phone_get_country_field()] if self._phone_get_country_field() else []
-        return res + self._phone_get_number_fields()
+    def_phone_get_sanitize_triggers(self):
+        """Toolmethodtogetalltriggersforsanitize"""
+        res=[self._phone_get_country_field()]ifself._phone_get_country_field()else[]
+        returnres+self._phone_get_number_fields()
 
-    def _phone_get_number_fields(self):
-        """ This method returns the fields to use to find the number to use to
-        send an SMS on a record. """
-        return []
+    def_phone_get_number_fields(self):
+        """Thismethodreturnsthefieldstousetofindthenumbertouseto
+        sendanSMSonarecord."""
+        return[]
 
-    def _phone_get_country_field(self):
-        if 'country_id' in self:
-            return 'country_id'
-        return False
+    def_phone_get_country_field(self):
+        if'country_id'inself:
+            return'country_id'
+        returnFalse
 
-    def phone_get_sanitized_numbers(self, number_fname='mobile', force_format='E164'):
-        res = dict.fromkeys(self.ids, False)
-        country_fname = self._phone_get_country_field()
-        for record in self:
-            number = record[number_fname]
-            res[record.id] = phone_validation.phone_sanitize_numbers_w_record([number], record, record_country_fname=country_fname, force_format=force_format)[number]['sanitized']
-        return res
+    defphone_get_sanitized_numbers(self,number_fname='mobile',force_format='E164'):
+        res=dict.fromkeys(self.ids,False)
+        country_fname=self._phone_get_country_field()
+        forrecordinself:
+            number=record[number_fname]
+            res[record.id]=phone_validation.phone_sanitize_numbers_w_record([number],record,record_country_fname=country_fname,force_format=force_format)[number]['sanitized']
+        returnres
 
-    def phone_get_sanitized_number(self, number_fname='mobile', force_format='E164'):
+    defphone_get_sanitized_number(self,number_fname='mobile',force_format='E164'):
         self.ensure_one()
-        country_fname = self._phone_get_country_field()
-        number = self[number_fname]
-        return phone_validation.phone_sanitize_numbers_w_record([number], self, record_country_fname=country_fname, force_format=force_format)[number]['sanitized']
+        country_fname=self._phone_get_country_field()
+        number=self[number_fname]
+        returnphone_validation.phone_sanitize_numbers_w_record([number],self,record_country_fname=country_fname,force_format=force_format)[number]['sanitized']
 
-    def _phone_set_blacklisted(self):
-        return self.env['phone.blacklist'].sudo()._add([r.phone_sanitized for r in self])
+    def_phone_set_blacklisted(self):
+        returnself.env['phone.blacklist'].sudo()._add([r.phone_sanitizedforrinself])
 
-    def _phone_reset_blacklisted(self):
-        return self.env['phone.blacklist'].sudo()._remove([r.phone_sanitized for r in self])
+    def_phone_reset_blacklisted(self):
+        returnself.env['phone.blacklist'].sudo()._remove([r.phone_sanitizedforrinself])
 
-    def phone_action_blacklist_remove(self):
-        # wizard access rights currently not working as expected and allows users without access to
-        # open this wizard, therefore we check to make sure they have access before the wizard opens.
-        can_access = self.env['phone.blacklist'].check_access_rights('write', raise_exception=False)
-        if can_access:
-            return {
-                'name': 'Are you sure you want to unblacklist this Phone Number?',
-                'type': 'ir.actions.act_window',
-                'view_mode': 'form',
-                'res_model': 'phone.blacklist.remove',
-                'target': 'new',
+    defphone_action_blacklist_remove(self):
+        #wizardaccessrightscurrentlynotworkingasexpectedandallowsuserswithoutaccessto
+        #openthiswizard,thereforewechecktomakesuretheyhaveaccessbeforethewizardopens.
+        can_access=self.env['phone.blacklist'].check_access_rights('write',raise_exception=False)
+        ifcan_access:
+            return{
+                'name':'AreyousureyouwanttounblacklistthisPhoneNumber?',
+                'type':'ir.actions.act_window',
+                'view_mode':'form',
+                'res_model':'phone.blacklist.remove',
+                'target':'new',
             }
         else:
-            raise AccessError("You do not have the access right to unblacklist phone numbers. Please contact your administrator.")
+            raiseAccessError("Youdonothavetheaccessrighttounblacklistphonenumbers.Pleasecontactyouradministrator.")

@@ -1,40 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <template id="certification_report_view_modern">
-            <!-- Style classes to be applyed to '#o_survey_certification': [no class](purple), gold, blue  -->
-            <div id="o_survey_certification" t-att-data-oe-model="user_input._name" t-att-data-oe-id="user_input.id" t-att-class="'article certification-wrapper modern %s' % layout_color">
-                <div class="certification">
-                    <div t-if="user_input.test_entry" class="test-entry"/>
-                    <div class="certification-top">
-                        <div class="certification-bg-dark">
-                            <div class="certification-company-wrapper" t-field="user_input.env.company.logo" t-options="{'widget': 'image'}" role="img"/>
+        <templateid="certification_report_view_modern">
+            <!--Styleclassestobeapplyedto'#o_survey_certification':[noclass](purple),gold,blue -->
+            <divid="o_survey_certification"t-att-data-oe-model="user_input._name"t-att-data-oe-id="user_input.id"t-att-class="'articlecertification-wrappermodern%s'%layout_color">
+                <divclass="certification">
+                    <divt-if="user_input.test_entry"class="test-entry"/>
+                    <divclass="certification-top">
+                        <divclass="certification-bg-dark">
+                            <divclass="certification-company-wrapper"t-field="user_input.env.company.logo"t-options="{'widget':'image'}"role="img"/>
                         </div>
-                        <div class="certification-name" t-field="user_input.survey_id.display_name"/>
+                        <divclass="certification-name"t-field="user_input.survey_id.display_name"/>
                     </div>
 
-                    <div class="certification-bottom">
-                        <div t-if="user_input.scoring_success">
-                            <h5 class="user-name-label">This Certificate is Presented to</h5>
-                            <div class="user-name" t-esc="user_input.partner_id.name or user_input.email"/>
+                    <divclass="certification-bottom">
+                        <divt-if="user_input.scoring_success">
+                            <h5class="user-name-label">ThisCertificateisPresentedto</h5>
+                            <divclass="user-name"t-esc="user_input.partner_id.nameoruser_input.email"/>
 
-                            <div class="certification-description">
-                                <span t-field="user_input.env.company.display_name"/> is proud to award this certificate to
-                                <span t-esc="user_input.partner_id.name or user_input.email"/> for graduating <span t-field="user_input.survey_id.display_name"/>.
+                            <divclass="certification-description">
+                                <spant-field="user_input.env.company.display_name"/>isproudtoawardthiscertificateto
+                                <spant-esc="user_input.partner_id.nameoruser_input.email"/>forgraduating<spant-field="user_input.survey_id.display_name"/>.
                             </div>
                         </div>
-                        <div t-else="">
-                            <h5>Certification Failed</h5>
+                        <divt-else="">
+                            <h5>CertificationFailed</h5>
                         </div>
 
-                        <div class="certification-bottom-group">
-                            <div class="certification-bg-dark"/>
-                            <div class="certification-date">
+                        <divclass="certification-bottom-group">
+                            <divclass="certification-bg-dark"/>
+                            <divclass="certification-date">
                                 <h5>Date</h5>
-                                <h5 t-field="user_input.create_date" t-options='{"widget": "date"}'/>
+                                <h5t-field="user_input.create_date"t-options='{"widget":"date"}'/>
                             </div>
-                            <div class="certification-seal">
-                                <img src="/survey/static/src/img/certification_seal.svg" alt="Certification Seal" role="image"/>
+                            <divclass="certification-seal">
+                                <imgsrc="/survey/static/src/img/certification_seal.svg"alt="CertificationSeal"role="image"/>
                             </div>
                         </div>
                     </div>
@@ -42,46 +42,46 @@
             </div>
         </template>
 
-        <template id="certification_report_view_classic">
-            <!-- Style classes to be applyed to '#o_survey_certification': [no class](purple), gold, blue  -->
-            <div id="o_survey_certification" t-att-data-oe-model="user_input._name" t-att-data-oe-id="user_input.id" t-att-class="'article certification-wrapper classic %s' % layout_color">
-                <div class="certification">
-                    <div t-if="user_input.test_entry" class="test-entry"/>
-                    <h5 class="certification-name-label">CERTIFICATE</h5>
-                    <div class="certification-name" t-field="user_input.survey_id.display_name"/>
+        <templateid="certification_report_view_classic">
+            <!--Styleclassestobeapplyedto'#o_survey_certification':[noclass](purple),gold,blue -->
+            <divid="o_survey_certification"t-att-data-oe-model="user_input._name"t-att-data-oe-id="user_input.id"t-att-class="'articlecertification-wrapperclassic%s'%layout_color">
+                <divclass="certification">
+                    <divt-if="user_input.test_entry"class="test-entry"/>
+                    <h5class="certification-name-label">CERTIFICATE</h5>
+                    <divclass="certification-name"t-field="user_input.survey_id.display_name"/>
                     <hr/>
 
-                    <div t-if="user_input.scoring_success">
-                        <h5>This Certificate is Presented to</h5>
-                        <div class="user-name" t-esc="user_input.partner_id.name or user_input.email"/>
-                        <hr class="small"/>
+                    <divt-if="user_input.scoring_success">
+                        <h5>ThisCertificateisPresentedto</h5>
+                        <divclass="user-name"t-esc="user_input.partner_id.nameoruser_input.email"/>
+                        <hrclass="small"/>
 
-                        <div class="certification-description">
-                            <span t-field="user_input.env.company.display_name"/> is proud to award this certificate to
-                            <span t-esc="user_input.partner_id.name or user_input.email"/> for graduating <span t-field="user_input.survey_id.display_name"/>.
+                        <divclass="certification-description">
+                            <spant-field="user_input.env.company.display_name"/>isproudtoawardthiscertificateto
+                            <spant-esc="user_input.partner_id.nameoruser_input.email"/>forgraduating<spant-field="user_input.survey_id.display_name"/>.
                         </div>
                     </div>
-                    <div t-else="">
-                        <h5>Certification Failed</h5>
+                    <divt-else="">
+                        <h5>CertificationFailed</h5>
                     </div>
 
-                    <div class="certification-date" t-field="user_input.create_date" t-options='{"widget": "date"}'/>
-                    <img src="/survey/static/src/img/certification_seal.svg" alt="Certification Seal" role="img"/>
+                    <divclass="certification-date"t-field="user_input.create_date"t-options='{"widget":"date"}'/>
+                    <imgsrc="/survey/static/src/img/certification_seal.svg"alt="CertificationSeal"role="img"/>
 
-                    <div class="certificate-signature">
-                        <span t-field="user_input.env.company.logo" t-options="{'widget': 'image'}" role="img"/>
+                    <divclass="certificate-signature">
+                        <spant-field="user_input.env.company.logo"t-options="{'widget':'image'}"role="img"/>
                     </div>
                 </div>
             </div>
         </template>
 
-        <template id="certification_report_view">
-            <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="user_input">
-                    <t t-set="layout_values" t-value="user_input.survey_id.certification_report_layout.split('_') if user_input.survey_id.certification_report_layout else ['modern', 'purple']"/>
-                    <t t-set="layout_template" t-value="'survey.certification_report_view_%s' % (layout_values[0])"/>
-                    <t t-set="layout_color" t-value="layout_values[1]"/>
-                    <t t-call="{{layout_template}}"/>
+        <templateid="certification_report_view">
+            <tt-call="web.html_container">
+                <tt-foreach="docs"t-as="user_input">
+                    <tt-set="layout_values"t-value="user_input.survey_id.certification_report_layout.split('_')ifuser_input.survey_id.certification_report_layoutelse['modern','purple']"/>
+                    <tt-set="layout_template"t-value="'survey.certification_report_view_%s'%(layout_values[0])"/>
+                    <tt-set="layout_color"t-value="layout_values[1]"/>
+                    <tt-call="{{layout_template}}"/>
                 </t>
             </t>
         </template>

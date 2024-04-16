@@ -1,49 +1,49 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
+importlogging
 
-from flectra import api, models
+fromflectraimportapi,models
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
 
-class MailMessageSubtype(models.Model):
-    _inherit = 'mail.message.subtype'
+classMailMessageSubtype(models.Model):
+    _inherit='mail.message.subtype'
 
-    def _get_department_subtype(self):
-        return self.search([
-            ('res_model', '=', 'hr.department'),
-            ('parent_id', '=', self.id)])
+    def_get_department_subtype(self):
+        returnself.search([
+            ('res_model','=','hr.department'),
+            ('parent_id','=',self.id)])
 
-    def _update_department_subtype(self):
-        for subtype in self:
-            department_subtype = subtype._get_department_subtype()
-            if department_subtype:
+    def_update_department_subtype(self):
+        forsubtypeinself:
+            department_subtype=subtype._get_department_subtype()
+            ifdepartment_subtype:
                 department_subtype.write({
-                    'name': subtype.name,
-                    'default': subtype.default,
+                    'name':subtype.name,
+                    'default':subtype.default,
                 })
             else:
-                department_subtype = self.create({
-                    'name': subtype.name,
-                    'res_model': 'hr.department',
-                    'default': subtype.default or False,
-                    'parent_id': subtype.id,
-                    'relation_field': 'department_id',
+                department_subtype=self.create({
+                    'name':subtype.name,
+                    'res_model':'hr.department',
+                    'default':subtype.defaultorFalse,
+                    'parent_id':subtype.id,
+                    'relation_field':'department_id',
                 })
-            return department_subtype
+            returndepartment_subtype
 
     @api.model
-    def create(self, vals):
-        result = super(MailMessageSubtype, self).create(vals)
-        if result.res_model in ['hr.leave', 'hr.leave.allocation']:
+    defcreate(self,vals):
+        result=super(MailMessageSubtype,self).create(vals)
+        ifresult.res_modelin['hr.leave','hr.leave.allocation']:
             result._update_department_subtype()
-        return result
+        returnresult
 
-    def write(self, vals):
-        result = super(MailMessageSubtype, self).write(vals)
+    defwrite(self,vals):
+        result=super(MailMessageSubtype,self).write(vals)
         self.filtered(
-            lambda subtype: subtype.res_model in ['hr.leave', 'hr.leave.allocation']
+            lambdasubtype:subtype.res_modelin['hr.leave','hr.leave.allocation']
         )._update_department_subtype()
-        return result
+        returnresult

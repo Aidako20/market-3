@@ -1,47 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?>
-<templates id="template" xml:space="preserve">
-    <div t-name="stock.leadDaysPopOver">
+<?xmlversion="1.0"encoding="utf-8"?>
+<templatesid="template"xml:space="preserve">
+    <divt-name="stock.leadDaysPopOver">
         <p>
-            The forecasted stock on the <t t-esc="lead_days_date"/>
-            is <t t-if="qty_to_order &lt;= 0"><t t-esc="qty_forecast"/> <t t-esc="product_uom_name"/></t><t t-else="">
-            below the minimum inventory of <t t-esc="product_min_qty"/> <t t-esc="product_uom_name"/>
-            : <t t-esc="qty_to_order"/> <t t-esc="product_uom_name"/> should be replenished to reach the maximum of 
-            <t t-esc="product_max_qty"/> <t t-esc="product_uom_name"/>.</t>
+            Theforecastedstockonthe<tt-esc="lead_days_date"/>
+            is<tt-if="qty_to_order&lt;=0"><tt-esc="qty_forecast"/><tt-esc="product_uom_name"/></t><tt-else="">
+            belowtheminimuminventoryof<tt-esc="product_min_qty"/><tt-esc="product_uom_name"/>
+            :<tt-esc="qty_to_order"/><tt-esc="product_uom_name"/>shouldbereplenishedtoreachthemaximumof
+            <tt-esc="product_max_qty"/><tt-esc="product_uom_name"/>.</t>
         </p>
-        <table t-if="lead_days_description" class="table table-borderless">
+        <tablet-if="lead_days_description"class="tabletable-borderless">
             <tbody>
                 <tr>
                     <td>
                         Today
                     </td>
-                    <td class="text-right">
-                        <t t-esc="today"/>
+                    <tdclass="text-right">
+                        <tt-esc="today"/>
                     </td>
                 </tr>
-                <t t-raw="lead_days_description"/>
-                <tr class="table-info">
+                <tt-raw="lead_days_description"/>
+                <trclass="table-info">
                     <td>
-                        Forecasted Date
+                        ForecastedDate
                     </td>
-                    <td class="text-right text-nowrap">
-                        = <t t-esc="lead_days_date"/>
+                    <tdclass="text-righttext-nowrap">
+                        =<tt-esc="lead_days_date"/>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <button class="text-left btn btn-link action_open_forecast"
+        <buttonclass="text-leftbtnbtn-linkaction_open_forecast"
             type="button">
-            <i class="fa fa-fw o_button_icon fa-arrow-right"></i>
-            View Forecast
+            <iclass="fafa-fwo_button_iconfa-arrow-right"></i>
+            ViewForecast
         </button>
     </div>
 
-    <t t-name="StockOrderpoint.Buttons">
+    <tt-name="StockOrderpoint.Buttons">
         <span>
-            <button type="button" class="btn d-none btn-primary o_button_order">
+            <buttontype="button"class="btnd-nonebtn-primaryo_button_order">
                 Order
             </button>
-            <button type="button" class="btn d-none btn-primary o_button_snooze">
+            <buttontype="button"class="btnd-nonebtn-primaryo_button_snooze">
                 Snooze
             </button>
         </span>

@@ -1,154 +1,154 @@
-flectra.define('web.basic_model_tests', function (require) {
-    "use strict";
+flectra.define('web.basic_model_tests',function(require){
+    "usestrict";
 
-    var BasicModel = require('web.BasicModel');
-    var FormView = require('web.FormView');
-    var testUtils = require('web.test_utils');
+    varBasicModel=require('web.BasicModel');
+    varFormView=require('web.FormView');
+    vartestUtils=require('web.test_utils');
 
-    var createModel = testUtils.createModel;
-    var createView = testUtils.createView;
+    varcreateModel=testUtils.createModel;
+    varcreateView=testUtils.createView;
 
-    QUnit.module('Views', {
-        beforeEach: function () {
-            this.data = {
-                partner: {
-                    fields: {
-                        display_name: { string: "STRING", type: 'char' },
-                        // the following 2 fields must remain in that order to check that
-                        // active has priority over x_active despite the order
-                        x_active: { string: "Custom Active", type: 'boolean', default: true},
-                        active: {string: "Active", type: 'boolean', default: true},
-                        total: { string: "Total", type: 'integer' },
-                        foo: { string: "Foo", type: 'char' },
-                        bar: { string: "Bar", type: 'integer' },
-                        qux: { string: "Qux", type: 'many2one', relation: 'partner' },
-                        product_id: { string: "Favorite product", type: 'many2one', relation: 'product' },
-                        product_ids: { string: "Favorite products", type: 'one2many', relation: 'product' },
-                        category: { string: "Category M2M", type: 'many2many', relation: 'partner_type' },
-                        date: { string: "Date Field", type: 'date' },
-                        reference: { string: "Reference Field", type: 'reference', selection: [["product", "Product"], ["partner_type", "Partner Type"], ["partner", "Partner"]] },
+    QUnit.module('Views',{
+        beforeEach:function(){
+            this.data={
+                partner:{
+                    fields:{
+                        display_name:{string:"STRING",type:'char'},
+                        //thefollowing2fieldsmustremaininthatordertocheckthat
+                        //activehaspriorityoverx_activedespitetheorder
+                        x_active:{string:"CustomActive",type:'boolean',default:true},
+                        active:{string:"Active",type:'boolean',default:true},
+                        total:{string:"Total",type:'integer'},
+                        foo:{string:"Foo",type:'char'},
+                        bar:{string:"Bar",type:'integer'},
+                        qux:{string:"Qux",type:'many2one',relation:'partner'},
+                        product_id:{string:"Favoriteproduct",type:'many2one',relation:'product'},
+                        product_ids:{string:"Favoriteproducts",type:'one2many',relation:'product'},
+                        category:{string:"CategoryM2M",type:'many2many',relation:'partner_type'},
+                        date:{string:"DateField",type:'date'},
+                        reference:{string:"ReferenceField",type:'reference',selection:[["product","Product"],["partner_type","PartnerType"],["partner","Partner"]]},
                     },
-                    records: [
-                        { id: 1, foo: 'blip', bar: 1, product_id: 37, category: [12], display_name: "first partner", date: "2017-01-25" },
-                        { id: 2, foo: 'gnap', bar: 2, product_id: 41, display_name: "second partner" },
+                    records:[
+                        {id:1,foo:'blip',bar:1,product_id:37,category:[12],display_name:"firstpartner",date:"2017-01-25"},
+                        {id:2,foo:'gnap',bar:2,product_id:41,display_name:"secondpartner"},
                     ],
-                    onchanges: {},
+                    onchanges:{},
                 },
-                product: {
-                    fields: {
-                        display_name: { string: "Product Display Name", type: "char" },
-                        name: { string: "Product Name", type: "char" },
-                        category: { string: "Category M2M", type: 'many2many', relation: 'partner_type' },
-                        active: {string: "Active", type: 'boolean', default: true},
+                product:{
+                    fields:{
+                        display_name:{string:"ProductDisplayName",type:"char"},
+                        name:{string:"ProductName",type:"char"},
+                        category:{string:"CategoryM2M",type:'many2many',relation:'partner_type'},
+                        active:{string:"Active",type:'boolean',default:true},
                     },
-                    records: [
-                        { id: 37, display_name: "xphone" },
-                        { id: 41, display_name: "xpad" }
+                    records:[
+                        {id:37,display_name:"xphone"},
+                        {id:41,display_name:"xpad"}
                     ]
                 },
-                partner_type: {
-                    fields: {
-                        display_name: { string: "Partner Type", type: "char" },
-                        date: { string: "Date Field", type: 'date' },
-                        x_active: { string: "Custom Active", type: 'boolean', default: true},
+                partner_type:{
+                    fields:{
+                        display_name:{string:"PartnerType",type:"char"},
+                        date:{string:"DateField",type:'date'},
+                        x_active:{string:"CustomActive",type:'boolean',default:true},
                     },
-                    records: [
-                        { id: 12, display_name: "gold", date: "2017-01-25" },
-                        { id: 14, display_name: "silver" },
-                        { id: 15, display_name: "bronze" }
+                    records:[
+                        {id:12,display_name:"gold",date:"2017-01-25"},
+                        {id:14,display_name:"silver"},
+                        {id:15,display_name:"bronze"}
                     ]
                 },
-                partner_title: {
-                    fields: {
-                        display_name: { string: "Partner Title", type: 'char'},
+                partner_title:{
+                    fields:{
+                        display_name:{string:"PartnerTitle",type:'char'},
                     },
-                    records: [
-                        { id: 42, display_name: "Dr."},
+                    records:[
+                        {id:42,display_name:"Dr."},
                     ]
                 }
             };
 
-            // add related fields to category.
-            this.data.partner.fields.category.relatedFields =
-                $.extend(true, {}, this.data.partner_type.fields);
-            this.params = {
-                res_id: 2,
-                modelName: 'partner',
-                fields: this.data.partner.fields,
+            //addrelatedfieldstocategory.
+            this.data.partner.fields.category.relatedFields=
+                $.extend(true,{},this.data.partner_type.fields);
+            this.params={
+                res_id:2,
+                modelName:'partner',
+                fields:this.data.partner.fields,
             };
         },
-    }, function () {
+    },function(){
         QUnit.module('BasicModel');
 
-        QUnit.test('context is given when using a resequence', async function (assert) {
+        QUnit.test('contextisgivenwhenusingaresequence',asyncfunction(assert){
             assert.expect(2);
-            delete this.params["res_id"];
-            this.data.product.fields.sequence = {string: "Sequence", type: "integer"};
+            deletethis.params["res_id"];
+            this.data.product.fields.sequence={string:"Sequence",type:"integer"};
 
-            const model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (route === '/web/dataset/resequence') {
-                        assert.deepEqual(args.context, { active_field: 2 },
-                            "context should be correct after a resequence");
+            constmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(route==='/web/dataset/resequence'){
+                        assert.deepEqual(args.context,{active_field:2},
+                            "contextshouldbecorrectafteraresequence");
                     }
-                    else if (args.method === "read") {
-                        assert.deepEqual(args.kwargs.context, { active_field: 2 },
-                            "context should be correct after a 'read' RPC");
+                    elseif(args.method==="read"){
+                        assert.deepEqual(args.kwargs.context,{active_field:2},
+                            "contextshouldbecorrectaftera'read'RPC");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
-            const params = _.extend(this.params, {
-                context: { active_field: 2 },
-                groupedBy: ['product_id'],
-                fieldNames: ['foo'],
+            constparams=_.extend(this.params,{
+                context:{active_field:2},
+                groupedBy:['product_id'],
+                fieldNames:['foo'],
             });
     
             model.load(params)
-                .then(function (stateID) {
-                    return model.resequence('product', [41, 37], stateID);
+                .then(function(stateID){
+                    returnmodel.resequence('product',[41,37],stateID);
                 })
-                .then(function () {
+                .then(function(){
                     model.destroy();
                 });
         });
 
-        QUnit.test('can process x2many commands', async function (assert) {
+        QUnit.test('canprocessx2manycommands',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.partner.fields.product_ids.default = [[0, 0, { category: [] }]];
+            this.data.partner.fields.product_ids.default=[[0,0,{category:[]}]];
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="product_ids"/>
+                        <fieldname="product_ids"/>
                     </form>
                 `,
-                archs: {
-                    'product,false,list': `
+                archs:{
+                    'product,false,list':`
                         <tree>
-                            <field name="display_name"/>
+                            <fieldname="display_name"/>
                         </tree>
                     `,
-                    'product,false,kanban': `
+                    'product,false,kanban':`
                         <kanban>
-                            <templates><t t-name="kanban-box">
-                                <div><field name="display_name"/></div>
+                            <templates><tt-name="kanban-box">
+                                <div><fieldname="display_name"/></div>
                             </t></templates>
                         </kanban>
                     `,
                 },
-                viewOptions: {
-                    mode: 'edit',
+                viewOptions:{
+                    mode:'edit',
                 },
-                mockRPC(route, args) {
+                mockRPC(route,args){
                     assert.step(args.method);
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
@@ -156,2413 +156,2413 @@ flectra.define('web.basic_model_tests', function (require) {
                 'load_views',
                 'onchange',
             ]);
-            assert.containsOnce(form, '.o_field_x2many_list', 'should have rendered a x2many list');
-            assert.containsOnce(form, '.o_data_row', 'should have added 1 record as default');
-            assert.containsOnce(form, '.o_field_x2many_list_row_add', 'should have rendered a x2many add row on list');
+            assert.containsOnce(form,'.o_field_x2many_list','shouldhaverenderedax2manylist');
+            assert.containsOnce(form,'.o_data_row','shouldhaveadded1recordasdefault');
+            assert.containsOnce(form,'.o_field_x2many_list_row_add','shouldhaverenderedax2manyaddrowonlist');
             form.destroy();
         });
 
-        QUnit.test('can process x2many commands (with multiple fields)', async function (assert) {
+        QUnit.test('canprocessx2manycommands(withmultiplefields)',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.fields.product_ids.default = [[0, 0, { category: [] }]];
+            this.data.partner.fields.product_ids.default=[[0,0,{category:[]}]];
 
-            const form = await createView({
-                View: FormView,
-                model: 'partner',
-                data: this.data,
-                arch: `
+            constform=awaitcreateView({
+                View:FormView,
+                model:'partner',
+                data:this.data,
+                arch:`
                     <form>
-                        <field name="product_ids"/>
+                        <fieldname="product_ids"/>
                     </form>
                 `,
-                archs: {
-                    'product,false,list': `
+                archs:{
+                    'product,false,list':`
                         <tree>
-                            <field name="display_name"/>
-                            <field name="active"/>
+                            <fieldname="display_name"/>
+                            <fieldname="active"/>
                         </tree>
                     `,
                 },
-                mockRPC(route, args) {
-                    if (args.method === "create") {
-                        const product_ids = args.args[0].product_ids;
-                        const values = product_ids[0][2];
-                        assert.strictEqual(values.active, true, "active field should be set");
+                mockRPC(route,args){
+                    if(args.method==="create"){
+                        constproduct_ids=args.args[0].product_ids;
+                        constvalues=product_ids[0][2];
+                        assert.strictEqual(values.active,true,"activefieldshouldbeset");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await testUtils.form.clickSave(form);
+            awaittestUtils.form.clickSave(form);
             form.destroy();
         });
 
-        QUnit.test('can load a record', async function (assert) {
+        QUnit.test('canloadarecord',asyncfunction(assert){
             assert.expect(7);
 
-            this.params.fieldNames = ['foo'];
-            this.params.context = { active_field: 2 };
+            this.params.fieldNames=['foo'];
+            this.params.context={active_field:2};
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    assert.deepEqual(args.kwargs.context, {
-                        active_field: 2,
-                        bin_size: true,
-                        someKey: 'some value',
-                    }, "should have sent the correct context");
-                    return this._super.apply(this, arguments);
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    assert.deepEqual(args.kwargs.context,{
+                        active_field:2,
+                        bin_size:true,
+                        someKey:'somevalue',
+                    },"shouldhavesentthecorrectcontext");
+                    returnthis._super.apply(this,arguments);
                 },
-                session: {
-                    user_context: { someKey: 'some value' },
+                session:{
+                    user_context:{someKey:'somevalue'},
                 }
             });
 
-            assert.strictEqual(model.get(1), null, "should return null for non existing key");
+            assert.strictEqual(model.get(1),null,"shouldreturnnullfornonexistingkey");
 
-            var resultID = await model.load(this.params);
-            // it is a string, because it is used as a key in an object
-            assert.strictEqual(typeof resultID, 'string', "result should be a valid id");
+            varresultID=awaitmodel.load(this.params);
+            //itisastring,becauseitisusedasakeyinanobject
+            assert.strictEqual(typeofresultID,'string',"resultshouldbeavalidid");
 
-            var record = model.get(resultID);
-            assert.strictEqual(record.res_id, 2, "res_id read should be the same as asked");
-            assert.strictEqual(record.type, 'record', "should be of type 'record'");
-            assert.strictEqual(record.data.foo, "gnap", "should correctly read value");
-            assert.strictEqual(record.data.bar, undefined, "should not fetch the field 'bar'");
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.res_id,2,"res_idreadshouldbethesameasasked");
+            assert.strictEqual(record.type,'record',"shouldbeoftype'record'");
+            assert.strictEqual(record.data.foo,"gnap","shouldcorrectlyreadvalue");
+            assert.strictEqual(record.data.bar,undefined,"shouldnotfetchthefield'bar'");
             model.destroy();
         });
 
-        QUnit.test('rejects loading a record with invalid id', async function (assert) {
+        QUnit.test('rejectsloadingarecordwithinvalidid',asyncfunction(assert){
             assert.expect(1);
 
-            this.params.res_id = 99;
+            this.params.res_id=99;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
-            try {
-                await model.load(this.params);
+            try{
+                awaitmodel.load(this.params);
             }
-            catch (e) {
-                assert.ok("load should return a rejected deferred for an invalid id");
+            catch(e){
+                assert.ok("loadshouldreturnarejecteddeferredforaninvalidid");
             }
 
             model.destroy();
         });
 
-        QUnit.test('notify change with many2one', async function (assert) {
+        QUnit.test('notifychangewithmany2one',asyncfunction(assert){
             assert.expect(2);
 
-            this.params.fieldNames = ['foo', 'qux'];
+            this.params.fieldNames=['foo','qux'];
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.qux, false, "qux field should be false");
-            await model.notifyChanges(resultID, { qux: { id: 1, display_name: "hello" } });
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.qux,false,"quxfieldshouldbefalse");
+            awaitmodel.notifyChanges(resultID,{qux:{id:1,display_name:"hello"}});
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.qux.data.id, 1, "qux field should be 1");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.qux.data.id,1,"quxfieldshouldbe1");
             model.destroy();
         });
 
-        QUnit.test('notify change on many2one: unset and reset same value', async function (assert) {
+        QUnit.test('notifychangeonmany2one:unsetandresetsamevalue',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.records[1].qux = 1;
+            this.data.partner.records[1].qux=1;
 
-            this.params.fieldNames = ['qux'];
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            this.params.fieldNames=['qux'];
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.qux.data.id, 1, "qux value should be 1");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.qux.data.id,1,"quxvalueshouldbe1");
 
-            await model.notifyChanges(resultID, { qux: false });
-            record = model.get(resultID);
-            assert.strictEqual(record.data.qux, false, "qux should be unset");
+            awaitmodel.notifyChanges(resultID,{qux:false});
+            record=model.get(resultID);
+            assert.strictEqual(record.data.qux,false,"quxshouldbeunset");
 
-            await model.notifyChanges(resultID, { qux: { id: 1, display_name: 'second_partner' } });
-            record = model.get(resultID);
-            assert.strictEqual(record.data.qux.data.id, 1, "qux value should be 1 again");
+            awaitmodel.notifyChanges(resultID,{qux:{id:1,display_name:'second_partner'}});
+            record=model.get(resultID);
+            assert.strictEqual(record.data.qux.data.id,1,"quxvalueshouldbe1again");
             model.destroy();
         });
 
-        QUnit.test('write on a many2one', async function (assert) {
+        QUnit.test('writeonamany2one',asyncfunction(assert){
             assert.expect(4);
-            var self = this;
+            varself=this;
 
-            this.params.fieldNames = ['product_id'];
+            this.params.fieldNames=['product_id'];
 
-            var rpcCount = 0;
+            varrpcCount=0;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     rpcCount++;
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.product_id.data.display_name, 'xpad',
-                "should be initialized with correct value");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.product_id.data.display_name,'xpad',
+                "shouldbeinitializedwithcorrectvalue");
 
-            await model.notifyChanges(resultID, { product_id: { id: 37, display_name: 'xphone' } });
+            awaitmodel.notifyChanges(resultID,{product_id:{id:37,display_name:'xphone'}});
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.product_id.data.display_name, 'xphone',
-                "should be changed with correct value");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.product_id.data.display_name,'xphone',
+                "shouldbechangedwithcorrectvalue");
 
-            await model.save(resultID);
+            awaitmodel.save(resultID);
 
-            assert.strictEqual(self.data.partner.records[1].product_id, 37,
-                "should have really saved the data");
-            assert.strictEqual(rpcCount, 3, "should have done 3 rpc: 1 read, 1 write, 1 read");
+            assert.strictEqual(self.data.partner.records[1].product_id,37,
+                "shouldhavereallysavedthedata");
+            assert.strictEqual(rpcCount,3,"shouldhavedone3rpc:1read,1write,1read");
             model.destroy();
         });
 
-        QUnit.test('basic onchange', async function (assert) {
+        QUnit.test('basiconchange',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.fields.foo.onChange = true;
-            this.data.partner.onchanges.foo = function (obj) {
-                obj.bar = obj.foo.length;
+            this.data.partner.fields.foo.onChange=true;
+            this.data.partner.onchanges.foo=function(obj){
+                obj.bar=obj.foo.length;
             };
 
-            this.params.fieldNames = ['foo', 'bar'];
-            this.params.context = { hello: 'world' };
+            this.params.fieldNames=['foo','bar'];
+            this.params.context={hello:'world'};
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        var context = args.kwargs.context;
-                        assert.deepEqual(context, { hello: 'world' },
-                            "context should be sent by the onchange");
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        varcontext=args.kwargs.context;
+                        assert.deepEqual(context,{hello:'world'},
+                            "contextshouldbesentbytheonchange");
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.foo, 'gnap', "foo field is properly initialized");
-            assert.strictEqual(record.data.bar, 2, "bar field is properly initialized");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.foo,'gnap',"foofieldisproperlyinitialized");
+            assert.strictEqual(record.data.bar,2,"barfieldisproperlyinitialized");
 
-            await model.notifyChanges(resultID, { foo: 'mary poppins' });
+            awaitmodel.notifyChanges(resultID,{foo:'marypoppins'});
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.foo, 'mary poppins', "onchange has been applied");
-            assert.strictEqual(record.data.bar, 12, "onchange has been applied");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.foo,'marypoppins',"onchangehasbeenapplied");
+            assert.strictEqual(record.data.bar,12,"onchangehasbeenapplied");
             model.destroy();
         });
 
-        QUnit.test('onchange with a many2one', async function (assert) {
+        QUnit.test('onchangewithamany2one',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.fields.product_id.onChange = true;
-            this.data.partner.onchanges.product_id = function (obj) {
-                if (obj.product_id === 37) {
-                    obj.foo = "space lollipop";
+            this.data.partner.fields.product_id.onChange=true;
+            this.data.partner.onchanges.product_id=function(obj){
+                if(obj.product_id===37){
+                    obj.foo="spacelollipop";
                 }
             };
 
-            this.params.fieldNames = ['foo', 'product_id'];
+            this.params.fieldNames=['foo','product_id'];
 
-            var rpcCount = 0;
+            varrpcCount=0;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        assert.strictEqual(args.args[2], "product_id",
-                            "should send the only changed field as a string, not a list");
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        assert.strictEqual(args.args[2],"product_id",
+                            "shouldsendtheonlychangedfieldasastring,notalist");
                     }
                     rpcCount++;
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.foo, 'gnap', "foo field is properly initialized");
-            assert.strictEqual(record.data.product_id.data.id, 41, "product_id field is properly initialized");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.foo,'gnap',"foofieldisproperlyinitialized");
+            assert.strictEqual(record.data.product_id.data.id,41,"product_idfieldisproperlyinitialized");
 
-            await model.notifyChanges(resultID, { product_id: { id: 37, display_name: 'xphone' } });
+            awaitmodel.notifyChanges(resultID,{product_id:{id:37,display_name:'xphone'}});
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.foo, 'space lollipop', "onchange has been applied");
-            assert.strictEqual(rpcCount, 2, "should have done 2 rpc: 1 read and 1 onchange");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.foo,'spacelollipop',"onchangehasbeenapplied");
+            assert.strictEqual(rpcCount,2,"shouldhavedone2rpc:1readand1onchange");
             model.destroy();
         });
 
-        QUnit.test('onchange on a one2many not in view (fieldNames)', async function (assert) {
+        QUnit.test('onchangeonaone2manynotinview(fieldNames)',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.partner.fields.foo.onChange = true;
-            this.data.partner.onchanges.foo = function (obj) {
-                obj.bar = obj.foo.length;
-                obj.product_ids = [];
+            this.data.partner.fields.foo.onChange=true;
+            this.data.partner.onchanges.foo=function(obj){
+                obj.bar=obj.foo.length;
+                obj.product_ids=[];
             };
 
-            this.params.fieldNames = ['foo'];
+            this.params.fieldNames=['foo'];
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.foo, 'gnap', "foo field is properly initialized");
-            assert.strictEqual(record.data.bar, undefined, "bar field is not loaded");
-            assert.strictEqual(record.data.product_ids, undefined, "product_ids field is not loaded");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.foo,'gnap',"foofieldisproperlyinitialized");
+            assert.strictEqual(record.data.bar,undefined,"barfieldisnotloaded");
+            assert.strictEqual(record.data.product_ids,undefined,"product_idsfieldisnotloaded");
 
-            await model.notifyChanges(resultID, { foo: 'mary poppins' });
+            awaitmodel.notifyChanges(resultID,{foo:'marypoppins'});
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.foo, 'mary poppins', "onchange has been applied");
-            assert.strictEqual(record.data.bar, 12, "onchange has been applied");
-            assert.strictEqual(record.data.product_ids, undefined,
-                "onchange on product_ids (one2many) has not been applied");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.foo,'marypoppins',"onchangehasbeenapplied");
+            assert.strictEqual(record.data.bar,12,"onchangehasbeenapplied");
+            assert.strictEqual(record.data.product_ids,undefined,
+                "onchangeonproduct_ids(one2many)hasnotbeenapplied");
             model.destroy();
         });
 
-        QUnit.test('notifyChange on a one2many', async function (assert) {
+        QUnit.test('notifyChangeonaone2many',asyncfunction(assert){
             assert.expect(9);
 
-            this.data.partner.records[1].product_ids = [37];
-            this.params.fieldNames = ['product_ids'];
+            this.data.partner.records[1].product_ids=[37];
+            this.params.fieldNames=['product_ids'];
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'name_get') {
-                        assert.strictEqual(args.model, 'product');
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='name_get'){
+                        assert.strictEqual(args.model,'product');
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var o2mParams = {
-                modelName: 'product',
-                fields: this.data.product.fields,
-                fieldNames: ['display_name'],
+            varo2mParams={
+                modelName:'product',
+                fields:this.data.product.fields,
+                fieldNames:['display_name'],
             };
-            var resultID = await model.load(this.params);
-            var newRecordID = await model.load(o2mParams);
-            var record = model.get(resultID);
-            var x2mListID = record.data.product_ids.id;
+            varresultID=awaitmodel.load(this.params);
+            varnewRecordID=awaitmodel.load(o2mParams);
+            varrecord=model.get(resultID);
+            varx2mListID=record.data.product_ids.id;
 
-            assert.strictEqual(record.data.product_ids.count, 1,
-                "there should be one record in the relation");
+            assert.strictEqual(record.data.product_ids.count,1,
+                "thereshouldbeonerecordintherelation");
 
-            // trigger a 'ADD' command
-            await model.notifyChanges(resultID, { product_ids: { operation: 'ADD', id: newRecordID } });
+            //triggera'ADD'command
+            awaitmodel.notifyChanges(resultID,{product_ids:{operation:'ADD',id:newRecordID}});
 
-            assert.deepEqual(model.localData[x2mListID]._changes, [{
-                operation: 'ADD', id: newRecordID,
-            }], "_changes should be correct");
-            record = model.get(resultID);
-            assert.strictEqual(record.data.product_ids.count, 2,
-                "there should be two records in the relation");
+            assert.deepEqual(model.localData[x2mListID]._changes,[{
+                operation:'ADD',id:newRecordID,
+            }],"_changesshouldbecorrect");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.product_ids.count,2,
+                "thereshouldbetworecordsintherelation");
 
-            // trigger a 'UPDATE' command
-            await model.notifyChanges(resultID, { product_ids: { operation: 'UPDATE', id: newRecordID } });
+            //triggera'UPDATE'command
+            awaitmodel.notifyChanges(resultID,{product_ids:{operation:'UPDATE',id:newRecordID}});
 
-            assert.deepEqual(model.localData[x2mListID]._changes, [{
-                operation: 'ADD', id: newRecordID,
-            }, {
-                operation: 'UPDATE', id: newRecordID,
-            }], "_changes should be correct");
-            record = model.get(resultID);
-            assert.strictEqual(record.data.product_ids.count, 2,
-                "there should be two records in the relation");
+            assert.deepEqual(model.localData[x2mListID]._changes,[{
+                operation:'ADD',id:newRecordID,
+            },{
+                operation:'UPDATE',id:newRecordID,
+            }],"_changesshouldbecorrect");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.product_ids.count,2,
+                "thereshouldbetworecordsintherelation");
 
-            // trigger a 'DELETE' command on the existing record
-            var existingRecordID = record.data.product_ids.data[0].id;
-            await model.notifyChanges(resultID, { product_ids: { operation: 'DELETE', ids: [existingRecordID] } });
+            //triggera'DELETE'commandontheexistingrecord
+            varexistingRecordID=record.data.product_ids.data[0].id;
+            awaitmodel.notifyChanges(resultID,{product_ids:{operation:'DELETE',ids:[existingRecordID]}});
 
-            assert.deepEqual(model.localData[x2mListID]._changes, [{
-                operation: 'ADD', id: newRecordID,
-            }, {
-                operation: 'UPDATE', id: newRecordID,
-            }, {
-                operation: 'DELETE', id: existingRecordID,
+            assert.deepEqual(model.localData[x2mListID]._changes,[{
+                operation:'ADD',id:newRecordID,
+            },{
+                operation:'UPDATE',id:newRecordID,
+            },{
+                operation:'DELETE',id:existingRecordID,
             }],
-                "_changes should be correct");
-            record = model.get(resultID);
-            assert.strictEqual(record.data.product_ids.count, 1,
-                "there should be one record in the relation");
+                "_changesshouldbecorrect");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.product_ids.count,1,
+                "thereshouldbeonerecordintherelation");
 
-            // trigger a 'DELETE' command on the new record
-            await model.notifyChanges(resultID, { product_ids: { operation: 'DELETE', ids: [newRecordID] } });
+            //triggera'DELETE'commandonthenewrecord
+            awaitmodel.notifyChanges(resultID,{product_ids:{operation:'DELETE',ids:[newRecordID]}});
 
-            assert.deepEqual(model.localData[x2mListID]._changes, [{
-                operation: 'DELETE', id: existingRecordID,
-            }], "_changes should be correct");
-            record = model.get(resultID);
-            assert.strictEqual(record.data.product_ids.count, 0,
-                "there should be no record in the relation");
+            assert.deepEqual(model.localData[x2mListID]._changes,[{
+                operation:'DELETE',id:existingRecordID,
+            }],"_changesshouldbecorrect");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.product_ids.count,0,
+                "thereshouldbenorecordintherelation");
 
             model.destroy();
         });
 
-        QUnit.test('notifyChange on a many2one, without display_name', async function (assert) {
+        QUnit.test('notifyChangeonamany2one,withoutdisplay_name',asyncfunction(assert){
             assert.expect(3);
 
-            this.params.fieldNames = ['product_id'];
+            this.params.fieldNames=['product_id'];
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'name_get') {
-                        assert.strictEqual(args.model, 'product');
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='name_get'){
+                        assert.strictEqual(args.model,'product');
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.product_id.data.display_name, 'xpad',
-                "product_id field is set to xpad");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.product_id.data.display_name,'xpad',
+                "product_idfieldissettoxpad");
 
-            await model.notifyChanges(resultID, { product_id: { id: 37 } });
+            awaitmodel.notifyChanges(resultID,{product_id:{id:37}});
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.product_id.data.display_name, 'xphone',
-                "display_name should have been fetched");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.product_id.data.display_name,'xphone',
+                "display_nameshouldhavebeenfetched");
             model.destroy();
         });
 
-        QUnit.test('onchange on a char with an unchanged many2one', async function (assert) {
+        QUnit.test('onchangeonacharwithanunchangedmany2one',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.fields.foo.onChange = true;
-            this.data.partner.onchanges.foo = function (obj) {
-                obj.foo = obj.foo + " alligator";
+            this.data.partner.fields.foo.onChange=true;
+            this.data.partner.onchanges.foo=function(obj){
+                obj.foo=obj.foo+"alligator";
             };
 
-            this.params.fieldNames = ['foo', 'product_id'];
+            this.params.fieldNames=['foo','product_id'];
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        assert.strictEqual(args.args[1].product_id, 41, "should send correct value");
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        assert.strictEqual(args.args[1].product_id,41,"shouldsendcorrectvalue");
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            await model.notifyChanges(resultID, { foo: 'cookie' });
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.foo, 'cookie alligator', "onchange has been applied");
+            varresultID=awaitmodel.load(this.params);
+            awaitmodel.notifyChanges(resultID,{foo:'cookie'});
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.foo,'cookiealligator',"onchangehasbeenapplied");
             model.destroy();
         });
 
-        QUnit.test('onchange on a char with another many2one not set to a value', async function (assert) {
+        QUnit.test('onchangeonacharwithanothermany2onenotsettoavalue',asyncfunction(assert){
             assert.expect(2);
-            this.data.partner.records[0].product_id = false;
-            this.data.partner.fields.foo.onChange = true;
-            this.data.partner.onchanges.foo = function (obj) {
-                obj.foo = obj.foo + " alligator";
+            this.data.partner.records[0].product_id=false;
+            this.data.partner.fields.foo.onChange=true;
+            this.data.partner.onchanges.foo=function(obj){
+                obj.foo=obj.foo+"alligator";
             };
 
-            this.params.fieldNames = ['foo', 'product_id'];
-            this.params.res_id = 1;
+            this.params.fieldNames=['foo','product_id'];
+            this.params.res_id=1;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.product_id, false, "product_id is not set");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.product_id,false,"product_idisnotset");
 
-            await model.notifyChanges(resultID, { foo: 'cookie' });
-            record = model.get(resultID);
-            assert.strictEqual(record.data.foo, 'cookie alligator', "onchange has been applied");
+            awaitmodel.notifyChanges(resultID,{foo:'cookie'});
+            record=model.get(resultID);
+            assert.strictEqual(record.data.foo,'cookiealligator',"onchangehasbeenapplied");
             model.destroy();
         });
 
-        QUnit.test('can get a many2many', async function (assert) {
+        QUnit.test('cangetamany2many',asyncfunction(assert){
             assert.expect(3);
 
-            this.params.res_id = 1;
-            this.params.fieldsInfo = {
-                default: {
-                    category: {
-                        fieldsInfo: { default: { display_name: {} } },
-                        relatedFields: { display_name: { type: "char" } },
-                        viewType: 'default',
+            this.params.res_id=1;
+            this.params.fieldsInfo={
+                default:{
+                    category:{
+                        fieldsInfo:{default:{display_name:{}}},
+                        relatedFields:{display_name:{type:"char"}},
+                        viewType:'default',
                     },
                 },
             };
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.category.data[0].res_id, 12,
-                "should have loaded many2many res_ids");
-            assert.strictEqual(record.data.category.data[0].data.display_name, "gold",
-                "should have loaded many2many display_name");
-            record = model.get(resultID, { raw: true });
-            assert.deepEqual(record.data.category, [12],
-                "with option raw, category should only return ids");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.category.data[0].res_id,12,
+                "shouldhaveloadedmany2manyres_ids");
+            assert.strictEqual(record.data.category.data[0].data.display_name,"gold",
+                "shouldhaveloadedmany2manydisplay_name");
+            record=model.get(resultID,{raw:true});
+            assert.deepEqual(record.data.category,[12],
+                "withoptionraw,categoryshouldonlyreturnids");
             model.destroy();
         });
 
-        QUnit.test('can use command add and get many2many value with date field', async function (assert) {
+        QUnit.test('canusecommandaddandgetmany2manyvaluewithdatefield',asyncfunction(assert){
             assert.expect(2);
 
-            this.params.fieldsInfo = {
-                default: {
-                    category: {
-                        fieldsInfo: { default: { date: {} } },
-                        relatedFields: { date: { type: "date" } },
-                        viewType: 'default',
+            this.params.fieldsInfo={
+                default:{
+                    category:{
+                        fieldsInfo:{default:{date:{}}},
+                        relatedFields:{date:{type:"date"}},
+                        viewType:'default',
                     },
                 },
             };
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var changes = {
-                category: { operation: 'ADD_M2M', ids: [{ id: 12 }] }
+            varresultID=awaitmodel.load(this.params);
+            varchanges={
+                category:{operation:'ADD_M2M',ids:[{id:12}]}
             };
-            await model.notifyChanges(resultID, changes);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.category.data.length, 1, "should have added one category");
-            assert.strictEqual(record.data.category.data[0].data.date instanceof moment,
-                true, "should have a date parsed in a moment object");
+            awaitmodel.notifyChanges(resultID,changes);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.category.data.length,1,"shouldhaveaddedonecategory");
+            assert.strictEqual(record.data.category.data[0].data.dateinstanceofmoment,
+                true,"shouldhaveadateparsedinamomentobject");
             model.destroy();
         });
 
-        QUnit.test('many2many with ADD_M2M command and context with parent key', async function (assert) {
+        QUnit.test('many2manywithADD_M2Mcommandandcontextwithparentkey',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner_type.fields.some_char = { type: "char" };
-            this.params.fieldsInfo = {
-                default: {
-                    category: {
-                        fieldsInfo: { default: { some_char: { context: "{'a': parent.foo}" } } },
-                        relatedFields: { some_char: { type: "char" } },
-                        viewType: 'default',
+            this.data.partner_type.fields.some_char={type:"char"};
+            this.params.fieldsInfo={
+                default:{
+                    category:{
+                        fieldsInfo:{default:{some_char:{context:"{'a':parent.foo}"}}},
+                        relatedFields:{some_char:{type:"char"}},
+                        viewType:'default',
                     },
-                    foo: {},
+                    foo:{},
                 },
             };
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var changes = {
-                category: { operation: 'ADD_M2M', ids: [{ id: 12 }] }
+            varresultID=awaitmodel.load(this.params);
+            varchanges={
+                category:{operation:'ADD_M2M',ids:[{id:12}]}
             };
-            await model.notifyChanges(resultID, changes);
-            var record = model.get(resultID);
-            var categoryRecord = record.data.category.data[0];
-            assert.deepEqual(categoryRecord.getContext({ fieldName: 'some_char' }), { a: 'gnap' },
-                "should properly evaluate context");
+            awaitmodel.notifyChanges(resultID,changes);
+            varrecord=model.get(resultID);
+            varcategoryRecord=record.data.category.data[0];
+            assert.deepEqual(categoryRecord.getContext({fieldName:'some_char'}),{a:'gnap'},
+                "shouldproperlyevaluatecontext");
             model.destroy();
         });
 
-        QUnit.test('can fetch a list', async function (assert) {
+        QUnit.test('canfetchalist',asyncfunction(assert){
             assert.expect(4);
 
-            this.params.fieldNames = ['foo'];
-            this.params.domain = [];
-            this.params.groupedBy = [];
-            this.params.res_id = undefined;
-            this.params.context = { active_field: 2 };
+            this.params.fieldNames=['foo'];
+            this.params.domain=[];
+            this.params.groupedBy=[];
+            this.params.res_id=undefined;
+            this.params.context={active_field:2};
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    assert.strictEqual(args.context.active_field, 2,
-                        "should have sent the correct context");
-                    return this._super(route, args);
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    assert.strictEqual(args.context.active_field,2,
+                        "shouldhavesentthecorrectcontext");
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
 
-            assert.strictEqual(record.type, 'list', "record fetched should be a list");
-            assert.strictEqual(record.data.length, 2, "should have fetched 2 records");
-            assert.strictEqual(record.data[0].data.foo, 'blip', "first record should have 'blip' in foo field");
+            assert.strictEqual(record.type,'list',"recordfetchedshouldbealist");
+            assert.strictEqual(record.data.length,2,"shouldhavefetched2records");
+            assert.strictEqual(record.data[0].data.foo,'blip',"firstrecordshouldhave'blip'infoofield");
             model.destroy();
         });
 
-        QUnit.test('fetch x2manys in list, with not too many rpcs', async function (assert) {
+        QUnit.test('fetchx2manysinlist,withnottoomanyrpcs',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.records[0].category = [12, 15];
-            this.data.partner.records[1].category = [12, 14];
+            this.data.partner.records[0].category=[12,15];
+            this.data.partner.records[1].category=[12,14];
 
-            this.params.fieldNames = ['category'];
-            this.params.domain = [];
-            this.params.groupedBy = [];
-            this.params.res_id = undefined;
+            this.params.fieldNames=['category'];
+            this.params.domain=[];
+            this.params.groupedBy=[];
+            this.params.res_id=undefined;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     assert.step(route);
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
 
-            assert.strictEqual(record.data[0].data.category.data.length, 2,
-                "first record should have 2 categories loaded");
+            assert.strictEqual(record.data[0].data.category.data.length,2,
+                "firstrecordshouldhave2categoriesloaded");
             assert.verifySteps(["/web/dataset/search_read"],
-                "should have done 2 rpc (searchread and read category)");
+                "shouldhavedone2rpc(searchreadandreadcategory)");
             model.destroy();
         });
 
-        QUnit.test('can make a default_record with the help of onchange', async function (assert) {
+        QUnit.test('canmakeadefault_recordwiththehelpofonchange',asyncfunction(assert){
             assert.expect(5);
 
-            this.params.context = {};
-            this.params.fieldNames = ['product_id', 'category', 'product_ids'];
-            this.params.res_id = undefined;
-            this.params.type = 'record';
+            this.params.context={};
+            this.params.fieldNames=['product_id','category','product_ids'];
+            this.params.res_id=undefined;
+            this.params.type='record';
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.product_id, false, "m2o default value should be false");
-            assert.deepEqual(record.data.product_ids.data, [], "o2m default should be []");
-            assert.deepEqual(record.data.category.data, [], "m2m default should be []");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.product_id,false,"m2odefaultvalueshouldbefalse");
+            assert.deepEqual(record.data.product_ids.data,[],"o2mdefaultshouldbe[]");
+            assert.deepEqual(record.data.category.data,[],"m2mdefaultshouldbe[]");
 
             assert.verifySteps(['onchange']);
 
             model.destroy();
         });
 
-        QUnit.test('default_get returning a non requested field', async function (assert) {
-            // 'default_get' returns a default value for the fields given in
-            // arguments. It should not return a value for fields that have not be
-            // requested. However, it happens (e.g. res.users), and the webclient
-            // should not crash when this situation occurs (the field should simply
-            // be ignored).
+        QUnit.test('default_getreturninganonrequestedfield',asyncfunction(assert){
+            //'default_get'returnsadefaultvalueforthefieldsgivenin
+            //arguments.Itshouldnotreturnavalueforfieldsthathavenotbe
+            //requested.However,ithappens(e.g.res.users),andthewebclient
+            //shouldnotcrashwhenthissituationoccurs(thefieldshouldsimply
+            //beignored).
             assert.expect(2);
 
-            this.params.context = {};
-            this.params.fieldNames = ['category'];
-            this.params.res_id = undefined;
-            this.params.type = 'record';
+            this.params.context={};
+            this.params.fieldNames=['category'];
+            this.params.res_id=undefined;
+            this.params.type='record';
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    var result = this._super(route, args);
-                    if (args.method === 'default_get') {
-                        result.product_ids = [[6, 0, [37, 41]]];
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    varresult=this._super(route,args);
+                    if(args.method==='default_get'){
+                        result.product_ids=[[6,0,[37,41]]];
                     }
-                    return result;
+                    returnresult;
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.ok('category' in record.data,
-                "should have processed 'category'");
-            assert.notOk('product_ids' in record.data,
-                "should have ignored 'product_ids'");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.ok('category'inrecord.data,
+                "shouldhaveprocessed'category'");
+            assert.notOk('product_ids'inrecord.data,
+                "shouldhaveignored'product_ids'");
 
             model.destroy();
         });
 
-        QUnit.test('can make a default_record with default relational values', async function (assert) {
+        QUnit.test('canmakeadefault_recordwithdefaultrelationalvalues',asyncfunction(assert){
             assert.expect(6);
 
-            this.data.partner.fields.product_id.default = 37;
-            this.data.partner.fields.product_ids.default = [
-                [0, false, { name: 'xmac' }],
-                [0, false, { name: 'xcloud' }]
+            this.data.partner.fields.product_id.default=37;
+            this.data.partner.fields.product_ids.default=[
+                [0,false,{name:'xmac'}],
+                [0,false,{name:'xcloud'}]
             ];
-            this.data.partner.fields.category.default = [
-                [6, false, [12, 14]]
+            this.data.partner.fields.category.default=[
+                [6,false,[12,14]]
             ];
 
-            this.params.fieldNames = ['product_id', 'category', 'product_ids'];
-            this.params.res_id = undefined;
-            this.params.type = 'record';
-            this.params.fieldsInfo = {
-                form: {
-                    category: {},
-                    product_id: {},
-                    product_ids: {
-                        fieldsInfo: {
-                            default: { name: {} },
+            this.params.fieldNames=['product_id','category','product_ids'];
+            this.params.res_id=undefined;
+            this.params.type='record';
+            this.params.fieldsInfo={
+                form:{
+                    category:{},
+                    product_id:{},
+                    product_ids:{
+                        fieldsInfo:{
+                            default:{name:{}},
                         },
-                        relatedFields: this.data.product.fields,
-                        viewType: 'default',
+                        relatedFields:this.data.product.fields,
+                        viewType:'default',
                     },
                 },
             };
-            this.params.viewType = 'form';
+            this.params.viewType='form';
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.deepEqual(record.data.product_id.data.display_name, 'xphone',
-                "m2o default should be xphone");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.deepEqual(record.data.product_id.data.display_name,'xphone',
+                "m2odefaultshouldbexphone");
             assert.deepEqual(record.data.product_ids.data.length,
-                2, "o2m default should have two records");
+                2,"o2mdefaultshouldhavetworecords");
             assert.deepEqual(record.data.product_ids.data[0].data.name,
-                'xmac', "first o2m default value should be xmac");
-            assert.deepEqual(record.data.category.res_ids, [12, 14],
-                "m2m default should be [12, 14]");
+                'xmac',"firsto2mdefaultvalueshouldbexmac");
+            assert.deepEqual(record.data.category.res_ids,[12,14],
+                "m2mdefaultshouldbe[12,14]");
 
             assert.verifySteps(['onchange']);
 
             model.destroy();
         });
 
-        QUnit.test('default_record, with onchange on many2one', async function (assert) {
+        QUnit.test('default_record,withonchangeonmany2one',asyncfunction(assert){
             assert.expect(1);
 
-            // the onchange is done by the mockRPC because we want to return a value
-            // of 'false', which does not work with the mockserver mockOnChange method.
-            this.data.partner.onchanges.product_id = true;
+            //theonchangeisdonebythemockRPCbecausewewanttoreturnavalue
+            //of'false',whichdoesnotworkwiththemockservermockOnChangemethod.
+            this.data.partner.onchanges.product_id=true;
 
-            this.params.context = {};
-            this.params.fieldNames = ['product_id'];
-            this.params.res_id = undefined;
-            this.params.type = 'record';
+            this.params.context={};
+            this.params.fieldNames=['product_id'];
+            this.params.res_id=undefined;
+            this.params.type='record';
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange') {
-                        return Promise.resolve({ value: { product_id: false } });
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'){
+                        returnPromise.resolve({value:{product_id:false}});
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.product_id, false, "m2o default value should be false");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.product_id,false,"m2odefaultvalueshouldbefalse");
             model.destroy();
         });
 
-        QUnit.test('default record: batch namegets on same model and res_id', async function (assert) {
+        QUnit.test('defaultrecord:batchnamegetsonsamemodelandres_id',asyncfunction(assert){
             assert.expect(3);
 
-            var rpcCount = 0;
-            var fields = this.data.partner.fields;
-            fields.other_product_id = _.extend({}, fields.product_id);
-            fields.product_id.default = 37;
-            fields.other_product_id.default = 41;
+            varrpcCount=0;
+            varfields=this.data.partner.fields;
+            fields.other_product_id=_.extend({},fields.product_id);
+            fields.product_id.default=37;
+            fields.other_product_id.default=41;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     rpcCount++;
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var params = {
-                context: {},
-                fieldNames: ['other_product_id', 'product_id'],
-                fields: fields,
-                modelName: 'partner',
-                type: 'record',
+            varparams={
+                context:{},
+                fieldNames:['other_product_id','product_id'],
+                fields:fields,
+                modelName:'partner',
+                type:'record',
             };
 
-            var resultID = await model.load(params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.product_id.data.display_name, "xphone",
-                "should have fetched correct name");
-            assert.strictEqual(record.data.other_product_id.data.display_name, "xpad",
-                "should have fetched correct name");
-            assert.strictEqual(rpcCount, 1, "should have done 1 rpc: onchange");
+            varresultID=awaitmodel.load(params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.product_id.data.display_name,"xphone",
+                "shouldhavefetchedcorrectname");
+            assert.strictEqual(record.data.other_product_id.data.display_name,"xpad",
+                "shouldhavefetchedcorrectname");
+            assert.strictEqual(rpcCount,1,"shouldhavedone1rpc:onchange");
             model.destroy();
         });
 
-        QUnit.test('undoing a change keeps the record dirty', async function (assert) {
+        QUnit.test('undoingachangekeepstherecorddirty',asyncfunction(assert){
             assert.expect(4);
 
-            this.params.fieldNames = ['foo'];
+            this.params.fieldNames=['foo'];
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.foo, "gnap", "foo field should properly be set");
-            assert.ok(!model.isDirty(resultID), "record should not be dirty");
-            await model.notifyChanges(resultID, { foo: "hello" });
-            assert.ok(model.isDirty(resultID), "record should be dirty");
-            await model.notifyChanges(resultID, { foo: "gnap" });
-            assert.ok(model.isDirty(resultID), "record should be dirty");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.foo,"gnap","foofieldshouldproperlybeset");
+            assert.ok(!model.isDirty(resultID),"recordshouldnotbedirty");
+            awaitmodel.notifyChanges(resultID,{foo:"hello"});
+            assert.ok(model.isDirty(resultID),"recordshouldbedirty");
+            awaitmodel.notifyChanges(resultID,{foo:"gnap"});
+            assert.ok(model.isDirty(resultID),"recordshouldbedirty");
             model.destroy();
         });
 
-        QUnit.test('isDirty works correctly on list made empty', async function (assert) {
+        QUnit.test('isDirtyworkscorrectlyonlistmadeempty',asyncfunction(assert){
             assert.expect(3);
 
-            this.params.fieldNames = ['category'];
-            this.params.res_id = 1;
+            this.params.fieldNames=['category'];
+            this.params.res_id=1;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            var category_value = record.data.category;
-            assert.ok(_.isObject(category_value), "category field should have been fetched");
-            assert.strictEqual(category_value.data.length, 1, "category field should contain one record");
-            await model.notifyChanges(resultID, {
-                category: {
-                    operation: 'DELETE',
-                    ids: [category_value.data[0].id],
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            varcategory_value=record.data.category;
+            assert.ok(_.isObject(category_value),"categoryfieldshouldhavebeenfetched");
+            assert.strictEqual(category_value.data.length,1,"categoryfieldshouldcontainonerecord");
+            awaitmodel.notifyChanges(resultID,{
+                category:{
+                    operation:'DELETE',
+                    ids:[category_value.data[0].id],
                 }
             });
-            assert.ok(model.isDirty(resultID), "record should be considered dirty");
+            assert.ok(model.isDirty(resultID),"recordshouldbeconsidereddirty");
             model.destroy();
         });
 
-        QUnit.test('can duplicate a record', async function (assert) {
+        QUnit.test('canduplicatearecord',asyncfunction(assert){
             assert.expect(4);
 
-            this.params.fieldNames = ['foo'];
+            this.params.fieldNames=['foo'];
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.display_name, "second partner",
-                "record should have correct display name");
-            assert.strictEqual(record.data.foo, "gnap", "foo should be set to correct value");
-            var duplicateID = await model.duplicateRecord(resultID);
-            var duplicate = model.get(duplicateID);
-            assert.strictEqual(duplicate.data.display_name, "second partner (copy)",
-                "record should have been duplicated");
-            assert.strictEqual(duplicate.data.foo, "gnap", "foo should be set to correct value");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.display_name,"secondpartner",
+                "recordshouldhavecorrectdisplayname");
+            assert.strictEqual(record.data.foo,"gnap","fooshouldbesettocorrectvalue");
+            varduplicateID=awaitmodel.duplicateRecord(resultID);
+            varduplicate=model.get(duplicateID);
+            assert.strictEqual(duplicate.data.display_name,"secondpartner(copy)",
+                "recordshouldhavebeenduplicated");
+            assert.strictEqual(duplicate.data.foo,"gnap","fooshouldbesettocorrectvalue");
             model.destroy();
         });
 
-        QUnit.test('record with many2one set to some value, then set it to none', async function (assert) {
+        QUnit.test('recordwithmany2onesettosomevalue,thensetittonone',asyncfunction(assert){
             assert.expect(3);
 
-            this.params.fieldNames = ['product_id'];
+            this.params.fieldNames=['product_id'];
 
-            var self = this;
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varself=this;
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.product_id.data.display_name, 'xpad', "product_id should be set");
-            await model.notifyChanges(resultID, { product_id: false });
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.product_id.data.display_name,'xpad',"product_idshouldbeset");
+            awaitmodel.notifyChanges(resultID,{product_id:false});
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.product_id, false, "product_id should not be set");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.product_id,false,"product_idshouldnotbeset");
 
-            await model.save(resultID);
+            awaitmodel.save(resultID);
 
-            assert.strictEqual(self.data.partner.records[1].product_id, false,
-                "should have saved the new product_id value");
+            assert.strictEqual(self.data.partner.records[1].product_id,false,
+                "shouldhavesavedthenewproduct_idvalue");
             model.destroy();
         });
 
-        QUnit.test('internal state of groups remains when reloading', async function (assert) {
+        QUnit.test('internalstateofgroupsremainswhenreloading',asyncfunction(assert){
             assert.expect(10);
 
-            this.params.fieldNames = ['foo'];
-            this.params.domain = [];
-            this.params.limit = 80;
-            this.params.groupedBy = ['product_id'];
-            this.params.res_id = undefined;
+            this.params.fieldNames=['foo'];
+            this.params.domain=[];
+            this.params.limit=80;
+            this.params.groupedBy=['product_id'];
+            this.params.res_id=undefined;
 
-            var filterEnabled = false;
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'web_read_group' && filterEnabled) {
-                        // as this is not yet supported by the MockServer, simulates
-                        // a read_group that returns empty groups
-                        // this is the case for several models (e.g. project.task
-                        // grouped by stage_id)
-                        return this._super.apply(this, arguments).then(function (result) {
-                            // artificially filter out records of first group
-                            result.groups[0].product_id_count = 0;
-                            return result;
+            varfilterEnabled=false;
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='web_read_group'&&filterEnabled){
+                        //asthisisnotyetsupportedbytheMockServer,simulates
+                        //aread_groupthatreturnsemptygroups
+                        //thisisthecaseforseveralmodels(e.g.project.task
+                        //groupedbystage_id)
+                        returnthis._super.apply(this,arguments).then(function(result){
+                            //artificiallyfilteroutrecordsoffirstgroup
+                            result.groups[0].product_id_count=0;
+                            returnresult;
                         });
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.length, 2, "should have 2 groups");
-            var groupID = record.data[0].id;
-            assert.strictEqual(model.localData[groupID].parentID, resultID,
-                "parentID should be correctly set on groups");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.length,2,"shouldhave2groups");
+            vargroupID=record.data[0].id;
+            assert.strictEqual(model.localData[groupID].parentID,resultID,
+                "parentIDshouldbecorrectlysetongroups");
 
-            await model.toggleGroup(groupID);
+            awaitmodel.toggleGroup(groupID);
 
-            record = model.get(resultID);
-            assert.ok(record.data[0].isOpen, "first group should be open");
-            assert.strictEqual(record.data[0].data.length, 1,
-                "first group should have one record");
-            assert.strictEqual(record.data[0].limit, 80,
-                "limit should be 80 by default");
+            record=model.get(resultID);
+            assert.ok(record.data[0].isOpen,"firstgroupshouldbeopen");
+            assert.strictEqual(record.data[0].data.length,1,
+                "firstgroupshouldhaveonerecord");
+            assert.strictEqual(record.data[0].limit,80,
+                "limitshouldbe80bydefault");
 
-            // change the limit and offset of the first group
-            model.localData[record.data[0].id].limit = 10;
+            //changethelimitandoffsetofthefirstgroup
+            model.localData[record.data[0].id].limit=10;
 
-            await model.reload(resultID);
-            record = model.get(resultID);
-            assert.ok(record.data[0].isOpen, "first group should still be open");
-            assert.strictEqual(record.data[0].data.length, 1,
-                "first group should still have one record");
-            assert.strictEqual(record.data[0].limit, 10,
-                "new limit should have been kept");
+            awaitmodel.reload(resultID);
+            record=model.get(resultID);
+            assert.ok(record.data[0].isOpen,"firstgroupshouldstillbeopen");
+            assert.strictEqual(record.data[0].data.length,1,
+                "firstgroupshouldstillhaveonerecord");
+            assert.strictEqual(record.data[0].limit,10,
+                "newlimitshouldhavebeenkept");
 
-            // filter some records out: the open group should stay open but now
-            // be empty
-            filterEnabled = true;
-            await model.reload(resultID);
-            record = model.get(resultID);
-            assert.strictEqual(record.data[0].count, 0,
-                "first group's count should be 0");
-            assert.strictEqual(record.data[0].data.length, 0,
-                "first group's data should be empty'");
+            //filtersomerecordsout:theopengroupshouldstayopenbutnow
+            //beempty
+            filterEnabled=true;
+            awaitmodel.reload(resultID);
+            record=model.get(resultID);
+            assert.strictEqual(record.data[0].count,0,
+                "firstgroup'scountshouldbe0");
+            assert.strictEqual(record.data[0].data.length,0,
+                "firstgroup'sdatashouldbeempty'");
             model.destroy();
         });
 
-        QUnit.test('group on date field with magic grouping method', async function (assert) {
+        QUnit.test('groupondatefieldwithmagicgroupingmethod',asyncfunction(assert){
             assert.expect(1);
 
-            this.params.fieldNames = ['foo'];
-            this.params.groupedBy = ['date:month'];
-            this.params.res_id = undefined;
+            this.params.fieldNames=['foo'];
+            this.params.groupedBy=['date:month'];
+            this.params.res_id=undefined;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'web_read_group') {
-                        assert.deepEqual(args.kwargs.fields, ['foo', 'date'],
-                            "should have correctly trimmed the magic grouping info from the field name");
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='web_read_group'){
+                        assert.deepEqual(args.kwargs.fields,['foo','date'],
+                            "shouldhavecorrectlytrimmedthemagicgroupinginfofromthefieldname");
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            await model.load(this.params);
+            awaitmodel.load(this.params);
             model.destroy();
         });
 
 
-        QUnit.test('read group when grouped by a selection field', async function (assert) {
+        QUnit.test('readgroupwhengroupedbyaselectionfield',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.fields.selection = {
-                type: 'selection',
-                selection: [['a', 'A'], ['b', 'B']],
+            this.data.partner.fields.selection={
+                type:'selection',
+                selection:[['a','A'],['b','B']],
             };
-            this.data.partner.records[0].selection = 'a';
+            this.data.partner.records[0].selection='a';
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
-            var params = {
-                modelName: 'partner',
-                fields: this.data.partner.fields,
-                fieldNames: ['foo'],
-                groupedBy: ['selection'],
+            varparams={
+                modelName:'partner',
+                fields:this.data.partner.fields,
+                fieldNames:['foo'],
+                groupedBy:['selection'],
             };
 
-            var resultID = await model.load(params);
-            var dataPoint = model.get(resultID);
-            assert.strictEqual(dataPoint.data.length, 2, "should have two groups");
+            varresultID=awaitmodel.load(params);
+            vardataPoint=model.get(resultID);
+            assert.strictEqual(dataPoint.data.length,2,"shouldhavetwogroups");
 
-            var groupFalse = _.findWhere(dataPoint.data, { value: false });
-            assert.ok(groupFalse, "should have a group for value false");
-            assert.deepEqual(groupFalse.domain, [['selection', '=', false]],
-                "group's domain should be correct");
+            vargroupFalse=_.findWhere(dataPoint.data,{value:false});
+            assert.ok(groupFalse,"shouldhaveagroupforvaluefalse");
+            assert.deepEqual(groupFalse.domain,[['selection','=',false]],
+                "group'sdomainshouldbecorrect");
 
-            var groupA = _.findWhere(dataPoint.data, { value: 'A' });
-            assert.ok(groupA, "should have a group for value 'a'");
-            assert.deepEqual(groupA.domain, [['selection', '=', 'a']],
-                "group's domain should be correct");
+            vargroupA=_.findWhere(dataPoint.data,{value:'A'});
+            assert.ok(groupA,"shouldhaveagroupforvalue'a'");
+            assert.deepEqual(groupA.domain,[['selection','=','a']],
+                "group'sdomainshouldbecorrect");
             model.destroy();
         });
 
-        QUnit.test('create record, then save', async function (assert) {
+        QUnit.test('createrecord,thensave',asyncfunction(assert){
             assert.expect(5);
 
-            this.params.fieldNames = ['product_ids'];
-            this.params.res_id = undefined;
-            this.params.type = 'record';
-            this.params.context = { active_field: 2 };
+            this.params.fieldNames=['product_ids'];
+            this.params.res_id=undefined;
+            this.params.type='record';
+            this.params.context={active_field:2};
 
-            var id;
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'create') {
-                        // has to be done before the call to _super
-                        assert.deepEqual(args.args[0].product_ids, [], "should not have any command");
-                        assert.notOk('category' in args.args[0], "should not have other fields");
+            varid;
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='create'){
+                        //hastobedonebeforethecallto_super
+                        assert.deepEqual(args.args[0].product_ids,[],"shouldnothaveanycommand");
+                        assert.notOk('category'inargs.args[0],"shouldnothaveotherfields");
 
-                        assert.strictEqual(args.kwargs.context.active_field, 2,
-                            "record's context should be correctly passed");
+                        assert.strictEqual(args.kwargs.context.active_field,2,
+                            "record'scontextshouldbecorrectlypassed");
                     }
-                    var result = this._super(route, args);
-                    if (args.method === 'create') {
-                        result.then(function (res) {
-                            id = res;
+                    varresult=this._super(route,args);
+                    if(args.method==='create'){
+                        result.then(function(res){
+                            id=res;
                         });
                     }
-                    return result;
+                    returnresult;
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            await model.save(record.id, { reload: false });
-            record = model.get(resultID);
-            assert.strictEqual(record.res_id, id, "should have correct id from server");
-            assert.strictEqual(record.data.id, id, "should have correct id from server");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            awaitmodel.save(record.id,{reload:false});
+            record=model.get(resultID);
+            assert.strictEqual(record.res_id,id,"shouldhavecorrectidfromserver");
+            assert.strictEqual(record.data.id,id,"shouldhavecorrectidfromserver");
             model.destroy();
         });
 
-        QUnit.test('write commands on a one2many', async function (assert) {
+        QUnit.test('writecommandsonaone2many',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.records[1].product_ids = [37];
+            this.data.partner.records[1].product_ids=[37];
 
-            this.params.fieldNames = ['product_ids'];
+            this.params.fieldNames=['product_ids'];
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.args[0], [2], "should write on res_id = 2");
-                        var commands = args.args[1].product_ids;
-                        assert.deepEqual(commands[0], [4, 37, false], "first command should be a 4");
-                        // TO DO: uncomment next line
-                        // assert.strictEqual(commands[1], [0, false, {name: "toy"}], "second command should be a 0");
-                        assert.strictEqual(commands[1][0], 0, "second command should be a 0");
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
+                        assert.deepEqual(args.args[0],[2],"shouldwriteonres_id=2");
+                        varcommands=args.args[1].product_ids;
+                        assert.deepEqual(commands[0],[4,37,false],"firstcommandshouldbea4");
+                        //TODO:uncommentnextline
+                        //assert.strictEqual(commands[1],[0,false,{name:"toy"}],"secondcommandshouldbea0");
+                        assert.strictEqual(commands[1][0],0,"secondcommandshouldbea0");
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID, { raw: true });
-            assert.deepEqual(record.data.product_ids, [37], "should have correct initial value");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID,{raw:true});
+            assert.deepEqual(record.data.product_ids,[37],"shouldhavecorrectinitialvalue");
 
-            var relatedRecordID = await model.makeRecord('product', [{
-                name: 'name',
-                string: "Product Name",
-                type: "char",
-                value: "xpod"
+            varrelatedRecordID=awaitmodel.makeRecord('product',[{
+                name:'name',
+                string:"ProductName",
+                type:"char",
+                value:"xpod"
             }
             ]);
-            await model.notifyChanges(record.id, {
-                product_ids: { operation: "ADD", id: relatedRecordID }
+            awaitmodel.notifyChanges(record.id,{
+                product_ids:{operation:"ADD",id:relatedRecordID}
             });
-            await model.save(record.id);
+            awaitmodel.save(record.id);
             model.destroy();
         });
 
-        QUnit.test('create commands on a one2many', async function (assert) {
+        QUnit.test('createcommandsonaone2many',asyncfunction(assert){
             assert.expect(3);
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    return this._super(route, args);
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    returnthis._super(route,args);
                 },
             });
 
-            this.params.fieldsInfo = {
-                default: {
-                    product_ids: {
-                        fieldsInfo: {
-                            default: {
-                                display_name: { type: 'string' },
+            this.params.fieldsInfo={
+                default:{
+                    product_ids:{
+                        fieldsInfo:{
+                            default:{
+                                display_name:{type:'string'},
                             }
                         },
-                        viewType: 'default',
+                        viewType:'default',
                     }
                 }
             };
-            this.params.res_id = undefined;
-            this.params.type = 'record';
+            this.params.res_id=undefined;
+            this.params.type='record';
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.product_ids.data.length, 0,
-                "one2many should start with a list of length 0");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.product_ids.data.length,0,
+                "one2manyshouldstartwithalistoflength0");
 
-            await model.notifyChanges(record.id, {
-                product_ids: {
-                    operation: "CREATE",
-                    data: {
-                        display_name: 'coucou',
+            awaitmodel.notifyChanges(record.id,{
+                product_ids:{
+                    operation:"CREATE",
+                    data:{
+                        display_name:'coucou',
                     },
                 },
             });
-            record = model.get(resultID);
-            assert.strictEqual(record.data.product_ids.data.length, 1,
-                "one2many should be a list of length 1");
-            assert.strictEqual(record.data.product_ids.data[0].data.display_name, "coucou",
-                "one2many should have correct data");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.product_ids.data.length,1,
+                "one2manyshouldbealistoflength1");
+            assert.strictEqual(record.data.product_ids.data[0].data.display_name,"coucou",
+                "one2manyshouldhavecorrectdata");
             model.destroy();
         });
 
-        QUnit.test('onchange with a one2many on a new record', async function (assert) {
+        QUnit.test('onchangewithaone2manyonanewrecord',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.fields.total.default = 50;
-            this.data.partner.fields.product_ids.onChange = true;
-            this.data.partner.onchanges.product_ids = function (obj) {
-                obj.total += 100;
+            this.data.partner.fields.total.default=50;
+            this.data.partner.fields.product_ids.onChange=true;
+            this.data.partner.onchanges.product_ids=function(obj){
+                obj.total+=100;
             };
 
-            this.params.fieldNames = ['total', 'product_ids'];
-            this.params.res_id = undefined;
-            this.params.type = 'record';
-            this.params.fieldsInfo = {
-                form: {
-                    product_ids: {
-                        fieldsInfo: {
-                            default: { name: {} },
+            this.params.fieldNames=['total','product_ids'];
+            this.params.res_id=undefined;
+            this.params.type='record';
+            this.params.fieldsInfo={
+                form:{
+                    product_ids:{
+                        fieldsInfo:{
+                            default:{name:{}},
                         },
-                        relatedFields: this.data.product.fields,
-                        viewType: 'default',
+                        relatedFields:this.data.product.fields,
+                        viewType:'default',
                     },
-                    total: {},
+                    total:{},
                 },
             };
-            this.params.viewType = 'form';
+            this.params.viewType='form';
 
-            var o2mRecordParams = {
-                fields: this.data.product.fields,
-                fieldNames: ['name'],
-                modelName: 'product',
-                type: 'record',
+            varo2mRecordParams={
+                fields:this.data.product.fields,
+                fieldNames:['name'],
+                modelName:'product',
+                type:'record',
             };
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'onchange' && args.args[1].total === 150) {
-                        assert.deepEqual(args.args[1].product_ids, [[0, args.args[1].product_ids[0][1], { name: "xpod" }]],
-                            "Should have sent the create command in the onchange");
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='onchange'&&args.args[1].total===150){
+                        assert.deepEqual(args.args[1].product_ids,[[0,args.args[1].product_ids[0][1],{name:"xpod"}]],
+                            "Shouldhavesentthecreatecommandintheonchange");
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.product_ids.data.length, 0,
-                "one2many should start with a list of length 0");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.product_ids.data.length,0,
+                "one2manyshouldstartwithalistoflength0");
 
-            // make a default record for the related model
-            var relatedRecordID = await model.load(o2mRecordParams);
-            // update the subrecord
-            await model.notifyChanges(relatedRecordID, { name: 'xpod' });
-            // add the subrecord to the o2m of the main record
-            await model.notifyChanges(resultID, {
-                product_ids: { operation: "ADD", id: relatedRecordID }
+            //makeadefaultrecordfortherelatedmodel
+            varrelatedRecordID=awaitmodel.load(o2mRecordParams);
+            //updatethesubrecord
+            awaitmodel.notifyChanges(relatedRecordID,{name:'xpod'});
+            //addthesubrecordtotheo2mofthemainrecord
+            awaitmodel.notifyChanges(resultID,{
+                product_ids:{operation:"ADD",id:relatedRecordID}
             });
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.product_ids.data.length, 1,
-                "one2many should be a list of length 1");
-            assert.strictEqual(record.data.product_ids.data[0].data.name, "xpod",
-                "one2many should have correct data");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.product_ids.data.length,1,
+                "one2manyshouldbealistoflength1");
+            assert.strictEqual(record.data.product_ids.data[0].data.name,"xpod",
+                "one2manyshouldhavecorrectdata");
             model.destroy();
         });
 
-        QUnit.test('dates are properly loaded and parsed (record)', async function (assert) {
+        QUnit.test('datesareproperlyloadedandparsed(record)',asyncfunction(assert){
             assert.expect(2);
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var params = {
-                fieldNames: ['date'],
-                fields: this.data.partner.fields,
-                modelName: 'partner',
-                res_id: 1,
+            varparams={
+                fieldNames:['date'],
+                fields:this.data.partner.fields,
+                modelName:'partner',
+                res_id:1,
             };
 
-            await model.load(params).then(function (resultID) {
-                var record = model.get(resultID);
-                assert.ok(record.data.date instanceof moment,
-                    "fetched date field should have been formatted");
+            awaitmodel.load(params).then(function(resultID){
+                varrecord=model.get(resultID);
+                assert.ok(record.data.dateinstanceofmoment,
+                    "fetcheddatefieldshouldhavebeenformatted");
             });
 
-            params.res_id = 2;
+            params.res_id=2;
 
-            await model.load(params).then(function (resultID) {
-                var record = model.get(resultID);
-                assert.strictEqual(record.data.date, false,
-                    "unset date field should be false");
+            awaitmodel.load(params).then(function(resultID){
+                varrecord=model.get(resultID);
+                assert.strictEqual(record.data.date,false,
+                    "unsetdatefieldshouldbefalse");
             });
             model.destroy();
         });
 
-        QUnit.test('dates are properly loaded and parsed (list)', async function (assert) {
+        QUnit.test('datesareproperlyloadedandparsed(list)',asyncfunction(assert){
             assert.expect(2);
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var params = {
-                fieldNames: ['date'],
-                fields: this.data.partner.fields,
-                modelName: 'partner',
-                type: 'list',
+            varparams={
+                fieldNames:['date'],
+                fields:this.data.partner.fields,
+                modelName:'partner',
+                type:'list',
             };
 
-            await model.load(params).then(function (resultID) {
-                var record = model.get(resultID);
-                var firstRecord = record.data[0];
-                var secondRecord = record.data[1];
-                assert.ok(firstRecord.data.date instanceof moment,
-                    "fetched date field should have been formatted");
-                assert.strictEqual(secondRecord.data.date, false,
-                    "if date is not set, it should be false");
+            awaitmodel.load(params).then(function(resultID){
+                varrecord=model.get(resultID);
+                varfirstRecord=record.data[0];
+                varsecondRecord=record.data[1];
+                assert.ok(firstRecord.data.dateinstanceofmoment,
+                    "fetcheddatefieldshouldhavebeenformatted");
+                assert.strictEqual(secondRecord.data.date,false,
+                    "ifdateisnotset,itshouldbefalse");
             });
             model.destroy();
         });
 
-        QUnit.test('dates are properly loaded and parsed (default_get)', async function (assert) {
+        QUnit.test('datesareproperlyloadedandparsed(default_get)',asyncfunction(assert){
             assert.expect(1);
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var params = {
-                fieldNames: ['date'],
-                fields: this.data.partner.fields,
-                modelName: 'partner',
-                type: 'record',
+            varparams={
+                fieldNames:['date'],
+                fields:this.data.partner.fields,
+                modelName:'partner',
+                type:'record',
             };
 
-            await model.load(params).then(function (resultID) {
-                var record = model.get(resultID);
-                assert.strictEqual(record.data.date, false, "date default value should be false");
+            awaitmodel.load(params).then(function(resultID){
+                varrecord=model.get(resultID);
+                assert.strictEqual(record.data.date,false,"datedefaultvalueshouldbefalse");
             });
             model.destroy();
         });
 
-        QUnit.test('default_get on x2many may return a list of ids', async function (assert) {
+        QUnit.test('default_getonx2manymayreturnalistofids',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.fields.category.default = [12, 14];
+            this.data.partner.fields.category.default=[12,14];
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var params = {
-                fieldNames: ['category'],
-                fields: this.data.partner.fields,
-                modelName: 'partner',
-                type: 'record',
+            varparams={
+                fieldNames:['category'],
+                fields:this.data.partner.fields,
+                modelName:'partner',
+                type:'record',
             };
 
-            await model.load(params).then(function (resultID) {
-                var record = model.get(resultID);
-                assert.ok(_.isEqual(record.data.category.res_ids, [12, 14]),
-                    "category field should have correct default value");
+            awaitmodel.load(params).then(function(resultID){
+                varrecord=model.get(resultID);
+                assert.ok(_.isEqual(record.data.category.res_ids,[12,14]),
+                    "categoryfieldshouldhavecorrectdefaultvalue");
             });
 
             model.destroy();
         });
 
-        QUnit.test('default_get: fetch many2one with default (empty & not) inside x2manys', async function (assert) {
+        QUnit.test('default_get:fetchmany2onewithdefault(empty&not)insidex2manys',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.fields.category_m2o = {
-                type: 'many2one',
-                relation: 'partner_type',
+            this.data.partner.fields.category_m2o={
+                type:'many2one',
+                relation:'partner_type',
             };
-            this.data.partner.fields.o2m = {
-                string: "O2M", type: 'one2many', relation: 'partner', default: [
-                    [6, 0, []],
-                    [0, 0, { category_m2o: false, o2m: [] }],
-                    [0, 0, { category_m2o: 12, o2m: [] }],
+            this.data.partner.fields.o2m={
+                string:"O2M",type:'one2many',relation:'partner',default:[
+                    [6,0,[]],
+                    [0,0,{category_m2o:false,o2m:[]}],
+                    [0,0,{category_m2o:12,o2m:[]}],
                 ],
             };
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var params = {
-                fieldNames: ['o2m'],
-                fields: this.data.partner.fields,
-                fieldsInfo: {
-                    form: {
-                        o2m: {
-                            relatedFields: this.data.partner.fields,
-                            fieldsInfo: {
-                                list: {
-                                    category_m2o: {
-                                        relatedFields: { display_name: {} },
+            varparams={
+                fieldNames:['o2m'],
+                fields:this.data.partner.fields,
+                fieldsInfo:{
+                    form:{
+                        o2m:{
+                            relatedFields:this.data.partner.fields,
+                            fieldsInfo:{
+                                list:{
+                                    category_m2o:{
+                                        relatedFields:{display_name:{}},
                                     },
                                 },
                             },
-                            viewType: 'list',
+                            viewType:'list',
                         },
                     },
                 },
-                modelName: 'partner',
-                type: 'record',
-                viewType: 'form',
+                modelName:'partner',
+                type:'record',
+                viewType:'form',
             };
 
-            var resultID = await model.load(params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.o2m.count, 2, "o2m field should contain 2 records");
-            assert.strictEqual(record.data.o2m.data[0].data.category_m2o, false,
-                "first category field should be empty");
-            assert.strictEqual(record.data.o2m.data[1].data.category_m2o.data.display_name, "gold",
-                "second category field should have been correctly fetched");
+            varresultID=awaitmodel.load(params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.o2m.count,2,"o2mfieldshouldcontain2records");
+            assert.strictEqual(record.data.o2m.data[0].data.category_m2o,false,
+                "firstcategoryfieldshouldbeempty");
+            assert.strictEqual(record.data.o2m.data[1].data.category_m2o.data.display_name,"gold",
+                "secondcategoryfieldshouldhavebeencorrectlyfetched");
 
             model.destroy();
         });
 
-        QUnit.test('default_get: fetch x2manys inside x2manys', async function (assert) {
+        QUnit.test('default_get:fetchx2manysinsidex2manys',asyncfunction(assert){
             assert.expect(3);
 
-            this.data.partner.fields.o2m = {
-                string: "O2M", type: 'one2many', relation: 'partner', default: [[6, 0, [1]]],
+            this.data.partner.fields.o2m={
+                string:"O2M",type:'one2many',relation:'partner',default:[[6,0,[1]]],
             };
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var params = {
-                fieldNames: ['o2m'],
-                fields: this.data.partner.fields,
-                fieldsInfo: {
-                    form: {
-                        o2m: {
-                            relatedFields: this.data.partner.fields,
-                            fieldsInfo: {
-                                list: {
-                                    category: {
-                                        relatedFields: { display_name: {} },
+            varparams={
+                fieldNames:['o2m'],
+                fields:this.data.partner.fields,
+                fieldsInfo:{
+                    form:{
+                        o2m:{
+                            relatedFields:this.data.partner.fields,
+                            fieldsInfo:{
+                                list:{
+                                    category:{
+                                        relatedFields:{display_name:{}},
                                     },
                                 },
                             },
-                            viewType: 'list',
+                            viewType:'list',
                         },
                     },
                 },
-                modelName: 'partner',
-                type: 'record',
-                viewType: 'form',
+                modelName:'partner',
+                type:'record',
+                viewType:'form',
             };
 
-            var resultID = await model.load(params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.o2m.count, 1, "o2m field should contain 1 record");
-            var categoryList = record.data.o2m.data[0].data.category;
-            assert.strictEqual(categoryList.count, 1,
-                "category field should contain 1 record");
+            varresultID=awaitmodel.load(params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.o2m.count,1,"o2mfieldshouldcontain1record");
+            varcategoryList=record.data.o2m.data[0].data.category;
+            assert.strictEqual(categoryList.count,1,
+                "categoryfieldshouldcontain1record");
             assert.strictEqual(categoryList.data[0].data.display_name,
-                'gold', "category records should have been fetched");
+                'gold',"categoryrecordsshouldhavebeenfetched");
 
             model.destroy();
         });
 
-        QUnit.test('contexts and domains can be properly fetched', async function (assert) {
+        QUnit.test('contextsanddomainscanbeproperlyfetched',asyncfunction(assert){
             assert.expect(8);
 
-            this.data.partner.fields.product_id.context = "{'hello': 'world', 'test': foo}";
-            this.data.partner.fields.product_id.domain = "[['hello', 'like', 'world'], ['test', 'like', foo]]";
+            this.data.partner.fields.product_id.context="{'hello':'world','test':foo}";
+            this.data.partner.fields.product_id.domain="[['hello','like','world'],['test','like',foo]]";
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            this.params.fieldNames = ['product_id', 'foo'];
+            this.params.fieldNames=['product_id','foo'];
 
-            var resultID = await model.load(this.params);
-            var recordPartner = model.get(resultID);
-            assert.strictEqual(typeof recordPartner.getContext, "function",
-                "partner record should have a getContext function");
-            assert.strictEqual(typeof recordPartner.getDomain, "function",
-                "partner record should have a getDomain function");
-            assert.deepEqual(recordPartner.getContext(), {},
-                "asking for a context without a field name should fetch the session/user/view context");
-            assert.deepEqual(recordPartner.getDomain(), [],
-                "asking for a domain without a field name should fetch the session/user/view domain");
+            varresultID=awaitmodel.load(this.params);
+            varrecordPartner=model.get(resultID);
+            assert.strictEqual(typeofrecordPartner.getContext,"function",
+                "partnerrecordshouldhaveagetContextfunction");
+            assert.strictEqual(typeofrecordPartner.getDomain,"function",
+                "partnerrecordshouldhaveagetDomainfunction");
+            assert.deepEqual(recordPartner.getContext(),{},
+                "askingforacontextwithoutafieldnameshouldfetchthesession/user/viewcontext");
+            assert.deepEqual(recordPartner.getDomain(),[],
+                "askingforadomainwithoutafieldnameshouldfetchthesession/user/viewdomain");
             assert.deepEqual(
-                recordPartner.getContext({ fieldName: "product_id" }),
-                { hello: "world", test: "gnap" },
-                "asking for a context with a field name should fetch the field context (evaluated)");
+                recordPartner.getContext({fieldName:"product_id"}),
+                {hello:"world",test:"gnap"},
+                "askingforacontextwithafieldnameshouldfetchthefieldcontext(evaluated)");
             assert.deepEqual(
-                recordPartner.getDomain({ fieldName: "product_id" }),
-                [["hello", "like", "world"], ["test", "like", "gnap"]],
-                "asking for a domain with a field name should fetch the field domain (evaluated)");
+                recordPartner.getDomain({fieldName:"product_id"}),
+                [["hello","like","world"],["test","like","gnap"]],
+                "askingforadomainwithafieldnameshouldfetchthefielddomain(evaluated)");
             model.destroy();
 
-            // Try again with xml override of field domain and context
-            model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            //Tryagainwithxmloverrideoffielddomainandcontext
+            model=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            this.params.fieldsInfo = {
-                default: {
-                    foo: {},
-                    product_id: {
-                        context: "{'hello2': 'world', 'test2': foo}",
-                        domain: "[['hello2', 'like', 'world'], ['test2', 'like', foo]]",
+            this.params.fieldsInfo={
+                default:{
+                    foo:{},
+                    product_id:{
+                        context:"{'hello2':'world','test2':foo}",
+                        domain:"[['hello2','like','world'],['test2','like',foo]]",
                     },
                 }
             };
 
-            resultID = await model.load(this.params);
-            recordPartner = model.get(resultID);
+            resultID=awaitmodel.load(this.params);
+            recordPartner=model.get(resultID);
             assert.deepEqual(
-                recordPartner.getContext({ fieldName: "product_id" }),
-                { hello2: "world", test2: "gnap" },
-                "field context should have been overridden by xml attribute");
+                recordPartner.getContext({fieldName:"product_id"}),
+                {hello2:"world",test2:"gnap"},
+                "fieldcontextshouldhavebeenoverriddenbyxmlattribute");
             assert.deepEqual(
-                recordPartner.getDomain({ fieldName: "product_id" }),
-                [["hello2", "like", "world"], ["test2", "like", "gnap"]],
-                "field domain should have been overridden by xml attribute");
+                recordPartner.getDomain({fieldName:"product_id"}),
+                [["hello2","like","world"],["test2","like","gnap"]],
+                "fielddomainshouldhavebeenoverriddenbyxmlattribute");
             model.destroy();
         });
 
-        QUnit.test('dont write on readonly fields (write and create)', async function (assert) {
+        QUnit.test('dontwriteonreadonlyfields(writeandcreate)',asyncfunction(assert){
             assert.expect(6);
 
-            this.params.fieldNames = ['foo', 'bar'];
-            this.data.partner.fields.foo.onChange = true;
-            this.data.partner.onchanges.foo = function (obj) {
-                obj.bar = obj.foo.length;
+            this.params.fieldNames=['foo','bar'];
+            this.data.partner.fields.foo.onChange=true;
+            this.data.partner.onchanges.foo=function(obj){
+                obj.bar=obj.foo.length;
             };
-            this.params.fieldsInfo = {
-                default: {
-                    foo: {},
-                    bar: {
-                        modifiers: {
-                            readonly: true,
+            this.params.fieldsInfo={
+                default:{
+                    foo:{},
+                    bar:{
+                        modifiers:{
+                            readonly:true,
                         },
                     },
                 }
             };
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.args[1], { foo: "verylongstring" },
-                            "should only save foo field");
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
+                        assert.deepEqual(args.args[1],{foo:"verylongstring"},
+                            "shouldonlysavefoofield");
                     }
-                    if (args.method === 'create') {
-                        assert.deepEqual(args.args[0], { foo: "anotherverylongstring" },
-                            "should only save foo field");
+                    if(args.method==='create'){
+                        assert.deepEqual(args.args[0],{foo:"anotherverylongstring"},
+                            "shouldonlysavefoofield");
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.bar, 2,
-                "should be initialized with correct value");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.bar,2,
+                "shouldbeinitializedwithcorrectvalue");
 
-            await model.notifyChanges(resultID, { foo: "verylongstring" });
+            awaitmodel.notifyChanges(resultID,{foo:"verylongstring"});
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.bar, 14,
-                "should be changed with correct value");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.bar,14,
+                "shouldbechangedwithcorrectvalue");
 
-            await model.save(resultID);
+            awaitmodel.save(resultID);
 
-            // start again, but with a new record
-            delete this.params.res_id;
-            resultID = await model.load(this.params);
-            record = model.get(resultID);
-            assert.strictEqual(record.data.bar, 0,
-                "should be initialized with correct value (0 as integer)");
+            //startagain,butwithanewrecord
+            deletethis.params.res_id;
+            resultID=awaitmodel.load(this.params);
+            record=model.get(resultID);
+            assert.strictEqual(record.data.bar,0,
+                "shouldbeinitializedwithcorrectvalue(0asinteger)");
 
-            await model.notifyChanges(resultID, { foo: "anotherverylongstring" });
+            awaitmodel.notifyChanges(resultID,{foo:"anotherverylongstring"});
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.bar, 21,
-                "should be changed with correct value");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.bar,21,
+                "shouldbechangedwithcorrectvalue");
 
-            await model.save(resultID);
+            awaitmodel.save(resultID);
             model.destroy();
         });
 
-        QUnit.test('dont write on readonly fields unless save attribute is set', async function (assert) {
+        QUnit.test('dontwriteonreadonlyfieldsunlesssaveattributeisset',asyncfunction(assert){
             assert.expect(6);
 
-            this.params.fieldNames = ['foo', 'bar'];
-            this.data.partner.fields.foo.onChange = true;
-            this.data.partner.onchanges.foo = function (obj) {
-                obj.bar = obj.foo.length;
+            this.params.fieldNames=['foo','bar'];
+            this.data.partner.fields.foo.onChange=true;
+            this.data.partner.onchanges.foo=function(obj){
+                obj.bar=obj.foo.length;
             };
-            this.params.fieldsInfo = {
-                default: {
-                    foo: {},
-                    bar: {
-                        modifiers: {
-                            readonly: true,
+            this.params.fieldsInfo={
+                default:{
+                    foo:{},
+                    bar:{
+                        modifiers:{
+                            readonly:true,
                         },
-                        force_save: true,
+                        force_save:true,
                     },
                 }
             };
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'write') {
-                        assert.deepEqual(args.args[1], { bar: 14, foo: "verylongstring" },
-                            "should only save foo field");
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='write'){
+                        assert.deepEqual(args.args[1],{bar:14,foo:"verylongstring"},
+                            "shouldonlysavefoofield");
                     }
-                    if (args.method === 'create') {
-                        assert.deepEqual(args.args[0], { bar: 21, foo: "anotherverylongstring" },
-                            "should only save foo field");
+                    if(args.method==='create'){
+                        assert.deepEqual(args.args[0],{bar:21,foo:"anotherverylongstring"},
+                            "shouldonlysavefoofield");
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.bar, 2,
-                "should be initialized with correct value");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.bar,2,
+                "shouldbeinitializedwithcorrectvalue");
 
-            await model.notifyChanges(resultID, { foo: "verylongstring" });
+            awaitmodel.notifyChanges(resultID,{foo:"verylongstring"});
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.bar, 14,
-                "should be changed with correct value");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.bar,14,
+                "shouldbechangedwithcorrectvalue");
 
-            await model.save(resultID);
+            awaitmodel.save(resultID);
 
-            // start again, but with a new record
-            delete this.params.res_id;
-            resultID = await model.load(this.params);
-            record = model.get(resultID);
-            assert.strictEqual(record.data.bar, 0,
-                "should be initialized with correct value (0 as integer)");
+            //startagain,butwithanewrecord
+            deletethis.params.res_id;
+            resultID=awaitmodel.load(this.params);
+            record=model.get(resultID);
+            assert.strictEqual(record.data.bar,0,
+                "shouldbeinitializedwithcorrectvalue(0asinteger)");
 
-            await model.notifyChanges(resultID, { foo: "anotherverylongstring" });
+            awaitmodel.notifyChanges(resultID,{foo:"anotherverylongstring"});
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.bar, 21,
-                "should be changed with correct value");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.bar,21,
+                "shouldbechangedwithcorrectvalue");
 
-            await model.save(resultID);
+            awaitmodel.save(resultID);
             model.destroy();
         });
 
-        QUnit.test('default_get with one2many values', async function (assert) {
+        QUnit.test('default_getwithone2manyvalues',asyncfunction(assert){
             assert.expect(1);
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
-                    if (args.method === 'default_get') {
-                        return Promise.resolve({
-                            product_ids: [[0, 0, { "name": "xdroid" }]]
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
+                    if(args.method==='default_get'){
+                        returnPromise.resolve({
+                            product_ids:[[0,0,{"name":"xdroid"}]]
                         });
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
-            var params = {
-                fieldNames: ['product_ids'],
-                fields: this.data.partner.fields,
-                modelName: 'partner',
-                type: 'record',
-                fieldsInfo: {
-                    form: {
-                        product_ids: {
-                            fieldsInfo: {
-                                default: { name: {} },
+            varparams={
+                fieldNames:['product_ids'],
+                fields:this.data.partner.fields,
+                modelName:'partner',
+                type:'record',
+                fieldsInfo:{
+                    form:{
+                        product_ids:{
+                            fieldsInfo:{
+                                default:{name:{}},
                             },
-                            relatedFields: this.data.product.fields,
-                            viewType: 'default',
+                            relatedFields:this.data.product.fields,
+                            viewType:'default',
                         },
                     },
                 },
-                viewType: 'form',
+                viewType:'form',
             };
-            var resultID = await model.load(params);
-            assert.strictEqual(typeof resultID, 'string', "result should be a valid id");
+            varresultID=awaitmodel.load(params);
+            assert.strictEqual(typeofresultID,'string',"resultshouldbeavalidid");
             model.destroy();
         });
 
-        QUnit.test('call makeRecord with a pre-fetched many2one field', async function (assert) {
+        QUnit.test('callmakeRecordwithapre-fetchedmany2onefield',asyncfunction(assert){
             assert.expect(3);
-            var rpcCount = 0;
+            varrpcCount=0;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     rpcCount++;
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            model.makeRecord('coucou', [{
-                name: 'partner_id',
-                relation: 'partner',
-                type: 'many2one',
-                value: [1, 'first partner'],
-            }], {
-                    partner_id: {
-                        options: {
-                            no_open: true,
+            model.makeRecord('coucou',[{
+                name:'partner_id',
+                relation:'partner',
+                type:'many2one',
+                value:[1,'firstpartner'],
+            }],{
+                    partner_id:{
+                        options:{
+                            no_open:true,
                         },
                     },
-                }).then(function (recordID) {
-                    var record = model.get(recordID);
-                    assert.deepEqual(record.fieldsInfo.default.partner_id, { options: { no_open: true } },
-                        "makeRecord should have generated the fieldsInfo");
-                    assert.deepEqual(record.data.partner_id.data, { id: 1, display_name: 'first partner' },
-                        "many2one should contain the partner with id 1");
-                    assert.strictEqual(rpcCount, 0, "makeRecord should not have done any rpc");
+                }).then(function(recordID){
+                    varrecord=model.get(recordID);
+                    assert.deepEqual(record.fieldsInfo.default.partner_id,{options:{no_open:true}},
+                        "makeRecordshouldhavegeneratedthefieldsInfo");
+                    assert.deepEqual(record.data.partner_id.data,{id:1,display_name:'firstpartner'},
+                        "many2oneshouldcontainthepartnerwithid1");
+                    assert.strictEqual(rpcCount,0,"makeRecordshouldnothavedoneanyrpc");
                 });
             model.destroy();
         });
 
-        QUnit.test('call makeRecord with a many2many field', async function (assert) {
+        QUnit.test('callmakeRecordwithamany2manyfield',asyncfunction(assert){
             assert.expect(5);
-            var rpcCount = 0;
+            varrpcCount=0;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     rpcCount++;
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var recordID = await model.makeRecord('coucou', [{
-                name: 'partner_ids',
-                fields: [{
-                    name: 'id',
-                    type: 'integer',
-                }, {
-                    name: 'display_name',
-                    type: 'char',
+            varrecordID=awaitmodel.makeRecord('coucou',[{
+                name:'partner_ids',
+                fields:[{
+                    name:'id',
+                    type:'integer',
+                },{
+                    name:'display_name',
+                    type:'char',
                 }],
-                relation: 'partner',
-                type: 'many2many',
-                value: [1, 2],
+                relation:'partner',
+                type:'many2many',
+                value:[1,2],
             }]);
-            var record = model.get(recordID);
-            assert.deepEqual(record.fieldsInfo.default.partner_ids, {},
-                "makeRecord should have generated the fieldsInfo");
-            assert.strictEqual(record.data.partner_ids.count, 2,
-                "there should be 2 elements in the many2many");
-            assert.strictEqual(record.data.partner_ids.data.length, 2,
-                "many2many should be a list of length 2");
-            assert.deepEqual(record.data.partner_ids.data[0].data, { id: 1, display_name: 'first partner' },
-                "many2many should contain the partner with id 1");
-            assert.strictEqual(rpcCount, 1, "makeRecord should have done 1 rpc");
+            varrecord=model.get(recordID);
+            assert.deepEqual(record.fieldsInfo.default.partner_ids,{},
+                "makeRecordshouldhavegeneratedthefieldsInfo");
+            assert.strictEqual(record.data.partner_ids.count,2,
+                "thereshouldbe2elementsinthemany2many");
+            assert.strictEqual(record.data.partner_ids.data.length,2,
+                "many2manyshouldbealistoflength2");
+            assert.deepEqual(record.data.partner_ids.data[0].data,{id:1,display_name:'firstpartner'},
+                "many2manyshouldcontainthepartnerwithid1");
+            assert.strictEqual(rpcCount,1,"makeRecordshouldhavedone1rpc");
             model.destroy();
         });
 
-        QUnit.test('call makeRecord with a pre-fetched many2many field', async function (assert) {
+        QUnit.test('callmakeRecordwithapre-fetchedmany2manyfield',asyncfunction(assert){
             assert.expect(5);
-            var rpcCount = 0;
+            varrpcCount=0;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     rpcCount++;
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var recordID = await model.makeRecord('coucou', [{
-                name: 'partner_ids',
-                fields: [{
-                    name: 'id',
-                    type: 'integer',
-                }, {
-                    name: 'display_name',
-                    type: 'char',
+            varrecordID=awaitmodel.makeRecord('coucou',[{
+                name:'partner_ids',
+                fields:[{
+                    name:'id',
+                    type:'integer',
+                },{
+                    name:'display_name',
+                    type:'char',
                 }],
-                relation: 'partner',
-                type: 'many2many',
-                value: [{
-                    id: 1,
-                    display_name: "first partner",
-                }, {
-                    id: 2,
-                    display_name: "second partner",
+                relation:'partner',
+                type:'many2many',
+                value:[{
+                    id:1,
+                    display_name:"firstpartner",
+                },{
+                    id:2,
+                    display_name:"secondpartner",
                 }],
             }]);
-            var record = model.get(recordID);
-            assert.deepEqual(record.fieldsInfo.default.partner_ids, {},
-                "makeRecord should have generated the fieldsInfo");
-            assert.strictEqual(record.data.partner_ids.count, 2,
-                "there should be 2 elements in the many2many");
-            assert.strictEqual(record.data.partner_ids.data.length, 2,
-                "many2many should be a list of length 2");
-            assert.deepEqual(record.data.partner_ids.data[0].data, { id: 1, display_name: 'first partner' },
-                "many2many should contain the partner with id 1");
-            assert.strictEqual(rpcCount, 0, "makeRecord should not have done any rpc");
+            varrecord=model.get(recordID);
+            assert.deepEqual(record.fieldsInfo.default.partner_ids,{},
+                "makeRecordshouldhavegeneratedthefieldsInfo");
+            assert.strictEqual(record.data.partner_ids.count,2,
+                "thereshouldbe2elementsinthemany2many");
+            assert.strictEqual(record.data.partner_ids.data.length,2,
+                "many2manyshouldbealistoflength2");
+            assert.deepEqual(record.data.partner_ids.data[0].data,{id:1,display_name:'firstpartner'},
+                "many2manyshouldcontainthepartnerwithid1");
+            assert.strictEqual(rpcCount,0,"makeRecordshouldnothavedoneanyrpc");
             model.destroy();
         });
 
-        QUnit.test('call makeRecord with a selection field', async function (assert) {
+        QUnit.test('callmakeRecordwithaselectionfield',asyncfunction(assert){
             assert.expect(4);
-            var rpcCount = 0;
+            varrpcCount=0;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     rpcCount++;
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            var recordID = await model.makeRecord('partner', [{
-                name: 'status',
-                string: 'Status',
-                type: 'selection',
-                selection: [['draft', 'Draft'], ['done', 'Done'], ['failed', 'Failed']],
-                value: 'done',
+            varrecordID=awaitmodel.makeRecord('partner',[{
+                name:'status',
+                string:'Status',
+                type:'selection',
+                selection:[['draft','Draft'],['done','Done'],['failed','Failed']],
+                value:'done',
             }]);
-            var record = model.get(recordID);
-            assert.deepEqual(record.fieldsInfo.default.status, {},
-                "makeRecord should have generated the fieldsInfo");
-            assert.strictEqual(record.data.status, 'done',
-                "should have a value 'done'");
-            assert.strictEqual(record.fields.status.selection.length, 3,
-                "should have 3 keys for selection");
-            assert.strictEqual(rpcCount, 0, "makeRecord should have done 0 rpc");
+            varrecord=model.get(recordID);
+            assert.deepEqual(record.fieldsInfo.default.status,{},
+                "makeRecordshouldhavegeneratedthefieldsInfo");
+            assert.strictEqual(record.data.status,'done',
+                "shouldhaveavalue'done'");
+            assert.strictEqual(record.fields.status.selection.length,3,
+                "shouldhave3keysforselection");
+            assert.strictEqual(rpcCount,0,"makeRecordshouldhavedone0rpc");
             model.destroy();
         });
 
-        QUnit.test('call makeRecord with a reference field', async function (assert) {
+        QUnit.test('callmakeRecordwithareferencefield',asyncfunction(assert){
             assert.expect(2);
-            let rpcCount = 0;
+            letrpcCount=0;
 
-            const model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            constmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     rpcCount++;
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            const field = this.data.partner.fields.reference;
-            const recordID = await model.makeRecord('coucou', [{
-                name: 'reference',
-                type: 'reference',
-                selection: field.selection,
-                value: 'product,37',
+            constfield=this.data.partner.fields.reference;
+            constrecordID=awaitmodel.makeRecord('coucou',[{
+                name:'reference',
+                type:'reference',
+                selection:field.selection,
+                value:'product,37',
             }]);
-            const record = model.get(recordID);
-            assert.deepEqual(record.data.reference.data, { id: 37, display_name: 'xphone' });
-            assert.strictEqual(rpcCount, 1);
+            constrecord=model.get(recordID);
+            assert.deepEqual(record.data.reference.data,{id:37,display_name:'xphone'});
+            assert.strictEqual(rpcCount,1);
 
             model.destroy();
         });
 
-        QUnit.test('check id, active_id, active_ids, active_model values in record\'s context', async function (assert) {
+        QUnit.test('checkid,active_id,active_ids,active_modelvaluesinrecord\'scontext',asyncfunction(assert){
             assert.expect(2);
 
-            this.data.partner.fields.product_id.context = "{'id': id, 'active_id': active_id, 'active_ids': active_ids, 'active_model': active_model}";
+            this.data.partner.fields.product_id.context="{'id':id,'active_id':active_id,'active_ids':active_ids,'active_model':active_model}";
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            this.params.fieldNames = ['product_id'];
+            this.params.fieldNames=['product_id'];
 
-            var resultID = await model.load(this.params);
-            var recordPartner = model.get(resultID);
+            varresultID=awaitmodel.load(this.params);
+            varrecordPartner=model.get(resultID);
             assert.deepEqual(
-                recordPartner.getContext({ fieldName: "product_id" }),
-                { id: 2, active_id: 2, active_ids: [2], active_model: "partner" },
-                "wrong values for id, active_id, active_ids or active_model");
+                recordPartner.getContext({fieldName:"product_id"}),
+                {id:2,active_id:2,active_ids:[2],active_model:"partner"},
+                "wrongvaluesforid,active_id,active_idsoractive_model");
 
-            // Try again without record
-            this.params.res_id = undefined;
+            //Tryagainwithoutrecord
+            this.params.res_id=undefined;
 
-            resultID = await model.load(this.params);
-            recordPartner = model.get(resultID);
+            resultID=awaitmodel.load(this.params);
+            recordPartner=model.get(resultID);
             assert.deepEqual(
-                recordPartner.getContext({ fieldName: "product_id" }),
-                { id: false, active_id: false, active_ids: [], active_model: "partner" },
-                "wrong values for id, active_id, active_ids or active_model. Have to be defined even if there is no record.");
+                recordPartner.getContext({fieldName:"product_id"}),
+                {id:false,active_id:false,active_ids:[],active_model:"partner"},
+                "wrongvaluesforid,active_id,active_idsoractive_model.Havetobedefinedevenifthereisnorecord.");
 
             model.destroy();
         });
 
-        QUnit.test('load model with many2many field properly fetched', async function (assert) {
+        QUnit.test('loadmodelwithmany2manyfieldproperlyfetched',asyncfunction(assert){
             assert.expect(2);
 
-            this.params.fieldNames = ['category'];
-            this.params.res_id = 1;
+            this.params.fieldNames=['category'];
+            this.params.res_id=1;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            await model.load(this.params);
+            awaitmodel.load(this.params);
             assert.verifySteps(['read'],
-                "there should be only one read");
+                "thereshouldbeonlyoneread");
             model.destroy();
         });
 
-        QUnit.test('data should contain all fields in view, default being false', async function (assert) {
+        QUnit.test('datashouldcontainallfieldsinview,defaultbeingfalse',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.fields.product_ids.default = [
-                [6, 0, []],
-                [0, 0, { name: 'new' }],
+            this.data.partner.fields.product_ids.default=[
+                [6,0,[]],
+                [0,0,{name:'new'}],
             ];
-            this.data.product.fields.date = { string: "Date", type: "date" };
+            this.data.product.fields.date={string:"Date",type:"date"};
 
-            var params = {
-                fieldNames: ['product_ids'],
-                modelName: 'partner',
-                fields: this.data.partner.fields,
-                fieldsInfo: {
-                    form: {
-                        product_ids: {
-                            relatedFields: this.data.product.fields,
-                            fieldsInfo: { list: { name: {}, date: {} } },
-                            viewType: 'list',
+            varparams={
+                fieldNames:['product_ids'],
+                modelName:'partner',
+                fields:this.data.partner.fields,
+                fieldsInfo:{
+                    form:{
+                        product_ids:{
+                            relatedFields:this.data.product.fields,
+                            fieldsInfo:{list:{name:{},date:{}}},
+                            viewType:'list',
                         }
                     },
                 },
-                res_id: undefined,
-                type: 'record',
-                viewType: 'form',
+                res_id:undefined,
+                type:'record',
+                viewType:'form',
             };
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            await model.load(params).then(function (resultID) {
-                var record = model.get(resultID);
-                assert.strictEqual(record.data.product_ids.data[0].data.date, false,
-                    "date value should be in data, and should be false");
+            awaitmodel.load(params).then(function(resultID){
+                varrecord=model.get(resultID);
+                assert.strictEqual(record.data.product_ids.data[0].data.date,false,
+                    "datevalueshouldbeindata,andshouldbefalse");
             });
 
             model.destroy();
         });
 
-        QUnit.test('changes are discarded when reloading from a new record', async function (assert) {
-            // practical use case: click on 'Create' to open a form view in edit
-            // mode (new record), click on 'Discard', then open an existing record
+        QUnit.test('changesarediscardedwhenreloadingfromanewrecord',asyncfunction(assert){
+            //practicalusecase:clickon'Create'toopenaformviewinedit
+            //mode(newrecord),clickon'Discard',thenopenanexistingrecord
             assert.expect(2);
 
-            this.data.partner.fields.foo.default = 'default';
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            this.data.partner.fields.foo.default='default';
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            // load a new record (default_get)
-            var params = _.extend(this.params, {
-                res_id: undefined,
-                type: 'record',
-                fieldNames: ['foo'],
+            //loadanewrecord(default_get)
+            varparams=_.extend(this.params,{
+                res_id:undefined,
+                type:'record',
+                fieldNames:['foo'],
             });
-            var resultID = await model.load(params);
-            var record = model.get(resultID);
-            assert.strictEqual(record.data.foo, 'default',
-                "should be the default value");
+            varresultID=awaitmodel.load(params);
+            varrecord=model.get(resultID);
+            assert.strictEqual(record.data.foo,'default',
+                "shouldbethedefaultvalue");
 
-            // reload with id 2
-            resultID = await model.reload(record.id, { currentId: 2 });
-            record = model.get(resultID);
-            assert.strictEqual(record.data.foo, 'gnap',
-                "should be the value of record 2");
+            //reloadwithid2
+            resultID=awaitmodel.reload(record.id,{currentId:2});
+            record=model.get(resultID);
+            assert.strictEqual(record.data.foo,'gnap',
+                "shouldbethevalueofrecord2");
 
             model.destroy();
         });
 
-        QUnit.test('has a proper evaluation context', async function (assert) {
+        QUnit.test('hasaproperevaluationcontext',asyncfunction(assert){
             assert.expect(6);
 
-            const unpatchDate = testUtils.mock.patchDate(1997, 0, 9, 12, 0, 0);
-            this.params.fieldNames = Object.keys(this.data.partner.fields);
-            this.params.res_id = 1;
+            constunpatchDate=testUtils.mock.patchDate(1997,0,9,12,0,0);
+            this.params.fieldNames=Object.keys(this.data.partner.fields);
+            this.params.res_id=1;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            const { evalContext } = model.get(resultID);
-            assert.strictEqual(typeof evalContext.datetime, "object");
-            assert.strictEqual(typeof evalContext.relativedelta, "object");
-            assert.strictEqual(typeof evalContext.time, "object");
-            assert.strictEqual(typeof evalContext.context_today, "function");
-            assert.strictEqual(typeof evalContext.tz_offset, "function");
-            const blackListedKeys = [
+            varresultID=awaitmodel.load(this.params);
+            const{evalContext}=model.get(resultID);
+            assert.strictEqual(typeofevalContext.datetime,"object");
+            assert.strictEqual(typeofevalContext.relativedelta,"object");
+            assert.strictEqual(typeofevalContext.time,"object");
+            assert.strictEqual(typeofevalContext.context_today,"function");
+            assert.strictEqual(typeofevalContext.tz_offset,"function");
+            constblackListedKeys=[
                 "time",
                 "datetime",
                 "relativedelta",
                 "context_today",
                 "tz_offset",
             ];
-            // Remove uncomparable values from the evaluation context
-            for (const key of blackListedKeys) {
-                delete evalContext[key];
+            //Removeuncomparablevaluesfromtheevaluationcontext
+            for(constkeyofblackListedKeys){
+                deleteevalContext[key];
             }
-            assert.deepEqual(evalContext, {
-                active: true,
-                active_id: 1,
-                active_ids: [1],
-                active_model: "partner",
-                bar: 1,
-                category: [12],
-                current_company_id: false,
-                current_date: moment().format('YYYY-MM-DD'),
-                today: moment().format('YYYY-MM-DD'),
-                now: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
-                date: "2017-01-25",
-                display_name: "first partner",
-                foo: "blip",
-                id: 1,
-                product_id: 37,
-                product_ids: [],
-                qux: false,
-                reference: false,
-                total: 0,
-                x_active: true,
-            }, "should use the proper eval context");
+            assert.deepEqual(evalContext,{
+                active:true,
+                active_id:1,
+                active_ids:[1],
+                active_model:"partner",
+                bar:1,
+                category:[12],
+                current_company_id:false,
+                current_date:moment().format('YYYY-MM-DD'),
+                today:moment().format('YYYY-MM-DD'),
+                now:moment().utc().format('YYYY-MM-DDHH:mm:ss'),
+                date:"2017-01-25",
+                display_name:"firstpartner",
+                foo:"blip",
+                id:1,
+                product_id:37,
+                product_ids:[],
+                qux:false,
+                reference:false,
+                total:0,
+                x_active:true,
+            },"shouldusetheproperevalcontext");
             model.destroy();
             unpatchDate();
         });
 
-        QUnit.test('x2manys in contexts and domains are correctly evaluated', async function (assert) {
+        QUnit.test('x2manysincontextsanddomainsarecorrectlyevaluated',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.records[0].product_ids = [37, 41];
-            this.params.fieldNames = Object.keys(this.data.partner.fields);
-            this.params.fieldsInfo = {
-                form: {
-                    qux: {
-                        context: "{'category': category, 'product_ids': product_ids}",
-                        domain: "[['id', 'in', category], ['id', 'in', product_ids]]",
-                        relatedFields: this.data.partner.fields,
+            this.data.partner.records[0].product_ids=[37,41];
+            this.params.fieldNames=Object.keys(this.data.partner.fields);
+            this.params.fieldsInfo={
+                form:{
+                    qux:{
+                        context:"{'category':category,'product_ids':product_ids}",
+                        domain:"[['id','in',category],['id','in',product_ids]]",
+                        relatedFields:this.data.partner.fields,
                     },
-                    category: {
-                        relatedFields: this.data.partner_type.fields,
+                    category:{
+                        relatedFields:this.data.partner_type.fields,
                     },
-                    product_ids: {
-                        relatedFields: this.data.product.fields,
+                    product_ids:{
+                        relatedFields:this.data.product.fields,
                     },
                 },
             };
-            this.params.viewType = 'form';
-            this.params.res_id = 1;
+            this.params.viewType='form';
+            this.params.res_id=1;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            var context = record.getContext({ fieldName: 'qux' });
-            var domain = record.getDomain({ fieldName: 'qux' });
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            varcontext=record.getContext({fieldName:'qux'});
+            vardomain=record.getDomain({fieldName:'qux'});
 
-            assert.deepEqual(context, {
-                category: [12],
-                product_ids: [37, 41],
-            }, "x2many values in context manipulated client-side should be lists of ids");
+            assert.deepEqual(context,{
+                category:[12],
+                product_ids:[37,41],
+            },"x2manyvaluesincontextmanipulatedclient-sideshouldbelistsofids");
             assert.strictEqual(JSON.stringify(context),
                 "{\"category\":[[6,false,[12]]],\"product_ids\":[[4,37,false],[4,41,false]]}",
-                "x2many values in context sent to the server should be commands");
-            assert.deepEqual(domain, [
-                ['id', 'in', [12]],
-                ['id', 'in', [37, 41]],
-            ], "x2many values in domains should be lists of ids");
+                "x2manyvaluesincontextsenttotheservershouldbecommands");
+            assert.deepEqual(domain,[
+                ['id','in',[12]],
+                ['id','in',[37,41]],
+            ],"x2manyvaluesindomainsshouldbelistsofids");
             assert.strictEqual(JSON.stringify(domain),
                 "[[\"id\",\"in\",[12]],[\"id\",\"in\",[37,41]]]",
-                "x2many values in domains should be lists of ids");
+                "x2manyvaluesindomainsshouldbelistsofids");
             model.destroy();
         });
 
-        QUnit.test('fetch references in list, with not too many rpcs', async function (assert) {
+        QUnit.test('fetchreferencesinlist,withnottoomanyrpcs',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.records[0].reference = 'product,37';
-            this.data.partner.records[1].reference = 'product,41';
+            this.data.partner.records[0].reference='product,37';
+            this.data.partner.records[1].reference='product,41';
 
-            this.params.fieldNames = ['reference'];
-            this.params.domain = [];
-            this.params.groupedBy = [];
-            this.params.res_id = undefined;
+            this.params.fieldNames=['reference'];
+            this.params.domain=[];
+            this.params.groupedBy=[];
+            this.params.res_id=undefined;
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     assert.step(route);
-                    if (route === "/web/dataset/call_kw/product/name_get") {
-                        assert.deepEqual(args.args, [[37, 41]],
-                            "the name_get should contain the product ids");
+                    if(route==="/web/dataset/call_kw/product/name_get"){
+                        assert.deepEqual(args.args,[[37,41]],
+                            "thename_getshouldcontaintheproductids");
                     }
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
 
-            assert.strictEqual(record.data[0].data.reference.data.display_name, "xphone",
-                "name_get should have been correctly fetched");
-            assert.verifySteps(["/web/dataset/search_read", "/web/dataset/call_kw/product/name_get"],
-                "should have done 2 rpc (searchread and name_get for product)");
+            assert.strictEqual(record.data[0].data.reference.data.display_name,"xphone",
+                "name_getshouldhavebeencorrectlyfetched");
+            assert.verifySteps(["/web/dataset/search_read","/web/dataset/call_kw/product/name_get"],
+                "shouldhavedone2rpc(searchreadandname_getforproduct)");
             model.destroy();
         });
 
-        QUnit.test('reload a new record', async function (assert) {
+        QUnit.test('reloadanewrecord',asyncfunction(assert){
             assert.expect(6);
 
-            this.params.context = {};
-            this.params.fieldNames = ['product_id', 'category', 'product_ids'];
-            this.params.res_id = undefined;
-            this.params.type = 'record';
+            this.params.context={};
+            this.params.fieldNames=['product_id','category','product_ids'];
+            this.params.res_id=undefined;
+            this.params.type='record';
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route, args) {
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route,args){
                     assert.step(args.method);
-                    return this._super(route, args);
+                    returnthis._super(route,args);
                 },
             });
 
-            var recordID = await model.load(this.params);
-            recordID = await model.reload(recordID);
-            assert.verifySteps(['onchange', 'onchange']);
-            var record = model.get(recordID);
-            assert.strictEqual(record.data.product_id, false,
-                "m2o default value should be false");
-            assert.deepEqual(record.data.product_ids.data, [],
-                "o2m default should be []");
-            assert.deepEqual(record.data.category.data, [],
-                "m2m default should be []");
+            varrecordID=awaitmodel.load(this.params);
+            recordID=awaitmodel.reload(recordID);
+            assert.verifySteps(['onchange','onchange']);
+            varrecord=model.get(recordID);
+            assert.strictEqual(record.data.product_id,false,
+                "m2odefaultvalueshouldbefalse");
+            assert.deepEqual(record.data.product_ids.data,[],
+                "o2mdefaultshouldbe[]");
+            assert.deepEqual(record.data.category.data,[],
+                "m2mdefaultshouldbe[]");
 
             model.destroy();
         });
 
-        QUnit.test('default_get with value false for a one2many', async function (assert) {
+        QUnit.test('default_getwithvaluefalseforaone2many',asyncfunction(assert){
             assert.expect(1);
 
-            this.data.partner.fields.product_ids.default = false;
-            this.params.fieldNames = ['product_ids'];
-            this.params.res_id = undefined;
-            this.params.type = 'record';
+            this.data.partner.fields.product_ids.default=false;
+            this.params.fieldNames=['product_ids'];
+            this.params.res_id=undefined;
+            this.params.type='record';
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.deepEqual(record.data.product_ids.data, [], "o2m default should be []");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.deepEqual(record.data.product_ids.data,[],"o2mdefaultshouldbe[]");
 
             model.destroy();
         });
 
-        QUnit.test('only x2many lists (static) should be sorted client-side', async function (assert) {
+        QUnit.test('onlyx2manylists(static)shouldbesortedclient-side',asyncfunction(assert){
             assert.expect(1);
 
-            this.params.modelName = 'partner_type';
-            this.params.res_id = undefined;
-            this.params.orderedBy = [{ name: 'display_name', asc: true }];
+            this.params.modelName='partner_type';
+            this.params.res_id=undefined;
+            this.params.orderedBy=[{name:'display_name',asc:true}];
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
-                mockRPC: function (route) {
-                    if (route === '/web/dataset/search_read') {
-                        // simulate randomn sort form the server
-                        return Promise.resolve({
-                            length: 3,
-                            records: [
-                                { id: 12, display_name: "gold", date: "2017-01-25" },
-                                { id: 15, display_name: "bronze" },
-                                { id: 14, display_name: "silver" },
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
+                mockRPC:function(route){
+                    if(route==='/web/dataset/search_read'){
+                        //simulaterandomnsortformtheserver
+                        returnPromise.resolve({
+                            length:3,
+                            records:[
+                                {id:12,display_name:"gold",date:"2017-01-25"},
+                                {id:15,display_name:"bronze"},
+                                {id:14,display_name:"silver"},
                             ],
                         });
                     }
-                    return this._super.apply(this, arguments);
+                    returnthis._super.apply(this,arguments);
                 },
             });
 
-            var resultID = await model.load(this.params);
-            var list = model.get(resultID);
-            assert.deepEqual(_.map(list.data, 'res_id'), [12, 15, 14],
-                "should have kept the order from the server");
+            varresultID=awaitmodel.load(this.params);
+            varlist=model.get(resultID);
+            assert.deepEqual(_.map(list.data,'res_id'),[12,15,14],
+                "shouldhavekepttheorderfromtheserver");
             model.destroy();
         });
 
-        QUnit.test('onchange on a boolean field', async function (assert) {
+        QUnit.test('onchangeonabooleanfield',asyncfunction(assert){
             assert.expect(2);
 
-            var newFields = {
-                foobool: {
-                    type: 'boolean',
-                    string: 'foobool',
+            varnewFields={
+                foobool:{
+                    type:'boolean',
+                    string:'foobool',
                 },
-                foobool2: {
-                    type: 'boolean',
-                    string: 'foobool2',
+                foobool2:{
+                    type:'boolean',
+                    string:'foobool2',
                 },
             };
-            _.extend(this.data.partner.fields, newFields);
+            _.extend(this.data.partner.fields,newFields);
 
-            this.data.partner.fields.foobool.onChange = true;
-            this.data.partner.onchanges.foobool = function (obj) {
-                if (obj.foobool) {
-                    obj.foobool2 = true;
+            this.data.partner.fields.foobool.onChange=true;
+            this.data.partner.onchanges.foobool=function(obj){
+                if(obj.foobool){
+                    obj.foobool2=true;
                 }
             };
 
-            this.data.partner.records[0].foobool = false;
-            this.data.partner.records[0].foobool2 = true;
+            this.data.partner.records[0].foobool=false;
+            this.data.partner.records[0].foobool2=true;
 
-            this.params.res_id = 1;
-            this.params.fieldNames = ['foobool', 'foobool2'];
-            this.params.fields = this.data.partner.fields;
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            this.params.res_id=1;
+            this.params.fieldNames=['foobool','foobool2'];
+            this.params.fields=this.data.partner.fields;
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            await model.notifyChanges(resultID, { foobool2: false });
-            record = model.get(resultID);
-            assert.strictEqual(record.data.foobool2, false, "foobool2 field should be false");
-            await model.notifyChanges(resultID, { foobool: true });
-            record = model.get(resultID);
-            assert.strictEqual(record.data.foobool2, true, "foobool2 field should be true");
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            awaitmodel.notifyChanges(resultID,{foobool2:false});
+            record=model.get(resultID);
+            assert.strictEqual(record.data.foobool2,false,"foobool2fieldshouldbefalse");
+            awaitmodel.notifyChanges(resultID,{foobool:true});
+            record=model.get(resultID);
+            assert.strictEqual(record.data.foobool2,true,"foobool2fieldshouldbetrue");
             model.destroy();
         });
 
-        QUnit.test('notifyChange DELETE_ALL on a one2many', async function (assert) {
+        QUnit.test('notifyChangeDELETE_ALLonaone2many',asyncfunction(assert){
             assert.expect(5);
 
-            this.data.partner.records[1].product_ids = [37, 38];
-            this.params.fieldNames = ['product_ids'];
+            this.data.partner.records[1].product_ids=[37,38];
+            this.params.fieldNames=['product_ids'];
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var o2mParams = {
-                modelName: 'product',
-                fields: this.data.product.fields,
+            varo2mParams={
+                modelName:'product',
+                fields:this.data.product.fields,
             };
 
-            var resultID = await model.load(this.params);
-            var newRecordID = await model.load(o2mParams);
-            var record = model.get(resultID);
-            var x2mListID = record.data.product_ids.id;
+            varresultID=awaitmodel.load(this.params);
+            varnewRecordID=awaitmodel.load(o2mParams);
+            varrecord=model.get(resultID);
+            varx2mListID=record.data.product_ids.id;
 
-            assert.strictEqual(record.data.product_ids.count, 2,
-                "there should be two records in the relation");
+            assert.strictEqual(record.data.product_ids.count,2,
+                "thereshouldbetworecordsintherelation");
 
-            await model.notifyChanges(resultID, {product_ids: {operation: 'ADD', id: newRecordID}});
+            awaitmodel.notifyChanges(resultID,{product_ids:{operation:'ADD',id:newRecordID}});
 
-            assert.deepEqual(model.localData[x2mListID]._changes, [{
-                operation: 'ADD', id: newRecordID,
-            }], "_changes should be correct");
+            assert.deepEqual(model.localData[x2mListID]._changes,[{
+                operation:'ADD',id:newRecordID,
+            }],"_changesshouldbecorrect");
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.product_ids.count, 3,
-                "there should be three records in the relation");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.product_ids.count,3,
+                "thereshouldbethreerecordsintherelation");
 
-            await model.notifyChanges(resultID, {product_ids: {operation: 'DELETE_ALL'}});
+            awaitmodel.notifyChanges(resultID,{product_ids:{operation:'DELETE_ALL'}});
 
-            assert.deepEqual(model.localData[x2mListID]._changes, [{
-                id: 37,
-                operation: "DELETE"
-            }, {
-                id: 38,
-                operation: "DELETE"
-            }], "_changes should contain the two 'DELETE' operations");
+            assert.deepEqual(model.localData[x2mListID]._changes,[{
+                id:37,
+                operation:"DELETE"
+            },{
+                id:38,
+                operation:"DELETE"
+            }],"_changesshouldcontainthetwo'DELETE'operations");
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.product_ids.count, 0,
-                "there should be no more records in the relation");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.product_ids.count,0,
+                "thereshouldbenomorerecordsintherelation");
             model.destroy();
         });
 
-        QUnit.test('notifyChange MULTI on a one2many', async function (assert) {
+        QUnit.test('notifyChangeMULTIonaone2many',asyncfunction(assert){
             assert.expect(4);
 
-            this.data.partner.records[1].product_ids = [37, 38];
-            this.params.fieldNames = ['product_ids'];
+            this.data.partner.records[1].product_ids=[37,38];
+            this.params.fieldNames=['product_ids'];
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var o2mParams = {
-                modelName: 'product',
-                fields: this.data.product.fields,
+            varo2mParams={
+                modelName:'product',
+                fields:this.data.product.fields,
             };
 
-            var resultID = await model.load(this.params);
-            var newRecordID = await model.load(o2mParams);
-            var record = model.get(resultID);
-            var x2mListID = record.data.product_ids.id;
+            varresultID=awaitmodel.load(this.params);
+            varnewRecordID=awaitmodel.load(o2mParams);
+            varrecord=model.get(resultID);
+            varx2mListID=record.data.product_ids.id;
 
-            assert.strictEqual(record.data.product_ids.count, 2,
-                "there should be two records in the relation");
+            assert.strictEqual(record.data.product_ids.count,2,
+                "thereshouldbetworecordsintherelation");
 
-            await model.notifyChanges(resultID, {product_ids: {
-                operation: 'MULTI',
-                commands: [{
-                    operation: 'DELETE_ALL'
-                }, {
-                    operation: 'ADD',
-                    id: newRecordID
+            awaitmodel.notifyChanges(resultID,{product_ids:{
+                operation:'MULTI',
+                commands:[{
+                    operation:'DELETE_ALL'
+                },{
+                    operation:'ADD',
+                    id:newRecordID
                 }]
             }});
 
-            assert.deepEqual(model.localData[x2mListID]._changes, [{
-                id: 37,
-                operation: "DELETE"
-            }, {
-                id: 38,
-                operation: "DELETE"
-            }, {
-                operation: 'ADD', id: newRecordID,
-            }], "_changes should be correct");
+            assert.deepEqual(model.localData[x2mListID]._changes,[{
+                id:37,
+                operation:"DELETE"
+            },{
+                id:38,
+                operation:"DELETE"
+            },{
+                operation:'ADD',id:newRecordID,
+            }],"_changesshouldbecorrect");
 
-            record = model.get(resultID);
-            assert.strictEqual(record.data.product_ids.count, 1,
-                "there should be one record in the relation");
+            record=model.get(resultID);
+            assert.strictEqual(record.data.product_ids.count,1,
+                "thereshouldbeonerecordintherelation");
 
-            assert.strictEqual(record.data.product_ids.data[0].id, newRecordID,
-                "the id should match");
+            assert.strictEqual(record.data.product_ids.data[0].id,newRecordID,
+                "theidshouldmatch");
         });
 
-        QUnit.test('notifyChange MULTI on a many2many', async function (assert) {
+        QUnit.test('notifyChangeMULTIonamany2many',asyncfunction(assert){
             assert.expect(3);
 
-            this.params.fieldsInfo = {
-                default: {
-                    category: {
-                        fieldsInfo: {default: {some_char: { context: "{'a': parent.foo}"}}},
-                        relatedFields: {some_char: {type: "char"}},
-                        viewType: 'default',
+            this.params.fieldsInfo={
+                default:{
+                    category:{
+                        fieldsInfo:{default:{some_char:{context:"{'a':parent.foo}"}}},
+                        relatedFields:{some_char:{type:"char"}},
+                        viewType:'default',
                     },
-                    foo: {},
+                    foo:{},
                 },
             };
 
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
 
-            var resultID = await model.load(this.params);
-            var changes = {
-                category: {
-                    operation: 'MULTI',
-                    commands: [{
-                        operation: 'ADD_M2M',
-                        ids: [{id: 23}, {id: 24}, {id: 25}]
-                    }, {
-                        operation: 'ADD_M2M',
-                        ids: [{id: 26}]
+            varresultID=awaitmodel.load(this.params);
+            varchanges={
+                category:{
+                    operation:'MULTI',
+                    commands:[{
+                        operation:'ADD_M2M',
+                        ids:[{id:23},{id:24},{id:25}]
+                    },{
+                        operation:'ADD_M2M',
+                        ids:[{id:26}]
                     }]
                 }
             };
-            await model.notifyChanges(resultID, changes);
-            var record = model.get(resultID);
-            var categoryRecord = record.data.category;
+            awaitmodel.notifyChanges(resultID,changes);
+            varrecord=model.get(resultID);
+            varcategoryRecord=record.data.category;
 
-            assert.strictEqual(categoryRecord.data.length, 4,
-                "there should 2 records in the relation");
+            assert.strictEqual(categoryRecord.data.length,4,
+                "thereshould2recordsintherelation");
 
-            await model.notifyChanges(resultID, {category: {
-                operation: 'MULTI',
-                commands: [{
-                    operation: 'DELETE_ALL'
-                }, {
-                    operation: 'ADD_M2M',
-                    ids: [{id: 27}]
+            awaitmodel.notifyChanges(resultID,{category:{
+                operation:'MULTI',
+                commands:[{
+                    operation:'DELETE_ALL'
+                },{
+                    operation:'ADD_M2M',
+                    ids:[{id:27}]
                 }]
             }});
-            record = model.get(resultID);
-            categoryRecord = record.data.category;
-            assert.strictEqual(categoryRecord.data.length, 1,
-                "there should 1 record in the relation");
+            record=model.get(resultID);
+            categoryRecord=record.data.category;
+            assert.strictEqual(categoryRecord.data.length,1,
+                "thereshould1recordintherelation");
 
-            assert.strictEqual(record.data.category.data[0].data.id, 27,
-                "the id should match");
+            assert.strictEqual(record.data.category.data[0].data.id,27,
+                "theidshouldmatch");
 
             model.destroy();
         });
 
-        QUnit.test('identify correct active field', async function(assert) {
+        QUnit.test('identifycorrectactivefield',asyncfunction(assert){
             assert.expect(4);
-            var model = await createModel({
-                Model: BasicModel,
-                data: this.data,
+            varmodel=awaitcreateModel({
+                Model:BasicModel,
+                data:this.data,
             });
-            // check that active field is returned if present
-            this.params.res_id = 37;
-            this.params.modelName = 'product'
-            this.params.fields = this.data.product.fields;
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.equal(model.getActiveField(record), 'active', 'should have returned "active" field name');
-            // check that active field is not returned if not present
-            this.params.res_id = 42;
-            this.params.modelName = 'partner_title';
-            this.params.fields = this.data.partner_title.fields;
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.equal(model.getActiveField(record), undefined, 'should not have returned any field name');
-            // check that x_active field is returned if x_active present
-            this.params.res_id = 12;
-            this.params.modelName = 'partner_type';
-            this.params.fields = this.data.partner_type.fields;
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.equal(model.getActiveField(record), 'x_active', 'should have returned "x_active" field name');
+            //checkthatactivefieldisreturnedifpresent
+            this.params.res_id=37;
+            this.params.modelName='product'
+            this.params.fields=this.data.product.fields;
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.equal(model.getActiveField(record),'active','shouldhavereturned"active"fieldname');
+            //checkthatactivefieldisnotreturnedifnotpresent
+            this.params.res_id=42;
+            this.params.modelName='partner_title';
+            this.params.fields=this.data.partner_title.fields;
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.equal(model.getActiveField(record),undefined,'shouldnothavereturnedanyfieldname');
+            //checkthatx_activefieldisreturnedifx_activepresent
+            this.params.res_id=12;
+            this.params.modelName='partner_type';
+            this.params.fields=this.data.partner_type.fields;
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.equal(model.getActiveField(record),'x_active','shouldhavereturned"x_active"fieldname');
 
-            // check that active field is returned if both active and x_active present
-            this.params.res_id = 1;
-            this.params.modelName = 'partner';
-            this.params.fields = this.data.partner.fields;
-            var resultID = await model.load(this.params);
-            var record = model.get(resultID);
-            assert.equal(model.getActiveField(record), 'active', 'should have returned "active" field name');
+            //checkthatactivefieldisreturnedifbothactiveandx_activepresent
+            this.params.res_id=1;
+            this.params.modelName='partner';
+            this.params.fields=this.data.partner.fields;
+            varresultID=awaitmodel.load(this.params);
+            varrecord=model.get(resultID);
+            assert.equal(model.getActiveField(record),'active','shouldhavereturned"active"fieldname');
         });
     });
 });

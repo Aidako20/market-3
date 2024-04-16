@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="hr_job_website_inherit" model="ir.ui.view">
-        <field name="name">hr.job.form.inherit</field>
-        <field name="model">hr.job</field>
-        <field name="inherit_id" ref="hr_recruitment.view_hr_job_kanban"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('o_kanban_card_header')]" position="before">
-                <field name="website_published" invisible="1"/>
-                <div class="ribbon ribbon-top-right" attrs="{'invisible': [('website_published', '=', False)]}">
-                    <span class="o_recruitment_purple">Published</span>
+    <recordid="hr_job_website_inherit"model="ir.ui.view">
+        <fieldname="name">hr.job.form.inherit</field>
+        <fieldname="model">hr.job</field>
+        <fieldname="inherit_id"ref="hr_recruitment.view_hr_job_kanban"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[hasclass('o_kanban_card_header')]"position="before">
+                <fieldname="website_published"invisible="1"/>
+                <divclass="ribbonribbon-top-right"attrs="{'invisible':[('website_published','=',False)]}">
+                    <spanclass="o_recruitment_purple">Published</span>
                 </div>
             </xpath>
-            <xpath expr="//div[@name='kanban_boxes']/div/div[1]" position="inside">
-                <field name="website_url" invisible="1"/>
+            <xpathexpr="//div[@name='kanban_boxes']/div/div[1]"position="inside">
+                <fieldname="website_url"invisible="1"/>
                 <span>
-                    <a t-attf-href="#{record.website_url.raw_value}" class="mr-2">Job Description</a>
-                    <field name="is_published" widget='boolean_toggle'/>
+                    <at-attf-href="#{record.website_url.raw_value}"class="mr-2">JobDescription</a>
+                    <fieldname="is_published"widget='boolean_toggle'/>
                 </span>
-            </xpath> 
+            </xpath>
         </field>
     </record>
 
-    <record id="view_hr_job_kanban_referal_extends" model="ir.ui.view"> 
-        <field name="model">hr.job</field>
-        <field name="name">hr.job.view.kanban</field>
-        <field name="inherit_id" ref="hr_recruitment.view_hr_job_kanban"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('o_link_trackers')]" position="replace">
-                <div class="o_link_trackers col-6">
-                    <a role="button" name="%(hr_recruitment.action_hr_job_sources)d" type="action" class="btn btn-sm ">
-                        <span title='Link Trackers'><i class='fa fa-lg fa-link' role="img" aria-label="Link Trackers"/></span> 
+    <recordid="view_hr_job_kanban_referal_extends"model="ir.ui.view">
+        <fieldname="model">hr.job</field>
+        <fieldname="name">hr.job.view.kanban</field>
+        <fieldname="inherit_id"ref="hr_recruitment.view_hr_job_kanban"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//div[hasclass('o_link_trackers')]"position="replace">
+                <divclass="o_link_trackerscol-6">
+                    <arole="button"name="%(hr_recruitment.action_hr_job_sources)d"type="action"class="btnbtn-sm">
+                        <spantitle='LinkTrackers'><iclass='fafa-lgfa-link'role="img"aria-label="LinkTrackers"/></span>
                     </a>
                 </div>
             </xpath>

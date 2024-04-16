@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
     <!--
-        @param {mail/static/src/widgets/discuss_invite_partner_dialog/discuss_invite_partner_dialog.js} widget
+        @param{mail/static/src/widgets/discuss_invite_partner_dialog/discuss_invite_partner_dialog.js}widget
     -->
-    <t t-name="mail.widgets.DiscussInvitePartnerDialog">
+    <tt-name="mail.widgets.DiscussInvitePartnerDialog">
         <div>
-            <input class="o_dialog o_input o_invite_partner" type="text"/>
+            <inputclass="o_dialogo_inputo_invite_partner"type="text"/>
         </div>
     </t>
 

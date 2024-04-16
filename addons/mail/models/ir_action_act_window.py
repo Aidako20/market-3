@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-from flectra import fields, models
+#-*-coding:utf-8-*-
+fromflectraimportfields,models
 
 
-class ActWindowView(models.Model):
-    _inherit = 'ir.actions.act_window.view'
+classActWindowView(models.Model):
+    _inherit='ir.actions.act_window.view'
 
-    view_mode = fields.Selection(selection_add=[
-        ('activity', 'Activity')
-    ], ondelete={'activity': 'cascade'})
+    view_mode=fields.Selection(selection_add=[
+        ('activity','Activity')
+    ],ondelete={'activity':'cascade'})

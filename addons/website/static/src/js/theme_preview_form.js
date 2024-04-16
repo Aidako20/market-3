@@ -1,154 +1,154 @@
-flectra.define('website.theme_preview_form', function (require) {
-"use strict";
+flectra.define('website.theme_preview_form',function(require){
+"usestrict";
 
-var FormController = require('web.FormController');
-var FormView = require('web.FormView');
-var viewRegistry = require('web.view_registry');
-var core = require('web.core');
-var qweb = core.qweb;
+varFormController=require('web.FormController');
+varFormView=require('web.FormView');
+varviewRegistry=require('web.view_registry');
+varcore=require('web.core');
+varqweb=core.qweb;
 
 /*
-* Common code for theme installation/update handler.
+*Commoncodeforthemeinstallation/updatehandler.
 */
-const ThemePreviewControllerCommon = {
+constThemePreviewControllerCommon={
     /**
-     * Called to add loading effect and install/pdate the selected theme depending on action.
+     *Calledtoaddloadingeffectandinstall/pdatetheselectedthemedependingonaction.
      *
-     * @private
-     * @param {number} res_id
-     * @param {String} action
+     *@private
+     *@param{number}res_id
+     *@param{String}action
      */
-    _handleThemeAction(res_id, action) {
-        this.$loader = $(qweb.render('website.ThemePreview.Loader', {
-            'showTips': action !== 'button_refresh_theme',
+    _handleThemeAction(res_id,action){
+        this.$loader=$(qweb.render('website.ThemePreview.Loader',{
+            'showTips':action!=='button_refresh_theme',
         }));
-        let actionCallback = undefined;
+        letactionCallback=undefined;
         this._addLoader();
-        switch (action) {
-            case 'button_choose_theme':
-                actionCallback = result => this.do_action(result);
+        switch(action){
+            case'button_choose_theme':
+                actionCallback=result=>this.do_action(result);
                 break;
-            case 'button_refresh_theme':
-                actionCallback = () => this._removeLoader();
+            case'button_refresh_theme':
+                actionCallback=()=>this._removeLoader();
                 break;
         }
-        const rpcData = {
-            model: 'ir.module.module',
-            method: action,
-            args: [res_id],
-            context: this.initialState.context,
+        constrpcData={
+            model:'ir.module.module',
+            method:action,
+            args:[res_id],
+            context:this.initialState.context,
         };
-        const rpcOptions = {
-            shadow: true,
+        constrpcOptions={
+            shadow:true,
         };
-        this._rpc(rpcData, rpcOptions)
+        this._rpc(rpcData,rpcOptions)
             .then(actionCallback)
-            .guardedCatch(() => this._removeLoader());
+            .guardedCatch(()=>this._removeLoader());
     },
     /**
-     * Called to add loader element in DOM.
+     *CalledtoaddloaderelementinDOM.
      *
-     * @private
+     *@private
      */
-    _addLoader() {
+    _addLoader(){
         $('body').append(this.$loader);
     },
     /**
-     * @private
+     *@private
      */
-    _removeLoader() {
+    _removeLoader(){
         this.$loader.remove();
     }
 };
 
-var ThemePreviewController = FormController.extend(ThemePreviewControllerCommon, {
-    events: Object.assign({}, FormController.prototype.events, {
-        'click .o_use_theme': '_onStartNowClick',
-        'click .o_switch_theme': '_onSwitchThemeClick',
-        'change input[name="viewer"]': '_onSwitchButtonChange',
+varThemePreviewController=FormController.extend(ThemePreviewControllerCommon,{
+    events:Object.assign({},FormController.prototype.events,{
+        'click.o_use_theme':'_onStartNowClick',
+        'click.o_switch_theme':'_onSwitchThemeClick',
+        'changeinput[name="viewer"]':'_onSwitchButtonChange',
     }),
     /**
-     * @override
+     *@override
      */
-    start: function () {
+    start:function(){
         this.$el.addClass('o_view_form_theme_preview_controller');
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 
-    // -------------------------------------------------------------------------
-    // Public
-    // -------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //Public
+    //-------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    renderButtons: function ($node) {
-        this.$buttons = $(qweb.render('website.ThemePreview.Buttons'));
-        if ($node) {
+    renderButtons:function($node){
+        this.$buttons=$(qweb.render('website.ThemePreview.Buttons'));
+        if($node){
             $node.html(this.$buttons);
         }
     },
     /**
-     * Overriden to prevent the controller from hiding the buttons
-     * @see FormController
+     *Overridentopreventthecontrollerfromhidingthebuttons
+     *@seeFormController
      *
-     * @override
+     *@override
      */
-    updateButtons: function () { },
+    updateButtons:function(){},
 
-    // -------------------------------------------------------------------------
-    // Private
-    // -------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //Private
+    //-------------------------------------------------------------------------
     /**
-     * Add Switcher View Mobile / Desktop near pager
+     *AddSwitcherViewMobile/Desktopnearpager
      *
-     * @private
+     *@private
      */
-    _updateControlPanelProps: async function () {
-        const props = this._super(...arguments);
-        const $switchModeButton = $(qweb.render('website.ThemePreview.SwitchModeButton'));
-        this.controlPanelProps.cp_content.$pager = $switchModeButton;
-        return props;
+    _updateControlPanelProps:asyncfunction(){
+        constprops=this._super(...arguments);
+        const$switchModeButton=$(qweb.render('website.ThemePreview.SwitchModeButton'));
+        this.controlPanelProps.cp_content.$pager=$switchModeButton;
+        returnprops;
     },
 
-    // -------------------------------------------------------------------------
-    // Handlers
-    // -------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //Handlers
+    //-------------------------------------------------------------------------
     /**
-     * Handler called when user click on 'Desktop/Mobile' switcher button.
+     *Handlercalledwhenuserclickon'Desktop/Mobile'switcherbutton.
      *
-     * @private
+     *@private
      */
-    _onSwitchButtonChange: function () {
+    _onSwitchButtonChange:function(){
         this.$('.o_preview_frame').toggleClass('is_mobile');
     },
     /**
-     * Handler called when user click on 'Choose another theme' button.
+     *Handlercalledwhenuserclickon'Chooseanothertheme'button.
      *
-     * @private
+     *@private
      */
-    _onSwitchThemeClick: function () {
+    _onSwitchThemeClick:function(){
         this.trigger_up('history_back');
     },
     /**
-     * Handler called when user click on 'START NOW' button in form view.
+     *Handlercalledwhenuserclickon'STARTNOW'buttoninformview.
      *
-     * @private
+     *@private
      */
-    _onStartNowClick: function () {
-        this._handleThemeAction(this.getSelectedIds()[0], 'button_choose_theme');
+    _onStartNowClick:function(){
+        this._handleThemeAction(this.getSelectedIds()[0],'button_choose_theme');
     },
 });
 
-var ThemePreviewFormView = FormView.extend({
-    config: _.extend({}, FormView.prototype.config, {
-        Controller: ThemePreviewController
+varThemePreviewFormView=FormView.extend({
+    config:_.extend({},FormView.prototype.config,{
+        Controller:ThemePreviewController
     }),
 });
 
-viewRegistry.add('theme_preview_form', ThemePreviewFormView);
+viewRegistry.add('theme_preview_form',ThemePreviewFormView);
 
-return {
-    ThemePreviewControllerCommon: ThemePreviewControllerCommon
+return{
+    ThemePreviewControllerCommon:ThemePreviewControllerCommon
 }
 });

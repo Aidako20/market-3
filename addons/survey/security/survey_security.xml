@@ -1,184 +1,184 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record model="ir.module.category" id="base.module_category_marketing_surveys">
-            <field name="description">Helps you manage your survey for review of different-different users.</field>
-            <field name="sequence">20</field>
+    <datanoupdate="1">
+        <recordmodel="ir.module.category"id="base.module_category_marketing_surveys">
+            <fieldname="description">Helpsyoumanageyoursurveyforreviewofdifferent-differentusers.</field>
+            <fieldname="sequence">20</field>
         </record>
 
-        <!-- Survey users -->
-        <record model="res.groups" id="group_survey_user">
-            <field name="name">User</field>
-            <field name="category_id" ref="base.module_category_marketing_surveys"/>
+        <!--Surveyusers-->
+        <recordmodel="res.groups"id="group_survey_user">
+            <fieldname="name">User</field>
+            <fieldname="category_id"ref="base.module_category_marketing_surveys"/>
         </record>
 
-        <!-- Survey managers -->
-        <record model="res.groups" id="group_survey_manager">
-            <field name="name">Administrator</field>
-            <field name="category_id" ref="base.module_category_marketing_surveys"/>
-            <field name="implied_ids" eval="[(4, ref('group_survey_user'))]"/>
-            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <!--Surveymanagers-->
+        <recordmodel="res.groups"id="group_survey_manager">
+            <fieldname="name">Administrator</field>
+            <fieldname="category_id"ref="base.module_category_marketing_surveys"/>
+            <fieldname="implied_ids"eval="[(4,ref('group_survey_user'))]"/>
+            <fieldname="users"eval="[(4,ref('base.user_root')),(4,ref('base.user_admin'))]"/>
         </record>
 
-        <record id="base.default_user" model="res.users">
-            <field name="groups_id" eval="[(4,ref('group_survey_manager'))]"/>
+        <recordid="base.default_user"model="res.users">
+            <fieldname="groups_id"eval="[(4,ref('group_survey_manager'))]"/>
         </record>
 
-        <!-- SURVEY: SURVEY, PAGE, STAGE, QUESTION, LABEL -->
-        <record id="survey_survey_rule_survey_manager" model="ir.rule">
-            <field name="name">Survey: manager: all</field>
-            <field name="model_id" ref="survey.model_survey_survey"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_manager'))]"/>
-            <field name="perm_unlink" eval="1"/>
-            <field name="perm_write" eval="1"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="1"/>
+        <!--SURVEY:SURVEY,PAGE,STAGE,QUESTION,LABEL-->
+        <recordid="survey_survey_rule_survey_manager"model="ir.rule">
+            <fieldname="name">Survey:manager:all</field>
+            <fieldname="model_id"ref="survey.model_survey_survey"/>
+            <fieldname="domain_force">[(1,'=',1)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_manager'))]"/>
+            <fieldname="perm_unlink"eval="1"/>
+            <fieldname="perm_write"eval="1"/>
+            <fieldname="perm_read"eval="1"/>
+            <fieldname="perm_create"eval="1"/>
         </record>
-        <record id="survey_survey_rule_survey_user_read" model="ir.rule">
-            <field name="name">Survey: officer: read all</field>
-            <field name="model_id" ref="survey.model_survey_survey"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_user'))]"/>
-            <field name="perm_unlink" eval="0"/>
-            <field name="perm_write" eval="0"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="0"/>
+        <recordid="survey_survey_rule_survey_user_read"model="ir.rule">
+            <fieldname="name">Survey:officer:readall</field>
+            <fieldname="model_id"ref="survey.model_survey_survey"/>
+            <fieldname="domain_force">[(1,'=',1)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_user'))]"/>
+            <fieldname="perm_unlink"eval="0"/>
+            <fieldname="perm_write"eval="0"/>
+            <fieldname="perm_read"eval="1"/>
+            <fieldname="perm_create"eval="0"/>
         </record>
-        <record id="survey_survey_rule_survey_user_cwu" model="ir.rule">
-            <field name="name">Survey: officer: create/write/unlink own only</field>
-            <field name="model_id" ref="survey.model_survey_survey"/>
-            <field name="domain_force">[('create_uid', '=', user.id)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_user'))]"/>
-            <field name="perm_unlink" eval="1"/>
-            <field name="perm_write" eval="1"/>
-            <field name="perm_read" eval="0"/>
-            <field name="perm_create" eval="1"/>
-        </record>
-
-        <record id="survey_question_rule_survey_manager" model="ir.rule">
-            <field name="name">Survey question: manager: all</field>
-            <field name="model_id" ref="survey.model_survey_question"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_manager'))]"/>
-            <field name="perm_unlink" eval="1"/>
-            <field name="perm_write" eval="1"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="1"/>
-        </record>
-        <record id="survey_question_rule_survey_user_read" model="ir.rule">
-            <field name="name">Survey question: officer: read all</field>
-            <field name="model_id" ref="survey.model_survey_question"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_user'))]"/>
-            <field name="perm_unlink" eval="0"/>
-            <field name="perm_write" eval="0"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="0"/>
-        </record>
-        <record id="survey_question_rule_survey_user_cw" model="ir.rule">
-            <field name="name">Survey question: officer: create/write/unlink linked to own survey only</field>
-            <field name="model_id" ref="survey.model_survey_question"/>
-            <field name="domain_force">[('survey_id.create_uid', '=', user.id)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_user'))]"/>
-            <field name="perm_unlink" eval="1"/>
-            <field name="perm_write" eval="1"/>
-            <field name="perm_read" eval="0"/>
-            <field name="perm_create" eval="1"/>
+        <recordid="survey_survey_rule_survey_user_cwu"model="ir.rule">
+            <fieldname="name">Survey:officer:create/write/unlinkownonly</field>
+            <fieldname="model_id"ref="survey.model_survey_survey"/>
+            <fieldname="domain_force">[('create_uid','=',user.id)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_user'))]"/>
+            <fieldname="perm_unlink"eval="1"/>
+            <fieldname="perm_write"eval="1"/>
+            <fieldname="perm_read"eval="0"/>
+            <fieldname="perm_create"eval="1"/>
         </record>
 
-        <record id="survey_question_answer_rule_survey_manager" model="ir.rule">
-            <field name="name">Survey question answer: manager: all</field>
-            <field name="model_id" ref="survey.model_survey_question_answer"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_manager'))]"/>
-            <field name="perm_unlink" eval="1"/>
-            <field name="perm_write" eval="1"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="1"/>
+        <recordid="survey_question_rule_survey_manager"model="ir.rule">
+            <fieldname="name">Surveyquestion:manager:all</field>
+            <fieldname="model_id"ref="survey.model_survey_question"/>
+            <fieldname="domain_force">[(1,'=',1)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_manager'))]"/>
+            <fieldname="perm_unlink"eval="1"/>
+            <fieldname="perm_write"eval="1"/>
+            <fieldname="perm_read"eval="1"/>
+            <fieldname="perm_create"eval="1"/>
         </record>
-        <record id="survey_question_answer_rule_survey_user_read" model="ir.rule">
-            <field name="name">Survey question answer: officer: read all</field>
-            <field name="model_id" ref="survey.model_survey_question_answer"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_user'))]"/>
-            <field name="perm_unlink" eval="0"/>
-            <field name="perm_write" eval="0"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="0"/>
+        <recordid="survey_question_rule_survey_user_read"model="ir.rule">
+            <fieldname="name">Surveyquestion:officer:readall</field>
+            <fieldname="model_id"ref="survey.model_survey_question"/>
+            <fieldname="domain_force">[(1,'=',1)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_user'))]"/>
+            <fieldname="perm_unlink"eval="0"/>
+            <fieldname="perm_write"eval="0"/>
+            <fieldname="perm_read"eval="1"/>
+            <fieldname="perm_create"eval="0"/>
         </record>
-        <record id="survey_question_answer_rule_survey_user_cw" model="ir.rule">
-            <field name="name">Survey question answer: officer: create/write/unlink linked to own survey only</field>
-            <field name="model_id" ref="survey.model_survey_question_answer"/>
-            <field name="domain_force">['|', ('question_id.survey_id.create_uid', '=', user.id), ('matrix_question_id.survey_id.create_uid', '=', user.id)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_user'))]"/>
-            <field name="perm_unlink" eval="1"/>
-            <field name="perm_write" eval="1"/>
-            <field name="perm_read" eval="0"/>
-            <field name="perm_create" eval="1"/>
-        </record>
-
-        <!-- SURVEY: USER_INPUT, USER_INPUT_LINE -->
-        <record id="survey_user_input_rule_survey_manager" model="ir.rule">
-            <field name="name">Survey user input: manager: all</field>
-            <field name="model_id" ref="survey.model_survey_user_input"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_manager'))]"/>
-            <field name="perm_unlink" eval="1"/>
-            <field name="perm_write" eval="1"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="1"/>
-        </record>
-        <record id="survey_user_input_rule_survey_user_read" model="ir.rule">
-            <field name="name">Survey user input: officer: read all</field>
-            <field name="model_id" ref="survey.model_survey_user_input"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_user'))]"/>
-            <field name="perm_unlink" eval="0"/>
-            <field name="perm_write" eval="0"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="0"/>
-        </record>
-        <record id="survey_user_input_rule_survey_user_cw" model="ir.rule">
-            <field name="name">Survey user input: officer: create/write/unlink linked to own survey only</field>
-            <field name="model_id" ref="survey.model_survey_user_input"/>
-            <field name="domain_force">[('survey_id.create_uid', '=', user.id)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_user'))]"/>
-            <field name="perm_unlink" eval="1"/>
-            <field name="perm_write" eval="1"/>
-            <field name="perm_read" eval="0"/>
-            <field name="perm_create" eval="1"/>
+        <recordid="survey_question_rule_survey_user_cw"model="ir.rule">
+            <fieldname="name">Surveyquestion:officer:create/write/unlinklinkedtoownsurveyonly</field>
+            <fieldname="model_id"ref="survey.model_survey_question"/>
+            <fieldname="domain_force">[('survey_id.create_uid','=',user.id)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_user'))]"/>
+            <fieldname="perm_unlink"eval="1"/>
+            <fieldname="perm_write"eval="1"/>
+            <fieldname="perm_read"eval="0"/>
+            <fieldname="perm_create"eval="1"/>
         </record>
 
-        <record id="survey_user_input_line_rule_survey_manager" model="ir.rule">
-            <field name="name">Survey user input line: manager: all</field>
-            <field name="model_id" ref="survey.model_survey_user_input_line"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_manager'))]"/>
-            <field name="perm_unlink" eval="1"/>
-            <field name="perm_write" eval="1"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="1"/>
+        <recordid="survey_question_answer_rule_survey_manager"model="ir.rule">
+            <fieldname="name">Surveyquestionanswer:manager:all</field>
+            <fieldname="model_id"ref="survey.model_survey_question_answer"/>
+            <fieldname="domain_force">[(1,'=',1)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_manager'))]"/>
+            <fieldname="perm_unlink"eval="1"/>
+            <fieldname="perm_write"eval="1"/>
+            <fieldname="perm_read"eval="1"/>
+            <fieldname="perm_create"eval="1"/>
         </record>
-        <record id="survey_user_input_line_rule_survey_user_read" model="ir.rule">
-            <field name="name">Survey user input line: officer: read all</field>
-            <field name="model_id" ref="survey.model_survey_user_input_line"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_user'))]"/>
-            <field name="perm_unlink" eval="0"/>
-            <field name="perm_write" eval="0"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_create" eval="0"/>
+        <recordid="survey_question_answer_rule_survey_user_read"model="ir.rule">
+            <fieldname="name">Surveyquestionanswer:officer:readall</field>
+            <fieldname="model_id"ref="survey.model_survey_question_answer"/>
+            <fieldname="domain_force">[(1,'=',1)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_user'))]"/>
+            <fieldname="perm_unlink"eval="0"/>
+            <fieldname="perm_write"eval="0"/>
+            <fieldname="perm_read"eval="1"/>
+            <fieldname="perm_create"eval="0"/>
         </record>
-        <record id="survey_user_input_line_rule_survey_user_cw" model="ir.rule">
-            <field name="name">Survey user input line: officer: create/write/unlink linked to own survey only</field>
-            <field name="model_id" ref="survey.model_survey_user_input_line"/>
-            <field name="domain_force">[('user_input_id.survey_id.create_uid', '=', user.id)]</field>
-            <field name="groups" eval="[(4, ref('group_survey_user'))]"/>
-            <field name="perm_unlink" eval="1"/>
-            <field name="perm_write" eval="1"/>
-            <field name="perm_read" eval="0"/>
-            <field name="perm_create" eval="1"/>
+        <recordid="survey_question_answer_rule_survey_user_cw"model="ir.rule">
+            <fieldname="name">Surveyquestionanswer:officer:create/write/unlinklinkedtoownsurveyonly</field>
+            <fieldname="model_id"ref="survey.model_survey_question_answer"/>
+            <fieldname="domain_force">['|',('question_id.survey_id.create_uid','=',user.id),('matrix_question_id.survey_id.create_uid','=',user.id)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_user'))]"/>
+            <fieldname="perm_unlink"eval="1"/>
+            <fieldname="perm_write"eval="1"/>
+            <fieldname="perm_read"eval="0"/>
+            <fieldname="perm_create"eval="1"/>
+        </record>
+
+        <!--SURVEY:USER_INPUT,USER_INPUT_LINE-->
+        <recordid="survey_user_input_rule_survey_manager"model="ir.rule">
+            <fieldname="name">Surveyuserinput:manager:all</field>
+            <fieldname="model_id"ref="survey.model_survey_user_input"/>
+            <fieldname="domain_force">[(1,'=',1)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_manager'))]"/>
+            <fieldname="perm_unlink"eval="1"/>
+            <fieldname="perm_write"eval="1"/>
+            <fieldname="perm_read"eval="1"/>
+            <fieldname="perm_create"eval="1"/>
+        </record>
+        <recordid="survey_user_input_rule_survey_user_read"model="ir.rule">
+            <fieldname="name">Surveyuserinput:officer:readall</field>
+            <fieldname="model_id"ref="survey.model_survey_user_input"/>
+            <fieldname="domain_force">[(1,'=',1)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_user'))]"/>
+            <fieldname="perm_unlink"eval="0"/>
+            <fieldname="perm_write"eval="0"/>
+            <fieldname="perm_read"eval="1"/>
+            <fieldname="perm_create"eval="0"/>
+        </record>
+        <recordid="survey_user_input_rule_survey_user_cw"model="ir.rule">
+            <fieldname="name">Surveyuserinput:officer:create/write/unlinklinkedtoownsurveyonly</field>
+            <fieldname="model_id"ref="survey.model_survey_user_input"/>
+            <fieldname="domain_force">[('survey_id.create_uid','=',user.id)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_user'))]"/>
+            <fieldname="perm_unlink"eval="1"/>
+            <fieldname="perm_write"eval="1"/>
+            <fieldname="perm_read"eval="0"/>
+            <fieldname="perm_create"eval="1"/>
+        </record>
+
+        <recordid="survey_user_input_line_rule_survey_manager"model="ir.rule">
+            <fieldname="name">Surveyuserinputline:manager:all</field>
+            <fieldname="model_id"ref="survey.model_survey_user_input_line"/>
+            <fieldname="domain_force">[(1,'=',1)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_manager'))]"/>
+            <fieldname="perm_unlink"eval="1"/>
+            <fieldname="perm_write"eval="1"/>
+            <fieldname="perm_read"eval="1"/>
+            <fieldname="perm_create"eval="1"/>
+        </record>
+        <recordid="survey_user_input_line_rule_survey_user_read"model="ir.rule">
+            <fieldname="name">Surveyuserinputline:officer:readall</field>
+            <fieldname="model_id"ref="survey.model_survey_user_input_line"/>
+            <fieldname="domain_force">[(1,'=',1)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_user'))]"/>
+            <fieldname="perm_unlink"eval="0"/>
+            <fieldname="perm_write"eval="0"/>
+            <fieldname="perm_read"eval="1"/>
+            <fieldname="perm_create"eval="0"/>
+        </record>
+        <recordid="survey_user_input_line_rule_survey_user_cw"model="ir.rule">
+            <fieldname="name">Surveyuserinputline:officer:create/write/unlinklinkedtoownsurveyonly</field>
+            <fieldname="model_id"ref="survey.model_survey_user_input_line"/>
+            <fieldname="domain_force">[('user_input_id.survey_id.create_uid','=',user.id)]</field>
+            <fieldname="groups"eval="[(4,ref('group_survey_user'))]"/>
+            <fieldname="perm_unlink"eval="1"/>
+            <fieldname="perm_write"eval="1"/>
+            <fieldname="perm_read"eval="0"/>
+            <fieldname="perm_create"eval="1"/>
         </record>
     </data>
 </flectra>

@@ -1,72 +1,72 @@
-flectra.define('barcodes.barcode_mobile_tests', function () {
-    "use strict";
+flectra.define('barcodes.barcode_mobile_tests',function(){
+    "usestrict";
 
-    QUnit.module('Barcodes', {}, function () {
+    QUnit.module('Barcodes',{},function(){
 
-        QUnit.module('Barcodes Mobile');
+        QUnit.module('BarcodesMobile');
 
-        QUnit.test('barcode field automatically focus behavior', function (assert) {
+        QUnit.test('barcodefieldautomaticallyfocusbehavior',function(assert){
             assert.expect(10);
 
-            // Mock Chrome mobile environment
-            var barcodeEvents = flectra.__DEBUG__.services["barcodes.BarcodeEvents"].BarcodeEvents;
-            var __isChromeMobile = barcodeEvents.isChromeMobile;
-            barcodeEvents.isChromeMobile = true;
-            // Rebind keyboard events
+            //MockChromemobileenvironment
+            varbarcodeEvents=flectra.__DEBUG__.services["barcodes.BarcodeEvents"].BarcodeEvents;
+            var__isChromeMobile=barcodeEvents.isChromeMobile;
+            barcodeEvents.isChromeMobile=true;
+            //Rebindkeyboardevents
             barcodeEvents.stop();
             barcodeEvents.start();
 
-            var $form = $(
-                '<form>' +
-                    '<input name="email" type="email"/>' +
-                    '<input name="number" type="number"/>' +
-                    '<input name="password" type="password"/>' +
-                    '<input name="tel" type="tel"/>' +
-                    '<input name="text"/>' +
-                    '<input name="explicit_text" type="text"/>' +
-                    '<textarea></textarea>' +
-                    '<div contenteditable="true"></div>' +
-                    '<select name="select">' +
-                        '<option value="option1">Option 1</option>' +
-                        '<option value="option2">Option 2</option>' +
-                    '</select>' +
+            var$form=$(
+                '<form>'+
+                    '<inputname="email"type="email"/>'+
+                    '<inputname="number"type="number"/>'+
+                    '<inputname="password"type="password"/>'+
+                    '<inputname="tel"type="tel"/>'+
+                    '<inputname="text"/>'+
+                    '<inputname="explicit_text"type="text"/>'+
+                    '<textarea></textarea>'+
+                    '<divcontenteditable="true"></div>'+
+                    '<selectname="select">'+
+                        '<optionvalue="option1">Option1</option>'+
+                        '<optionvalue="option2">Option2</option>'+
+                    '</select>'+
                 '</form>');
             $('#qunit-fixture').append($form);
 
-            // Some elements doesn't need to keep the focus
+            //Someelementsdoesn'tneedtokeepthefocus
             $('body').keydown();
-            assert.strictEqual(document.activeElement.name, 'barcode',
-                "hidden barcode input should have the focus");
+            assert.strictEqual(document.activeElement.name,'barcode',
+                "hiddenbarcodeinputshouldhavethefocus");
 
-            var $element = $form.find('select');
+            var$element=$form.find('select');
             $element.focus().keydown();
-            assert.strictEqual(document.activeElement.name, 'barcode',
-                "hidden barcode input should have the focus");
+            assert.strictEqual(document.activeElement.name,'barcode',
+                "hiddenbarcodeinputshouldhavethefocus");
 
-            // Those elements absolutely need to keep the focus:
-            // inputs elements:
-            var keepFocusedElements = ['email', 'number', 'password', 'tel',
-                'text', 'explicit_text'];
-            for (var i = 0; i < keepFocusedElements.length; ++i) {
-                $element = $form.find('input[name=' + keepFocusedElements[i] + ']');
+            //Thoseelementsabsolutelyneedtokeepthefocus:
+            //inputselements:
+            varkeepFocusedElements=['email','number','password','tel',
+                'text','explicit_text'];
+            for(vari=0;i<keepFocusedElements.length;++i){
+                $element=$form.find('input[name='+keepFocusedElements[i]+']');
                 $element.focus().keydown();
-                assert.strictEqual(document.activeElement, $element[0],
-                    "input " + keepFocusedElements[i] + " should keep focus");
+                assert.strictEqual(document.activeElement,$element[0],
+                    "input"+keepFocusedElements[i]+"shouldkeepfocus");
             }
-            // textarea element
-            $element = $form.find('textarea');
+            //textareaelement
+            $element=$form.find('textarea');
             $element.focus().keydown();
-            assert.strictEqual(document.activeElement, $element[0],
-                "textarea should keep focus");
-            // contenteditable elements
-            $element = $form.find('[contenteditable=true]');
+            assert.strictEqual(document.activeElement,$element[0],
+                "textareashouldkeepfocus");
+            //contenteditableelements
+            $element=$form.find('[contenteditable=true]');
             $element.focus().keydown();
-            assert.strictEqual(document.activeElement, $element[0],
-                "contenteditable should keep focus");
+            assert.strictEqual(document.activeElement,$element[0],
+                "contenteditableshouldkeepfocus");
 
             $('#qunit-fixture').empty();
-            barcodeEvents.isChromeMobile = __isChromeMobile;
-            // Rebind keyboard events
+            barcodeEvents.isChromeMobile=__isChromeMobile;
+            //Rebindkeyboardevents
             barcodeEvents.stop();
             barcodeEvents.start();
 

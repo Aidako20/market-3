@@ -1,20 +1,20 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import http
-from flectra.http import request
+fromflectraimporthttp
+fromflectra.httpimportrequest
 
 
-class NoteController(http.Controller):
+classNoteController(http.Controller):
 
-    @http.route('/note/new', type='json', auth='user')
-    def note_new_from_systray(self, note, activity_type_id=None, date_deadline=None):
-        """ Route to create note and their activity directly from the systray """
-        note = request.env['note.note'].create({'memo': note})
-        if date_deadline:
+    @http.route('/note/new',type='json',auth='user')
+    defnote_new_from_systray(self,note,activity_type_id=None,date_deadline=None):
+        """Routetocreatenoteandtheiractivitydirectlyfromthesystray"""
+        note=request.env['note.note'].create({'memo':note})
+        ifdate_deadline:
             note.activity_schedule(
-                activity_type_id=activity_type_id or request.env['mail.activity.type'].sudo().search([('category', '=', 'reminder')], limit=1).id,
+                activity_type_id=activity_type_idorrequest.env['mail.activity.type'].sudo().search([('category','=','reminder')],limit=1).id,
                 note=note.memo,
                 date_deadline=date_deadline
             )
-        return note.id
+        returnnote.id

@@ -1,60 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <template id="report_pricelist_page">
-        <div class="container bg-white p-4 my-4">
-            <div class="row my-3">
-                <div class="col-12">
-                    <h2 t-if="is_html_type">
+    <templateid="report_pricelist_page">
+        <divclass="containerbg-whitep-4my-4">
+            <divclass="rowmy-3">
+                <divclass="col-12">
+                    <h2t-if="is_html_type">
                         Pricelist:
-                        <a href="#" class="o_action" data-model="product.pricelist" t-att-data-res-id="pricelist.id">
-                            <t t-esc="pricelist.display_name"/>
+                        <ahref="#"class="o_action"data-model="product.pricelist"t-att-data-res-id="pricelist.id">
+                            <tt-esc="pricelist.display_name"/>
                         </a>
                     </h2>
-                    <h2 t-else="">
-                        Pricelist: <t t-esc="pricelist.display_name"/>
+                    <h2t-else="">
+                        Pricelist:<tt-esc="pricelist.display_name"/>
                     </h2>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <table class="table table-sm">
+            <divclass="row">
+                <divclass="col-12">
+                    <tableclass="tabletable-sm">
                         <thead>
                             <tr>
                                 <th>Products</th>
-                                <t t-foreach="quantities" t-as="qty">
-                                    <th class="text-right"><t t-esc="qty"/> Units</th>
+                                <tt-foreach="quantities"t-as="qty">
+                                    <thclass="text-right"><tt-esc="qty"/>Units</th>
                                 </t>
                             </tr>
                         </thead>
                         <tbody>
-                            <t t-foreach="products" t-as="product">
+                            <tt-foreach="products"t-as="product">
                                 <tr>
-                                    <td t-att-class="is_product_tmpl and 'font-weight-bold' or None">
-                                        <a t-if="is_html_type" href="#" class="o_action" t-att-data-model="is_product_tmpl and 'product.template' or 'product.product'" t-att-data-res-id="product['id']">
-                                            <t t-esc="product['name']"/>
+                                    <tdt-att-class="is_product_tmpland'font-weight-bold'orNone">
+                                        <at-if="is_html_type"href="#"class="o_action"t-att-data-model="is_product_tmpland'product.template'or'product.product'"t-att-data-res-id="product['id']">
+                                            <tt-esc="product['name']"/>
                                         </a>
-                                        <t t-else="">
-                                            <t t-esc="product['name']"/>
+                                        <tt-else="">
+                                            <tt-esc="product['name']"/>
                                         </t>
                                     </td>
-                                    <t t-foreach="quantities" t-as="qty">
-                                        <td class="text-right">
-                                            <t t-esc="product['price'][qty]" t-options='{"widget": "monetary", "display_currency": pricelist.currency_id}'/>
+                                    <tt-foreach="quantities"t-as="qty">
+                                        <tdclass="text-right">
+                                            <tt-esc="product['price'][qty]"t-options='{"widget":"monetary","display_currency":pricelist.currency_id}'/>
                                         </td>
                                     </t>
                                 </tr>
-                                <t t-if="is_product_tmpl">
-                                    <tr t-foreach="product['variants']" t-as="variant">
+                                <tt-if="is_product_tmpl">
+                                    <trt-foreach="product['variants']"t-as="variant">
                                         <td>
-                                            <a t-if="is_html_type" href="#" class="o_action ml-4" data-model="product.product" t-att-data-res-id="variant['id']">
-                                                <t t-esc="variant['name']"/>
+                                            <at-if="is_html_type"href="#"class="o_actionml-4"data-model="product.product"t-att-data-res-id="variant['id']">
+                                                <tt-esc="variant['name']"/>
                                             </a>
-                                            <span t-else="" class="ml-4" t-esc="variant['name']"/>
+                                            <spant-else=""class="ml-4"t-esc="variant['name']"/>
                                         </td>
-                                        <t t-foreach="quantities" t-as="qty">
-                                            <td class="text-right">
-                                                <t t-esc="variant['price'][qty]" t-options='{"widget": "monetary", "display_currency": pricelist.currency_id}'/>
+                                        <tt-foreach="quantities"t-as="qty">
+                                            <tdclass="text-right">
+                                                <tt-esc="variant['price'][qty]"t-options='{"widget":"monetary","display_currency":pricelist.currency_id}'/>
                                             </td>
                                         </t>
                                     </tr>
@@ -67,12 +67,12 @@
         </div>
     </template>
 
-    <template id="report_pricelist">
-        <t t-call="web.basic_layout">
-            <div class="page">
-                <t t-call="product.report_pricelist_page"/>
+    <templateid="report_pricelist">
+        <tt-call="web.basic_layout">
+            <divclass="page">
+                <tt-call="product.report_pricelist_page"/>
             </div>
-            <p style="page-break-before:always;"> </p>
+            <pstyle="page-break-before:always;"></p>
         </t>
     </template>
 

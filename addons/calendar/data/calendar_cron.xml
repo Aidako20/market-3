@@ -1,18 +1,18 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra>
-    <data noupdate="1">
-        <!-- Scheduler for Event Alarm-->
-        <record forcecreate="True" id="ir_cron_scheduler_alarm" model="ir.cron">
-            <field name="name">Calendar: Event Reminder</field>
-            <field name="model_id" ref="model_calendar_alarm_manager"/>
-            <field name="state">code</field>
-            <field name="code">model.get_next_mail()</field>
-            <field eval="False" name="active" />
-            <field name="user_id" ref="base.user_root" />
-            <field name="interval_number">30</field>
-            <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
-            <field eval="False" name="doall" />
+    <datanoupdate="1">
+        <!--SchedulerforEventAlarm-->
+        <recordforcecreate="True"id="ir_cron_scheduler_alarm"model="ir.cron">
+            <fieldname="name">Calendar:EventReminder</field>
+            <fieldname="model_id"ref="model_calendar_alarm_manager"/>
+            <fieldname="state">code</field>
+            <fieldname="code">model.get_next_mail()</field>
+            <fieldeval="False"name="active"/>
+            <fieldname="user_id"ref="base.user_root"/>
+            <fieldname="interval_number">30</field>
+            <fieldname="interval_type">minutes</field>
+            <fieldname="numbercall">-1</field>
+            <fieldeval="False"name="doall"/>
         </record>
     </data>
-</flectra> 
+</flectra>

@@ -1,17 +1,17 @@
-flectra.define('point_of_sale.PSNumpadInputButton', function(require) {
-    'use strict';
+flectra.define('point_of_sale.PSNumpadInputButton',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
-    class PSNumpadInputButton extends PosComponent {
-        get _class() {
-            return this.props.changeClassTo || 'input-button number-char';
+    classPSNumpadInputButtonextendsPosComponent{
+        get_class(){
+            returnthis.props.changeClassTo||'input-buttonnumber-char';
         }
     }
-    PSNumpadInputButton.template = 'PSNumpadInputButton';
+    PSNumpadInputButton.template='PSNumpadInputButton';
 
     Registries.Component.add(PSNumpadInputButton);
 
-    return PSNumpadInputButton;
+    returnPSNumpadInputButton;
 });

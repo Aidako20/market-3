@@ -1,59 +1,59 @@
-//! moment.js locale configuration
-//! locale  :  Arabic (Tunisia) [ar-tn]
-//! author : Nader Toukabri : https://github.com/naderio
+//!moment.jslocaleconfiguration
+//!locale : Arabic(Tunisia)[ar-tn]
+//!author:NaderToukabri:https://github.com/naderio
 
-;(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined'
-       && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+;(function(global,factory){
+   typeofexports==='object'&&typeofmodule!=='undefined'
+       &&typeofrequire==='function'?factory(require('../moment')):
+   typeofdefine==='function'&&define.amd?define(['../moment'],factory):
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this,(function(moment){'usestrict';
 
 
-var arTn = moment.defineLocale('ar-tn', {
-    months: 'جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر'.split('_'),
-    monthsShort: 'جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر'.split('_'),
-    weekdays: 'الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت'.split('_'),
-    weekdaysShort: 'أحد_إثنين_ثلاثاء_أربعاء_خميس_جمعة_سبت'.split('_'),
-    weekdaysMin: 'ح_ن_ث_ر_خ_ج_س'.split('_'),
-    weekdaysParseExact : true,
-    longDateFormat: {
-        LT: 'HH:mm',
-        LTS: 'HH:mm:ss',
-        L: 'DD/MM/YYYY',
-        LL: 'D MMMM YYYY',
-        LLL: 'D MMMM YYYY HH:mm',
-        LLLL: 'dddd D MMMM YYYY HH:mm'
+vararTn=moment.defineLocale('ar-tn',{
+    months:'جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر'.split('_'),
+    monthsShort:'جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر'.split('_'),
+    weekdays:'الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت'.split('_'),
+    weekdaysShort:'أحد_إثنين_ثلاثاء_أربعاء_خميس_جمعة_سبت'.split('_'),
+    weekdaysMin:'ح_ن_ث_ر_خ_ج_س'.split('_'),
+    weekdaysParseExact:true,
+    longDateFormat:{
+        LT:'HH:mm',
+        LTS:'HH:mm:ss',
+        L:'DD/MM/YYYY',
+        LL:'DMMMMYYYY',
+        LLL:'DMMMMYYYYHH:mm',
+        LLLL:'ddddDMMMMYYYYHH:mm'
     },
-    calendar: {
-        sameDay: '[اليوم على الساعة] LT',
-        nextDay: '[غدا على الساعة] LT',
-        nextWeek: 'dddd [على الساعة] LT',
-        lastDay: '[أمس على الساعة] LT',
-        lastWeek: 'dddd [على الساعة] LT',
-        sameElse: 'L'
+    calendar:{
+        sameDay:'[اليومعلىالساعة]LT',
+        nextDay:'[غداعلىالساعة]LT',
+        nextWeek:'dddd[علىالساعة]LT',
+        lastDay:'[أمسعلىالساعة]LT',
+        lastWeek:'dddd[علىالساعة]LT',
+        sameElse:'L'
     },
-    relativeTime: {
-        future: 'في %s',
-        past: 'منذ %s',
-        s: 'ثوان',
-        m: 'دقيقة',
-        mm: '%d دقائق',
-        h: 'ساعة',
-        hh: '%d ساعات',
-        d: 'يوم',
-        dd: '%d أيام',
-        M: 'شهر',
-        MM: '%d أشهر',
-        y: 'سنة',
-        yy: '%d سنوات'
+    relativeTime:{
+        future:'في%s',
+        past:'منذ%s',
+        s:'ثوان',
+        m:'دقيقة',
+        mm:'%dدقائق',
+        h:'ساعة',
+        hh:'%dساعات',
+        d:'يوم',
+        dd:'%dأيام',
+        M:'شهر',
+        MM:'%dأشهر',
+        y:'سنة',
+        yy:'%dسنوات'
     },
-    week: {
-        dow: 1, // Monday is the first day of the week.
-        doy: 4 // The week that contains Jan 4th is the first week of the year.
+    week:{
+        dow:1,//Mondayisthefirstdayoftheweek.
+        doy:4//TheweekthatcontainsJan4thisthefirstweekoftheyear.
     }
 });
 
-return arTn;
+returnarTn;
 
 })));

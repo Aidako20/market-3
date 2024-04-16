@@ -1,70 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-    <record id="purchase_order_view_form_inherit" model="ir.ui.view">
-        <field name="name">purchase.order.form.inherit</field>
-        <field name="model">purchase.order</field>
-        <field name="inherit_id" ref="purchase.purchase_order_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//header/button[@name='action_rfq_send']" position="after">
-                <button name="action_view_picking" string="Receive Products" class="oe_highlight" type="object" attrs="{'invisible': ['|', '|' , ('is_shipped', '=', True), ('state','not in', ('purchase','done')), ('picking_count', '=', 0)]}"/>
+    <recordid="purchase_order_view_form_inherit"model="ir.ui.view">
+        <fieldname="name">purchase.order.form.inherit</field>
+        <fieldname="model">purchase.order</field>
+        <fieldname="inherit_id"ref="purchase.purchase_order_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//header/button[@name='action_rfq_send']"position="after">
+                <buttonname="action_view_picking"string="ReceiveProducts"class="oe_highlight"type="object"attrs="{'invisible':['|','|',('is_shipped','=',True),('state','notin',('purchase','done')),('picking_count','=',0)]}"/>
             </xpath>
-            <xpath expr="//header/button[@name='confirm_reminder_mail']" position="attributes">
-                <attribute name="attrs">{'invisible': ['|', '|', '|', ('state', 'not in', ('purchase', 'done')), ('mail_reminder_confirmed', '=', True), ('date_planned', '=', False), ('effective_date', '!=', False)]}</attribute>
+            <xpathexpr="//header/button[@name='confirm_reminder_mail']"position="attributes">
+                <attributename="attrs">{'invisible':['|','|','|',('state','notin',('purchase','done')),('mail_reminder_confirmed','=',True),('date_planned','=',False),('effective_date','!=',False)]}</attribute>
             </xpath>
-            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
-                <button type="object"
+            <xpathexpr="//div[hasclass('oe_button_box')]"position="inside">
+                <buttontype="object"
                     name="action_view_picking"
                     class="oe_stat_button"
-                    icon="fa-truck" attrs="{'invisible':[('picking_ids','=',[])]}">
-                    <field name="picking_count" widget="statinfo" string="Receipt" help="Incoming Shipments"/>
-                    <field name="picking_ids" invisible="1"/>
+                    icon="fa-truck"attrs="{'invisible':[('picking_ids','=',[])]}">
+                    <fieldname="picking_count"widget="statinfo"string="Receipt"help="IncomingShipments"/>
+                    <fieldname="picking_ids"invisible="1"/>
                 </button>
             </xpath>
-            <xpath expr="//field[@name='currency_id']" position="after">
-                <field name="is_shipped" invisible="1"/>
+            <xpathexpr="//field[@name='currency_id']"position="after">
+                <fieldname="is_shipped"invisible="1"/>
             </xpath>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='date_planned']" position="after">
-                <field name="move_dest_ids" invisible="1"/>
+            <xpathexpr="//field[@name='order_line']/tree//field[@name='date_planned']"position="after">
+                <fieldname="move_dest_ids"invisible="1"/>
             </xpath>
-            <xpath expr="//div[@name='date_planned_div']" position="inside">
-                <button name="%(action_purchase_vendor_delay_report)d" class="oe_link" type="action" context="{'search_default_partner_id': partner_id}" attrs="{'invisible': ['|', ('state', 'in', ['purchase', 'done']), ('partner_id', '=', False)]}">
-                    <span attrs="{'invisible': [('on_time_rate', '&lt;', 0)]}"><field name="on_time_rate" widget="integer" class="oe_inline"/>% On-Time Delivery</span>
-                    <span attrs="{'invisible': [('on_time_rate', '&gt;=', 0)]}">No On-time Delivery Data</span>
+            <xpathexpr="//div[@name='date_planned_div']"position="inside">
+                <buttonname="%(action_purchase_vendor_delay_report)d"class="oe_link"type="action"context="{'search_default_partner_id':partner_id}"attrs="{'invisible':['|',('state','in',['purchase','done']),('partner_id','=',False)]}">
+                    <spanattrs="{'invisible':[('on_time_rate','&lt;',0)]}"><fieldname="on_time_rate"widget="integer"class="oe_inline"/>%On-TimeDelivery</span>
+                    <spanattrs="{'invisible':[('on_time_rate','&gt;=',0)]}">NoOn-timeDeliveryData</span>
                 </button>
             </xpath>
-            <xpath expr="//div[@name='reminder']" position="attributes">
-                <attribute name="attrs">{'invisible': [('effective_date', '!=', False)]}</attribute>
+            <xpathexpr="//div[@name='reminder']"position="attributes">
+                <attributename="attrs">{'invisible':[('effective_date','!=',False)]}</attribute>
             </xpath>
-            <xpath expr="//div[@name='reminder']" position="after">
-                <field name="effective_date" attrs="{'invisible': [('effective_date', '=', False)]}"/>
+            <xpathexpr="//div[@name='reminder']"position="after">
+                <fieldname="effective_date"attrs="{'invisible':[('effective_date','=',False)]}"/>
             </xpath>
-            <xpath expr="//field[@name='order_line']/form//field[@name='invoice_lines']" position="after">
-                <field name="move_ids"/>
+            <xpathexpr="//field[@name='order_line']/form//field[@name='invoice_lines']"position="after">
+                <fieldname="move_ids"/>
             </xpath>
-            <xpath expr="//field[@name='order_line']/form//field[@name='account_analytic_id']" position="before">
-                <field name="propagate_cancel" groups="base.group_no_one"/>
+            <xpathexpr="//field[@name='order_line']/form//field[@name='account_analytic_id']"position="before">
+                <fieldname="propagate_cancel"groups="base.group_no_one"/>
             </xpath>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='qty_received']" position="attributes">
-                <attribute name="attrs">{'column_invisible': [('parent.state', 'not in', ('purchase', 'done'))], 'readonly': [('product_type', 'in', ('consu', 'product'))]}</attribute>
+            <xpathexpr="//field[@name='order_line']/tree//field[@name='qty_received']"position="attributes">
+                <attributename="attrs">{'column_invisible':[('parent.state','notin',('purchase','done'))],'readonly':[('product_type','in',('consu','product'))]}</attribute>
             </xpath>
-            <xpath expr="//page[@name='purchase_delivery_invoice']/group/group" position="inside">
-                <field name="picking_type_id" domain="[('code','=','incoming'), '|', ('warehouse_id', '=', False), ('warehouse_id.company_id', '=', company_id)]" options="{'no_create': True}" groups="stock.group_stock_multi_locations"/>
-                <field name="dest_address_id" groups="stock.group_stock_multi_locations" attrs="{'invisible': [('default_location_dest_id_usage', '!=', 'customer')], 'required': [('default_location_dest_id_usage', '=', 'customer')]}"/>
-                <field name="default_location_dest_id_usage" invisible="1"/>
-                <field name="incoterm_id"/>
+            <xpathexpr="//page[@name='purchase_delivery_invoice']/group/group"position="inside">
+                <fieldname="picking_type_id"domain="[('code','=','incoming'),'|',('warehouse_id','=',False),('warehouse_id.company_id','=',company_id)]"options="{'no_create':True}"groups="stock.group_stock_multi_locations"/>
+                <fieldname="dest_address_id"groups="stock.group_stock_multi_locations"attrs="{'invisible':[('default_location_dest_id_usage','!=','customer')],'required':[('default_location_dest_id_usage','=','customer')]}"/>
+                <fieldname="default_location_dest_id_usage"invisible="1"/>
+                <fieldname="incoterm_id"/>
             </xpath>
         </field>
     </record>
 
-    <record id="purchase_order_line_view_form_inherit" model="ir.ui.view">
-        <field name="name">purchase.order.line.form.inherit</field>
-        <field name="model">purchase.order.line</field>
-        <field name="inherit_id" ref="purchase.purchase_order_line_form2"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='invoice_lines']" position="after">
-                <separator string="Stock Moves"/>
-                <field name="move_ids"/>
+    <recordid="purchase_order_line_view_form_inherit"model="ir.ui.view">
+        <fieldname="name">purchase.order.line.form.inherit</field>
+        <fieldname="model">purchase.order.line</field>
+        <fieldname="inherit_id"ref="purchase.purchase_order_line_form2"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='invoice_lines']"position="after">
+                <separatorstring="StockMoves"/>
+                <fieldname="move_ids"/>
             </xpath>
         </field>
     </record>

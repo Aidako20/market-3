@@ -1,30 +1,30 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.lb = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.lb=factory()));
+}(this,function(){'usestrict';
 
-    var lb = {
-        code: "lb",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
+    varlb={
+        code:"lb",
+        week:{
+            dow:1,
+            doy:4//TheweekthatcontainsJan4thisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "Zréck",
-            next: "Weider",
-            today: "Haut",
-            month: "Mount",
-            week: "Woch",
-            day: "Dag",
-            list: "Terminiwwersiicht"
+        buttonText:{
+            prev:"Zréck",
+            next:"Weider",
+            today:"Haut",
+            month:"Mount",
+            week:"Woch",
+            day:"Dag",
+            list:"Terminiwwersiicht"
         },
-        weekLabel: "W",
-        allDayText: "Ganzen Dag",
-        eventLimitText: "méi",
-        noEventsMessage: "Nee Evenementer ze affichéieren"
+        weekLabel:"W",
+        allDayText:"GanzenDag",
+        eventLimitText:"méi",
+        noEventsMessage:"NeeEvenementerzeaffichéieren"
     };
 
-    return lb;
+    returnlb;
 
 }));

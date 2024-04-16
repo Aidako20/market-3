@@ -1,120 +1,120 @@
-//! moment.js locale configuration
-//! locale : Klingon [tlh]
-//! author : Dominika Kruk : https://github.com/amaranthrose
+//!moment.jslocaleconfiguration
+//!locale:Klingon[tlh]
+//!author:DominikaKruk:https://github.com/amaranthrose
 
-;(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined'
-       && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+;(function(global,factory){
+   typeofexports==='object'&&typeofmodule!=='undefined'
+       &&typeofrequire==='function'?factory(require('../moment')):
+   typeofdefine==='function'&&define.amd?define(['../moment'],factory):
    factory(global.moment)
-}(this, (function (moment) { 'use strict';
+}(this,(function(moment){'usestrict';
 
 
-var numbersNouns = 'pagh_wa’_cha’_wej_loS_vagh_jav_Soch_chorgh_Hut'.split('_');
+varnumbersNouns='pagh_wa’_cha’_wej_loS_vagh_jav_Soch_chorgh_Hut'.split('_');
 
-function translateFuture(output) {
-    var time = output;
-    time = (output.indexOf('jaj') !== -1) ?
-    time.slice(0, -3) + 'leS' :
-    (output.indexOf('jar') !== -1) ?
-    time.slice(0, -3) + 'waQ' :
-    (output.indexOf('DIS') !== -1) ?
-    time.slice(0, -3) + 'nem' :
-    time + ' pIq';
-    return time;
+functiontranslateFuture(output){
+    vartime=output;
+    time=(output.indexOf('jaj')!==-1)?
+    time.slice(0,-3)+'leS':
+    (output.indexOf('jar')!==-1)?
+    time.slice(0,-3)+'waQ':
+    (output.indexOf('DIS')!==-1)?
+    time.slice(0,-3)+'nem':
+    time+'pIq';
+    returntime;
 }
 
-function translatePast(output) {
-    var time = output;
-    time = (output.indexOf('jaj') !== -1) ?
-    time.slice(0, -3) + 'Hu’' :
-    (output.indexOf('jar') !== -1) ?
-    time.slice(0, -3) + 'wen' :
-    (output.indexOf('DIS') !== -1) ?
-    time.slice(0, -3) + 'ben' :
-    time + ' ret';
-    return time;
+functiontranslatePast(output){
+    vartime=output;
+    time=(output.indexOf('jaj')!==-1)?
+    time.slice(0,-3)+'Hu’':
+    (output.indexOf('jar')!==-1)?
+    time.slice(0,-3)+'wen':
+    (output.indexOf('DIS')!==-1)?
+    time.slice(0,-3)+'ben':
+    time+'ret';
+    returntime;
 }
 
-function translate(number, withoutSuffix, string, isFuture) {
-    var numberNoun = numberAsNoun(number);
-    switch (string) {
-        case 'mm':
-            return numberNoun + ' tup';
-        case 'hh':
-            return numberNoun + ' rep';
-        case 'dd':
-            return numberNoun + ' jaj';
-        case 'MM':
-            return numberNoun + ' jar';
-        case 'yy':
-            return numberNoun + ' DIS';
+functiontranslate(number,withoutSuffix,string,isFuture){
+    varnumberNoun=numberAsNoun(number);
+    switch(string){
+        case'mm':
+            returnnumberNoun+'tup';
+        case'hh':
+            returnnumberNoun+'rep';
+        case'dd':
+            returnnumberNoun+'jaj';
+        case'MM':
+            returnnumberNoun+'jar';
+        case'yy':
+            returnnumberNoun+'DIS';
     }
 }
 
-function numberAsNoun(number) {
-    var hundred = Math.floor((number % 1000) / 100),
-    ten = Math.floor((number % 100) / 10),
-    one = number % 10,
-    word = '';
-    if (hundred > 0) {
-        word += numbersNouns[hundred] + 'vatlh';
+functionnumberAsNoun(number){
+    varhundred=Math.floor((number%1000)/100),
+    ten=Math.floor((number%100)/10),
+    one=number%10,
+    word='';
+    if(hundred>0){
+        word+=numbersNouns[hundred]+'vatlh';
     }
-    if (ten > 0) {
-        word += ((word !== '') ? ' ' : '') + numbersNouns[ten] + 'maH';
+    if(ten>0){
+        word+=((word!=='')?'':'')+numbersNouns[ten]+'maH';
     }
-    if (one > 0) {
-        word += ((word !== '') ? ' ' : '') + numbersNouns[one];
+    if(one>0){
+        word+=((word!=='')?'':'')+numbersNouns[one];
     }
-    return (word === '') ? 'pagh' : word;
+    return(word==='')?'pagh':word;
 }
 
-var tlh = moment.defineLocale('tlh', {
-    months : 'tera’ jar wa’_tera’ jar cha’_tera’ jar wej_tera’ jar loS_tera’ jar vagh_tera’ jar jav_tera’ jar Soch_tera’ jar chorgh_tera’ jar Hut_tera’ jar wa’maH_tera’ jar wa’maH wa’_tera’ jar wa’maH cha’'.split('_'),
-    monthsShort : 'jar wa’_jar cha’_jar wej_jar loS_jar vagh_jar jav_jar Soch_jar chorgh_jar Hut_jar wa’maH_jar wa’maH wa’_jar wa’maH cha’'.split('_'),
-    monthsParseExact : true,
-    weekdays : 'lojmItjaj_DaSjaj_povjaj_ghItlhjaj_loghjaj_buqjaj_ghInjaj'.split('_'),
-    weekdaysShort : 'lojmItjaj_DaSjaj_povjaj_ghItlhjaj_loghjaj_buqjaj_ghInjaj'.split('_'),
-    weekdaysMin : 'lojmItjaj_DaSjaj_povjaj_ghItlhjaj_loghjaj_buqjaj_ghInjaj'.split('_'),
-    longDateFormat : {
-        LT : 'HH:mm',
-        LTS : 'HH:mm:ss',
-        L : 'DD.MM.YYYY',
-        LL : 'D MMMM YYYY',
-        LLL : 'D MMMM YYYY HH:mm',
-        LLLL : 'dddd, D MMMM YYYY HH:mm'
+vartlh=moment.defineLocale('tlh',{
+    months:'tera’jarwa’_tera’jarcha’_tera’jarwej_tera’jarloS_tera’jarvagh_tera’jarjav_tera’jarSoch_tera’jarchorgh_tera’jarHut_tera’jarwa’maH_tera’jarwa’maHwa’_tera’jarwa’maHcha’'.split('_'),
+    monthsShort:'jarwa’_jarcha’_jarwej_jarloS_jarvagh_jarjav_jarSoch_jarchorgh_jarHut_jarwa’maH_jarwa’maHwa’_jarwa’maHcha’'.split('_'),
+    monthsParseExact:true,
+    weekdays:'lojmItjaj_DaSjaj_povjaj_ghItlhjaj_loghjaj_buqjaj_ghInjaj'.split('_'),
+    weekdaysShort:'lojmItjaj_DaSjaj_povjaj_ghItlhjaj_loghjaj_buqjaj_ghInjaj'.split('_'),
+    weekdaysMin:'lojmItjaj_DaSjaj_povjaj_ghItlhjaj_loghjaj_buqjaj_ghInjaj'.split('_'),
+    longDateFormat:{
+        LT:'HH:mm',
+        LTS:'HH:mm:ss',
+        L:'DD.MM.YYYY',
+        LL:'DMMMMYYYY',
+        LLL:'DMMMMYYYYHH:mm',
+        LLLL:'dddd,DMMMMYYYYHH:mm'
     },
-    calendar : {
-        sameDay: '[DaHjaj] LT',
-        nextDay: '[wa’leS] LT',
-        nextWeek: 'LLL',
-        lastDay: '[wa’Hu’] LT',
-        lastWeek: 'LLL',
-        sameElse: 'L'
+    calendar:{
+        sameDay:'[DaHjaj]LT',
+        nextDay:'[wa’leS]LT',
+        nextWeek:'LLL',
+        lastDay:'[wa’Hu’]LT',
+        lastWeek:'LLL',
+        sameElse:'L'
     },
-    relativeTime : {
-        future : translateFuture,
-        past : translatePast,
-        s : 'puS lup',
-        m : 'wa’ tup',
-        mm : translate,
-        h : 'wa’ rep',
-        hh : translate,
-        d : 'wa’ jaj',
-        dd : translate,
-        M : 'wa’ jar',
-        MM : translate,
-        y : 'wa’ DIS',
-        yy : translate
+    relativeTime:{
+        future:translateFuture,
+        past:translatePast,
+        s:'puSlup',
+        m:'wa’tup',
+        mm:translate,
+        h:'wa’rep',
+        hh:translate,
+        d:'wa’jaj',
+        dd:translate,
+        M:'wa’jar',
+        MM:translate,
+        y:'wa’DIS',
+        yy:translate
     },
-    ordinalParse: /\d{1,2}\./,
-    ordinal : '%d.',
-    week : {
-        dow : 1, // Monday is the first day of the week.
-        doy : 4  // The week that contains Jan 4th is the first week of the year.
+    ordinalParse:/\d{1,2}\./,
+    ordinal:'%d.',
+    week:{
+        dow:1,//Mondayisthefirstdayoftheweek.
+        doy:4 //TheweekthatcontainsJan4thisthefirstweekoftheyear.
     }
 });
 
-return tlh;
+returntlh;
 
 })));

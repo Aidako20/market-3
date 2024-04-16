@@ -1,62 +1,62 @@
-flectra.define('point_of_sale.AbstractReceiptScreen', function (require) {
-    'use strict';
+flectra.define('point_of_sale.AbstractReceiptScreen',function(require){
+    'usestrict';
 
-    const { useRef } = owl.hooks;
-    const { nextFrame } = require('point_of_sale.utils');
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    const{useRef}=owl.hooks;
+    const{nextFrame}=require('point_of_sale.utils');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
     /**
-     * This relies on the assumption that there is a reference to
-     * `order-receipt` so it is important to declare a `t-ref` to
-     * `order-receipt` in the template of the Component that extends
-     * this abstract component.
+     *Thisreliesontheassumptionthatthereisareferenceto
+     *`order-receipt`soitisimportanttodeclarea`t-ref`to
+     *`order-receipt`inthetemplateoftheComponentthatextends
+     *thisabstractcomponent.
      */
-    class AbstractReceiptScreen extends PosComponent {
-        constructor() {
+    classAbstractReceiptScreenextendsPosComponent{
+        constructor(){
             super(...arguments);
-            this.orderReceipt = useRef('order-receipt');
+            this.orderReceipt=useRef('order-receipt');
         }
-        async _printReceipt() {
-            if (this.env.pos.proxy.printer) {
-                const printResult = await this.env.pos.proxy.printer.print_receipt(this.orderReceipt.el.outerHTML);
-                if (printResult.successful) {
-                    return true;
-                } else {
-                    const { confirmed } = await this.showPopup('ConfirmPopup', {
-                        title: printResult.message.title,
-                        body: this.env._t('Do you want to print using the web printer?'),
+        async_printReceipt(){
+            if(this.env.pos.proxy.printer){
+                constprintResult=awaitthis.env.pos.proxy.printer.print_receipt(this.orderReceipt.el.outerHTML);
+                if(printResult.successful){
+                    returntrue;
+                }else{
+                    const{confirmed}=awaitthis.showPopup('ConfirmPopup',{
+                        title:printResult.message.title,
+                        body:this.env._t('Doyouwanttoprintusingthewebprinter?'),
                     });
-                    if (confirmed) {
-                        // We want to call the _printWeb when the popup is fully gone
-                        // from the screen which happens after the next animation frame.
-                        await nextFrame();
-                        return await this._printWeb();
+                    if(confirmed){
+                        //Wewanttocallthe_printWebwhenthepopupisfullygone
+                        //fromthescreenwhichhappensafterthenextanimationframe.
+                        awaitnextFrame();
+                        returnawaitthis._printWeb();
                     }
-                    return false;
+                    returnfalse;
                 }
-            } else {
-                return await this._printWeb();
+            }else{
+                returnawaitthis._printWeb();
             }
         }
-        async _printWeb() {
-            try {
+        async_printWeb(){
+            try{
                 window.print();
-                return true;
-            } catch (err) {
-                await this.showPopup('ErrorPopup', {
-                    title: this.env._t('Printing is not supported on some browsers'),
-                    body: this.env._t(
-                        'Printing is not supported on some browsers due to no default printing protocol ' +
-                            'is available. It is possible to print your tickets by making use of an IoT Box.'
+                returntrue;
+            }catch(err){
+                awaitthis.showPopup('ErrorPopup',{
+                    title:this.env._t('Printingisnotsupportedonsomebrowsers'),
+                    body:this.env._t(
+                        'Printingisnotsupportedonsomebrowsersduetonodefaultprintingprotocol'+
+                            'isavailable.ItispossibletoprintyourticketsbymakinguseofanIoTBox.'
                     ),
                 });
-                return false;
+                returnfalse;
             }
         }
     }
 
     Registries.Component.add(AbstractReceiptScreen);
 
-    return AbstractReceiptScreen;
+    returnAbstractReceiptScreen;
 });

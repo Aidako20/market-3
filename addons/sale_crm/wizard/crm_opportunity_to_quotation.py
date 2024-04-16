@@ -1,52 +1,52 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportUserError
 
 
-class Opportunity2Quotation(models.TransientModel):
-    _name = 'crm.quotation.partner'
-    _description = 'Create new or use existing Customer on new Quotation'
+classOpportunity2Quotation(models.TransientModel):
+    _name='crm.quotation.partner'
+    _description='CreateneworuseexistingCustomeronnewQuotation'
 
     @api.model
-    def default_get(self, fields):
-        result = super(Opportunity2Quotation, self).default_get(fields)
+    defdefault_get(self,fields):
+        result=super(Opportunity2Quotation,self).default_get(fields)
 
-        active_model = self._context.get('active_model')
-        if active_model != 'crm.lead':
-            raise UserError(_('You can only apply this action from a lead.'))
+        active_model=self._context.get('active_model')
+        ifactive_model!='crm.lead':
+            raiseUserError(_('Youcanonlyapplythisactionfromalead.'))
 
-        lead = False
-        if result.get('lead_id'):
-            lead = self.env['crm.lead'].browse(result['lead_id'])
-        elif 'lead_id' in fields and self._context.get('active_id'):
-            lead = self.env['crm.lead'].browse(self._context['active_id'])
-        if lead:
-            result['lead_id'] = lead.id
-            partner_id = result.get('partner_id') or lead._find_matching_partner().id
-            if 'action' in fields and not result.get('action'):
-                result['action'] = 'exist' if partner_id else 'create'
-            if 'partner_id' in fields and not result.get('partner_id'):
-                result['partner_id'] = partner_id
+        lead=False
+        ifresult.get('lead_id'):
+            lead=self.env['crm.lead'].browse(result['lead_id'])
+        elif'lead_id'infieldsandself._context.get('active_id'):
+            lead=self.env['crm.lead'].browse(self._context['active_id'])
+        iflead:
+            result['lead_id']=lead.id
+            partner_id=result.get('partner_id')orlead._find_matching_partner().id
+            if'action'infieldsandnotresult.get('action'):
+                result['action']='exist'ifpartner_idelse'create'
+            if'partner_id'infieldsandnotresult.get('partner_id'):
+                result['partner_id']=partner_id
 
-        return result
+        returnresult
 
-    action = fields.Selection([
-        ('create', 'Create a new customer'),
-        ('exist', 'Link to an existing customer'),
-        ('nothing', 'Do not link to a customer')
-    ], string='Quotation Customer', required=True)
-    lead_id = fields.Many2one('crm.lead', "Associated Lead", required=True)
-    partner_id = fields.Many2one('res.partner', 'Customer')
+    action=fields.Selection([
+        ('create','Createanewcustomer'),
+        ('exist','Linktoanexistingcustomer'),
+        ('nothing','Donotlinktoacustomer')
+    ],string='QuotationCustomer',required=True)
+    lead_id=fields.Many2one('crm.lead',"AssociatedLead",required=True)
+    partner_id=fields.Many2one('res.partner','Customer')
 
-    def action_apply(self):
-        """ Convert lead to opportunity or merge lead and opportunity and open
-            the freshly created opportunity view.
+    defaction_apply(self):
+        """Convertleadtoopportunityormergeleadandopportunityandopen
+            thefreshlycreatedopportunityview.
         """
         self.ensure_one()
-        if self.action == 'create':
+        ifself.action=='create':
             self.lead_id.handle_partner_assignment(create_missing=True)
-        elif self.action == 'exist':
-            self.lead_id.handle_partner_assignment(force_partner_id=self.partner_id.id, create_missing=False)
-        return self.lead_id.action_new_quotation()
+        elifself.action=='exist':
+            self.lead_id.handle_partner_assignment(force_partner_id=self.partner_id.id,create_missing=False)
+        returnself.lead_id.action_new_quotation()

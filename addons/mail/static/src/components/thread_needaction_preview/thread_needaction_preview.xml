@@ -1,54 +1,54 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.ThreadNeedactionPreview" owl="1">
+    <tt-name="mail.ThreadNeedactionPreview"owl="1">
         <!--
-            The preview template is used by the discuss in mobile, and by the systray
-            menu in order to show preview of threads.
+            Thepreviewtemplateisusedbythediscussinmobile,andbythesystray
+            menuinordertoshowpreviewofthreads.
         -->
-        <div class="o_ThreadNeedactionPreview" t-on-click="_onClick" t-att-data-thread-local-id="thread ? thread.localId : undefined">
-            <t t-if="thread">
-                <div class="o_ThreadNeedactionPreview_sidebar">
-                    <div class="o_ThreadNeedactionPreview_imageContainer o_ThreadNeedactionPreview_sidebarItem">
-                        <img class="o_ThreadNeedactionPreview_image" t-att-src="image()" alt="Thread Image"/>
-                        <t t-if="thread.correspondent and thread.correspondent.im_status">
+        <divclass="o_ThreadNeedactionPreview"t-on-click="_onClick"t-att-data-thread-local-id="thread?thread.localId:undefined">
+            <tt-if="thread">
+                <divclass="o_ThreadNeedactionPreview_sidebar">
+                    <divclass="o_ThreadNeedactionPreview_imageContainero_ThreadNeedactionPreview_sidebarItem">
+                        <imgclass="o_ThreadNeedactionPreview_image"t-att-src="image()"alt="ThreadImage"/>
+                        <tt-if="thread.correspondentandthread.correspondent.im_status">
                             <PartnerImStatusIcon
                                 class="o_ThreadNeedactionPreview_partnerImStatusIcon"
                                 t-att-class="{
-                                    'o-mobile': env.messaging.device.isMobile,
+                                    'o-mobile':env.messaging.device.isMobile,
                                 }"
                                 partnerLocalId="thread.correspondent.localId"
                             />
                         </t>
                     </div>
                 </div>
-                <div class="o_ThreadNeedactionPreview_content">
-                    <div class="o_ThreadNeedactionPreview_header">
-                        <span class="o_ThreadNeedactionPreview_name" t-att-class="{ 'o-mobile': env.messaging.device.isMobile }">
-                            <t t-esc="thread.displayName"/>
+                <divclass="o_ThreadNeedactionPreview_content">
+                    <divclass="o_ThreadNeedactionPreview_header">
+                        <spanclass="o_ThreadNeedactionPreview_name"t-att-class="{'o-mobile':env.messaging.device.isMobile}">
+                            <tt-esc="thread.displayName"/>
                         </span>
-                        <span class="o_ThreadNeedactionPreview_counter">
-                            (<t t-esc="thread.needactionMessagesAsOriginThread.length"/>)
+                        <spanclass="o_ThreadNeedactionPreview_counter">
+                            (<tt-esc="thread.needactionMessagesAsOriginThread.length"/>)
                         </span>
-                        <span class="o-autogrow"/>
-                        <t t-if="thread.lastNeedactionMessageAsOriginThread and thread.lastNeedactionMessageAsOriginThread.date">
-                            <span class="o_ThreadNeedactionPreview_date">
-                                <t t-esc="thread.lastNeedactionMessageAsOriginThread.date.fromNow()"/>
+                        <spanclass="o-autogrow"/>
+                        <tt-if="thread.lastNeedactionMessageAsOriginThreadandthread.lastNeedactionMessageAsOriginThread.date">
+                            <spanclass="o_ThreadNeedactionPreview_date">
+                                <tt-esc="thread.lastNeedactionMessageAsOriginThread.date.fromNow()"/>
                             </span>
                         </t>
                     </div>
-                    <div class="o_ThreadNeedactionPreview_core">
-                        <span class="o_ThreadNeedactionPreview_coreItem o_ThreadNeedactionPreview_inlineText" t-att-class="{ 'o-empty': inlineLastNeedactionMessageAsOriginThreadBody.length === 0 }">
-                            <t t-if="thread.lastNeedactionMessageAsOriginThread and thread.lastNeedactionMessageAsOriginThread.author">
+                    <divclass="o_ThreadNeedactionPreview_core">
+                        <spanclass="o_ThreadNeedactionPreview_coreItemo_ThreadNeedactionPreview_inlineText"t-att-class="{'o-empty':inlineLastNeedactionMessageAsOriginThreadBody.length===0}">
+                            <tt-if="thread.lastNeedactionMessageAsOriginThreadandthread.lastNeedactionMessageAsOriginThread.author">
                                 <MessageAuthorPrefix
                                     messageLocalId="thread.lastNeedactionMessageAsOriginThread.localId"
                                     threadLocalId="thread.localId"
                                 />
                             </t>
-                            <t t-esc="inlineLastNeedactionMessageAsOriginThreadBody"/>
+                            <tt-esc="inlineLastNeedactionMessageAsOriginThreadBody"/>
                         </span>
-                        <span class="o-autogrow"/>
-                        <span class="o_ThreadNeedactionPreview_coreItem o_ThreadNeedactionPreview_markAsRead fa fa-check" title="Mark as Read" t-on-click="_onClickMarkAsRead" t-ref="markAsRead"/>
+                        <spanclass="o-autogrow"/>
+                        <spanclass="o_ThreadNeedactionPreview_coreItemo_ThreadNeedactionPreview_markAsReadfafa-check"title="MarkasRead"t-on-click="_onClickMarkAsRead"t-ref="markAsRead"/>
                     </div>
                 </div>
             </t>

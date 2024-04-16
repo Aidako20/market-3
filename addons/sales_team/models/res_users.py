@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ResUsers(models.Model):
-    _inherit = 'res.users'
+classResUsers(models.Model):
+    _inherit='res.users'
 
-    sale_team_id = fields.Many2one(
-        'crm.team', "User's Sales Team",
-        help='Sales Team the user is member of. Used to compute the members of a Sales Team through the inverse one2many') 
+    sale_team_id=fields.Many2one(
+        'crm.team',"User'sSalesTeam",
+        help='SalesTeamtheuserismemberof.UsedtocomputethemembersofaSalesTeamthroughtheinverseone2many')

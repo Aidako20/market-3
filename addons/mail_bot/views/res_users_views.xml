@@ -1,28 +1,28 @@
-<?xml version="1.0"?>
+<?xmlversion="1.0"?>
 <flectra><data>
-    <!-- Update Preferences form !-->
-    <record id="res_users_view_form_preferences" model="ir.ui.view">
-        <field name="name">res.users.view.form.preferences.mail_bot</field>
-        <field name="model">res.users</field>
-        <field name="inherit_id" ref="mail.view_users_form_simple_modif_mail"/>
-        <field name="arch" type="xml">
+    <!--UpdatePreferencesform!-->
+    <recordid="res_users_view_form_preferences"model="ir.ui.view">
+        <fieldname="name">res.users.view.form.preferences.mail_bot</field>
+        <fieldname="model">res.users</field>
+        <fieldname="inherit_id"ref="mail.view_users_form_simple_modif_mail"/>
+        <fieldname="arch"type="xml">
             <data>
-                <field name="notification_type" position="after">
-                    <field name="flectrabot_state" readonly="0" groups="base.group_no_one"/>
+                <fieldname="notification_type"position="after">
+                    <fieldname="flectrabot_state"readonly="0"groups="base.group_no_one"/>
                 </field>
             </data>
         </field>
     </record>
 
-    <!-- Update user form !-->
-    <record id="res_users_view_form" model="ir.ui.view">
-        <field name="name">res.users.view.form.mail_bot</field>
-        <field name="model">res.users</field>
-        <field name="inherit_id" ref="mail.view_users_form_mail"/>
-        <field name="arch" type="xml">
+    <!--Updateuserform!-->
+    <recordid="res_users_view_form"model="ir.ui.view">
+        <fieldname="name">res.users.view.form.mail_bot</field>
+        <fieldname="model">res.users</field>
+        <fieldname="inherit_id"ref="mail.view_users_form_mail"/>
+        <fieldname="arch"type="xml">
             <data>
-                <field name="signature" position="before">
-                    <field name="flectrabot_state" readonly="0" groups="base.group_no_one"/>
+                <fieldname="signature"position="before">
+                    <fieldname="flectrabot_state"readonly="0"groups="base.group_no_one"/>
                 </field>
             </data>
         </field>

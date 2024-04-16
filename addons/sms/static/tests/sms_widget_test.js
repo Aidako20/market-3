@@ -1,227 +1,227 @@
-flectra.define('sms.sms_widget_tests', function (require) {
-"use strict";
+flectra.define('sms.sms_widget_tests',function(require){
+"usestrict";
 
-var config = require('web.config');
-var FormView = require('web.FormView');
-var ListView = require('web.ListView');
-var testUtils = require('web.test_utils');
+varconfig=require('web.config');
+varFormView=require('web.FormView');
+varListView=require('web.ListView');
+vartestUtils=require('web.test_utils');
 
-var createView = testUtils.createView;
+varcreateView=testUtils.createView;
 
-QUnit.module('fields', {
-    beforeEach: function () {
-        this.data = {
-            partner: {
-                fields: {
-                    message: {string: "message", type: "text"},
-                    foo: {string: "Foo", type: "char", default: "My little Foo Value"},
-                    mobile: {string: "mobile", type: "text"},
+QUnit.module('fields',{
+    beforeEach:function(){
+        this.data={
+            partner:{
+                fields:{
+                    message:{string:"message",type:"text"},
+                    foo:{string:"Foo",type:"char",default:"MylittleFooValue"},
+                    mobile:{string:"mobile",type:"text"},
                 },
-                records: [{
-                    id: 1,
-                    message: "",
-                    foo: 'yop',
-                    mobile: "+32494444444",
-                }, {
-                    id: 2,
-                    message: "",
-                    foo: 'bayou',
+                records:[{
+                    id:1,
+                    message:"",
+                    foo:'yop',
+                    mobile:"+32494444444",
+                },{
+                    id:2,
+                    message:"",
+                    foo:'bayou',
                 }]
             },
-            visitor: {
-                fields: {
-                    mobile: {string: "mobile", type: "text"},
+            visitor:{
+                fields:{
+                    mobile:{string:"mobile",type:"text"},
                 },
-                records: [{
-                    id: 1,
-                    mobile: "+32494444444",
+                records:[{
+                    id:1,
+                    mobile:"+32494444444",
                 }]
             },
         };
     }
-}, function () {
+},function(){
 
     QUnit.module('SmsWidget');
 
-    QUnit.test('Sms widgets are correctly rendered', async function (assert) {
+    QUnit.test('Smswidgetsarecorrectlyrendered',asyncfunction(assert){
         assert.expect(9);
-        var form = await createView({
-            View: FormView,
-            model: 'partner',
-            data: this.data,
-            arch: '<form><sheet><field name="message" widget="sms_widget"/></sheet></form>',
+        varform=awaitcreateView({
+            View:FormView,
+            model:'partner',
+            data:this.data,
+            arch:'<form><sheet><fieldname="message"widget="sms_widget"/></sheet></form>',
         });
 
-        assert.containsOnce(form, '.o_sms_count', "Should have a sms counter");
-        assert.strictEqual(form.$('.o_sms_count').text(), '0 characters, fits in 0 SMS (GSM7) ',
-            'Should be "0 characters, fits in 0 SMS (GSM7) " by default');
-        // GSM-7
-        await testUtils.fields.editAndTrigger(form.$('.o_input'), "Hello from Flectra", 'input');
-        assert.strictEqual(form.$('.o_sms_count').text(), '15 characters, fits in 1 SMS (GSM7) ',
-            'Should be "15 characters, fits in 1 SMS (GSM7) " for "Hello from Flectra"');
-        // GSM-7 with \n => this one count as 2 characters
-        form.$('.o_input').val("Hello from Flectra\n").trigger('input');
-        assert.strictEqual(form.$('.o_sms_count').text(), '17 characters, fits in 1 SMS (GSM7) ',
-            'Should be "17 characters, fits in 1 SMS (GSM7) " for "Hello from Flectra\\n"');
-        // Unicode => ê
-        form.$('.o_input').val("Hêllo from Flectra").trigger('input');
-        assert.strictEqual(form.$('.o_sms_count').text(), '15 characters, fits in 1 SMS (UNICODE) ',
-            'Should be "15 characters, fits in 1 SMS (UNICODE) " for "Hêllo from Flectra"');
-        // GSM-7 with 160c
-        var text = Array(161).join('a');
-        await testUtils.fields.editAndTrigger(form.$('.o_input'), text, 'input');
-        assert.strictEqual(form.$('.o_sms_count').text(), '160 characters, fits in 1 SMS (GSM7) ',
-            'Should be "160 characters, fits in 1 SMS (GSM7) " for 160 x "a"');
-        // GSM-7 with 161c
-        text = Array(162).join('a');
-        await testUtils.fields.editAndTrigger(form.$('.o_input'), text, 'input');
-        assert.strictEqual(form.$('.o_sms_count').text(), '161 characters, fits in 2 SMS (GSM7) ',
-            'Should be "161 characters, fits in 2 SMS (GSM7) " for 161 x "a"');
-        // Unicode with 70c
-        text = Array(71).join('ê');
-        await testUtils.fields.editAndTrigger(form.$('.o_input'), text, 'input');
-        assert.strictEqual(form.$('.o_sms_count').text(), '70 characters, fits in 1 SMS (UNICODE) ',
-            'Should be "70 characters, fits in 1 SMS (UNICODE) " for 70 x "ê"');
-        // Unicode with 71c
-        text = Array(72).join('ê');
-        await testUtils.fields.editAndTrigger(form.$('.o_input'), text, 'input');
-        assert.strictEqual(form.$('.o_sms_count').text(), '71 characters, fits in 2 SMS (UNICODE) ',
-            'Should be "71 characters, fits in 2 SMS (UNICODE) " for 71 x "ê"');
+        assert.containsOnce(form,'.o_sms_count',"Shouldhaveasmscounter");
+        assert.strictEqual(form.$('.o_sms_count').text(),'0characters,fitsin0SMS(GSM7)',
+            'Shouldbe"0characters,fitsin0SMS(GSM7)"bydefault');
+        //GSM-7
+        awaittestUtils.fields.editAndTrigger(form.$('.o_input'),"HellofromFlectra",'input');
+        assert.strictEqual(form.$('.o_sms_count').text(),'15characters,fitsin1SMS(GSM7)',
+            'Shouldbe"15characters,fitsin1SMS(GSM7)"for"HellofromFlectra"');
+        //GSM-7with\n=>thisonecountas2characters
+        form.$('.o_input').val("HellofromFlectra\n").trigger('input');
+        assert.strictEqual(form.$('.o_sms_count').text(),'17characters,fitsin1SMS(GSM7)',
+            'Shouldbe"17characters,fitsin1SMS(GSM7)"for"HellofromFlectra\\n"');
+        //Unicode=>ê
+        form.$('.o_input').val("HêllofromFlectra").trigger('input');
+        assert.strictEqual(form.$('.o_sms_count').text(),'15characters,fitsin1SMS(UNICODE)',
+            'Shouldbe"15characters,fitsin1SMS(UNICODE)"for"HêllofromFlectra"');
+        //GSM-7with160c
+        vartext=Array(161).join('a');
+        awaittestUtils.fields.editAndTrigger(form.$('.o_input'),text,'input');
+        assert.strictEqual(form.$('.o_sms_count').text(),'160characters,fitsin1SMS(GSM7)',
+            'Shouldbe"160characters,fitsin1SMS(GSM7)"for160x"a"');
+        //GSM-7with161c
+        text=Array(162).join('a');
+        awaittestUtils.fields.editAndTrigger(form.$('.o_input'),text,'input');
+        assert.strictEqual(form.$('.o_sms_count').text(),'161characters,fitsin2SMS(GSM7)',
+            'Shouldbe"161characters,fitsin2SMS(GSM7)"for161x"a"');
+        //Unicodewith70c
+        text=Array(71).join('ê');
+        awaittestUtils.fields.editAndTrigger(form.$('.o_input'),text,'input');
+        assert.strictEqual(form.$('.o_sms_count').text(),'70characters,fitsin1SMS(UNICODE)',
+            'Shouldbe"70characters,fitsin1SMS(UNICODE)"for70x"ê"');
+        //Unicodewith71c
+        text=Array(72).join('ê');
+        awaittestUtils.fields.editAndTrigger(form.$('.o_input'),text,'input');
+        assert.strictEqual(form.$('.o_sms_count').text(),'71characters,fitsin2SMS(UNICODE)',
+            'Shouldbe"71characters,fitsin2SMS(UNICODE)"for71x"ê"');
 
         form.destroy();
     });
 
-    QUnit.test('Sms widgets with non-empty initial value', async function (assert) {
+    QUnit.test('Smswidgetswithnon-emptyinitialvalue',asyncfunction(assert){
         assert.expect(1);
-        var form = await createView({
-            View: FormView,
-            model: 'visitor',
-            data: this.data,
-            arch: `<form><sheet><field name="mobile" widget="sms_widget"/></sheet></form>`,
-            res_id: 1,
-            res_ids: [1],
+        varform=awaitcreateView({
+            View:FormView,
+            model:'visitor',
+            data:this.data,
+            arch:`<form><sheet><fieldname="mobile"widget="sms_widget"/></sheet></form>`,
+            res_id:1,
+            res_ids:[1],
         });
 
-        assert.strictEqual(form.$('.o_field_text').text(), '+32494444444',
-            'Should have the initial value');
+        assert.strictEqual(form.$('.o_field_text').text(),'+32494444444',
+            'Shouldhavetheinitialvalue');
 
         form.destroy();
     });
 
-    QUnit.test('Sms widgets with empty initial value', async function (assert) {
+    QUnit.test('Smswidgetswithemptyinitialvalue',asyncfunction(assert){
         assert.expect(1);
-        var form = await createView({
-            View: FormView,
-            model: 'partner',
-            data: this.data,
-            arch: `<form><sheet><field name="message" widget="sms_widget"/></sheet></form>`,
-            res_id: 1,
-            res_ids: [1],
+        varform=awaitcreateView({
+            View:FormView,
+            model:'partner',
+            data:this.data,
+            arch:`<form><sheet><fieldname="message"widget="sms_widget"/></sheet></form>`,
+            res_id:1,
+            res_ids:[1],
         });
 
-        assert.strictEqual(form.$('.o_field_text').text(), '',
-            'Should have the empty initial value');
+        assert.strictEqual(form.$('.o_field_text').text(),'',
+            'Shouldhavetheemptyinitialvalue');
 
         form.destroy();
     });
 
     QUnit.module('PhoneWidget');
 
-    QUnit.test('phone field in editable list view on normal screens', async function (assert) {
+    QUnit.test('phonefieldineditablelistviewonnormalscreens',asyncfunction(assert){
         assert.expect(11);
-        var doActionCount = 0;
+        vardoActionCount=0;
 
-        var list = await createView({
-            View: ListView,
-            model: 'partner',
-            data: this.data,
+        varlist=awaitcreateView({
+            View:ListView,
+            model:'partner',
+            data:this.data,
             debug:true,
-            arch: '<tree editable="bottom"><field name="foo" widget="phone"/></tree>',
-            intercepts: {
-                do_action(ev) {
-                    assert.equal(ev.data.action.res_model, 'sms.composer',
-                        'The action to send an SMS should have been executed');
-                    doActionCount += 1;
+            arch:'<treeeditable="bottom"><fieldname="foo"widget="phone"/></tree>',
+            intercepts:{
+                do_action(ev){
+                    assert.equal(ev.data.action.res_model,'sms.composer',
+                        'TheactiontosendanSMSshouldhavebeenexecuted');
+                    doActionCount+=1;
                 }
             }
         });
 
-        assert.containsN(list, 'tbody td:not(.o_list_record_selector)', 4);
-        assert.strictEqual(list.$('tbody td:not(.o_list_record_selector)').first().text(), 'yopSMS',
-            "value should be displayed properly with a link to send SMS");
+        assert.containsN(list,'tbodytd:not(.o_list_record_selector)',4);
+        assert.strictEqual(list.$('tbodytd:not(.o_list_record_selector)').first().text(),'yopSMS',
+            "valueshouldbedisplayedproperlywithalinktosendSMS");
 
-        assert.containsN(list, 'a.o_field_widget.o_form_uri', 2,
-            "should have the correct classnames");
+        assert.containsN(list,'a.o_field_widget.o_form_uri',2,
+            "shouldhavethecorrectclassnames");
 
-        // Edit a line and check the result
-        var $cell = list.$('tbody td:not(.o_list_record_selector)').first();
-        await testUtils.dom.click($cell);
-        assert.hasClass($cell.parent(),'o_selected_row', 'should be set as edit mode');
-        assert.strictEqual($cell.find('input').val(), 'yop',
-            'should have the corect value in internal input');
-        await testUtils.fields.editInput($cell.find('input'), 'new');
+        //Editalineandchecktheresult
+        var$cell=list.$('tbodytd:not(.o_list_record_selector)').first();
+        awaittestUtils.dom.click($cell);
+        assert.hasClass($cell.parent(),'o_selected_row','shouldbesetaseditmode');
+        assert.strictEqual($cell.find('input').val(),'yop',
+            'shouldhavethecorectvalueininternalinput');
+        awaittestUtils.fields.editInput($cell.find('input'),'new');
 
-        // save
-        await testUtils.dom.click(list.$buttons.find('.o_list_button_save'));
-        $cell = list.$('tbody td:not(.o_list_record_selector)').first();
-        assert.doesNotHaveClass($cell.parent(), 'o_selected_row', 'should not be in edit mode anymore');
-        assert.strictEqual(list.$('tbody td:not(.o_list_record_selector)').first().text(), 'newSMS',
-            "value should be properly updated");
-        assert.containsN(list, 'a.o_field_widget.o_form_uri', 2,
-            "should still have links with correct classes");
+        //save
+        awaittestUtils.dom.click(list.$buttons.find('.o_list_button_save'));
+        $cell=list.$('tbodytd:not(.o_list_record_selector)').first();
+        assert.doesNotHaveClass($cell.parent(),'o_selected_row','shouldnotbeineditmodeanymore');
+        assert.strictEqual(list.$('tbodytd:not(.o_list_record_selector)').first().text(),'newSMS',
+            "valueshouldbeproperlyupdated");
+        assert.containsN(list,'a.o_field_widget.o_form_uri',2,
+            "shouldstillhavelinkswithcorrectclasses");
 
-        await testUtils.dom.click(list.$('tbody td:not(.o_list_record_selector) .o_field_phone_sms').first());
-        assert.equal(doActionCount, 1, 'Only one action should have been executed');
-        assert.containsNone(list, '.o_selected_row',
-            'None of the list element should have been activated');
+        awaittestUtils.dom.click(list.$('tbodytd:not(.o_list_record_selector).o_field_phone_sms').first());
+        assert.equal(doActionCount,1,'Onlyoneactionshouldhavebeenexecuted');
+        assert.containsNone(list,'.o_selected_row',
+            'Noneofthelistelementshouldhavebeenactivated');
 
         list.destroy();
     });
 
-    QUnit.test('readonly sms phone field is properly rerendered after been changed by onchange', async function (assert) {
+    QUnit.test('readonlysmsphonefieldisproperlyrerenderedafterbeenchangedbyonchange',asyncfunction(assert){
         assert.expect(4);
 
-        const NEW_PHONE = '+32595555555';
+        constNEW_PHONE='+32595555555';
 
-        const form = await createView({
-            View: FormView,
-            model: 'partner',
-            data: this.data,
-            arch: '<form string="Partners">' +
-                '<sheet>' +
-                '<group>' +
-                '<field name="foo" on_change="1"/>' + // onchange to update mobile in readonly mode directly
-                '<field name="mobile" widget="phone" readonly="1"/>' + // readonly only, we don't want to go through write mode
-                '</group>' +
-                '</sheet>' +
+        constform=awaitcreateView({
+            View:FormView,
+            model:'partner',
+            data:this.data,
+            arch:'<formstring="Partners">'+
+                '<sheet>'+
+                '<group>'+
+                '<fieldname="foo"on_change="1"/>'+//onchangetoupdatemobileinreadonlymodedirectly
+                '<fieldname="mobile"widget="phone"readonly="1"/>'+//readonlyonly,wedon'twanttogothroughwritemode
+                '</group>'+
+                '</sheet>'+
                 '</form>',
-            res_id: 1,
-            viewOptions: {mode: 'edit'},
-            mockRPC: function (route, args) {
-                if (args.method === 'onchange') {
-                    return Promise.resolve({
-                        value: {
-                            mobile: NEW_PHONE, // onchange to update mobile in readonly mode directly
+            res_id:1,
+            viewOptions:{mode:'edit'},
+            mockRPC:function(route,args){
+                if(args.method==='onchange'){
+                    returnPromise.resolve({
+                        value:{
+                            mobile:NEW_PHONE,//onchangetoupdatemobileinreadonlymodedirectly
                         },
                     });
                 }
-                return this._super.apply(this, arguments);
+                returnthis._super.apply(this,arguments);
             },
         });
-        // check initial rendering
-        assert.strictEqual(form.$('.o_field_phone').text(), "+32494444444",
-                           'Initial Phone text should be set');
-        assert.strictEqual(form.$('.o_field_phone_sms').text(), 'SMS',
-                           'SMS button label should be rendered');
+        //checkinitialrendering
+        assert.strictEqual(form.$('.o_field_phone').text(),"+32494444444",
+                           'InitialPhonetextshouldbeset');
+        assert.strictEqual(form.$('.o_field_phone_sms').text(),'SMS',
+                           'SMSbuttonlabelshouldberendered');
 
-        // trigger the onchange to update phone field, but still in readonly mode
-        await testUtils.fields.editInput($('input[name="foo"]'), 'someOtherFoo');
+        //triggertheonchangetoupdatephonefield,butstillinreadonlymode
+        awaittestUtils.fields.editInput($('input[name="foo"]'),'someOtherFoo');
 
-        // check rendering after changes
-        assert.strictEqual(form.$('.o_field_phone').text(), NEW_PHONE,
-                           'Phone text should be updated');
-        assert.strictEqual(form.$('.o_field_phone_sms').text(), 'SMS',
-                           'SMS button label should not be changed');
+        //checkrenderingafterchanges
+        assert.strictEqual(form.$('.o_field_phone').text(),NEW_PHONE,
+                           'Phonetextshouldbeupdated');
+        assert.strictEqual(form.$('.o_field_phone_sms').text(),'SMS',
+                           'SMSbuttonlabelshouldnotbechanged');
 
         form.destroy();
     });

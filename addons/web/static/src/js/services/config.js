@@ -1,135 +1,135 @@
-flectra.define('web.config', function (require) {
-"use strict";
+flectra.define('web.config',function(require){
+"usestrict";
 
-const Bus = require('web.Bus');
+constBus=require('web.Bus');
 
-const bus = new Bus();
+constbus=newBus();
 
 /**
- * This module contains all the (mostly) static 'environmental' information.
- * This is often necessary to allow the rest of the web client to properly
- * render itself.
+ *Thismodulecontainsallthe(mostly)static'environmental'information.
+ *Thisisoftennecessarytoallowtherestofthewebclienttoproperly
+ *renderitself.
  *
- * Note that many information currently stored in session should be moved to
- * this file someday.
+ *Notethatmanyinformationcurrentlystoredinsessionshouldbemovedto
+ *thisfilesomeday.
  */
 
-const maxTouchPoints = navigator.maxTouchPoints || 1;
-const isAndroid = /Android/i.test(navigator.userAgent);
-const isIOS = /(iPad|iPhone|iPod)/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && maxTouchPoints > 1);
-const isOtherMobileDevice = /(webOS|BlackBerry|Windows Phone)/i.test(navigator.userAgent);
+constmaxTouchPoints=navigator.maxTouchPoints||1;
+constisAndroid=/Android/i.test(navigator.userAgent);
+constisIOS=/(iPad|iPhone|iPod)/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&maxTouchPoints>1);
+constisOtherMobileDevice=/(webOS|BlackBerry|WindowsPhone)/i.test(navigator.userAgent);
 
-var config = {
-    device: {
+varconfig={
+    device:{
         /**
-        * bus to use in order to be able to handle device config related events
-        *   - 'size_changed' : triggered when window size is
-        *     corresponding to a new bootstrap breakpoint. The new size_class
-         *    is provided.
+        *bustouseinordertobeabletohandledeviceconfigrelatedevents
+        *  -'size_changed':triggeredwhenwindowsizeis
+        *    correspondingtoanewbootstrapbreakpoint.Thenewsize_class
+         *   isprovided.
         */
-        bus: bus,
+        bus:bus,
         /**
-         * touch is a boolean, true if the device supports touch interaction
+         *touchisaboolean,trueifthedevicesupportstouchinteraction
          *
-         * @type Boolean
+         *@typeBoolean
          */
-        touch: 'ontouchstart' in window || 'onmsgesturechange' in window,
+        touch:'ontouchstart'inwindow||'onmsgesturechange'inwindow,
         /**
-         * size_class is an integer: 0, 1, 2, 3 or 4, depending on the (current)
-         * size of the device.  This is a dynamic property, updated whenever the
-         * browser is resized
+         *size_classisaninteger:0,1,2,3or4,dependingonthe(current)
+         *sizeofthedevice. Thisisadynamicproperty,updatedwheneverthe
+         *browserisresized
          *
-         * @type Number
+         *@typeNumber
          */
-        size_class: null,
+        size_class:null,
         /**
-         * Mobile OS (Android) device detection using userAgent.
-         * This flag doesn't depend on the size/resolution of the screen.
+         *MobileOS(Android)devicedetectionusinguserAgent.
+         *Thisflagdoesn'tdependonthesize/resolutionofthescreen.
          *
-         * @return Boolean
+         *@returnBoolean
          */
-        isAndroid: isAndroid,
+        isAndroid:isAndroid,
         /**
-         * Mobile OS (iOS) device detection using userAgent.
-         * This flag doesn't depend on the size/resolution of the screen.
+         *MobileOS(iOS)devicedetectionusinguserAgent.
+         *Thisflagdoesn'tdependonthesize/resolutionofthescreen.
          *
-         * @return Boolean
+         *@returnBoolean
          */
-        isIOS: isIOS,
+        isIOS:isIOS,
         /**
-         * A frequent use case is to have a different render in 'mobile' mode,
-         * meaning when the screen is small.  This flag (boolean) is true when
-         * the size is XS/VSM/SM. It is also updated dynamically.
+         *Afrequentusecaseistohaveadifferentrenderin'mobile'mode,
+         *meaningwhenthescreenissmall. Thisflag(boolean)istruewhen
+         *thesizeisXS/VSM/SM.Itisalsoupdateddynamically.
          *
-         * @type Boolean
+         *@typeBoolean
          */
-        isMobile: null,
+        isMobile:null,
         /**
-         * Mobile device detection using userAgent.
-         * This flag doesn't depend on the size/resolution of the screen.
-         * It targets mobile devices which suggests that there is a virtual keyboard.
+         *MobiledevicedetectionusinguserAgent.
+         *Thisflagdoesn'tdependonthesize/resolutionofthescreen.
+         *Ittargetsmobiledeviceswhichsuggeststhatthereisavirtualkeyboard.
          *
-         * @return {boolean}
+         *@return{boolean}
          */
-        isMobileDevice: isAndroid || isIOS || isOtherMobileDevice,
+        isMobileDevice:isAndroid||isIOS||isOtherMobileDevice,
         /**
-         * Mapping between the numbers 0,1,2,3,4,5,6 and some descriptions
+         *Mappingbetweenthenumbers0,1,2,3,4,5,6andsomedescriptions
          */
-        SIZES: { XS: 0, VSM: 1, SM: 2, MD: 3, LG: 4, XL: 5, XXL: 6 },
+        SIZES:{XS:0,VSM:1,SM:2,MD:3,LG:4,XL:5,XXL:6},
     },
     /**
-     * States whether the current environment is in debug or not.
+     *Stateswhetherthecurrentenvironmentisindebugornot.
      *
-     * @param debugMode the debug mode to check, empty for simple debug mode
-     * @returns {boolean}
+     *@paramdebugModethedebugmodetocheck,emptyforsimpledebugmode
+     *@returns{boolean}
      */
-    isDebug: function (debugMode) {
-        if (debugMode) {
-            return flectra.debug && flectra.debug.indexOf(debugMode) !== -1;
+    isDebug:function(debugMode){
+        if(debugMode){
+            returnflectra.debug&&flectra.debug.indexOf(debugMode)!==-1;
         }
-        return flectra.debug;
+        returnflectra.debug;
     },
 };
 
 
-var medias = [
-    window.matchMedia('(max-width: 474px)'),
-    window.matchMedia('(min-width: 475px) and (max-width: 575px)'),
-    window.matchMedia('(min-width: 576px) and (max-width: 767px)'),
-    window.matchMedia('(min-width: 768px) and (max-width: 991px)'),
-    window.matchMedia('(min-width: 992px) and (max-width: 1199px)'),
-    window.matchMedia('(min-width: 1200px) and (max-width: 1533px)'),
-    window.matchMedia('(min-width: 1534px)'),
+varmedias=[
+    window.matchMedia('(max-width:474px)'),
+    window.matchMedia('(min-width:475px)and(max-width:575px)'),
+    window.matchMedia('(min-width:576px)and(max-width:767px)'),
+    window.matchMedia('(min-width:768px)and(max-width:991px)'),
+    window.matchMedia('(min-width:992px)and(max-width:1199px)'),
+    window.matchMedia('(min-width:1200px)and(max-width:1533px)'),
+    window.matchMedia('(min-width:1534px)'),
 ];
 
 /**
- * Return the current size class
+ *Returnthecurrentsizeclass
  *
- * @returns {integer} a number between 0 and 5, included
+ *@returns{integer}anumberbetween0and5,included
  */
-function _getSizeClass() {
-    for (var i = 0 ; i < medias.length ; i++) {
-        if (medias[i].matches) {
-            return i;
+function_getSizeClass(){
+    for(vari=0;i<medias.length;i++){
+        if(medias[i].matches){
+            returni;
         }
     }
 }
 /**
- * Update the size dependant properties in the config object.  This method
- * should be called every time the size class changes.
+ *Updatethesizedependantpropertiesintheconfigobject. Thismethod
+ *shouldbecalledeverytimethesizeclasschanges.
  */
-function _updateSizeProps() {
-    var sc = _getSizeClass();
-    if (sc !== config.device.size_class) {
-        config.device.size_class = sc;
-        config.device.isMobile = config.device.size_class <= config.device.SIZES.SM;
-        config.device.bus.trigger('size_changed', config.device.size_class);
+function_updateSizeProps(){
+    varsc=_getSizeClass();
+    if(sc!==config.device.size_class){
+        config.device.size_class=sc;
+        config.device.isMobile=config.device.size_class<=config.device.SIZES.SM;
+        config.device.bus.trigger('size_changed',config.device.size_class);
     }
 }
 
-_.invoke(medias, 'addListener', _updateSizeProps);
+_.invoke(medias,'addListener',_updateSizeProps);
 _updateSizeProps();
 
-return config;
+returnconfig;
 
 });

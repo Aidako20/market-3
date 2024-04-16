@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="cash_rounding_5_centime" model="account.cash.rounding">
-            <field name="name">Coinage 0.05</field>
-            <field name="rounding">0.05</field>
-            <field name="strategy">add_invoice_line</field>
+        <recordid="cash_rounding_5_centime"model="account.cash.rounding">
+            <fieldname="name">Coinage0.05</field>
+            <fieldname="rounding">0.05</field>
+            <fieldname="strategy">add_invoice_line</field>
         </record>
     </data>
 </flectra>

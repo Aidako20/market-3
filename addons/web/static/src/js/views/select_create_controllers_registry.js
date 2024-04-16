@@ -1,60 +1,60 @@
-flectra.define('web.select_create_controllers_registry', function (require) {
-"use strict";
+flectra.define('web.select_create_controllers_registry',function(require){
+"usestrict";
 
-return {};
+return{};
 
 });
 
-flectra.define('web._select_create_controllers_registry', function (require) {
-"use strict";
+flectra.define('web._select_create_controllers_registry',function(require){
+"usestrict";
 
-var KanbanController = require('web.KanbanController');
-var ListController = require('web.ListController');
-var select_create_controllers_registry = require('web.select_create_controllers_registry');
+varKanbanController=require('web.KanbanController');
+varListController=require('web.ListController');
+varselect_create_controllers_registry=require('web.select_create_controllers_registry');
 
-var SelectCreateKanbanController = KanbanController.extend({
+varSelectCreateKanbanController=KanbanController.extend({
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Override to select the clicked record instead of opening it
+     *Overridetoselecttheclickedrecordinsteadofopeningit
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onOpenRecord: function (ev) {
-        var selectedRecord = this.model.get(ev.data.id);
-        this.trigger_up('select_record', {
-            id: selectedRecord.res_id,
-            display_name: selectedRecord.data.display_name,
+    _onOpenRecord:function(ev){
+        varselectedRecord=this.model.get(ev.data.id);
+        this.trigger_up('select_record',{
+            id:selectedRecord.res_id,
+            display_name:selectedRecord.data.display_name,
         });
     },
 });
 
-var SelectCreateListController = ListController.extend({
+varSelectCreateListController=ListController.extend({
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Override to select the clicked record instead of opening it
+     *Overridetoselecttheclickedrecordinsteadofopeningit
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _onOpenRecord: function (ev) {
-        var selectedRecord = this.model.get(ev.data.id);
-        this.trigger_up('select_record', {
-            id: selectedRecord.res_id,
-            display_name: selectedRecord.data.display_name,
+    _onOpenRecord:function(ev){
+        varselectedRecord=this.model.get(ev.data.id);
+        this.trigger_up('select_record',{
+            id:selectedRecord.res_id,
+            display_name:selectedRecord.data.display_name,
         });
     },
 });
 
-_.extend(select_create_controllers_registry, {
-    SelectCreateListController: SelectCreateListController,
-    SelectCreateKanbanController: SelectCreateKanbanController,
+_.extend(select_create_controllers_registry,{
+    SelectCreateListController:SelectCreateListController,
+    SelectCreateKanbanController:SelectCreateKanbanController,
 });
 
 });

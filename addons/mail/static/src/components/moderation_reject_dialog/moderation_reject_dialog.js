@@ -1,104 +1,104 @@
-flectra.define('mail/static/src/components/moderation_reject_dialog/moderation_reject_dialog.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/moderation_reject_dialog/moderation_reject_dialog.js',function(require){
+'usestrict';
 
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-const components = {
-    Dialog: require('web.OwlDialog'),
+constcomponents={
+    Dialog:require('web.OwlDialog'),
 };
 
-const { Component, useState } = owl;
-const { useRef } = owl.hooks;
+const{Component,useState}=owl;
+const{useRef}=owl.hooks;
 
-class ModerationRejectDialog extends Component {
+classModerationRejectDialogextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps({
-            compareDepth: {
-                messageLocalIds: 1,
+            compareDepth:{
+                messageLocalIds:1,
             },
         });
-        this.state = useState({
-            title: this.env._t("Message Rejected"),
-            comment: this.env._t("Your message was rejected by moderator."),
+        this.state=useState({
+            title:this.env._t("MessageRejected"),
+            comment:this.env._t("Yourmessagewasrejectedbymoderator."),
         });
-        useStore(props => {
-            const messages = props.messageLocalIds.map(localId =>
+        useStore(props=>{
+            constmessages=props.messageLocalIds.map(localId=>
                 this.env.models['mail.message'].get(localId)
             );
-            return {
-                messages: messages.map(message => message ? message.__state : undefined),
+            return{
+                messages:messages.map(message=>message?message.__state:undefined),
             };
-        }, {
-            compareDepth: {
-                messages: 1,
+        },{
+            compareDepth:{
+                messages:1,
             },
         });
-        // to manually trigger the dialog close event
-        this._dialogRef = useRef('dialog');
+        //tomanuallytriggerthedialogcloseevent
+        this._dialogRef=useRef('dialog');
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {mail.message[]}
+     *@returns{mail.message[]}
      */
-    get messages() {
-        return this.props.messageLocalIds.map(localId =>
+    getmessages(){
+        returnthis.props.messageLocalIds.map(localId=>
             this.env.models['mail.message'].get(localId)
         );
     }
 
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    get SEND_EXPLANATION_TO_AUTHOR() {
-        return this.env._t("Send explanation to author");
+    getSEND_EXPLANATION_TO_AUTHOR(){
+        returnthis.env._t("Sendexplanationtoauthor");
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onClickCancel() {
+    _onClickCancel(){
         this._dialogRef.comp._close();
     }
 
     /**
-     * @private
+     *@private
      */
-    _onClickReject() {
+    _onClickReject(){
         this._dialogRef.comp._close();
-        const kwargs = {
-            title: this.state.title,
-            comment: this.state.comment,
+        constkwargs={
+            title:this.state.title,
+            comment:this.state.comment,
         };
-        this.env.models['mail.message'].moderate(this.messages, 'reject', kwargs);
+        this.env.models['mail.message'].moderate(this.messages,'reject',kwargs);
     }
 
 }
 
-Object.assign(ModerationRejectDialog, {
+Object.assign(ModerationRejectDialog,{
     components,
-    props: {
-        messageLocalIds: {
-            type: Array,
-            element: String,
+    props:{
+        messageLocalIds:{
+            type:Array,
+            element:String,
         },
     },
-    template: 'mail.ModerationRejectDialog',
+    template:'mail.ModerationRejectDialog',
 });
 
-return ModerationRejectDialog;
+returnModerationRejectDialog;
 
 });

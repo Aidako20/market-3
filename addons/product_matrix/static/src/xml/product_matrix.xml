@@ -1,53 +1,53 @@
 <template>
-    <div t-name="product_matrix.matrix">
-        <table class="o_matrix_input_table o_product_variant_matrix table table-sm table-striped table-bordered">
+    <divt-name="product_matrix.matrix">
+        <tableclass="o_matrix_input_tableo_product_variant_matrixtabletable-smtable-stripedtable-bordered">
             <thead>
                 <tr>
-                    <t t-foreach="header" t-as="column_header">
-                        <th t-attf-class="o_matrix_title_header {{column_header_first?'text-left':'text-center'}}">
-                            <span t-esc="column_header.name"/>
-                            <t t-call="product_matrix.extra_price">
-                                <t t-set="price" t-value="column_header.price"/>
+                    <tt-foreach="header"t-as="column_header">
+                        <tht-attf-class="o_matrix_title_header{{column_header_first?'text-left':'text-center'}}">
+                            <spant-esc="column_header.name"/>
+                            <tt-call="product_matrix.extra_price">
+                                <tt-set="price"t-value="column_header.price"/>
                             </t>
                         </th>
                     </t>
                 </tr>
             </thead>
             <tbody>
-                <tr t-foreach="rows" t-as="row">
-                    <t t-foreach="row" t-as="cell">
-                        <td t-if="cell.name" class="text-left">
-                            <strong t-esc="cell.name"/>
-                            <t t-call="product_matrix.extra_price">
-                                <t t-set="price" t-value="cell.price"/>
+                <trt-foreach="rows"t-as="row">
+                    <tt-foreach="row"t-as="cell">
+                        <tdt-if="cell.name"class="text-left">
+                            <strongt-esc="cell.name"/>
+                            <tt-call="product_matrix.extra_price">
+                                <tt-set="price"t-value="cell.price"/>
                             </t>
                         </td>
-                        <td t-else="">
-                            <div t-if="cell.is_possible_combination" class="input-group">
-                                <input type="number"
+                        <tdt-else="">
+                            <divt-if="cell.is_possible_combination"class="input-group">
+                                <inputtype="number"
                                   class="o_matrix_input"
                                   t-att-ptav_ids="cell.ptav_ids"
                                   t-att-value="cell.qty"/>
                             </div>
-                            <span t-else="" class="o_matrix_cell o_matrix_text_muted o_matrix_nocontent_container"> Not available </span>
+                            <spant-else=""class="o_matrix_cello_matrix_text_mutedo_matrix_nocontent_container">Notavailable</span>
                         </td>
                     </t>
                 </tr>
             </tbody>
         </table>
     </div>
-    <span t-name="product_matrix.extra_price" t-if="price" class="badge badge-pill badge-secondary">
+    <spant-name="product_matrix.extra_price"t-if="price"class="badgebadge-pillbadge-secondary">
             <!--
-                price_extra is displayed as catalog price instead of
-                price after pricelist because it is impossible to
-                compute. Indeed, the pricelist rule might depend on the
-                selected variant, so the price_extra will be different
-                depending on the selected combination. The price of an
-                attribute is therefore variable and it's not very
-                accurate to display it.
+                price_extraisdisplayedascatalogpriceinsteadof
+                priceafterpricelistbecauseitisimpossibleto
+                compute.Indeed,thepricelistrulemightdependonthe
+                selectedvariant,sotheprice_extrawillbedifferent
+                dependingontheselectedcombination.Thepriceofan
+                attributeisthereforevariableandit'snotvery
+                accuratetodisplayit.
                 -->
-            <span class="variant_price_extra" style="white-space: nowrap;">
-                <t t-raw="price"/>
+            <spanclass="variant_price_extra"style="white-space:nowrap;">
+                <tt-raw="price"/>
             </span>
         </span>
 </template>

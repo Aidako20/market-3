@@ -1,720 +1,720 @@
-flectra.define('mail/static/src/components/discuss/tests/discuss_inbox_tests.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/discuss/tests/discuss_inbox_tests.js',function(require){
+'usestrict';
 
-const {
+const{
     afterEach,
     afterNextRender,
     beforeEach,
     nextAnimationFrame,
     start,
-} = require('mail/static/src/utils/test_utils.js');
+}=require('mail/static/src/utils/test_utils.js');
 
-const Bus = require('web.Bus');
+constBus=require('web.Bus');
 
-QUnit.module('mail', {}, function () {
-QUnit.module('components', {}, function () {
-QUnit.module('discuss', {}, function () {
-QUnit.module('discuss_inbox_tests.js', {
-    beforeEach() {
+QUnit.module('mail',{},function(){
+QUnit.module('components',{},function(){
+QUnit.module('discuss',{},function(){
+QUnit.module('discuss_inbox_tests.js',{
+    beforeEach(){
         beforeEach(this);
 
-        this.start = async params => {
-            const { env, widget } = await start(Object.assign({}, params, {
-                autoOpenDiscuss: true,
-                data: this.data,
-                hasDiscuss: true,
+        this.start=asyncparams=>{
+            const{env,widget}=awaitstart(Object.assign({},params,{
+                autoOpenDiscuss:true,
+                data:this.data,
+                hasDiscuss:true,
             }));
-            this.env = env;
-            this.widget = widget;
+            this.env=env;
+            this.widget=widget;
         };
     },
-    afterEach() {
+    afterEach(){
         afterEach(this);
     },
 });
 
-QUnit.test('reply: discard on pressing escape', async function (assert) {
+QUnit.test('reply:discardonpressingescape',asyncfunction(assert){
     assert.expect(9);
 
-    // partner expected to be found by mention
+    //partnerexpectedtobefoundbymention
     this.data['res.partner'].records.push({
-        email: "testpartnert@flectrahq.com",
-        id: 11,
-        name: "TestPartner",
+        email:"testpartnert@flectrahq.com",
+        id:11,
+        name:"TestPartner",
     });
-    // message expected to be found in inbox
+    //messageexpectedtobefoundininbox
     this.data['mail.message'].records.push({
-        body: "not empty",
-        model: 'res.partner',
-        needaction: true,
-        needaction_partner_ids: [this.data.currentPartnerId],
-        res_id: 20,
+        body:"notempty",
+        model:'res.partner',
+        needaction:true,
+        needaction_partner_ids:[this.data.currentPartnerId],
+        res_id:20,
     });
-    await this.start();
+    awaitthis.start();
     assert.containsOnce(
         document.body,
         '.o_Message',
-        "should display a single message"
+        "shoulddisplayasinglemessage"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_Message_commandReply').click()
     );
     assert.containsOnce(
         document.body,
         '.o_Composer',
-        "should have composer after clicking on reply to message"
+        "shouldhavecomposerafterclickingonreplytomessage"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_Composer_buttonEmojis`).click()
     );
     assert.containsOnce(
         document.body,
         '.o_EmojisPopover',
-        "emojis popover should be opened after click on emojis button"
+        "emojispopovershouldbeopenedafterclickonemojisbutton"
     );
 
-    await afterNextRender(() => {
-        const ev = new window.KeyboardEvent('keydown', { bubbles: true, key: "Escape" });
+    awaitafterNextRender(()=>{
+        constev=newwindow.KeyboardEvent('keydown',{bubbles:true,key:"Escape"});
         document.querySelector(`.o_Composer_buttonEmojis`).dispatchEvent(ev);
     });
     assert.containsNone(
         document.body,
         '.o_EmojisPopover',
-        "emojis popover should be closed after pressing escape on emojis button"
+        "emojispopovershouldbeclosedafterpressingescapeonemojisbutton"
     );
     assert.containsOnce(
         document.body,
         '.o_Composer',
-        "reply composer should still be opened after pressing escape on emojis button"
+        "replycomposershouldstillbeopenedafterpressingescapeonemojisbutton"
     );
 
-    await afterNextRender(() => {
+    awaitafterNextRender(()=>{
         document.querySelector(`.o_ComposerTextInput_textarea`).focus();
-        document.execCommand('insertText', false, "@");
+        document.execCommand('insertText',false,"@");
         document.querySelector(`.o_ComposerTextInput_textarea`)
-            .dispatchEvent(new window.KeyboardEvent('keydown'));
+            .dispatchEvent(newwindow.KeyboardEvent('keydown'));
         document.querySelector(`.o_ComposerTextInput_textarea`)
-            .dispatchEvent(new window.KeyboardEvent('keyup'));
-        document.execCommand('insertText', false, "T");
+            .dispatchEvent(newwindow.KeyboardEvent('keyup'));
+        document.execCommand('insertText',false,"T");
         document.querySelector(`.o_ComposerTextInput_textarea`)
-            .dispatchEvent(new window.KeyboardEvent('keydown'));
+            .dispatchEvent(newwindow.KeyboardEvent('keydown'));
         document.querySelector(`.o_ComposerTextInput_textarea`)
-            .dispatchEvent(new window.KeyboardEvent('keyup'));
-        document.execCommand('insertText', false, "e");
+            .dispatchEvent(newwindow.KeyboardEvent('keyup'));
+        document.execCommand('insertText',false,"e");
         document.querySelector(`.o_ComposerTextInput_textarea`)
-            .dispatchEvent(new window.KeyboardEvent('keydown'));
+            .dispatchEvent(newwindow.KeyboardEvent('keydown'));
         document.querySelector(`.o_ComposerTextInput_textarea`)
-            .dispatchEvent(new window.KeyboardEvent('keyup'));
+            .dispatchEvent(newwindow.KeyboardEvent('keyup'));
     });
     assert.containsOnce(
         document.body,
         '.o_ComposerSuggestion',
-        "mention suggestion should be opened after typing @"
+        "mentionsuggestionshouldbeopenedaftertyping@"
     );
 
-    await afterNextRender(() => {
-        const ev = new window.KeyboardEvent('keydown', { bubbles: true, key: "Escape" });
+    awaitafterNextRender(()=>{
+        constev=newwindow.KeyboardEvent('keydown',{bubbles:true,key:"Escape"});
         document.querySelector(`.o_ComposerTextInput_textarea`).dispatchEvent(ev);
     });
     assert.containsNone(
         document.body,
         '.o_ComposerSuggestion',
-        "mention suggestion should be closed after pressing escape on mention suggestion"
+        "mentionsuggestionshouldbeclosedafterpressingescapeonmentionsuggestion"
     );
     assert.containsOnce(
         document.body,
         '.o_Composer',
-        "reply composer should still be opened after pressing escape on mention suggestion"
+        "replycomposershouldstillbeopenedafterpressingescapeonmentionsuggestion"
     );
 
-    await afterNextRender(() => {
-        const ev = new window.KeyboardEvent('keydown', { bubbles: true, key: "Escape" });
+    awaitafterNextRender(()=>{
+        constev=newwindow.KeyboardEvent('keydown',{bubbles:true,key:"Escape"});
         document.querySelector(`.o_ComposerTextInput_textarea`).dispatchEvent(ev);
     });
     assert.containsNone(
         document.body,
         '.o_Composer',
-        "reply composer should be closed after pressing escape if there was no other priority escape handler"
+        "replycomposershouldbeclosedafterpressingescapeiftherewasnootherpriorityescapehandler"
     );
 });
 
-QUnit.test('reply: discard on discard button click', async function (assert) {
+QUnit.test('reply:discardondiscardbuttonclick',asyncfunction(assert){
     assert.expect(4);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        model: 'res.partner',
-        needaction: true,
-        needaction_partner_ids: [this.data.currentPartnerId],
-        res_id: 20,
+        body:"notempty",
+        model:'res.partner',
+        needaction:true,
+        needaction_partner_ids:[this.data.currentPartnerId],
+        res_id:20,
     });
-    await this.start();
+    awaitthis.start();
     assert.containsOnce(
         document.body,
         '.o_Message',
-        "should display a single message"
+        "shoulddisplayasinglemessage"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_Message_commandReply').click()
     );
     assert.containsOnce(
         document.body,
         '.o_Composer',
-        "should have composer after clicking on reply to message"
+        "shouldhavecomposerafterclickingonreplytomessage"
     );
     assert.containsOnce(
         document.body,
         '.o_Composer_buttonDiscard',
-        "composer should have a discard button"
+        "composershouldhaveadiscardbutton"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_Composer_buttonDiscard`).click()
     );
     assert.containsNone(
         document.body,
         '.o_Composer',
-        "reply composer should be closed after clicking on discard"
+        "replycomposershouldbeclosedafterclickingondiscard"
     );
 });
 
-QUnit.test('reply: discard on reply button toggle', async function (assert) {
+QUnit.test('reply:discardonreplybuttontoggle',asyncfunction(assert){
     assert.expect(3);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        model: 'res.partner',
-        needaction: true,
-        needaction_partner_ids: [this.data.currentPartnerId],
-        res_id: 20,
+        body:"notempty",
+        model:'res.partner',
+        needaction:true,
+        needaction_partner_ids:[this.data.currentPartnerId],
+        res_id:20,
     });
-    await this.start();
+    awaitthis.start();
     assert.containsOnce(
         document.body,
         '.o_Message',
-        "should display a single message"
+        "shoulddisplayasinglemessage"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_Message_commandReply').click()
     );
     assert.containsOnce(
         document.body,
         '.o_Composer',
-        "should have composer after clicking on reply to message"
+        "shouldhavecomposerafterclickingonreplytomessage"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_Message_commandReply`).click()
     );
     assert.containsNone(
         document.body,
         '.o_Composer',
-        "reply composer should be closed after clicking on reply button again"
+        "replycomposershouldbeclosedafterclickingonreplybuttonagain"
     );
 });
 
-QUnit.test('reply: discard on click away', async function (assert) {
+QUnit.test('reply:discardonclickaway',asyncfunction(assert){
     assert.expect(7);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        model: 'res.partner',
-        needaction: true,
-        needaction_partner_ids: [this.data.currentPartnerId],
-        res_id: 20,
+        body:"notempty",
+        model:'res.partner',
+        needaction:true,
+        needaction_partner_ids:[this.data.currentPartnerId],
+        res_id:20,
     });
-    await this.start();
+    awaitthis.start();
     assert.containsOnce(
         document.body,
         '.o_Message',
-        "should display a single message"
+        "shoulddisplayasinglemessage"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_Message_commandReply').click()
     );
     assert.containsOnce(
         document.body,
         '.o_Composer',
-        "should have composer after clicking on reply to message"
+        "shouldhavecomposerafterclickingonreplytomessage"
     );
 
     document.querySelector(`.o_ComposerTextInput_textarea`).click();
-    await nextAnimationFrame(); // wait just in case, but nothing is supposed to happen
+    awaitnextAnimationFrame();//waitjustincase,butnothingissupposedtohappen
     assert.containsOnce(
         document.body,
         '.o_Composer',
-        "reply composer should still be there after clicking inside itself"
+        "replycomposershouldstillbethereafterclickinginsideitself"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_Composer_buttonEmojis`).click()
     );
     assert.containsOnce(
         document.body,
         '.o_EmojisPopover',
-        "emojis popover should be opened after clicking on emojis button"
+        "emojispopovershouldbeopenedafterclickingonemojisbutton"
     );
 
-    await afterNextRender(() => {
+    awaitafterNextRender(()=>{
         document.querySelector(`.o_EmojisPopover_emoji`).click();
     });
     assert.containsNone(
         document.body,
         '.o_EmojisPopover',
-        "emojis popover should be closed after selecting an emoji"
+        "emojispopovershouldbeclosedafterselectinganemoji"
     );
     assert.containsOnce(
         document.body,
         '.o_Composer',
-        "reply composer should still be there after selecting an emoji (even though it is technically a click away, it should be considered inside)"
+        "replycomposershouldstillbethereafterselectinganemoji(eventhoughitistechnicallyaclickaway,itshouldbeconsideredinside)"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector(`.o_Message`).click()
     );
     assert.containsNone(
         document.body,
         '.o_Composer',
-        "reply composer should be closed after clicking away"
+        "replycomposershouldbeclosedafterclickingaway"
     );
 });
 
-QUnit.test('"reply to" composer should log note if message replied to is a note', async function (assert) {
+QUnit.test('"replyto"composershouldlognoteifmessagerepliedtoisanote',asyncfunction(assert){
     assert.expect(6);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        is_discussion: false,
-        model: 'res.partner',
-        needaction: true,
-        needaction_partner_ids: [this.data.currentPartnerId],
-        res_id: 20,
+        body:"notempty",
+        is_discussion:false,
+        model:'res.partner',
+        needaction:true,
+        needaction_partner_ids:[this.data.currentPartnerId],
+        res_id:20,
     });
-    await this.start({
-        async mockRPC(route, args) {
-            if (args.method === 'message_post') {
+    awaitthis.start({
+        asyncmockRPC(route,args){
+            if(args.method==='message_post'){
                 assert.step('message_post');
                 assert.strictEqual(
                     args.kwargs.message_type,
                     "comment",
-                    "should set message type as 'comment'"
+                    "shouldsetmessagetypeas'comment'"
                 );
                 assert.strictEqual(
                     args.kwargs.subtype_xmlid,
                     "mail.mt_note",
-                    "should set subtype_xmlid as 'note'"
+                    "shouldsetsubtype_xmlidas'note'"
                 );
             }
-            return this._super(...arguments);
+            returnthis._super(...arguments);
         },
     });
     assert.containsOnce(
         document.body,
         '.o_Message',
-        "should display a single message"
+        "shoulddisplayasinglemessage"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_Message_commandReply').click()
     );
     assert.strictEqual(
         document.querySelector('.o_Composer_buttonSend').textContent.trim(),
         "Log",
-        "Send button text should be 'Log'"
+        "Sendbuttontextshouldbe'Log'"
     );
 
-    await afterNextRender(() =>
-        document.execCommand('insertText', false, "Test")
+    awaitafterNextRender(()=>
+        document.execCommand('insertText',false,"Test")
     );
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_Composer_buttonSend').click()
     );
     assert.verifySteps(['message_post']);
 });
 
-QUnit.test('"reply to" composer should send message if message replied to is not a note', async function (assert) {
+QUnit.test('"replyto"composershouldsendmessageifmessagerepliedtoisnotanote',asyncfunction(assert){
     assert.expect(6);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        is_discussion: true,
-        model: 'res.partner',
-        needaction: true,
-        needaction_partner_ids: [this.data.currentPartnerId],
-        res_id: 20,
+        body:"notempty",
+        is_discussion:true,
+        model:'res.partner',
+        needaction:true,
+        needaction_partner_ids:[this.data.currentPartnerId],
+        res_id:20,
     });
-    await this.start({
-        async mockRPC(route, args) {
-            if (args.method === 'message_post') {
+    awaitthis.start({
+        asyncmockRPC(route,args){
+            if(args.method==='message_post'){
                 assert.step('message_post');
                 assert.strictEqual(
                     args.kwargs.message_type,
                     "comment",
-                    "should set message type as 'comment'"
+                    "shouldsetmessagetypeas'comment'"
                 );
                 assert.strictEqual(
                     args.kwargs.subtype_xmlid,
                     "mail.mt_comment",
-                    "should set subtype_xmlid as 'comment'"
+                    "shouldsetsubtype_xmlidas'comment'"
                 );
             }
-            return this._super(...arguments);
+            returnthis._super(...arguments);
         },
     });
     assert.containsOnce(
         document.body,
         '.o_Message',
-        "should display a single message"
+        "shoulddisplayasinglemessage"
     );
 
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_Message_commandReply').click()
     );
     assert.strictEqual(
         document.querySelector('.o_Composer_buttonSend').textContent.trim(),
         "Send",
-        "Send button text should be 'Send'"
+        "Sendbuttontextshouldbe'Send'"
     );
 
-    await afterNextRender(() =>
-        document.execCommand('insertText', false, "Test")
+    awaitafterNextRender(()=>
+        document.execCommand('insertText',false,"Test")
     );
-    await afterNextRender(() =>
+    awaitafterNextRender(()=>
         document.querySelector('.o_Composer_buttonSend').click()
     );
     assert.verifySteps(['message_post']);
 });
 
-QUnit.test('error notifications should not be shown in Inbox', async function (assert) {
+QUnit.test('errornotificationsshouldnotbeshowninInbox',asyncfunction(assert){
     assert.expect(3);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        id: 100,
-        model: 'mail.channel',
-        needaction: true,
-        needaction_partner_ids: [this.data.currentPartnerId],
-        res_id: 20,
+        body:"notempty",
+        id:100,
+        model:'mail.channel',
+        needaction:true,
+        needaction_partner_ids:[this.data.currentPartnerId],
+        res_id:20,
     });
     this.data['mail.notification'].records.push({
-        mail_message_id: 100, // id of related message
-        res_partner_id: this.data.currentPartnerId, // must be for current partner
-        notification_status: 'exception',
-        notification_type: 'email',
+        mail_message_id:100,//idofrelatedmessage
+        res_partner_id:this.data.currentPartnerId,//mustbeforcurrentpartner
+        notification_status:'exception',
+        notification_type:'email',
     });
-    await this.start();
+    awaitthis.start();
     assert.containsOnce(
         document.body,
         '.o_Message',
-        "should display a single message"
+        "shoulddisplayasinglemessage"
     );
     assert.containsOnce(
         document.body,
         '.o_Message_originThreadLink',
-        "should display origin thread link"
+        "shoulddisplayoriginthreadlink"
     );
     assert.containsNone(
         document.body,
         '.o_Message_notificationIcon',
-        "should not display any notification icon in Inbox"
+        "shouldnotdisplayanynotificationiconinInbox"
     );
 });
 
-QUnit.test('show subject of message in Inbox', async function (assert) {
+QUnit.test('showsubjectofmessageinInbox',asyncfunction(assert){
     assert.expect(3);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        model: 'mail.channel', // random existing model
-        needaction: true, // message_fetch domain
-        needaction_partner_ids: [this.data.currentPartnerId], // not needed, for consistency
-        subject: "Salutations, voyageur", // will be asserted in the test
+        body:"notempty",
+        model:'mail.channel',//randomexistingmodel
+        needaction:true,//message_fetchdomain
+        needaction_partner_ids:[this.data.currentPartnerId],//notneeded,forconsistency
+        subject:"Salutations,voyageur",//willbeassertedinthetest
     });
-    await this.start();
+    awaitthis.start();
     assert.containsOnce(
         document.body,
         '.o_Message',
-        "should display a single message"
+        "shoulddisplayasinglemessage"
     );
     assert.containsOnce(
         document.body,
         '.o_Message_subject',
-        "should display subject of the message"
+        "shoulddisplaysubjectofthemessage"
     );
     assert.strictEqual(
         document.querySelector('.o_Message_subject').textContent,
-        "Subject: Salutations, voyageur",
-        "Subject of the message should be 'Salutations, voyageur'"
+        "Subject:Salutations,voyageur",
+        "Subjectofthemessageshouldbe'Salutations,voyageur'"
     );
 });
 
-QUnit.test('show subject of message in history', async function (assert) {
+QUnit.test('showsubjectofmessageinhistory',asyncfunction(assert){
     assert.expect(3);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        history_partner_ids: [3], // not needed, for consistency
-        model: 'mail.channel', // random existing model
-        subject: "Salutations, voyageur", // will be asserted in the test
+        body:"notempty",
+        history_partner_ids:[3],//notneeded,forconsistency
+        model:'mail.channel',//randomexistingmodel
+        subject:"Salutations,voyageur",//willbeassertedinthetest
     });
-    await this.start({
-        discuss: {
-            params: {
-                default_active_id: 'mail.box_history',
+    awaitthis.start({
+        discuss:{
+            params:{
+                default_active_id:'mail.box_history',
             },
         },
     });
     assert.containsOnce(
         document.body,
         '.o_Message',
-        "should display a single message"
+        "shoulddisplayasinglemessage"
     );
     assert.containsOnce(
         document.body,
         '.o_Message_subject',
-        "should display subject of the message"
+        "shoulddisplaysubjectofthemessage"
     );
     assert.strictEqual(
         document.querySelector('.o_Message_subject').textContent,
-        "Subject: Salutations, voyageur",
-        "Subject of the message should be 'Salutations, voyageur'"
+        "Subject:Salutations,voyageur",
+        "Subjectofthemessageshouldbe'Salutations,voyageur'"
     );
 });
 
-QUnit.test('click on (non-channel/non-partner) origin thread link should redirect to form view', async function (assert) {
+QUnit.test('clickon(non-channel/non-partner)originthreadlinkshouldredirecttoformview',asyncfunction(assert){
     assert.expect(9);
 
-    const bus = new Bus();
-    bus.on('do-action', null, payload => {
-        // Callback of doing an action (action manager).
-        // Expected to be called on click on origin thread link,
-        // which redirects to form view of record related to origin thread
+    constbus=newBus();
+    bus.on('do-action',null,payload=>{
+        //Callbackofdoinganaction(actionmanager).
+        //Expectedtobecalledonclickonoriginthreadlink,
+        //whichredirectstoformviewofrecordrelatedtooriginthread
         assert.step('do-action');
         assert.strictEqual(
             payload.action.type,
             'ir.actions.act_window',
-            "action should open a view"
+            "actionshouldopenaview"
         );
         assert.deepEqual(
             payload.action.views,
-            [[false, 'form']],
-            "action should open form view"
+            [[false,'form']],
+            "actionshouldopenformview"
         );
         assert.strictEqual(
             payload.action.res_model,
             'some.model',
-            "action should open view with model 'some.model' (model of message origin thread)"
+            "actionshouldopenviewwithmodel'some.model'(modelofmessageoriginthread)"
         );
         assert.strictEqual(
             payload.action.res_id,
             10,
-            "action should open view with id 10 (id of message origin thread)"
+            "actionshouldopenviewwithid10(idofmessageoriginthread)"
         );
     });
-    this.data['some.model'] = { fields: {}, records: [{ id: 10 }] };
+    this.data['some.model']={fields:{},records:[{id:10}]};
     this.data['mail.message'].records.push({
-        body: "not empty",
-        model: 'some.model',
-        needaction: true,
-        needaction_partner_ids: [this.data.currentPartnerId],
-        record_name: "Some record",
-        res_id: 10,
+        body:"notempty",
+        model:'some.model',
+        needaction:true,
+        needaction_partner_ids:[this.data.currentPartnerId],
+        record_name:"Somerecord",
+        res_id:10,
     });
-    await this.start({
-        env: {
+    awaitthis.start({
+        env:{
             bus,
         },
     });
     assert.containsOnce(
         document.body,
         '.o_Message',
-        "should display a single message"
+        "shoulddisplayasinglemessage"
     );
     assert.containsOnce(
         document.body,
         '.o_Message_originThreadLink',
-        "should display origin thread link"
+        "shoulddisplayoriginthreadlink"
     );
     assert.strictEqual(
         document.querySelector('.o_Message_originThreadLink').textContent,
-        "Some record",
-        "origin thread link should display record name"
+        "Somerecord",
+        "originthreadlinkshoulddisplayrecordname"
     );
 
     document.querySelector('.o_Message_originThreadLink').click();
-    assert.verifySteps(['do-action'], "should have made an action on click on origin thread (to open form view)");
+    assert.verifySteps(['do-action'],"shouldhavemadeanactiononclickonoriginthread(toopenformview)");
 });
 
-QUnit.test('subject should not be shown when subject is the same as the thread name', async function (assert) {
+QUnit.test('subjectshouldnotbeshownwhensubjectisthesameasthethreadname',asyncfunction(assert){
     assert.expect(1);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        channel_ids: [100],
-        model: 'mail.channel',
-        res_id: 100,
-        needaction: true,
-        subject: "Salutations, voyageur",
+        body:"notempty",
+        channel_ids:[100],
+        model:'mail.channel',
+        res_id:100,
+        needaction:true,
+        subject:"Salutations,voyageur",
     });
     this.data['mail.channel'].records.push({
-        id: 100,
-        name: "Salutations, voyageur",
+        id:100,
+        name:"Salutations,voyageur",
     });
-    await this.start();
+    awaitthis.start();
 
     assert.containsNone(
         document.body,
         '.o_Message_subject',
-        "subject should not be shown when subject is the same as the thread name"
+        "subjectshouldnotbeshownwhensubjectisthesameasthethreadname"
     );
 });
 
-QUnit.test('subject should not be shown when subject is the same as the thread name and both have the same prefix', async function (assert) {
+QUnit.test('subjectshouldnotbeshownwhensubjectisthesameasthethreadnameandbothhavethesameprefix',asyncfunction(assert){
     assert.expect(1);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        channel_ids: [100],
-        model: 'mail.channel',
-        res_id: 100,
-        needaction: true,
-        subject: "Re: Salutations, voyageur",
+        body:"notempty",
+        channel_ids:[100],
+        model:'mail.channel',
+        res_id:100,
+        needaction:true,
+        subject:"Re:Salutations,voyageur",
     });
     this.data['mail.channel'].records.push({
-        id: 100,
-        name: "Re: Salutations, voyageur",
+        id:100,
+        name:"Re:Salutations,voyageur",
     });
-    await this.start();
+    awaitthis.start();
 
     assert.containsNone(
         document.body,
         '.o_Message_subject',
-        "subject should not be shown when subject is the same as the thread name and both have the same prefix"
+        "subjectshouldnotbeshownwhensubjectisthesameasthethreadnameandbothhavethesameprefix"
     );
 });
 
-QUnit.test('subject should not be shown when subject differs from thread name only by the "Re:" prefix', async function (assert) {
+QUnit.test('subjectshouldnotbeshownwhensubjectdiffersfromthreadnameonlybythe"Re:"prefix',asyncfunction(assert){
     assert.expect(1);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        channel_ids: [100],
-        model: 'mail.channel',
-        res_id: 100,
-        needaction: true,
-        subject: "Re: Salutations, voyageur",
+        body:"notempty",
+        channel_ids:[100],
+        model:'mail.channel',
+        res_id:100,
+        needaction:true,
+        subject:"Re:Salutations,voyageur",
     });
     this.data['mail.channel'].records.push({
-        id: 100,
-        name: "Salutations, voyageur",
+        id:100,
+        name:"Salutations,voyageur",
     });
-    await this.start();
+    awaitthis.start();
 
     assert.containsNone(
         document.body,
         '.o_Message_subject',
-        "should not display subject when subject differs from thread name only by the 'Re:' prefix"
+        "shouldnotdisplaysubjectwhensubjectdiffersfromthreadnameonlybythe'Re:'prefix"
     );
 });
 
-QUnit.test('subject should not be shown when subject differs from thread name only by the "Fw:" and "Re:" prefix', async function (assert) {
+QUnit.test('subjectshouldnotbeshownwhensubjectdiffersfromthreadnameonlybythe"Fw:"and"Re:"prefix',asyncfunction(assert){
     assert.expect(1);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        channel_ids: [100],
-        model: 'mail.channel',
-        res_id: 100,
-        needaction: true,
-        subject: "Fw: Re: Salutations, voyageur",
+        body:"notempty",
+        channel_ids:[100],
+        model:'mail.channel',
+        res_id:100,
+        needaction:true,
+        subject:"Fw:Re:Salutations,voyageur",
     });
     this.data['mail.channel'].records.push({
-        id: 100,
-        name: "Salutations, voyageur",
+        id:100,
+        name:"Salutations,voyageur",
     });
-    await this.start();
+    awaitthis.start();
 
     assert.containsNone(
         document.body,
         '.o_Message_subject',
-        "should not display subject when subject differs from thread name only by the 'Fw:' and Re:' prefix"
+        "shouldnotdisplaysubjectwhensubjectdiffersfromthreadnameonlybythe'Fw:'andRe:'prefix"
     );
 });
 
-QUnit.test('subject should be shown when the thread name has an extra prefix compared to subject', async function (assert) {
+QUnit.test('subjectshouldbeshownwhenthethreadnamehasanextraprefixcomparedtosubject',asyncfunction(assert){
     assert.expect(1);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        channel_ids: [100],
-        model: 'mail.channel',
-        res_id: 100,
-        needaction: true,
-        subject: "Salutations, voyageur",
+        body:"notempty",
+        channel_ids:[100],
+        model:'mail.channel',
+        res_id:100,
+        needaction:true,
+        subject:"Salutations,voyageur",
     });
     this.data['mail.channel'].records.push({
-        id: 100,
-        name: "Re: Salutations, voyageur",
+        id:100,
+        name:"Re:Salutations,voyageur",
     });
-    await this.start();
+    awaitthis.start();
 
     assert.containsOnce(
         document.body,
         '.o_Message_subject',
-        "subject should be shown when the thread name has an extra prefix compared to subject"
+        "subjectshouldbeshownwhenthethreadnamehasanextraprefixcomparedtosubject"
     );
 });
 
-QUnit.test('subject should not be shown when subject differs from thread name only by the "fw:" prefix and both contain another common prefix', async function (assert) {
+QUnit.test('subjectshouldnotbeshownwhensubjectdiffersfromthreadnameonlybythe"fw:"prefixandbothcontainanothercommonprefix',asyncfunction(assert){
     assert.expect(1);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        channel_ids: [100],
-        model: 'mail.channel',
-        res_id: 100,
-        needaction: true,
-        subject: "fw: re: Salutations, voyageur",
+        body:"notempty",
+        channel_ids:[100],
+        model:'mail.channel',
+        res_id:100,
+        needaction:true,
+        subject:"fw:re:Salutations,voyageur",
     });
     this.data['mail.channel'].records.push({
-        id: 100,
-        name: "Re: Salutations, voyageur",
+        id:100,
+        name:"Re:Salutations,voyageur",
     });
-    await this.start();
+    awaitthis.start();
 
     assert.containsNone(
         document.body,
         '.o_Message_subject',
-        "subject should not be shown when subject differs from thread name only by the 'fw:' prefix and both contain another common prefix"
+        "subjectshouldnotbeshownwhensubjectdiffersfromthreadnameonlybythe'fw:'prefixandbothcontainanothercommonprefix"
     );
 });
 
-QUnit.test('subject should not be shown when subject differs from thread name only by the "Re: Re:" prefix', async function (assert) {
+QUnit.test('subjectshouldnotbeshownwhensubjectdiffersfromthreadnameonlybythe"Re:Re:"prefix',asyncfunction(assert){
     assert.expect(1);
 
     this.data['mail.message'].records.push({
-        body: "not empty",
-        channel_ids: [100],
-        model: 'mail.channel',
-        res_id: 100,
-        needaction: true,
-        subject: "Re: Re: Salutations, voyageur",
+        body:"notempty",
+        channel_ids:[100],
+        model:'mail.channel',
+        res_id:100,
+        needaction:true,
+        subject:"Re:Re:Salutations,voyageur",
     });
     this.data['mail.channel'].records.push({
-        id: 100,
-        name: "Salutations, voyageur",
+        id:100,
+        name:"Salutations,voyageur",
     });
-    await this.start();
+    awaitthis.start();
 
     assert.containsNone(
         document.body,
         '.o_Message_subject',
-        "should not display subject when subject differs from thread name only by the 'Re: Re:'' prefix"
+        "shouldnotdisplaysubjectwhensubjectdiffersfromthreadnameonlybythe'Re:Re:''prefix"
     );
 });
 

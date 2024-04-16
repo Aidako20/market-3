@@ -1,37 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <flectra>
 
-  <!-- TODO ensure barcode working with matrix (configurator mobile task ?) -->
+  <!--TODOensurebarcodeworkingwithmatrix(configuratormobiletask?)-->
 
-  <record id="purchase_order_form_matrix" model="ir.ui.view">
-    <field name="name">purchase.order.form.inherit.matrix</field>
-    <field name="model">purchase.order</field>
-    <field name="inherit_id" ref="purchase.purchase_order_form"/>
-    <field name="arch" type="xml">
-      <xpath expr="//tree/field[@name='product_id']" position="attributes">
-          <attribute name="invisible">1</attribute>
+  <recordid="purchase_order_form_matrix"model="ir.ui.view">
+    <fieldname="name">purchase.order.form.inherit.matrix</field>
+    <fieldname="model">purchase.order</field>
+    <fieldname="inherit_id"ref="purchase.purchase_order_form"/>
+    <fieldname="arch"type="xml">
+      <xpathexpr="//tree/field[@name='product_id']"position="attributes">
+          <attributename="invisible">1</attribute>
       </xpath>
-      <xpath expr="//tree/field[@name='product_id']" position="after">
-          <field name="product_template_id"
+      <xpathexpr="//tree/field[@name='product_id']"position="after">
+          <fieldname="product_template_id"
             string="Product"
             attrs="{
-                'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))],
-                'required': [('display_type', '=', False)],
+                'readonly':[('state','in',('purchase','toapprove','done','cancel'))],
+                'required':[('display_type','=',False)],
             }"
-            options="{'no_open': True}"
-            context="{'partner_id': parent.partner_id}"
+            options="{'no_open':True}"
+            context="{'partner_id':parent.partner_id}"
             widget="matrix_configurator"/>
-          <field name="product_template_attribute_value_ids" invisible="1" />
-          <field name="product_no_variant_attribute_value_ids" invisible="1" />
-          <field name="is_configurable_product" invisible="1" />
+          <fieldname="product_template_attribute_value_ids"invisible="1"/>
+          <fieldname="product_no_variant_attribute_value_ids"invisible="1"/>
+          <fieldname="is_configurable_product"invisible="1"/>
       </xpath>
-      <field name="partner_id" position="after">
-          <field name="grid" invisible="1"/>
-          <field name="grid_product_tmpl_id" invisible="1"/>
-          <field name="grid_update" invisible="1"/>
+      <fieldname="partner_id"position="after">
+          <fieldname="grid"invisible="1"/>
+          <fieldname="grid_product_tmpl_id"invisible="1"/>
+          <fieldname="grid_update"invisible="1"/>
       </field>
-      <xpath expr="//group[@name='other_info']" position="inside">
-          <field name="report_grids" groups="base.group_no_one"/>
+      <xpathexpr="//group[@name='other_info']"position="inside">
+          <fieldname="report_grids"groups="base.group_no_one"/>
       </xpath>
     </field>
   </record>

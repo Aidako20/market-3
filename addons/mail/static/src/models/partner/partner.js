@@ -1,152 +1,152 @@
-flectra.define('mail/static/src/models/partner/partner.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/partner/partner.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { attr, many2many, many2one, one2many, one2one } = require('mail/static/src/model/model_field.js');
-const { cleanSearchTerm } = require('mail/static/src/utils/utils.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{attr,many2many,many2one,one2many,one2one}=require('mail/static/src/model/model_field.js');
+const{cleanSearchTerm}=require('mail/static/src/utils/utils.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class Partner extends dependencies['mail.model'] {
+    classPartnerextendsdependencies['mail.model']{
 
         //----------------------------------------------------------------------
-        // Public
+        //Public
         //----------------------------------------------------------------------
 
         /**
-         * @static
-         * @private
-         * @param {Object} data
-         * @return {Object}
+         *@static
+         *@private
+         *@param{Object}data
+         *@return{Object}
          */
-        static convertData(data) {
-            const data2 = {};
-            if ('active' in data) {
-                data2.active = data.active;
+        staticconvertData(data){
+            constdata2={};
+            if('active'indata){
+                data2.active=data.active;
             }
-            if ('country' in data) {
-                if (!data.country) {
-                    data2.country = [['unlink-all']];
-                } else {
-                    data2.country = [['insert', {
-                        id: data.country[0],
-                        name: data.country[1],
+            if('country'indata){
+                if(!data.country){
+                    data2.country=[['unlink-all']];
+                }else{
+                    data2.country=[['insert',{
+                        id:data.country[0],
+                        name:data.country[1],
                     }]];
                 }
             }
-            if ('display_name' in data) {
-                data2.display_name = data.display_name;
+            if('display_name'indata){
+                data2.display_name=data.display_name;
             }
-            if ('email' in data) {
-                data2.email = data.email;
+            if('email'indata){
+                data2.email=data.email;
             }
-            if ('id' in data) {
-                data2.id = data.id;
+            if('id'indata){
+                data2.id=data.id;
             }
-            if ('im_status' in data) {
-                data2.im_status = data.im_status;
+            if('im_status'indata){
+                data2.im_status=data.im_status;
             }
-            if ('name' in data) {
-                data2.name = data.name;
+            if('name'indata){
+                data2.name=data.name;
             }
 
-            // relation
-            if ('user_id' in data) {
-                if (!data.user_id) {
-                    data2.user = [['unlink-all']];
-                } else {
-                    let user = {};
-                    if (Array.isArray(data.user_id)) {
-                        user = {
-                            id: data.user_id[0],
-                            display_name: data.user_id[1],
+            //relation
+            if('user_id'indata){
+                if(!data.user_id){
+                    data2.user=[['unlink-all']];
+                }else{
+                    letuser={};
+                    if(Array.isArray(data.user_id)){
+                        user={
+                            id:data.user_id[0],
+                            display_name:data.user_id[1],
                         };
-                    } else {
-                        user = {
-                            id: data.user_id,
+                    }else{
+                        user={
+                            id:data.user_id,
                         };
                     }
-                    user.isInternalUser = data.is_internal_user;
-                    data2.user = [['insert', user]];
+                    user.isInternalUser=data.is_internal_user;
+                    data2.user=[['insert',user]];
                 }
             }
 
-            return data2;
+            returndata2;
         }
 
         /**
-         * Fetches partners matching the given search term to extend the
-         * JS knowledge and to update the suggestion list accordingly.
+         *Fetchespartnersmatchingthegivensearchtermtoextendthe
+         *JSknowledgeandtoupdatethesuggestionlistaccordingly.
          *
-         * @static
-         * @param {string} searchTerm
-         * @param {Object} [options={}]
-         * @param {mail.thread} [options.thread] prioritize and/or restrict
-         *  result in the context of given thread
+         *@static
+         *@param{string}searchTerm
+         *@param{Object}[options={}]
+         *@param{mail.thread}[options.thread]prioritizeand/orrestrict
+         * resultinthecontextofgiventhread
          */
-        static async fetchSuggestions(searchTerm, { thread } = {}) {
-            const kwargs = { search: searchTerm };
-            const isNonPublicChannel = thread && thread.model === 'mail.channel' && thread.public !== 'public';
-            if (isNonPublicChannel) {
-                kwargs.channel_id = thread.id;
+        staticasyncfetchSuggestions(searchTerm,{thread}={}){
+            constkwargs={search:searchTerm};
+            constisNonPublicChannel=thread&&thread.model==='mail.channel'&&thread.public!=='public';
+            if(isNonPublicChannel){
+                kwargs.channel_id=thread.id;
             }
-            const [
+            const[
                 mainSuggestedPartners,
                 extraSuggestedPartners,
-            ] = await this.env.services.rpc(
+            ]=awaitthis.env.services.rpc(
                 {
-                    model: 'res.partner',
-                    method: 'get_mention_suggestions',
+                    model:'res.partner',
+                    method:'get_mention_suggestions',
                     kwargs,
                 },
-                { shadow: true },
+                {shadow:true},
             );
-            const partnersData = mainSuggestedPartners.concat(extraSuggestedPartners);
-            const partners = this.env.models['mail.partner'].insert(partnersData.map(data =>
+            constpartnersData=mainSuggestedPartners.concat(extraSuggestedPartners);
+            constpartners=this.env.models['mail.partner'].insert(partnersData.map(data=>
                 this.env.models['mail.partner'].convertData(data)
             ));
-            if (isNonPublicChannel) {
-                thread.update({ members: [['link', partners]] });
+            if(isNonPublicChannel){
+                thread.update({members:[['link',partners]]});
             }
         }
 
         /**
-         * Search for partners matching `keyword`.
+         *Searchforpartnersmatching`keyword`.
          *
-         * @static
-         * @param {Object} param0
-         * @param {function} param0.callback
-         * @param {string} param0.keyword
-         * @param {integer} [param0.limit=10]
+         *@static
+         *@param{Object}param0
+         *@param{function}param0.callback
+         *@param{string}param0.keyword
+         *@param{integer}[param0.limit=10]
          */
-        static async imSearch({ callback, keyword, limit = 10 }) {
-            // prefetched partners
-            let partners = [];
-            const cleanedSearchTerm = cleanSearchTerm(keyword);
-            const currentPartner = this.env.messaging.currentPartner;
-            for (const partner of this.all(partner => partner.active)) {
-                if (partners.length < limit) {
-                    if (
-                        partner !== currentPartner &&
-                        partner.name &&
-                        partner.user &&
+        staticasyncimSearch({callback,keyword,limit=10}){
+            //prefetchedpartners
+            letpartners=[];
+            constcleanedSearchTerm=cleanSearchTerm(keyword);
+            constcurrentPartner=this.env.messaging.currentPartner;
+            for(constpartnerofthis.all(partner=>partner.active)){
+                if(partners.length<limit){
+                    if(
+                        partner!==currentPartner&&
+                        partner.name&&
+                        partner.user&&
                         cleanSearchTerm(partner.name).includes(cleanedSearchTerm)
-                    ) {
+                    ){
                         partners.push(partner);
                     }
                 }
             }
-            if (!partners.length) {
-                const partnersData = await this.env.services.rpc(
+            if(!partners.length){
+                constpartnersData=awaitthis.env.services.rpc(
                     {
-                        model: 'res.partner',
-                        method: 'im_search',
-                        args: [keyword, limit]
+                        model:'res.partner',
+                        method:'im_search',
+                        args:[keyword,limit]
                     },
-                    { shadow: true }
+                    {shadow:true}
                 );
-                const newPartners = this.insert(partnersData.map(
-                    partnerData => this.convertData(partnerData)
+                constnewPartners=this.insert(partnersData.map(
+                    partnerData=>this.convertData(partnerData)
                 ));
                 partners.push(...newPartners);
             }
@@ -154,386 +154,386 @@ function factory(dependencies) {
         }
 
         /**
-         * Returns partners that match the given search term.
+         *Returnspartnersthatmatchthegivensearchterm.
          *
-         * @static
-         * @param {string} searchTerm
-         * @param {Object} [options={}]
-         * @param {mail.thread} [options.thread] prioritize and/or restrict
-         *  result in the context of given thread
-         * @returns {[mail.partner[], mail.partner[]]}
+         *@static
+         *@param{string}searchTerm
+         *@param{Object}[options={}]
+         *@param{mail.thread}[options.thread]prioritizeand/orrestrict
+         * resultinthecontextofgiventhread
+         *@returns{[mail.partner[],mail.partner[]]}
          */
-        static searchSuggestions(searchTerm, { thread } = {}) {
-            let partners;
-            const isNonPublicChannel = thread && thread.model === 'mail.channel' && thread.public !== 'public';
-            if (isNonPublicChannel) {
-                // Only return the channel members when in the context of a
-                // non-public channel. Indeed, the message with the mention
-                // would be notified to the mentioned partner, so this prevents
-                // from inadvertently leaking the private message to the
-                // mentioned partner.
-                partners = thread.members;
-            } else {
-                partners = this.env.models['mail.partner'].all();
+        staticsearchSuggestions(searchTerm,{thread}={}){
+            letpartners;
+            constisNonPublicChannel=thread&&thread.model==='mail.channel'&&thread.public!=='public';
+            if(isNonPublicChannel){
+                //Onlyreturnthechannelmemberswheninthecontextofa
+                //non-publicchannel.Indeed,themessagewiththemention
+                //wouldbenotifiedtothementionedpartner,sothisprevents
+                //frominadvertentlyleakingtheprivatemessagetothe
+                //mentionedpartner.
+                partners=thread.members;
+            }else{
+                partners=this.env.models['mail.partner'].all();
             }
-            const cleanedSearchTerm = cleanSearchTerm(searchTerm);
-            const mainSuggestionList = [];
-            const extraSuggestionList = [];
-            for (const partner of partners) {
-                if (
-                    (!partner.active && partner !== this.env.messaging.partnerRoot) ||
-                    partner.id <= 0 ||
+            constcleanedSearchTerm=cleanSearchTerm(searchTerm);
+            constmainSuggestionList=[];
+            constextraSuggestionList=[];
+            for(constpartnerofpartners){
+                if(
+                    (!partner.active&&partner!==this.env.messaging.partnerRoot)||
+                    partner.id<=0||
                     this.env.messaging.publicPartners.includes(partner)
-                ) {
-                    // ignore archived partners (except FlectraBot), temporary
-                    // partners (livechat guests), public partners (technical)
+                ){
+                    //ignorearchivedpartners(exceptFlectraBot),temporary
+                    //partners(livechatguests),publicpartners(technical)
                     continue;
                 }
-                if (!partner.name) {
+                if(!partner.name){
                     continue;
                 }
-                if (
-                    (cleanSearchTerm(partner.name).includes(cleanedSearchTerm)) ||
-                    (partner.email && cleanSearchTerm(partner.email).includes(cleanedSearchTerm))
-                ) {
-                    if (partner.user) {
+                if(
+                    (cleanSearchTerm(partner.name).includes(cleanedSearchTerm))||
+                    (partner.email&&cleanSearchTerm(partner.email).includes(cleanedSearchTerm))
+                ){
+                    if(partner.user){
                         mainSuggestionList.push(partner);
-                    } else {
+                    }else{
                         extraSuggestionList.push(partner);
                     }
                 }
             }
-            return [mainSuggestionList, extraSuggestionList];
+            return[mainSuggestionList,extraSuggestionList];
         }
 
         /**
-         * @static
+         *@static
          */
-        static async startLoopFetchImStatus() {
-            await this._fetchImStatus();
+        staticasyncstartLoopFetchImStatus(){
+            awaitthis._fetchImStatus();
             this._loopFetchImStatus();
         }
 
         /**
-         * Checks whether this partner has a related user and links them if
-         * applicable.
+         *Checkswhetherthispartnerhasarelateduserandlinksthemif
+         *applicable.
          */
-        async checkIsUser() {
-            const userIds = await this.async(() => this.env.services.rpc({
-                model: 'res.users',
-                method: 'search',
-                args: [[['partner_id', '=', this.id]]],
-                kwargs: {
-                    context: { active_test: false },
+        asynccheckIsUser(){
+            constuserIds=awaitthis.async(()=>this.env.services.rpc({
+                model:'res.users',
+                method:'search',
+                args:[[['partner_id','=',this.id]]],
+                kwargs:{
+                    context:{active_test:false},
                 },
-            }, { shadow: true }));
-            this.update({ hasCheckedUser: true });
-            if (userIds.length > 0) {
-                this.update({ user: [['insert', { id: userIds[0] }]] });
+            },{shadow:true}));
+            this.update({hasCheckedUser:true});
+            if(userIds.length>0){
+                this.update({user:[['insert',{id:userIds[0]}]]});
             }
         }
 
         /**
-         * Gets the chat between the user of this partner and the current user.
+         *Getsthechatbetweentheuserofthispartnerandthecurrentuser.
          *
-         * If a chat is not appropriate, a notification is displayed instead.
+         *Ifachatisnotappropriate,anotificationisdisplayedinstead.
          *
-         * @returns {mail.thread|undefined}
+         *@returns{mail.thread|undefined}
          */
-        async getChat() {
-            if (!this.user && !this.hasCheckedUser) {
-                await this.async(() => this.checkIsUser());
+        asyncgetChat(){
+            if(!this.user&&!this.hasCheckedUser){
+                awaitthis.async(()=>this.checkIsUser());
             }
-            // prevent chatting with non-users
-            if (!this.user) {
+            //preventchattingwithnon-users
+            if(!this.user){
                 this.env.services['notification'].notify({
-                    message: this.env._t("You can only chat with partners that have a dedicated user."),
-                    type: 'info',
+                    message:this.env._t("Youcanonlychatwithpartnersthathaveadedicateduser."),
+                    type:'info',
                 });
                 return;
             }
-            return this.user.getChat();
+            returnthis.user.getChat();
         }
 
         /**
-         * Returns the text that identifies this partner in a mention.
+         *Returnsthetextthatidentifiesthispartnerinamention.
          *
-         * @returns {string}
+         *@returns{string}
          */
-        getMentionText() {
-            return this.name;
+        getMentionText(){
+            returnthis.name;
         }
 
         /**
-         * Returns a sort function to determine the order of display of partners
-         * in the suggestion list.
+         *Returnsasortfunctiontodeterminetheorderofdisplayofpartners
+         *inthesuggestionlist.
          *
-         * @static
-         * @param {string} searchTerm
-         * @param {Object} [options={}]
-         * @param {mail.thread} [options.thread] prioritize result in the
-         *  context of given thread
-         * @returns {function}
+         *@static
+         *@param{string}searchTerm
+         *@param{Object}[options={}]
+         *@param{mail.thread}[options.thread]prioritizeresultinthe
+         * contextofgiventhread
+         *@returns{function}
          */
-        static getSuggestionSortFunction(searchTerm, { thread } = {}) {
-            const cleanedSearchTerm = cleanSearchTerm(searchTerm);
-            return (a, b) => {
-                const isAInternalUser = a.user && a.user.isInternalUser;
-                const isBInternalUser = b.user && b.user.isInternalUser;
-                if (isAInternalUser && !isBInternalUser) {
-                    return -1;
+        staticgetSuggestionSortFunction(searchTerm,{thread}={}){
+            constcleanedSearchTerm=cleanSearchTerm(searchTerm);
+            return(a,b)=>{
+                constisAInternalUser=a.user&&a.user.isInternalUser;
+                constisBInternalUser=b.user&&b.user.isInternalUser;
+                if(isAInternalUser&&!isBInternalUser){
+                    return-1;
                 }
-                if (!isAInternalUser && isBInternalUser) {
-                    return 1;
+                if(!isAInternalUser&&isBInternalUser){
+                    return1;
                 }
-                if (thread && thread.model === 'mail.channel') {
-                    const isAMember = thread.members.includes(a);
-                    const isBMember = thread.members.includes(b);
-                    if (isAMember && !isBMember) {
-                        return -1;
+                if(thread&&thread.model==='mail.channel'){
+                    constisAMember=thread.members.includes(a);
+                    constisBMember=thread.members.includes(b);
+                    if(isAMember&&!isBMember){
+                        return-1;
                     }
-                    if (!isAMember && isBMember) {
-                        return 1;
-                    }
-                }
-                if (thread) {
-                    const isAFollower = thread.followersPartner.includes(a);
-                    const isBFollower = thread.followersPartner.includes(b);
-                    if (isAFollower && !isBFollower) {
-                        return -1;
-                    }
-                    if (!isAFollower && isBFollower) {
-                        return 1;
+                    if(!isAMember&&isBMember){
+                        return1;
                     }
                 }
-                const cleanedAName = cleanSearchTerm(a.name || '');
-                const cleanedBName = cleanSearchTerm(b.name || '');
-                if (cleanedAName.startsWith(cleanedSearchTerm) && !cleanedBName.startsWith(cleanedSearchTerm)) {
-                    return -1;
+                if(thread){
+                    constisAFollower=thread.followersPartner.includes(a);
+                    constisBFollower=thread.followersPartner.includes(b);
+                    if(isAFollower&&!isBFollower){
+                        return-1;
+                    }
+                    if(!isAFollower&&isBFollower){
+                        return1;
+                    }
                 }
-                if (!cleanedAName.startsWith(cleanedSearchTerm) && cleanedBName.startsWith(cleanedSearchTerm)) {
-                    return 1;
+                constcleanedAName=cleanSearchTerm(a.name||'');
+                constcleanedBName=cleanSearchTerm(b.name||'');
+                if(cleanedAName.startsWith(cleanedSearchTerm)&&!cleanedBName.startsWith(cleanedSearchTerm)){
+                    return-1;
                 }
-                if (cleanedAName < cleanedBName) {
-                    return -1;
+                if(!cleanedAName.startsWith(cleanedSearchTerm)&&cleanedBName.startsWith(cleanedSearchTerm)){
+                    return1;
                 }
-                if (cleanedAName > cleanedBName) {
-                    return 1;
+                if(cleanedAName<cleanedBName){
+                    return-1;
                 }
-                const cleanedAEmail = cleanSearchTerm(a.email || '');
-                const cleanedBEmail = cleanSearchTerm(b.email || '');
-                if (cleanedAEmail.startsWith(cleanedSearchTerm) && !cleanedAEmail.startsWith(cleanedSearchTerm)) {
-                    return -1;
+                if(cleanedAName>cleanedBName){
+                    return1;
                 }
-                if (!cleanedBEmail.startsWith(cleanedSearchTerm) && cleanedBEmail.startsWith(cleanedSearchTerm)) {
-                    return 1;
+                constcleanedAEmail=cleanSearchTerm(a.email||'');
+                constcleanedBEmail=cleanSearchTerm(b.email||'');
+                if(cleanedAEmail.startsWith(cleanedSearchTerm)&&!cleanedAEmail.startsWith(cleanedSearchTerm)){
+                    return-1;
                 }
-                if (cleanedAEmail < cleanedBEmail) {
-                    return -1;
+                if(!cleanedBEmail.startsWith(cleanedSearchTerm)&&cleanedBEmail.startsWith(cleanedSearchTerm)){
+                    return1;
                 }
-                if (cleanedAEmail > cleanedBEmail) {
-                    return 1;
+                if(cleanedAEmail<cleanedBEmail){
+                    return-1;
                 }
-                return a.id - b.id;
+                if(cleanedAEmail>cleanedBEmail){
+                    return1;
+                }
+                returna.id-b.id;
             };
         }
 
         /**
-         * Opens a chat between the user of this partner and the current user
-         * and returns it.
+         *Opensachatbetweentheuserofthispartnerandthecurrentuser
+         *andreturnsit.
          *
-         * If a chat is not appropriate, a notification is displayed instead.
+         *Ifachatisnotappropriate,anotificationisdisplayedinstead.
          *
-         * @param {Object} [options] forwarded to @see `mail.thread:open()`
-         * @returns {mail.thread|undefined}
+         *@param{Object}[options]forwardedto@see`mail.thread:open()`
+         *@returns{mail.thread|undefined}
          */
-        async openChat(options) {
-            const chat = await this.async(() => this.getChat());
-            if (!chat) {
+        asyncopenChat(options){
+            constchat=awaitthis.async(()=>this.getChat());
+            if(!chat){
                 return;
             }
-            await this.async(() => chat.open(options));
-            return chat;
+            awaitthis.async(()=>chat.open(options));
+            returnchat;
         }
 
         /**
-         * Opens the most appropriate view that is a profile for this partner.
+         *Opensthemostappropriateviewthatisaprofileforthispartner.
          */
-        async openProfile() {
-            return this.env.messaging.openDocument({
-                id: this.id,
-                model: 'res.partner',
+        asyncopenProfile(){
+            returnthis.env.messaging.openDocument({
+                id:this.id,
+                model:'res.partner',
             });
         }
 
         //----------------------------------------------------------------------
-        // Private
+        //Private
         //----------------------------------------------------------------------
 
         /**
-         * @private
-         * @returns {string}
+         *@private
+         *@returns{string}
          */
-        _computeAvatarUrl() {
-            return `/web/image/res.partner/${this.id}/image_128`;
+        _computeAvatarUrl(){
+            return`/web/image/res.partner/${this.id}/image_128`;
         }
 
         /**
-         * @override
+         *@override
          */
-        static _createRecordLocalId(data) {
-            return `${this.modelName}_${data.id}`;
+        static_createRecordLocalId(data){
+            return`${this.modelName}_${data.id}`;
         }
 
         /**
-         * @static
-         * @private
+         *@static
+         *@private
          */
-        static async _fetchImStatus() {
-            const partnerIds = [];
-            for (const partner of this.all()) {
-                if (partner.im_status !== 'im_partner' && partner.id > 0) {
+        staticasync_fetchImStatus(){
+            constpartnerIds=[];
+            for(constpartnerofthis.all()){
+                if(partner.im_status!=='im_partner'&&partner.id>0){
                     partnerIds.push(partner.id);
                 }
             }
-            if (partnerIds.length === 0) {
+            if(partnerIds.length===0){
                 return;
             }
-            const dataList = await this.env.services.rpc({
-                route: '/longpolling/im_status',
-                params: {
-                    partner_ids: partnerIds,
+            constdataList=awaitthis.env.services.rpc({
+                route:'/longpolling/im_status',
+                params:{
+                    partner_ids:partnerIds,
                 },
-            }, { shadow: true });
+            },{shadow:true});
             this.insert(dataList);
         }
 
         /**
-         * @static
-         * @private
+         *@static
+         *@private
          */
-        static _loopFetchImStatus() {
-            setTimeout(async () => {
-                await this._fetchImStatus();
+        static_loopFetchImStatus(){
+            setTimeout(async()=>{
+                awaitthis._fetchImStatus();
                 this._loopFetchImStatus();
-            }, 50 * 1000);
+            },50*1000);
         }
 
         /**
-         * @private
-         * @returns {string|undefined}
+         *@private
+         *@returns{string|undefined}
          */
-        _computeDisplayName() {
-            return this.display_name || this.user && this.user.display_name;
+        _computeDisplayName(){
+            returnthis.display_name||this.user&&this.user.display_name;
         }
 
         /**
-         * @private
-         * @returns {mail.messaging}
+         *@private
+         *@returns{mail.messaging}
          */
-        _computeMessaging() {
-            return [['link', this.env.messaging]];
+        _computeMessaging(){
+            return[['link',this.env.messaging]];
         }
 
         /**
-         * @private
-         * @returns {string|undefined}
+         *@private
+         *@returns{string|undefined}
          */
-        _computeNameOrDisplayName() {
-            return this.name || this.display_name;
+        _computeNameOrDisplayName(){
+            returnthis.name||this.display_name;
         }
 
     }
 
-    Partner.fields = {
-        active: attr({
-            default: true,
+    Partner.fields={
+        active:attr({
+            default:true,
         }),
-        avatarUrl: attr({
-            compute: '_computeAvatarUrl',
-            dependencies: [
+        avatarUrl:attr({
+            compute:'_computeAvatarUrl',
+            dependencies:[
                 'id',
             ],
         }),
-        correspondentThreads: one2many('mail.thread', {
-            inverse: 'correspondent',
+        correspondentThreads:one2many('mail.thread',{
+            inverse:'correspondent',
         }),
-        country: many2one('mail.country'),
+        country:many2one('mail.country'),
         /**
-         * Deprecated.
-         * States the `display_name` of this partner, as returned by the server.
-         * The value of this field is unreliable (notably its value depends on
-         * context on which it was received) therefore it should only be used as
-         * a default if the actual `name` is missing (@see `nameOrDisplayName`).
-         * And if a specific name format is required, it should be computed from
-         * relevant fields instead.
+         *Deprecated.
+         *Statesthe`display_name`ofthispartner,asreturnedbytheserver.
+         *Thevalueofthisfieldisunreliable(notablyitsvaluedependson
+         *contextonwhichitwasreceived)thereforeitshouldonlybeusedas
+         *adefaultiftheactual`name`ismissing(@see`nameOrDisplayName`).
+         *Andifaspecificnameformatisrequired,itshouldbecomputedfrom
+         *relevantfieldsinstead.
          */
-        display_name: attr({
-            compute: '_computeDisplayName',
-            default: "",
-            dependencies: [
+        display_name:attr({
+            compute:'_computeDisplayName',
+            default:"",
+            dependencies:[
                 'display_name',
                 'userDisplayName',
             ],
         }),
-        email: attr(),
-        failureNotifications: one2many('mail.notification', {
-            related: 'messagesAsAuthor.failureNotifications',
+        email:attr(),
+        failureNotifications:one2many('mail.notification',{
+            related:'messagesAsAuthor.failureNotifications',
         }),
         /**
-         * Whether an attempt was already made to fetch the user corresponding
-         * to this partner. This prevents doing the same RPC multiple times.
+         *Whetheranattemptwasalreadymadetofetchtheusercorresponding
+         *tothispartner.ThispreventsdoingthesameRPCmultipletimes.
          */
-        hasCheckedUser: attr({
-            default: false,
+        hasCheckedUser:attr({
+            default:false,
         }),
-        id: attr(),
-        im_status: attr(),
-        memberThreads: many2many('mail.thread', {
-            inverse: 'members',
+        id:attr(),
+        im_status:attr(),
+        memberThreads:many2many('mail.thread',{
+            inverse:'members',
         }),
-        messagesAsAuthor: one2many('mail.message', {
-            inverse: 'author',
+        messagesAsAuthor:one2many('mail.message',{
+            inverse:'author',
         }),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        messaging: many2one('mail.messaging', {
-            compute: '_computeMessaging',
+        messaging:many2one('mail.messaging',{
+            compute:'_computeMessaging',
         }),
-        model: attr({
-            default: 'res.partner',
+        model:attr({
+            default:'res.partner',
         }),
         /**
-         * Channels that are moderated by this partner.
+         *Channelsthataremoderatedbythispartner.
          */
-        moderatedChannels: many2many('mail.thread', {
-            inverse: 'moderators',
+        moderatedChannels:many2many('mail.thread',{
+            inverse:'moderators',
         }),
-        name: attr(),
-        nameOrDisplayName: attr({
-            compute: '_computeNameOrDisplayName',
-            dependencies: [
+        name:attr(),
+        nameOrDisplayName:attr({
+            compute:'_computeNameOrDisplayName',
+            dependencies:[
                 'display_name',
                 'name',
             ],
         }),
-        user: one2one('mail.user', {
-            inverse: 'partner',
+        user:one2one('mail.user',{
+            inverse:'partner',
         }),
         /**
-         * Serves as compute dependency.
+         *Servesascomputedependency.
          */
-        userDisplayName: attr({
-            related: 'user.display_name',
+        userDisplayName:attr({
+            related:'user.display_name',
         }),
     };
 
-    Partner.modelName = 'mail.partner';
+    Partner.modelName='mail.partner';
 
-    return Partner;
+    returnPartner;
 }
 
-registerNewModel('mail.partner', factory);
+registerNewModel('mail.partner',factory);
 
 });

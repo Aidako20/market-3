@@ -1,30 +1,30 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.lt = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.lt=factory()));
+}(this,function(){'usestrict';
 
-    var lt = {
-        code: "lt",
-        week: {
-            dow: 1,
-            doy: 4 // The week that contains Jan 4th is the first week of the year.
+    varlt={
+        code:"lt",
+        week:{
+            dow:1,
+            doy:4//TheweekthatcontainsJan4thisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "Atgal",
-            next: "Pirmyn",
-            today: "Šiandien",
-            month: "Mėnuo",
-            week: "Savaitė",
-            day: "Diena",
-            list: "Darbotvarkė"
+        buttonText:{
+            prev:"Atgal",
+            next:"Pirmyn",
+            today:"Šiandien",
+            month:"Mėnuo",
+            week:"Savaitė",
+            day:"Diena",
+            list:"Darbotvarkė"
         },
-        weekLabel: "SAV",
-        allDayText: "Visą dieną",
-        eventLimitText: "daugiau",
-        noEventsMessage: "Nėra įvykių rodyti"
+        weekLabel:"SAV",
+        allDayText:"Visądieną",
+        eventLimitText:"daugiau",
+        noEventsMessage:"Nėraįvykiųrodyti"
     };
 
-    return lt;
+    returnlt;
 
 }));

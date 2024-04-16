@@ -1,150 +1,150 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-        <!-- Delivery Carriers -->
-        <menuitem id="menu_delivery" name="Delivery" parent="stock.menu_stock_config_settings" groups="stock.group_stock_manager" sequence="50"/>
+        <!--DeliveryCarriers-->
+        <menuitemid="menu_delivery"name="Delivery"parent="stock.menu_stock_config_settings"groups="stock.group_stock_manager"sequence="50"/>
 
-        <record id="action_delivery_packaging_view" model="ir.actions.act_window">
-            <field name="name">Delivery Packages</field>
-            <field name="res_model">product.packaging</field>
-            <field name="domain">[('product_id', '=', False)]</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'tree', 'view_id': ref('delivery.product_packaging_delivery_tree')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('delivery.product_packaging_delivery_form')})]"/>
+        <recordid="action_delivery_packaging_view"model="ir.actions.act_window">
+            <fieldname="name">DeliveryPackages</field>
+            <fieldname="res_model">product.packaging</field>
+            <fieldname="domain">[('product_id','=',False)]</field>
+            <fieldname="view_ids"eval="[(5,0,0),
+                (0,0,{'view_mode':'tree','view_id':ref('delivery.product_packaging_delivery_tree')}),
+                (0,0,{'view_mode':'form','view_id':ref('delivery.product_packaging_delivery_form')})]"/>
         </record>
 
-        <menuitem id="menu_delivery_packagings" name="Delivery Packages" parent="menu_delivery" action="action_delivery_packaging_view" groups="stock.group_tracking_lot"/>
+        <menuitemid="menu_delivery_packagings"name="DeliveryPackages"parent="menu_delivery"action="action_delivery_packaging_view"groups="stock.group_tracking_lot"/>
 
-        <record id="view_delivery_carrier_tree" model="ir.ui.view">
-            <field name="name">delivery.carrier.tree</field>
-            <field name="model">delivery.carrier</field>
-            <field name="arch" type="xml">
-                <tree string="Carrier">
-                    <field name="sequence" widget="handle"/>
-                    <field name="name"/>
-                    <field name="delivery_type"/>
-                    <field name="company_id" groups="base.group_multi_company"/>
+        <recordid="view_delivery_carrier_tree"model="ir.ui.view">
+            <fieldname="name">delivery.carrier.tree</field>
+            <fieldname="model">delivery.carrier</field>
+            <fieldname="arch"type="xml">
+                <treestring="Carrier">
+                    <fieldname="sequence"widget="handle"/>
+                    <fieldname="name"/>
+                    <fieldname="delivery_type"/>
+                    <fieldname="company_id"groups="base.group_multi_company"/>
                 </tree>
             </field>
         </record>
 
-        <record id="view_delivery_carrier_search" model="ir.ui.view">
-            <field name="name">delivery.carrier.search</field>
-            <field name="model">delivery.carrier</field>
-            <field name="arch" type="xml">
-                <search string="Delivery Carrier">
-                    <field name="name" string="Carrier" />
-                    <field name="delivery_type"/>
+        <recordid="view_delivery_carrier_search"model="ir.ui.view">
+            <fieldname="name">delivery.carrier.search</field>
+            <fieldname="model">delivery.carrier</field>
+            <fieldname="arch"type="xml">
+                <searchstring="DeliveryCarrier">
+                    <fieldname="name"string="Carrier"/>
+                    <fieldname="delivery_type"/>
                     <separator/>
-                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
-                    <group expand="1" string="Group By">
-                        <filter string="Provider" name="provider" context="{'group_by':'delivery_type', 'residual_visible':True}"/>
+                    <filterstring="Archived"name="inactive"domain="[('active','=',False)]"/>
+                    <groupexpand="1"string="GroupBy">
+                        <filterstring="Provider"name="provider"context="{'group_by':'delivery_type','residual_visible':True}"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <record id="view_delivery_carrier_form" model="ir.ui.view">
-            <field name="name">delivery.carrier.form</field>
-            <field name="model">delivery.carrier</field>
-            <field name="arch" type="xml">
-                <form string="Carrier">
+        <recordid="view_delivery_carrier_form"model="ir.ui.view">
+            <fieldname="name">delivery.carrier.form</field>
+            <fieldname="model">delivery.carrier</field>
+            <fieldname="arch"type="xml">
+                <formstring="Carrier">
                     <sheet>
-                        <div class="oe_button_box" name="button_box">
-                            <button name="toggle_prod_environment"
-                                    attrs="{'invisible': ['|', '|', ('prod_environment', '=', False), ('delivery_type', '=', 'fixed'), ('delivery_type', '=', 'base_on_rule')]}"
+                        <divclass="oe_button_box"name="button_box">
+                            <buttonname="toggle_prod_environment"
+                                    attrs="{'invisible':['|','|',('prod_environment','=',False),('delivery_type','=','fixed'),('delivery_type','=','base_on_rule')]}"
                                     class="oe_stat_button"
-                                    type="object" icon="fa-play">
-                                <div class="o_stat_info o_field_widget">
-                                    <span class="text-success">Production</span>
-                                    <span class="o_stat_text">Environment</span>
+                                    type="object"icon="fa-play">
+                                <divclass="o_stat_infoo_field_widget">
+                                    <spanclass="text-success">Production</span>
+                                    <spanclass="o_stat_text">Environment</span>
                                 </div>
                             </button>
-                            <!-- transfer referenced here due to view inheritance issue in current master (post-saas-16) -->
-                            <button name="toggle_prod_environment"
-                                    attrs="{'invisible': ['|', '|', ('prod_environment', '=', True), ('delivery_type', '=', 'fixed'), ('delivery_type', '=', 'base_on_rule')]}"
+                            <!--transferreferencedhereduetoviewinheritanceissueincurrentmaster(post-saas-16)-->
+                            <buttonname="toggle_prod_environment"
+                                    attrs="{'invisible':['|','|',('prod_environment','=',True),('delivery_type','=','fixed'),('delivery_type','=','base_on_rule')]}"
                                     class="oe_stat_button"
-                                    type="object" icon="fa-stop">
-                                <div class="o_stat_info o_field_widget">
-                                    <span class="o_warning_text">Test</span>
-                                    <span class="o_stat_text">Environment</span>
+                                    type="object"icon="fa-stop">
+                                <divclass="o_stat_infoo_field_widget">
+                                    <spanclass="o_warning_text">Test</span>
+                                    <spanclass="o_stat_text">Environment</span>
                                 </div>
                             </button>
-                            <button name="toggle_debug"
-                                    attrs="{'invisible': ['|', '|', ('delivery_type', '=', 'fixed'), ('delivery_type', '=', 'base_on_rule'), ('debug_logging', '=', True)]}"
+                            <buttonname="toggle_debug"
+                                    attrs="{'invisible':['|','|',('delivery_type','=','fixed'),('delivery_type','=','base_on_rule'),('debug_logging','=',True)]}"
                                     class="oe_stat_button"
-                                    type="object" icon="fa-code">
-                                <div class="o_stat_info o_field_widget">
-                                    <span class="text-danger">No debug</span>
+                                    type="object"icon="fa-code">
+                                <divclass="o_stat_infoo_field_widget">
+                                    <spanclass="text-danger">Nodebug</span>
                                 </div>
                             </button>
-                            <button name="toggle_debug"
-                                    attrs="{'invisible': ['|', '|', ('delivery_type', '=', 'fixed'), ('delivery_type', '=', 'base_on_rule'), ('debug_logging', '=', False)]}"
+                            <buttonname="toggle_debug"
+                                    attrs="{'invisible':['|','|',('delivery_type','=','fixed'),('delivery_type','=','base_on_rule'),('debug_logging','=',False)]}"
                                     class="oe_stat_button"
-                                    type="object" icon="fa-code">
-                                <div class="o_stat_info o_field_widget">
-                                    <span class="text-success">Debug requests</span>
+                                    type="object"icon="fa-code">
+                                <divclass="o_stat_infoo_field_widget">
+                                    <spanclass="text-success">Debugrequests</span>
                                 </div>
                             </button>
                         </div>
-                        <widget name="web_ribbon" text="Archived" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
-                        <div class="oe_title" name="title">
-                            <label for="name" string="Name" class="oe_edit_only"/>
+                        <widgetname="web_ribbon"text="Archived"title="Archived"bg_color="bg-danger"attrs="{'invisible':[('active','=',True)]}"/>
+                        <divclass="oe_title"name="title">
+                            <labelfor="name"string="Name"class="oe_edit_only"/>
                             <h1>
-                                <field name="name" placeholder="e.g. UPS Express"/>
+                                <fieldname="name"placeholder="e.g.UPSExpress"/>
                             </h1>
                         </div>
                         <group>
-                            <group name="provider_details">
-                                <field name="active" invisible="1"/>
-                                <field name="prod_environment" invisible="1"/>
-                                <field name="debug_logging" invisible="1"/>
-                                <label for="delivery_type"/>
+                            <groupname="provider_details">
+                                <fieldname="active"invisible="1"/>
+                                <fieldname="prod_environment"invisible="1"/>
+                                <fieldname="debug_logging"invisible="1"/>
+                                <labelfor="delivery_type"/>
                                 <div>
-                                    <field name="delivery_type" />
-                                    <button string="Install more Providers" name="install_more_provider" type="object" class="oe_link oe_edit_only"/>
+                                    <fieldname="delivery_type"/>
+                                    <buttonstring="InstallmoreProviders"name="install_more_provider"type="object"class="oe_linkoe_edit_only"/>
                                 </div>
-                                <field name="integration_level" widget="radio" attrs="{'invisible': ['|', ('delivery_type', '=', 'fixed'), ('delivery_type', '=', 'base_on_rule')]}"/>
-                                <field name="company_id" groups="base.group_multi_company"/>
+                                <fieldname="integration_level"widget="radio"attrs="{'invisible':['|',('delivery_type','=','fixed'),('delivery_type','=','base_on_rule')]}"/>
+                                <fieldname="company_id"groups="base.group_multi_company"/>
                             </group>
-                            <group name="delivery_details">
-                                <field name="product_id" context="{'default_type': 'service', 'default_sale_ok': False, 'default_purchase_ok': False, 'default_invoice_policy': 'order'}" />
-                                <field name="invoice_policy" widget="radio" attrs="{'invisible': ['|', ('delivery_type', 'in', ('fixed', 'base_on_rule')), ('integration_level', '=', 'rate')]}"/>
-                                <label for="margin" string="Margin on Rate"/>
+                            <groupname="delivery_details">
+                                <fieldname="product_id"context="{'default_type':'service','default_sale_ok':False,'default_purchase_ok':False,'default_invoice_policy':'order'}"/>
+                                <fieldname="invoice_policy"widget="radio"attrs="{'invisible':['|',('delivery_type','in',('fixed','base_on_rule')),('integration_level','=','rate')]}"/>
+                                <labelfor="margin"string="MarginonRate"/>
                                 <div>
-                                    <field name="margin" class="oe_inline"/>%
+                                    <fieldname="margin"class="oe_inline"/>%
                                 </div>
-                                <field name="free_over"/>
-                                <field name="amount" attrs="{'required':[('free_over','!=', False)], 'invisible':[('free_over','=', False)]}"/>
+                                <fieldname="free_over"/>
+                                <fieldname="amount"attrs="{'required':[('free_over','!=',False)],'invisible':[('free_over','=',False)]}"/>
                             </group>
                         </group>
                         <notebook>
-                            <page name="pricing" string="Pricing" attrs="{'invisible': [('delivery_type', 'not in', ['fixed', 'base_on_rule'])]}">
-                                <group attrs="{'invisible':[('delivery_type', '!=', 'fixed')]}">
-                                    <group name="fixed_price">
-                                        <field name="fixed_price"/>
+                            <pagename="pricing"string="Pricing"attrs="{'invisible':[('delivery_type','notin',['fixed','base_on_rule'])]}">
+                                <groupattrs="{'invisible':[('delivery_type','!=','fixed')]}">
+                                    <groupname="fixed_price">
+                                        <fieldname="fixed_price"/>
                                     </group>
                                 </group>
-                                <group name="general" attrs="{'invisible':[('delivery_type', '!=', 'base_on_rule')]}">
-                                    <field name="price_rule_ids" nolabel="1"/>
+                                <groupname="general"attrs="{'invisible':[('delivery_type','!=','base_on_rule')]}">
+                                    <fieldname="price_rule_ids"nolabel="1"/>
                                 </group>
                             </page>
-                            <page string="Destination Availability" name="destination">
+                            <pagestring="DestinationAvailability"name="destination">
                                 <group>
                                     <p>
-                                        Filling this form allows you to filter delivery carriers according to the delivery address of your customer.
+                                        Fillingthisformallowsyoutofilterdeliverycarriersaccordingtothedeliveryaddressofyourcustomer.
                                     </p>
                                 </group>
                                 <group>
-                                    <group name="country_details">
-                                        <field name="country_ids" widget="many2many_tags"/>
-                                        <field name="state_ids" widget="many2many_tags"/>
+                                    <groupname="country_details">
+                                        <fieldname="country_ids"widget="many2many_tags"/>
+                                        <fieldname="state_ids"widget="many2many_tags"/>
                                     </group>
                                     <group></group>
-                                    <group name="zip_from">
-                                        <field name="zip_from"/>
+                                    <groupname="zip_from">
+                                        <fieldname="zip_from"/>
                                     </group>
-                                    <group name="zip_to">
-                                        <field name="zip_to"/>
+                                    <groupname="zip_to">
+                                        <fieldname="zip_to"/>
                                     </group>
                                 </group>
                             </page>
@@ -154,239 +154,239 @@
             </field>
         </record>
 
-        <record id="action_delivery_carrier_form" model="ir.actions.act_window">
-            <field name="name">Shipping Methods</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">delivery.carrier</field>
-            <field name="view_mode">tree,form</field>
-            <field name="context">{'search_default_group_by_provider': True}</field>
-            <field name="help" type="html">
-              <p class="o_view_nocontent_smiling_face">
-                Define a new delivery method
+        <recordid="action_delivery_carrier_form"model="ir.actions.act_window">
+            <fieldname="name">ShippingMethods</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">delivery.carrier</field>
+            <fieldname="view_mode">tree,form</field>
+            <fieldname="context">{'search_default_group_by_provider':True}</field>
+            <fieldname="help"type="html">
+              <pclass="o_view_nocontent_smiling_face">
+                Defineanewdeliverymethod
               </p><p>
-                Each carrier (e.g. UPS) can have several delivery methods (e.g.
-                UPS Express, UPS Standard) with a set of pricing rules attached
-                to each method.
+                Eachcarrier(e.g.UPS)canhaveseveraldeliverymethods(e.g.
+                UPSExpress,UPSStandard)withasetofpricingrulesattached
+                toeachmethod.
               </p><p>
-                These methods allow to automatically compute the delivery price
-                according to your settings; on the sales order (based on the
-                quotation) or the invoice (based on the delivery orders).
+                Thesemethodsallowtoautomaticallycomputethedeliveryprice
+                accordingtoyoursettings;onthesalesorder(basedonthe
+                quotation)ortheinvoice(basedonthedeliveryorders).
               </p>
             </field>
         </record>
 
-        <menuitem action="action_delivery_carrier_form" id="menu_action_delivery_carrier_form" parent="menu_delivery" sequence="1"/>
-        <menuitem action="action_delivery_carrier_form" id="sale_menu_action_delivery_carrier_form" parent="sale.menu_sales_config" sequence="4"/>
+        <menuitemaction="action_delivery_carrier_form"id="menu_action_delivery_carrier_form"parent="menu_delivery"sequence="1"/>
+        <menuitemaction="action_delivery_carrier_form"id="sale_menu_action_delivery_carrier_form"parent="sale.menu_sales_config"sequence="4"/>
 
-        <record id="view_delivery_price_rule_form" model="ir.ui.view">
-            <field name="name">delivery.price.rule.form</field>
-            <field name="model">delivery.price.rule</field>
-            <field name="arch" type="xml">
-                <form string="Price Rules">
+        <recordid="view_delivery_price_rule_form"model="ir.ui.view">
+            <fieldname="name">delivery.price.rule.form</field>
+            <fieldname="model">delivery.price.rule</field>
+            <fieldname="arch"type="xml">
+                <formstring="PriceRules">
                     <group>
-                        <field name="name" invisible="1"/>
+                        <fieldname="name"invisible="1"/>
                     </group>
                     <group>
-                        <label for="variable" string="Condition"/>
-                        <div class="o_row">
-                            <field name="variable"/>
-                            <field name="operator"/>
-                            <field name="max_value"/>
+                        <labelfor="variable"string="Condition"/>
+                        <divclass="o_row">
+                            <fieldname="variable"/>
+                            <fieldname="operator"/>
+                            <fieldname="max_value"/>
                         </div>
-                        <label for="list_base_price" string="Delivery Cost"/>
+                        <labelfor="list_base_price"string="DeliveryCost"/>
                         <div>
-                            <field name="list_base_price" class="oe_inline"/>
+                            <fieldname="list_base_price"class="oe_inline"/>
                             +
-                            <field name="list_price" class="oe_inline"/>
+                            <fieldname="list_price"class="oe_inline"/>
                             *
-                            <field name="variable_factor" class="oe_inline"/>
+                            <fieldname="variable_factor"class="oe_inline"/>
                         </div>
                     </group>
                 </form>
             </field>
         </record>
-        <record id="view_delivery_price_rule_tree" model="ir.ui.view">
-            <field name="name">delivery.price.rule.tree</field>
-            <field name="model">delivery.price.rule</field>
-            <field name="arch" type="xml">
-                <tree string="Price Rules">
-                    <field name="sequence" widget="handle" />
-                    <field name="name"/>
+        <recordid="view_delivery_price_rule_tree"model="ir.ui.view">
+            <fieldname="name">delivery.price.rule.tree</field>
+            <fieldname="model">delivery.price.rule</field>
+            <fieldname="arch"type="xml">
+                <treestring="PriceRules">
+                    <fieldname="sequence"widget="handle"/>
+                    <fieldname="name"/>
                 </tree>
             </field>
         </record>
 
-        <record id="view_picking_withcarrier_out_form" model="ir.ui.view">
-            <field name="name">delivery.stock.picking_withcarrier.form.view</field>
-            <field name="model">stock.picking</field>
-            <field name="inherit_id" ref="stock.view_picking_form"/>
-            <field name="arch" type="xml">
+        <recordid="view_picking_withcarrier_out_form"model="ir.ui.view">
+            <fieldname="name">delivery.stock.picking_withcarrier.form.view</field>
+            <fieldname="model">stock.picking</field>
+            <fieldname="inherit_id"ref="stock.view_picking_form"/>
+            <fieldname="arch"type="xml">
               <data>
-                <xpath expr="//group[@name='other_infos']" position="before">
-                    <group name='carrier_data' string="Shipping Information">
-                        <field name="is_return_picking" invisible="1"/>
-                        <field name="carrier_id" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}" options="{'no_create': True, 'no_open': True}"/>
-                        <field name="delivery_type" attrs="{'invisible':True}"/>
-                        <label for="carrier_tracking_ref"/>
-                        <div name="tracking">
-                            <field name="carrier_tracking_ref" class="oe_inline" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-                            <button type='object' class="fa fa-arrow-right oe_link" name="cancel_shipment" string="Cancel" attrs="{'invisible':['|','|','|',('carrier_tracking_ref','=',False),('delivery_type','in', ['fixed', 'base_on_rule']),('delivery_type','=',False),('state','not in',('done'))]}"/>
+                <xpathexpr="//group[@name='other_infos']"position="before">
+                    <groupname='carrier_data'string="ShippingInformation">
+                        <fieldname="is_return_picking"invisible="1"/>
+                        <fieldname="carrier_id"attrs="{'readonly':[('state','in',('done','cancel'))]}"options="{'no_create':True,'no_open':True}"/>
+                        <fieldname="delivery_type"attrs="{'invisible':True}"/>
+                        <labelfor="carrier_tracking_ref"/>
+                        <divname="tracking">
+                            <fieldname="carrier_tracking_ref"class="oe_inline"attrs="{'readonly':[('state','in',('done','cancel'))]}"/>
+                            <buttontype='object'class="fafa-arrow-rightoe_link"name="cancel_shipment"string="Cancel"attrs="{'invisible':['|','|','|',('carrier_tracking_ref','=',False),('delivery_type','in',['fixed','base_on_rule']),('delivery_type','=',False),('state','notin',('done'))]}"/>
                         </div>
-                        <label for="weight" string="Weight"/>
+                        <labelfor="weight"string="Weight"/>
                         <div>
-                            <field name="weight" class="oe_inline"/>
-                            <field name="weight_uom_name" nolabel="1" class="oe_inline" style="margin-left:5px"/>
+                            <fieldname="weight"class="oe_inline"/>
+                            <fieldname="weight_uom_name"nolabel="1"class="oe_inline"style="margin-left:5px"/>
                         </div>
-                        <label for="shipping_weight" string="Weight for shipping"/>
+                        <labelfor="shipping_weight"string="Weightforshipping"/>
                         <div>
-                            <field name="shipping_weight" class="oe_inline"/>
-                            <field name="weight_uom_name" nolabel="1" class="oe_inline" style="margin-left:5px"/>
+                            <fieldname="shipping_weight"class="oe_inline"/>
+                            <fieldname="weight_uom_name"nolabel="1"class="oe_inline"style="margin-left:5px"/>
                         </div>
                     </group>
                 </xpath>
-                <div name="button_box" position="inside">
-                    <button type="object" name="open_website_url" class="oe_stat_button" icon='fa-truck' string="Tracking"
-                         attrs="{'invisible': ['|','|',('carrier_tracking_ref','=',False),('carrier_id', '=', False),('delivery_type','=','grid')]}" />
+                <divname="button_box"position="inside">
+                    <buttontype="object"name="open_website_url"class="oe_stat_button"icon='fa-truck'string="Tracking"
+                         attrs="{'invisible':['|','|',('carrier_tracking_ref','=',False),('carrier_id','=',False),('delivery_type','=','grid')]}"/>
                 </div>
-                <xpath expr="/form/header/button[last()]" position="after">
-                    <button name="send_to_shipper" string="Send to Shipper" type="object" attrs="{'invisible':['|','|','|','|',('carrier_tracking_ref','!=',False),('delivery_type','in', ['fixed', 'base_on_rule']),('delivery_type','=',False),('state','not in',('done')),('picking_type_code', '=', 'incoming')]}"/>
+                <xpathexpr="/form/header/button[last()]"position="after">
+                    <buttonname="send_to_shipper"string="SendtoShipper"type="object"attrs="{'invisible':['|','|','|','|',('carrier_tracking_ref','!=',False),('delivery_type','in',['fixed','base_on_rule']),('delivery_type','=',False),('state','notin',('done')),('picking_type_code','=','incoming')]}"/>
                 </xpath>
-                <xpath expr="/form/header/button[last()]" position="after">
-                    <button name="print_return_label" string="Print Return Label" type="object" attrs="{'invisible':['|', '|', ('is_return_picking', '=', False),('state', '=', 'done'),('picking_type_code', '!=', 'incoming')]}"/>
+                <xpathexpr="/form/header/button[last()]"position="after">
+                    <buttonname="print_return_label"string="PrintReturnLabel"type="object"attrs="{'invisible':['|','|',('is_return_picking','=',False),('state','=','done'),('picking_type_code','!=','incoming')]}"/>
                 </xpath>
               </data>
-              <xpath expr="//field[@name='partner_id']" position="attributes">
-                  <attribute name="attrs">{'required': ['&amp;', ('delivery_type', '!=', False), ('delivery_type', 'not in', ['fixed', 'base_on_rule'])]}</attribute>
+              <xpathexpr="//field[@name='partner_id']"position="attributes">
+                  <attributename="attrs">{'required':['&amp;',('delivery_type','!=',False),('delivery_type','notin',['fixed','base_on_rule'])]}</attribute>
               </xpath>
             </field>
         </record>
 
-        <record id="view_picking_withweight_internal_move_form" model="ir.ui.view">
-            <field name="name">stock.picking_withweight.internal.move.form.view</field>
-            <field name="model">stock.move</field>
-            <field name="inherit_id" ref="stock.view_move_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='location_dest_id']" position="after">
-                    <field name="weight"/>
+        <recordid="view_picking_withweight_internal_move_form"model="ir.ui.view">
+            <fieldname="name">stock.picking_withweight.internal.move.form.view</field>
+            <fieldname="model">stock.move</field>
+            <fieldname="inherit_id"ref="stock.view_move_form"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//field[@name='location_dest_id']"position="after">
+                    <fieldname="weight"/>
                 </xpath>
             </field>
         </record>
 
-        <record id="view_quant_package_weight_form" model="ir.ui.view">
-            <field name="name">stock.quant.package.weight.form</field>
-            <field name="model">stock.quant.package</field>
-            <field name="inherit_id" ref="stock.view_quant_package_form"/>
-            <field name="arch" type="xml">
-                <field name="company_id" position="before">
-                    <field name="packaging_id" domain="[('product_id', '=', False)]"/>
-                    <label for="shipping_weight"/>
-                    <div class="o_row" name="Shipping Weight">
-                        <field name="shipping_weight"/>
-                        <span><field name="weight_uom_name"/></span>
-                        <span class="text-muted">(computed: <field name="weight" nolabel="1"/></span><span class="text-muted"><field name="weight_uom_name" nolabel="1"/>)</span>
+        <recordid="view_quant_package_weight_form"model="ir.ui.view">
+            <fieldname="name">stock.quant.package.weight.form</field>
+            <fieldname="model">stock.quant.package</field>
+            <fieldname="inherit_id"ref="stock.view_quant_package_form"/>
+            <fieldname="arch"type="xml">
+                <fieldname="company_id"position="before">
+                    <fieldname="packaging_id"domain="[('product_id','=',False)]"/>
+                    <labelfor="shipping_weight"/>
+                    <divclass="o_row"name="ShippingWeight">
+                        <fieldname="shipping_weight"/>
+                        <span><fieldname="weight_uom_name"/></span>
+                        <spanclass="text-muted">(computed:<fieldname="weight"nolabel="1"/></span><spanclass="text-muted"><fieldname="weight_uom_name"nolabel="1"/>)</span>
                     </div>
                 </field>
             </field>
         </record>
 
-        <record id="view_quant_package_packaging_tree" model="ir.ui.view">
-            <field name="name">stock.quant.package.packaging.tree</field>
-            <field name="model">stock.quant.package</field>
-            <field name="inherit_id" ref="stock.view_quant_package_tree"/>
-            <field name="arch" type="xml">
-                <field name="display_name" position="after">
-                    <field name="packaging_id"/>
+        <recordid="view_quant_package_packaging_tree"model="ir.ui.view">
+            <fieldname="name">stock.quant.package.packaging.tree</field>
+            <fieldname="model">stock.quant.package</field>
+            <fieldname="inherit_id"ref="stock.view_quant_package_tree"/>
+            <fieldname="arch"type="xml">
+                <fieldname="display_name"position="after">
+                    <fieldname="packaging_id"/>
                 </field>
             </field>
         </record>
 
-        <record id="view_order_form_with_carrier" model="ir.ui.view">
-            <field name="name">delivery.sale.order.form.view.with_carrier</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
-            <field name="arch" type="xml">
+        <recordid="view_order_form_with_carrier"model="ir.ui.view">
+            <fieldname="name">delivery.sale.order.form.view.with_carrier</field>
+            <fieldname="model">sale.order</field>
+            <fieldname="inherit_id"ref="sale.view_order_form"/>
+            <fieldname="arch"type="xml">
                 <data>
-                    <xpath expr="//field[@name='partner_id']" position='after'>
-                        <field name="delivery_set" invisible="1"/>
-                        <field name="is_all_service" invisible="1"/>
-                        <field name="recompute_delivery_price" invisible="1"/>
+                    <xpathexpr="//field[@name='partner_id']"position='after'>
+                        <fieldname="delivery_set"invisible="1"/>
+                        <fieldname="is_all_service"invisible="1"/>
+                        <fieldname="recompute_delivery_price"invisible="1"/>
                     </xpath>
-                    <xpath expr="//group[@name='note_group']" position="before">
-                        <div class="oe_right">
+                    <xpathexpr="//group[@name='note_group']"position="before">
+                        <divclass="oe_right">
                             <button
-                                string="Add shipping"
+                                string="Addshipping"
                                 name="action_open_delivery_wizard"
                                 type="object"
-                                attrs="{'invisible': ['|', '|',('is_all_service', '=', True), ('order_line', '=', []), ('delivery_set', '=', True)]}"
+                                attrs="{'invisible':['|','|',('is_all_service','=',True),('order_line','=',[]),('delivery_set','=',True)]}"
                             />
                             <button
-                                string="Update shipping cost"
+                                string="Updateshippingcost"
                                 name="action_open_delivery_wizard"
                                 context="{'carrier_recompute':True}"
                                 type="object"
-                                class="text-warning btn-secondary"
-                                attrs="{'invisible': ['|', '|',('is_all_service', '=', True), ('recompute_delivery_price', '=', False), ('delivery_set', '=', False)]}"
+                                class="text-warningbtn-secondary"
+                                attrs="{'invisible':['|','|',('is_all_service','=',True),('recompute_delivery_price','=',False),('delivery_set','=',False)]}"
                             />
                             <button
-                                string="Update shipping cost"
+                                string="Updateshippingcost"
                                 name="action_open_delivery_wizard"
                                 context="{'carrier_recompute':True}"
                                 type="object"
-                                attrs="{'invisible': ['|', '|',('is_all_service', '=', True), ('recompute_delivery_price', '=', True), ('delivery_set', '=', False)]}"
+                                attrs="{'invisible':['|','|',('is_all_service','=',True),('recompute_delivery_price','=',True),('delivery_set','=',False)]}"
                             />
                         </div>
                     </xpath>
-                    <xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_unit']" position="before">
-                        <field name="recompute_delivery_price" invisible="1"/>
-                        <field name="is_delivery" invisible="1"/>
+                    <xpathexpr="//field[@name='order_line']/form/group/group/field[@name='price_unit']"position="before">
+                        <fieldname="recompute_delivery_price"invisible="1"/>
+                        <fieldname="is_delivery"invisible="1"/>
                     </xpath>
-                    <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
-                        <field name="recompute_delivery_price" invisible="1"/>
-                        <field name="is_delivery" invisible="1"/>
+                    <xpathexpr="//field[@name='order_line']/tree/field[@name='price_unit']"position="before">
+                        <fieldname="recompute_delivery_price"invisible="1"/>
+                        <fieldname="is_delivery"invisible="1"/>
                     </xpath>
-                    <xpath expr="//field[@name='order_line']/tree" position="attributes">
-                        <attribute name="decoration-warning">recompute_delivery_price and is_delivery</attribute>
+                    <xpathexpr="//field[@name='order_line']/tree"position="attributes">
+                        <attributename="decoration-warning">recompute_delivery_priceandis_delivery</attribute>
                     </xpath>
                 </data>
             </field>
         </record>
 
-        <record id="delivery_tracking_url_warning_form" model="ir.ui.view">
-            <field name="name">delivery.carrier.warning.url.form</field>
-            <field name="model">stock.picking</field>
-            <field name="arch" type="xml">
-                <form string="Trackers URL">
+        <recordid="delivery_tracking_url_warning_form"model="ir.ui.view">
+            <fieldname="name">delivery.carrier.warning.url.form</field>
+            <fieldname="model">stock.picking</field>
+            <fieldname="arch"type="xml">
+                <formstring="TrackersURL">
                     <group>
-                        <div class="alert alert-info" role="status">
-                            <p>You have multiple tracker links, they are available in the chatter.</p>
+                        <divclass="alertalert-info"role="status">
+                            <p>Youhavemultipletrackerlinks,theyareavailableinthechatter.</p>
                         </div>
                     </group>
                     <footer>
-                        <button string="OK" special="cancel" class="oe_highlight"/>
+                        <buttonstring="OK"special="cancel"class="oe_highlight"/>
                     </footer>
                 </form>
             </field>
         </record>
 
-        <record id="act_delivery_trackers_url" model="ir.actions.act_window">
-            <field name="name">Display tracking links</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">stock.picking</field>
-            <field name="view_id" ref="delivery.delivery_tracking_url_warning_form"/>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
+        <recordid="act_delivery_trackers_url"model="ir.actions.act_window">
+            <fieldname="name">Displaytrackinglinks</field>
+            <fieldname="type">ir.actions.act_window</field>
+            <fieldname="res_model">stock.picking</field>
+            <fieldname="view_id"ref="delivery.delivery_tracking_url_warning_form"/>
+            <fieldname="view_mode">form</field>
+            <fieldname="target">new</field>
         </record>
 
-        <record id="vpicktree_view_tree" model="ir.ui.view">
-            <field name="name">stock.picking.delivery.tree.inherit.delivery</field>
-            <field name="model">stock.picking</field>
-            <field name="inherit_id" ref="stock.vpicktree"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='backorder_id']" position="after">
-                    <field name="carrier_tracking_ref" optional="hide"/>
-                    <field name="carrier_id" optional="hide"/>
-                    <field name="weight" optional="hide"/>
-                    <field name="shipping_weight" optional="hide"/>
+        <recordid="vpicktree_view_tree"model="ir.ui.view">
+            <fieldname="name">stock.picking.delivery.tree.inherit.delivery</field>
+            <fieldname="model">stock.picking</field>
+            <fieldname="inherit_id"ref="stock.vpicktree"/>
+            <fieldname="arch"type="xml">
+                <xpathexpr="//field[@name='backorder_id']"position="after">
+                    <fieldname="carrier_tracking_ref"optional="hide"/>
+                    <fieldname="carrier_id"optional="hide"/>
+                    <fieldname="weight"optional="hide"/>
+                    <fieldname="shipping_weight"optional="hide"/>
                 </xpath>
             </field>
         </record>

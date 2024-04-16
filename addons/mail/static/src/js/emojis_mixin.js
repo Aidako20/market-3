@@ -1,90 +1,90 @@
-flectra.define('mail.emoji_mixin', function (require) {
-"use strict";
+flectra.define('mail.emoji_mixin',function(require){
+"usestrict";
 
-var emojis = require('mail.emojis');
+varemojis=require('mail.emojis');
 
 /**
- * This mixin gathers a few methods that are used to handle emojis.
+ *Thismixingathersafewmethodsthatareusedtohandleemojis.
  *
- * It's used to:
+ *It'susedto:
  *
- * - handle the click on an emoji from a dropdown panel and add it to the related textarea/input
- * - format text and wrap the emojis around <span class="o_mail_emoji"> to make them look nicer
+ *-handletheclickonanemojifromadropdownpanelandaddittotherelatedtextarea/input
+ *-formattextandwraptheemojisaround<spanclass="o_mail_emoji">tomakethemlooknicer
  *
- * Methods are based on the collections of emojis available in mail.emojis
+ *Methodsarebasedonthecollectionsofemojisavailableinmail.emojis
  *
  */
-return {
+return{
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * This method should be bound to a click event on an emoji.
-     * (used in text element's emojis dropdown list)
+     *Thismethodshouldbeboundtoaclickeventonanemoji.
+     *(usedintextelement'semojisdropdownlist)
      *
-     * It assumes that a ``_getTargetTextElement`` method is defined that will return the related
-     * textarea/input element in which the emoji will be inserted.
+     *Itassumesthata``_getTargetTextElement``methodisdefinedthatwillreturntherelated
+     *textarea/inputelementinwhichtheemojiwillbeinserted.
      *
-     * @param {MouseEvent} ev
+     *@param{MouseEvent}ev
      */
-    _onEmojiClick: function (ev) {
-        var unicode = ev.currentTarget.textContent.trim();
-        var textInput = this._getTargetTextElement($(ev.currentTarget))[0];
-        var selectionStart = textInput.selectionStart;
+    _onEmojiClick:function(ev){
+        varunicode=ev.currentTarget.textContent.trim();
+        vartextInput=this._getTargetTextElement($(ev.currentTarget))[0];
+        varselectionStart=textInput.selectionStart;
 
-        textInput.value = textInput.value.slice(0, selectionStart) + unicode + textInput.value.slice(selectionStart);
+        textInput.value=textInput.value.slice(0,selectionStart)+unicode+textInput.value.slice(selectionStart);
         textInput.focus();
-        textInput.setSelectionRange(selectionStart + unicode.length, selectionStart + unicode.length);
+        textInput.setSelectionRange(selectionStart+unicode.length,selectionStart+unicode.length);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * This method is used to wrap emojis in a text message with <span class="o_mail_emoji">
-     * As this returns html to be used in a 't-raw' argument, it first makes sure that the
-     * passed text message is html escaped for safety reasons.
+     *Thismethodisusedtowrapemojisinatextmessagewith<spanclass="o_mail_emoji">
+     *Asthisreturnshtmltobeusedina't-raw'argument,itfirstmakessurethatthe
+     *passedtextmessageishtmlescapedforsafetyreasons.
      *
-     * @param {String} message a text message to format
+     *@param{String}messageatextmessagetoformat
      */
-    _formatText: function (message) {
-        message = this._htmlEscape(message);
-        message = this._wrapEmojis(message);
-        message = message.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    _formatText:function(message){
+        message=this._htmlEscape(message);
+        message=this._wrapEmojis(message);
+        message=message.replace(/(?:\r\n|\r|\n)/g,'<br>');
 
-        return message;
+        returnmessage;
     },
 
     /**
-     * Adapted from qweb2.js#html_escape to avoid formatting '&'
+     *Adaptedfromqweb2.js#html_escapetoavoidformatting'&'
      *
-     * @param {String} s
-     * @private
+     *@param{String}s
+     *@private
      */
-    _htmlEscape: function (s) {
-        if (s == null) {
-            return '';
+    _htmlEscape:function(s){
+        if(s==null){
+            return'';
         }
-        return String(s).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        returnString(s).replace(/</g,'&lt;').replace(/>/g,'&gt;');
     },
 
     /**
-     * Will use the mail.emojis library to wrap emojis unicode around a span with a special font
-     * that will make them look nicer (colored, ...).
+     *Willusethemail.emojislibrarytowrapemojisunicodearoundaspanwithaspecialfont
+     *thatwillmakethemlooknicer(colored,...).
      *
-     * @param {String} message
+     *@param{String}message
      */
-    _wrapEmojis: function (message) {
-        emojis.forEach(function (emoji) {
-            message = message.replace(
-                new RegExp(emoji.unicode.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
-                '<span class="o_mail_emoji">' + emoji.unicode + '</span>'
+    _wrapEmojis:function(message){
+        emojis.forEach(function(emoji){
+            message=message.replace(
+                newRegExp(emoji.unicode.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g'),
+                '<spanclass="o_mail_emoji">'+emoji.unicode+'</span>'
             );
         });
 
-        return message;
+        returnmessage;
     }
 };
 

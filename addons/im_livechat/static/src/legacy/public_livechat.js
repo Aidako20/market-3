@@ -1,218 +1,218 @@
-flectra.define('im_livechat.legacy.im_livechat.im_livechat', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.im_livechat.im_livechat',function(require){
+"usestrict";
 
 require('bus.BusService');
-var concurrency = require('web.concurrency');
-var config = require('web.config');
-var core = require('web.core');
-var session = require('web.session');
-var time = require('web.time');
-var utils = require('web.utils');
-var Widget = require('web.Widget');
+varconcurrency=require('web.concurrency');
+varconfig=require('web.config');
+varcore=require('web.core');
+varsession=require('web.session');
+vartime=require('web.time');
+varutils=require('web.utils');
+varWidget=require('web.Widget');
 
-var WebsiteLivechat = require('im_livechat.legacy.im_livechat.model.WebsiteLivechat');
-var WebsiteLivechatMessage = require('im_livechat.legacy.im_livechat.model.WebsiteLivechatMessage');
-var WebsiteLivechatWindow = require('im_livechat.legacy.im_livechat.WebsiteLivechatWindow');
+varWebsiteLivechat=require('im_livechat.legacy.im_livechat.model.WebsiteLivechat');
+varWebsiteLivechatMessage=require('im_livechat.legacy.im_livechat.model.WebsiteLivechatMessage');
+varWebsiteLivechatWindow=require('im_livechat.legacy.im_livechat.WebsiteLivechatWindow');
 
-var _t = core._t;
-var QWeb = core.qweb;
+var_t=core._t;
+varQWeb=core.qweb;
 
-// Constants
-var LIVECHAT_COOKIE_HISTORY = 'im_livechat_history';
-var HISTORY_LIMIT = 15;
+//Constants
+varLIVECHAT_COOKIE_HISTORY='im_livechat_history';
+varHISTORY_LIMIT=15;
 
-var RATING_TO_EMOJI = {
-    "5": "😊",
-    "3": "😐",
-    "1": "😞"
+varRATING_TO_EMOJI={
+    "5":"😊",
+    "3":"😐",
+    "1":"😞"
 };
 
-// History tracking
-var page = window.location.href.replace(/^.*\/\/[^/]+/, '');
-var pageHistory = utils.get_cookie(LIVECHAT_COOKIE_HISTORY);
-var urlHistory = [];
-if (pageHistory) {
-    urlHistory = JSON.parse(pageHistory) || [];
+//Historytracking
+varpage=window.location.href.replace(/^.*\/\/[^/]+/,'');
+varpageHistory=utils.get_cookie(LIVECHAT_COOKIE_HISTORY);
+varurlHistory=[];
+if(pageHistory){
+    urlHistory=JSON.parse(pageHistory)||[];
 }
-if (!_.contains(urlHistory, page)) {
+if(!_.contains(urlHistory,page)){
     urlHistory.push(page);
-    while (urlHistory.length > HISTORY_LIMIT) {
+    while(urlHistory.length>HISTORY_LIMIT){
         urlHistory.shift();
     }
-    utils.set_cookie(LIVECHAT_COOKIE_HISTORY, JSON.stringify(urlHistory), 60 * 60 * 24); // 1 day cookie
+    utils.set_cookie(LIVECHAT_COOKIE_HISTORY,JSON.stringify(urlHistory),60*60*24);//1daycookie
 }
 
-var LivechatButton = Widget.extend({
-    className: 'openerp o_livechat_button d-print-none',
-    custom_events: {
-        'close_chat_window': '_onCloseChatWindow',
-        'post_message_chat_window': '_onPostMessageChatWindow',
-        'save_chat_window': '_onSaveChatWindow',
-        'updated_typing_partners': '_onUpdatedTypingPartners',
-        'updated_unread_counter': '_onUpdatedUnreadCounter',
+varLivechatButton=Widget.extend({
+    className:'openerpo_livechat_buttond-print-none',
+    custom_events:{
+        'close_chat_window':'_onCloseChatWindow',
+        'post_message_chat_window':'_onPostMessageChatWindow',
+        'save_chat_window':'_onSaveChatWindow',
+        'updated_typing_partners':'_onUpdatedTypingPartners',
+        'updated_unread_counter':'_onUpdatedUnreadCounter',
     },
-    events: {
-        'click': '_openChat'
+    events:{
+        'click':'_openChat'
     },
-    init: function (parent, serverURL, options) {
+    init:function(parent,serverURL,options){
         this._super(parent);
-        this.options = _.defaults(options || {}, {
-            input_placeholder: _t("Ask something ..."),
-            default_username: _t("Visitor"),
-            button_text: _t("Chat with one of our collaborators"),
-            default_message: _t("How may I help you?"),
+        this.options=_.defaults(options||{},{
+            input_placeholder:_t("Asksomething..."),
+            default_username:_t("Visitor"),
+            button_text:_t("Chatwithoneofourcollaborators"),
+            default_message:_t("HowmayIhelpyou?"),
         });
 
-        this._history = null;
-        // livechat model
-        this._livechat = null;
-        // livechat window
-        this._chatWindow = null;
-        this._messages = [];
-        this._serverURL = serverURL;
+        this._history=null;
+        //livechatmodel
+        this._livechat=null;
+        //livechatwindow
+        this._chatWindow=null;
+        this._messages=[];
+        this._serverURL=serverURL;
     },
-    willStart: function () {
-        var self = this;
-        var cookie = utils.get_cookie('im_livechat_session');
-        var ready;
-        if (!cookie) {
-            ready = session.rpc('/im_livechat/init', { channel_id: this.options.channel_id })
-                .then(function (result) {
-                    if (!result.available_for_me) {
-                        return Promise.reject();
+    willStart:function(){
+        varself=this;
+        varcookie=utils.get_cookie('im_livechat_session');
+        varready;
+        if(!cookie){
+            ready=session.rpc('/im_livechat/init',{channel_id:this.options.channel_id})
+                .then(function(result){
+                    if(!result.available_for_me){
+                        returnPromise.reject();
                     }
-                    self._rule = result.rule;
+                    self._rule=result.rule;
                 });
-        } else {
-            var channel = JSON.parse(cookie);
-            ready = session.rpc('/mail/chat_history', { uuid: channel.uuid, limit: 100 })
-                .then(function (history) {
-                    self._history = history;
+        }else{
+            varchannel=JSON.parse(cookie);
+            ready=session.rpc('/mail/chat_history',{uuid:channel.uuid,limit:100})
+                .then(function(history){
+                    self._history=history;
                 });
         }
-        session.user_context = {};
-        return ready
+        session.user_context={};
+        returnready
             .then(this._loadQWebTemplate.bind(this))
-            .then(() => {
-                if (!session.is_frontend) {
-                    return session.load_translations(["im_livechat"]);
+            .then(()=>{
+                if(!session.is_frontend){
+                    returnsession.load_translations(["im_livechat"]);
                 }
             });
     },
-    start: function () {
+    start:function(){
         this.$el.text(this.options.button_text);
-        if (this._history) {
-            _.each(this._history.reverse(), this._addMessage.bind(this));
+        if(this._history){
+            _.each(this._history.reverse(),this._addMessage.bind(this));
             this._openChat();
-        } else if (!config.device.isMobile && this._rule.action === 'auto_popup') {
-            var autoPopupCookie = utils.get_cookie('im_livechat_auto_popup');
-            if (!autoPopupCookie || JSON.parse(autoPopupCookie)) {
-                this._autoPopupTimeout =
-                    setTimeout(this._openChat.bind(this), this._rule.auto_popup_timer * 1000);
+        }elseif(!config.device.isMobile&&this._rule.action==='auto_popup'){
+            varautoPopupCookie=utils.get_cookie('im_livechat_auto_popup');
+            if(!autoPopupCookie||JSON.parse(autoPopupCookie)){
+                this._autoPopupTimeout=
+                    setTimeout(this._openChat.bind(this),this._rule.auto_popup_timer*1000);
             }
         }
-        this.call('bus_service', 'onNotification', this, this._onNotification);
-        if (this.options.button_background_color) {
-            this.$el.css('background-color', this.options.button_background_color);
+        this.call('bus_service','onNotification',this,this._onNotification);
+        if(this.options.button_background_color){
+            this.$el.css('background-color',this.options.button_background_color);
         }
-        if (this.options.button_text_color) {
-            this.$el.css('color', this.options.button_text_color);
-        }
-
-        // If website_event_track installed, put the livechat banner above the PWA banner.
-        var pwaBannerHeight = $('.o_pwa_install_banner').outerHeight(true);
-        if (pwaBannerHeight) {
-            this.$el.css('bottom', pwaBannerHeight + 'px');
+        if(this.options.button_text_color){
+            this.$el.css('color',this.options.button_text_color);
         }
 
-        return this._super();
+        //Ifwebsite_event_trackinstalled,putthelivechatbannerabovethePWAbanner.
+        varpwaBannerHeight=$('.o_pwa_install_banner').outerHeight(true);
+        if(pwaBannerHeight){
+            this.$el.css('bottom',pwaBannerHeight+'px');
+        }
+
+        returnthis._super();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
 
     /**
-     * @private
-     * @param {Object} data
-     * @param {Object} [options={}]
+     *@private
+     *@param{Object}data
+     *@param{Object}[options={}]
      */
-    _addMessage: function (data, options) {
-        options = _.extend({}, this.options, options, {
-            serverURL: this._serverURL,
+    _addMessage:function(data,options){
+        options=_.extend({},this.options,options,{
+            serverURL:this._serverURL,
         });
-        var message = new WebsiteLivechatMessage(this, data, options);
+        varmessage=newWebsiteLivechatMessage(this,data,options);
 
-        var hasAlreadyMessage = _.some(this._messages, function (msg) {
-            return message.getID() === msg.getID();
+        varhasAlreadyMessage=_.some(this._messages,function(msg){
+            returnmessage.getID()===msg.getID();
         });
-        if (hasAlreadyMessage) {
+        if(hasAlreadyMessage){
             return;
         }
 
-        if (this._livechat) {
+        if(this._livechat){
             this._livechat.addMessage(message);
         }
 
-        if (options && options.prepend) {
+        if(options&&options.prepend){
             this._messages.unshift(message);
-        } else {
+        }else{
             this._messages.push(message);
         }
     },
     /**
-     * @private
+     *@private
      */
-    _askFeedback: function () {
-        this._chatWindow.$('.o_thread_composer input').prop('disabled', true);
+    _askFeedback:function(){
+        this._chatWindow.$('.o_thread_composerinput').prop('disabled',true);
 
-        var feedback = new Feedback(this, this._livechat);
+        varfeedback=newFeedback(this,this._livechat);
         this._chatWindow.replaceContentWith(feedback);
 
-        feedback.on('send_message', this, this._sendMessage);
-        feedback.on('feedback_sent', this, this._closeChat);
+        feedback.on('send_message',this,this._sendMessage);
+        feedback.on('feedback_sent',this,this._closeChat);
     },
     /**
-     * @private
+     *@private
      */
-    _closeChat: function () {
+    _closeChat:function(){
         this._chatWindow.destroy();
-        utils.set_cookie('im_livechat_session', "", -1); // remove cookie
+        utils.set_cookie('im_livechat_session',"",-1);//removecookie
     },
     /**
-     * @private
-     * @param {Array} notification
+     *@private
+     *@param{Array}notification
      */
-    _handleNotification: function (notification) {
-        const [livechatUUID, notificationData] = notification;
-        if (this._livechat && (livechatUUID === this._livechat.getUUID())) {
-            if (notificationData._type === 'history_command') { // history request
-                const cookie = utils.get_cookie(LIVECHAT_COOKIE_HISTORY);
-                const history = cookie ? JSON.parse(cookie) : [];
-                session.rpc('/im_livechat/history', {
-                    pid: this._livechat.getOperatorPID()[0],
-                    channel_uuid: this._livechat.getUUID(),
-                    page_history: history,
+    _handleNotification:function(notification){
+        const[livechatUUID,notificationData]=notification;
+        if(this._livechat&&(livechatUUID===this._livechat.getUUID())){
+            if(notificationData._type==='history_command'){//historyrequest
+                constcookie=utils.get_cookie(LIVECHAT_COOKIE_HISTORY);
+                consthistory=cookie?JSON.parse(cookie):[];
+                session.rpc('/im_livechat/history',{
+                    pid:this._livechat.getOperatorPID()[0],
+                    channel_uuid:this._livechat.getUUID(),
+                    page_history:history,
                 });
-            } else if (notificationData.info === 'typing_status') {
-                const partnerID = notificationData.partner_id;
-                if (partnerID === this.options.current_partner_id) {
-                    // ignore typing display of current partner.
+            }elseif(notificationData.info==='typing_status'){
+                constpartnerID=notificationData.partner_id;
+                if(partnerID===this.options.current_partner_id){
+                    //ignoretypingdisplayofcurrentpartner.
                     return;
                 }
-                if (notificationData.is_typing) {
-                    this._livechat.registerTyping({ partnerID });
-                } else {
-                    this._livechat.unregisterTyping({ partnerID });
+                if(notificationData.is_typing){
+                    this._livechat.registerTyping({partnerID});
+                }else{
+                    this._livechat.unregisterTyping({partnerID});
                 }
-            } else if ('body' in notificationData) { // normal message
-                // If message from notif is already in chatter messages, stop handling
-                if (this._messages.some(message => message.getID() === notificationData.id)) {
+            }elseif('body'innotificationData){//normalmessage
+                //Ifmessagefromnotifisalreadyinchattermessages,stophandling
+                if(this._messages.some(message=>message.getID()===notificationData.id)){
                     return;
                 }
                 this._addMessage(notificationData);
-                if (this._chatWindow.isFolded() || !this._chatWindow.isAtBottom()) {
+                if(this._chatWindow.isFolded()||!this._chatWindow.isAtBottom()){
                     this._livechat.incrementUnreadCounter();
                 }
                 this._renderMessages();
@@ -220,160 +220,160 @@ var LivechatButton = Widget.extend({
         }
     },
     /**
-     * @private
+     *@private
      */
-    _loadQWebTemplate: function () {
-        return session.rpc('/im_livechat/load_templates').then(function (templates) {
-            _.each(templates, function (template) {
+    _loadQWebTemplate:function(){
+        returnsession.rpc('/im_livechat/load_templates').then(function(templates){
+            _.each(templates,function(template){
                 QWeb.add_template(template);
             });
         });
     },
     /**
-     * @private
+     *@private
      */
-    _openChat: _.debounce(function () {
-        if (this._openingChat) {
+    _openChat:_.debounce(function(){
+        if(this._openingChat){
             return;
         }
-        var self = this;
-        var cookie = utils.get_cookie('im_livechat_session');
-        var def;
-        this._openingChat = true;
+        varself=this;
+        varcookie=utils.get_cookie('im_livechat_session');
+        vardef;
+        this._openingChat=true;
         clearTimeout(this._autoPopupTimeout);
-        if (cookie) {
-            def = Promise.resolve(JSON.parse(cookie));
-        } else {
-            this._messages = []; // re-initialize messages cache
-            def = session.rpc('/im_livechat/get_session', {
-                channel_id: this.options.channel_id,
-                anonymous_name: this.options.default_username,
-                previous_operator_id: this._get_previous_operator_id(),
-            }, { shadow: true });
+        if(cookie){
+            def=Promise.resolve(JSON.parse(cookie));
+        }else{
+            this._messages=[];//re-initializemessagescache
+            def=session.rpc('/im_livechat/get_session',{
+                channel_id:this.options.channel_id,
+                anonymous_name:this.options.default_username,
+                previous_operator_id:this._get_previous_operator_id(),
+            },{shadow:true});
         }
-        def.then(function (livechatData) {
-            if (!livechatData || !livechatData.operator_pid) {
-                try {
+        def.then(function(livechatData){
+            if(!livechatData||!livechatData.operator_pid){
+                try{
                     self.displayNotification({
-                        message: _t("No available collaborator, please try again later."),
-                        sticky: true,
+                        message:_t("Noavailablecollaborator,pleasetryagainlater."),
+                        sticky:true,
                     });
-                } catch (err) {
+                }catch(err){
                     /**
-                     * Failure in displaying notification happens when
-                     * notification service doesn't exist, which is the case in
-                     * external lib. We don't want notifications in external
-                     * lib at the moment because they use bootstrap toast and
-                     * we don't want to include boostrap in external lib.
+                     *Failureindisplayingnotificationhappenswhen
+                     *notificationservicedoesn'texist,whichisthecasein
+                     *externallib.Wedon'twantnotificationsinexternal
+                     *libatthemomentbecausetheyusebootstraptoastand
+                     *wedon'twanttoincludeboostrapinexternallib.
                      */
-                    console.warn(_t("No available collaborator, please try again later."));
+                    console.warn(_t("Noavailablecollaborator,pleasetryagainlater."));
                 }
-            } else {
-                self._livechat = new WebsiteLivechat({
-                    parent: self,
-                    data: livechatData
+            }else{
+                self._livechat=newWebsiteLivechat({
+                    parent:self,
+                    data:livechatData
                 });
-                return self._openChatWindow().then(function () {
-                    if (!self._history) {
+                returnself._openChatWindow().then(function(){
+                    if(!self._history){
                         self._sendWelcomeMessage();
                     }
                     self._renderMessages();
-                    self.call('bus_service', 'addChannel', self._livechat.getUUID());
-                    self.call('bus_service', 'startPolling');
+                    self.call('bus_service','addChannel',self._livechat.getUUID());
+                    self.call('bus_service','startPolling');
 
-                    utils.set_cookie('im_livechat_session', utils.unaccent(JSON.stringify(self._livechat.toData())), 60 * 60);
-                    utils.set_cookie('im_livechat_auto_popup', JSON.stringify(false), 60 * 60);
-                    if (livechatData.operator_pid[0]) {
-                        // livechatData.operator_pid contains a tuple (id, name)
-                        // we are only interested in the id
-                        var operatorPidId = livechatData.operator_pid[0];
-                        var oneWeek = 7 * 24 * 60 * 60;
-                        utils.set_cookie('im_livechat_previous_operator_pid', operatorPidId, oneWeek);
+                    utils.set_cookie('im_livechat_session',utils.unaccent(JSON.stringify(self._livechat.toData())),60*60);
+                    utils.set_cookie('im_livechat_auto_popup',JSON.stringify(false),60*60);
+                    if(livechatData.operator_pid[0]){
+                        //livechatData.operator_pidcontainsatuple(id,name)
+                        //weareonlyinterestedintheid
+                        varoperatorPidId=livechatData.operator_pid[0];
+                        varoneWeek=7*24*60*60;
+                        utils.set_cookie('im_livechat_previous_operator_pid',operatorPidId,oneWeek);
                     }
                 });
             }
-        }).then(function () {
-            self._openingChat = false;
-        }).guardedCatch(function () {
-            self._openingChat = false;
+        }).then(function(){
+            self._openingChat=false;
+        }).guardedCatch(function(){
+            self._openingChat=false;
         });
-    }, 200, true),
+    },200,true),
     /**
-     * Will try to get a previous operator for this visitor.
-     * If the visitor already had visitor A, it's better for his user experience
-     * to get operator A again.
+     *Willtrytogetapreviousoperatorforthisvisitor.
+     *IfthevisitoralreadyhadvisitorA,it'sbetterforhisuserexperience
+     *togetoperatorAagain.
      *
-     * The information is stored in the 'im_livechat_previous_operator_pid' cookie.
+     *Theinformationisstoredinthe'im_livechat_previous_operator_pid'cookie.
      *
-     * @private
-     * @return {integer} operator_id.partner_id.id if the cookie is set
+     *@private
+     *@return{integer}operator_id.partner_id.idifthecookieisset
      */
-    _get_previous_operator_id: function () {
-        var cookie = utils.get_cookie('im_livechat_previous_operator_pid');
-        if (cookie) {
-            return cookie;
+    _get_previous_operator_id:function(){
+        varcookie=utils.get_cookie('im_livechat_previous_operator_pid');
+        if(cookie){
+            returncookie;
         }
 
-        return null;
+        returnnull;
     },
     /**
-     * @private
-     * @return {Promise}
+     *@private
+     *@return{Promise}
      */
-    _openChatWindow: function () {
-        var self = this;
-        var options = {
-            displayStars: false,
-            headerBackgroundColor: this.options.header_background_color,
-            placeholder: this.options.input_placeholder || "",
-            titleColor: this.options.title_color,
+    _openChatWindow:function(){
+        varself=this;
+        varoptions={
+            displayStars:false,
+            headerBackgroundColor:this.options.header_background_color,
+            placeholder:this.options.input_placeholder||"",
+            titleColor:this.options.title_color,
         };
-        this._chatWindow = new WebsiteLivechatWindow(this, this._livechat, options);
-        return this._chatWindow.appendTo($('body')).then(function () {
-            var cssProps = { bottom: 0 };
-            cssProps[_t.database.parameters.direction === 'rtl' ? 'left' : 'right'] = 0;
+        this._chatWindow=newWebsiteLivechatWindow(this,this._livechat,options);
+        returnthis._chatWindow.appendTo($('body')).then(function(){
+            varcssProps={bottom:0};
+            cssProps[_t.database.parameters.direction==='rtl'?'left':'right']=0;
             self._chatWindow.$el.css(cssProps);
             self.$el.hide();
         });
     },
     /**
-     * @private
+     *@private
      */
-    _renderMessages: function () {
-        var shouldScroll = !this._chatWindow.isFolded() && this._chatWindow.isAtBottom();
+    _renderMessages:function(){
+        varshouldScroll=!this._chatWindow.isFolded()&&this._chatWindow.isAtBottom();
         this._livechat.setMessages(this._messages);
         this._chatWindow.render();
-        if (shouldScroll) {
+        if(shouldScroll){
             this._chatWindow.scrollToBottom();
         }
     },
     /**
-     * @private
-     * @param {Object} message
-     * @return {Promise}
+     *@private
+     *@param{Object}message
+     *@return{Promise}
      */
-    _sendMessage: function (message) {
-        var self = this;
-        this._livechat._notifyMyselfTyping({ typing: false });
-        return session
-            .rpc('/mail/chat_post', { uuid: this._livechat.getUUID(), message_content: message.content })
-            .then(function (messageId) {
-                if (!messageId) {
-                    try {
+    _sendMessage:function(message){
+        varself=this;
+        this._livechat._notifyMyselfTyping({typing:false});
+        returnsession
+            .rpc('/mail/chat_post',{uuid:this._livechat.getUUID(),message_content:message.content})
+            .then(function(messageId){
+                if(!messageId){
+                    try{
                         self.displayNotification({
-                            message: _t("Session expired... Please refresh and try again."),
-                            sticky: true,
+                            message:_t("Sessionexpired...Pleaserefreshandtryagain."),
+                            sticky:true,
                         });
-                    } catch (err) {
+                    }catch(err){
                         /**
-                         * Failure in displaying notification happens when
-                         * notification service doesn't exist, which is the case
-                         * in external lib. We don't want notifications in
-                         * external lib at the moment because they use bootstrap
-                         * toast and we don't want to include boostrap in
-                         * external lib.
+                         *Failureindisplayingnotificationhappenswhen
+                         *notificationservicedoesn'texist,whichisthecase
+                         *inexternallib.Wedon'twantnotificationsin
+                         *externallibatthemomentbecausetheyusebootstrap
+                         *toastandwedon'twanttoincludeboostrapin
+                         *externallib.
                          */
-                        console.warn(_t("Session expired... Please refresh and try again."));
+                        console.warn(_t("Sessionexpired...Pleaserefreshandtryagain."));
                     }
                     self._closeChat();
                 }
@@ -381,3554 +381,3554 @@ var LivechatButton = Widget.extend({
             });
     },
     /**
-     * @private
+     *@private
      */
-    _sendWelcomeMessage: function () {
-        if (this.options.default_message) {
+    _sendWelcomeMessage:function(){
+        if(this.options.default_message){
             this._addMessage({
-                id: '_welcome',
-                attachment_ids: [],
-                author_id: this._livechat.getOperatorPID(),
-                body: this.options.default_message,
-                channel_ids: [this._livechat.getID()],
-                date: time.datetime_to_str(new Date()),
-            }, { prepend: true });
+                id:'_welcome',
+                attachment_ids:[],
+                author_id:this._livechat.getOperatorPID(),
+                body:this.options.default_message,
+                channel_ids:[this._livechat.getID()],
+                date:time.datetime_to_str(newDate()),
+            },{prepend:true});
         }
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onCloseChatWindow: function (ev) {
+    _onCloseChatWindow:function(ev){
         ev.stopPropagation();
-        var isComposerDisabled = this._chatWindow.$('.o_thread_composer input').prop('disabled');
-        var shouldAskFeedback = !isComposerDisabled && _.find(this._messages, function (message) {
-            return message.getID() !== '_welcome';
+        varisComposerDisabled=this._chatWindow.$('.o_thread_composerinput').prop('disabled');
+        varshouldAskFeedback=!isComposerDisabled&&_.find(this._messages,function(message){
+            returnmessage.getID()!=='_welcome';
         });
-        if (shouldAskFeedback) {
+        if(shouldAskFeedback){
             this._chatWindow.toggleFold(false);
             this._askFeedback();
-        } else {
+        }else{
             this._closeChat();
         }
         this._visitorLeaveSession();
     },
     /**
-     * @private
-     * @param {Array[]} notifications
+     *@private
+     *@param{Array[]}notifications
      */
-    _onNotification: function (notifications) {
-        var self = this;
-        _.each(notifications, function (notification) {
+    _onNotification:function(notifications){
+        varself=this;
+        _.each(notifications,function(notification){
             self._handleNotification(notification);
         });
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
-     * @param {Object} ev.data.messageData
+     *@private
+     *@param{FlectraEvent}ev
+     *@param{Object}ev.data.messageData
      */
-    _onPostMessageChatWindow: function (ev) {
+    _onPostMessageChatWindow:function(ev){
         ev.stopPropagation();
-        var self = this;
-        var messageData = ev.data.messageData;
-        this._sendMessage(messageData).guardedCatch(function (reason) {
+        varself=this;
+        varmessageData=ev.data.messageData;
+        this._sendMessage(messageData).guardedCatch(function(reason){
             reason.event.preventDefault();
-            return self._sendMessage(messageData); // try again just in case
+            returnself._sendMessage(messageData);//tryagainjustincase
         });
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onSaveChatWindow: function (ev) {
+    _onSaveChatWindow:function(ev){
         ev.stopPropagation();
-        utils.set_cookie('im_livechat_session', utils.unaccent(JSON.stringify(this._livechat.toData())), 60 * 60);
+        utils.set_cookie('im_livechat_session',utils.unaccent(JSON.stringify(this._livechat.toData())),60*60);
     },
     /**
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onUpdatedTypingPartners(ev) {
-        ev.stopPropagation();
-        this._chatWindow.renderHeader();
-    },
-    /**
-     * @private
-     * @param {FlectraEvent} ev
-     */
-    _onUpdatedUnreadCounter: function (ev) {
+    _onUpdatedTypingPartners(ev){
         ev.stopPropagation();
         this._chatWindow.renderHeader();
     },
     /**
-     * @private
-     * Called when the visitor leaves the livechat chatter the first time (first click on X button)
-     * this will deactivate the mail_channel, notify operator that visitor has left the channel.
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _visitorLeaveSession: function () {
-        var cookie = utils.get_cookie('im_livechat_session');
-        if (cookie) {
-            var channel = JSON.parse(cookie);
-            session.rpc('/im_livechat/visitor_leave_session', {uuid: channel.uuid});
-            utils.set_cookie('im_livechat_session', "", -1); // remove cookie
+    _onUpdatedUnreadCounter:function(ev){
+        ev.stopPropagation();
+        this._chatWindow.renderHeader();
+    },
+    /**
+     *@private
+     *Calledwhenthevisitorleavesthelivechatchatterthefirsttime(firstclickonXbutton)
+     *thiswilldeactivatethemail_channel,notifyoperatorthatvisitorhasleftthechannel.
+     */
+    _visitorLeaveSession:function(){
+        varcookie=utils.get_cookie('im_livechat_session');
+        if(cookie){
+            varchannel=JSON.parse(cookie);
+            session.rpc('/im_livechat/visitor_leave_session',{uuid:channel.uuid});
+            utils.set_cookie('im_livechat_session',"",-1);//removecookie
         }
     },
 });
 
 /*
- * Rating for Livechat
+ *RatingforLivechat
  *
- * This widget displays the 3 rating smileys, and a textarea to add a reason
- * (only for red smiley), and sends the user feedback to the server.
+ *Thiswidgetdisplaysthe3ratingsmileys,andatextareatoaddareason
+ *(onlyforredsmiley),andsendstheuserfeedbacktotheserver.
  */
-var Feedback = Widget.extend({
-    template: 'im_livechat.legacy.im_livechat.FeedBack',
+varFeedback=Widget.extend({
+    template:'im_livechat.legacy.im_livechat.FeedBack',
 
-    events: {
-        'click .o_livechat_rating_choices img': '_onClickSmiley',
-        'click .o_livechat_no_feedback span': '_onClickNoFeedback',
-        'click .o_rating_submit_button': '_onClickSend',
-        'click .o_email_chat_button': '_onEmailChat',
-        'click .o_livechat_email_error .alert-link': '_onTryAgain',
+    events:{
+        'click.o_livechat_rating_choicesimg':'_onClickSmiley',
+        'click.o_livechat_no_feedbackspan':'_onClickNoFeedback',
+        'click.o_rating_submit_button':'_onClickSend',
+        'click.o_email_chat_button':'_onEmailChat',
+        'click.o_livechat_email_error.alert-link':'_onTryAgain',
     },
 
     /**
-     * @param {?} parent
-     * @param {im_livechat.legacy.im_livechat.model.WebsiteLivechat} livechat
+     *@param{?}parent
+     *@param{im_livechat.legacy.im_livechat.model.WebsiteLivechat}livechat
      */
-    init: function (parent, livechat) {
+    init:function(parent,livechat){
         this._super(parent);
-        this._livechat = livechat;
-        this.server_origin = session.origin;
-        this.rating = undefined;
-        this.dp = new concurrency.DropPrevious();
+        this._livechat=livechat;
+        this.server_origin=session.origin;
+        this.rating=undefined;
+        this.dp=newconcurrency.DropPrevious();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {Object} options
+     *@private
+     *@param{Object}options
      */
-    _sendFeedback: function (reason) {
-        var self = this;
-        var args = {
-            uuid: this._livechat.getUUID(),
-            rate: this.rating,
-            reason: reason,
+    _sendFeedback:function(reason){
+        varself=this;
+        varargs={
+            uuid:this._livechat.getUUID(),
+            rate:this.rating,
+            reason:reason,
         };
-        this.dp.add(session.rpc('/im_livechat/feedback', args)).then(function () {
-            var emoji = RATING_TO_EMOJI[self.rating] || "??";
-            var content = _.str.sprintf(_t("Rating: %s"), emoji);
-            if (reason) {
-                content += " \n" + reason;
+        this.dp.add(session.rpc('/im_livechat/feedback',args)).then(function(){
+            varemoji=RATING_TO_EMOJI[self.rating]||"??";
+            varcontent=_.str.sprintf(_t("Rating:%s"),emoji);
+            if(reason){
+                content+="\n"+reason;
             }
-            self.trigger('send_message', { content: content, isFeedback: true });
+            self.trigger('send_message',{content:content,isFeedback:true});
         });
     },
     /**
-    * @private
+    *@private
     */
-    _showThanksMessage: function () {
-        this.$('.o_livechat_rating_box').empty().append($('<div />', {
-            text: _t('Thank you for your feedback'),
-            class: 'text-muted'
+    _showThanksMessage:function(){
+        this.$('.o_livechat_rating_box').empty().append($('<div/>',{
+            text:_t('Thankyouforyourfeedback'),
+            class:'text-muted'
         }));
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _onClickNoFeedback: function () {
-        this.trigger('feedback_sent'); // will close the chat
+    _onClickNoFeedback:function(){
+        this.trigger('feedback_sent');//willclosethechat
     },
     /**
-     * @private
+     *@private
      */
-    _onClickSend: function () {
+    _onClickSend:function(){
         this.$('.o_livechat_rating_reason').hide();
         this._showThanksMessage();
-        if (_.isNumber(this.rating)) {
+        if(_.isNumber(this.rating)){
             this._sendFeedback(this.$('textarea').val());
         }
     },
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickSmiley: function (ev) {
-        this.rating = parseInt($(ev.currentTarget).data('value'));
-        this.$('.o_livechat_rating_choices img').removeClass('selected');
-        this.$('.o_livechat_rating_choices img[data-value="' + this.rating + '"]').addClass('selected');
+    _onClickSmiley:function(ev){
+        this.rating=parseInt($(ev.currentTarget).data('value'));
+        this.$('.o_livechat_rating_choicesimg').removeClass('selected');
+        this.$('.o_livechat_rating_choicesimg[data-value="'+this.rating+'"]').addClass('selected');
 
-        // only display textearea if bad smiley selected
-        if (this.rating !== 5) {
+        //onlydisplaytexteareaifbadsmileyselected
+        if(this.rating!==5){
             this.$('.o_livechat_rating_reason').show();
-        } else {
+        }else{
             this.$('.o_livechat_rating_reason').hide();
             this._showThanksMessage();
             this._sendFeedback();
         }
     },
     /**
-    * @private
+    *@private
     */
-    _onEmailChat: function () {
-        var self = this;
-        var $email = this.$('#o_email');
+    _onEmailChat:function(){
+        varself=this;
+        var$email=this.$('#o_email');
 
-        if (utils.is_email($email.val())) {
-            $email.removeAttr('title').removeClass('is-invalid').prop('disabled', true);
-            this.$('.o_email_chat_button').prop('disabled', true);
+        if(utils.is_email($email.val())){
+            $email.removeAttr('title').removeClass('is-invalid').prop('disabled',true);
+            this.$('.o_email_chat_button').prop('disabled',true);
             this._rpc({
-                route: '/im_livechat/email_livechat_transcript',
-                params: {
-                    uuid: this._livechat.getUUID(),
-                    email: $email.val(),
+                route:'/im_livechat/email_livechat_transcript',
+                params:{
+                    uuid:this._livechat.getUUID(),
+                    email:$email.val(),
                 }
-            }).then(function () {
-                self.$('.o_livechat_email').html($('<strong />', { text: _t('Conversation Sent') }));
-            }).guardedCatch(function () {
+            }).then(function(){
+                self.$('.o_livechat_email').html($('<strong/>',{text:_t('ConversationSent')}));
+            }).guardedCatch(function(){
                 self.$('.o_livechat_email').hide();
                 self.$('.o_livechat_email_error').show();
             });
-        } else {
-            $email.addClass('is-invalid').prop('title', _t('Invalid email address'));
+        }else{
+            $email.addClass('is-invalid').prop('title',_t('Invalidemailaddress'));
         }
     },
     /**
-    * @private
+    *@private
     */
-    _onTryAgain: function () {
-        this.$('#o_email').prop('disabled', false);
-        this.$('.o_email_chat_button').prop('disabled', false);
+    _onTryAgain:function(){
+        this.$('#o_email').prop('disabled',false);
+        this.$('.o_email_chat_button').prop('disabled',false);
         this.$('.o_livechat_email_error').hide();
         this.$('.o_livechat_email').show();
     },
 });
 
-return {
-    LivechatButton: LivechatButton,
-    Feedback: Feedback,
+return{
+    LivechatButton:LivechatButton,
+    Feedback:Feedback,
 };
 
 });
 
-flectra.define('im_livechat.legacy.im_livechat.model.WebsiteLivechat', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.im_livechat.model.WebsiteLivechat',function(require){
+"usestrict";
 
-var AbstractThread = require('im_livechat.legacy.mail.model.AbstractThread');
-var ThreadTypingMixin = require('im_livechat.legacy.mail.model.ThreadTypingMixin');
+varAbstractThread=require('im_livechat.legacy.mail.model.AbstractThread');
+varThreadTypingMixin=require('im_livechat.legacy.mail.model.ThreadTypingMixin');
 
-var session = require('web.session');
+varsession=require('web.session');
 
 /**
- * Thread model that represents a livechat on the website-side. This livechat
- * is not linked to the mail service.
+ *Threadmodelthatrepresentsalivechatonthewebsite-side.Thislivechat
+ *isnotlinkedtothemailservice.
  */
-var WebsiteLivechat = AbstractThread.extend(ThreadTypingMixin, {
+varWebsiteLivechat=AbstractThread.extend(ThreadTypingMixin,{
 
     /**
-     * @override
-     * @private
-     * @param {Object} params
-     * @param {Object} params.data
-     * @param {boolean} [params.data.folded] states whether the livechat is
-     *   folded or not. It is considered only if this is defined and it is a
-     *   boolean.
-     * @param {integer} params.data.id the ID of this livechat.
-     * @param {integer} [params.data.message_unread_counter] the unread counter
-     *   of this livechat.
-     * @param {Array} params.data.operator_pid
-     * @param {string} params.data.name the name of this livechat.
-     * @param {string} [params.data.state] if 'folded', the livechat is folded.
-     *   This is ignored if `folded` is provided and is a boolean value.
-     * @param {string} params.data.uuid the UUID of this livechat.
-     * @param {im_livechat.legacy.im_livechat.im_livechat:LivechatButton} params.parent
+     *@override
+     *@private
+     *@param{Object}params
+     *@param{Object}params.data
+     *@param{boolean}[params.data.folded]stateswhetherthelivechatis
+     *  foldedornot.Itisconsideredonlyifthisisdefinedanditisa
+     *  boolean.
+     *@param{integer}params.data.idtheIDofthislivechat.
+     *@param{integer}[params.data.message_unread_counter]theunreadcounter
+     *  ofthislivechat.
+     *@param{Array}params.data.operator_pid
+     *@param{string}params.data.namethenameofthislivechat.
+     *@param{string}[params.data.state]if'folded',thelivechatisfolded.
+     *  Thisisignoredif`folded`isprovidedandisabooleanvalue.
+     *@param{string}params.data.uuidtheUUIDofthislivechat.
+     *@param{im_livechat.legacy.im_livechat.im_livechat:LivechatButton}params.parent
      */
-    init: function (params) {
-        this._super.apply(this, arguments);
-        ThreadTypingMixin.init.call(this, arguments);
+    init:function(params){
+        this._super.apply(this,arguments);
+        ThreadTypingMixin.init.call(this,arguments);
 
-        this._members = [];
-        this._operatorPID = params.data.operator_pid;
-        this._uuid = params.data.uuid;
+        this._members=[];
+        this._operatorPID=params.data.operator_pid;
+        this._uuid=params.data.uuid;
 
-        if (params.data.message_unread_counter !== undefined) {
-            this._unreadCounter = params.data.message_unread_counter;
+        if(params.data.message_unread_counter!==undefined){
+            this._unreadCounter=params.data.message_unread_counter;
         }
 
-        if (_.isBoolean(params.data.folded)) {
-            this._folded = params.data.folded;
-        } else {
-            this._folded = params.data.state === 'folded';
+        if(_.isBoolean(params.data.folded)){
+            this._folded=params.data.folded;
+        }else{
+            this._folded=params.data.state==='folded';
         }
 
-        // Necessary for thread typing mixin to display is typing notification
-        // bar text (at least, for the operator in the members).
+        //Necessaryforthreadtypingmixintodisplayistypingnotification
+        //bartext(atleast,fortheoperatorinthemembers).
         this._members.push({
-            id: this._operatorPID[0],
-            name: this._operatorPID[1]
+            id:this._operatorPID[0],
+            name:this._operatorPID[1]
         });
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @returns {im_livechat.legacy.im_livechat.model.WebsiteLivechatMessage[]}
+     *@override
+     *@returns{im_livechat.legacy.im_livechat.model.WebsiteLivechatMessage[]}
      */
-    getMessages: function () {
-        return this._messages;
+    getMessages:function(){
+        returnthis._messages;
     },
     /**
-     * @returns {Array}
+     *@returns{Array}
      */
-    getOperatorPID: function () {
-        return this._operatorPID;
+    getOperatorPID:function(){
+        returnthis._operatorPID;
     },
     /**
-     * @returns {string}
+     *@returns{string}
      */
-    getUUID: function () {
-        return this._uuid;
+    getUUID:function(){
+        returnthis._uuid;
     },
     /**
-     * Increments the unread counter of this livechat by 1 unit.
+     *Incrementstheunreadcounterofthislivechatby1unit.
      *
-     * Note: this public method makes sense because the management of messages
-     * for website livechat is external. This method should be dropped when
-     * this class handles messages by itself.
+     *Note:thispublicmethodmakessensebecausethemanagementofmessages
+     *forwebsitelivechatisexternal.Thismethodshouldbedroppedwhen
+     *thisclasshandlesmessagesbyitself.
      */
-    incrementUnreadCounter: function () {
+    incrementUnreadCounter:function(){
         this._incrementUnreadCounter();
     },
     /**
-     * AKU: hack for the moment
+     *AKU:hackforthemoment
      *
-     * @param {im_livechat.legacy.im_livechat.model.WebsiteLivechatMessage[]} messages
+     *@param{im_livechat.legacy.im_livechat.model.WebsiteLivechatMessage[]}messages
      */
-    setMessages: function (messages) {
-        this._messages = messages;
+    setMessages:function(messages){
+        this._messages=messages;
     },
     /**
-     * @returns {Object}
+     *@returns{Object}
      */
-    toData: function () {
-        return {
-            folded: this.isFolded(),
-            id: this.getID(),
-            message_unread_counter: this.getUnreadCounter(),
-            operator_pid: this.getOperatorPID(),
-            name: this.getName(),
-            uuid: this.getUUID(),
+    toData:function(){
+        return{
+            folded:this.isFolded(),
+            id:this.getID(),
+            message_unread_counter:this.getUnreadCounter(),
+            operator_pid:this.getOperatorPID(),
+            name:this.getName(),
+            uuid:this.getUUID(),
         };
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override {mail.model.ThreadTypingMixin}
-     * @private
-     * @param {Object} params
-     * @param {boolean} params.isWebsiteUser
-     * @returns {boolean}
+     *@override{mail.model.ThreadTypingMixin}
+     *@private
+     *@param{Object}params
+     *@param{boolean}params.isWebsiteUser
+     *@returns{boolean}
      */
-    _isTypingMyselfInfo: function (params) {
-        return params.isWebsiteUser;
+    _isTypingMyselfInfo:function(params){
+        returnparams.isWebsiteUser;
     },
     /**
-     * @override {mail.model.ThreadTypingMixin}
-     * @private
-     * @param {Object} params
-     * @param {boolean} params.typing
-     * @returns {Promise}
+     *@override{mail.model.ThreadTypingMixin}
+     *@private
+     *@param{Object}params
+     *@param{boolean}params.typing
+     *@returns{Promise}
      */
-    _notifyMyselfTyping: function (params) {
-        return session.rpc('/im_livechat/notify_typing', {
-            uuid: this.getUUID(),
-            is_typing: params.typing,
-        }, { shadow: true });
+    _notifyMyselfTyping:function(params){
+        returnsession.rpc('/im_livechat/notify_typing',{
+            uuid:this.getUUID(),
+            is_typing:params.typing,
+        },{shadow:true});
     },
     /**
-     * Warn views that the list of users that are currently typing on this
-     * livechat has been updated.
+     *Warnviewsthatthelistofusersthatarecurrentlytypingonthis
+     *livechathasbeenupdated.
      *
-     * @override {mail.model.ThreadTypingMixin}
-     * @private
+     *@override{mail.model.ThreadTypingMixin}
+     *@private
      */
-    _warnUpdatedTypingPartners: function () {
+    _warnUpdatedTypingPartners:function(){
         this.trigger_up('updated_typing_partners');
     },
     /**
-     * Warn that the unread counter has been updated on this livechat
+     *Warnthattheunreadcounterhasbeenupdatedonthislivechat
      *
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _warnUpdatedUnreadCounter: function () {
+    _warnUpdatedUnreadCounter:function(){
         this.trigger_up('updated_unread_counter');
     },
 
     //--------------------------------------------------------------------------
-    // Handler
+    //Handler
     //--------------------------------------------------------------------------
 
     /**
-     * Override so that it only unregister typing operators.
+     *Overridesothatitonlyunregistertypingoperators.
      *
-     * Note that in the frontend, there is no way to identify a message that is
-     * from the current user, because there is no partner ID in the session and
-     * a message with an author sets the partner ID of the author.
+     *Notethatinthefrontend,thereisnowaytoidentifyamessagethatis
+     *fromthecurrentuser,becausethereisnopartnerIDinthesessionand
+     *amessagewithanauthorsetsthepartnerIDoftheauthor.
      *
-     * @override {mail.model.ThreadTypingMixin}
-     * @private
-     * @param {mail.model.AbstractMessage} message
+     *@override{mail.model.ThreadTypingMixin}
+     *@private
+     *@param{mail.model.AbstractMessage}message
      */
-    _onTypingMessageAdded: function (message) {
-        var operatorID = this.getOperatorPID()[0];
-        if (message.hasAuthor() && message.getAuthorID() === operatorID) {
-            this.unregisterTyping({ partnerID: operatorID });
+    _onTypingMessageAdded:function(message){
+        varoperatorID=this.getOperatorPID()[0];
+        if(message.hasAuthor()&&message.getAuthorID()===operatorID){
+            this.unregisterTyping({partnerID:operatorID});
         }
     },
 });
 
-return WebsiteLivechat;
+returnWebsiteLivechat;
 
 });
 
-flectra.define('im_livechat.legacy.im_livechat.model.WebsiteLivechatMessage', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.im_livechat.model.WebsiteLivechatMessage',function(require){
+"usestrict";
 
-var AbstractMessage = require('im_livechat.legacy.mail.model.AbstractMessage');
+varAbstractMessage=require('im_livechat.legacy.mail.model.AbstractMessage');
 
 /**
- * This is a message that is handled by im_livechat, without making use of the
- * mail.Manager. The purpose of this is to make im_livechat compatible with
- * mail.widget.Thread.
+ *Thisisamessagethatishandledbyim_livechat,withoutmakinguseofthe
+ *mail.Manager.Thepurposeofthisistomakeim_livechatcompatiblewith
+ *mail.widget.Thread.
  *
- * @see im_livechat.legacy.mail.model.AbstractMessage for more information.
+ *@seeim_livechat.legacy.mail.model.AbstractMessageformoreinformation.
  */
-var WebsiteLivechatMessage = AbstractMessage.extend({
+varWebsiteLivechatMessage=AbstractMessage.extend({
 
     /**
-     * @param {im_livechat.legacy.im_livechat.im_livechat.LivechatButton} parent
-     * @param {Object} data
-     * @param {Object} options
-     * @param {string} options.default_username
-     * @param {string} options.serverURL
+     *@param{im_livechat.legacy.im_livechat.im_livechat.LivechatButton}parent
+     *@param{Object}data
+     *@param{Object}options
+     *@param{string}options.default_username
+     *@param{string}options.serverURL
      */
-    init: function (parent, data, options) {
-        this._super.apply(this, arguments);
+    init:function(parent,data,options){
+        this._super.apply(this,arguments);
 
-        this._defaultUsername = options.default_username;
-        this._serverURL = options.serverURL;
+        this._defaultUsername=options.default_username;
+        this._serverURL=options.serverURL;
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Get the relative url of the avatar to display next to the message
+     *Gettherelativeurloftheavatartodisplaynexttothemessage
      *
-     * @override
-     * @return {string}
+     *@override
+     *@return{string}
      */
-    getAvatarSource: function () {
-        var source = this._serverURL;
-        if (this.hasAuthor()) {
-            source += '/web/partner_image/' + this.getAuthorID();
-        } else {
-            source += '/mail/static/src/img/smiley/avatar.jpg';
+    getAvatarSource:function(){
+        varsource=this._serverURL;
+        if(this.hasAuthor()){
+            source+='/web/partner_image/'+this.getAuthorID();
+        }else{
+            source+='/mail/static/src/img/smiley/avatar.jpg';
         }
-        return source;
+        returnsource;
     },
     /**
-     * Get the text to display for the author of the message
+     *Getthetexttodisplayfortheauthorofthemessage
      *
-     * Rule of precedence for the displayed author::
+     *Ruleofprecedenceforthedisplayedauthor::
      *
-     *      author name > default usernane
+     *     authorname>defaultusernane
      *
-     * @override
-     * @return {string}
+     *@override
+     *@return{string}
      */
-    getDisplayedAuthor: function () {
-        return this._super.apply(this, arguments) || this._defaultUsername;
+    getDisplayedAuthor:function(){
+        returnthis._super.apply(this,arguments)||this._defaultUsername;
     },
 
 });
 
-return WebsiteLivechatMessage;
+returnWebsiteLivechatMessage;
 
 });
 
-flectra.define('im_livechat.legacy.im_livechat.WebsiteLivechatWindow', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.im_livechat.WebsiteLivechatWindow',function(require){
+"usestrict";
 
-var AbstractThreadWindow = require('im_livechat.legacy.mail.AbstractThreadWindow');
+varAbstractThreadWindow=require('im_livechat.legacy.mail.AbstractThreadWindow');
 
 /**
- * This is the widget that represent windows of livechat in the frontend.
+ *Thisisthewidgetthatrepresentwindowsoflivechatinthefrontend.
  *
- * @see im_livechat.legacy.mail.AbstractThreadWindow for more information
+ *@seeim_livechat.legacy.mail.AbstractThreadWindowformoreinformation
  */
-var LivechatWindow = AbstractThreadWindow.extend({
-    events: _.extend(AbstractThreadWindow.prototype.events, {
-        'input .o_composer_text_field': '_onInput',
+varLivechatWindow=AbstractThreadWindow.extend({
+    events:_.extend(AbstractThreadWindow.prototype.events,{
+        'input.o_composer_text_field':'_onInput',
     }),
     /**
-     * @override
-     * @param {im_livechat.legacy.im_livechat.im_livechat:LivechatButton} parent
-     * @param {im_livechat.legacy.im_livechat.model.WebsiteLivechat} thread
-     * @param {Object} [options={}]
-     * @param {string} [options.headerBackgroundColor]
-     * @param {string} [options.titleColor]
+     *@override
+     *@param{im_livechat.legacy.im_livechat.im_livechat:LivechatButton}parent
+     *@param{im_livechat.legacy.im_livechat.model.WebsiteLivechat}thread
+     *@param{Object}[options={}]
+     *@param{string}[options.headerBackgroundColor]
+     *@param{string}[options.titleColor]
      */
-    init(parent, thread, options = {}) {
-        this._super.apply(this, arguments);
-        this._thread = thread;
+    init(parent,thread,options={}){
+        this._super.apply(this,arguments);
+        this._thread=thread;
     },
     /**
-     * @override
-     * @return {Promise}
+     *@override
+     *@return{Promise}
      */
-    async start() {
-        await this._super(...arguments);
-        if (this.options.headerBackgroundColor) {
-            this.$('.o_thread_window_header').css('background-color', this.options.headerBackgroundColor);
+    asyncstart(){
+        awaitthis._super(...arguments);
+        if(this.options.headerBackgroundColor){
+            this.$('.o_thread_window_header').css('background-color',this.options.headerBackgroundColor);
         }
-        if (this.options.titleColor) {
-            this.$('.o_thread_window_header').css('color', this.options.titleColor);
+        if(this.options.titleColor){
+            this.$('.o_thread_window_header').css('color',this.options.titleColor);
         }
     },
 
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    close: function () {
+    close:function(){
         this.trigger_up('close_chat_window');
     },
     /**
-     * Replace the thread content with provided new content
+     *Replacethethreadcontentwithprovidednewcontent
      *
-     * @param {$.Element} $element
+     *@param{$.Element}$element
      */
-    replaceContentWith: function ($element) {
+    replaceContentWith:function($element){
         $element.replace(this._threadWidget.$el);
     },
     /**
-     * Warn the parent widget (LivechatButton)
+     *Warntheparentwidget(LivechatButton)
      *
-     * @override
-     * @param {boolean} folded
+     *@override
+     *@param{boolean}folded
      */
-    toggleFold: function () {
-        this._super.apply(this, arguments);
+    toggleFold:function(){
+        this._super.apply(this,arguments);
         this.trigger_up('save_chat_window');
         this.updateVisualFoldState();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
-     * @private
-     * @param {Object} messageData
+     *@override
+     *@private
+     *@param{Object}messageData
      */
-    _postMessage: function (messageData) {
-        this.trigger_up('post_message_chat_window', { messageData: messageData });
-        this._super.apply(this, arguments);
+    _postMessage:function(messageData){
+        this.trigger_up('post_message_chat_window',{messageData:messageData});
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the input in the composer changes
+     *Calledwhentheinputinthecomposerchanges
      *
-     * @private
+     *@private
      */
-    _onInput: function () {
-        if (this.hasThread() && this._thread.hasTypingNotification()) {
-            var isTyping = this.$input.val().length > 0;
-            this._thread.setMyselfTyping({ typing: isTyping });
+    _onInput:function(){
+        if(this.hasThread()&&this._thread.hasTypingNotification()){
+            varisTyping=this.$input.val().length>0;
+            this._thread.setMyselfTyping({typing:isTyping});
         }
     },
 });
 
-return LivechatWindow;
+returnLivechatWindow;
 
 });
 
-flectra.define('im_livechat.legacy.mail.model.AbstractThread', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.mail.model.AbstractThread',function(require){
+"usestrict";
 
-var Class = require('web.Class');
-var Mixins = require('web.mixins');
+varClass=require('web.Class');
+varMixins=require('web.mixins');
 
 /**
- * Abstract thread is the super class of all threads, either backend threads
- * (which are compatible with mail service) or website livechats.
+ *Abstractthreadisthesuperclassofallthreads,eitherbackendthreads
+ *(whicharecompatiblewithmailservice)orwebsitelivechats.
  *
- * Abstract threads contain abstract messages
+ *Abstractthreadscontainabstractmessages
  */
-var AbstractThread = Class.extend(Mixins.EventDispatcherMixin, {
+varAbstractThread=Class.extend(Mixins.EventDispatcherMixin,{
     /**
-     * @param {Object} params
-     * @param {Object} params.data
-     * @param {integer|string} params.data.id the ID of this thread
-     * @param {string} params.data.name the name of this thread
-     * @param {string} [params.data.status=''] the status of this thread
-     * @param {Object} params.parent Object with the event-dispatcher mixin
-     *   (@see {web.mixins.EventDispatcherMixin})
+     *@param{Object}params
+     *@param{Object}params.data
+     *@param{integer|string}params.data.idtheIDofthisthread
+     *@param{string}params.data.namethenameofthisthread
+     *@param{string}[params.data.status='']thestatusofthisthread
+     *@param{Object}params.parentObjectwiththeevent-dispatchermixin
+     *  (@see{web.mixins.EventDispatcherMixin})
      */
-    init: function (params) {
-        Mixins.EventDispatcherMixin.init.call(this, arguments);
+    init:function(params){
+        Mixins.EventDispatcherMixin.init.call(this,arguments);
         this.setParent(params.parent);
 
-        this._folded = false; // threads are unfolded by default
-        this._id = params.data.id;
-        this._name = params.data.name;
-        this._status = params.data.status || '';
-        this._unreadCounter = 0; // amount of messages not yet been read
+        this._folded=false;//threadsareunfoldedbydefault
+        this._id=params.data.id;
+        this._name=params.data.name;
+        this._status=params.data.status||'';
+        this._unreadCounter=0;//amountofmessagesnotyetbeenread
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Add a message to this thread.
+     *Addamessagetothisthread.
      *
-     * @param {im_livechat.legacy.mail.model.AbstractMessage} message
+     *@param{im_livechat.legacy.mail.model.AbstractMessage}message
      */
-    addMessage: function (message) {
-        this._addMessage.apply(this, arguments);
-        this.trigger('message_added', message);
+    addMessage:function(message){
+        this._addMessage.apply(this,arguments);
+        this.trigger('message_added',message);
     },
     /**
-     * Updates the folded state of the thread
+     *Updatesthefoldedstateofthethread
      *
-     * @param {boolean} folded
+     *@param{boolean}folded
      */
-    fold: function (folded) {
-        this._folded = folded;
+    fold:function(folded){
+        this._folded=folded;
     },
     /**
-     * Get the ID of this thread
+     *GettheIDofthisthread
      *
-     * @returns {integer|string}
+     *@returns{integer|string}
      */
-    getID: function () {
-        return this._id;
+    getID:function(){
+        returnthis._id;
     },
     /**
-     * @abstract
-     * @returns {im_livechat.legacy.mail.model.AbstractMessage[]}
+     *@abstract
+     *@returns{im_livechat.legacy.mail.model.AbstractMessage[]}
      */
-    getMessages: function () {},
+    getMessages:function(){},
     /**
-     * Get the name of this thread. If the name of the thread has been created
-     * by the user from an input, it may be escaped.
+     *Getthenameofthisthread.Ifthenameofthethreadhasbeencreated
+     *bytheuserfromaninput,itmaybeescaped.
      *
-     * @returns {string}
+     *@returns{string}
      */
-    getName: function () {
-        return this._name;
+    getName:function(){
+        returnthis._name;
     },
     /**
-     * Get the status of the thread (e.g. 'online', 'offline', etc.)
+     *Getthestatusofthethread(e.g.'online','offline',etc.)
      *
-     * @returns {string}
+     *@returns{string}
      */
-    getStatus: function () {
-        return this._status;
+    getStatus:function(){
+        returnthis._status;
     },
     /**
-     * Returns the title to display in thread window's headers.
+     *Returnsthetitletodisplayinthreadwindow'sheaders.
      *
-     * @returns {string} the name of the thread by default (see @getName)
+     *@returns{string}thenameofthethreadbydefault(see@getName)
      */
-    getTitle: function () {
-        return this.getName();
+    getTitle:function(){
+        returnthis.getName();
     },
-    getType: function () {},
+    getType:function(){},
     /**
-     * @returns {integer}
+     *@returns{integer}
      */
-    getUnreadCounter: function () {
-        return this._unreadCounter;
-    },
-    /**
-     * @returns {boolean}
-     */
-    hasMessages: function () {
-        return !_.isEmpty(this.getMessages());
+    getUnreadCounter:function(){
+        returnthis._unreadCounter;
     },
     /**
-     * States whether this thread is compatible with the 'seen' feature.
-     * By default, threads do not have thsi feature active.
-     * @see {im_livechat.legacy.mail.model.ThreadSeenMixin} to enable this feature on a thread.
+     *@returns{boolean}
+     */
+    hasMessages:function(){
+        return!_.isEmpty(this.getMessages());
+    },
+    /**
+     *Stateswhetherthisthreadiscompatiblewiththe'seen'feature.
+     *Bydefault,threadsdonothavethsifeatureactive.
+     *@see{im_livechat.legacy.mail.model.ThreadSeenMixin}toenablethisfeatureonathread.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    hasSeenFeature: function () {
-        return false;
+    hasSeenFeature:function(){
+        returnfalse;
     },
     /**
-     * States whether this thread is folded or not.
+     *Stateswhetherthisthreadisfoldedornot.
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    isFolded: function () {
-        return this._folded;
+    isFolded:function(){
+        returnthis._folded;
     },
     /**
-     * Mark the thread as read, which resets the unread counter to 0. This is
-     * only performed if the unread counter is not 0.
+     *Markthethreadasread,whichresetstheunreadcounterto0.Thisis
+     *onlyperformediftheunreadcounterisnot0.
      *
-     * @returns {Promise}
+     *@returns{Promise}
      */
-    markAsRead: function () {
-        if (this._unreadCounter > 0) {
-            return this._markAsRead();
+    markAsRead:function(){
+        if(this._unreadCounter>0){
+            returnthis._markAsRead();
         }
-        return Promise.resolve();
+        returnPromise.resolve();
     },
     /**
-     * Post a message on this thread
+     *Postamessageonthisthread
      *
-     * @returns {Promise} resolved with the message object to be sent to the
-     *   server
+     *@returns{Promise}resolvedwiththemessageobjecttobesenttothe
+     *  server
      */
-    postMessage: function () {
-        return this._postMessage.apply(this, arguments)
-                                .then(this.trigger.bind(this, 'message_posted'));
+    postMessage:function(){
+        returnthis._postMessage.apply(this,arguments)
+                                .then(this.trigger.bind(this,'message_posted'));
     },
     /**
-     * Resets the unread counter of this thread to 0.
+     *Resetstheunreadcounterofthisthreadto0.
      */
-    resetUnreadCounter: function () {
-        this._unreadCounter = 0;
+    resetUnreadCounter:function(){
+        this._unreadCounter=0;
         this._warnUpdatedUnreadCounter();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Add a message to this thread.
+     *Addamessagetothisthread.
      *
-     * @abstract
-     * @private
-     * @param {im_livechat.legacy.mail.model.AbstractMessage} message
+     *@abstract
+     *@private
+     *@param{im_livechat.legacy.mail.model.AbstractMessage}message
      */
-    _addMessage: function (message) {},
+    _addMessage:function(message){},
     /**
-     * Increments the unread counter of this thread by 1 unit.
+     *Incrementstheunreadcounterofthisthreadby1unit.
      *
-     * @private
+     *@private
      */
-    _incrementUnreadCounter: function () {
+    _incrementUnreadCounter:function(){
         this._unreadCounter++;
     },
     /**
-     * Mark the thread as read
+     *Markthethreadasread
      *
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    _markAsRead: function () {
+    _markAsRead:function(){
         this.resetUnreadCounter();
-        return Promise.resolve();
+        returnPromise.resolve();
     },
     /**
-     * Post a message on this thread
+     *Postamessageonthisthread
      *
-     * @abstract
-     * @private
-     * @returns {Promise} resolved with the message object to be sent to the
-     *   server
+     *@abstract
+     *@private
+     *@returns{Promise}resolvedwiththemessageobjecttobesenttothe
+     *  server
      */
-    _postMessage: function () {
-        return Promise.resolve();
+    _postMessage:function(){
+        returnPromise.resolve();
     },
     /**
-     * Warn views (e.g. discuss app, thread window, etc.) to update visually
-     * the unread counter of this thread.
+     *Warnviews(e.g.discussapp,threadwindow,etc.)toupdatevisually
+     *theunreadcounterofthisthread.
      *
-     * @abstract
-     * @private
+     *@abstract
+     *@private
      */
-    _warnUpdatedUnreadCounter: function () {},
+    _warnUpdatedUnreadCounter:function(){},
 });
 
-return AbstractThread;
+returnAbstractThread;
 
 });
 
-flectra.define('im_livechat.legacy.mail.model.ThreadTypingMixin', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.mail.model.ThreadTypingMixin',function(require){
+"usestrict";
 
-var CCThrottleFunction = require('im_livechat.legacy.mail.model.CCThrottleFunction');
-var Timer = require('im_livechat.legacy.mail.model.Timer');
-var Timers = require('im_livechat.legacy.mail.model.Timers');
+varCCThrottleFunction=require('im_livechat.legacy.mail.model.CCThrottleFunction');
+varTimer=require('im_livechat.legacy.mail.model.Timer');
+varTimers=require('im_livechat.legacy.mail.model.Timers');
 
-var core = require('web.core');
+varcore=require('web.core');
 
-var _t = core._t;
+var_t=core._t;
 
 /**
- * Mixin for enabling the "is typing..." notification on a type of thread.
+ *Mixinforenablingthe"istyping..."notificationonatypeofthread.
  */
-var ThreadTypingMixin = {
-    // Default partner infos
-    _DEFAULT_TYPING_PARTNER_ID: '_default',
-    _DEFAULT_TYPING_PARTNER_NAME: 'Someone',
+varThreadTypingMixin={
+    //Defaultpartnerinfos
+    _DEFAULT_TYPING_PARTNER_ID:'_default',
+    _DEFAULT_TYPING_PARTNER_NAME:'Someone',
 
     /**
-     * Initialize the internal data for typing feature on threads.
+     *Initializetheinternaldatafortypingfeatureonthreads.
      *
-     * Also listens on some internal events of the thread:
+     *Alsolistensonsomeinternaleventsofthethread:
      *
-     * - 'message_added': when a message is added, remove the author in the
-     *     typing partners.
-     * - 'message_posted': when a message is posted, let the user have the
-     *     possibility to immediately notify if he types something right away,
-     *     instead of waiting for a throttle behaviour.
+     *-'message_added':whenamessageisadded,removetheauthorinthe
+     *    typingpartners.
+     *-'message_posted':whenamessageisposted,lettheuserhavethe
+     *    possibilitytoimmediatelynotifyifhetypessomethingrightaway,
+     *    insteadofwaitingforathrottlebehaviour.
      */
-    init: function () {
-        // Store the last "myself typing" status that has been sent to the
-        // server. This is useful in order to not notify the same typing
-        // status multiple times.
-        this._lastNotifiedMyselfTyping = false;
+    init:function(){
+        //Storethelast"myselftyping"statusthathasbeensenttothe
+        //server.Thisisusefulinordertonotnotifythesametyping
+        //statusmultipletimes.
+        this._lastNotifiedMyselfTyping=false;
 
-        // Timer of current user that is typing a very long text. When the
-        // receivers do not receive any typing notification for a long time,
-        // they assume that the related partner is no longer typing
-        // something (e.g. they have closed the browser tab).
-        // This is a timer to let others know that we are still typing
-        // something, so that they do not assume we stopped typing
-        // something.
-        this._myselfLongTypingTimer = new Timer({
-            duration: 50 * 1000,
-            onTimeout: this._onMyselfLongTypingTimeout.bind(this),
+        //Timerofcurrentuserthatistypingaverylongtext.Whenthe
+        //receiversdonotreceiveanytypingnotificationforalongtime,
+        //theyassumethattherelatedpartnerisnolongertyping
+        //something(e.g.theyhaveclosedthebrowsertab).
+        //Thisisatimertoletothersknowthatwearestilltyping
+        //something,sothattheydonotassumewestoppedtyping
+        //something.
+        this._myselfLongTypingTimer=newTimer({
+            duration:50*1000,
+            onTimeout:this._onMyselfLongTypingTimeout.bind(this),
         });
 
-        // Timer of current user that was currently typing something, but
-        // there is no change on the input for several time. This is used
-        // in order to automatically notify other users that we have stopped
-        // typing something, due to making no changes on the composer for
-        // some time.
-        this._myselfTypingInactivityTimer = new Timer({
-            duration: 5 * 1000,
-            onTimeout: this._onMyselfTypingInactivityTimeout.bind(this),
+        //Timerofcurrentuserthatwascurrentlytypingsomething,but
+        //thereisnochangeontheinputforseveraltime.Thisisused
+        //inordertoautomaticallynotifyotherusersthatwehavestopped
+        //typingsomething,duetomakingnochangesonthecomposerfor
+        //sometime.
+        this._myselfTypingInactivityTimer=newTimer({
+            duration:5*1000,
+            onTimeout:this._onMyselfTypingInactivityTimeout.bind(this),
         });
 
-        // Timers of users currently typing in the thread. This is useful
-        // in order to automatically unregister typing users when we do not
-        // receive any typing notification after a long time. Timers are
-        // internally indexed by partnerID. The current user is ignored in
-        // this list of timers.
-        this._othersTypingTimers = new Timers({
-            duration: 60 * 1000,
-            onTimeout: this._onOthersTypingTimeout.bind(this),
+        //Timersofuserscurrentlytypinginthethread.Thisisuseful
+        //inordertoautomaticallyunregistertypinguserswhenwedonot
+        //receiveanytypingnotificationafteralongtime.Timersare
+        //internallyindexedbypartnerID.Thecurrentuserisignoredin
+        //thislistoftimers.
+        this._othersTypingTimers=newTimers({
+            duration:60*1000,
+            onTimeout:this._onOthersTypingTimeout.bind(this),
         });
 
-        // Clearable and cancellable throttled version of the
-        // `doNotifyMyselfTyping` method. (basically `notifyMyselfTyping`
-        // with slight pre- and post-processing)
-        // @see {mail.model.ResetableThrottleFunction}
-        // This is useful when the user posts a message and types something
-        // else: he must notify immediately that he is typing something,
-        // instead of waiting for the throttle internal timer.
-        this._throttleNotifyMyselfTyping = CCThrottleFunction({
-            duration: 2.5 * 1000,
-            func: this._onNotifyMyselfTyping.bind(this),
+        //Clearableandcancellablethrottledversionofthe
+        //`doNotifyMyselfTyping`method.(basically`notifyMyselfTyping`
+        //withslightpre-andpost-processing)
+        //@see{mail.model.ResetableThrottleFunction}
+        //Thisisusefulwhentheuserpostsamessageandtypessomething
+        //else:hemustnotifyimmediatelythatheistypingsomething,
+        //insteadofwaitingforthethrottleinternaltimer.
+        this._throttleNotifyMyselfTyping=CCThrottleFunction({
+            duration:2.5*1000,
+            func:this._onNotifyMyselfTyping.bind(this),
         });
 
-        // This is used to track the order of registered partners typing
-        // something, in order to display the oldest typing partners.
-        this._typingPartnerIDs = [];
+        //Thisisusedtotracktheorderofregisteredpartnerstyping
+        //something,inordertodisplaytheoldesttypingpartners.
+        this._typingPartnerIDs=[];
 
-        this.on('message_added', this, this._onTypingMessageAdded);
-        this.on('message_posted', this, this._onTypingMessagePosted);
+        this.on('message_added',this,this._onTypingMessageAdded);
+        this.on('message_posted',this,this._onTypingMessagePosted);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Get the text to display when some partners are typing something on the
-     * thread:
+     *Getthetexttodisplaywhensomepartnersaretypingsomethingonthe
+     *thread:
      *
-     * - single typing partner:
+     *-singletypingpartner:
      *
-     *   A is typing...
+     *  Aistyping...
      *
-     * - two typing partners:
+     *-twotypingpartners:
      *
-     *   A and B are typing...
+     *  AandBaretyping...
      *
-     * - three or more typing partners:
+     *-threeormoretypingpartners:
      *
-     *   A, B and more are typing...
+     *  A,Bandmorearetyping...
      *
-     * The choice of the members name for display is not random: it displays
-     * the user that have been typing for the longest time. Also, this function
-     * is hard-coded to display at most 2 partners. This limitation comes from
-     * how translation works in Flectra, for which unevaluated string cannot be
-     * translated.
+     *Thechoiceofthemembersnamefordisplayisnotrandom:itdisplays
+     *theuserthathavebeentypingforthelongesttime.Also,thisfunction
+     *ishard-codedtodisplayatmost2partners.Thislimitationcomesfrom
+     *howtranslationworksinFlectra,forwhichunevaluatedstringcannotbe
+     *translated.
      *
-     * @returns {string} list of members that are typing something on the thread
-     *   (excluding the current user).
+     *@returns{string}listofmembersthataretypingsomethingonthethread
+     *  (excludingthecurrentuser).
      */
-    getTypingMembersToText: function () {
-        var typingPartnerIDs = this._typingPartnerIDs;
-        var typingMembers = _.filter(this._members, function (member) {
-            return _.contains(typingPartnerIDs, member.id);
+    getTypingMembersToText:function(){
+        vartypingPartnerIDs=this._typingPartnerIDs;
+        vartypingMembers=_.filter(this._members,function(member){
+            return_.contains(typingPartnerIDs,member.id);
         });
-        var sortedTypingMembers = _.sortBy(typingMembers, function (member) {
-            return _.indexOf(typingPartnerIDs, member.id);
+        varsortedTypingMembers=_.sortBy(typingMembers,function(member){
+            return_.indexOf(typingPartnerIDs,member.id);
         });
-        var displayableTypingMembers = sortedTypingMembers.slice(0, 3);
+        vardisplayableTypingMembers=sortedTypingMembers.slice(0,3);
 
-        if (displayableTypingMembers.length === 0) {
-            return '';
-        } else if (displayableTypingMembers.length === 1) {
-            return _.str.sprintf(_t("%s is typing..."), displayableTypingMembers[0].name);
-        } else if (displayableTypingMembers.length === 2) {
-            return _.str.sprintf(_t("%s and %s are typing..."),
+        if(displayableTypingMembers.length===0){
+            return'';
+        }elseif(displayableTypingMembers.length===1){
+            return_.str.sprintf(_t("%sistyping..."),displayableTypingMembers[0].name);
+        }elseif(displayableTypingMembers.length===2){
+            return_.str.sprintf(_t("%sand%saretyping..."),
                                     displayableTypingMembers[0].name,
                                     displayableTypingMembers[1].name);
-        } else {
-            return _.str.sprintf(_t("%s, %s and more are typing..."),
+        }else{
+            return_.str.sprintf(_t("%s,%sandmorearetyping..."),
                                     displayableTypingMembers[0].name,
                                     displayableTypingMembers[1].name);
         }
     },
     /**
-     * Threads with this mixin have the typing notification feature
+     *Threadswiththismixinhavethetypingnotificationfeature
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    hasTypingNotification: function () {
-        return true;
+    hasTypingNotification:function(){
+        returntrue;
     },
     /**
-     * Tells if someone other than current user is typing something on this
-     * thread.
+     *Tellsifsomeoneotherthancurrentuseristypingsomethingonthis
+     *thread.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    isSomeoneTyping: function () {
-        return !(_.isEmpty(this._typingPartnerIDs));
+    isSomeoneTyping:function(){
+        return!(_.isEmpty(this._typingPartnerIDs));
     },
     /**
-     * Register someone that is currently typing something in this thread.
-     * If this is the current user that is typing something, don't do anything
-     * (we do not have to display anything)
+     *Registersomeonethatiscurrentlytypingsomethinginthisthread.
+     *Ifthisisthecurrentuserthatistypingsomething,don'tdoanything
+     *(wedonothavetodisplayanything)
      *
-     * This method is ignored if we try to register the current user.
+     *Thismethodisignoredifwetrytoregisterthecurrentuser.
      *
-     * @param {Object} params
-     * @param {integer} params.partnerID ID of the partner linked to the user
-     *   currently typing something on the thread.
+     *@param{Object}params
+     *@param{integer}params.partnerIDIDofthepartnerlinkedtotheuser
+     *  currentlytypingsomethingonthethread.
      */
-    registerTyping: function (params) {
-        if (this._isTypingMyselfInfo(params)) {
+    registerTyping:function(params){
+        if(this._isTypingMyselfInfo(params)){
             return;
         }
-        var partnerID = params.partnerID;
+        varpartnerID=params.partnerID;
         this._othersTypingTimers.registerTimer({
-            timeoutCallbackArguments: [partnerID],
-            timerID: partnerID,
+            timeoutCallbackArguments:[partnerID],
+            timerID:partnerID,
         });
-        if (_.contains(this._typingPartnerIDs, partnerID)) {
+        if(_.contains(this._typingPartnerIDs,partnerID)){
             return;
         }
         this._typingPartnerIDs.push(partnerID);
         this._warnUpdatedTypingPartners();
     },
     /**
-     * This method must be called when the user starts or stops typing something
-     * in the composer of the thread.
+     *Thismethodmustbecalledwhentheuserstartsorstopstypingsomething
+     *inthecomposerofthethread.
      *
-     * @param {Object} params
-     * @param {boolean} params.typing tell whether the current is typing or not.
+     *@param{Object}params
+     *@param{boolean}params.typingtellwhetherthecurrentistypingornot.
      */
-    setMyselfTyping: function (params) {
-        var typing = params.typing;
-        if (this._lastNotifiedMyselfTyping === typing) {
+    setMyselfTyping:function(params){
+        vartyping=params.typing;
+        if(this._lastNotifiedMyselfTyping===typing){
             this._throttleNotifyMyselfTyping.cancel();
-        } else {
+        }else{
             this._throttleNotifyMyselfTyping(params);
         }
 
-        if (typing) {
+        if(typing){
             this._myselfTypingInactivityTimer.reset();
-        } else {
+        }else{
             this._myselfTypingInactivityTimer.clear();
         }
     },
     /**
-     * Unregister someone from currently typing something in this thread.
+     *Unregistersomeonefromcurrentlytypingsomethinginthisthread.
      *
-     * @param {Object} params
-     * @param {integer} params.partnerID ID of the partner related to the user
-     *   that is currently typing something
+     *@param{Object}params
+     *@param{integer}params.partnerIDIDofthepartnerrelatedtotheuser
+     *  thatiscurrentlytypingsomething
      */
-    unregisterTyping: function (params) {
-        var partnerID = params.partnerID;
-        this._othersTypingTimers.unregisterTimer({ timerID: partnerID });
-        if (!_.contains(this._typingPartnerIDs, partnerID)) {
+    unregisterTyping:function(params){
+        varpartnerID=params.partnerID;
+        this._othersTypingTimers.unregisterTimer({timerID:partnerID});
+        if(!_.contains(this._typingPartnerIDs,partnerID)){
             return;
         }
-        this._typingPartnerIDs = _.reject(this._typingPartnerIDs, function (id) {
-            return id === partnerID;
+        this._typingPartnerIDs=_.reject(this._typingPartnerIDs,function(id){
+            returnid===partnerID;
         });
         this._warnUpdatedTypingPartners();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Tells whether the provided information on a partner is related to the
-     * current user or not.
+     *Tellswhethertheprovidedinformationonapartnerisrelatedtothe
+     *currentuserornot.
      *
-     * @abstract
-     * @private
-     * @param {Object} params
-     * @param {integer} params.partner ID of partner to check
+     *@abstract
+     *@private
+     *@param{Object}params
+     *@param{integer}params.partnerIDofpartnertocheck
      */
-    _isTypingMyselfInfo: function (params) {
-        return false;
+    _isTypingMyselfInfo:function(params){
+        returnfalse;
     },
     /**
-     * Notify to the server that the current user either starts or stops typing
-     * something.
+     *Notifytotheserverthatthecurrentusereitherstartsorstopstyping
+     *something.
      *
-     * @abstract
-     * @private
-     * @param {Object} params
-     * @param {boolean} params.typing whether we are typing something or not
-     * @returns {Promise} resolved if the server is notified, rejected
-     *   otherwise
+     *@abstract
+     *@private
+     *@param{Object}params
+     *@param{boolean}params.typingwhetherwearetypingsomethingornot
+     *@returns{Promise}resolvediftheserverisnotified,rejected
+     *  otherwise
      */
-    _notifyMyselfTyping: function (params) {
-        return Promise.resolve();
+    _notifyMyselfTyping:function(params){
+        returnPromise.resolve();
     },
     /**
-     * Warn views that the list of users that are currently typing on this
-     * thread has been updated.
+     *Warnviewsthatthelistofusersthatarecurrentlytypingonthis
+     *threadhasbeenupdated.
      *
-     * @abstract
-     * @private
+     *@abstract
+     *@private
      */
-    _warnUpdatedTypingPartners: function () {},
+    _warnUpdatedTypingPartners:function(){},
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when current user is typing something for a long time. In order
-     * to not let other users assume that we are no longer typing something, we
-     * must notify again that we are typing something.
+     *Calledwhencurrentuseristypingsomethingforalongtime.Inorder
+     *tonotletotherusersassumethatwearenolongertypingsomething,we
+     *mustnotifyagainthatwearetypingsomething.
      *
-     * @private
+     *@private
      */
-    _onMyselfLongTypingTimeout: function () {
+    _onMyselfLongTypingTimeout:function(){
         this._throttleNotifyMyselfTyping.clear();
-        this._throttleNotifyMyselfTyping({ typing: true });
+        this._throttleNotifyMyselfTyping({typing:true});
     },
     /**
-     * Called when current user has something typed in the composer, but is
-     * inactive for some time. In this case, he automatically notifies that he
-     * is no longer typing something
+     *Calledwhencurrentuserhassomethingtypedinthecomposer,butis
+     *inactiveforsometime.Inthiscase,heautomaticallynotifiesthathe
+     *isnolongertypingsomething
      *
-     * @private
+     *@private
      */
-    _onMyselfTypingInactivityTimeout: function () {
+    _onMyselfTypingInactivityTimeout:function(){
         this._throttleNotifyMyselfTyping.clear();
-        this._throttleNotifyMyselfTyping({ typing: false });
+        this._throttleNotifyMyselfTyping({typing:false});
     },
     /**
-     * Called by throttled version of notify myself typing
+     *Calledbythrottledversionofnotifymyselftyping
      *
-     * Notify to the server that the current user either starts or stops typing
-     * something. Remember last notified stuff from the server, and update
-     * related typing timers.
+     *Notifytotheserverthatthecurrentusereitherstartsorstopstyping
+     *something.Rememberlastnotifiedstufffromtheserver,andupdate
+     *relatedtypingtimers.
      *
-     * @private
-     * @param {Object} params
-     * @param {boolean} params.typing whether we are typing something or not.
+     *@private
+     *@param{Object}params
+     *@param{boolean}params.typingwhetherwearetypingsomethingornot.
      */
-    _onNotifyMyselfTyping: function (params) {
-        var typing = params.typing;
-        this._lastNotifiedMyselfTyping = typing;
+    _onNotifyMyselfTyping:function(params){
+        vartyping=params.typing;
+        this._lastNotifiedMyselfTyping=typing;
         this._notifyMyselfTyping(params);
-        if (typing) {
+        if(typing){
             this._myselfLongTypingTimer.reset();
-        } else {
+        }else{
             this._myselfLongTypingTimer.clear();
         }
     },
     /**
-     * Called when current user do not receive a typing notification of someone
-     * else typing for a long time. In this case, we assume that this person is
-     * no longer typing something.
+     *Calledwhencurrentuserdonotreceiveatypingnotificationofsomeone
+     *elsetypingforalongtime.Inthiscase,weassumethatthispersonis
+     *nolongertypingsomething.
      *
-     * @private
-     * @param {integer} partnerID partnerID of the person we assume he is no
-     *   longer typing something.
+     *@private
+     *@param{integer}partnerIDpartnerIDofthepersonweassumeheisno
+     *  longertypingsomething.
      */
-    _onOthersTypingTimeout: function (partnerID) {
-        this.unregisterTyping({ partnerID: partnerID });
+    _onOthersTypingTimeout:function(partnerID){
+        this.unregisterTyping({partnerID:partnerID});
     },
     /**
-     * Called when a new message is added to the thread
-     * On receiving a message from a typing partner, unregister this partner
-     * from typing partners (otherwise, it will still display it until timeout).
+     *Calledwhenanewmessageisaddedtothethread
+     *Onreceivingamessagefromatypingpartner,unregisterthispartner
+     *fromtypingpartners(otherwise,itwillstilldisplayituntiltimeout).
      *
-     * @private
-     * @param {mail.model.AbstractMessage} message
+     *@private
+     *@param{mail.model.AbstractMessage}message
      */
-    _onTypingMessageAdded: function (message) {
-        var partnerID = message.hasAuthor() ?
-                        message.getAuthorID() :
+    _onTypingMessageAdded:function(message){
+        varpartnerID=message.hasAuthor()?
+                        message.getAuthorID():
                         this._DEFAULT_TYPING_PARTNER_ID;
-        this.unregisterTyping({ partnerID: partnerID });
+        this.unregisterTyping({partnerID:partnerID});
     },
     /**
-     * Called when current user has posted a message on this thread.
+     *Calledwhencurrentuserhaspostedamessageonthisthread.
      *
-     * The current user receives the possibility to immediately notify the
-     * other users if he is typing something else.
+     *Thecurrentuserreceivesthepossibilitytoimmediatelynotifythe
+     *otherusersifheistypingsomethingelse.
      *
-     * Refresh the context for the current user to notify that he starts or
-     * stops typing something. In other words, when this function is called and
-     * then the current user types something, it immediately notifies the
-     * server as if it is the first time he is typing something.
+     *Refreshthecontextforthecurrentusertonotifythathestartsor
+     *stopstypingsomething.Inotherwords,whenthisfunctioniscalledand
+     *thenthecurrentusertypessomething,itimmediatelynotifiesthe
+     *serverasifitisthefirsttimeheistypingsomething.
      *
-     * @private
+     *@private
      */
-    _onTypingMessagePosted: function () {
-        this._lastNotifiedMyselfTyping = false;
+    _onTypingMessagePosted:function(){
+        this._lastNotifiedMyselfTyping=false;
         this._throttleNotifyMyselfTyping.clear();
         this._myselfLongTypingTimer.clear();
         this._myselfTypingInactivityTimer.clear();
     },
 };
 
-return ThreadTypingMixin;
+returnThreadTypingMixin;
 
 });
 
-flectra.define('im_livechat.legacy.mail.model.AbstractMessage', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.mail.model.AbstractMessage',function(require){
+"usestrict";
 
-var mailUtils = require('mail.utils');
+varmailUtils=require('mail.utils');
 
-var Class = require('web.Class');
-var core = require('web.core');
-var session = require('web.session');
-var time = require('web.time');
+varClass=require('web.Class');
+varcore=require('web.core');
+varsession=require('web.session');
+vartime=require('web.time');
 
-var _t = core._t;
+var_t=core._t;
 
 /**
- * This is an abstract class for modeling messages in JS.
- * The purpose of this interface is to make im_livechat compatible with
- * mail.widget.Thread, as this widget was designed to work with messages that
- * are instances of mail.model.Messages.
+ *ThisisanabstractclassformodelingmessagesinJS.
+ *Thepurposeofthisinterfaceistomakeim_livechatcompatiblewith
+ *mail.widget.Thread,asthiswidgetwasdesignedtoworkwithmessagesthat
+ *areinstancesofmail.model.Messages.
  *
- * Ideally, im_livechat should also handle mail.model.Message, but this is not
- * feasible for the moment, as mail.model.Message requires mail.Manager to work,
- * and this module should not leak outside of the backend, hence the use of
- * mail.model.AbstractMessage as a work-around.
+ *Ideally,im_livechatshouldalsohandlemail.model.Message,butthisisnot
+ *feasibleforthemoment,asmail.model.Messagerequiresmail.Managertowork,
+ *andthismoduleshouldnotleakoutsideofthebackend,hencetheuseof
+ *mail.model.AbstractMessageasawork-around.
  */
-var AbstractMessage = Class.extend({
+varAbstractMessage=Class.extend({
 
     /**
-     * @param {Widget} parent
-     * @param {Object} data
-     * @param {Array} [data.attachment_ids=[]]
-     * @param {Array} [data.author_id]
-     * @param {string} [data.body = ""]
-     * @param {string} [data.date] the server-format date time of the message.
-     *   If not provided, use current date time for this message.
-     * @param {integer} data.id
-     * @param {boolean} [data.is_discussion = false]
-     * @param {boolean} [data.is_notification = false]
-     * @param {string} [data.message_type = undefined]
+     *@param{Widget}parent
+     *@param{Object}data
+     *@param{Array}[data.attachment_ids=[]]
+     *@param{Array}[data.author_id]
+     *@param{string}[data.body=""]
+     *@param{string}[data.date]theserver-formatdatetimeofthemessage.
+     *  Ifnotprovided,usecurrentdatetimeforthismessage.
+     *@param{integer}data.id
+     *@param{boolean}[data.is_discussion=false]
+     *@param{boolean}[data.is_notification=false]
+     *@param{string}[data.message_type=undefined]
      */
-    init: function (parent, data) {
-        this._attachmentIDs = data.attachment_ids || [];
-        this._body = data.body || "";
-        // by default: current datetime
-        this._date = data.date ? moment(time.str_to_datetime(data.date)) : moment();
-        this._id = data.id;
-        this._isDiscussion = data.is_discussion;
-        this._isNotification = data.is_notification;
-        this._serverAuthorID = data.author_id;
-        this._type = data.message_type || undefined;
+    init:function(parent,data){
+        this._attachmentIDs=data.attachment_ids||[];
+        this._body=data.body||"";
+        //bydefault:currentdatetime
+        this._date=data.date?moment(time.str_to_datetime(data.date)):moment();
+        this._id=data.id;
+        this._isDiscussion=data.is_discussion;
+        this._isNotification=data.is_notification;
+        this._serverAuthorID=data.author_id;
+        this._type=data.message_type||undefined;
 
         this._processAttachmentURL();
-        this._attachmentIDs.forEach(function (attachment) {
-            attachment.filename = attachment.filename || attachment.name || _t("unnamed");
+        this._attachmentIDs.forEach(function(attachment){
+            attachment.filename=attachment.filename||attachment.name||_t("unnamed");
         });
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Get the list of files attached to this message.
-     * Note that attachments are stored with server-format
+     *Getthelistoffilesattachedtothismessage.
+     *Notethatattachmentsarestoredwithserver-format
      *
-     * @return {Object[]}
+     *@return{Object[]}
      */
-    getAttachments: function () {
-        return this._attachmentIDs;
+    getAttachments:function(){
+        returnthis._attachmentIDs;
     },
     /**
-     * Get the server ID (number) of the author of this message
-     * If there are no author, return -1;
+     *GettheserverID(number)oftheauthorofthismessage
+     *Iftherearenoauthor,return-1;
      *
-     * @return {integer}
+     *@return{integer}
      */
-    getAuthorID: function () {
-        if (!this.hasAuthor()) {
-            return -1;
+    getAuthorID:function(){
+        if(!this.hasAuthor()){
+            return-1;
         }
-        return this._serverAuthorID[0];
+        returnthis._serverAuthorID[0];
     },
     /**
-     * Threads do not have an im status by default
+     *Threadsdonothaveanimstatusbydefault
      *
-     * @return {undefined}
+     *@return{undefined}
      */
-    getAuthorImStatus: function () {
-        return undefined;
+    getAuthorImStatus:function(){
+        returnundefined;
     },
     /**
-     * Get the relative url of the avatar to display next to the message
+     *Gettherelativeurloftheavatartodisplaynexttothemessage
      *
-     * @abstract
-     * @return {string}
+     *@abstract
+     *@return{string}
      */
-    getAvatarSource: function () {
-        if (this.hasAuthor()) {
-            return '/web/image/res.partner/' + this.getAuthorID() + '/image_128';
+    getAvatarSource:function(){
+        if(this.hasAuthor()){
+            return'/web/image/res.partner/'+this.getAuthorID()+'/image_128';
         }
     },
     /**
-     * Get the body content of this message
+     *Getthebodycontentofthismessage
      *
-     * @return {string}
+     *@return{string}
      */
-    getBody: function () {
-        return this._body;
+    getBody:function(){
+        returnthis._body;
     },
     /**
-     * @return {moment}
+     *@return{moment}
      */
-    getDate: function () {
-        return this._date;
+    getDate:function(){
+        returnthis._date;
     },
     /**
-     * Get the date day of this message
+     *Getthedatedayofthismessage
      *
-     * @return {string}
+     *@return{string}
      */
-    getDateDay: function () {
-        var date = this.getDate().format('YYYY-MM-DD');
-        if (date === moment().format('YYYY-MM-DD')) {
-            return _t("Today");
-        } else if (date === moment().subtract(1, 'days').format('YYYY-MM-DD')) {
-            return _t("Yesterday");
+    getDateDay:function(){
+        vardate=this.getDate().format('YYYY-MM-DD');
+        if(date===moment().format('YYYY-MM-DD')){
+            return_t("Today");
+        }elseif(date===moment().subtract(1,'days').format('YYYY-MM-DD')){
+            return_t("Yesterday");
         }
-        return this.getDate().format('LL');
+        returnthis.getDate().format('LL');
     },
     /**
-     * Get the name of the author, if there is an author of this message
-     * If there are no author of this message, returns 'null'
+     *Getthenameoftheauthor,ifthereisanauthorofthismessage
+     *Iftherearenoauthorofthismessage,returns'null'
      *
-     * @return {string}
+     *@return{string}
      */
-    getDisplayedAuthor: function () {
-        return this.hasAuthor() ? this._getAuthorName() : null;
+    getDisplayedAuthor:function(){
+        returnthis.hasAuthor()?this._getAuthorName():null;
     },
     /**
-     * Get the server ID (number) of this message
+     *GettheserverID(number)ofthismessage
      *
-     * @override
-     * @return {integer}
+     *@override
+     *@return{integer}
      */
-    getID: function () {
-        return this._id;
+    getID:function(){
+        returnthis._id;
     },
     /**
-     * Get the list of images attached to this message.
-     * Note that attachments are stored with server-format
+     *Getthelistofimagesattachedtothismessage.
+     *Notethatattachmentsarestoredwithserver-format
      *
-     * @return {Object[]}
+     *@return{Object[]}
      */
-    getImageAttachments: function () {
-        return _.filter(this.getAttachments(), function (attachment) {
-            return attachment.mimetype && attachment.mimetype.split('/')[0] === 'image';
+    getImageAttachments:function(){
+        return_.filter(this.getAttachments(),function(attachment){
+            returnattachment.mimetype&&attachment.mimetype.split('/')[0]==='image';
         });
     },
     /**
-     * Get the list of non-images attached to this message.
-     * Note that attachments are stored with server-format
+     *Getthelistofnon-imagesattachedtothismessage.
+     *Notethatattachmentsarestoredwithserver-format
      *
-     * @return {Object[]}
+     *@return{Object[]}
      */
-    getNonImageAttachments: function () {
-        return _.difference(this.getAttachments(), this.getImageAttachments());
+    getNonImageAttachments:function(){
+        return_.difference(this.getAttachments(),this.getImageAttachments());
     },
     /**
-     * Gets the class to use as the notification icon.
+     *Getstheclasstouseasthenotificationicon.
      *
-     * @returns {string}
+     *@returns{string}
      */
-    getNotificationIcon() {
-        if (!this.hasNotificationsError()) {
-            return 'fa fa-envelope-o';
+    getNotificationIcon(){
+        if(!this.hasNotificationsError()){
+            return'fafa-envelope-o';
         }
-        return 'fa fa-envelope';
+        return'fafa-envelope';
     },
     /**
-     * Gets the list of notifications of this message, in no specific order.
-     * By default messages do not have notifications.
+     *Getsthelistofnotificationsofthismessage,innospecificorder.
+     *Bydefaultmessagesdonothavenotifications.
      *
-     * @returns {Object[]}
+     *@returns{Object[]}
      */
-    getNotifications() {
-        return [];
+    getNotifications(){
+        return[];
     },
     /**
-     * Gets the text to display next to the notification icon.
+     *Getsthetexttodisplaynexttothenotificationicon.
      *
-     * @returns {string}
+     *@returns{string}
      */
-    getNotificationText() {
-        return '';
+    getNotificationText(){
+        return'';
     },
     /**
-     * Get the time elapsed between sent message and now
+     *Getthetimeelapsedbetweensentmessageandnow
      *
-     * @return {string}
+     *@return{string}
      */
-    getTimeElapsed: function () {
-        return mailUtils.timeFromNow(this.getDate());
+    getTimeElapsed:function(){
+        returnmailUtils.timeFromNow(this.getDate());
     },
     /**
-     * Get the type of message (e.g. 'comment', 'email', 'notification', ...)
-     * By default, messages are of type 'undefined'
+     *Getthetypeofmessage(e.g.'comment','email','notification',...)
+     *Bydefault,messagesareoftype'undefined'
      *
-     * @override
-     * @return {string|undefined}
+     *@override
+     *@return{string|undefined}
      */
-    getType: function () {
-        return this._type;
+    getType:function(){
+        returnthis._type;
     },
     /**
-     * State whether this message contains some attachments.
+     *Statewhetherthismessagecontainssomeattachments.
      *
-     * @override
-     * @return {boolean}
+     *@override
+     *@return{boolean}
      */
-    hasAttachments: function () {
-        return this.getAttachments().length > 0;
+    hasAttachments:function(){
+        returnthis.getAttachments().length>0;
     },
     /**
-     * State whether this message has an author
+     *Statewhetherthismessagehasanauthor
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    hasAuthor: function () {
-        return !!(this._serverAuthorID && this._serverAuthorID[0]);
+    hasAuthor:function(){
+        return!!(this._serverAuthorID&&this._serverAuthorID[0]);
     },
     /**
-     * State whether this message has an email of its sender.
-     * By default, messages do not have any email of its sender.
+     *Statewhetherthismessagehasanemailofitssender.
+     *Bydefault,messagesdonothaveanyemailofitssender.
      *
-     * @return {string}
+     *@return{string}
      */
-    hasEmailFrom: function () {
-        return false;
+    hasEmailFrom:function(){
+        returnfalse;
     },
     /**
-     * State whether this image contains images attachments
+     *Statewhetherthisimagecontainsimagesattachments
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    hasImageAttachments: function () {
-        return _.some(this.getAttachments(), function (attachment) {
-            return attachment.mimetype && attachment.mimetype.split('/')[0] === 'image';
+    hasImageAttachments:function(){
+        return_.some(this.getAttachments(),function(attachment){
+            returnattachment.mimetype&&attachment.mimetype.split('/')[0]==='image';
         });
     },
     /**
-     * State whether this image contains non-images attachments
+     *Statewhetherthisimagecontainsnon-imagesattachments
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    hasNonImageAttachments: function () {
-        return _.some(this.getAttachments(), function (attachment) {
-            return !(attachment.mimetype && attachment.mimetype.split('/')[0] === 'image');
+    hasNonImageAttachments:function(){
+        return_.some(this.getAttachments(),function(attachment){
+            return!(attachment.mimetype&&attachment.mimetype.split('/')[0]==='image');
         });
     },
     /**
-     * States whether this message has some notifications.
+     *Stateswhetherthismessagehassomenotifications.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    hasNotifications() {
-        return this.getNotifications().length > 0;
+    hasNotifications(){
+        returnthis.getNotifications().length>0;
     },
     /**
-     * States whether this message has notifications that are in error.
+     *Stateswhetherthismessagehasnotificationsthatareinerror.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    hasNotificationsError() {
-        return this.getNotifications().some(notif =>
-            notif.notification_status === 'exception' ||
-            notif.notification_status === 'bounce'
+    hasNotificationsError(){
+        returnthis.getNotifications().some(notif=>
+            notif.notification_status==='exception'||
+            notif.notification_status==='bounce'
         );
     },
     /**
-     * State whether this message originates from a channel.
-     * By default, messages do not originate from a channel.
+     *Statewhetherthismessageoriginatesfromachannel.
+     *Bydefault,messagesdonotoriginatefromachannel.
      *
-     * @override
-     * @return {boolean}
+     *@override
+     *@return{boolean}
      */
-    originatesFromChannel: function () {
-        return false;
+    originatesFromChannel:function(){
+        returnfalse;
     },
     /**
-     * State whether this message has a subject
-     * By default, messages do not have any subject.
+     *Statewhetherthismessagehasasubject
+     *Bydefault,messagesdonothaveanysubject.
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    hasSubject: function () {
-        return false;
+    hasSubject:function(){
+        returnfalse;
     },
     /**
-     * State whether this message is empty
+     *Statewhetherthismessageisempty
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    isEmpty: function () {
-        return !this.hasTrackingValues() &&
-        !this.hasAttachments() &&
+    isEmpty:function(){
+        return!this.hasTrackingValues()&&
+        !this.hasAttachments()&&
         !this.getBody();
     },
     /**
-     * By default, messages do not have any subtype description
+     *Bydefault,messagesdonothaveanysubtypedescription
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    hasSubtypeDescription: function () {
-        return false;
+    hasSubtypeDescription:function(){
+        returnfalse;
     },
     /**
-     * State whether this message contains some tracking values
-     * By default, messages do not have any tracking values.
+     *Statewhetherthismessagecontainssometrackingvalues
+     *Bydefault,messagesdonothaveanytrackingvalues.
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    hasTrackingValues: function () {
-        return false;
+    hasTrackingValues:function(){
+        returnfalse;
     },
     /**
-     * State whether this message is a discussion
+     *Statewhetherthismessageisadiscussion
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    isDiscussion: function () {
-        return this._isDiscussion;
+    isDiscussion:function(){
+        returnthis._isDiscussion;
     },
     /**
-     * State whether this message is linked to a document thread
-     * By default, messages are not linked to a document thread.
+     *Statewhetherthismessageislinkedtoadocumentthread
+     *Bydefault,messagesarenotlinkedtoadocumentthread.
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    isLinkedToDocumentThread: function () {
-        return false;
+    isLinkedToDocumentThread:function(){
+        returnfalse;
     },
     /**
-     * State whether this message is needaction
-     * By default, messages are not needaction.
+     *Statewhetherthismessageisneedaction
+     *Bydefault,messagesarenotneedaction.
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    isNeedaction: function () {
-        return false;
+    isNeedaction:function(){
+        returnfalse;
     },
     /**
-     * State whether this message is a note (i.e. a message from "Log note")
+     *Statewhetherthismessageisanote(i.e.amessagefrom"Lognote")
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    isNote: function () {
-        return this._isNote;
+    isNote:function(){
+        returnthis._isNote;
     },
     /**
-     * State whether this message is a notification
+     *Statewhetherthismessageisanotification
      *
-     * User notifications are defined as either
-     *      - notes
-     *      - pushed to user Inbox or email through classic notification process
-     *      - not linked to any document, meaning model and res_id are void
+     *Usernotificationsaredefinedaseither
+     *     -notes
+     *     -pushedtouserInboxoremailthroughclassicnotificationprocess
+     *     -notlinkedtoanydocument,meaningmodelandres_idarevoid
      *
-     * This is useful in order to display white background for user
-     * notifications in chatter
+     *Thisisusefulinordertodisplaywhitebackgroundforuser
+     *notificationsinchatter
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    isNotification: function () {
-        return this._isNotification;
+    isNotification:function(){
+        returnthis._isNotification;
     },
     /**
-     * State whether this message is starred
-     * By default, messages are not starred.
+     *Statewhetherthismessageisstarred
+     *Bydefault,messagesarenotstarred.
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    isStarred: function () {
-        return false;
+    isStarred:function(){
+        returnfalse;
     },
     /**
-     * State whether this message is a system notification
-     * By default, messages are not system notifications
+     *Statewhetherthismessageisasystemnotification
+     *Bydefault,messagesarenotsystemnotifications
      *
-     * @override
-     * @return {boolean}
+     *@override
+     *@return{boolean}
      */
-    isSystemNotification: function () {
-        return false;
+    isSystemNotification:function(){
+        returnfalse;
     },
     /**
-     * States whether the current message needs moderation in general.
-     * By default, messages do not require any moderation.
+     *Stateswhetherthecurrentmessageneedsmoderationingeneral.
+     *Bydefault,messagesdonotrequireanymoderation.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    needsModeration: function () {
-        return false;
+    needsModeration:function(){
+        returnfalse;
     },
     /**
-     * @params {integer[]} attachmentIDs
+     *@params{integer[]}attachmentIDs
      */
-    removeAttachments: function (attachmentIDs) {
-        this._attachmentIDs = _.reject(this._attachmentIDs, function (attachment) {
-            return _.contains(attachmentIDs, attachment.id);
+    removeAttachments:function(attachmentIDs){
+        this._attachmentIDs=_.reject(this._attachmentIDs,function(attachment){
+            return_.contains(attachmentIDs,attachment.id);
         });
     },
     /**
-     * State whether this message should redirect to the author
-     * when clicking on the author of this message.
+     *Statewhetherthismessageshouldredirecttotheauthor
+     *whenclickingontheauthorofthismessage.
      *
-     * Do not redirect on author clicked of self-posted messages.
+     *Donotredirectonauthorclickedofself-postedmessages.
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    shouldRedirectToAuthor: function () {
-        return !this._isMyselfAuthor();
+    shouldRedirectToAuthor:function(){
+        return!this._isMyselfAuthor();
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Get the name of the author of this message.
-     * If there are no author of this messages, returns '' (empty string).
+     *Getthenameoftheauthorofthismessage.
+     *Iftherearenoauthorofthismessages,returns''(emptystring).
      *
-     * @private
-     * @returns {string}
+     *@private
+     *@returns{string}
      */
-    _getAuthorName: function () {
-        if (!this.hasAuthor()) {
-            return "";
+    _getAuthorName:function(){
+        if(!this.hasAuthor()){
+            return"";
         }
-        return this._serverAuthorID[1];
+        returnthis._serverAuthorID[1];
     },
     /**
-     * State whether the current user is the author of this message
+     *Statewhetherthecurrentuseristheauthorofthismessage
      *
-     * @private
-     * @return {boolean}
+     *@private
+     *@return{boolean}
      */
-    _isMyselfAuthor: function () {
-        return this.hasAuthor() && (this.getAuthorID() === session.partner_id);
+    _isMyselfAuthor:function(){
+        returnthis.hasAuthor()&&(this.getAuthorID()===session.partner_id);
     },
     /**
-     * Compute url of attachments of this message
+     *Computeurlofattachmentsofthismessage
      *
-     * @private
+     *@private
      */
-    _processAttachmentURL: function () {
-        _.each(this.getAttachments(), function (attachment) {
-            attachment.url = '/web/content/' + attachment.id + '?download=true';
+    _processAttachmentURL:function(){
+        _.each(this.getAttachments(),function(attachment){
+            attachment.url='/web/content/'+attachment.id+'?download=true';
         });
     },
 
 });
 
-return AbstractMessage;
+returnAbstractMessage;
 
 });
 
-flectra.define('im_livechat.legacy.mail.AbstractThreadWindow', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.mail.AbstractThreadWindow',function(require){
+"usestrict";
 
-var ThreadWidget = require('im_livechat.legacy.mail.widget.Thread');
+varThreadWidget=require('im_livechat.legacy.mail.widget.Thread');
 
-var config = require('web.config');
-var core = require('web.core');
-var Widget = require('web.Widget');
+varconfig=require('web.config');
+varcore=require('web.core');
+varWidget=require('web.Widget');
 
-var QWeb = core.qweb;
-var _t = core._t;
+varQWeb=core.qweb;
+var_t=core._t;
 
 /**
- * This is an abstract widget for rendering thread windows.
- * AbstractThreadWindow is kept for legacy reasons. 
+ *Thisisanabstractwidgetforrenderingthreadwindows.
+ *AbstractThreadWindowiskeptforlegacyreasons.
  */
-var AbstractThreadWindow = Widget.extend({
-    template: 'im_livechat.legacy.mail.AbstractThreadWindow',
-    custom_events: {
-        document_viewer_closed: '_onDocumentViewerClose',
+varAbstractThreadWindow=Widget.extend({
+    template:'im_livechat.legacy.mail.AbstractThreadWindow',
+    custom_events:{
+        document_viewer_closed:'_onDocumentViewerClose',
     },
-    events: {
-        'click .o_thread_window_close': '_onClickClose',
-        'click .o_thread_window_title': '_onClickFold',
-        'click .o_composer_text_field': '_onComposerClick',
-        'click .o_mail_thread': '_onThreadWindowClicked',
-        'keydown .o_composer_text_field': '_onKeydown',
-        'keypress .o_composer_text_field': '_onKeypress',
+    events:{
+        'click.o_thread_window_close':'_onClickClose',
+        'click.o_thread_window_title':'_onClickFold',
+        'click.o_composer_text_field':'_onComposerClick',
+        'click.o_mail_thread':'_onThreadWindowClicked',
+        'keydown.o_composer_text_field':'_onKeydown',
+        'keypress.o_composer_text_field':'_onKeypress',
     },
-    FOLD_ANIMATION_DURATION: 200, // duration in ms for (un)fold transition
-    HEIGHT_OPEN: '400px', // height in px of thread window when open
-    HEIGHT_FOLDED: '34px', // height, in px, of thread window when folded
+    FOLD_ANIMATION_DURATION:200,//durationinmsfor(un)foldtransition
+    HEIGHT_OPEN:'400px',//heightinpxofthreadwindowwhenopen
+    HEIGHT_FOLDED:'34px',//height,inpx,ofthreadwindowwhenfolded
     /**
-     * Children of this class must make use of `thread`, which is an object that
-     * represent the thread that is linked to this thread window.
+     *Childrenofthisclassmustmakeuseof`thread`,whichisanobjectthat
+     *representthethreadthatislinkedtothisthreadwindow.
      *
-     * If no thread is provided, this will represent the "blank" thread window.
+     *Ifnothreadisprovided,thiswillrepresentthe"blank"threadwindow.
      *
-     * @abstract
-     * @param {Widget} parent
-     * @param {im_livechat.legacy.mail.model.AbstractThread} [thread=null] the thread that this
-     *   thread window is linked to. If not set, it is the "blank" thread
-     *   window.
-     * @param {Object} [options={}]
-     * @param {im_livechat.legacy.mail.model.AbstractThread} [options.thread]
+     *@abstract
+     *@param{Widget}parent
+     *@param{im_livechat.legacy.mail.model.AbstractThread}[thread=null]thethreadthatthis
+     *  threadwindowislinkedto.Ifnotset,itisthe"blank"thread
+     *  window.
+     *@param{Object}[options={}]
+     *@param{im_livechat.legacy.mail.model.AbstractThread}[options.thread]
      */
-    init: function (parent, thread, options) {
+    init:function(parent,thread,options){
         this._super(parent);
 
-        this.options = _.defaults(options || {}, {
-            autofocus: true,
-            displayStars: true,
-            displayReplyIcons: false,
-            displayNotificationIcons: false,
-            placeholder: _t("Say something"),
+        this.options=_.defaults(options||{},{
+            autofocus:true,
+            displayStars:true,
+            displayReplyIcons:false,
+            displayNotificationIcons:false,
+            placeholder:_t("Saysomething"),
         });
 
-        this._hidden = false;
-        this._thread = thread || null;
+        this._hidden=false;
+        this._thread=thread||null;
 
-        this._debouncedOnScroll = _.debounce(this._onScroll.bind(this), 100);
+        this._debouncedOnScroll=_.debounce(this._onScroll.bind(this),100);
 
-        if (!this.hasThread()) {
-            // internal fold state of thread window without any thread
-            this._folded = false;
+        if(!this.hasThread()){
+            //internalfoldstateofthreadwindowwithoutanythread
+            this._folded=false;
         }
     },
-    start: function () {
-        var self = this;
-        this.$input = this.$('.o_composer_text_field');
-        this.$header = this.$('.o_thread_window_header');
-        var options = {
-            displayMarkAsRead: false,
-            displayStars: this.options.displayStars,
+    start:function(){
+        varself=this;
+        this.$input=this.$('.o_composer_text_field');
+        this.$header=this.$('.o_thread_window_header');
+        varoptions={
+            displayMarkAsRead:false,
+            displayStars:this.options.displayStars,
         };
-        if (this._thread && this._thread._type === 'document_thread') {
-            options.displayDocumentLinks = false;
+        if(this._thread&&this._thread._type==='document_thread'){
+            options.displayDocumentLinks=false;
         }
-        this._threadWidget = new ThreadWidget(this, options);
+        this._threadWidget=newThreadWidget(this,options);
 
-        // animate the (un)folding of thread windows
-        this.$el.css({ transition: 'height ' + this.FOLD_ANIMATION_DURATION + 'ms linear' });
-        if (this.isFolded()) {
-            this.$el.css('height', this.HEIGHT_FOLDED);
-        } else if (this.options.autofocus) {
+        //animatethe(un)foldingofthreadwindows
+        this.$el.css({transition:'height'+this.FOLD_ANIMATION_DURATION+'mslinear'});
+        if(this.isFolded()){
+            this.$el.css('height',this.HEIGHT_FOLDED);
+        }elseif(this.options.autofocus){
             this._focusInput();
         }
-        if (!config.device.isMobile) {
-            var margin_dir = _t.database.parameters.direction === "rtl" ? "margin-left" : "margin-right";
-            this.$el.css(margin_dir, $.position.scrollbarWidth());
+        if(!config.device.isMobile){
+            varmargin_dir=_t.database.parameters.direction==="rtl"?"margin-left":"margin-right";
+            this.$el.css(margin_dir,$.position.scrollbarWidth());
         }
-        var def = this._threadWidget.replace(this.$('.o_thread_window_content')).then(function () {
-            self._threadWidget.$el.on('scroll', self, self._debouncedOnScroll);
+        vardef=this._threadWidget.replace(this.$('.o_thread_window_content')).then(function(){
+            self._threadWidget.$el.on('scroll',self,self._debouncedOnScroll);
         });
-        return Promise.all([this._super(), def]);
+        returnPromise.all([this._super(),def]);
     },
     /**
-     * @override
+     *@override
      */
-    do_hide: function () {
-        this._hidden = true;
-        this._super.apply(this, arguments);
+    do_hide:function(){
+        this._hidden=true;
+        this._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    do_show: function () {
-        this._hidden = false;
-        this._super.apply(this, arguments);
+    do_show:function(){
+        this._hidden=false;
+        this._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    do_toggle: function (display) {
-        this._hidden = _.isBoolean(display) ? !display : !this._hidden;
-        this._super.apply(this, arguments);
+    do_toggle:function(display){
+        this._hidden=_.isBoolean(display)?!display:!this._hidden;
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Close this window
+     *Closethiswindow
      *
-     * @abstract
+     *@abstract
      */
-    close: function () {},
+    close:function(){},
     /**
-     * Get the ID of the thread window, which is equivalent to the ID of the
-     * thread related to this window
+     *GettheIDofthethreadwindow,whichisequivalenttotheIDofthe
+     *threadrelatedtothiswindow
      *
-     * @returns {integer|string}
+     *@returns{integer|string}
      */
-    getID: function () {
-        return this._getThreadID();
+    getID:function(){
+        returnthis._getThreadID();
     },
     /**
-     * @returns {mail.model.Thread|undefined}
+     *@returns{mail.model.Thread|undefined}
      */
-    getThread: function () {
-        if (!this.hasThread()) {
-            return undefined;
+    getThread:function(){
+        if(!this.hasThread()){
+            returnundefined;
         }
-        return this._thread;
+        returnthis._thread;
     },
     /**
-     * Get the status of the thread, such as the im status of a DM chat
-     * ('online', 'offline', etc.). If this window has no thread, returns
-     * `undefined`.
+     *Getthestatusofthethread,suchastheimstatusofaDMchat
+     *('online','offline',etc.).Ifthiswindowhasnothread,returns
+     *`undefined`.
      *
-     * @returns {string|undefined}
+     *@returns{string|undefined}
      */
-    getThreadStatus: function () {
-        if (!this.hasThread()) {
-            return undefined;
+    getThreadStatus:function(){
+        if(!this.hasThread()){
+            returnundefined;
         }
-        return this._thread.getStatus();
+        returnthis._thread.getStatus();
     },
     /**
-     * Get the title of the thread window, which usually contains the name of
-     * the thread.
+     *Getthetitleofthethreadwindow,whichusuallycontainsthenameof
+     *thethread.
      *
-     * @returns {string}
+     *@returns{string}
      */
-    getTitle: function () {
-        if (!this.hasThread()) {
-            return _t("Undefined");
+    getTitle:function(){
+        if(!this.hasThread()){
+            return_t("Undefined");
         }
-        return this._thread.getTitle();
+        returnthis._thread.getTitle();
     },
     /**
-     * Get the unread counter of the related thread. If there are no thread
-     * linked to this window, returns 0.
+     *Gettheunreadcounteroftherelatedthread.Iftherearenothread
+     *linkedtothiswindow,returns0.
      *
-     * @returns {integer}
+     *@returns{integer}
      */
-    getUnreadCounter: function () {
-        if (!this.hasThread()) {
-            return 0;
+    getUnreadCounter:function(){
+        if(!this.hasThread()){
+            return0;
         }
-        return this._thread.getUnreadCounter();
+        returnthis._thread.getUnreadCounter();
     },
     /**
-     * States whether this thread window is related to a thread or not.
+     *Stateswhetherthisthreadwindowisrelatedtoathreadornot.
      *
-     * This is useful in order to provide specific behaviour for thread windows
-     * without any thread, e.g. let them open a thread from this "blank" thread
-     * window.
+     *Thisisusefulinordertoprovidespecificbehaviourforthreadwindows
+     *withoutanythread,e.g.letthemopenathreadfromthis"blank"thread
+     *window.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    hasThread: function () {
-        return !! this._thread;
+    hasThread:function(){
+        return!!this._thread;
     },
     /**
-     * Tells whether the bottom of the thread in the thread window is visible
-     * or not.
+     *Tellswhetherthebottomofthethreadinthethreadwindowisvisible
+     *ornot.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    isAtBottom: function () {
-        return this._threadWidget.isAtBottom();
+    isAtBottom:function(){
+        returnthis._threadWidget.isAtBottom();
     },
     /**
-     * State whether the related thread is folded or not. If there are no
-     * thread related to this window, it means this is the "blank" thread
-     * window, therefore we use the internal folded state.
+     *Statewhethertherelatedthreadisfoldedornot.Ifthereareno
+     *threadrelatedtothiswindow,itmeansthisisthe"blank"thread
+     *window,thereforeweusetheinternalfoldedstate.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    isFolded: function () {
-        if (!this.hasThread()) {
-            return this._folded;
+    isFolded:function(){
+        if(!this.hasThread()){
+            returnthis._folded;
         }
-        return this._thread.isFolded();
+        returnthis._thread.isFolded();
     },
     /**
-     * States whether the current environment is in mobile or not. This is
-     * useful in order to customize the template rendering for mobile view.
+     *Stateswhetherthecurrentenvironmentisinmobileornot.Thisis
+     *usefulinordertocustomizethetemplaterenderingformobileview.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    isMobile: function () {
-        return config.device.isMobile;
+    isMobile:function(){
+        returnconfig.device.isMobile;
     },
     /**
-     * States whether the thread window is hidden or not.
+     *Stateswhetherthethreadwindowishiddenornot.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    isHidden: function () {
-        return this._hidden;
+    isHidden:function(){
+        returnthis._hidden;
     },
     /**
-     * States whether the input of the thread window should be displayed or not.
-     * By default, any thread window with a thread needs a composer.
+     *Stateswhethertheinputofthethreadwindowshouldbedisplayedornot.
+     *Bydefault,anythreadwindowwithathreadneedsacomposer.
      *
-     * @returns {boolean}
+     *@returns{boolean}
      */
-    needsComposer: function () {
-        return this.hasThread();
+    needsComposer:function(){
+        returnthis.hasThread();
     },
     /**
-     * Render the thread window
+     *Renderthethreadwindow
      */
-    render: function () {
+    render:function(){
         this.renderHeader();
-        if (this.hasThread()) {
-            this._threadWidget.render(this._thread, { displayLoadMore: false });
+        if(this.hasThread()){
+            this._threadWidget.render(this._thread,{displayLoadMore:false});
         }
     },
     /**
-     * Render the header of this thread window.
-     * This is useful when some information on the header have be updated such
-     * as the status or the title of the thread that have changed.
+     *Rendertheheaderofthisthreadwindow.
+     *Thisisusefulwhensomeinformationontheheaderhavebeupdatedsuch
+     *asthestatusorthetitleofthethreadthathavechanged.
      *
-     * @private
+     *@private
      */
-    renderHeader: function () {
-        var options = this._getHeaderRenderingOptions();
+    renderHeader:function(){
+        varoptions=this._getHeaderRenderingOptions();
         this.$header.html(
-            QWeb.render('im_livechat.legacy.mail.AbstractThreadWindow.HeaderContent', options));
+            QWeb.render('im_livechat.legacy.mail.AbstractThreadWindow.HeaderContent',options));
     },
     /**
-     * Scroll to the bottom of the thread in the thread window
+     *Scrolltothebottomofthethreadinthethreadwindow
      */
-    scrollToBottom: function () {
+    scrollToBottom:function(){
         this._threadWidget.scrollToBottom();
     },
     /**
-     * Toggle the fold state of this thread window. Also update the fold state
-     * of the thread model. If the boolean parameter `folded` is provided, it
-     * folds/unfolds the window when it is set/unset.
+     *Togglethefoldstateofthisthreadwindow.Alsoupdatethefoldstate
+     *ofthethreadmodel.Ifthebooleanparameter`folded`isprovided,it
+     *folds/unfoldsthewindowwhenitisset/unset.
      *
-     * @param {boolean} [folded] if not a boolean, toggle the fold state.
-     *   Otherwise, fold/unfold the window if set/unset.
+     *@param{boolean}[folded]ifnotaboolean,togglethefoldstate.
+     *  Otherwise,fold/unfoldthewindowifset/unset.
      */
-    toggleFold: function (folded) {
-        if (!_.isBoolean(folded)) {
-            folded = !this.isFolded();
+    toggleFold:function(folded){
+        if(!_.isBoolean(folded)){
+            folded=!this.isFolded();
         }
         this._updateThreadFoldState(folded);
     },
     /**
-     * Update the visual state of the window so that it matched the internal
-     * fold state. This is useful in case the related thread has its fold state
-     * that has been changed.
+     *Updatethevisualstateofthewindowsothatitmatchedtheinternal
+     *foldstate.Thisisusefulincasetherelatedthreadhasitsfoldstate
+     *thathasbeenchanged.
      */
-    updateVisualFoldState: function () {
-        if (!this.isFolded()) {
+    updateVisualFoldState:function(){
+        if(!this.isFolded()){
             this._threadWidget.scrollToBottom();
-            if (this.options.autofocus) {
+            if(this.options.autofocus){
                 this._focusInput();
             }
         }
-        var height = this.isFolded() ? this.HEIGHT_FOLDED : this.HEIGHT_OPEN;
-        this.$el.css({ height: height });
+        varheight=this.isFolded()?this.HEIGHT_FOLDED:this.HEIGHT_OPEN;
+        this.$el.css({height:height});
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Set the focus on the composer of the thread window. This operation is
-     * ignored in mobile context.
+     *Setthefocusonthecomposerofthethreadwindow.Thisoperationis
+     *ignoredinmobilecontext.
      *
-     * @private
-     * Set the focus on the input of the window
+     *@private
+     *Setthefocusontheinputofthewindow
      */
-    _focusInput: function () {
-        if (
-            config.device.touch &&
-            config.device.size_class <= config.device.SIZES.SM
-        ) {
+    _focusInput:function(){
+        if(
+            config.device.touch&&
+            config.device.size_class<=config.device.SIZES.SM
+        ){
             return;
         }
         this.$input.focus();
     },
     /**
-     * Returns the options used by the rendering of the window's header
+     *Returnstheoptionsusedbytherenderingofthewindow'sheader
      *
-     * @private
-     * @returns {Object}
+     *@private
+     *@returns{Object}
      */
-    _getHeaderRenderingOptions: function () {
-        return {
-            status: this.getThreadStatus(),
-            thread: this.getThread(),
-            title: this.getTitle(),
-            unreadCounter: this.getUnreadCounter(),
-            widget: this,
+    _getHeaderRenderingOptions:function(){
+        return{
+            status:this.getThreadStatus(),
+            thread:this.getThread(),
+            title:this.getTitle(),
+            unreadCounter:this.getUnreadCounter(),
+            widget:this,
         };
     },
     /**
-     * Get the ID of the related thread.
-     * If this window is not related to a thread, it means this is the "blank"
-     * thread window, therefore it returns "_blank" as its ID.
+     *GettheIDoftherelatedthread.
+     *Ifthiswindowisnotrelatedtoathread,itmeansthisisthe"blank"
+     *threadwindow,thereforeitreturns"_blank"asitsID.
      *
-     * @private
-     * @returns {integer|string} the threadID, or '_blank' for the window that
-     *   is not related to any thread.
+     *@private
+     *@returns{integer|string}thethreadID,or'_blank'forthewindowthat
+     *  isnotrelatedtoanythread.
      */
-    _getThreadID: function () {
-        if (!this.hasThread()) {
-            return '_blank';
+    _getThreadID:function(){
+        if(!this.hasThread()){
+            return'_blank';
         }
-        return this._thread.getID();
+        returnthis._thread.getID();
     },
     /**
-     * Tells whether there is focus on this thread. Note that a thread that has
-     * the focus means the input has focus.
+     *Tellswhetherthereisfocusonthisthread.Notethatathreadthathas
+     *thefocusmeanstheinputhasfocus.
      *
-     * @private
-     * @returns {boolean}
+     *@private
+     *@returns{boolean}
      */
-    _hasFocus: function () {
-        return this.$input.is(':focus');
+    _hasFocus:function(){
+        returnthis.$input.is(':focus');
     },
     /**
-     * Post a message on this thread window, and auto-scroll to the bottom of
-     * the thread.
+     *Postamessageonthisthreadwindow,andauto-scrolltothebottomof
+     *thethread.
      *
-     * @private
-     * @param {Object} messageData
+     *@private
+     *@param{Object}messageData
      */
-    _postMessage: function (messageData) {
-        var self = this;
-        if (!this.hasThread()) {
+    _postMessage:function(messageData){
+        varself=this;
+        if(!this.hasThread()){
             return;
         }
         this._thread.postMessage(messageData)
-            .then(function () {
+            .then(function(){
                 self._threadWidget.scrollToBottom();
             });
     },
     /**
-     * Update the fold state of the thread.
+     *Updatethefoldstateofthethread.
      *
-     * This function is called when toggling the fold state of this window.
-     * If there is no thread linked to this window, it means this is the
-     * "blank" thread window, therefore we use the internal state 'folded'
+     *Thisfunctioniscalledwhentogglingthefoldstateofthiswindow.
+     *Ifthereisnothreadlinkedtothiswindow,itmeansthisisthe
+     *"blank"threadwindow,thereforeweusetheinternalstate'folded'
      *
-     * @private
-     * @param {boolean} folded
+     *@private
+     *@param{boolean}folded
      */
-    _updateThreadFoldState: function (folded) {
-        if (this.hasThread()) {
+    _updateThreadFoldState:function(folded){
+        if(this.hasThread()){
             this._thread.fold(folded);
-        } else {
-            this._folded = folded;
+        }else{
+            this._folded=folded;
             this.updateVisualFoldState();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Close the thread window.
-     * Mark the thread as read if the thread window was open.
+     *Closethethreadwindow.
+     *Markthethreadasreadifthethreadwindowwasopen.
      *
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickClose: function (ev) {
+    _onClickClose:function(ev){
         ev.stopPropagation();
         ev.preventDefault();
-        if (
-            this.hasThread() &&
-            this._thread.getUnreadCounter() > 0 &&
+        if(
+            this.hasThread()&&
+            this._thread.getUnreadCounter()>0&&
             !this.isFolded()
-        ) {
+        ){
             this._thread.markAsRead();
         }
         this.close();
     },
     /**
-     * Fold/unfold the thread window.
-     * Also mark the thread as read.
+     *Fold/unfoldthethreadwindow.
+     *Alsomarkthethreadasread.
      *
-     * @private
+     *@private
      */
-    _onClickFold: function () {
-        if (!config.device.isMobile) {
+    _onClickFold:function(){
+        if(!config.device.isMobile){
             this.toggleFold();
         }
     },
     /**
-     * Called when the composer is clicked -> forces focus on input even if
-     * jquery's blockUI is enabled.
+     *Calledwhenthecomposerisclicked->forcesfocusoninputevenif
+     *jquery'sblockUIisenabled.
      *
-     * @private
-     * @param {Event} ev
+     *@private
+     *@param{Event}ev
      */
-    _onComposerClick: function (ev) {
-        if ($(ev.target).closest('a, button').length) {
+    _onComposerClick:function(ev){
+        if($(ev.target).closest('a,button').length){
             return;
         }
         this._focusInput();
     },
     /**
-     * @private
+     *@private
      */
-    _onDocumentViewerClose: function () {
+    _onDocumentViewerClose:function(){
         this._focusInput();
     },
     /**
-     * Called when typing something on the composer of this thread window.
+     *Calledwhentypingsomethingonthecomposerofthisthreadwindow.
      *
-     * @private
-     * @param {KeyboardEvent} ev
+     *@private
+     *@param{KeyboardEvent}ev
      */
-    _onKeydown: function (ev) {
-        ev.stopPropagation(); // to prevent jquery's blockUI to cancel event
-        // ENTER key (avoid requiring jquery ui for external livechat)
-        if (ev.which === 13) {
-            var content = _.str.trim(this.$input.val());
-            var messageData = {
-                content: content,
-                attachment_ids: [],
-                partner_ids: [],
+    _onKeydown:function(ev){
+        ev.stopPropagation();//topreventjquery'sblockUItocancelevent
+        //ENTERkey(avoidrequiringjqueryuiforexternallivechat)
+        if(ev.which===13){
+            varcontent=_.str.trim(this.$input.val());
+            varmessageData={
+                content:content,
+                attachment_ids:[],
+                partner_ids:[],
             };
             this.$input.val('');
-            if (content) {
+            if(content){
                 this._postMessage(messageData);
             }
         }
     },
     /**
-     * @private
-     * @param {KeyboardEvent} ev
+     *@private
+     *@param{KeyboardEvent}ev
      */
-    _onKeypress: function (ev) {
-        ev.stopPropagation(); // to prevent jquery's blockUI to cancel event
+    _onKeypress:function(ev){
+        ev.stopPropagation();//topreventjquery'sblockUItocancelevent
     },
     /**
-     * @private
+     *@private
      */
-    _onScroll: function () {
-        if (this.hasThread() && this.isAtBottom()) {
+    _onScroll:function(){
+        if(this.hasThread()&&this.isAtBottom()){
             this._thread.markAsRead();
         }
     },
     /**
-     * When a thread window is clicked on, we want to give the focus to the main
-     * input. An exception is made when the user is selecting something.
+     *Whenathreadwindowisclickedon,wewanttogivethefocustothemain
+     *input.Anexceptionismadewhentheuserisselectingsomething.
      *
-     * @private
+     *@private
      */
-    _onThreadWindowClicked: function () {
-        var selectObj = window.getSelection();
-        if (selectObj.anchorOffset === selectObj.focusOffset) {
+    _onThreadWindowClicked:function(){
+        varselectObj=window.getSelection();
+        if(selectObj.anchorOffset===selectObj.focusOffset){
             this.$input.focus();
         }
     },
 });
 
-return AbstractThreadWindow;
+returnAbstractThreadWindow;
 
 });
 
-flectra.define('im_livechat.legacy.mail.model.CCThrottleFunctionObject', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.mail.model.CCThrottleFunctionObject',function(require){
+"usestrict";
 
-var Class = require('web.Class');
+varClass=require('web.Class');
 
 /**
- * This object models the behaviour of the clearable and cancellable (CC)
- * throttle version of a provided function.
+ *Thisobjectmodelsthebehaviouroftheclearableandcancellable(CC)
+ *throttleversionofaprovidedfunction.
  */
-var CCThrottleFunctionObject = Class.extend({
+varCCThrottleFunctionObject=Class.extend({
 
     /**
-     * @param {Object} params
-     * @param {integer} params.duration duration of the 'cooldown' phase, i.e.
-     *   the minimum duration between the most recent function call that has
-     *   been made and the following function call.
-     * @param {function} params.func provided function for making the CC
-     *   throttled version.
+     *@param{Object}params
+     *@param{integer}params.durationdurationofthe'cooldown'phase,i.e.
+     *  theminimumdurationbetweenthemostrecentfunctioncallthathas
+     *  beenmadeandthefollowingfunctioncall.
+     *@param{function}params.funcprovidedfunctionformakingtheCC
+     *  throttledversion.
      */
-    init: function (params) {
-        this._arguments = undefined;
-        this._cooldownTimeout = undefined;
-        this._duration = params.duration;
-        this._func = params.func;
-        this._shouldCallFunctionAfterCD = false;
+    init:function(params){
+        this._arguments=undefined;
+        this._cooldownTimeout=undefined;
+        this._duration=params.duration;
+        this._func=params.func;
+        this._shouldCallFunctionAfterCD=false;
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Cancel any buffered function call, but keep the cooldown phase running.
+     *Cancelanybufferedfunctioncall,butkeepthecooldownphaserunning.
      */
-    cancel: function () {
-        this._arguments = undefined;
-        this._shouldCallFunctionAfterCD = false;
+    cancel:function(){
+        this._arguments=undefined;
+        this._shouldCallFunctionAfterCD=false;
     },
     /**
-     * Clear the internal throttle timer, so that the following function call
-     * is immediate. For instance, if there is a cooldown stage, it is aborted.
+     *Cleartheinternalthrottletimer,sothatthefollowingfunctioncall
+     *isimmediate.Forinstance,ifthereisacooldownstage,itisaborted.
      */
-    clear: function () {
-        if (this._cooldownTimeout) {
+    clear:function(){
+        if(this._cooldownTimeout){
             clearTimeout(this._cooldownTimeout);
             this._onCooldownTimeout();
         }
     },
     /**
-     * Called when there is a call to the function. This function is throttled,
-     * so the time it is called depends on whether the "cooldown stage" occurs
-     * or not:
+     *Calledwhenthereisacalltothefunction.Thisfunctionisthrottled,
+     *sothetimeitiscalleddependsonwhetherthe"cooldownstage"occurs
+     *ornot:
      *
-     * - no cooldown stage: function is called immediately, and it starts
-     *      the cooldown stage when successful.
-     * - in cooldown stage: function is called when the cooldown stage has
-     *      ended from timeout.
+     *-nocooldownstage:functioniscalledimmediately,anditstarts
+     *     thecooldownstagewhensuccessful.
+     *-incooldownstage:functioniscalledwhenthecooldownstagehas
+     *     endedfromtimeout.
      *
-     * Note that after the cooldown stage, only the last attempted function
-     * call will be considered.
+     *Notethatafterthecooldownstage,onlythelastattemptedfunction
+     *callwillbeconsidered.
      */
-    do: function () {
-        this._arguments = Array.prototype.slice.call(arguments);
-        if (this._cooldownTimeout === undefined) {
+    do:function(){
+        this._arguments=Array.prototype.slice.call(arguments);
+        if(this._cooldownTimeout===undefined){
             this._callFunction();
-        } else {
-            this._shouldCallFunctionAfterCD = true;
+        }else{
+            this._shouldCallFunctionAfterCD=true;
         }
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Immediately calls the function with arguments of last buffered function
-     * call. It initiates the cooldown stage after this function call.
+     *Immediatelycallsthefunctionwithargumentsoflastbufferedfunction
+     *call.Itinitiatesthecooldownstageafterthisfunctioncall.
      *
-     * @private
+     *@private
      */
-    _callFunction: function () {
-        this._func.apply(null, this._arguments);
+    _callFunction:function(){
+        this._func.apply(null,this._arguments);
         this._cooldown();
     },
     /**
-     * Called when the function has been successfully called. The following
-     * calls to the function with this object should suffer a "cooldown stage",
-     * which prevents the function from being called until this stage has ended.
+     *Calledwhenthefunctionhasbeensuccessfullycalled.Thefollowing
+     *callstothefunctionwiththisobjectshouldsuffera"cooldownstage",
+     *whichpreventsthefunctionfrombeingcalleduntilthisstagehasended.
      *
-     * @private
+     *@private
      */
-    _cooldown: function () {
+    _cooldown:function(){
         this.cancel();
-        this._cooldownTimeout = setTimeout(
+        this._cooldownTimeout=setTimeout(
             this._onCooldownTimeout.bind(this),
             this._duration
         );
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the cooldown stage ended from timeout. Calls the function if
-     * a function call was buffered.
+     *Calledwhenthecooldownstageendedfromtimeout.Callsthefunctionif
+     *afunctioncallwasbuffered.
      *
-     * @private
+     *@private
      */
-    _onCooldownTimeout: function () {
-        if (this._shouldCallFunctionAfterCD) {
+    _onCooldownTimeout:function(){
+        if(this._shouldCallFunctionAfterCD){
             this._callFunction();
-        } else {
-            this._cooldownTimeout = undefined;
+        }else{
+            this._cooldownTimeout=undefined;
         }
     },
 });
 
-return CCThrottleFunctionObject;
+returnCCThrottleFunctionObject;
 
 });
 
-flectra.define('im_livechat.legacy.mail.model.CCThrottleFunction', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.mail.model.CCThrottleFunction',function(require){
+"usestrict";
 
-var CCThrottleFunctionObject = require('im_livechat.legacy.mail.model.CCThrottleFunctionObject');
+varCCThrottleFunctionObject=require('im_livechat.legacy.mail.model.CCThrottleFunctionObject');
 
 /**
- * A function that creates a cancellable and clearable (CC) throttle version
- * of a provided function.
+ *Afunctionthatcreatesacancellableandclearable(CC)throttleversion
+ *ofaprovidedfunction.
  *
- * This throttle mechanism allows calling a function at most once during a
- * certain period:
+ *Thisthrottlemechanismallowscallingafunctionatmostonceduringa
+ *certainperiod:
  *
- * - When a function call is made, it enters a 'cooldown' phase, in which any
- *     attempt to call the function is buffered until the cooldown phase ends.
- * - At most 1 function call can be buffered during the cooldown phase, and the
- *     latest one in this phase will be considered at its end.
- * - When a cooldown phase ends, any buffered function call will be performed
- *     and another cooldown phase will follow up.
+ *-Whenafunctioncallismade,itentersa'cooldown'phase,inwhichany
+ *    attempttocallthefunctionisbuffereduntilthecooldownphaseends.
+ *-Atmost1functioncallcanbebufferedduringthecooldownphase,andthe
+ *    latestoneinthisphasewillbeconsideredatitsend.
+ *-Whenacooldownphaseends,anybufferedfunctioncallwillbeperformed
+ *    andanothercooldownphasewillfollowup.
  *
- * This throttle version has the following interesting properties:
+ *Thisthrottleversionhasthefollowinginterestingproperties:
  *
- * - cancellable: it allows removing a buffered function call during the
- *     cooldown phase, but it keeps the cooldown phase running.
- * - clearable: it allows to clear the internal clock of the throttled function,
- *     so that any cooldown phase is immediately ending.
+ *-cancellable:itallowsremovingabufferedfunctioncallduringthe
+ *    cooldownphase,butitkeepsthecooldownphaserunning.
+ *-clearable:itallowstocleartheinternalclockofthethrottledfunction,
+ *    sothatanycooldownphaseisimmediatelyending.
  *
- * @param {Object} params
- * @param {integer} params.duration a duration for the throttled behaviour,
- *   in milli-seconds.
- * @param {function} params.func the function to throttle
- * @returns {function} the cancellable and clearable throttle version of the
- *   provided function in argument.
+ *@param{Object}params
+ *@param{integer}params.durationadurationforthethrottledbehaviour,
+ *  inmilli-seconds.
+ *@param{function}params.functhefunctiontothrottle
+ *@returns{function}thecancellableandclearablethrottleversionofthe
+ *  providedfunctioninargument.
  */
-var CCThrottleFunction = function (params) {
-    var duration = params.duration;
-    var func = params.func;
+varCCThrottleFunction=function(params){
+    varduration=params.duration;
+    varfunc=params.func;
 
-    var throttleFunctionObject = new CCThrottleFunctionObject({
-        duration: duration,
-        func: func,
+    varthrottleFunctionObject=newCCThrottleFunctionObject({
+        duration:duration,
+        func:func,
     });
 
-    var callable = function () {
-        return throttleFunctionObject.do.apply(throttleFunctionObject, arguments);
+    varcallable=function(){
+        returnthrottleFunctionObject.do.apply(throttleFunctionObject,arguments);
     };
-    callable.cancel = function () {
+    callable.cancel=function(){
         throttleFunctionObject.cancel();
     };
-    callable.clear = function () {
+    callable.clear=function(){
         throttleFunctionObject.clear();
     };
 
-    return callable;
+    returncallable;
 };
 
-return CCThrottleFunction;
+returnCCThrottleFunction;
 
 });
 
-flectra.define('im_livechat.legacy.mail.model.Timer', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.mail.model.Timer',function(require){
+"usestrict";
 
-var Class = require('web.Class');
+varClass=require('web.Class');
 
 /**
- * This class creates a timer which, when times out, calls a function.
+ *Thisclasscreatesatimerwhich,whentimesout,callsafunction.
  */
-var Timer = Class.extend({
+varTimer=Class.extend({
 
     /**
-     * Instantiate a new timer. Note that the timer is not started on
-     * initialization (@see start method).
+     *Instantiateanewtimer.Notethatthetimerisnotstartedon
+     *initialization(@seestartmethod).
      *
-     * @param {Object} params
-     * @param {number} params.duration duration of timer before timeout in
-     *   milli-seconds.
-     * @param {function} params.onTimeout function that is called when the
-     *   timer times out.
+     *@param{Object}params
+     *@param{number}params.durationdurationoftimerbeforetimeoutin
+     *  milli-seconds.
+     *@param{function}params.onTimeoutfunctionthatiscalledwhenthe
+     *  timertimesout.
      */
-    init: function (params) {
-        this._duration = params.duration;
-        this._timeout = undefined;
-        this._timeoutCallback = params.onTimeout;
+    init:function(params){
+        this._duration=params.duration;
+        this._timeout=undefined;
+        this._timeoutCallback=params.onTimeout;
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Clears the countdown of the timer.
+     *Clearsthecountdownofthetimer.
      */
-    clear: function () {
+    clear:function(){
         clearTimeout(this._timeout);
     },
     /**
-     * Resets the timer, i.e. resets its duration.
+     *Resetsthetimer,i.e.resetsitsduration.
      */
-    reset: function () {
+    reset:function(){
         this.clear();
         this.start();
     },
     /**
-     * Starts the timer, i.e. after a certain duration, it times out and calls
-     * a function back.
+     *Startsthetimer,i.e.afteracertainduration,ittimesoutandcalls
+     *afunctionback.
      */
-    start: function () {
-        this._timeout = setTimeout(this._onTimeout.bind(this), this._duration);
+    start:function(){
+        this._timeout=setTimeout(this._onTimeout.bind(this),this._duration);
     },
 
     //--------------------------------------------------------------------------
-    // Handler
+    //Handler
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the timer times out, calls back a function on timeout.
+     *Calledwhenthetimertimesout,callsbackafunctionontimeout.
      *
-     * @private
+     *@private
      */
-    _onTimeout: function () {
+    _onTimeout:function(){
         this._timeoutCallback();
     },
 
 });
 
-return Timer;
+returnTimer;
 
 });
 
-flectra.define('im_livechat.legacy.mail.model.Timers', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.mail.model.Timers',function(require){
+"usestrict";
 
-var Timer = require('im_livechat.legacy.mail.model.Timer');
+varTimer=require('im_livechat.legacy.mail.model.Timer');
 
-var Class = require('web.Class');
+varClass=require('web.Class');
 
 /**
- * This class lists several timers that use a same callback and duration.
+ *Thisclasslistsseveraltimersthatuseasamecallbackandduration.
  */
-var Timers = Class.extend({
+varTimers=Class.extend({
 
     /**
-     * Instantiate a new list of timers
+     *Instantiateanewlistoftimers
      *
-     * @param {Object} params
-     * @param {integer} params.duration duration of the underlying timers from
-     *   start to timeout, in milli-seconds.
-     * @param {function} params.onTimeout a function to call back for underlying
-     *   timers on timeout.
+     *@param{Object}params
+     *@param{integer}params.durationdurationoftheunderlyingtimersfrom
+     *  starttotimeout,inmilli-seconds.
+     *@param{function}params.onTimeoutafunctiontocallbackforunderlying
+     *  timersontimeout.
      */
-    init: function (params) {
-        this._duration = params.duration;
-        this._timeoutCallback = params.onTimeout;
-        this._timers = {};
+    init:function(params){
+        this._duration=params.duration;
+        this._timeoutCallback=params.onTimeout;
+        this._timers={};
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Register a timer with ID `timerID` to start.
+     *RegisteratimerwithID`timerID`tostart.
      *
-     * - an already registered timer with this ID is reset.
-     * - (optional) can provide a list of arguments that is passed to the
-     *   function callback when timer times out.
+     *-analreadyregisteredtimerwiththisIDisreset.
+     *-(optional)canprovidealistofargumentsthatispassedtothe
+     *  functioncallbackwhentimertimesout.
      *
-     * @param {Object} params
-     * @param {Array} [params.timeoutCallbackArguments]
-     * @param {integer} params.timerID
+     *@param{Object}params
+     *@param{Array}[params.timeoutCallbackArguments]
+     *@param{integer}params.timerID
      */
-    registerTimer: function (params) {
-        var timerID = params.timerID;
-        if (this._timers[timerID]) {
+    registerTimer:function(params){
+        vartimerID=params.timerID;
+        if(this._timers[timerID]){
             this._timers[timerID].clear();
         }
-        var timerParams = {
-            duration: this._duration,
-            onTimeout: this._timeoutCallback,
+        vartimerParams={
+            duration:this._duration,
+            onTimeout:this._timeoutCallback,
         };
-        if ('timeoutCallbackArguments' in params) {
-            timerParams.onTimeout = this._timeoutCallback.bind.apply(
+        if('timeoutCallbackArguments'inparams){
+            timerParams.onTimeout=this._timeoutCallback.bind.apply(
                 this._timeoutCallback,
                 [null].concat(params.timeoutCallbackArguments)
             );
-        } else {
-            timerParams.onTimeout = this._timeoutCallback;
+        }else{
+            timerParams.onTimeout=this._timeoutCallback;
         }
-        this._timers[timerID] = new Timer(timerParams);
+        this._timers[timerID]=newTimer(timerParams);
         this._timers[timerID].start();
     },
     /**
-     * Unregister a timer with ID `timerID`. The unregistered timer is aborted
-     * and will not time out.
+     *UnregisteratimerwithID`timerID`.Theunregisteredtimerisaborted
+     *andwillnottimeout.
      *
-     * @param {Object} params
-     * @param {integer} params.timerID
+     *@param{Object}params
+     *@param{integer}params.timerID
      */
-    unregisterTimer: function (params) {
-        var timerID = params.timerID;
-        if (this._timers[timerID]) {
+    unregisterTimer:function(params){
+        vartimerID=params.timerID;
+        if(this._timers[timerID]){
             this._timers[timerID].clear();
-            delete this._timers[timerID];
+            deletethis._timers[timerID];
         }
     },
 
 });
 
-return Timers;
+returnTimers;
 
 });
 
-flectra.define('im_livechat.legacy.mail.widget.Thread', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.mail.widget.Thread',function(require){
+"usestrict";
 
-var DocumentViewer = require('im_livechat.legacy.mail.DocumentViewer');
-var mailUtils = require('mail.utils');
+varDocumentViewer=require('im_livechat.legacy.mail.DocumentViewer');
+varmailUtils=require('mail.utils');
 
-var core = require('web.core');
-var time = require('web.time');
-var Widget = require('web.Widget');
+varcore=require('web.core');
+vartime=require('web.time');
+varWidget=require('web.Widget');
 
-var QWeb = core.qweb;
-var _lt = core._lt;
+varQWeb=core.qweb;
+var_lt=core._lt;
 
-var ORDER = {
-    ASC: 1, // visually, ascending order of message IDs (from top to bottom)
-    DESC: -1, // visually, descending order of message IDs (from top to bottom)
+varORDER={
+    ASC:1,//visually,ascendingorderofmessageIDs(fromtoptobottom)
+    DESC:-1,//visually,descendingorderofmessageIDs(fromtoptobottom)
 };
 
-var READ_MORE = _lt("read more");
-var READ_LESS = _lt("read less");
+varREAD_MORE=_lt("readmore");
+varREAD_LESS=_lt("readless");
 
 /**
- * This is a generic widget to render a thread.
- * Any thread that extends mail.model.AbstractThread can be used with this
- * widget.
+ *Thisisagenericwidgettorenderathread.
+ *Anythreadthatextendsmail.model.AbstractThreadcanbeusedwiththis
+ *widget.
  */
-var ThreadWidget = Widget.extend({
-    className: 'o_mail_thread',
+varThreadWidget=Widget.extend({
+    className:'o_mail_thread',
 
-    events: {
-        'click a': '_onClickRedirect',
-        'click img': '_onClickRedirect',
-        'click strong': '_onClickRedirect',
-        'click .o_thread_show_more': '_onClickShowMore',
-        'click .o_attachment_download': '_onAttachmentDownload',
-        'click .o_attachment_view': '_onAttachmentView',
-        'click .o_attachment_delete_cross': '_onDeleteAttachment',
-        'click .o_thread_message_needaction': '_onClickMessageNeedaction',
-        'click .o_thread_message_star': '_onClickMessageStar',
-        'click .o_thread_message_reply': '_onClickMessageReply',
-        'click .oe_mail_expand': '_onClickMailExpand',
-        'click .o_thread_message': '_onClickMessage',
-        'click': '_onClick',
-        'click .o_thread_message_notification_error': '_onClickMessageNotificationError',
-        'click .o_thread_message_moderation': '_onClickMessageModeration',
-        'change .moderation_checkbox': '_onChangeModerationCheckbox',
+    events:{
+        'clicka':'_onClickRedirect',
+        'clickimg':'_onClickRedirect',
+        'clickstrong':'_onClickRedirect',
+        'click.o_thread_show_more':'_onClickShowMore',
+        'click.o_attachment_download':'_onAttachmentDownload',
+        'click.o_attachment_view':'_onAttachmentView',
+        'click.o_attachment_delete_cross':'_onDeleteAttachment',
+        'click.o_thread_message_needaction':'_onClickMessageNeedaction',
+        'click.o_thread_message_star':'_onClickMessageStar',
+        'click.o_thread_message_reply':'_onClickMessageReply',
+        'click.oe_mail_expand':'_onClickMailExpand',
+        'click.o_thread_message':'_onClickMessage',
+        'click':'_onClick',
+        'click.o_thread_message_notification_error':'_onClickMessageNotificationError',
+        'click.o_thread_message_moderation':'_onClickMessageModeration',
+        'change.moderation_checkbox':'_onChangeModerationCheckbox',
     },
 
     /**
-     * @override
-     * @param {widget} parent
-     * @param {Object} options
+     *@override
+     *@param{widget}parent
+     *@param{Object}options
      */
-    init: function (parent, options) {
-        this._super.apply(this, arguments);
-        this.attachments = [];
-        // options when the thread is enabled (e.g. can send message,
-        // interact on messages, etc.)
-        this._enabledOptions = _.defaults(options || {}, {
-            displayOrder: ORDER.ASC,
-            displayMarkAsRead: true,
-            displayModerationCommands: false,
-            displayStars: true,
-            displayDocumentLinks: true,
-            displayAvatars: true,
-            squashCloseMessages: true,
-            displayNotificationIcons: true,
-            displayReplyIcons: false,
-            loadMoreOnScroll: false,
-            hasMessageAttachmentDeletable: false,
+    init:function(parent,options){
+        this._super.apply(this,arguments);
+        this.attachments=[];
+        //optionswhenthethreadisenabled(e.g.cansendmessage,
+        //interactonmessages,etc.)
+        this._enabledOptions=_.defaults(options||{},{
+            displayOrder:ORDER.ASC,
+            displayMarkAsRead:true,
+            displayModerationCommands:false,
+            displayStars:true,
+            displayDocumentLinks:true,
+            displayAvatars:true,
+            squashCloseMessages:true,
+            displayNotificationIcons:true,
+            displayReplyIcons:false,
+            loadMoreOnScroll:false,
+            hasMessageAttachmentDeletable:false,
         });
-        // options when the thread is disabled
-        this._disabledOptions = {
-            displayOrder: this._enabledOptions.displayOrder,
-            displayMarkAsRead: false,
-            displayModerationCommands: false,
-            displayStars: false,
-            displayDocumentLinks: false,
-            displayAvatars: this._enabledOptions.displayAvatars,
-            squashCloseMessages: false,
-            displayNotificationIcons: false,
-            displayReplyIcons: false,
-            loadMoreOnScroll: this._enabledOptions.loadMoreOnScroll,
-            hasMessageAttachmentDeletable: false,
+        //optionswhenthethreadisdisabled
+        this._disabledOptions={
+            displayOrder:this._enabledOptions.displayOrder,
+            displayMarkAsRead:false,
+            displayModerationCommands:false,
+            displayStars:false,
+            displayDocumentLinks:false,
+            displayAvatars:this._enabledOptions.displayAvatars,
+            squashCloseMessages:false,
+            displayNotificationIcons:false,
+            displayReplyIcons:false,
+            loadMoreOnScroll:this._enabledOptions.loadMoreOnScroll,
+            hasMessageAttachmentDeletable:false,
         };
-        this._selectedMessageID = null;
-        this._currentThreadID = null;
-        this._messageMailPopover = null;
-        this._messageSeenPopover = null;
-        // used to track popover IDs to destroy on re-rendering of popovers
-        this._openedSeenPopoverIDs = [];
+        this._selectedMessageID=null;
+        this._currentThreadID=null;
+        this._messageMailPopover=null;
+        this._messageSeenPopover=null;
+        //usedtotrackpopoverIDstodestroyonre-renderingofpopovers
+        this._openedSeenPopoverIDs=[];
     },
     /**
-     * The message mail popover may still be shown at this moment. If we do not
-     * remove it, it stays visible on the page until a page reload.
+     *Themessagemailpopovermaystillbeshownatthismoment.Ifwedonot
+     *removeit,itstaysvisibleonthepageuntilapagereload.
      *
-     * @override
+     *@override
      */
-    destroy: function () {
+    destroy:function(){
         clearInterval(this._updateTimestampsInterval);
-        if (this._messageMailPopover) {
+        if(this._messageMailPopover){
             this._messageMailPopover.popover('hide');
         }
-        if (this._messageSeenPopover) {
+        if(this._messageSeenPopover){
             this._messageSeenPopover.popover('hide');
         }
         this._destroyOpenSeenPopoverIDs();
         this._super();
     },
     /**
-     * @param {im_livechat.legacy.mail.model.AbstractThread} thread the thread to render.
-     * @param {Object} [options]
-     * @param {integer} [options.displayOrder=ORDER.ASC] order of displaying
-     *    messages in the thread:
-     *      - ORDER.ASC: last message is at the bottom of the thread
-     *      - ORDER.DESC: last message is at the top of the thread
-     * @param {boolean} [options.displayLoadMore]
-     * @param {Array} [options.domain=[]] the domain for the messages in the
-     *    thread.
-     * @param {boolean} [options.isCreateMode]
-     * @param {boolean} [options.scrollToBottom=false]
-     * @param {boolean} [options.squashCloseMessages]
+     *@param{im_livechat.legacy.mail.model.AbstractThread}threadthethreadtorender.
+     *@param{Object}[options]
+     *@param{integer}[options.displayOrder=ORDER.ASC]orderofdisplaying
+     *   messagesinthethread:
+     *     -ORDER.ASC:lastmessageisatthebottomofthethread
+     *     -ORDER.DESC:lastmessageisatthetopofthethread
+     *@param{boolean}[options.displayLoadMore]
+     *@param{Array}[options.domain=[]]thedomainforthemessagesinthe
+     *   thread.
+     *@param{boolean}[options.isCreateMode]
+     *@param{boolean}[options.scrollToBottom=false]
+     *@param{boolean}[options.squashCloseMessages]
      */
-    render: function (thread, options) {
-        var self = this;
+    render:function(thread,options){
+        varself=this;
 
-        var shouldScrollToBottomAfterRendering = false;
-        if (this._currentThreadID === thread.getID() && this.isAtBottom()) {
-            shouldScrollToBottomAfterRendering = true;
+        varshouldScrollToBottomAfterRendering=false;
+        if(this._currentThreadID===thread.getID()&&this.isAtBottom()){
+            shouldScrollToBottomAfterRendering=true;
         }
-        this._currentThreadID = thread.getID();
+        this._currentThreadID=thread.getID();
 
-        // copy so that reverse do not alter order in the thread object
-        var messages = _.clone(thread.getMessages({ domain: options.domain || [] }));
+        //copysothatreversedonotalterorderinthethreadobject
+        varmessages=_.clone(thread.getMessages({domain:options.domain||[]}));
 
-        var modeOptions = options.isCreateMode ? this._disabledOptions :
+        varmodeOptions=options.isCreateMode?this._disabledOptions:
                                                     this._enabledOptions;
 
-        // attachments ordered by messages order (increasing ID)
-        this.attachments = _.uniq(_.flatten(_.map(messages, function (message) {
-            return message.getAttachments();
+        //attachmentsorderedbymessagesorder(increasingID)
+        this.attachments=_.uniq(_.flatten(_.map(messages,function(message){
+            returnmessage.getAttachments();
         })));
 
-        options = _.extend({}, modeOptions, options, {
-            selectedMessageID: this._selectedMessageID,
+        options=_.extend({},modeOptions,options,{
+            selectedMessageID:this._selectedMessageID,
         });
 
-        // dict where key is message ID, and value is whether it should display
-        // the author of message or not visually
-        var displayAuthorMessages = {};
+        //dictwherekeyismessageID,andvalueiswhetheritshoulddisplay
+        //theauthorofmessageornotvisually
+        vardisplayAuthorMessages={};
 
-        // Hide avatar and info of a message if that message and the previous
-        // one are both comments wrote by the same author at the same minute
-        // and in the same document (users can now post message in documents
-        // directly from a channel that follows it)
-        var prevMessage;
-        _.each(messages, function (message) {
-            if (
-                // is first message of thread
-                !prevMessage ||
-                // more than 1 min. elasped
-                (Math.abs(message.getDate().diff(prevMessage.getDate())) > 60000) ||
-                prevMessage.getType() !== 'comment' ||
-                message.getType() !== 'comment' ||
-                // from a different author
-                (prevMessage.getAuthorID() !== message.getAuthorID()) ||
+        //Hideavatarandinfoofamessageifthatmessageandtheprevious
+        //onearebothcommentswrotebythesameauthoratthesameminute
+        //andinthesamedocument(userscannowpostmessageindocuments
+        //directlyfromachannelthatfollowsit)
+        varprevMessage;
+        _.each(messages,function(message){
+            if(
+                //isfirstmessageofthread
+                !prevMessage||
+                //morethan1min.elasped
+                (Math.abs(message.getDate().diff(prevMessage.getDate()))>60000)||
+                prevMessage.getType()!=='comment'||
+                message.getType()!=='comment'||
+                //fromadifferentauthor
+                (prevMessage.getAuthorID()!==message.getAuthorID())||
                 (
-                    // messages are linked to a document thread
+                    //messagesarelinkedtoadocumentthread
                     (
-                        prevMessage.isLinkedToDocumentThread() &&
+                        prevMessage.isLinkedToDocumentThread()&&
                         message.isLinkedToDocumentThread()
-                    ) &&
+                    )&&
                     (
-                        // are from different documents
-                        prevMessage.getDocumentModel() !== message.getDocumentModel() ||
-                        prevMessage.getDocumentID() !== message.getDocumentID()
+                        //arefromdifferentdocuments
+                        prevMessage.getDocumentModel()!==message.getDocumentModel()||
+                        prevMessage.getDocumentID()!==message.getDocumentID()
                     )
                 )
-            ) {
-                displayAuthorMessages[message.getID()] = true;
-            } else {
-                displayAuthorMessages[message.getID()] = !options.squashCloseMessages;
+            ){
+                displayAuthorMessages[message.getID()]=true;
+            }else{
+                displayAuthorMessages[message.getID()]=!options.squashCloseMessages;
             }
-            prevMessage = message;
+            prevMessage=message;
         });
 
-        if (modeOptions.displayOrder === ORDER.DESC) {
+        if(modeOptions.displayOrder===ORDER.DESC){
             messages.reverse();
         }
 
-        this.$el.html(QWeb.render('im_livechat.legacy.mail.widget.Thread', {
-            thread: thread,
-            displayAuthorMessages: displayAuthorMessages,
-            options: options,
-            ORDER: ORDER,
-            dateFormat: time.getLangDatetimeFormat(),
+        this.$el.html(QWeb.render('im_livechat.legacy.mail.widget.Thread',{
+            thread:thread,
+            displayAuthorMessages:displayAuthorMessages,
+            options:options,
+            ORDER:ORDER,
+            dateFormat:time.getLangDatetimeFormat(),
         }));
 
-        _.each(messages, function (message) {
-            var $message = self.$('.o_thread_message[data-message-id="' + message.getID() + '"]');
-            $message.find('.o_mail_timestamp').data('date', message.getDate());
+        _.each(messages,function(message){
+            var$message=self.$('.o_thread_message[data-message-id="'+message.getID()+'"]');
+            $message.find('.o_mail_timestamp').data('date',message.getDate());
 
             self._insertReadMore($message);
         });
 
-        if (shouldScrollToBottomAfterRendering) {
+        if(shouldScrollToBottomAfterRendering){
             this.scrollToBottom();
         }
 
-        if (!this._updateTimestampsInterval) {
-            this.updateTimestampsInterval = setInterval(function () {
+        if(!this._updateTimestampsInterval){
+            this.updateTimestampsInterval=setInterval(function(){
                 self._updateTimestamps();
-            }, 1000 * 60);
+            },1000*60);
         }
 
         this._renderMessageNotificationPopover(messages);
-        if (thread.hasSeenFeature()) {
-            this._renderMessageSeenPopover(thread, messages);
+        if(thread.hasSeenFeature()){
+            this._renderMessageSeenPopover(thread,messages);
         }
     },
 
     /**
-     * Render thread widget when loading, i.e. when messaging is not yet ready.
-     * @see /mail/init_messaging
+     *Renderthreadwidgetwhenloading,i.e.whenmessagingisnotyetready.
+     *@see/mail/init_messaging
      */
-    renderLoading: function () {
+    renderLoading:function(){
         this.$el.html(QWeb.render('im_livechat.legacy.mail.widget.ThreadLoading'));
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
-    getScrolltop: function () {
-        return this.$el.scrollTop();
+    getScrolltop:function(){
+        returnthis.$el.scrollTop();
     },
     /**
-     * State whether the bottom of the thread is visible or not,
-     * with a tolerance of 5 pixels
+     *Statewhetherthebottomofthethreadisvisibleornot,
+     *withatoleranceof5pixels
      *
-     * @return {boolean}
+     *@return{boolean}
      */
-    isAtBottom: function () {
-        var fullHeight = this.el.scrollHeight;
-        var topHiddenHeight = this.$el.scrollTop();
-        var visibleHeight = this.$el.outerHeight();
-        var bottomHiddenHeight = fullHeight - topHiddenHeight - visibleHeight;
-        return bottomHiddenHeight < 5;
+    isAtBottom:function(){
+        varfullHeight=this.el.scrollHeight;
+        vartopHiddenHeight=this.$el.scrollTop();
+        varvisibleHeight=this.$el.outerHeight();
+        varbottomHiddenHeight=fullHeight-topHiddenHeight-visibleHeight;
+        returnbottomHiddenHeight<5;
     },
     /**
-     * Removes a message and re-renders the thread
+     *Removesamessageandre-rendersthethread
      *
-     * @param {integer} [messageID] the id of the removed message
-     * @param {mail.model.AbstractThread} thread the thread which contains
-     *   updated list of messages (so it does not contain any message with ID
-     *   `messageID`).
-     * @param {Object} [options] options for the thread rendering
+     *@param{integer}[messageID]theidoftheremovedmessage
+     *@param{mail.model.AbstractThread}threadthethreadwhichcontains
+     *  updatedlistofmessages(soitdoesnotcontainanymessagewithID
+     *  `messageID`).
+     *@param{Object}[options]optionsforthethreadrendering
      */
-    removeMessageAndRender: function (messageID, thread, options) {
-        var self = this;
-        this._currentThreadID = thread.getID();
-        return new Promise(function (resolve, reject) {
-            self.$('.o_thread_message[data-message-id="' + messageID + '"]')
+    removeMessageAndRender:function(messageID,thread,options){
+        varself=this;
+        this._currentThreadID=thread.getID();
+        returnnewPromise(function(resolve,reject){
+            self.$('.o_thread_message[data-message-id="'+messageID+'"]')
             .fadeOut({
-                done: function () {
-                    if (self._currentThreadID === thread.getID()) {
-                        self.render(thread, options);
+                done:function(){
+                    if(self._currentThreadID===thread.getID()){
+                        self.render(thread,options);
                     }
                     resolve();
                 },
-                duration: 200,
+                duration:200,
             });
         });
     },
     /**
-     * Scroll to the bottom of the thread
+     *Scrolltothebottomofthethread
      */
-    scrollToBottom: function () {
+    scrollToBottom:function(){
         this.$el.scrollTop(this.el.scrollHeight);
     },
     /**
-     * Scrolls the thread to a given message
+     *Scrollsthethreadtoagivenmessage
      *
-     * @param {integer} options.msgID the ID of the message to scroll to
-     * @param {integer} [options.duration]
-     * @param {boolean} [options.onlyIfNecessary]
+     *@param{integer}options.msgIDtheIDofthemessagetoscrollto
+     *@param{integer}[options.duration]
+     *@param{boolean}[options.onlyIfNecessary]
      */
-    scrollToMessage: function (options) {
-        var $target = this.$('.o_thread_message[data-message-id="' + options.messageID + '"]');
-        if (options.onlyIfNecessary) {
-            var delta = $target.parent().height() - $target.height();
-            var offset = delta < 0 ?
-                            0 :
-                            delta - ($target.offset().top - $target.offsetParent().offset().top);
-            offset = - Math.min(offset, 0);
-            this.$el.scrollTo("+=" + offset + "px", options.duration);
-        } else if ($target.length) {
+    scrollToMessage:function(options){
+        var$target=this.$('.o_thread_message[data-message-id="'+options.messageID+'"]');
+        if(options.onlyIfNecessary){
+            vardelta=$target.parent().height()-$target.height();
+            varoffset=delta<0?
+                            0:
+                            delta-($target.offset().top-$target.offsetParent().offset().top);
+            offset=-Math.min(offset,0);
+            this.$el.scrollTo("+="+offset+"px",options.duration);
+        }elseif($target.length){
             this.$el.scrollTo($target);
         }
     },
     /**
-     * Scroll to the specific position in pixel
+     *Scrolltothespecificpositioninpixel
      *
-     * If no position is provided, scroll to the bottom of the thread
+     *Ifnopositionisprovided,scrolltothebottomofthethread
      *
-     * @param {integer} [position] distance from top to position in pixels.
-     *    If not provided, scroll to the bottom.
+     *@param{integer}[position]distancefromtoptopositioninpixels.
+     *   Ifnotprovided,scrolltothebottom.
      */
-    scrollToPosition: function (position) {
-        if (position) {
+    scrollToPosition:function(position){
+        if(position){
             this.$el.scrollTop(position);
-        } else {
+        }else{
             this.scrollToBottom();
         }
     },
     /**
-     * Toggle all the moderation checkboxes in the thread
+     *Toggleallthemoderationcheckboxesinthethread
      *
-     * @param {boolean} checked if true, check the boxes,
-     *      otherwise uncheck them.
+     *@param{boolean}checkediftrue,checktheboxes,
+     *     otherwiseuncheckthem.
      */
-    toggleModerationCheckboxes: function (checked) {
-        this.$('.moderation_checkbox').prop('checked', checked);
+    toggleModerationCheckboxes:function(checked){
+        this.$('.moderation_checkbox').prop('checked',checked);
     },
     /**
-     * Unselect the selected message
+     *Unselecttheselectedmessage
      */
-    unselectMessage: function () {
+    unselectMessage:function(){
         this.$('.o_thread_message').removeClass('o_thread_selected_message');
-        this._selectedMessageID = null;
+        this._selectedMessageID=null;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _destroyOpenSeenPopoverIDs: function () {
-        _.each(this._openedSeenPopoverIDs, function (popoverID) {
-            $('#' + popoverID).remove();
+    _destroyOpenSeenPopoverIDs:function(){
+        _.each(this._openedSeenPopoverIDs,function(popoverID){
+            $('#'+popoverID).remove();
         });
-        this._openedSeenPopoverIDs = [];
+        this._openedSeenPopoverIDs=[];
     },
     /**
-     * Modifies $element to add the 'read more/read less' functionality
-     * All element nodes with 'data-o-mail-quote' attribute are concerned.
-     * All text nodes after a ``#stopSpelling`` element are concerned.
-     * Those text nodes need to be wrapped in a span (toggle functionality).
-     * All consecutive elements are joined in one 'read more/read less'.
+     *Modifies$elementtoaddthe'readmore/readless'functionality
+     *Allelementnodeswith'data-o-mail-quote'attributeareconcerned.
+     *Alltextnodesaftera``#stopSpelling``elementareconcerned.
+     *Thosetextnodesneedtobewrappedinaspan(togglefunctionality).
+     *Allconsecutiveelementsarejoinedinone'readmore/readless'.
      *
-     * @private
-     * @param {jQuery} $element
+     *@private
+     *@param{jQuery}$element
      */
-    _insertReadMore: function ($element) {
-        var self = this;
+    _insertReadMore:function($element){
+        varself=this;
 
-        var groups = [];
-        var readMoreNodes;
+        vargroups=[];
+        varreadMoreNodes;
 
-        // nodeType 1: element_node
-        // nodeType 3: text_node
-        var $children = $element.contents()
-            .filter(function () {
-                return this.nodeType === 1 ||
-                        this.nodeType === 3 &&
+        //nodeType1:element_node
+        //nodeType3:text_node
+        var$children=$element.contents()
+            .filter(function(){
+                returnthis.nodeType===1||
+                        this.nodeType===3&&
                         this.nodeValue.trim();
             });
 
-        _.each($children, function (child) {
-            var $child = $(child);
+        _.each($children,function(child){
+            var$child=$(child);
 
-            // Hide Text nodes if "stopSpelling"
-            if (
-                child.nodeType === 3 &&
-                $child.prevAll('[id*="stopSpelling"]').length > 0
-            ) {
-                // Convert Text nodes to Element nodes
-                $child = $('<span>', {
-                    text: child.textContent,
-                    'data-o-mail-quote': '1',
+            //HideTextnodesif"stopSpelling"
+            if(
+                child.nodeType===3&&
+                $child.prevAll('[id*="stopSpelling"]').length>0
+            ){
+                //ConvertTextnodestoElementnodes
+                $child=$('<span>',{
+                    text:child.textContent,
+                    'data-o-mail-quote':'1',
                 });
-                child.parentNode.replaceChild($child[0], child);
+                child.parentNode.replaceChild($child[0],child);
             }
 
-            // Create array for each 'read more' with nodes to toggle
-            if (
-                $child.attr('data-o-mail-quote') ||
+            //Createarrayforeach'readmore'withnodestotoggle
+            if(
+                $child.attr('data-o-mail-quote')||
                 (
-                    $child.get(0).nodeName === 'BR' &&
-                    $child.prev('[data-o-mail-quote="1"]').length > 0
+                    $child.get(0).nodeName==='BR'&&
+                    $child.prev('[data-o-mail-quote="1"]').length>0
                 )
-            ) {
-                if (!readMoreNodes) {
-                    readMoreNodes = [];
+            ){
+                if(!readMoreNodes){
+                    readMoreNodes=[];
                     groups.push(readMoreNodes);
                 }
                 $child.hide();
                 readMoreNodes.push($child);
-            } else {
-                readMoreNodes = undefined;
+            }else{
+                readMoreNodes=undefined;
                 self._insertReadMore($child);
             }
         });
 
-        _.each(groups, function (group) {
-            // Insert link just before the first node
-            var $readMore = $('<a>', {
-                class: 'o_mail_read_more',
-                href: '#',
-                text: READ_MORE,
+        _.each(groups,function(group){
+            //Insertlinkjustbeforethefirstnode
+            var$readMore=$('<a>',{
+                class:'o_mail_read_more',
+                href:'#',
+                text:READ_MORE,
             }).insertBefore(group[0]);
 
-            // Toggle All next nodes
-            var isReadMore = true;
-            $readMore.click(function (e) {
+            //ToggleAllnextnodes
+            varisReadMore=true;
+            $readMore.click(function(e){
                 e.preventDefault();
-                isReadMore = !isReadMore;
-                _.each(group, function ($child) {
+                isReadMore=!isReadMore;
+                _.each(group,function($child){
                     $child.hide();
                     $child.toggle(!isReadMore);
                 });
-                $readMore.text(isReadMore ? READ_MORE : READ_LESS);
+                $readMore.text(isReadMore?READ_MORE:READ_LESS);
             });
         });
     },
     /**
-    * @private
-    * @param {MouseEvent} ev
+    *@private
+    *@param{MouseEvent}ev
     */
-    _onDeleteAttachment: function (ev) {
+    _onDeleteAttachment:function(ev){
         ev.stopPropagation();
-        var $target = $(ev.currentTarget);
-        this.trigger_up('delete_attachment', {
-            attachmentId: $target.data('id'),
-            attachmentName: $target.data('name')
+        var$target=$(ev.currentTarget);
+        this.trigger_up('delete_attachment',{
+            attachmentId:$target.data('id'),
+            attachmentName:$target.data('name')
         });
         },
     /**
-     * @private
-     * @param {Object} options
-     * @param {integer} [options.channelID]
-     * @param {string} options.model
-     * @param {integer} options.id
+     *@private
+     *@param{Object}options
+     *@param{integer}[options.channelID]
+     *@param{string}options.model
+     *@param{integer}options.id
      */
-    _redirect: _.debounce(function (options) {
-        if ('channelID' in options) {
-            this.trigger('redirect_to_channel', options.channelID);
-        } else {
-            this.trigger('redirect', options.model, options.id);
+    _redirect:_.debounce(function(options){
+        if('channelID'inoptions){
+            this.trigger('redirect_to_channel',options.channelID);
+        }else{
+            this.trigger('redirect',options.model,options.id);
         }
-    }, 500, true),
+    },500,true),
     /**
-     * Render the popover when mouse-hovering on the notification icon of a
-     * message in the thread.
-     * There is at most one such popover at any given time.
+     *Renderthepopoverwhenmouse-hoveringonthenotificationiconofa
+     *messageinthethread.
+     *Thereisatmostonesuchpopoveratanygiventime.
      *
-     * @private
-     * @param {im_livechat.legacy.mail.model.AbstractMessage[]} messages list of messages in the
-     *   rendered thread, for which popover on mouseover interaction is
-     *   permitted.
+     *@private
+     *@param{im_livechat.legacy.mail.model.AbstractMessage[]}messageslistofmessagesinthe
+     *  renderedthread,forwhichpopoveronmouseoverinteractionis
+     *  permitted.
      */
-    _renderMessageNotificationPopover(messages) {
-        if (this._messageMailPopover) {
+    _renderMessageNotificationPopover(messages){
+        if(this._messageMailPopover){
             this._messageMailPopover.popover('hide');
         }
-        if (!this.$('.o_thread_tooltip').length) {
+        if(!this.$('.o_thread_tooltip').length){
             return;
         }
-        this._messageMailPopover = this.$('.o_thread_tooltip').popover({
-            html: true,
-            boundary: 'viewport',
-            placement: 'auto',
-            trigger: 'hover',
-            offset: '0, 1',
-            content: function () {
-                var messageID = $(this).data('message-id');
-                var message = _.find(messages, function (message) {
-                    return message.getID() === messageID;
+        this._messageMailPopover=this.$('.o_thread_tooltip').popover({
+            html:true,
+            boundary:'viewport',
+            placement:'auto',
+            trigger:'hover',
+            offset:'0,1',
+            content:function(){
+                varmessageID=$(this).data('message-id');
+                varmessage=_.find(messages,function(message){
+                    returnmessage.getID()===messageID;
                 });
-                return QWeb.render('im_livechat.legacy.mail.widget.Thread.Message.MailTooltip', {
-                    notifications: message.getNotifications(),
+                returnQWeb.render('im_livechat.legacy.mail.widget.Thread.Message.MailTooltip',{
+                    notifications:message.getNotifications(),
                 });
             },
         });
     },
     /**
-     * Render the popover when mouse hovering on the seen icon of a message
-     * in the thread. Only seen icons in non-squashed message have popover,
-     * because squashed messages hides this icon on message mouseover.
+     *Renderthepopoverwhenmousehoveringontheseeniconofamessage
+     *inthethread.Onlyseeniconsinnon-squashedmessagehavepopover,
+     *becausesquashedmessageshidesthisicononmessagemouseover.
      *
-     * @private
-     * @param {im_livechat.legacy.mail.model.AbstractThread} thread with thread seen mixin,
-     *   @see {im_livechat.legacy.mail.model.ThreadSeenMixin}
-     * @param {im_livechat.legacy.mail.model.Message[]} messages list of messages in the
-     *   rendered thread.
+     *@private
+     *@param{im_livechat.legacy.mail.model.AbstractThread}threadwiththreadseenmixin,
+     *  @see{im_livechat.legacy.mail.model.ThreadSeenMixin}
+     *@param{im_livechat.legacy.mail.model.Message[]}messageslistofmessagesinthe
+     *  renderedthread.
      */
-    _renderMessageSeenPopover: function (thread, messages) {
-        var self = this;
+    _renderMessageSeenPopover:function(thread,messages){
+        varself=this;
         this._destroyOpenSeenPopoverIDs();
-        if (this._messageSeenPopover) {
+        if(this._messageSeenPopover){
             this._messageSeenPopover.popover('hide');
         }
-        if (!this.$('.o_thread_message_core .o_mail_thread_message_seen_icon').length) {
+        if(!this.$('.o_thread_message_core.o_mail_thread_message_seen_icon').length){
             return;
         }
-        this._messageSeenPopover = this.$('.o_thread_message_core .o_mail_thread_message_seen_icon').popover({
-            html: true,
-            boundary: 'viewport',
-            placement: 'auto',
-            trigger: 'hover',
-            offset: '0, 1',
-            content: function () {
-                var $this = $(this);
+        this._messageSeenPopover=this.$('.o_thread_message_core.o_mail_thread_message_seen_icon').popover({
+            html:true,
+            boundary:'viewport',
+            placement:'auto',
+            trigger:'hover',
+            offset:'0,1',
+            content:function(){
+                var$this=$(this);
                 self._openedSeenPopoverIDs.push($this.attr('aria-describedby'));
-                var messageID = $this.data('message-id');
-                var message = _.find(messages, function (message) {
-                    return message.getID() === messageID;
+                varmessageID=$this.data('message-id');
+                varmessage=_.find(messages,function(message){
+                    returnmessage.getID()===messageID;
                 });
-                return QWeb.render('im_livechat.legacy.mail.widget.Thread.Message.SeenIconPopoverContent', {
-                    thread: thread,
-                    message: message,
+                returnQWeb.render('im_livechat.legacy.mail.widget.Thread.Message.SeenIconPopoverContent',{
+                    thread:thread,
+                    message:message,
                 });
             },
         });
     },
     /**
-     * @private
+     *@private
      */
-    _updateTimestamps: function () {
-        var isAtBottom = this.isAtBottom();
-        this.$('.o_mail_timestamp').each(function () {
-            var date = $(this).data('date');
+    _updateTimestamps:function(){
+        varisAtBottom=this.isAtBottom();
+        this.$('.o_mail_timestamp').each(function(){
+            vardate=$(this).data('date');
             $(this).html(mailUtils.timeFromNow(date));
         });
-        if (isAtBottom && !this.isAtBottom()) {
+        if(isAtBottom&&!this.isAtBottom()){
             this.scrollToBottom();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} event
+     *@private
+     *@param{MouseEvent}event
      */
-    _onAttachmentDownload: function (event) {
+    _onAttachmentDownload:function(event){
         event.stopPropagation();
     },
     /**
-     * @private
-     * @param {MouseEvent} event
+     *@private
+     *@param{MouseEvent}event
      */
-    _onAttachmentView: function (event) {
+    _onAttachmentView:function(event){
         event.stopPropagation();
-        var activeAttachmentID = $(event.currentTarget).data('id');
-        if (activeAttachmentID) {
-            var attachmentViewer = new DocumentViewer(this, this.attachments, activeAttachmentID);
+        varactiveAttachmentID=$(event.currentTarget).data('id');
+        if(activeAttachmentID){
+            varattachmentViewer=newDocumentViewer(this,this.attachments,activeAttachmentID);
             attachmentViewer.appendTo($('body'));
         }
     },
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onChangeModerationCheckbox: function (ev) {
+    _onChangeModerationCheckbox:function(ev){
         this.trigger_up('update_moderation_buttons');
     },
     /**
-     * @private
+     *@private
      */
-    _onClick: function () {
-        if (this._selectedMessageID) {
+    _onClick:function(){
+        if(this._selectedMessageID){
             this.unselectMessage();
             this.trigger('unselect_message');
         }
     },
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickMailExpand: function (ev) {
+    _onClickMailExpand:function(ev){
         ev.preventDefault();
     },
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickMessage: function (ev) {
+    _onClickMessage:function(ev){
         $(ev.currentTarget).toggleClass('o_thread_selected_message');
     },
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickMessageNeedaction: function (ev) {
-        var messageID = $(ev.currentTarget).data('message-id');
-        this.trigger('mark_as_read', messageID);
+    _onClickMessageNeedaction:function(ev){
+        varmessageID=$(ev.currentTarget).data('message-id');
+        this.trigger('mark_as_read',messageID);
     },
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickMessageNotificationError(ev) {
-        const messageID = $(ev.currentTarget).data('message-id');
-        this.do_action('mail.mail_resend_message_action', {
-            additional_context: {
-                mail_message_to_resend: messageID,
+    _onClickMessageNotificationError(ev){
+        constmessageID=$(ev.currentTarget).data('message-id');
+        this.do_action('mail.mail_resend_message_action',{
+            additional_context:{
+                mail_message_to_resend:messageID,
             }
         });
     },
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickMessageReply: function (ev) {
-        this._selectedMessageID = $(ev.currentTarget).data('message-id');
+    _onClickMessageReply:function(ev){
+        this._selectedMessageID=$(ev.currentTarget).data('message-id');
         this.$('.o_thread_message').removeClass('o_thread_selected_message');
-        this.$('.o_thread_message[data-message-id="' + this._selectedMessageID + '"]')
+        this.$('.o_thread_message[data-message-id="'+this._selectedMessageID+'"]')
             .addClass('o_thread_selected_message');
-        this.trigger('select_message', this._selectedMessageID);
+        this.trigger('select_message',this._selectedMessageID);
         ev.stopPropagation();
     },
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickMessageStar: function (ev) {
-        var messageID = $(ev.currentTarget).data('message-id');
-        this.trigger('toggle_star_status', messageID);
+    _onClickMessageStar:function(ev){
+        varmessageID=$(ev.currentTarget).data('message-id');
+        this.trigger('toggle_star_status',messageID);
     },
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickMessageModeration: function (ev) {
-        var $button = $(ev.currentTarget);
-        var messageID = $button.data('message-id');
-        var decision = $button.data('decision');
-        this.trigger_up('message_moderation', {
-            messageID: messageID,
-            decision: decision,
+    _onClickMessageModeration:function(ev){
+        var$button=$(ev.currentTarget);
+        varmessageID=$button.data('message-id');
+        vardecision=$button.data('decision');
+        this.trigger_up('message_moderation',{
+            messageID:messageID,
+            decision:decision,
         });
     },
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickRedirect: function (ev) {
-        // ignore inherited branding
-        if ($(ev.target).data('oe-field') !== undefined) {
+    _onClickRedirect:function(ev){
+        //ignoreinheritedbranding
+        if($(ev.target).data('oe-field')!==undefined){
             return;
         }
-        var id = $(ev.target).data('oe-id');
-        if (id) {
+        varid=$(ev.target).data('oe-id');
+        if(id){
             ev.preventDefault();
-            var model = $(ev.target).data('oe-model');
-            var options;
-            if (model && (model !== 'mail.channel')) {
-                options = {
-                    model: model,
-                    id: id
+            varmodel=$(ev.target).data('oe-model');
+            varoptions;
+            if(model&&(model!=='mail.channel')){
+                options={
+                    model:model,
+                    id:id
                 };
-            } else {
-                options = { channelID: id };
+            }else{
+                options={channelID:id};
             }
             this._redirect(options);
         }
     },
     /**
-     * @private
+     *@private
      */
-    _onClickShowMore: function () {
+    _onClickShowMore:function(){
         this.trigger('load_more_messages');
     },
 });
 
-ThreadWidget.ORDER = ORDER;
+ThreadWidget.ORDER=ORDER;
 
-return ThreadWidget;
+returnThreadWidget;
 
 });
 
-flectra.define('im_livechat.legacy.mail.DocumentViewer', function (require) {
-"use strict";
+flectra.define('im_livechat.legacy.mail.DocumentViewer',function(require){
+"usestrict";
 
-var core = require('web.core');
-var Widget = require('web.Widget');
+varcore=require('web.core');
+varWidget=require('web.Widget');
 
-var QWeb = core.qweb;
+varQWeb=core.qweb;
 
-var SCROLL_ZOOM_STEP = 0.1;
-var ZOOM_STEP = 0.5;
+varSCROLL_ZOOM_STEP=0.1;
+varZOOM_STEP=0.5;
 
-var DocumentViewer = Widget.extend({
-    template: "im_livechat.legacy.mail.DocumentViewer",
-    events: {
-        'click .o_download_btn': '_onDownload',
-        'click .o_viewer_img': '_onImageClicked',
-        'click .o_viewer_video': '_onVideoClicked',
-        'click .move_next': '_onNext',
-        'click .move_previous': '_onPrevious',
-        'click .o_rotate': '_onRotate',
-        'click .o_zoom_in': '_onZoomIn',
-        'click .o_zoom_out': '_onZoomOut',
-        'click .o_zoom_reset': '_onZoomReset',
-        'click .o_close_btn, .o_viewer_img_wrapper': '_onClose',
-        'click .o_print_btn': '_onPrint',
-        'DOMMouseScroll .o_viewer_content': '_onScroll', // Firefox
-        'mousewheel .o_viewer_content': '_onScroll', // Chrome, Safari, IE
-        'keydown': '_onKeydown',
-        'keyup': '_onKeyUp',
-        'mousedown .o_viewer_img': '_onStartDrag',
-        'mousemove .o_viewer_content': '_onDrag',
-        'mouseup .o_viewer_content': '_onEndDrag'
+varDocumentViewer=Widget.extend({
+    template:"im_livechat.legacy.mail.DocumentViewer",
+    events:{
+        'click.o_download_btn':'_onDownload',
+        'click.o_viewer_img':'_onImageClicked',
+        'click.o_viewer_video':'_onVideoClicked',
+        'click.move_next':'_onNext',
+        'click.move_previous':'_onPrevious',
+        'click.o_rotate':'_onRotate',
+        'click.o_zoom_in':'_onZoomIn',
+        'click.o_zoom_out':'_onZoomOut',
+        'click.o_zoom_reset':'_onZoomReset',
+        'click.o_close_btn,.o_viewer_img_wrapper':'_onClose',
+        'click.o_print_btn':'_onPrint',
+        'DOMMouseScroll.o_viewer_content':'_onScroll',//Firefox
+        'mousewheel.o_viewer_content':'_onScroll',//Chrome,Safari,IE
+        'keydown':'_onKeydown',
+        'keyup':'_onKeyUp',
+        'mousedown.o_viewer_img':'_onStartDrag',
+        'mousemove.o_viewer_content':'_onDrag',
+        'mouseup.o_viewer_content':'_onEndDrag'
     },
     /**
-     * The documentViewer takes an array of objects describing attachments in
-     * argument, and the ID of an active attachment (the one to display first).
-     * Documents that are not of type image or video are filtered out.
+     *ThedocumentViewertakesanarrayofobjectsdescribingattachmentsin
+     *argument,andtheIDofanactiveattachment(theonetodisplayfirst).
+     *Documentsthatarenotoftypeimageorvideoarefilteredout.
      *
-     * @override
-     * @param {Array<Object>} attachments list of attachments
-     * @param {integer} activeAttachmentID
+     *@override
+     *@param{Array<Object>}attachmentslistofattachments
+     *@param{integer}activeAttachmentID
      */
-    init: function (parent, attachments, activeAttachmentID) {
-        this._super.apply(this, arguments);
-        this.attachment = _.filter(attachments, function (attachment) {
-            var match = attachment.type === 'url' ? attachment.url.match("(youtu|.png|.jpg|.gif)") : attachment.mimetype.match("(image|video|application/pdf|text)");
-            if (match) {
-                attachment.fileType = match[1];
-                if (match[1].match("(.png|.jpg|.gif)")) {
-                    attachment.fileType = 'image';
+    init:function(parent,attachments,activeAttachmentID){
+        this._super.apply(this,arguments);
+        this.attachment=_.filter(attachments,function(attachment){
+            varmatch=attachment.type==='url'?attachment.url.match("(youtu|.png|.jpg|.gif)"):attachment.mimetype.match("(image|video|application/pdf|text)");
+            if(match){
+                attachment.fileType=match[1];
+                if(match[1].match("(.png|.jpg|.gif)")){
+                    attachment.fileType='image';
                 }
-                if (match[1] === 'youtu') {
-                    var youtube_array = attachment.url.split('/');
-                    var youtube_token = youtube_array[youtube_array.length - 1];
-                    if (youtube_token.indexOf('watch') !== -1) {
-                        youtube_token = youtube_token.split('v=')[1];
-                        var amp = youtube_token.indexOf('&');
-                        if (amp !== -1) {
-                            youtube_token = youtube_token.substring(0, amp);
+                if(match[1]==='youtu'){
+                    varyoutube_array=attachment.url.split('/');
+                    varyoutube_token=youtube_array[youtube_array.length-1];
+                    if(youtube_token.indexOf('watch')!==-1){
+                        youtube_token=youtube_token.split('v=')[1];
+                        varamp=youtube_token.indexOf('&');
+                        if(amp!==-1){
+                            youtube_token=youtube_token.substring(0,amp);
                         }
                     }
-                    attachment.youtube = youtube_token;
+                    attachment.youtube=youtube_token;
                 }
-                return true;
+                returntrue;
             }
         });
-        this.activeAttachment = _.findWhere(attachments, { id: activeAttachmentID });
-        this.modelName = 'ir.attachment';
+        this.activeAttachment=_.findWhere(attachments,{id:activeAttachmentID});
+        this.modelName='ir.attachment';
         this._reset();
     },
     /**
-     * Open a modal displaying the active attachment
-     * @override
+     *Openamodaldisplayingtheactiveattachment
+     *@override
      */
-    start: function () {
+    start:function(){
         this.$el.modal('show');
-        this.$el.on('hidden.bs.modal', _.bind(this._onDestroy, this));
-        this.$('.o_viewer_img').on("load", _.bind(this._onImageLoaded, this));
-        this.$('[data-toggle="tooltip"]').tooltip({ delay: 0 });
-        return this._super.apply(this, arguments);
+        this.$el.on('hidden.bs.modal',_.bind(this._onDestroy,this));
+        this.$('.o_viewer_img').on("load",_.bind(this._onImageLoaded,this));
+        this.$('[data-toggle="tooltip"]').tooltip({delay:0});
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
-        if (this.isDestroyed()) {
+    destroy:function(){
+        if(this.isDestroyed()){
             return;
         }
         this.trigger_up('document_viewer_closed');
         this.$el.modal('hide');
         this.$el.remove();
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //---------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _next: function () {
-        var index = _.findIndex(this.attachment, this.activeAttachment);
-        index = (index + 1) % this.attachment.length;
-        this.activeAttachment = this.attachment[index];
+    _next:function(){
+        varindex=_.findIndex(this.attachment,this.activeAttachment);
+        index=(index+1)%this.attachment.length;
+        this.activeAttachment=this.attachment[index];
         this._updateContent();
     },
     /**
-     * @private
+     *@private
      */
-    _previous: function () {
-        var index = _.findIndex(this.attachment, this.activeAttachment);
-        index = index === 0 ? this.attachment.length - 1 : index - 1;
-        this.activeAttachment = this.attachment[index];
+    _previous:function(){
+        varindex=_.findIndex(this.attachment,this.activeAttachment);
+        index=index===0?this.attachment.length-1:index-1;
+        this.activeAttachment=this.attachment[index];
         this._updateContent();
     },
     /**
-     * @private
+     *@private
      */
-    _reset: function () {
-        this.scale = 1;
-        this.dragStartX = this.dragstopX = 0;
-        this.dragStartY = this.dragstopY = 0;
+    _reset:function(){
+        this.scale=1;
+        this.dragStartX=this.dragstopX=0;
+        this.dragStartY=this.dragstopY=0;
     },
     /**
-     * Render the active attachment
+     *Rendertheactiveattachment
      *
-     * @private
+     *@private
      */
-    _updateContent: function () {
-        this.$('.o_viewer_content').html(QWeb.render('im_livechat.legacy.mail.DocumentViewer.Content', {
-            widget: this
+    _updateContent:function(){
+        this.$('.o_viewer_content').html(QWeb.render('im_livechat.legacy.mail.DocumentViewer.Content',{
+            widget:this
         }));
-        this.$('.o_viewer_img').on("load", _.bind(this._onImageLoaded, this));
-        this.$('[data-toggle="tooltip"]').tooltip({ delay: 0 });
+        this.$('.o_viewer_img').on("load",_.bind(this._onImageLoaded,this));
+        this.$('[data-toggle="tooltip"]').tooltip({delay:0});
         this._reset();
     },
     /**
-     * Get CSS transform property based on scale and angle
+     *GetCSStransformpropertybasedonscaleandangle
      *
-     * @private
-     * @param {float} scale
-     * @param {float} angle
+     *@private
+     *@param{float}scale
+     *@param{float}angle
      */
-    _getTransform: function (scale, angle) {
-        return 'scale3d(' + scale + ', ' + scale + ', 1) rotate(' + angle + 'deg)';
+    _getTransform:function(scale,angle){
+        return'scale3d('+scale+','+scale+',1)rotate('+angle+'deg)';
     },
     /**
-     * Rotate image clockwise by provided angle
+     *Rotateimageclockwisebyprovidedangle
      *
-     * @private
-     * @param {float} angle
+     *@private
+     *@param{float}angle
      */
-    _rotate: function (angle) {
+    _rotate:function(angle){
         this._reset();
-        var new_angle = (this.angle || 0) + angle;
-        this.$('.o_viewer_img').css('transform', this._getTransform(this.scale, new_angle));
-        this.$('.o_viewer_img').css('max-width', new_angle % 180 !== 0 ? $(document).height() : '100%');
-        this.$('.o_viewer_img').css('max-height', new_angle % 180 !== 0 ? $(document).width() : '100%');
-        this.angle = new_angle;
+        varnew_angle=(this.angle||0)+angle;
+        this.$('.o_viewer_img').css('transform',this._getTransform(this.scale,new_angle));
+        this.$('.o_viewer_img').css('max-width',new_angle%180!==0?$(document).height():'100%');
+        this.$('.o_viewer_img').css('max-height',new_angle%180!==0?$(document).width():'100%');
+        this.angle=new_angle;
     },
     /**
-     * Zoom in/out image by provided scale
+     *Zoomin/outimagebyprovidedscale
      *
-     * @private
-     * @param {integer} scale
+     *@private
+     *@param{integer}scale
      */
-    _zoom: function (scale) {
-        if (scale > 0.5) {
-            this.$('.o_viewer_img').css('transform', this._getTransform(scale, this.angle || 0));
-            this.scale = scale;
+    _zoom:function(scale){
+        if(scale>0.5){
+            this.$('.o_viewer_img').css('transform',this._getTransform(scale,this.angle||0));
+            this.scale=scale;
         }
-        this.$('.o_zoom_reset').add('.o_zoom_out').toggleClass('disabled', scale === 1);
+        this.$('.o_zoom_reset').add('.o_zoom_out').toggleClass('disabled',scale===1);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onClose: function (e) {
+    _onClose:function(e){
         e.preventDefault();
         this.destroy();
     },
     /**
-     * When popup close complete destroyed modal even DOM footprint too
+     *WhenpopupclosecompletedestroyedmodalevenDOMfootprinttoo
      *
-     * @private
+     *@private
      */
-    _onDestroy: function () {
+    _onDestroy:function(){
         this.destroy();
     },
     /**
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onDownload: function (e) {
+    _onDownload:function(e){
         e.preventDefault();
-        window.location = '/web/content/' + this.modelName + '/' + this.activeAttachment.id + '/' + 'datas' + '?download=true';
+        window.location='/web/content/'+this.modelName+'/'+this.activeAttachment.id+'/'+'datas'+'?download=true';
     },
     /**
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onDrag: function (e) {
+    _onDrag:function(e){
         e.preventDefault();
-        if (this.enableDrag) {
-            var $image = this.$('.o_viewer_img');
-            var $zoomer = this.$('.o_viewer_zoomer');
-            var top = $image.prop('offsetHeight') * this.scale > $zoomer.height() ? e.clientY - this.dragStartY : 0;
-            var left = $image.prop('offsetWidth') * this.scale > $zoomer.width() ? e.clientX - this.dragStartX : 0;
-            $zoomer.css("transform", "translate3d(" + left + "px, " + top + "px, 0)");
-            $image.css('cursor', 'move');
+        if(this.enableDrag){
+            var$image=this.$('.o_viewer_img');
+            var$zoomer=this.$('.o_viewer_zoomer');
+            vartop=$image.prop('offsetHeight')*this.scale>$zoomer.height()?e.clientY-this.dragStartY:0;
+            varleft=$image.prop('offsetWidth')*this.scale>$zoomer.width()?e.clientX-this.dragStartX:0;
+            $zoomer.css("transform","translate3d("+left+"px,"+top+"px,0)");
+            $image.css('cursor','move');
         }
     },
     /**
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onEndDrag: function (e) {
+    _onEndDrag:function(e){
         e.preventDefault();
-        if (this.enableDrag) {
-            this.enableDrag = false;
-            this.dragstopX = e.clientX - this.dragStartX;
-            this.dragstopY = e.clientY - this.dragStartY;
-            this.$('.o_viewer_img').css('cursor', '');
+        if(this.enableDrag){
+            this.enableDrag=false;
+            this.dragstopX=e.clientX-this.dragStartX;
+            this.dragstopY=e.clientY-this.dragStartY;
+            this.$('.o_viewer_img').css('cursor','');
         }
     },
     /**
-     * On click of image do not close modal so stop event propagation
+     *Onclickofimagedonotclosemodalsostopeventpropagation
      *
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onImageClicked: function (e) {
+    _onImageClicked:function(e){
         e.stopPropagation();
     },
     /**
-     * Remove loading indicator when image loaded
-     * @private
+     *Removeloadingindicatorwhenimageloaded
+     *@private
      */
-    _onImageLoaded: function () {
+    _onImageLoaded:function(){
         this.$('.o_loading_img').hide();
     },
     /**
-     * Move next previous attachment on keyboard right left key
+     *Movenextpreviousattachmentonkeyboardrightleftkey
      *
-     * @private
-     * @param {KeyEvent} e
+     *@private
+     *@param{KeyEvent}e
      */
-    _onKeydown: function (e) {
-        switch (e.which) {
-            case $.ui.keyCode.RIGHT:
+    _onKeydown:function(e){
+        switch(e.which){
+            case$.ui.keyCode.RIGHT:
                 e.preventDefault();
                 this._next();
                 break;
-            case $.ui.keyCode.LEFT:
+            case$.ui.keyCode.LEFT:
                 e.preventDefault();
                 this._previous();
                 break;
         }
     },
     /**
-     * Close popup on ESCAPE keyup
+     *ClosepopuponESCAPEkeyup
      *
-     * @private
-     * @param {KeyEvent} e
+     *@private
+     *@param{KeyEvent}e
      */
-    _onKeyUp: function (e) {
-        switch (e.which) {
-            case $.ui.keyCode.ESCAPE:
+    _onKeyUp:function(e){
+        switch(e.which){
+            case$.ui.keyCode.ESCAPE:
                 e.preventDefault();
                 this._onClose(e);
                 break;
         }
     },
     /**
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onNext: function (e) {
+    _onNext:function(e){
         e.preventDefault();
         this._next();
     },
     /**
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onPrevious: function (e) {
+    _onPrevious:function(e){
         e.preventDefault();
         this._previous();
     },
     /**
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onPrint: function (e) {
+    _onPrint:function(e){
         e.preventDefault();
-        var src = this.$('.o_viewer_img').prop('src');
-        var script = QWeb.render('im_livechat.legacy.mail.PrintImage', {
-            src: src
+        varsrc=this.$('.o_viewer_img').prop('src');
+        varscript=QWeb.render('im_livechat.legacy.mail.PrintImage',{
+            src:src
         });
-        var printWindow = window.open('about:blank', "_new");
+        varprintWindow=window.open('about:blank',"_new");
         printWindow.document.open();
         printWindow.document.write(script);
         printWindow.document.close();
     },
     /**
-     * Zoom image on scroll
+     *Zoomimageonscroll
      *
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onScroll: function (e) {
-        var scale;
-        if (e.originalEvent.wheelDelta > 0 || e.originalEvent.detail < 0) {
-            scale = this.scale + SCROLL_ZOOM_STEP;
+    _onScroll:function(e){
+        varscale;
+        if(e.originalEvent.wheelDelta>0||e.originalEvent.detail<0){
+            scale=this.scale+SCROLL_ZOOM_STEP;
             this._zoom(scale);
-        } else {
-            scale = this.scale - SCROLL_ZOOM_STEP;
+        }else{
+            scale=this.scale-SCROLL_ZOOM_STEP;
             this._zoom(scale);
         }
     },
     /**
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onStartDrag: function (e) {
+    _onStartDrag:function(e){
         e.preventDefault();
-        this.enableDrag = true;
-        this.dragStartX = e.clientX - (this.dragstopX || 0);
-        this.dragStartY = e.clientY - (this.dragstopY || 0);
+        this.enableDrag=true;
+        this.dragStartX=e.clientX-(this.dragstopX||0);
+        this.dragStartY=e.clientY-(this.dragstopY||0);
     },
     /**
-     * On click of video do not close modal so stop event propagation
-     * and provide play/pause the video instead of quitting it
+     *Onclickofvideodonotclosemodalsostopeventpropagation
+     *andprovideplay/pausethevideoinsteadofquittingit
      *
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onVideoClicked: function (e) {
+    _onVideoClicked:function(e){
         e.stopPropagation();
-        var videoElement = e.target;
-        if (videoElement.paused) {
+        varvideoElement=e.target;
+        if(videoElement.paused){
             videoElement.play();
-        } else {
+        }else{
             videoElement.pause();
         }
     },
     /**
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onRotate: function (e) {
+    _onRotate:function(e){
         e.preventDefault();
         this._rotate(90);
     },
     /**
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onZoomIn: function (e) {
+    _onZoomIn:function(e){
         e.preventDefault();
-        var scale = this.scale + ZOOM_STEP;
+        varscale=this.scale+ZOOM_STEP;
         this._zoom(scale);
     },
     /**
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onZoomOut: function (e) {
+    _onZoomOut:function(e){
         e.preventDefault();
-        var scale = this.scale - ZOOM_STEP;
+        varscale=this.scale-ZOOM_STEP;
         this._zoom(scale);
     },
     /**
-     * @private
-     * @param {MouseEvent} e
+     *@private
+     *@param{MouseEvent}e
      */
-    _onZoomReset: function (e) {
+    _onZoomReset:function(e){
         e.preventDefault();
-        this.$('.o_viewer_zoomer').css("transform", "");
+        this.$('.o_viewer_zoomer').css("transform","");
         this._zoom(1);
     },
 });
-return DocumentViewer;
+returnDocumentViewer;
 });

@@ -1,43 +1,43 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import flectra.tests
+importflectra.tests
 
 
-@flectra.tests.common.tagged('post_install', '-at_install')
-class TestUnsplashBeacon(flectra.tests.HttpCase):
+@flectra.tests.common.tagged('post_install','-at_install')
+classTestUnsplashBeacon(flectra.tests.HttpCase):
 
-    def test_01_beacon(self):
-        self.env['ir.config_parameter'].sudo().set_param('unsplash.app_id', '123456')
-        # Create page with unsplash image.
-        page = self.env['website.page'].search([('url', '=', '/'), ('website_id', '=', 1)])
-        page.arch = '''<t name="Homepage" t-name="website.homepage1">
-        <t t-call="website.layout">
-            <t t-set="pageName" t-value="'homepage'"/>
-            <div id="wrap" class="oe_structure oe_empty">
-                <img src="/unsplash/pYyOZ8q7AII/306/fairy.jpg"/>
+    deftest_01_beacon(self):
+        self.env['ir.config_parameter'].sudo().set_param('unsplash.app_id','123456')
+        #Createpagewithunsplashimage.
+        page=self.env['website.page'].search([('url','=','/'),('website_id','=',1)])
+        page.arch='''<tname="Homepage"t-name="website.homepage1">
+        <tt-call="website.layout">
+            <tt-set="pageName"t-value="'homepage'"/>
+            <divid="wrap"class="oe_structureoe_empty">
+                <imgsrc="/unsplash/pYyOZ8q7AII/306/fairy.jpg"/>
                 <!--
-                    Keeping this javascript inline instead of extracting it
-                    to avoid tempting users to publish such a file on their
-                    production system.
+                    Keepingthisjavascriptinlineinsteadofextractingit
+                    toavoidtemptinguserstopublishsuchafileontheir
+                    productionsystem.
                 -->
                 <script>
-                    Object.defineProperty(window, "$", {
-                        get() {
-                            return this._patched$;
+                    Object.defineProperty(window,"$",{
+                        get(){
+                            returnthis._patched$;
                         },
-                        set(value) {
-                            delete this.$;
-                            this._patched$ = value;
-                            // Patch RPC call.
-                            const oldGet = value.get.bind(this);
-                            value.get = (url, data, success, dataType) => {
-                                if (url === "https://views.unsplash.com/v") {
-                                    const imageEl = document.querySelector(`img[src^="/unsplash/${data.photo_id}/"]`);
-                                    imageEl.dataset.beacon = "sent";
+                        set(value){
+                            deletethis.$;
+                            this._patched$=value;
+                            //PatchRPCcall.
+                            constoldGet=value.get.bind(this);
+                            value.get=(url,data,success,dataType)=>{
+                                if(url==="https://views.unsplash.com/v"){
+                                    constimageEl=document.querySelector(`img[src^="/unsplash/${data.photo_id}/"]`);
+                                    imageEl.dataset.beacon="sent";
                                     return;
                                 }
-                                return oldGet(url, data, success, dataType);
+                                returnoldGet(url,data,success,dataType);
                             };
                         },
                     });
@@ -45,5 +45,5 @@ class TestUnsplashBeacon(flectra.tests.HttpCase):
             </div>
             </t>
         </t>'''
-        # Access page.
-        self.start_tour('/', 'test_unsplash_beacon')
+        #Accesspage.
+        self.start_tour('/','test_unsplash_beacon')

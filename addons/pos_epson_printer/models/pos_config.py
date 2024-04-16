@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
-class PosConfig(models.Model):
-    _inherit = 'pos.config'
+classPosConfig(models.Model):
+    _inherit='pos.config'
 
-    epson_printer_ip = fields.Char(string='Epson Printer IP', help="Local IP address of an Epson receipt printer.")
+    epson_printer_ip=fields.Char(string='EpsonPrinterIP',help="LocalIPaddressofanEpsonreceiptprinter.")
 
     @api.onchange('epson_printer_ip')
-    def _onchange_epson_printer_ip(self):
-        if self.epson_printer_ip in (False, ''):
-            self.iface_cashdrawer = False
+    def_onchange_epson_printer_ip(self):
+        ifself.epson_printer_ipin(False,''):
+            self.iface_cashdrawer=False

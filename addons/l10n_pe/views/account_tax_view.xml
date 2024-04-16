@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="view_tax_form" model="ir.ui.view">
-        <field name="name">account.tax.form</field>
-        <field name="model">account.tax</field>
-        <field name="inherit_id" ref="account.view_tax_form"/>
-        <field name="priority" eval="900"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='type_tax_use']" position="before">
-                <field name="l10n_pe_edi_tax_code"
-                       attrs="{'invisible': [('country_code', '!=', 'PE')]}"/>
-                <field name="l10n_pe_edi_unece_category"
-                       attrs="{'invisible': [('country_code', '!=', 'PE')]}"/>
+    <recordid="view_tax_form"model="ir.ui.view">
+        <fieldname="name">account.tax.form</field>
+        <fieldname="model">account.tax</field>
+        <fieldname="inherit_id"ref="account.view_tax_form"/>
+        <fieldname="priority"eval="900"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='type_tax_use']"position="before">
+                <fieldname="l10n_pe_edi_tax_code"
+                       attrs="{'invisible':[('country_code','!=','PE')]}"/>
+                <fieldname="l10n_pe_edi_unece_category"
+                       attrs="{'invisible':[('country_code','!=','PE')]}"/>
             </xpath>
         </field>
     </record>

@@ -1,30 +1,30 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra.addons.website_sale.controllers.main import WebsiteSale
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectra.addons.website_sale.controllers.mainimportWebsiteSale
 
-from flectra import http,_
-from flectra.http import request
-from flectra.exceptions import ValidationError
+fromflectraimporthttp,_
+fromflectra.httpimportrequest
+fromflectra.exceptionsimportValidationError
 
 
-class WebsiteSaleStock(WebsiteSale):
+classWebsiteSaleStock(WebsiteSale):
     @http.route()
-    def payment_transaction(self, *args, **kwargs):
-        """ Payment transaction override to double check cart quantities before
-        placing the order
+    defpayment_transaction(self,*args,**kwargs):
+        """Paymenttransactionoverridetodoublecheckcartquantitiesbefore
+        placingtheorder
         """
-        order = request.website.sale_get_order()
-        values = []
-        for line in order.order_line:
-            if line.product_id.type == 'product' and line.product_id.inventory_availability in ['always', 'threshold']:
-                cart_qty = sum(order.order_line.filtered(lambda p: p.product_id.id == line.product_id.id).mapped('product_uom_qty'))
-                avl_qty = line.product_id.with_context(warehouse=order.warehouse_id.id).virtual_available
-                if cart_qty > avl_qty:
+        order=request.website.sale_get_order()
+        values=[]
+        forlineinorder.order_line:
+            ifline.product_id.type=='product'andline.product_id.inventory_availabilityin['always','threshold']:
+                cart_qty=sum(order.order_line.filtered(lambdap:p.product_id.id==line.product_id.id).mapped('product_uom_qty'))
+                avl_qty=line.product_id.with_context(warehouse=order.warehouse_id.id).virtual_available
+                ifcart_qty>avl_qty:
                     values.append(_(
-                        'You ask for %(quantity)s products but only %(available_qty)s is available',
+                        'Youaskfor%(quantity)sproductsbutonly%(available_qty)sisavailable',
                         quantity=cart_qty,
-                        available_qty=avl_qty if avl_qty > 0 else 0
+                        available_qty=avl_qtyifavl_qty>0else0
                     ))
-        if values:
-            raise ValidationError('. '.join(values) + '.')
-        return super(WebsiteSaleStock, self).payment_transaction(*args, **kwargs)
+        ifvalues:
+            raiseValidationError('.'.join(values)+'.')
+        returnsuper(WebsiteSaleStock,self).payment_transaction(*args,**kwargs)

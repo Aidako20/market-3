@@ -1,32 +1,32 @@
-flectra.define('mail/static/src/models/dialog/dialog.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/models/dialog/dialog.js',function(require){
+'usestrict';
 
-const { registerNewModel } = require('mail/static/src/model/model_core.js');
-const { many2one, one2one } = require('mail/static/src/model/model_field.js');
+const{registerNewModel}=require('mail/static/src/model/model_core.js');
+const{many2one,one2one}=require('mail/static/src/model/model_field.js');
 
-function factory(dependencies) {
+functionfactory(dependencies){
 
-    class Dialog extends dependencies['mail.model'] {}
+    classDialogextendsdependencies['mail.model']{}
 
-    Dialog.fields = {
-        manager: many2one('mail.dialog_manager', {
-            inverse: 'dialogs',
+    Dialog.fields={
+        manager:many2one('mail.dialog_manager',{
+            inverse:'dialogs',
         }),
         /**
-         * Content of dialog that is directly linked to a record that models
-         * a UI component, such as AttachmentViewer. These records must be
-         * created from @see `mail.dialog_manager:open()`.
+         *Contentofdialogthatisdirectlylinkedtoarecordthatmodels
+         *aUIcomponent,suchasAttachmentViewer.Theserecordsmustbe
+         *createdfrom@see`mail.dialog_manager:open()`.
          */
-        record: one2one('mail.model', {
-            isCausal: true,
+        record:one2one('mail.model',{
+            isCausal:true,
         }),
     };
 
-    Dialog.modelName = 'mail.dialog';
+    Dialog.modelName='mail.dialog';
 
-    return Dialog;
+    returnDialog;
 }
 
-registerNewModel('mail.dialog', factory);
+registerNewModel('mail.dialog',factory);
 
 });

@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import models, fields, api, _
+fromflectraimportmodels,fields,api,_
 
 
-class WebsiteSnippetFilter(models.Model):
-    _inherit = 'website.snippet.filter'
+classWebsiteSnippetFilter(models.Model):
+    _inherit='website.snippet.filter'
 
     @api.model
-    def _get_website_currency(self):
-        pricelist = self.env['website'].get_current_website().get_current_pricelist()
-        return pricelist.currency_id
+    def_get_website_currency(self):
+        pricelist=self.env['website'].get_current_website().get_current_pricelist()
+        returnpricelist.currency_id

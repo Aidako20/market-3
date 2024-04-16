@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
-from flectra.http import request
+fromflectraimportmodels
+fromflectra.httpimportrequest
 
 
-class Http(models.AbstractModel):
-    _inherit = 'ir.http'
+classHttp(models.AbstractModel):
+    _inherit='ir.http'
 
     @classmethod
-    def _dispatch(cls):
-        # add signup token or login to the session if given
-        if 'auth_signup_token' in request.params:
-            request.session['auth_signup_token'] = request.params['auth_signup_token']
-        if 'auth_login' in request.params:
-            request.session['auth_login'] = request.params['auth_login']
+    def_dispatch(cls):
+        #addsignuptokenorlogintothesessionifgiven
+        if'auth_signup_token'inrequest.params:
+            request.session['auth_signup_token']=request.params['auth_signup_token']
+        if'auth_login'inrequest.params:
+            request.session['auth_login']=request.params['auth_login']
 
-        return super(Http, cls)._dispatch()
+        returnsuper(Http,cls)._dispatch()

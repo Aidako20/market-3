@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <record id="action_report_picking_batch" model="ir.actions.report">
-            <field name="name">Batch Transfer</field>
-            <field name="model">stock.picking.batch</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">stock_picking_batch.report_picking_batch</field>
-            <field name="report_file">stock_picking_batch.report_picking_batch</field>
-            <field name="binding_model_id" ref="model_stock_picking_batch"/>
-            <field name="binding_type">report</field>
+        <recordid="action_report_picking_batch"model="ir.actions.report">
+            <fieldname="name">BatchTransfer</field>
+            <fieldname="model">stock.picking.batch</field>
+            <fieldname="report_type">qweb-pdf</field>
+            <fieldname="report_name">stock_picking_batch.report_picking_batch</field>
+            <fieldname="report_file">stock_picking_batch.report_picking_batch</field>
+            <fieldname="binding_model_id"ref="model_stock_picking_batch"/>
+            <fieldname="binding_type">report</field>
         </record>
     </data>
 </flectra>

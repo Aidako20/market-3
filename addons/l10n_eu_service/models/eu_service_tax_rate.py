@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class ServiceTaxRate(models.Model):
-    _name = "l10n_eu_service.service_tax_rate"
-    _description = "EU Service Tax Rate"
+classServiceTaxRate(models.Model):
+    _name="l10n_eu_service.service_tax_rate"
+    _description="EUServiceTaxRate"
 
-    country_id = fields.Many2one('res.country', string='Country')
-    rate = fields.Float(string="VAT Rate")
+    country_id=fields.Many2one('res.country',string='Country')
+    rate=fields.Float(string="VATRate")

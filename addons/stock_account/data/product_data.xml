@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record forcecreate="True" id="property_stock_account_output_categ_id" model="ir.property">
-            <field name="name">property_stock_account_output_categ_id</field>
-            <field name="fields_id" search="[('model','=','product.category'),('name','=','property_stock_account_output_categ_id')]"/>
-            <field eval="False" name="value"/>
-            <field name="company_id" ref="base.main_company"/>
+    <datanoupdate="1">
+        <recordforcecreate="True"id="property_stock_account_output_categ_id"model="ir.property">
+            <fieldname="name">property_stock_account_output_categ_id</field>
+            <fieldname="fields_id"search="[('model','=','product.category'),('name','=','property_stock_account_output_categ_id')]"/>
+            <fieldeval="False"name="value"/>
+            <fieldname="company_id"ref="base.main_company"/>
         </record>
-        <record forcecreate="True" id="property_stock_account_input_categ_id" model="ir.property">
-            <field name="name">property_stock_account_input_categ_id</field>
-            <field name="fields_id" search="[('model','=','product.category'),('name','=','property_stock_account_input_categ_id')]"/>
-            <field eval="False" name="value"/>
-            <field name="company_id" ref="base.main_company"/>
+        <recordforcecreate="True"id="property_stock_account_input_categ_id"model="ir.property">
+            <fieldname="name">property_stock_account_input_categ_id</field>
+            <fieldname="fields_id"search="[('model','=','product.category'),('name','=','property_stock_account_input_categ_id')]"/>
+            <fieldeval="False"name="value"/>
+            <fieldname="company_id"ref="base.main_company"/>
         </record>
     </data>
 </flectra>

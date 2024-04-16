@@ -1,81 +1,81 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <!-- account.fiscal.position.tax.template -->
-    <record id="afpttn_it_intra_1" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="22v"/>
-        <field name="tax_dest_id" ref="00eu"/>
+    <!--account.fiscal.position.tax.template-->
+    <recordid="afpttn_it_intra_1"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="22v"/>
+        <fieldname="tax_dest_id"ref="00eu"/>
     </record>
-    <record id="afpttn_it_intra_2" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="10v"/>
-        <field name="tax_dest_id" ref="00eu"/>
+    <recordid="afpttn_it_intra_2"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="10v"/>
+        <fieldname="tax_dest_id"ref="00eu"/>
     </record>
-    <record id="afpttn_it_intra_3" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="5v"/>
-        <field name="tax_dest_id" ref="00eu"/>
+    <recordid="afpttn_it_intra_3"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="5v"/>
+        <fieldname="tax_dest_id"ref="00eu"/>
     </record>
-    <record id="afpttn_it_intra_4" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="4v"/>
-        <field name="tax_dest_id" ref="00eu"/>
+    <recordid="afpttn_it_intra_4"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="4v"/>
+        <fieldname="tax_dest_id"ref="00eu"/>
     </record>
-    <record id="afpttn_it_intra_5" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="00v"/>
-        <field name="tax_dest_id" ref="00eu"/>
-    </record>
-
-    <record id="afpttn_it_intra_6" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="22am"/>
-        <field name="tax_dest_id" ref="22rcm"/>
-    </record>
-    <record id="afpttn_it_intra_7" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="10am"/>
-        <field name="tax_dest_id" ref="10rcm"/>
-    </record>
-    <record id="afpttn_it_intra_8" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="5am"/>
-        <field name="tax_dest_id" ref="5rcm"/>
-    </record>
-    <record id="afpttn_it_intra_9" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="4am"/>
-        <field name="tax_dest_id" ref="4rcm"/>
-    </record>
-    <record id="afpttn_it_intra_10" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="00am"/>
-        <field name="tax_dest_id" ref="00rcm"/>
+    <recordid="afpttn_it_intra_5"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="00v"/>
+        <fieldname="tax_dest_id"ref="00eu"/>
     </record>
 
-    <record id="afpttn_it_intra_11" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="22as"/>
-        <field name="tax_dest_id" ref="22rcs"/>
+    <recordid="afpttn_it_intra_6"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="22am"/>
+        <fieldname="tax_dest_id"ref="22rcm"/>
     </record>
-    <record id="afpttn_it_intra_12" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="10as"/>
-        <field name="tax_dest_id" ref="10rcs"/>
+    <recordid="afpttn_it_intra_7"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="10am"/>
+        <fieldname="tax_dest_id"ref="10rcm"/>
     </record>
-    <record id="afpttn_it_intra_13" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="5as"/>
-        <field name="tax_dest_id" ref="5rcs"/>
+    <recordid="afpttn_it_intra_8"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="5am"/>
+        <fieldname="tax_dest_id"ref="5rcm"/>
     </record>
-    <record id="afpttn_it_intra_14" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="4as"/>
-        <field name="tax_dest_id" ref="4rcs"/>
+    <recordid="afpttn_it_intra_9"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="4am"/>
+        <fieldname="tax_dest_id"ref="4rcm"/>
     </record>
-    <record id="afpttn_it_intra_15" model="account.fiscal.position.tax.template">
-        <field name="position_id" ref="intra"/>
-        <field name="tax_src_id"  ref="00as"/>
-        <field name="tax_dest_id" ref="00rcs"/>
+    <recordid="afpttn_it_intra_10"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="00am"/>
+        <fieldname="tax_dest_id"ref="00rcm"/>
+    </record>
+
+    <recordid="afpttn_it_intra_11"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="22as"/>
+        <fieldname="tax_dest_id"ref="22rcs"/>
+    </record>
+    <recordid="afpttn_it_intra_12"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="10as"/>
+        <fieldname="tax_dest_id"ref="10rcs"/>
+    </record>
+    <recordid="afpttn_it_intra_13"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="5as"/>
+        <fieldname="tax_dest_id"ref="5rcs"/>
+    </record>
+    <recordid="afpttn_it_intra_14"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="4as"/>
+        <fieldname="tax_dest_id"ref="4rcs"/>
+    </record>
+    <recordid="afpttn_it_intra_15"model="account.fiscal.position.tax.template">
+        <fieldname="position_id"ref="intra"/>
+        <fieldname="tax_src_id" ref="00as"/>
+        <fieldname="tax_dest_id"ref="00rcs"/>
     </record>
 </flectra>

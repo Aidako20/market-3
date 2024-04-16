@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
+fromflectraimportmodels
 
 
-class ResPartner(models.Model):
-    _inherit = 'res.partner'
+classResPartner(models.Model):
+    _inherit='res.partner'
 
-    def can_edit_vat(self):
-        ''' `vat` is a commercial field, synced between the parent (commercial
-        entity) and the children. Only the commercial entity should be able to
-        edit it (as in backend). '''
-        return not self.parent_id
+    defcan_edit_vat(self):
+        '''`vat`isacommercialfield,syncedbetweentheparent(commercial
+        entity)andthechildren.Onlythecommercialentityshouldbeableto
+        editit(asinbackend).'''
+        returnnotself.parent_id

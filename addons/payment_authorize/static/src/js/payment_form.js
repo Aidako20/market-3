@@ -1,159 +1,159 @@
-flectra.define('payment_authorize.payment_form', function (require) {
-"use strict";
+flectra.define('payment_authorize.payment_form',function(require){
+"usestrict";
 
-var ajax = require('web.ajax');
-var core = require('web.core');
-var PaymentForm = require('payment.payment_form');
+varajax=require('web.ajax');
+varcore=require('web.core');
+varPaymentForm=require('payment.payment_form');
 
-var _t = core._t;
+var_t=core._t;
 
 PaymentForm.include({
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Returns the parameters for the AcceptUI button that AcceptJS will use.
+     *ReturnstheparametersfortheAcceptUIbuttonthatAcceptJSwilluse.
      *
-     * @private
-     * @param {Object} formData data obtained by getFormData
-     * @returns {Object} params for the AcceptJS button
+     *@private
+     *@param{Object}formDatadataobtainedbygetFormData
+     *@returns{Object}paramsfortheAcceptJSbutton
      */
-    _acceptJsParams: function (formData) {
-        return {
-            'class': 'AcceptUI d-none',
-            'data-apiLoginID': formData.login_id,
-            'data-clientKey': formData.client_key,
-            'data-billingAddressOptions': '{"show": false, "required": false}',
-            'data-responseHandler': 'responseHandler'
+    _acceptJsParams:function(formData){
+        return{
+            'class':'AcceptUId-none',
+            'data-apiLoginID':formData.login_id,
+            'data-clientKey':formData.client_key,
+            'data-billingAddressOptions':'{"show":false,"required":false}',
+            'data-responseHandler':'responseHandler'
         };
     },
 
     /**
-     * called when clicking on pay now or add payment event to create token for credit card/debit card.
+     *calledwhenclickingonpaynoworaddpaymenteventtocreatetokenforcreditcard/debitcard.
      *
-     * @private
-     * @param {Event} ev
-     * @param {DOMElement} checkedRadio
-     * @param {Boolean} addPmEvent
+     *@private
+     *@param{Event}ev
+     *@param{DOMElement}checkedRadio
+     *@param{Boolean}addPmEvent
      */
-    _createAuthorizeToken: function (ev, $checkedRadio, addPmEvent) {
-        var self = this;
-        if (ev.type === 'submit') {
-            var button = $(ev.target).find('*[type="submit"]')[0]
-        } else {
-            var button = ev.target;
+    _createAuthorizeToken:function(ev,$checkedRadio,addPmEvent){
+        varself=this;
+        if(ev.type==='submit'){
+            varbutton=$(ev.target).find('*[type="submit"]')[0]
+        }else{
+            varbutton=ev.target;
         }
-        var acquirerID = this.getAcquirerIdFromRadio($checkedRadio);
-        var acquirerForm = this.$('#o_payment_add_token_acq_' + acquirerID);
-        var inputsForm = $('input', acquirerForm);
-        var formData = self.getFormData(inputsForm);
-        if (this.options.partnerId === undefined) {
-            console.warn('payment_form: unset partner_id when adding new token; things could go wrong');
+        varacquirerID=this.getAcquirerIdFromRadio($checkedRadio);
+        varacquirerForm=this.$('#o_payment_add_token_acq_'+acquirerID);
+        varinputsForm=$('input',acquirerForm);
+        varformData=self.getFormData(inputsForm);
+        if(this.options.partnerId===undefined){
+            console.warn('payment_form:unsetpartner_idwhenaddingnewtoken;thingscouldgowrong');
         }
-        var AcceptJs = false;
-        if (formData.acquirer_state === 'enabled') {
-            AcceptJs = 'https://js.authorize.net/v3/AcceptUI.js';
-        } else {
-            AcceptJs = 'https://jstest.authorize.net/v3/AcceptUI.js';
+        varAcceptJs=false;
+        if(formData.acquirer_state==='enabled'){
+            AcceptJs='https://js.authorize.net/v3/AcceptUI.js';
+        }else{
+            AcceptJs='https://jstest.authorize.net/v3/AcceptUI.js';
         }
 
-        window.responseHandler = function (response) {
-            _.extend(formData, response);
+        window.responseHandler=function(response){
+            _.extend(formData,response);
 
-            if (response.messages.resultCode === "Error") {
-                var errorMessage = "";
-                _.each(response.messages.message, function (message) {
-                    errorMessage += message.code + ": " + message.text;
+            if(response.messages.resultCode==="Error"){
+                varerrorMessage="";
+                _.each(response.messages.message,function(message){
+                    errorMessage+=message.code+":"+message.text;
                 })
                 acquirerForm.removeClass('d-none');
-                return self.displayError(_t('Server Error'), errorMessage);
+                returnself.displayError(_t('ServerError'),errorMessage);
             }
 
             self._rpc({
-                route: formData.data_set,
-                params: formData
-            }).then (function (data) {
-                if (addPmEvent) {
-                    if (formData.return_url) {
-                        window.location = formData.return_url;
-                    } else {
+                route:formData.data_set,
+                params:formData
+            }).then(function(data){
+                if(addPmEvent){
+                    if(formData.return_url){
+                        window.location=formData.return_url;
+                    }else{
                         window.location.reload();
                     }
-                } else {
+                }else{
                     $checkedRadio.val(data.id);
                     self.el.submit();
                 }
-            }).guardedCatch(function (error) {
-                // if the rpc fails, pretty obvious
+            }).guardedCatch(function(error){
+                //iftherpcfails,prettyobvious
                 error.event.preventDefault();
                 acquirerForm.removeClass('d-none');
                 self.displayError(
-                    _t('Server Error'),
-                    _t("We are not able to add your payment method at the moment.") +
+                    _t('ServerError'),
+                    _t("Wearenotabletoaddyourpaymentmethodatthemoment.")+
                         self._parseError(error)
                 );
             });
         };
 
-        if (this.$button === undefined) {
-            this.$button = $('<button>', this._acceptJsParams(formData));
+        if(this.$button===undefined){
+            this.$button=$('<button>',this._acceptJsParams(formData));
             this.$button.appendTo('body');
         }
-        ajax.loadJS(AcceptJs).then(function () {
+        ajax.loadJS(AcceptJs).then(function(){
             self.$button.trigger('click');
         });
     },
     /**
-     * @override
+     *@override
      */
-    updateNewPaymentDisplayStatus: function () {
-        var $checkedRadio = this.$('input[type="radio"]:checked');
+    updateNewPaymentDisplayStatus:function(){
+        var$checkedRadio=this.$('input[type="radio"]:checked');
 
-        if ($checkedRadio.length !== 1) {
+        if($checkedRadio.length!==1){
             return;
         }
 
-        //  hide add token form for authorize
-        if ($checkedRadio.data('provider') === 'authorize' && this.isNewPaymentRadio($checkedRadio)) {
+        // hideaddtokenformforauthorize
+        if($checkedRadio.data('provider')==='authorize'&&this.isNewPaymentRadio($checkedRadio)){
             this.$('[id*="o_payment_add_token_acq_"]').addClass('d-none');
-        } else {
-            this._super.apply(this, arguments);
+        }else{
+            this._super.apply(this,arguments);
         }
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    payEvent: function (ev) {
+    payEvent:function(ev){
         ev.preventDefault();
-        var $checkedRadio = this.$('input[type="radio"]:checked');
+        var$checkedRadio=this.$('input[type="radio"]:checked');
 
-        // first we check that the user has selected a authorize as s2s payment method
-        if ($checkedRadio.length === 1 && this.isNewPaymentRadio($checkedRadio) && $checkedRadio.data('provider') === 'authorize') {
-            this._createAuthorizeToken(ev, $checkedRadio);
-        } else {
-            this._super.apply(this, arguments);
+        //firstwecheckthattheuserhasselectedaauthorizeass2spaymentmethod
+        if($checkedRadio.length===1&&this.isNewPaymentRadio($checkedRadio)&&$checkedRadio.data('provider')==='authorize'){
+            this._createAuthorizeToken(ev,$checkedRadio);
+        }else{
+            this._super.apply(this,arguments);
         }
     },
     /**
-     * @override
+     *@override
      */
-    addPmEvent: function (ev) {
+    addPmEvent:function(ev){
         ev.stopPropagation();
         ev.preventDefault();
-        var $checkedRadio = this.$('input[type="radio"]:checked');
+        var$checkedRadio=this.$('input[type="radio"]:checked');
 
-        // first we check that the user has selected a authorize as add payment method
-        if ($checkedRadio.length === 1 && this.isNewPaymentRadio($checkedRadio) && $checkedRadio.data('provider') === 'authorize') {
-            this._createAuthorizeToken(ev, $checkedRadio, true);
-        } else {
-            this._super.apply(this, arguments);
+        //firstwecheckthattheuserhasselectedaauthorizeasaddpaymentmethod
+        if($checkedRadio.length===1&&this.isNewPaymentRadio($checkedRadio)&&$checkedRadio.data('provider')==='authorize'){
+            this._createAuthorizeToken(ev,$checkedRadio,true);
+        }else{
+            this._super.apply(this,arguments);
         }
     },
 });

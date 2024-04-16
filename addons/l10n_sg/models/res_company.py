@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import fields, models
+fromflectraimportfields,models
 
-class ResCompany(models.Model):
-    _name = 'res.company'
-    _description = 'Companies'
-    _inherit = 'res.company'
+classResCompany(models.Model):
+    _name='res.company'
+    _description='Companies'
+    _inherit='res.company'
 
-    l10n_sg_unique_entity_number = fields.Char(string='UEN', related="partner_id.l10n_sg_unique_entity_number", readonly=False)
+    l10n_sg_unique_entity_number=fields.Char(string='UEN',related="partner_id.l10n_sg_unique_entity_number",readonly=False)

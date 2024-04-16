@@ -1,93 +1,93 @@
-flectra.define('mail/static/src/components/notification_group/notification_group.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/notification_group/notification_group.js',function(require){
+'usestrict';
 
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-const { Component } = owl;
-const { useRef } = owl.hooks;
+const{Component}=owl;
+const{useRef}=owl.hooks;
 
-class NotificationGroup extends Component {
+classNotificationGroupextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps();
-        useStore(props => {
-            const group = this.env.models['mail.notification_group'].get(props.notificationGroupLocalId);
-            return {
-                group: group ? group.__state : undefined,
+        useStore(props=>{
+            constgroup=this.env.models['mail.notification_group'].get(props.notificationGroupLocalId);
+            return{
+                group:group?group.__state:undefined,
             };
         });
         /**
-         * Reference of the "mark as read" button. Useful to disable the
-         * top-level click handler when clicking on this specific button.
+         *Referenceofthe"markasread"button.Usefultodisablethe
+         *top-levelclickhandlerwhenclickingonthisspecificbutton.
          */
-        this._markAsReadRef = useRef('markAsRead');
+        this._markAsReadRef=useRef('markAsRead');
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {mail.notification_group}
+     *@returns{mail.notification_group}
      */
-    get group() {
-        return this.env.models['mail.notification_group'].get(this.props.notificationGroupLocalId);
+    getgroup(){
+        returnthis.env.models['mail.notification_group'].get(this.props.notificationGroupLocalId);
     }
 
     /**
-     * @returns {string|undefined}
+     *@returns{string|undefined}
      */
-    image() {
-        if (this.group.notification_type === 'email') {
-            return '/mail/static/src/img/smiley/mailfailure.jpg';
+    image(){
+        if(this.group.notification_type==='email'){
+            return'/mail/static/src/img/smiley/mailfailure.jpg';
         }
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClick(ev) {
-        const markAsRead = this._markAsReadRef.el;
-        if (markAsRead && markAsRead.contains(ev.target)) {
-            // handled in `_onClickMarkAsRead`
+    _onClick(ev){
+        constmarkAsRead=this._markAsReadRef.el;
+        if(markAsRead&&markAsRead.contains(ev.target)){
+            //handledin`_onClickMarkAsRead`
             return;
         }
         this.group.openDocuments();
-        if (!this.env.messaging.device.isMobile) {
+        if(!this.env.messaging.device.isMobile){
             this.env.messaging.messagingMenu.close();
         }
     }
 
     /**
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickMarkAsRead(ev) {
+    _onClickMarkAsRead(ev){
         this.group.openCancelAction();
-        if (!this.env.messaging.device.isMobile) {
+        if(!this.env.messaging.device.isMobile){
             this.env.messaging.messagingMenu.close();
         }
     }
 
 }
 
-Object.assign(NotificationGroup, {
-    props: {
-        notificationGroupLocalId: String,
+Object.assign(NotificationGroup,{
+    props:{
+        notificationGroupLocalId:String,
     },
-    template: 'mail.NotificationGroup',
+    template:'mail.NotificationGroup',
 });
 
-return NotificationGroup;
+returnNotificationGroup;
 
 });

@@ -1,45 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-<data noupdate="1">
+<datanoupdate="1">
 
-    <record id="analytic_comp_rule" model="ir.rule">
-        <field name="name">Analytic multi company rule</field>
-        <field name="model_id" ref="model_account_analytic_account"/>
-        <field eval="True" name="global"/>
-        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    <recordid="analytic_comp_rule"model="ir.rule">
+        <fieldname="name">Analyticmulticompanyrule</field>
+        <fieldname="model_id"ref="model_account_analytic_account"/>
+        <fieldeval="True"name="global"/>
+        <fieldname="domain_force">[('company_id','in',company_ids+[False])]</field>
     </record>
 
-    <record id="analytic_line_comp_rule" model="ir.rule">
-        <field name="name">Analytic line multi company rule</field>
-        <field name="model_id" ref="model_account_analytic_line"/>
-        <field eval="True" name="global"/>
-        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    <recordid="analytic_line_comp_rule"model="ir.rule">
+        <fieldname="name">Analyticlinemulticompanyrule</field>
+        <fieldname="model_id"ref="model_account_analytic_line"/>
+        <fieldeval="True"name="global"/>
+        <fieldname="domain_force">[('company_id','in',company_ids)]</field>
     </record>
 
-    <record id="analytic_group_comp_rule" model="ir.rule">
-        <field name="name">Analytic line multi company rule</field>
-        <field name="model_id" ref="model_account_analytic_group"/>
-        <field eval="True" name="global"/>
-        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    <recordid="analytic_group_comp_rule"model="ir.rule">
+        <fieldname="name">Analyticlinemulticompanyrule</field>
+        <fieldname="model_id"ref="model_account_analytic_group"/>
+        <fieldeval="True"name="global"/>
+        <fieldname="domain_force">[('company_id','in',company_ids+[False])]</field>
     </record>
 
-    <record id="analytic_tag_comp_rule" model="ir.rule">
-        <field name="name">Analytic line multi company rule</field>
-        <field name="model_id" ref="model_account_analytic_tag"/>
-        <field eval="True" name="global"/>
-        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+    <recordid="analytic_tag_comp_rule"model="ir.rule">
+        <fieldname="name">Analyticlinemulticompanyrule</field>
+        <fieldname="model_id"ref="model_account_analytic_tag"/>
+        <fieldeval="True"name="global"/>
+        <fieldname="domain_force">[('company_id','in',company_ids+[False])]</field>
     </record>
 </data>
-<data noupdate="0">
+<datanoupdate="0">
 
-    <record id="group_analytic_accounting" model="res.groups">
-        <field name="name">Analytic Accounting</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
+    <recordid="group_analytic_accounting"model="res.groups">
+        <fieldname="name">AnalyticAccounting</field>
+        <fieldname="category_id"ref="base.module_category_hidden"/>
     </record>
 
-    <record id="group_analytic_tags" model="res.groups">
-        <field name="name">Analytic Accounting Tags</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
+    <recordid="group_analytic_tags"model="res.groups">
+        <fieldname="name">AnalyticAccountingTags</field>
+        <fieldname="category_id"ref="base.module_category_hidden"/>
     </record>
 
 </data>

@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import models
-from flectra.http import request
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportmodels
+fromflectra.httpimportrequest
 
 
-class WabsitePage(models.AbstractModel):
-    _inherit = 'website.page'
+classWabsitePage(models.AbstractModel):
+    _inherit='website.page'
 
-    def _get_cache_key(self, req):
-        cart = request.website.sale_get_order()
-        cache_key = (cart and cart.cart_quantity or 0,)
-        cache_key += super()._get_cache_key(req)
-        return cache_key
+    def_get_cache_key(self,req):
+        cart=request.website.sale_get_order()
+        cache_key=(cartandcart.cart_quantityor0,)
+        cache_key+=super()._get_cache_key(req)
+        returncache_key

@@ -1,34 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="partner_demo_company_mx" model="res.partner">
-        <field name="name">MX Company</field>
-        <field name="vat">AAAA611013AAA</field>
-        <field name="street">298 </field>
-        <field name="city">Santiago de Querétaro</field>
-        <field name="country_id" ref="base.mx"/>
-        <field name="state_id" ref="base.state_mx_zac"/>
-        <field name="zip">76168</field>
-        <field name="phone">+52 222 123 4567</field>
-        <field name="email">info@company.mxexample.com</field>
-        <field name="website">www.mxexample.com</field>
+    <recordid="partner_demo_company_mx"model="res.partner">
+        <fieldname="name">MXCompany</field>
+        <fieldname="vat">AAAA611013AAA</field>
+        <fieldname="street">298</field>
+        <fieldname="city">SantiagodeQuerétaro</field>
+        <fieldname="country_id"ref="base.mx"/>
+        <fieldname="state_id"ref="base.state_mx_zac"/>
+        <fieldname="zip">76168</field>
+        <fieldname="phone">+522221234567</field>
+        <fieldname="email">info@company.mxexample.com</field>
+        <fieldname="website">www.mxexample.com</field>
     </record>
 
-    <record id="demo_company_mx" model="res.company">
-        <field name="name">MX Company</field>
-        <field name="partner_id" ref="partner_demo_company_mx"/>
+    <recordid="demo_company_mx"model="res.company">
+        <fieldname="name">MXCompany</field>
+        <fieldname="partner_id"ref="partner_demo_company_mx"/>
     </record>
 
-    <function model="res.company" name="_onchange_country_id">
-        <value eval="[ref('demo_company_mx')]"/>
+    <functionmodel="res.company"name="_onchange_country_id">
+        <valueeval="[ref('demo_company_mx')]"/>
     </function>
 
-    <function model="res.users" name="write">
-        <value eval="[ref('base.user_root'), ref('base.user_admin'), ref('base.user_demo')]"/>
-        <value eval="{'company_ids': [(4, ref('l10n_mx.demo_company_mx'))]}"/>
+    <functionmodel="res.users"name="write">
+        <valueeval="[ref('base.user_root'),ref('base.user_admin'),ref('base.user_demo')]"/>
+        <valueeval="{'company_ids':[(4,ref('l10n_mx.demo_company_mx'))]}"/>
     </function>
 
-    <function model="account.chart.template" name="try_loading">
-        <value eval="[ref('l10n_mx.mx_coa')]"/>
-        <value model="res.company" eval="obj().env.ref('l10n_mx.demo_company_mx')"/>
+    <functionmodel="account.chart.template"name="try_loading">
+        <valueeval="[ref('l10n_mx.mx_coa')]"/>
+        <valuemodel="res.company"eval="obj().env.ref('l10n_mx.demo_company_mx')"/>
     </function>
 </flectra>

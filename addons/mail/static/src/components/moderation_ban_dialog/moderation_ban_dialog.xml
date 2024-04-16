@@ -1,22 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
-    <t t-name="mail.ModerationBanDialog" owl="1">
-        <Dialog contentClass="'o_ModerationBanDialog'" title="CONFIRMATION" size="'medium'" t-ref="dialog">
-            <t t-if="messages.length === 1">
-                <p>You are going to ban the following user:</p>
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
+    <tt-name="mail.ModerationBanDialog"owl="1">
+        <DialogcontentClass="'o_ModerationBanDialog'"title="CONFIRMATION"size="'medium'"t-ref="dialog">
+            <tt-if="messages.length===1">
+                <p>Youaregoingtobanthefollowinguser:</p>
             </t>
-            <t t-else="">
-                <p>You are going to ban the following users:</p>
+            <tt-else="">
+                <p>Youaregoingtobanthefollowingusers:</p>
             </t>
-            <ul class="my-5">
-                <t t-foreach="messages" t-as="message" t-key="message.localId">
-                    <li t-esc="message.email_from"/>
+            <ulclass="my-5">
+                <tt-foreach="messages"t-as="message"t-key="message.localId">
+                    <lit-esc="message.email_from"/>
                 </t>
             </ul>
-            <p>Do you confirm the action?</p>
-            <t t-set-slot="buttons">
-                <button class="o-ban btn btn-primary" t-on-click="_onClickBan">Ban</button>
-                <button class="o-cancel btn btn-secondary" t-on-click="_onClickCancel">Cancel</button>
+            <p>Doyouconfirmtheaction?</p>
+            <tt-set-slot="buttons">
+                <buttonclass="o-banbtnbtn-primary"t-on-click="_onClickBan">Ban</button>
+                <buttonclass="o-cancelbtnbtn-secondary"t-on-click="_onClickCancel">Cancel</button>
             </t>
         </Dialog>
     </t>

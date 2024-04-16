@@ -1,99 +1,99 @@
-flectra.define('website_forum.share', function (require) {
-'use strict';
+flectra.define('website_forum.share',function(require){
+'usestrict';
 
-var core = require('web.core');
-var publicWidget = require('web.public.widget');
+varcore=require('web.core');
+varpublicWidget=require('web.public.widget');
 
-var qweb = core.qweb;
+varqweb=core.qweb;
 
-// FIXME There is no reason to inherit from socialShare here
-var ForumShare = publicWidget.registry.socialShare.extend({
-    selector: '',
-    xmlDependencies: publicWidget.registry.socialShare.prototype.xmlDependencies
+//FIXMEThereisnoreasontoinheritfromsocialSharehere
+varForumShare=publicWidget.registry.socialShare.extend({
+    selector:'',
+    xmlDependencies:publicWidget.registry.socialShare.prototype.xmlDependencies
         .concat(['/website_forum/static/src/xml/website_forum_share_templates.xml']),
-    events: {},
+    events:{},
 
     /**
-     * @override
-     * @param {Object} parent
-     * @param {Object} options
-     * @param {string} targetType
+     *@override
+     *@param{Object}parent
+     *@param{Object}options
+     *@param{string}targetType
      */
-    init: function (parent, options, targetType) {
-        this._super.apply(this, arguments);
-        this.targetType = targetType;
+    init:function(parent,options,targetType){
+        this._super.apply(this,arguments);
+        this.targetType=targetType;
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var def = this._super.apply(this, arguments);
+    start:function(){
+        vardef=this._super.apply(this,arguments);
         this._onMouseEnter();
-        return def;
+        returndef;
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _bindSocialEvent: function () {
-        this._super.apply(this, arguments);
-        $('.oe_share_bump').click($.proxy(this._postBump, this));
+    _bindSocialEvent:function(){
+        this._super.apply(this,arguments);
+        $('.oe_share_bump').click($.proxy(this._postBump,this));
     },
     /**
-     * @private
+     *@private
      */
-    _render: function () {
-        var $question = this.$('article.question');
-        if (!this.targetType) {
-            this._super.apply(this, arguments);
-        } else if (this.targetType === 'social-alert') {
-            $question.before(qweb.render('website.social_alert', {medias: this.socialList}));
-        } else {
-            $('body').append(qweb.render('website.social_modal', {
-                medias: this.socialList,
-                target_type: this.targetType,
-                state: $question.data('state'),
+    _render:function(){
+        var$question=this.$('article.question');
+        if(!this.targetType){
+            this._super.apply(this,arguments);
+        }elseif(this.targetType==='social-alert'){
+            $question.before(qweb.render('website.social_alert',{medias:this.socialList}));
+        }else{
+            $('body').append(qweb.render('website.social_modal',{
+                medias:this.socialList,
+                target_type:this.targetType,
+                state:$question.data('state'),
             }));
             $('#oe_social_share_modal').modal('show');
         }
     },
     /**
-     * @private
+     *@private
      */
-    _postBump: function () {
-        this._rpc({ // FIXME
-            route: '/forum/post/bump',
-            params: {
-                post_id: this.element.data('id'),
+    _postBump:function(){
+        this._rpc({//FIXME
+            route:'/forum/post/bump',
+            params:{
+                post_id:this.element.data('id'),
             },
         });
     },
 });
 
-publicWidget.registry.websiteForumShare = publicWidget.Widget.extend({
-    selector: '.website_forum',
+publicWidget.registry.websiteForumShare=publicWidget.Widget.extend({
+    selector:'.website_forum',
 
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        // Retrieve stored social data
-        if (sessionStorage.getItem('social_share')) {
-            var socialData = JSON.parse(sessionStorage.getItem('social_share'));
-            (new ForumShare(this, false, socialData.targetType)).attachTo($(document.body));
+    start:function(){
+        //Retrievestoredsocialdata
+        if(sessionStorage.getItem('social_share')){
+            varsocialData=JSON.parse(sessionStorage.getItem('social_share'));
+            (newForumShare(this,false,socialData.targetType)).attachTo($(document.body));
             sessionStorage.removeItem('social_share');
         }
-        // Display an alert if post has no reply and is older than 10 days
-        var $questionContainer = $('.oe_js_bump');
-        if ($questionContainer.length) {
-            new ForumShare(this, false, 'social-alert').attachTo($questionContainer);
+        //Displayanalertifposthasnoreplyandisolderthan10days
+        var$questionContainer=$('.oe_js_bump');
+        if($questionContainer.length){
+            newForumShare(this,false,'social-alert').attachTo($questionContainer);
         }
 
-        return this._super.apply(this, arguments);
+        returnthis._super.apply(this,arguments);
     },
 });
 });

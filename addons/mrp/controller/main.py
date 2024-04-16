@@ -1,35 +1,35 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import base64
-import json
-import logging
+importbase64
+importjson
+importlogging
 
-from flectra import http
-from flectra.http import request
-from flectra.tools.translate import _
+fromflectraimporthttp
+fromflectra.httpimportrequest
+fromflectra.tools.translateimport_
 
-logger = logging.getLogger(__name__)
+logger=logging.getLogger(__name__)
 
 
-class MrpDocumentRoute(http.Controller):
+classMrpDocumentRoute(http.Controller):
 
-    @http.route('/mrp/upload_attachment', type='http', methods=['POST'], auth="user")
-    def upload_document(self, ufile, **kwargs):
-        files = request.httprequest.files.getlist('ufile')
-        result = {'success': _("All files uploaded")}
-        for ufile in files:
+    @http.route('/mrp/upload_attachment',type='http',methods=['POST'],auth="user")
+    defupload_document(self,ufile,**kwargs):
+        files=request.httprequest.files.getlist('ufile')
+        result={'success':_("Allfilesuploaded")}
+        forufileinfiles:
             try:
-                mimetype = ufile.content_type
+                mimetype=ufile.content_type
                 request.env['mrp.document'].create({
-                    'name': ufile.filename,
-                    'res_model': kwargs.get('res_model'),
-                    'res_id': int(kwargs.get('res_id')),
-                    'mimetype': mimetype,
-                    'datas': base64.encodebytes(ufile.read()),
+                    'name':ufile.filename,
+                    'res_model':kwargs.get('res_model'),
+                    'res_id':int(kwargs.get('res_id')),
+                    'mimetype':mimetype,
+                    'datas':base64.encodebytes(ufile.read()),
                 })
-            except Exception as e:
-                logger.exception("Fail to upload document %s" % ufile.filename)
-                result = {'error': str(e)}
+            exceptExceptionase:
+                logger.exception("Failtouploaddocument%s"%ufile.filename)
+                result={'error':str(e)}
 
-        return json.dumps(result)
+        returnjson.dumps(result)

@@ -1,610 +1,610 @@
-flectra.define('web.AbstractController', function (require) {
-"use strict";
+flectra.define('web.AbstractController',function(require){
+"usestrict";
 
 /**
- * The Controller class is the class coordinating the model and the renderer.
- * It is the C in MVC, and is what was formerly known in Flectra as a View.
+ *TheControllerclassistheclasscoordinatingthemodelandtherenderer.
+ *ItistheCinMVC,andiswhatwasformerlyknowninFlectraasaView.
  *
- * Its role is to listen to events bubbling up from the model/renderer, and call
- * the appropriate methods if necessary.  It also render control panel buttons,
- * and react to changes in the search view.  Basically, all interactions from
- * the renderer/model with the outside world (meaning server/reading in session/
- * reading localstorage, ...) has to go through the controller.
+ *Itsroleistolistentoeventsbubblingupfromthemodel/renderer,andcall
+ *theappropriatemethodsifnecessary. Italsorendercontrolpanelbuttons,
+ *andreacttochangesinthesearchview. Basically,allinteractionsfrom
+ *therenderer/modelwiththeoutsideworld(meaningserver/readinginsession/
+ *readinglocalstorage,...)hastogothroughthecontroller.
  */
 
-var ActionMixin = require('web.ActionMixin');
-var ajax = require('web.ajax');
-var concurrency = require('web.concurrency');
-const config = require('web.config');
-const { ComponentWrapper } = require('web.OwlCompatibility');
-var mvc = require('web.mvc');
-var session = require('web.session');
+varActionMixin=require('web.ActionMixin');
+varajax=require('web.ajax');
+varconcurrency=require('web.concurrency');
+constconfig=require('web.config');
+const{ComponentWrapper}=require('web.OwlCompatibility');
+varmvc=require('web.mvc');
+varsession=require('web.session');
 
 
-var AbstractController = mvc.Controller.extend(ActionMixin, {
-    custom_events: _.extend({}, ActionMixin.custom_events, {
-        navigation_move: '_onNavigationMove',
-        open_record: '_onOpenRecord',
-        switch_view: '_onSwitchView',
+varAbstractController=mvc.Controller.extend(ActionMixin,{
+    custom_events:_.extend({},ActionMixin.custom_events,{
+        navigation_move:'_onNavigationMove',
+        open_record:'_onOpenRecord',
+        switch_view:'_onSwitchView',
     }),
-    events: {
-        'click a[type="action"]': '_onActionClicked',
+    events:{
+        'clicka[type="action"]':'_onActionClicked',
     },
 
     /**
-     * @param {Object} param
-     * @param {Object[]} params.actionViews
-     * @param {string} params.activeActions
-     * @param {string} params.bannerRoute
-     * @param {Object} [params.controlPanel]
-     * @param {string} params.controllerID an id to ease the communication with
-     *      upstream components
-     * @param {string} params.displayName
-     * @param {Object} params.initialState
-     * @param {string} params.modelName
-     * @param {ActionModel} [params.searchModel]
-     * @param {string} [params.searchPanel]
-     * @param {string} params.viewType
-     * @param {boolean} [params.withControlPanel]
-     * @param {boolean} [params.withSearchPanel]
+     *@param{Object}param
+     *@param{Object[]}params.actionViews
+     *@param{string}params.activeActions
+     *@param{string}params.bannerRoute
+     *@param{Object}[params.controlPanel]
+     *@param{string}params.controllerIDanidtoeasethecommunicationwith
+     *     upstreamcomponents
+     *@param{string}params.displayName
+     *@param{Object}params.initialState
+     *@param{string}params.modelName
+     *@param{ActionModel}[params.searchModel]
+     *@param{string}[params.searchPanel]
+     *@param{string}params.viewType
+     *@param{boolean}[params.withControlPanel]
+     *@param{boolean}[params.withSearchPanel]
      */
-    init: function (parent, model, renderer, params) {
-        this._super.apply(this, arguments);
-        this._title = params.displayName;
-        this.modelName = params.modelName;
-        this.activeActions = params.activeActions;
-        this.controllerID = params.controllerID;
-        this.initialState = params.initialState;
-        this.bannerRoute = params.bannerRoute;
-        this.actionViews = params.actionViews;
-        this.viewType = params.viewType;
-        // use a DropPrevious to correctly handle concurrent updates
-        this.dp = new concurrency.DropPrevious();
+    init:function(parent,model,renderer,params){
+        this._super.apply(this,arguments);
+        this._title=params.displayName;
+        this.modelName=params.modelName;
+        this.activeActions=params.activeActions;
+        this.controllerID=params.controllerID;
+        this.initialState=params.initialState;
+        this.bannerRoute=params.bannerRoute;
+        this.actionViews=params.actionViews;
+        this.viewType=params.viewType;
+        //useaDropPrevioustocorrectlyhandleconcurrentupdates
+        this.dp=newconcurrency.DropPrevious();
 
-        this.withControlPanel = params.withControlPanel;
-        this.withSearchPanel = params.withSearchPanel;
-        if (params.searchModel) {
-            this.searchModel = params.searchModel;
+        this.withControlPanel=params.withControlPanel;
+        this.withSearchPanel=params.withSearchPanel;
+        if(params.searchModel){
+            this.searchModel=params.searchModel;
         }
-        if (this.withControlPanel) {
-            const { Component, props } = params.controlPanel;
-            this.ControlPanel = Component;
-            this.controlPanelProps = props;
+        if(this.withControlPanel){
+            const{Component,props}=params.controlPanel;
+            this.ControlPanel=Component;
+            this.controlPanelProps=props;
         }
-        if (this.withSearchPanel) {
-            const { Component, props } = params.searchPanel;
-            this.SearchPanel = Component;
-            this.searchPanelProps = props;
+        if(this.withSearchPanel){
+            const{Component,props}=params.searchPanel;
+            this.SearchPanel=Component;
+            this.searchPanelProps=props;
         }
     },
 
     /**
-     * Simply renders and updates the url.
+     *Simplyrendersandupdatestheurl.
      *
-     * @returns {Promise}
+     *@returns{Promise}
      */
-    start: async function () {
+    start:asyncfunction(){
         this.$el.addClass('o_view_controller');
         this.renderButtons();
-        const promises = [this._super(...arguments)];
-        if (this.withControlPanel) {
+        constpromises=[this._super(...arguments)];
+        if(this.withControlPanel){
             this._updateControlPanelProps(this.initialState);
-            this._controlPanelWrapper = new ComponentWrapper(this, this.ControlPanel, this.controlPanelProps);
-            this._controlPanelWrapper.env.bus.on('focus-view', this, () => this._giveFocus());
-            promises.push(this._controlPanelWrapper.mount(this.el, { position: 'first-child' }));
+            this._controlPanelWrapper=newComponentWrapper(this,this.ControlPanel,this.controlPanelProps);
+            this._controlPanelWrapper.env.bus.on('focus-view',this,()=>this._giveFocus());
+            promises.push(this._controlPanelWrapper.mount(this.el,{position:'first-child'}));
         }
-        if (this.withSearchPanel) {
-            this._searchPanelWrapper = new ComponentWrapper(this, this.SearchPanel, this.searchPanelProps);
-            const content = this.el.querySelector(':scope .o_content');
+        if(this.withSearchPanel){
+            this._searchPanelWrapper=newComponentWrapper(this,this.SearchPanel,this.searchPanelProps);
+            constcontent=this.el.querySelector(':scope.o_content');
             content.classList.add('o_controller_with_searchpanel');
-            promises.push(this._searchPanelWrapper.mount(content, { position: 'first-child' }));
+            promises.push(this._searchPanelWrapper.mount(content,{position:'first-child'}));
         }
-        await Promise.all(promises);
-        await this._update(this.initialState, { shouldUpdateSearchComponents: false });
+        awaitPromise.all(promises);
+        awaitthis._update(this.initialState,{shouldUpdateSearchComponents:false});
         this.updateButtons();
-        this.el.classList.toggle('o_view_sample_data', this.model.isInSampleMode());
+        this.el.classList.toggle('o_view_sample_data',this.model.isInSampleMode());
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
-        if (this.$buttons) {
+    destroy:function(){
+        if(this.$buttons){
             this.$buttons.off();
         }
         ActionMixin.destroy.call(this);
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
     /**
-     * Called each time the controller is attached into the DOM.
+     *CalledeachtimethecontrollerisattachedintotheDOM.
      */
-    on_attach_callback: function () {
+    on_attach_callback:function(){
         ActionMixin.on_attach_callback.call(this);
-        this.searchModel.on('search', this, this._onSearch);
-        if (!config.device.isMobileDevice) {
+        this.searchModel.on('search',this,this._onSearch);
+        if(!config.device.isMobileDevice){
             this.searchModel.trigger('focus-control-panel');
         }
-        if (this.withControlPanel) {
-            this.searchModel.on('get-controller-query-params', this, this._onGetOwnedQueryParams);
+        if(this.withControlPanel){
+            this.searchModel.on('get-controller-query-params',this,this._onGetOwnedQueryParams);
         }
-        if (!(this.renderer instanceof owl.Component)) {
+        if(!(this.rendererinstanceofowl.Component)){
             this.renderer.on_attach_callback();
         }
     },
     /**
-     * Called each time the controller is detached from the DOM.
+     *CalledeachtimethecontrollerisdetachedfromtheDOM.
      */
-    on_detach_callback: function () {
+    on_detach_callback:function(){
         ActionMixin.on_detach_callback.call(this);
-        this.searchModel.off('search', this);
-        if (this.withControlPanel) {
-            this.searchModel.off('get-controller-query-params', this);
+        this.searchModel.off('search',this);
+        if(this.withControlPanel){
+            this.searchModel.off('get-controller-query-params',this);
         }
-        if (!(this.renderer instanceof owl.Component)) {
+        if(!(this.rendererinstanceofowl.Component)){
             this.renderer.on_detach_callback();
         }
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    canBeRemoved: function () {
-        // AAB: get rid of 'readonlyIfRealDiscard' option when on_hashchange mechanism is improved
-        return this.discardChanges(undefined, {
-            noAbandon: true,
-            readonlyIfRealDiscard: true,
+    canBeRemoved:function(){
+        //AAB:getridof'readonlyIfRealDiscard'optionwhenon_hashchangemechanismisimproved
+        returnthis.discardChanges(undefined,{
+            noAbandon:true,
+            readonlyIfRealDiscard:true,
         });
     },
     /**
-     * Discards the changes made on the record associated to the given ID, or
-     * all changes made by the current controller if no recordID is given. For
-     * example, when the user opens the 'home' screen, the action manager calls
-     * this method on the active view to make sure it is ok to open the home
-     * screen (and lose all current state).
+     *DiscardsthechangesmadeontherecordassociatedtothegivenID,or
+     *allchangesmadebythecurrentcontrollerifnorecordIDisgiven.For
+     *example,whentheuseropensthe'home'screen,theactionmanagercalls
+     *thismethodontheactiveviewtomakesureitisoktoopenthehome
+     *screen(andloseallcurrentstate).
      *
-     * Note that it returns a Promise, because the view could choose to ask the
-     * user if he agrees to discard.
+     *NotethatitreturnsaPromise,becausetheviewcouldchoosetoaskthe
+     *userifheagreestodiscard.
      *
-     * @param {string} [recordID]
-     *        if not given, we consider all the changes made by the controller
-     * @param {Object} [options]
-     * @returns {Promise} resolved if properly discarded, rejected otherwise
+     *@param{string}[recordID]
+     *       ifnotgiven,weconsiderallthechangesmadebythecontroller
+     *@param{Object}[options]
+     *@returns{Promise}resolvedifproperlydiscarded,rejectedotherwise
      */
-    discardChanges: function (recordID, options) {
-        return Promise.resolve();
+    discardChanges:function(recordID,options){
+        returnPromise.resolve();
     },
     /**
-     * Export the state of the controller containing information that is shared
-     * between different controllers of a same action (like the current search
-     * model state or the states of some components).
+     *Exportthestateofthecontrollercontaininginformationthatisshared
+     *betweendifferentcontrollersofasameaction(likethecurrentsearch
+     *modelstateorthestatesofsomecomponents).
      *
-     * @returns {Object}
+     *@returns{Object}
      */
-    exportState() {
-        const exported = {
-            searchModel: this.searchModel.exportState(),
+    exportState(){
+        constexported={
+            searchModel:this.searchModel.exportState(),
         };
-        if (this.withSearchPanel) {
-            const searchPanel = this._searchPanelWrapper.componentRef.comp;
-            exported.searchPanel = searchPanel.exportState();
+        if(this.withSearchPanel){
+            constsearchPanel=this._searchPanelWrapper.componentRef.comp;
+            exported.searchPanel=searchPanel.exportState();
         }
-        return exported;
+        returnexported;
     },
     /**
-     * Parses and imports a previously exported state.
+     *Parsesandimportsapreviouslyexportedstate.
      *
-     * @param {Object} state
+     *@param{Object}state
      */
-    importState(state) {
+    importState(state){
         this.searchModel.importState(state.searchModel);
-        if (this.withSearchPanel) {
-            const searchPanel = this._searchPanelWrapper.componentRef.comp;
+        if(this.withSearchPanel){
+            constsearchPanel=this._searchPanelWrapper.componentRef.comp;
             searchPanel.importState(state.searchPanel);
         }
     },
     /**
-     * The use of this method is discouraged.  It is still snakecased, because
-     * it currently is used in many templates, but we will move to a simpler
-     * mechanism as soon as we can.
+     *Theuseofthismethodisdiscouraged. Itisstillsnakecased,because
+     *itcurrentlyisusedinmanytemplates,butwewillmovetoasimpler
+     *mechanismassoonaswecan.
      *
-     * @deprecated
-     * @param {string} action type of action, such as 'create', 'read', ...
-     * @returns {boolean}
+     *@deprecated
+     *@param{string}actiontypeofaction,suchas'create','read',...
+     *@returns{boolean}
      */
-    is_action_enabled: function (action) {
-        return this.activeActions[action];
+    is_action_enabled:function(action){
+        returnthis.activeActions[action];
     },
     /**
-     * Short helper method to reload the view
+     *Shorthelpermethodtoreloadtheview
      *
-     * @param {Object} [params={}]
-     * @param {Object} [params.controllerState={}]
-     * @returns {Promise}
+     *@param{Object}[params={}]
+     *@param{Object}[params.controllerState={}]
+     *@returns{Promise}
      */
-    reload: async function (params = {}) {
-        if (params.controllerState) {
+    reload:asyncfunction(params={}){
+        if(params.controllerState){
             this.importState(params.controllerState);
-            Object.assign(params, this.searchModel.get('query'));
+            Object.assign(params,this.searchModel.get('query'));
         }
-        return this.update(params, {});
+        returnthis.update(params,{});
     },
     /**
-     * This is the main entry point for the controller.  Changes from the search
-     * view arrive in this method, and internal changes can sometimes also call
-     * this method.  It is basically the way everything notifies the controller
-     * that something has changed.
+     *Thisisthemainentrypointforthecontroller. Changesfromthesearch
+     *viewarriveinthismethod,andinternalchangescansometimesalsocall
+     *thismethod. Itisbasicallythewayeverythingnotifiesthecontroller
+     *thatsomethinghaschanged.
      *
-     * The update method is responsible for fetching necessary data, then
-     * updating the renderer and wait for the rendering to complete.
+     *Theupdatemethodisresponsibleforfetchingnecessarydata,then
+     *updatingtherendererandwaitfortherenderingtocomplete.
      *
-     * @param {Object} params will be given to the model and to the renderer
-     * @param {Object} [options={}]
-     * @param {boolean} [options.reload=true] if true, the model will reload data
-     * @returns {Promise}
+     *@param{Object}paramswillbegiventothemodelandtotherenderer
+     *@param{Object}[options={}]
+     *@param{boolean}[options.reload=true]iftrue,themodelwillreloaddata
+     *@returns{Promise}
      */
-    async update(params, options = {}) {
-        const shouldReload = 'reload' in options ? options.reload : true;
-        if (shouldReload) {
-            this.handle = await this.dp.add(this.model.reload(this.handle, params));
+    asyncupdate(params,options={}){
+        constshouldReload='reload'inoptions?options.reload:true;
+        if(shouldReload){
+            this.handle=awaitthis.dp.add(this.model.reload(this.handle,params));
         }
-        const localState = this.renderer.getLocalState();
-        const state = this.model.get(this.handle, { withSampleData: true });
-        const promises = [
-            this._updateRendererState(state, params).then(() => {
+        constlocalState=this.renderer.getLocalState();
+        conststate=this.model.get(this.handle,{withSampleData:true});
+        constpromises=[
+            this._updateRendererState(state,params).then(()=>{
                 this.renderer.setLocalState(localState);
             }),
-            this._update(this.model.get(this.handle), params)
+            this._update(this.model.get(this.handle),params)
         ];
-        await this.dp.add(Promise.all(promises));
+        awaitthis.dp.add(Promise.all(promises));
         this.updateButtons();
-        this.el.classList.toggle('o_view_sample_data', this.model.isInSampleMode());
+        this.el.classList.toggle('o_view_sample_data',this.model.isInSampleMode());
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
 
     /**
-     * Meant to be overriden to return a proper object.
-     * @private
-     * @param {Object} [state]
-     * @return {(Object|null)}
+     *Meanttobeoverridentoreturnaproperobject.
+     *@private
+     *@param{Object}[state]
+     *@return{(Object|null)}
      */
-    _getPagingInfo: function (state) {
-        return null;
+    _getPagingInfo:function(state){
+        returnnull;
     },
     /**
-     * Meant to be overriden to return a proper object.
-     * @private
-     * @param {Object} [state]
-     * @return {(Object|null)}
+     *Meanttobeoverridentoreturnaproperobject.
+     *@private
+     *@param{Object}[state]
+     *@return{(Object|null)}
      */
-    _getActionMenuItems: function (state) {
-        return null;
+    _getActionMenuItems:function(state){
+        returnnull;
     },
     /**
-     * Gives the focus to the renderer if not in sample mode.
+     *Givesthefocustotherendererifnotinsamplemode.
      *
-     * @private
+     *@private
      */
-    _giveFocus() {
-        if (!this.model.isInSampleMode()) {
+    _giveFocus(){
+        if(!this.model.isInSampleMode()){
             this.renderer.giveFocus();
         }
     },
     /**
-     * This method is the way a view can notifies the outside world that
-     * something has changed.  The main use for this is to update the url, for
-     * example with a new id.
+     *Thismethodisthewayaviewcannotifiestheoutsideworldthat
+     *somethinghaschanged. Themainuseforthisistoupdatetheurl,for
+     *examplewithanewid.
      *
-     * @private
+     *@private
      */
-    _pushState: function () {
-        this.trigger_up('push_state', {
-            controllerID: this.controllerID,
-            state: this.getState(),
+    _pushState:function(){
+        this.trigger_up('push_state',{
+            controllerID:this.controllerID,
+            state:this.getState(),
         });
     },
     /**
-     * @private
-     * @param {function} callback function to execute before removing classname
-     *   'o_view_sample_data' (may be async). This allows to reload and/or
-     *   rerender before removing the className, thus preventing the view from
-     *   flickering.
+     *@private
+     *@param{function}callbackfunctiontoexecutebeforeremovingclassname
+     *  'o_view_sample_data'(maybeasync).Thisallowstoreloadand/or
+     *  rerenderbeforeremovingtheclassName,thuspreventingtheviewfrom
+     *  flickering.
      */
-    async _removeSampleData(callback) {
+    async_removeSampleData(callback){
         this.model.leaveSampleMode();
-        if (callback) {
-            await callback();
+        if(callback){
+            awaitcallback();
         }
         this.el.classList.remove('o_view_sample_data');
     },
     /**
-     * Renders the html provided by the route specified by the
-     * bannerRoute attribute on the controller (banner_route in the template).
-     * Renders it before the view output and add a css class 'o_has_banner' to it.
-     * There can be only one banner displayed at a time.
+     *Rendersthehtmlprovidedbytheroutespecifiedbythe
+     *bannerRouteattributeonthecontroller(banner_routeinthetemplate).
+     *Rendersitbeforetheviewoutputandaddacssclass'o_has_banner'toit.
+     *Therecanbeonlyonebannerdisplayedatatime.
      *
-     * If the banner contains stylesheet links or js files, they are moved to <head>
-     * (and will only be fetched once).
+     *Ifthebannercontainsstylesheetlinksorjsfiles,theyaremovedto<head>
+     *(andwillonlybefetchedonce).
      *
-     * Route example:
-     * @http.route('/module/hello', auth='user', type='json')
-     * def hello(self):
-     *     return {'html': '<h1>hello, world</h1>'}
+     *Routeexample:
+     *@http.route('/module/hello',auth='user',type='json')
+     *defhello(self):
+     *    return{'html':'<h1>hello,world</h1>'}
      *
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    _renderBanner: async function () {
-        if (this.bannerRoute !== undefined) {
-            const response = await this._rpc({
-                route: this.bannerRoute,
-                params: {context: session.user_context},
+    _renderBanner:asyncfunction(){
+        if(this.bannerRoute!==undefined){
+            constresponse=awaitthis._rpc({
+                route:this.bannerRoute,
+                params:{context:session.user_context},
             });
-            if (!response.html) {
+            if(!response.html){
                 this.$el.removeClass('o_has_banner');
-                return Promise.resolve();
+                returnPromise.resolve();
             }
             this.$el.addClass('o_has_banner');
-            var $banner = $(response.html);
-            // we should only display one banner at a time
-            if (this._$banner && this._$banner.remove) {
+            var$banner=$(response.html);
+            //weshouldonlydisplayonebanneratatime
+            if(this._$banner&&this._$banner.remove){
                 this._$banner.remove();
             }
-            // Css and js are moved to <head>
-            var defs = [];
-            $('link[rel="stylesheet"]', $banner).each(function (i, link) {
+            //Cssandjsaremovedto<head>
+            vardefs=[];
+            $('link[rel="stylesheet"]',$banner).each(function(i,link){
                 defs.push(ajax.loadCSS(link.href));
                 link.remove();
             });
-            $('script[type="text/javascript"]', $banner).each(function (i, js) {
+            $('script[type="text/javascript"]',$banner).each(function(i,js){
                 defs.push(ajax.loadJS(js.src));
                 js.remove();
             });
-            await Promise.all(defs);
-            $banner.insertBefore(this.$('> .o_content'));
-            this._$banner = $banner;
+            awaitPromise.all(defs);
+            $banner.insertBefore(this.$('>.o_content'));
+            this._$banner=$banner;
         }
     },
     /**
-     * @override
-     * @private
+     *@override
+     *@private
      */
-    _startRenderer: function () {
-        if (this.renderer instanceof owl.Component) {
-            return this.renderer.mount(this.$('.o_content')[0]);
+    _startRenderer:function(){
+        if(this.rendererinstanceofowl.Component){
+            returnthis.renderer.mount(this.$('.o_content')[0]);
         }
-        return this.renderer.appendTo(this.$('.o_content'));
+        returnthis.renderer.appendTo(this.$('.o_content'));
     },
     /**
-     * This method is called after each update or when the start method is
-     * completed.
+     *Thismethodiscalledaftereachupdateorwhenthestartmethodis
+     *completed.
      *
-     * Its primary use is to be used as a hook to update all parts of the UI,
-     * besides the renderer.  For example, it may be used to enable/disable
-     * some buttons in the control panel, such as the current graph type for a
-     * graph view.
+     *ItsprimaryuseistobeusedasahooktoupdateallpartsoftheUI,
+     *besidestherenderer. Forexample,itmaybeusedtoenable/disable
+     *somebuttonsinthecontrolpanel,suchasthecurrentgraphtypefora
+     *graphview.
      *
-     * FIXME: this hook should be synchronous, and called once async rendering
-     * has been done.
+     *FIXME:thishookshouldbesynchronous,andcalledonceasyncrendering
+     *hasbeendone.
      *
-     * @private
-     * @param {Object} state the state given by the model
-     * @param {Object} [params={}]
-     * @param {Array} [params.breadcrumbs]
-     * @param {Object} [params.shouldUpdateSearchComponents]
-     * @returns {Promise}
+     *@private
+     *@param{Object}statethestategivenbythemodel
+     *@param{Object}[params={}]
+     *@param{Array}[params.breadcrumbs]
+     *@param{Object}[params.shouldUpdateSearchComponents]
+     *@returns{Promise}
      */
-    async _update(state, params) {
-        // AAB: update the control panel -> this will be moved elsewhere at some point
-        if (!this.$buttons) {
+    async_update(state,params){
+        //AAB:updatethecontrolpanel->thiswillbemovedelsewhereatsomepoint
+        if(!this.$buttons){
             this.renderButtons();
         }
-        const promises = [this._renderBanner()];
-        if (params.shouldUpdateSearchComponents !== false) {
-            if (this.withControlPanel) {
+        constpromises=[this._renderBanner()];
+        if(params.shouldUpdateSearchComponents!==false){
+            if(this.withControlPanel){
                 this._updateControlPanelProps(state);
-                if (params.breadcrumbs) {
-                    this.controlPanelProps.breadcrumbs = params.breadcrumbs;
+                if(params.breadcrumbs){
+                    this.controlPanelProps.breadcrumbs=params.breadcrumbs;
                 }
                 promises.push(this.updateControlPanel());
             }
-            if (this.withSearchPanel) {
+            if(this.withSearchPanel){
                 this._updateSearchPanel();
             }
         }
         this._pushState();
-        await Promise.all(promises);
+        awaitPromise.all(promises);
     },
     /**
-     * Can be used to update the key 'cp_content'. This method is called in start and _update methods.
+     *Canbeusedtoupdatethekey'cp_content'.Thismethodiscalledinstartand_updatemethods.
      *
-     * @private
-     * @param {Object} state the state given by the model
+     *@private
+     *@param{Object}statethestategivenbythemodel
      */
-     _updateControlPanelProps(state) {
-        if (!this.controlPanelProps.cp_content) {
-            this.controlPanelProps.cp_content = {};
+     _updateControlPanelProps(state){
+        if(!this.controlPanelProps.cp_content){
+            this.controlPanelProps.cp_content={};
         }
-        if (this.$buttons) {
-            this.controlPanelProps.cp_content.$buttons = this.$buttons;
+        if(this.$buttons){
+            this.controlPanelProps.cp_content.$buttons=this.$buttons;
         }
-        Object.assign(this.controlPanelProps, {
-            actionMenus: this._getActionMenuItems(state),
-            pager: this._getPagingInfo(state),
-            title: this.getTitle(),
+        Object.assign(this.controlPanelProps,{
+            actionMenus:this._getActionMenuItems(state),
+            pager:this._getPagingInfo(state),
+            title:this.getTitle(),
         });
     },
     /**
-     * @private
-     * @param {Object} state
-     * @param {Object} newProps
-     * @returns {Promise}
+     *@private
+     *@param{Object}state
+     *@param{Object}newProps
+     *@returns{Promise}
      */
-    _updatePaging: async function (state, newProps) {
-        const pagingInfo = this._getPagingInfo(state);
-        if (pagingInfo) {
-            Object.assign(pagingInfo, newProps);
-            return this.updateControlPanel({ pager: pagingInfo });
+    _updatePaging:asyncfunction(state,newProps){
+        constpagingInfo=this._getPagingInfo(state);
+        if(pagingInfo){
+            Object.assign(pagingInfo,newProps);
+            returnthis.updateControlPanel({pager:pagingInfo});
         }
     },
     /**
-     * Updates the state of the renderer (handle both Widget and Component
-     * renderers).
+     *Updatesthestateoftherenderer(handlebothWidgetandComponent
+     *renderers).
      *
-     * @private
-     * @param {Object} state the model state
-     * @param {Object} [params={}] will be given to the model and to the renderer
-     * @return {Promise}
+     *@private
+     *@param{Object}statethemodelstate
+     *@param{Object}[params={}]willbegiventothemodelandtotherenderer
+     *@return{Promise}
      */
-    _updateRendererState(state, params = {}) {
-        if (this.renderer instanceof owl.Component) {
-            return this.renderer.update(state);
+    _updateRendererState(state,params={}){
+        if(this.rendererinstanceofowl.Component){
+            returnthis.renderer.update(state);
         }
-        return this.renderer.updateState(state, params);
+        returnthis.renderer.updateState(state,params);
     },
     /**
-     * @private
-     * @param {Object} [newProps={}]
-     * @return {Promise}
+     *@private
+     *@param{Object}[newProps={}]
+     *@return{Promise}
      */
-    async _updateSearchPanel(newProps) {
-        Object.assign(this.searchPanelProps, newProps);
-        await this._searchPanelWrapper.update(this.searchPanelProps);
+    async_updateSearchPanel(newProps){
+        Object.assign(this.searchPanelProps,newProps);
+        awaitthis._searchPanelWrapper.update(this.searchPanelProps);
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * When a user clicks on an <a> link with type="action", we need to actually
-     * do the action. This kind of links is used a lot in no-content helpers.
+     *Whenauserclicksonan<a>linkwithtype="action",weneedtoactually
+     *dotheaction.Thiskindoflinksisusedalotinno-contenthelpers.
      *
-     * * if the link has both data-model and data-method attributes, the
-     *   corresponding method is called, chained to any action it would
-     *   return. An optional data-reload-on-close (set to a non-falsy value)
-     *   also causes th underlying view to be reloaded after the dialog is
-     *   closed.
-     * * if the link has a name attribute, invoke the action with that
-     *   identifier (see :class:`ActionManager.doAction` to not get the
-     *   details)
-     * * otherwise an *action descriptor* is built from the link's data-
-     *   attributes (model, res-id, views, domain and context)
+     **ifthelinkhasbothdata-modelanddata-methodattributes,the
+     *  correspondingmethodiscalled,chainedtoanyactionitwould
+     *  return.Anoptionaldata-reload-on-close(settoanon-falsyvalue)
+     *  alsocausesthunderlyingviewtobereloadedafterthedialogis
+     *  closed.
+     **ifthelinkhasanameattribute,invoketheactionwiththat
+     *  identifier(see:class:`ActionManager.doAction`tonotgetthe
+     *  details)
+     **otherwisean*actiondescriptor*isbuiltfromthelink'sdata-
+     *  attributes(model,res-id,views,domainandcontext)
      *
-     * @private
-     * @param ev
+     *@private
+     *@paramev
      */
-    _onActionClicked: function (ev) { // FIXME: maybe this should also work on <button> tags?
+    _onActionClicked:function(ev){//FIXME:maybethisshouldalsoworkon<button>tags?
         ev.preventDefault();
-        var $target = $(ev.currentTarget);
-        var self = this;
-        var data = $target.data();
+        var$target=$(ev.currentTarget);
+        varself=this;
+        vardata=$target.data();
 
-        if (data.method !== undefined && data.model !== undefined) {
-            var options = {};
-            if (data.reloadOnClose) {
-                options.on_close = function () {
+        if(data.method!==undefined&&data.model!==undefined){
+            varoptions={};
+            if(data.reloadOnClose){
+                options.on_close=function(){
                     self.trigger_up('reload');
                 };
             }
             this.dp.add(this._rpc({
-                model: data.model,
-                method: data.method,
-                context: session.user_context,
-            })).then(function (action) {
-                if (action !== undefined) {
-                    self.do_action(action, options);
+                model:data.model,
+                method:data.method,
+                context:session.user_context,
+            })).then(function(action){
+                if(action!==undefined){
+                    self.do_action(action,options);
                 }
             });
-        } else if ($target.attr('name')) {
+        }elseif($target.attr('name')){
             this.do_action(
                 $target.attr('name'),
-                data.context && {additional_context: data.context}
+                data.context&&{additional_context:data.context}
             );
-        } else {
+        }else{
             this.do_action({
-                name: $target.attr('title') || _.str.strip($target.text()),
-                type: 'ir.actions.act_window',
-                res_model: data.model || this.modelName,
-                res_id: data.resId,
-                target: 'current', // TODO: make customisable?
-                views: data.views || (data.resId ? [[false, 'form']] : [[false, 'list'], [false, 'form']]),
-                domain: data.domain || [],
-            }, {
-                additional_context: _.extend({}, data.context)
+                name:$target.attr('title')||_.str.strip($target.text()),
+                type:'ir.actions.act_window',
+                res_model:data.model||this.modelName,
+                res_id:data.resId,
+                target:'current',//TODO:makecustomisable?
+                views:data.views||(data.resId?[[false,'form']]:[[false,'list'],[false,'form']]),
+                domain:data.domain||[],
+            },{
+                additional_context:_.extend({},data.context)
             });
         }
     },
     /**
-     * Called either from the control panel to focus the controller
-     * or from the view to focus the search bar
+     *Calledeitherfromthecontrolpaneltofocusthecontroller
+     *orfromtheviewtofocusthesearchbar
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onNavigationMove: function (ev) {
-        switch (ev.data.direction) {
-            case 'up':
+    _onNavigationMove:function(ev){
+        switch(ev.data.direction){
+            case'up':
                 ev.stopPropagation();
                 this.searchModel.trigger('focus-control-panel');
                 break;
-            case 'down':
+            case'down':
                 ev.stopPropagation();
                 this._giveFocus();
                 break;
         }
     },
     /**
-     * When an Flectra event arrives requesting a record to be opened, this method
-     * gets the res_id, and request a switch view in the appropriate mode
+     *WhenanFlectraeventarrivesrequestingarecordtobeopened,thismethod
+     *getstheres_id,andrequestaswitchviewintheappropriatemode
      *
-     * Note: this method seems wrong, it relies on the model being a basic model,
-     * to get the res_id.  It should receive the res_id in the event data
-     * @todo move this to basic controller?
+     *Note:thismethodseemswrong,itreliesonthemodelbeingabasicmodel,
+     *togettheres_id. Itshouldreceivetheres_idintheeventdata
+     *@todomovethistobasiccontroller?
      *
-     * @private
-     * @param {FlectraEvent} ev
-     * @param {number} ev.data.id The local model ID for the record to be
-     *   opened
-     * @param {string} [ev.data.mode='readonly']
+     *@private
+     *@param{FlectraEvent}ev
+     *@param{number}ev.data.idThelocalmodelIDfortherecordtobe
+     *  opened
+     *@param{string}[ev.data.mode='readonly']
      */
-    _onOpenRecord: function (ev) {
+    _onOpenRecord:function(ev){
         ev.stopPropagation();
-        var record = this.model.get(ev.data.id, {raw: true});
-        this.trigger_up('switch_view', {
-            view_type: 'form',
-            res_id: record.res_id,
-            mode: ev.data.mode || 'readonly',
-            model: this.modelName,
+        varrecord=this.model.get(ev.data.id,{raw:true});
+        this.trigger_up('switch_view',{
+            view_type:'form',
+            res_id:record.res_id,
+            mode:ev.data.mode||'readonly',
+            model:this.modelName,
         });
     },
     /**
-     * Called when there is a change in the search view, so the current action's
-     * environment needs to be updated with the new domain, context, groupby,...
+     *Calledwhenthereisachangeinthesearchview,sothecurrentaction's
+     *environmentneedstobeupdatedwiththenewdomain,context,groupby,...
      *
-     * @private
-     * @param {Object} searchQuery
+     *@private
+     *@param{Object}searchQuery
      */
-    _onSearch: function (searchQuery) {
-        this.reload(_.extend({ offset: 0, groupsOffset: 0 }, searchQuery));
+    _onSearch:function(searchQuery){
+        this.reload(_.extend({offset:0,groupsOffset:0},searchQuery));
     },
     /**
-     * Intercepts the 'switch_view' event to add the controllerID into the data,
-     * and lets the event bubble up.
+     *Interceptsthe'switch_view'eventtoaddthecontrollerIDintothedata,
+     *andletstheeventbubbleup.
      *
-     * @param {FlectraEvent} ev
+     *@param{FlectraEvent}ev
      */
-    _onSwitchView: function (ev) {
-        ev.data.controllerID = this.controllerID;
+    _onSwitchView:function(ev){
+        ev.data.controllerID=this.controllerID;
     },
 });
 
-return AbstractController;
+returnAbstractController;
 
 });

@@ -1,24 +1,24 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
-from flectra.addons.stock_landed_costs.models.stock_landed_cost import SPLIT_METHOD
-from flectra.exceptions import UserError
-from flectra import _
+fromflectraimportfields,models
+fromflectra.addons.stock_landed_costs.models.stock_landed_costimportSPLIT_METHOD
+fromflectra.exceptionsimportUserError
+fromflectraimport_
 
 
-class ProductTemplate(models.Model):
-    _inherit = "product.template"
+classProductTemplate(models.Model):
+    _inherit="product.template"
 
-    landed_cost_ok = fields.Boolean('Is a Landed Cost', help='Indicates whether the product is a landed cost.')
-    split_method_landed_cost = fields.Selection(SPLIT_METHOD, string="Default Split Method",
-                                                help="Default Split Method when used for Landed Cost")
+    landed_cost_ok=fields.Boolean('IsaLandedCost',help='Indicateswhethertheproductisalandedcost.')
+    split_method_landed_cost=fields.Selection(SPLIT_METHOD,string="DefaultSplitMethod",
+                                                help="DefaultSplitMethodwhenusedforLandedCost")
 
-    def write(self, vals):
-        for product in self:
-            if (('type' in vals and vals['type'] != 'service') or ('landed_cost_ok' in vals and not vals['landed_cost_ok'])) and product.type == 'service' and product.landed_cost_ok:
-                if self.env['account.move.line'].search_count([('product_id', 'in', product.product_variant_ids.ids), ('is_landed_costs_line', '=', True)]):
-                    raise UserError(_("You cannot change the product type or disable landed cost option because the product is used in an account move line."))
-                vals['landed_cost_ok'] = False
+    defwrite(self,vals):
+        forproductinself:
+            if(('type'invalsandvals['type']!='service')or('landed_cost_ok'invalsandnotvals['landed_cost_ok']))andproduct.type=='service'andproduct.landed_cost_ok:
+                ifself.env['account.move.line'].search_count([('product_id','in',product.product_variant_ids.ids),('is_landed_costs_line','=',True)]):
+                    raiseUserError(_("Youcannotchangetheproducttypeordisablelandedcostoptionbecausetheproductisusedinanaccountmoveline."))
+                vals['landed_cost_ok']=False
 
-        return super().write(vals)
+        returnsuper().write(vals)

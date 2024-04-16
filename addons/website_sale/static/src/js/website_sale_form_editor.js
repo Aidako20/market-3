@@ -1,27 +1,27 @@
-flectra.define('website_sale.form', function (require) {
-'use strict';
+flectra.define('website_sale.form',function(require){
+'usestrict';
 
-var FormEditorRegistry = require('website_form.form_editor_registry');
+varFormEditorRegistry=require('website_form.form_editor_registry');
 
-FormEditorRegistry.add('create_customer', {
-    formFields: [{
-        type: 'char',
-        modelRequired: true,
-        name: 'name',
-        string: 'Your Name',
-    }, {
-        type: 'email',
-        required: true,
-        name: 'email',
-        string: 'Your Email',
-    }, {
-        type: 'tel',
-        name: 'phone',
-        string: 'Phone Number',
-    }, {
-        type: 'char',
-        name: 'company_name',
-        string: 'Company Name',
+FormEditorRegistry.add('create_customer',{
+    formFields:[{
+        type:'char',
+        modelRequired:true,
+        name:'name',
+        string:'YourName',
+    },{
+        type:'email',
+        required:true,
+        name:'email',
+        string:'YourEmail',
+    },{
+        type:'tel',
+        name:'phone',
+        string:'PhoneNumber',
+    },{
+        type:'char',
+        name:'company_name',
+        string:'CompanyName',
     }],
 });
 

@@ -1,23 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="choose_delivery_package_view_form" model="ir.ui.view">
-        <field name="name">choose.delivery.package.form</field>
-        <field name="model">choose.delivery.package</field>
-        <field name="arch" type="xml">
-            <form string="Package">
-                <field name="picking_id" invisible="1"/>
+    <recordid="choose_delivery_package_view_form"model="ir.ui.view">
+        <fieldname="name">choose.delivery.package.form</field>
+        <fieldname="model">choose.delivery.package</field>
+        <fieldname="arch"type="xml">
+            <formstring="Package">
+                <fieldname="picking_id"invisible="1"/>
                 <group>
-                    <field name="delivery_packaging_id"  domain="[('package_carrier_type', '=', context.get('current_package_carrier_type', 'none'))]"
+                    <fieldname="delivery_packaging_id" domain="[('package_carrier_type','=',context.get('current_package_carrier_type','none'))]"
                       context="{'form_view_ref':'delivery.product_packaging_delivery_form'}"/>
-                    <label for="shipping_weight" attrs="{'invisible': [('delivery_packaging_id', '=', False)]}"/>
-                    <div class="o_row" attrs="{'invisible': [('delivery_packaging_id', '=', False)]}" name="package_weight">
-                        <field name="shipping_weight"/>
-                        <field name="weight_uom_name"/>
+                    <labelfor="shipping_weight"attrs="{'invisible':[('delivery_packaging_id','=',False)]}"/>
+                    <divclass="o_row"attrs="{'invisible':[('delivery_packaging_id','=',False)]}"name="package_weight">
+                        <fieldname="shipping_weight"/>
+                        <fieldname="weight_uom_name"/>
                     </div>
                 </group>
                 <footer>
-                    <button name="action_put_in_pack" type="object" string="Save" class="btn-primary"/>
-                    <button string="Discard" special="cancel" class="btn-secondary"/>
+                    <buttonname="action_put_in_pack"type="object"string="Save"class="btn-primary"/>
+                    <buttonstring="Discard"special="cancel"class="btn-secondary"/>
                 </footer>
             </form>
         </field>

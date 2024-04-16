@@ -1,37 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="view_stock_rules_report" model="ir.ui.view">
-        <field name="name">Stock Rules Report</field>
-        <field name="model">stock.rules.report</field>
-        <field name="arch" type="xml">
-            <form string="Product Routes Report">
+    <recordid="view_stock_rules_report"model="ir.ui.view">
+        <fieldname="name">StockRulesReport</field>
+        <fieldname="model">stock.rules.report</field>
+        <fieldname="arch"type="xml">
+            <formstring="ProductRoutesReport">
                 <group>
-                    <field name="product_tmpl_id" invisible="1" />
-                    <field name="product_has_variants" invisible="1" />
-                    <field name="product_id" 
-                        domain="[('product_tmpl_id', '=', product_tmpl_id)]"
-                        attrs="{'readonly': [('product_has_variants', '=', False)]}" options="{'no_create': True}"/>
-                    <field name="warehouse_ids"
+                    <fieldname="product_tmpl_id"invisible="1"/>
+                    <fieldname="product_has_variants"invisible="1"/>
+                    <fieldname="product_id"
+                        domain="[('product_tmpl_id','=',product_tmpl_id)]"
+                        attrs="{'readonly':[('product_has_variants','=',False)]}"options="{'no_create':True}"/>
+                    <fieldname="warehouse_ids"
                         groups="stock.group_stock_multi_warehouses"
-                        widget="many2many_tags" />
+                        widget="many2many_tags"/>
                 </group>
                 <footer>
-                    <button name="print_report" 
-                        string="Overview" 
-                        type="object" 
+                    <buttonname="print_report"
+                        string="Overview"
+                        type="object"
                         class="btn-primary"/>
-                    <button string="Cancel" class="btn-default" special="cancel"/>
+                    <buttonstring="Cancel"class="btn-default"special="cancel"/>
                 </footer>
             </form>
         </field>
     </record>
 
-    <record id="action_stock_rules_report" model="ir.actions.act_window">
-        <field name="name">Stock Rules Report</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">stock.rules.report</field>
-        <field name="view_mode">form</field>
-        <field name="view_id" ref="view_stock_rules_report"/>
-        <field name="target">new</field>
+    <recordid="action_stock_rules_report"model="ir.actions.act_window">
+        <fieldname="name">StockRulesReport</field>
+        <fieldname="type">ir.actions.act_window</field>
+        <fieldname="res_model">stock.rules.report</field>
+        <fieldname="view_mode">form</field>
+        <fieldname="view_id"ref="view_stock_rules_report"/>
+        <fieldname="target">new</field>
     </record>
 </flectra>

@@ -1,98 +1,98 @@
-flectra.define('web.GroupByMenu', function (require) {
-    "use strict";
+flectra.define('web.GroupByMenu',function(require){
+    "usestrict";
 
-    const CustomGroupByItem = require('web.CustomGroupByItem');
-    const DropdownMenu = require('web.DropdownMenu');
-    const { FACET_ICONS, GROUPABLE_TYPES } = require('web.searchUtils');
-    const { useModel } = require('web/static/src/js/model.js');
+    constCustomGroupByItem=require('web.CustomGroupByItem');
+    constDropdownMenu=require('web.DropdownMenu');
+    const{FACET_ICONS,GROUPABLE_TYPES}=require('web.searchUtils');
+    const{useModel}=require('web/static/src/js/model.js');
 
     /**
-     * 'Group by' menu
+     *'Groupby'menu
      *
-     * Simple rendering of the filters of type `groupBy` given by the control panel
-     * model. It uses most of the behaviours implemented by the dropdown menu Component,
-     * with the addition of a groupBy filter generator (@see CustomGroupByItem).
-     * @see DropdownMenu for additional details.
-     * @extends DropdownMenu
+     *Simplerenderingofthefiltersoftype`groupBy`givenbythecontrolpanel
+     *model.ItusesmostofthebehavioursimplementedbythedropdownmenuComponent,
+     *withtheadditionofagroupByfiltergenerator(@seeCustomGroupByItem).
+     *@seeDropdownMenuforadditionaldetails.
+     *@extendsDropdownMenu
      */
-    class GroupByMenu extends DropdownMenu {
+    classGroupByMenuextendsDropdownMenu{
 
-        constructor() {
+        constructor(){
             super(...arguments);
 
-            this.fields = Object.values(this.props.fields)
-                .filter(field => this._validateField(field))
-                .sort(({ string: a }, { string: b }) => a > b ? 1 : a < b ? -1 : 0);
+            this.fields=Object.values(this.props.fields)
+                .filter(field=>this._validateField(field))
+                .sort(({string:a},{string:b})=>a>b?1:a<b?-1:0);
 
-            this.model = useModel('searchModel');
+            this.model=useModel('searchModel');
         }
 
         //---------------------------------------------------------------------
-        // Getters
+        //Getters
         //---------------------------------------------------------------------
 
         /**
-         * @override
+         *@override
          */
-        get icon() {
-            return FACET_ICONS.groupBy;
+        geticon(){
+            returnFACET_ICONS.groupBy;
         }
 
         /**
-         * @override
+         *@override
          */
-        get items() {
-            return this.model.get('filters', f => f.type === 'groupBy');
+        getitems(){
+            returnthis.model.get('filters',f=>f.type==='groupBy');
         }
 
         /**
-         * @override
+         *@override
          */
-        get title() {
-            return this.env._t("Group By");
+        gettitle(){
+            returnthis.env._t("GroupBy");
         }
 
         //---------------------------------------------------------------------
-        // Private
+        //Private
         //---------------------------------------------------------------------
 
         /**
-         * @private
-         * @param {Object} field
-         * @returns {boolean}
+         *@private
+         *@param{Object}field
+         *@returns{boolean}
          */
-        _validateField(field) {
-            return field.sortable &&
-                field.name !== "id" &&
+        _validateField(field){
+            returnfield.sortable&&
+                field.name!=="id"&&
                 GROUPABLE_TYPES.includes(field.type);
         }
 
         //---------------------------------------------------------------------
-        // Handlers
+        //Handlers
         //---------------------------------------------------------------------
 
         /**
-         * @private
-         * @param {OwlEvent} ev
+         *@private
+         *@param{OwlEvent}ev
          */
-        _onItemSelected(ev) {
+        _onItemSelected(ev){
             ev.stopPropagation();
-            const { item, option } = ev.detail;
-            if (option) {
-                this.model.dispatch('toggleFilterWithOptions', item.id, option.id);
-            } else {
-                this.model.dispatch('toggleFilter', item.id);
+            const{item,option}=ev.detail;
+            if(option){
+                this.model.dispatch('toggleFilterWithOptions',item.id,option.id);
+            }else{
+                this.model.dispatch('toggleFilter',item.id);
             }
         }
     }
 
-    GroupByMenu.components = Object.assign({}, DropdownMenu.components, {
+    GroupByMenu.components=Object.assign({},DropdownMenu.components,{
         CustomGroupByItem,
     });
-    GroupByMenu.props = Object.assign({}, DropdownMenu.props, {
-        fields: Object,
+    GroupByMenu.props=Object.assign({},DropdownMenu.props,{
+        fields:Object,
     });
-    GroupByMenu.template = 'web.GroupByMenu';
+    GroupByMenu.template='web.GroupByMenu';
 
-    return GroupByMenu;
+    returnGroupByMenu;
 });

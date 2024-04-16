@@ -1,44 +1,44 @@
 
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, models
-from flectra.addons.snailmail.country_utils import SNAILMAIL_COUNTRIES
+fromflectraimportapi,models
+fromflectra.addons.snailmail.country_utilsimportSNAILMAIL_COUNTRIES
 
 
-class ResPartner(models.Model):
-    _inherit = "res.partner"
+classResPartner(models.Model):
+    _inherit="res.partner"
 
-    def write(self, vals):
-        letter_address_vals = {}
-        address_fields = ['street', 'street2', 'city', 'zip', 'state_id', 'country_id']
-        for field in address_fields:
-            if field in vals:
-                letter_address_vals[field] = vals[field]
+    defwrite(self,vals):
+        letter_address_vals={}
+        address_fields=['street','street2','city','zip','state_id','country_id']
+        forfieldinaddress_fields:
+            iffieldinvals:
+                letter_address_vals[field]=vals[field]
 
-        if letter_address_vals:
-            letters = self.env['snailmail.letter'].search([
-                ('state', 'not in', ['sent', 'canceled']),
-                ('partner_id', 'in', self.ids),
+        ifletter_address_vals:
+            letters=self.env['snailmail.letter'].search([
+                ('state','notin',['sent','canceled']),
+                ('partner_id','in',self.ids),
             ])
             letters.write(letter_address_vals)
 
-        return super(ResPartner, self).write(vals)
+        returnsuper(ResPartner,self).write(vals)
 
-    def _get_country_name(self):
-        # when sending a letter, thus rendering the report with the snailmail_layout,
-        # we need to override the country name to its english version following the
-        # dictionary imported in country_utils.py
-        country_code = self.country_id.code
-        if self.env.context.get('snailmail_layout') and country_code in SNAILMAIL_COUNTRIES:
-            return SNAILMAIL_COUNTRIES.get(country_code)
+    def_get_country_name(self):
+        #whensendingaletter,thusrenderingthereportwiththesnailmail_layout,
+        #weneedtooverridethecountrynametoitsenglishversionfollowingthe
+        #dictionaryimportedincountry_utils.py
+        country_code=self.country_id.code
+        ifself.env.context.get('snailmail_layout')andcountry_codeinSNAILMAIL_COUNTRIES:
+            returnSNAILMAIL_COUNTRIES.get(country_code)
 
-        return super(ResPartner, self)._get_country_name()
+        returnsuper(ResPartner,self)._get_country_name()
 
     @api.model
-    def _get_address_format(self):
-        # When sending a letter, the fields 'street' and 'street2' should be on a single line to fit in the address area
-        if self.env.context.get('snailmail_layout') and self.street2:
-            return "%(street)s, %(street2)s\n%(city)s %(state_code)s %(zip)s\n%(country_name)s"
+    def_get_address_format(self):
+        #Whensendingaletter,thefields'street'and'street2'shouldbeonasinglelinetofitintheaddressarea
+        ifself.env.context.get('snailmail_layout')andself.street2:
+            return"%(street)s,%(street2)s\n%(city)s%(state_code)s%(zip)s\n%(country_name)s"
 
-        return super(ResPartner, self)._get_address_format()
+        returnsuper(ResPartner,self)._get_address_format()

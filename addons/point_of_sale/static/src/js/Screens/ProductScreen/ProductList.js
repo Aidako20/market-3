@@ -1,13 +1,13 @@
-flectra.define('point_of_sale.ProductList', function(require) {
-    'use strict';
+flectra.define('point_of_sale.ProductList',function(require){
+    'usestrict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
-    class ProductList extends PosComponent {}
-    ProductList.template = 'ProductList';
+    classProductListextendsPosComponent{}
+    ProductList.template='ProductList';
 
     Registries.Component.add(ProductList);
 
-    return ProductList;
+    returnProductList;
 });

@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models, _
-from flectra.exceptions import UserError
+fromflectraimportapi,fields,models,_
+fromflectra.exceptionsimportUserError
 
 
-class AccountAnalyticLine(models.Model):
-    _inherit = 'account.analytic.line'
+classAccountAnalyticLine(models.Model):
+    _inherit='account.analytic.line'
 
-    holiday_id = fields.Many2one("hr.leave", string='Leave Request')
+    holiday_id=fields.Many2one("hr.leave",string='LeaveRequest')
 
-    def unlink(self):
-        if any(line.holiday_id for line in self):
-            raise UserError(_('You cannot delete timesheet lines attached to a leaves. Please cancel the leaves instead.'))
-        return super(AccountAnalyticLine, self).unlink()
+    defunlink(self):
+        ifany(line.holiday_idforlineinself):
+            raiseUserError(_('Youcannotdeletetimesheetlinesattachedtoaleaves.Pleasecanceltheleavesinstead.'))
+        returnsuper(AccountAnalyticLine,self).unlink()

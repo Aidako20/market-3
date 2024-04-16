@@ -1,37 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xmlversion="1.0"encoding="UTF-8"?>
 <template>
-    <t t-name="Many2ManyAttendeeTag" t-extend="FieldMany2ManyTag">
-        <t t-jquery="span:first" t-operation="prepend">
-            <span t-if="attendeesData[el_index]" t-attf-class="o_calendar_invitation #{attendeesData[el_index].status}"/>
+    <tt-name="Many2ManyAttendeeTag"t-extend="FieldMany2ManyTag">
+        <tt-jquery="span:first"t-operation="prepend">
+            <spant-if="attendeesData[el_index]"t-attf-class="o_calendar_invitation#{attendeesData[el_index].status}"/>
         </t>
     </t>
 
-    <div t-name="calendar.RecurrentEventUpdate">
-        <div class="form-check o_radio_item">
-            <input name="recurrence-update" type="radio" class="form-check-input o_radio_input" checked="true" value="self_only" id="self_only"/>
-            <label class="form-check-label o_form_label" for="self_only">This event</label>
+    <divt-name="calendar.RecurrentEventUpdate">
+        <divclass="form-checko_radio_item">
+            <inputname="recurrence-update"type="radio"class="form-check-inputo_radio_input"checked="true"value="self_only"id="self_only"/>
+            <labelclass="form-check-labelo_form_label"for="self_only">Thisevent</label>
         </div>
 
-        <div class="form-check o_radio_item">
-            <input name="recurrence-update" type="radio" class="form-check-input o_radio_input" value="future_events" id="future_events"/>
-            <label class="form-check-label o_form_label" for="future_events">This and following events</label>
+        <divclass="form-checko_radio_item">
+            <inputname="recurrence-update"type="radio"class="form-check-inputo_radio_input"value="future_events"id="future_events"/>
+            <labelclass="form-check-labelo_form_label"for="future_events">Thisandfollowingevents</label>
         </div>
     </div>
 
-    <t t-extend="mail.systray.ActivityMenu.Previews">
-        <t t-jquery="div.o_preview_title" t-operation="after">
-            <div t-if="activity and activity.type == 'meeting'">
-                <t t-set="is_next_meeting" t-value="true"/>
-                <t t-foreach="activity.meetings" t-as="meeting">
+    <tt-extend="mail.systray.ActivityMenu.Previews">
+        <tt-jquery="div.o_preview_title"t-operation="after">
+            <divt-if="activityandactivity.type=='meeting'">
+                <tt-set="is_next_meeting"t-value="true"/>
+                <tt-foreach="activity.meetings"t-as="meeting">
                     <div>
-                        <span t-att-class="!meeting.allday and is_next_meeting ? 'o_meeting_filter o_meeting_bold' : 'o_meeting_filter'" t-att-data-res_model="activity.model" t-att-data-res_id="meeting.id" t-att-data-model_name="activity.name" t-att-title="meeting.name">
-                            <span><t t-esc="meeting.name"/></span>
+                        <spant-att-class="!meeting.alldayandis_next_meeting?'o_meeting_filtero_meeting_bold':'o_meeting_filter'"t-att-data-res_model="activity.model"t-att-data-res_id="meeting.id"t-att-data-model_name="activity.name"t-att-title="meeting.name">
+                            <span><tt-esc="meeting.name"/></span>
                         </span>
-                        <span t-if="meeting.start" class="float-right">
-                            <t t-if="meeting.allday">All Day</t>
-                            <t t-else=''>
-                                <t t-set="is_next_meeting" t-value="false"/>
-                                <t t-esc="moment(meeting.start).local().format(Time.strftime_to_moment_format(_t.database.parameters.time_format))"/>
+                        <spant-if="meeting.start"class="float-right">
+                            <tt-if="meeting.allday">AllDay</t>
+                            <tt-else=''>
+                                <tt-set="is_next_meeting"t-value="false"/>
+                                <tt-esc="moment(meeting.start).local().format(Time.strftime_to_moment_format(_t.database.parameters.time_format))"/>
                             </t>
                         </span>
                     </div>
@@ -40,16 +40,16 @@
         </t>
     </t>
 
-    <t t-name="Calendar.attendee.status.popover" t-extend="CalendarView.event.popover">
-        <t t-jquery=".o_cw_popover_delete" t-operation="after">
-            <div t-if="widget.displayAttendeeAnswerChoice()" class="btn-group o-calendar-attendee-status ml-2">
-                <a href="#" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i t-attf-class="fa fa-circle o-calendar-attendee-status-icon #{widget.selectedStatusInfo.color}"/> <span class="o-calendar-attendee-status-text" t-esc="widget.selectedStatusInfo.text"></span>
+    <tt-name="Calendar.attendee.status.popover"t-extend="CalendarView.event.popover">
+        <tt-jquery=".o_cw_popover_delete"t-operation="after">
+            <divt-if="widget.displayAttendeeAnswerChoice()"class="btn-groupo-calendar-attendee-statusml-2">
+                <ahref="#"class="btnbtn-secondarydropdown-toggle"data-toggle="dropdown"aria-haspopup="true"aria-expanded="false">
+                    <it-attf-class="fafa-circleo-calendar-attendee-status-icon#{widget.selectedStatusInfo.color}"/><spanclass="o-calendar-attendee-status-text"t-esc="widget.selectedStatusInfo.text"></span>
                 </a>
-                <div class="dropdown-menu overflow-hidden">
-                    <a class="dropdown-item" href="#" data-action="accepted"><i class="fa fa-circle text-success"/> Accept</a>
-                    <a class="dropdown-item" href="#" data-action="declined"><i class="fa fa-circle text-danger"/> Decline</a>
-                    <a class="dropdown-item" href="#" data-action="tentative"><i class="fa fa-circle text-muted"/> Uncertain</a>
+                <divclass="dropdown-menuoverflow-hidden">
+                    <aclass="dropdown-item"href="#"data-action="accepted"><iclass="fafa-circletext-success"/>Accept</a>
+                    <aclass="dropdown-item"href="#"data-action="declined"><iclass="fafa-circletext-danger"/>Decline</a>
+                    <aclass="dropdown-item"href="#"data-action="tentative"><iclass="fafa-circletext-muted"/>Uncertain</a>
                 </div>
             </div>
         </t>

@@ -1,21 +1,21 @@
-flectra.define('mail/static/src/component_hooks/use_refs/use_refs.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/component_hooks/use_refs/use_refs.js',function(require){
+'usestrict';
 
-const { Component } = owl;
+const{Component}=owl;
 
 /**
- * This hook provides support for dynamic-refs.
+ *Thishookprovidessupportfordynamic-refs.
  *
- * @returns {function} returns object whose keys are t-ref values of active refs.
- *   and values are refs.
+ *@returns{function}returnsobjectwhosekeysaret-refvaluesofactiverefs.
+ *  andvaluesarerefs.
  */
-function useRefs() {
-    const component = Component.current;
-    return function () {
-        return component.__owl__.refs || {};
+functionuseRefs(){
+    constcomponent=Component.current;
+    returnfunction(){
+        returncomponent.__owl__.refs||{};
     };
 }
 
-return useRefs;
+returnuseRefs;
 
 });

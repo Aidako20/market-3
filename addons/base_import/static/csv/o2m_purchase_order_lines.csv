@@ -1,4 +1,4 @@
-"Order Date","Order Reference",Vendor,"Order Lines / Product","Order Lines / Description","Order Lines / Quantity","Order Lines / Product Unit of Measure","Order Lines / Unit Price","Order Lines / Scheduled Date"
+"OrderDate","OrderReference",Vendor,"OrderLines/Product","OrderLines/Description","OrderLines/Quantity","OrderLines/ProductUnitofMeasure","OrderLines/UnitPrice","OrderLines/ScheduledDate"
 2016-12-15,PO00008,ASUSTeK,ADPT,ADPT,20.0,"Units",13.0,2016-12-15
 ,,,CARD,CARD,30,"Units",876.0,2016-12-15
 ,,,C-Case,C-Case,40,"Units",20.0,2016-12-15

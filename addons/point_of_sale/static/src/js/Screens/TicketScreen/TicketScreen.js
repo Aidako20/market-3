@@ -1,221 +1,221 @@
-flectra.define('point_of_sale.TicketScreen', function (require) {
-    'use strict';
+flectra.define('point_of_sale.TicketScreen',function(require){
+    'usestrict';
 
-    const Registries = require('point_of_sale.Registries');
-    const IndependentToOrderScreen = require('point_of_sale.IndependentToOrderScreen');
-    const { useListener } = require('web.custom_hooks');
-    const { posbus } = require('point_of_sale.utils');
+    constRegistries=require('point_of_sale.Registries');
+    constIndependentToOrderScreen=require('point_of_sale.IndependentToOrderScreen');
+    const{useListener}=require('web.custom_hooks');
+    const{posbus}=require('point_of_sale.utils');
 
-    class TicketScreen extends IndependentToOrderScreen {
-        constructor() {
+    classTicketScreenextendsIndependentToOrderScreen{
+        constructor(){
             super(...arguments);
-            useListener('close-screen', this.close);
-            useListener('filter-selected', this._onFilterSelected);
-            useListener('search', this._onSearch);
-            this.searchDetails = {};
-            this.filter = null;
+            useListener('close-screen',this.close);
+            useListener('filter-selected',this._onFilterSelected);
+            useListener('search',this._onSearch);
+            this.searchDetails={};
+            this.filter=null;
             this._initializeSearchFieldConstants();
         }
-        mounted() {
-            posbus.on('ticket-button-clicked', this, this.close);
-            this.env.pos.get('orders').on('add remove change', () => this.render(), this);
-            this.env.pos.on('change:selectedOrder', () => this.render(), this);
+        mounted(){
+            posbus.on('ticket-button-clicked',this,this.close);
+            this.env.pos.get('orders').on('addremovechange',()=>this.render(),this);
+            this.env.pos.on('change:selectedOrder',()=>this.render(),this);
         }
-        willUnmount() {
-            posbus.off('ticket-button-clicked', this);
-            this.env.pos.get('orders').off('add remove change', null, this);
-            this.env.pos.off('change:selectedOrder', null, this);
+        willUnmount(){
+            posbus.off('ticket-button-clicked',this);
+            this.env.pos.get('orders').off('addremovechange',null,this);
+            this.env.pos.off('change:selectedOrder',null,this);
         }
-        _onFilterSelected(event) {
-            this.filter = event.detail.filter;
+        _onFilterSelected(event){
+            this.filter=event.detail.filter;
             this.render();
         }
-        _onSearch(event) {
-            const searchDetails = event.detail;
-            Object.assign(this.searchDetails, searchDetails);
+        _onSearch(event){
+            constsearchDetails=event.detail;
+            Object.assign(this.searchDetails,searchDetails);
             this.render();
         }
         /**
-         * Override to conditionally show the new ticket button.
+         *Overridetoconditionallyshowthenewticketbutton.
          */
-        get showNewTicketButton() {
-            return true;
+        getshowNewTicketButton(){
+            returntrue;
         }
-        get orderList() {
-            return this.env.pos.get_order_list();
+        getorderList(){
+            returnthis.env.pos.get_order_list();
         }
-        get filteredOrderList() {
-            const { AllTickets } = this.getOrderStates();
-            const filterCheck = (order) => {
-                if (this.filter && this.filter !== AllTickets) {
-                    const screen = order.get_screen_data();
-                    return this.filter === this.constants.screenToStatusMap[screen.name];
+        getfilteredOrderList(){
+            const{AllTickets}=this.getOrderStates();
+            constfilterCheck=(order)=>{
+                if(this.filter&&this.filter!==AllTickets){
+                    constscreen=order.get_screen_data();
+                    returnthis.filter===this.constants.screenToStatusMap[screen.name];
                 }
-                return true;
+                returntrue;
             };
-            const { fieldValue, searchTerm } = this.searchDetails;
-            const fieldAccessor = this._searchFields[fieldValue];
-            const searchCheck = (order) => {
-                if (!fieldAccessor) return true;
-                const fieldValue = fieldAccessor(order);
-                if (fieldValue === null) return true;
-                if (!searchTerm) return true;
-                return fieldValue && fieldValue.toString().toLowerCase().includes(searchTerm.toLowerCase());
+            const{fieldValue,searchTerm}=this.searchDetails;
+            constfieldAccessor=this._searchFields[fieldValue];
+            constsearchCheck=(order)=>{
+                if(!fieldAccessor)returntrue;
+                constfieldValue=fieldAccessor(order);
+                if(fieldValue===null)returntrue;
+                if(!searchTerm)returntrue;
+                returnfieldValue&&fieldValue.toString().toLowerCase().includes(searchTerm.toLowerCase());
             };
-            const predicate = (order) => {
-                return filterCheck(order) && searchCheck(order);
+            constpredicate=(order)=>{
+                returnfilterCheck(order)&&searchCheck(order);
             };
-            return this.orderList.filter(predicate);
+            returnthis.orderList.filter(predicate);
         }
-        selectOrder(order) {
+        selectOrder(order){
             this._setOrder(order);
-            if (order === this.env.pos.get_order()) {
+            if(order===this.env.pos.get_order()){
                 this.close();
             }
         }
-        _setOrder(order) {
+        _setOrder(order){
             this.env.pos.set_order(order);
         }
-        createNewOrder() {
+        createNewOrder(){
             this.env.pos.add_new_order();
         }
-        async deleteOrder(order) {
-            const screen = order.get_screen_data();
-            if (['ProductScreen', 'PaymentScreen'].includes(screen.name) && order.get_orderlines().length > 0) {
-                const { confirmed } = await this.showPopup('ConfirmPopup', {
-                    title: this.env._t('Existing orderlines'),
-                    body: _.str.sprintf(
-                      this.env._t('%s has a total amount of %s, are you sure you want to delete this order ?'),
-                      order.name, this.getTotal(order)
+        asyncdeleteOrder(order){
+            constscreen=order.get_screen_data();
+            if(['ProductScreen','PaymentScreen'].includes(screen.name)&&order.get_orderlines().length>0){
+                const{confirmed}=awaitthis.showPopup('ConfirmPopup',{
+                    title:this.env._t('Existingorderlines'),
+                    body:_.str.sprintf(
+                      this.env._t('%shasatotalamountof%s,areyousureyouwanttodeletethisorder?'),
+                      order.name,this.getTotal(order)
                     ),
                 });
-                if (!confirmed) return;
+                if(!confirmed)return;
             }
-            if (order) {
-                await this._canDeleteOrder(order);
-                order.destroy({ reason: 'abandon' });
+            if(order){
+                awaitthis._canDeleteOrder(order);
+                order.destroy({reason:'abandon'});
             }
             posbus.trigger('order-deleted');
         }
-        getDate(order) {
-            return moment(order.creation_date).format('YYYY-MM-DD hh:mm A');
+        getDate(order){
+            returnmoment(order.creation_date).format('YYYY-MM-DDhh:mmA');
         }
-        getTotal(order) {
-            return this.env.pos.format_currency(order.get_total_with_tax());
+        getTotal(order){
+            returnthis.env.pos.format_currency(order.get_total_with_tax());
         }
-        getCustomer(order) {
-            return order.get_client_name();
+        getCustomer(order){
+            returnorder.get_client_name();
         }
-        getCardholderName(order) {
-            return order.get_cardholder_name();
+        getCardholderName(order){
+            returnorder.get_cardholder_name();
         }
-        getEmployee(order) {
-            return order.employee ? order.employee.name : '';
+        getEmployee(order){
+            returnorder.employee?order.employee.name:'';
         }
-        getStatus(order) {
-            const screen = order.get_screen_data();
-            return this.constants.screenToStatusMap[screen.name];
+        getStatus(order){
+            constscreen=order.get_screen_data();
+            returnthis.constants.screenToStatusMap[screen.name];
         }
         /**
-         * Hide the delete button if one of the payments is a 'done' electronic payment.
+         *Hidethedeletebuttonifoneofthepaymentsisa'done'electronicpayment.
          */
-        hideDeleteButton(order) {
-            return order
+        hideDeleteButton(order){
+            returnorder
                 .get_paymentlines()
-                .some((payment) => payment.is_electronic() && payment.get_payment_status() === 'done');
+                .some((payment)=>payment.is_electronic()&&payment.get_payment_status()==='done');
         }
-        showCardholderName() {
-            return this.env.pos.payment_methods.some(method => method.use_payment_terminal);
+        showCardholderName(){
+            returnthis.env.pos.payment_methods.some(method=>method.use_payment_terminal);
         }
-        get searchBarConfig() {
-            return {
-                searchFields: this.constants.searchFieldNames,
-                filter: { show: true, options: this.filterOptions },
+        getsearchBarConfig(){
+            return{
+                searchFields:this.constants.searchFieldNames,
+                filter:{show:true,options:this.filterOptions},
             };
         }
-        get filterOptions() {
-            const { AllTickets, Ongoing, Payment, Receipt } = this.getOrderStates();
-            return [AllTickets, Ongoing, Payment, Receipt];
+        getfilterOptions(){
+            const{AllTickets,Ongoing,Payment,Receipt}=this.getOrderStates();
+            return[AllTickets,Ongoing,Payment,Receipt];
         }
         /**
-         * An object with keys containing the search field names which map to functions.
-         * The mapped functions will be used to generate representative string for the order
-         * to match the search term when searching.
-         * E.g. Given 2 orders, search those with `Receipt Number` containing `1111`.
-         * ```
-         * orders = [{
-         *    name: '000-1111-222'
-         *    total: 10,
-         *   }, {
-         *    name: '444-5555-666'
-         *    total: 15,
-         * }]
-         * ```
-         * `Receipt Number` search field maps to the `name` of the order. So, the orders will be
-         * represented by their name, and the search will result to:
-         * ```
-         * result = [{
-         *    name: '000-1111-222',
-         *    total: 10,
-         * }]
-         * ```
-         * @returns Record<string, (models.Order) => string>
+         *Anobjectwithkeyscontainingthesearchfieldnameswhichmaptofunctions.
+         *Themappedfunctionswillbeusedtogeneraterepresentativestringfortheorder
+         *tomatchthesearchtermwhensearching.
+         *E.g.Given2orders,searchthosewith`ReceiptNumber`containing`1111`.
+         *```
+         *orders=[{
+         *   name:'000-1111-222'
+         *   total:10,
+         *  },{
+         *   name:'444-5555-666'
+         *   total:15,
+         *}]
+         *```
+         *`ReceiptNumber`searchfieldmapstothe`name`oftheorder.So,theorderswillbe
+         *representedbytheirname,andthesearchwillresultto:
+         *```
+         *result=[{
+         *   name:'000-1111-222',
+         *   total:10,
+         *}]
+         *```
+         *@returnsRecord<string,(models.Order)=>string>
          */
-        get _searchFields() {
-            const { ReceiptNumber, Date, Customer, CardholderName } = this.getSearchFieldNames();
-            var fields = {
-                [ReceiptNumber]: (order) => order.name,
-                [Date]: (order) => moment(order.creation_date).format('YYYY-MM-DD hh:mm A'),
-                [Customer]: (order) => order.get_client_name(),
+        get_searchFields(){
+            const{ReceiptNumber,Date,Customer,CardholderName}=this.getSearchFieldNames();
+            varfields={
+                [ReceiptNumber]:(order)=>order.name,
+                [Date]:(order)=>moment(order.creation_date).format('YYYY-MM-DDhh:mmA'),
+                [Customer]:(order)=>order.get_client_name(),
             };
 
-            if (this.showCardholderName()) {
-                fields[CardholderName] = (order) => order.get_cardholder_name();
+            if(this.showCardholderName()){
+                fields[CardholderName]=(order)=>order.get_cardholder_name();
             }
 
-            return fields;
+            returnfields;
         }
         /**
-         * Maps the order screen params to order status.
+         *Mapstheorderscreenparamstoorderstatus.
          */
-        get _screenToStatusMap() {
-            const { Ongoing, Payment, Receipt } = this.getOrderStates();
-            return {
-                ProductScreen: Ongoing,
-                PaymentScreen: Payment,
-                ReceiptScreen: Receipt,
+        get_screenToStatusMap(){
+            const{Ongoing,Payment,Receipt}=this.getOrderStates();
+            return{
+                ProductScreen:Ongoing,
+                PaymentScreen:Payment,
+                ReceiptScreen:Receipt,
             };
         }
-        _initializeSearchFieldConstants() {
-            this.constants = {};
-            Object.assign(this.constants, {
-                searchFieldNames: Object.keys(this._searchFields),
-                screenToStatusMap: this._screenToStatusMap,
+        _initializeSearchFieldConstants(){
+            this.constants={};
+            Object.assign(this.constants,{
+                searchFieldNames:Object.keys(this._searchFields),
+                screenToStatusMap:this._screenToStatusMap,
             });
         }
-        async _canDeleteOrder(order) {
-            return true;
+        async_canDeleteOrder(order){
+            returntrue;
         }
-        getOrderStates() {
-            return {
-                AllTickets: this.env._t('All Tickets'),
-                Ongoing: this.env._t('Ongoing'),
-                Payment: this.env._t('Payment'),
-                Receipt: this.env._t('Receipt'),
+        getOrderStates(){
+            return{
+                AllTickets:this.env._t('AllTickets'),
+                Ongoing:this.env._t('Ongoing'),
+                Payment:this.env._t('Payment'),
+                Receipt:this.env._t('Receipt'),
             };
         }
-        getSearchFieldNames() {
-            return {
-                ReceiptNumber: this.env._t('Receipt Number'),
-                Date: this.env._t('Date'),
-                Customer: this.env._t('Customer'),
-                CardholderName: this.env._t('Cardholder Name'),
+        getSearchFieldNames(){
+            return{
+                ReceiptNumber:this.env._t('ReceiptNumber'),
+                Date:this.env._t('Date'),
+                Customer:this.env._t('Customer'),
+                CardholderName:this.env._t('CardholderName'),
             };
         }
     }
-    TicketScreen.template = 'TicketScreen';
+    TicketScreen.template='TicketScreen';
 
     Registries.Component.add(TicketScreen);
 
-    return TicketScreen;
+    returnTicketScreen;
 });

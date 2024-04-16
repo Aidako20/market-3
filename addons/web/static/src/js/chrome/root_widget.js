@@ -1,7 +1,7 @@
-flectra.define('root.widget', function (require) {
-"use strict";
+flectra.define('root.widget',function(require){
+"usestrict";
 
-var webClient = require('web.web_client');
+varwebClient=require('web.web_client');
 
-return webClient;
+returnwebClient;
 });

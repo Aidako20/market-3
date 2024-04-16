@@ -1,38 +1,38 @@
-flectra.define('lunch.LunchListView', function (require) {
-"use strict";
+flectra.define('lunch.LunchListView',function(require){
+"usestrict";
 
-var LunchListController = require('lunch.LunchListController');
-var LunchListRenderer = require('lunch.LunchListRenderer');
+varLunchListController=require('lunch.LunchListController');
+varLunchListRenderer=require('lunch.LunchListRenderer');
 
-var core = require('web.core');
-var ListView = require('web.ListView');
-var view_registry = require('web.view_registry');
+varcore=require('web.core');
+varListView=require('web.ListView');
+varview_registry=require('web.view_registry');
 
-var _lt = core._lt;
+var_lt=core._lt;
 
-var LunchListView = ListView.extend({
-    config: _.extend({}, ListView.prototype.config, {
-        Controller: LunchListController,
-        Renderer: LunchListRenderer,
+varLunchListView=ListView.extend({
+    config:_.extend({},ListView.prototype.config,{
+        Controller:LunchListController,
+        Renderer:LunchListRenderer,
     }),
-    display_name: _lt('Lunch List'),
+    display_name:_lt('LunchList'),
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @override
+     *@override
      */
-    _createSearchModel(params, extraExtensions = {}) {
-        Object.assign(extraExtensions, { Lunch: {} });
-        return this._super(params, extraExtensions);
+    _createSearchModel(params,extraExtensions={}){
+        Object.assign(extraExtensions,{Lunch:{}});
+        returnthis._super(params,extraExtensions);
     },
 
 });
 
-view_registry.add('lunch_list', LunchListView);
+view_registry.add('lunch_list',LunchListView);
 
-return LunchListView;
+returnLunchListView;
 
 });

@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.addons.website.tests.test_performance import UtilPerf
+fromflectra.addons.website.tests.test_performanceimportUtilPerf
 
 
-class TestPerformance(UtilPerf):
-    def test_10_perf_sql_website_controller_minimalist(self):
-        url = '/empty_controller_test'
-        self.assertEqual(self._get_url_hot_query(url), 3)
+classTestPerformance(UtilPerf):
+    deftest_10_perf_sql_website_controller_minimalist(self):
+        url='/empty_controller_test'
+        self.assertEqual(self._get_url_hot_query(url),3)

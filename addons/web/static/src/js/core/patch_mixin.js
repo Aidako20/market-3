@@ -1,80 +1,80 @@
-flectra.define("web.patchMixin", function () {
-    "use strict";
+flectra.define("web.patchMixin",function(){
+    "usestrict";
 
     /**
-     * This module defines and exports the 'patchMixin' function. This function
-     * returns a 'monkey-patchable' version of the ES6 Class given in arguments.
+     *Thismoduledefinesandexportsthe'patchMixin'function.Thisfunction
+     *returnsa'monkey-patchable'versionoftheES6Classgiveninarguments.
      *
-     *    const patchMixin = require('web.patchMixin');
-     *    class MyClass {
-     *        print() {
-     *            console.log('MyClass');
-     *        }
-     *    }
-     *    const MyPatchedClass = patchMixin(MyClass);
-     *
-     *
-     * A patchable class has a 'patch' function, allowing to define a patch:
-     *
-     *    MyPatchedClass.patch("module_name.key", T =>
-     *        class extends T {
-     *            print() {
-     *                console.log('MyPatchedClass');
-     *                super.print();
-     *            }
-     *        }
-     *    );
-     *
-     *    const myPatchedClass = new MyPatchedClass();
-     *    myPatchedClass.print(); // displays "MyPatchedClass" and "MyClass"
+     *   constpatchMixin=require('web.patchMixin');
+     *   classMyClass{
+     *       print(){
+     *           console.log('MyClass');
+     *       }
+     *   }
+     *   constMyPatchedClass=patchMixin(MyClass);
      *
      *
-     * The 'unpatch' function can be used to remove a patch, given its key:
+     *Apatchableclasshasa'patch'function,allowingtodefineapatch:
      *
-     *    MyPatchedClass.unpatch("module_name.key");
+     *   MyPatchedClass.patch("module_name.key",T=>
+     *       classextendsT{
+     *           print(){
+     *               console.log('MyPatchedClass');
+     *               super.print();
+     *           }
+     *       }
+     *   );
+     *
+     *   constmyPatchedClass=newMyPatchedClass();
+     *   myPatchedClass.print();//displays"MyPatchedClass"and"MyClass"
+     *
+     *
+     *The'unpatch'functioncanbeusedtoremoveapatch,givenitskey:
+     *
+     *   MyPatchedClass.unpatch("module_name.key");
      */
-    function patchMixin(OriginalClass) {
-        let unpatchList = [];
-        class PatchableClass extends OriginalClass {}
+    functionpatchMixin(OriginalClass){
+        letunpatchList=[];
+        classPatchableClassextendsOriginalClass{}
 
-        PatchableClass.patch = function (name, patch) {
-            if (unpatchList.find(x => x.name === name)) {
-                throw new Error(`Class ${OriginalClass.name} already has a patch ${name}`);
+        PatchableClass.patch=function(name,patch){
+            if(unpatchList.find(x=>x.name===name)){
+                thrownewError(`Class${OriginalClass.name}alreadyhasapatch${name}`);
             }
-            if (!Object.prototype.hasOwnProperty.call(this, 'patch')) {
-                throw new Error(`Class ${this.name} is not patchable`);
+            if(!Object.prototype.hasOwnProperty.call(this,'patch')){
+                thrownewError(`Class${this.name}isnotpatchable`);
             }
-            const SubClass = patch(Object.getPrototypeOf(this));
+            constSubClass=patch(Object.getPrototypeOf(this));
             unpatchList.push({
-                name: name,
-                elem: this,
-                prototype: this.prototype,
-                origProto: Object.getPrototypeOf(this),
-                origPrototype: Object.getPrototypeOf(this.prototype),
-                patch: patch,
+                name:name,
+                elem:this,
+                prototype:this.prototype,
+                origProto:Object.getPrototypeOf(this),
+                origPrototype:Object.getPrototypeOf(this.prototype),
+                patch:patch,
             });
-            Object.setPrototypeOf(this, SubClass);
-            Object.setPrototypeOf(this.prototype, SubClass.prototype);
+            Object.setPrototypeOf(this,SubClass);
+            Object.setPrototypeOf(this.prototype,SubClass.prototype);
         };
 
-        PatchableClass.unpatch = function (name) {
-            if (!unpatchList.find(x => x.name === name)) {
-                throw new Error(`Class ${OriginalClass.name} does not have any patch ${name}`);
+        PatchableClass.unpatch=function(name){
+            if(!unpatchList.find(x=>x.name===name)){
+                thrownewError(`Class${OriginalClass.name}doesnothaveanypatch${name}`);
             }
-            const toUnpatch = unpatchList.reverse();
-            unpatchList = [];
-            for (let unpatch of toUnpatch) {
-                Object.setPrototypeOf(unpatch.elem, unpatch.origProto);
-                Object.setPrototypeOf(unpatch.prototype, unpatch.origPrototype);
+            consttoUnpatch=unpatchList.reverse();
+            unpatchList=[];
+            for(letunpatchoftoUnpatch){
+                Object.setPrototypeOf(unpatch.elem,unpatch.origProto);
+                Object.setPrototypeOf(unpatch.prototype,unpatch.origPrototype);
             }
-            for (let u of toUnpatch.reverse()) {
-                if (u.name !== name) {
-                    PatchableClass.patch(u.name, u.patch);
+            for(letuoftoUnpatch.reverse()){
+                if(u.name!==name){
+                    PatchableClass.patch(u.name,u.patch);
                 }
             }
         };
-        return PatchableClass;
+        returnPatchableClass;
     }
 
-    return patchMixin;
+    returnpatchMixin;
 });

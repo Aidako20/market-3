@@ -1,89 +1,89 @@
-flectra.define('mail/static/src/components/follower_subtype_list/follower_subtype_list.js', function (require) {
-'use strict';
+flectra.define('mail/static/src/components/follower_subtype_list/follower_subtype_list.js',function(require){
+'usestrict';
 
-const components = {
-    FollowerSubtype: require('mail/static/src/components/follower_subtype/follower_subtype.js'),
+constcomponents={
+    FollowerSubtype:require('mail/static/src/components/follower_subtype/follower_subtype.js'),
 };
-const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
-const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
+constuseShouldUpdateBasedOnProps=require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
+constuseStore=require('mail/static/src/component_hooks/use_store/use_store.js');
 
-const { Component, QWeb } = owl;
+const{Component,QWeb}=owl;
 
-class FollowerSubtypeList extends Component {
+classFollowerSubtypeListextendsComponent{
 
     /**
-     * @override
+     *@override
      */
-    constructor(...args) {
+    constructor(...args){
         super(...args);
         useShouldUpdateBasedOnProps();
-        useStore(props => {
-            const followerSubtypeList = this.env.models['mail.follower_subtype_list'].get(props.localId);
-            const follower = followerSubtypeList
-                ? followerSubtypeList.follower
-                : undefined;
-            const followerSubtypes = follower ? follower.subtypes : [];
-            return {
-                follower: follower ? follower.__state : undefined,
-                followerSubtypeList: followerSubtypeList
-                    ? followerSubtypeList.__state
-                    : undefined,
-                followerSubtypes: followerSubtypes.map(subtype => subtype.__state),
+        useStore(props=>{
+            constfollowerSubtypeList=this.env.models['mail.follower_subtype_list'].get(props.localId);
+            constfollower=followerSubtypeList
+                ?followerSubtypeList.follower
+                :undefined;
+            constfollowerSubtypes=follower?follower.subtypes:[];
+            return{
+                follower:follower?follower.__state:undefined,
+                followerSubtypeList:followerSubtypeList
+                    ?followerSubtypeList.__state
+                    :undefined,
+                followerSubtypes:followerSubtypes.map(subtype=>subtype.__state),
             };
-        }, {
-            compareDepth: {
-                followerSubtypes: 1,
+        },{
+            compareDepth:{
+                followerSubtypes:1,
             },
         });
     }
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * @returns {mail.follower_subtype_list}
+     *@returns{mail.follower_subtype_list}
      */
-    get followerSubtypeList() {
-        return this.env.models['mail.follower_subtype_list'].get(this.props.localId);
+    getfollowerSubtypeList(){
+        returnthis.env.models['mail.follower_subtype_list'].get(this.props.localId);
     }
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when clicking on cancel button.
+     *Calledwhenclickingoncancelbutton.
      *
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickCancel(ev) {
+    _onClickCancel(ev){
         this.followerSubtypeList.follower.closeSubtypes();
     }
 
     /**
-     * Called when clicking on apply button.
+     *Calledwhenclickingonapplybutton.
      *
-     * @private
-     * @param {MouseEvent} ev
+     *@private
+     *@param{MouseEvent}ev
      */
-    _onClickApply(ev) {
+    _onClickApply(ev){
         this.followerSubtypeList.follower.updateSubtypes();
     }
 
 }
 
-Object.assign(FollowerSubtypeList, {
+Object.assign(FollowerSubtypeList,{
     components,
-    props: {
-        localId: String,
+    props:{
+        localId:String,
     },
-    template: 'mail.FollowerSubtypeList',
+    template:'mail.FollowerSubtypeList',
 });
 
-QWeb.registerComponent('FollowerSubtypeList', FollowerSubtypeList);
+QWeb.registerComponent('FollowerSubtypeList',FollowerSubtypeList);
 
-return FollowerSubtypeList;
+returnFollowerSubtypeList;
 
 });

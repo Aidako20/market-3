@@ -1,83 +1,83 @@
 <templates>
-    <t t-name="static">
-        <div foo="a" bar="b" baz="c"/>
+    <tt-name="static">
+        <divfoo="a"bar="b"baz="c"/>
     </t>
-    <result id="static"><![CDATA[<div foo="a" bar="b" baz="c"></div>]]></result>
+    <resultid="static"><![CDATA[<divfoo="a"bar="b"baz="c"></div>]]></result>
 
-    <t t-name="static-void">
-        <img src="/test.jpg" alt="Test"/>
+    <tt-name="static-void">
+        <imgsrc="/test.jpg"alt="Test"/>
     </t>
-    <result id="static-void"><![CDATA[<img src="/test.jpg" alt="Test"/>]]></result>
+    <resultid="static-void"><![CDATA[<imgsrc="/test.jpg"alt="Test"/>]]></result>
 
-    <t t-name="fixed-literal">
-        <div t-att-foo="'bar'"/>
+    <tt-name="fixed-literal">
+        <divt-att-foo="'bar'"/>
     </t>
-    <result id="fixed-literal"><![CDATA[<div foo="bar"></div>]]></result>
+    <resultid="fixed-literal"><![CDATA[<divfoo="bar"></div>]]></result>
 
-    <t t-name="fixed-variable">
-        <div t-att-foo="value"/>
+    <tt-name="fixed-variable">
+        <divt-att-foo="value"/>
     </t>
-    <params id="fixed-variable">{"value": "ok"}</params>
-    <result id="fixed-variable"><![CDATA[<div foo="ok"></div>]]></result>
+    <paramsid="fixed-variable">{"value":"ok"}</params>
+    <resultid="fixed-variable"><![CDATA[<divfoo="ok"></div>]]></result>
 
-    <t t-name="tuple-literal">
-        <div t-att="['foo', 'bar']"/>
+    <tt-name="tuple-literal">
+        <divt-att="['foo','bar']"/>
     </t>
-    <result id="tuple-literal"><![CDATA[<div foo="bar"></div>]]></result>
+    <resultid="tuple-literal"><![CDATA[<divfoo="bar"></div>]]></result>
 
-    <t t-name="tuple-variable">
-        <div t-att="value"/>
+    <tt-name="tuple-variable">
+        <divt-att="value"/>
     </t>
-    <params id="tuple-variable">{"value": ["foo", "bar"]}</params>
-    <result id="tuple-variable"><![CDATA[<div foo="bar"></div>]]></result>
+    <paramsid="tuple-variable">{"value":["foo","bar"]}</params>
+    <resultid="tuple-variable"><![CDATA[<divfoo="bar"></div>]]></result>
 
-    <t t-name="object">
-        <div t-att="value"/>
+    <tt-name="object">
+        <divt-att="value"/>
     </t>
-    <params id="object">{"value": {"a": 1, "b": 2, "c": 3}}</params>
-    <result id="object"><![CDATA[<div a="1" b="2" c="3"></div>]]></result>
+    <paramsid="object">{"value":{"a":1,"b":2,"c":3}}</params>
+    <resultid="object"><![CDATA[<diva="1"b="2"c="3"></div>]]></result>
 
-    <t t-name="format-literal">
-        <div t-attf-foo="bar"/>
+    <tt-name="format-literal">
+        <divt-attf-foo="bar"/>
     </t>
-    <result id="format-literal"><![CDATA[<div foo="bar"></div>]]></result>
+    <resultid="format-literal"><![CDATA[<divfoo="bar"></div>]]></result>
 
-    <t t-name="format-value">
-        <div t-attf-foo="b{{value}}r"/>
+    <tt-name="format-value">
+        <divt-attf-foo="b{{value}}r"/>
     </t>
-    <params id="format-value">{"value": "a"}</params>
-    <result id="format-value"><![CDATA[<div foo="bar"></div>]]></result>
+    <paramsid="format-value">{"value":"a"}</params>
+    <resultid="format-value"><![CDATA[<divfoo="bar"></div>]]></result>
 
-    <t t-name="format-expression">
-        <div t-attf-foo="{{value + 37}}"/>
+    <tt-name="format-expression">
+        <divt-attf-foo="{{value+37}}"/>
     </t>
-    <params id="format-expression">{"value": 5}</params>
-    <result id="format-expression"><![CDATA[<div foo="42"></div>]]></result>
+    <paramsid="format-expression">{"value":5}</params>
+    <resultid="format-expression"><![CDATA[<divfoo="42"></div>]]></result>
 
-    <t t-name="format-multiple">
-        <div t-attf-foo="a {{value1}} is {{value2}} of {{value3}} ]"/>
+    <tt-name="format-multiple">
+        <divt-attf-foo="a{{value1}}is{{value2}}of{{value3}}]"/>
     </t>
-    <params id="format-multiple">{
-        "value1": 0,
-        "value2": 1,
-        "value3": 2
+    <paramsid="format-multiple">{
+        "value1":0,
+        "value2":1,
+        "value3":2
     }</params>
-    <result id="format-multiple"><![CDATA[
-        <div foo="a 0 is 1 of 2 ]"></div>
+    <resultid="format-multiple"><![CDATA[
+        <divfoo="a0is1of2]"></div>
     ]]></result>
 
-    <t t-name="various-escapes">
-        <div foo="&lt;foo"
+    <tt-name="various-escapes">
+        <divfoo="&lt;foo"
              t-att-bar="bar"
              t-attf-baz="&lt;{{baz}}&gt;"
              t-att="qux"/>
     </t>
-    <params id="various-escapes"><![CDATA[{
-        "bar": "<bar>",
-        "baz": "\"<baz>\"",
-        "qux": {"qux": "<>"}
+    <paramsid="various-escapes"><![CDATA[{
+        "bar":"<bar>",
+        "baz":"\"<baz>\"",
+        "qux":{"qux":"<>"}
     }]]></params>
-    <result id="various-escapes"><![CDATA[
-        <div foo="&lt;foo" bar="&lt;bar&gt;" baz="&lt;&quot;&lt;baz&gt;&quot;&gt;" qux="&lt;&gt;"></div>
+    <resultid="various-escapes"><![CDATA[
+        <divfoo="&lt;foo"bar="&lt;bar&gt;"baz="&lt;&quot;&lt;baz&gt;&quot;&gt;"qux="&lt;&gt;"></div>
     ]]></result>
 </templates>

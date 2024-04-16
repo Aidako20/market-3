@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-# Copyright (C) 2004-2008 PC Solutions (<http://pcsol.be>). All Rights Reserved
-from flectra import fields, models, api
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+#Copyright(C)2004-2008PCSolutions(<http://pcsol.be>).AllRightsReserved
+fromflectraimportfields,models,api
 
 
-class AccountJournal(models.Model):
-    _inherit = 'account.journal'
+classAccountJournal(models.Model):
+    _inherit='account.journal'
 
-    pos_payment_method_ids = fields.One2many('pos.payment.method', 'cash_journal_id', string='Point of Sale Payment Methods')
+    pos_payment_method_ids=fields.One2many('pos.payment.method','cash_journal_id',string='PointofSalePaymentMethods')

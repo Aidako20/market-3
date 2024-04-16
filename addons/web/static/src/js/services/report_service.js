@@ -1,35 +1,35 @@
-flectra.define('web.ReportService', function (require) {
-"use strict";
+flectra.define('web.ReportService',function(require){
+"usestrict";
 
 /**
- * This file defines the service for the report generation in Flectra.
+ *ThisfiledefinestheserviceforthereportgenerationinFlectra.
  */
 
-var AbstractService = require('web.AbstractService');
-var core = require('web.core');
+varAbstractService=require('web.AbstractService');
+varcore=require('web.core');
 
-var ReportService = AbstractService.extend({
-    dependencies: ['ajax'],
+varReportService=AbstractService.extend({
+    dependencies:['ajax'],
 
     /**
-     * Checks the state of the installation of wkhtmltopdf on the server.
-     * Implements an internal cache to do the request only once.
+     *Checksthestateoftheinstallationofwkhtmltopdfontheserver.
+     *Implementsaninternalcachetodotherequestonlyonce.
      *
-     * @returns {Promise} resolved with the state of wkhtmltopdf on the server
-     *   (possible values are 'ok', 'broken', 'install', 'upgrade', 'workers').
+     *@returns{Promise}resolvedwiththestateofwkhtmltopdfontheserver
+     *  (possiblevaluesare'ok','broken','install','upgrade','workers').
      */
-    checkWkhtmltopdf: function () {
-        if (!this.wkhtmltopdfState) {
-            this.wkhtmltopdfState = this._rpc({
+    checkWkhtmltopdf:function(){
+        if(!this.wkhtmltopdfState){
+            this.wkhtmltopdfState=this._rpc({
                 route:'/report/check_wkhtmltopdf'
             });
         }
-        return this.wkhtmltopdfState;
+        returnthis.wkhtmltopdfState;
     },
 });
 
-core.serviceRegistry.add('report', ReportService);
+core.serviceRegistry.add('report',ReportService);
 
-return ReportService;
+returnReportService;
 
 });

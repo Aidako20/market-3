@@ -1,125 +1,125 @@
-# -*- coding: utf-8 -*-
+#-*-coding:utf-8-*-
 
-from flectra import api, models, _
-from flectra.exceptions import UserError
-from flectra.osv import expression
+fromflectraimportapi,models,_
+fromflectra.exceptionsimportUserError
+fromflectra.osvimportexpression
 
 
-class SaleOrder(models.Model):
-    _inherit = "sale.order"
+classSaleOrder(models.Model):
+    _inherit="sale.order"
 
-    def _cart_find_product_line(self, product_id=None, line_id=None, **kwargs):
+    def_cart_find_product_line(self,product_id=None,line_id=None,**kwargs):
         self.ensure_one()
-        lines = super(SaleOrder, self)._cart_find_product_line(product_id, line_id, **kwargs)
-        if line_id:
-            return lines
-        domain = [('id', 'in', lines.ids)]
-        if self.env.context.get("event_ticket_id"):
-            domain.append(('event_ticket_id', '=', self.env.context.get("event_ticket_id")))
-        return self.env['sale.order.line'].sudo().search(domain)
+        lines=super(SaleOrder,self)._cart_find_product_line(product_id,line_id,**kwargs)
+        ifline_id:
+            returnlines
+        domain=[('id','in',lines.ids)]
+        ifself.env.context.get("event_ticket_id"):
+            domain.append(('event_ticket_id','=',self.env.context.get("event_ticket_id")))
+        returnself.env['sale.order.line'].sudo().search(domain)
 
-    def _website_product_id_change(self, order_id, product_id, qty=0):
-        order = self.env['sale.order'].sudo().browse(order_id)
-        if self._context.get('pricelist') != order.pricelist_id.id:
-            self = self.with_context(pricelist=order.pricelist_id.id)
+    def_website_product_id_change(self,order_id,product_id,qty=0):
+        order=self.env['sale.order'].sudo().browse(order_id)
+        ifself._context.get('pricelist')!=order.pricelist_id.id:
+            self=self.with_context(pricelist=order.pricelist_id.id)
 
-        values = super(SaleOrder, self)._website_product_id_change(order_id, product_id, qty=qty)
-        event_ticket_id = None
-        if self.env.context.get("event_ticket_id"):
-            event_ticket_id = self.env.context.get("event_ticket_id")
+        values=super(SaleOrder,self)._website_product_id_change(order_id,product_id,qty=qty)
+        event_ticket_id=None
+        ifself.env.context.get("event_ticket_id"):
+            event_ticket_id=self.env.context.get("event_ticket_id")
         else:
-            product = self.env['product.product'].browse(product_id)
-            if product.event_ticket_ids:
-                event_ticket_id = product.event_ticket_ids[0].id
+            product=self.env['product.product'].browse(product_id)
+            ifproduct.event_ticket_ids:
+                event_ticket_id=product.event_ticket_ids[0].id
 
-        if event_ticket_id:
-            ticket = self.env['event.event.ticket'].browse(event_ticket_id)
-            if product_id != ticket.product_id.id:
-                raise UserError(_("The ticket doesn't match with this product."))
+        ifevent_ticket_id:
+            ticket=self.env['event.event.ticket'].browse(event_ticket_id)
+            ifproduct_id!=ticket.product_id.id:
+                raiseUserError(_("Theticketdoesn'tmatchwiththisproduct."))
 
-            values['product_id'] = ticket.product_id.id
-            values['event_id'] = ticket.event_id.id
-            values['event_ticket_id'] = ticket.id
-            if order.pricelist_id.discount_policy == 'without_discount':
-                values['price_unit'] = ticket.price
+            values['product_id']=ticket.product_id.id
+            values['event_id']=ticket.event_id.id
+            values['event_ticket_id']=ticket.id
+            iforder.pricelist_id.discount_policy=='without_discount':
+                values['price_unit']=ticket.price
             else:
-                values['price_unit'] = ticket.price_reduce
-            values['name'] = ticket._get_ticket_multiline_description()
+                values['price_unit']=ticket.price_reduce
+            values['name']=ticket._get_ticket_multiline_description()
 
-        # avoid writing related values that end up locking the product record
-        values.pop('event_ok', None)
+        #avoidwritingrelatedvaluesthatenduplockingtheproductrecord
+        values.pop('event_ok',None)
 
-        return values
+        returnvalues
 
-    def _cart_update(self, product_id=None, line_id=None, add_qty=0, set_qty=0, **kwargs):
-        OrderLine = self.env['sale.order.line']
+    def_cart_update(self,product_id=None,line_id=None,add_qty=0,set_qty=0,**kwargs):
+        OrderLine=self.env['sale.order.line']
 
         try:
-            if add_qty:
-                add_qty = float(add_qty)
-        except ValueError:
-            add_qty = 1
+            ifadd_qty:
+                add_qty=float(add_qty)
+        exceptValueError:
+            add_qty=1
         try:
-            if set_qty:
-                set_qty = float(set_qty)
-        except ValueError:
-            set_qty = 0
+            ifset_qty:
+                set_qty=float(set_qty)
+        exceptValueError:
+            set_qty=0
 
-        if line_id:
-            line = OrderLine.browse(line_id)
-            ticket = line.event_ticket_id
-            old_qty = int(line.product_uom_qty)
-            if ticket.id:
-                self = self.with_context(event_ticket_id=ticket.id, fixed_price=1)
+        ifline_id:
+            line=OrderLine.browse(line_id)
+            ticket=line.event_ticket_id
+            old_qty=int(line.product_uom_qty)
+            ifticket.id:
+                self=self.with_context(event_ticket_id=ticket.id,fixed_price=1)
         else:
-            ticket_domain = [('product_id', '=', product_id)]
-            if self.env.context.get("event_ticket_id"):
-                ticket_domain = expression.AND([ticket_domain, [('id', '=', self.env.context['event_ticket_id'])]])
-            ticket = self.env['event.event.ticket'].search(ticket_domain, limit=1)
-            old_qty = 0
-        new_qty = set_qty if set_qty else (add_qty or 0 + old_qty)
+            ticket_domain=[('product_id','=',product_id)]
+            ifself.env.context.get("event_ticket_id"):
+                ticket_domain=expression.AND([ticket_domain,[('id','=',self.env.context['event_ticket_id'])]])
+            ticket=self.env['event.event.ticket'].search(ticket_domain,limit=1)
+            old_qty=0
+        new_qty=set_qtyifset_qtyelse(add_qtyor0+old_qty)
 
-        # case: buying tickets for a sold out ticket
-        values = {}
-        increased_quantity = new_qty > old_qty
-        if ticket and ticket.seats_limited and ticket.seats_available <= 0 and increased_quantity:
-            values['warning'] = _('Sorry, The %(ticket)s tickets for the %(event)s event are sold out.') % {
-                'ticket': ticket.name,
-                'event': ticket.event_id.name}
-            new_qty, set_qty, add_qty = 0, 0, -old_qty
-        # case: buying tickets, too much attendees
-        elif ticket and ticket.seats_limited and new_qty > ticket.seats_available and increased_quantity:
-            values['warning'] = _('Sorry, only %(remaining_seats)d seats are still available for the %(ticket)s ticket for the %(event)s event.') % {
-                'remaining_seats': ticket.seats_available,
-                'ticket': ticket.name,
-                'event': ticket.event_id.name}
-            new_qty, set_qty, add_qty = ticket.seats_available, ticket.seats_available, 0
-        values.update(super(SaleOrder, self)._cart_update(product_id, line_id, add_qty, set_qty, **kwargs))
+        #case:buyingticketsforasoldoutticket
+        values={}
+        increased_quantity=new_qty>old_qty
+        ifticketandticket.seats_limitedandticket.seats_available<=0andincreased_quantity:
+            values['warning']=_('Sorry,The%(ticket)sticketsforthe%(event)seventaresoldout.')%{
+                'ticket':ticket.name,
+                'event':ticket.event_id.name}
+            new_qty,set_qty,add_qty=0,0,-old_qty
+        #case:buyingtickets,toomuchattendees
+        elifticketandticket.seats_limitedandnew_qty>ticket.seats_availableandincreased_quantity:
+            values['warning']=_('Sorry,only%(remaining_seats)dseatsarestillavailableforthe%(ticket)sticketforthe%(event)sevent.')%{
+                'remaining_seats':ticket.seats_available,
+                'ticket':ticket.name,
+                'event':ticket.event_id.name}
+            new_qty,set_qty,add_qty=ticket.seats_available,ticket.seats_available,0
+        values.update(super(SaleOrder,self)._cart_update(product_id,line_id,add_qty,set_qty,**kwargs))
 
-        # removing attendees
-        if ticket and new_qty < old_qty:
-            attendees = self.env['event.registration'].search([
-                ('state', '!=', 'cancel'),
-                ('sale_order_id', 'in', self.ids),  # To avoid break on multi record set
-                ('event_ticket_id', '=', ticket.id),
-            ], offset=new_qty, limit=(old_qty - new_qty), order='create_date asc')
+        #removingattendees
+        ifticketandnew_qty<old_qty:
+            attendees=self.env['event.registration'].search([
+                ('state','!=','cancel'),
+                ('sale_order_id','in',self.ids), #Toavoidbreakonmultirecordset
+                ('event_ticket_id','=',ticket.id),
+            ],offset=new_qty,limit=(old_qty-new_qty),order='create_dateasc')
             attendees.action_cancel()
-        # adding attendees
-        elif ticket and new_qty > old_qty:
-            # do not do anything, attendees will be created at SO confirmation if not given previously
+        #addingattendees
+        elifticketandnew_qty>old_qty:
+            #donotdoanything,attendeeswillbecreatedatSOconfirmationifnotgivenpreviously
             pass
-        return values
+        returnvalues
 
 
-class SaleOrderLine(models.Model):
-    _inherit = "sale.order.line"
+classSaleOrderLine(models.Model):
+    _inherit="sale.order.line"
 
-    @api.depends('product_id.display_name', 'event_ticket_id.display_name')
-    def _compute_name_short(self):
-        """ If the sale order line concerns a ticket, we don't want the product name, but the ticket name instead.
+    @api.depends('product_id.display_name','event_ticket_id.display_name')
+    def_compute_name_short(self):
+        """Ifthesaleorderlineconcernsaticket,wedon'twanttheproductname,buttheticketnameinstead.
         """
-        super(SaleOrderLine, self)._compute_name_short()
+        super(SaleOrderLine,self)._compute_name_short()
 
-        for record in self:
-            if record.event_ticket_id:
-                record.name_short = record.event_ticket_id.display_name
+        forrecordinself:
+            ifrecord.event_ticket_id:
+                record.name_short=record.event_ticket_id.display_name

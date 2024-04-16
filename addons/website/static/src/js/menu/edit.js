@@ -1,262 +1,262 @@
-flectra.define('website.editMenu', function (require) {
-'use strict';
+flectra.define('website.editMenu',function(require){
+'usestrict';
 
-var core = require('web.core');
-var EditorMenu = require('website.editor.menu');
-var websiteNavbarData = require('website.navbar');
+varcore=require('web.core');
+varEditorMenu=require('website.editor.menu');
+varwebsiteNavbarData=require('website.navbar');
 
-var _t = core._t;
+var_t=core._t;
 
 /**
- * Adds the behavior when clicking on the 'edit' button (+ editor interaction)
+ *Addsthebehaviorwhenclickingonthe'edit'button(+editorinteraction)
  */
-var EditPageMenu = websiteNavbarData.WebsiteNavbarActionWidget.extend({
-    assetLibs: ['web_editor.compiled_assets_wysiwyg', 'website.compiled_assets_wysiwyg'],
+varEditPageMenu=websiteNavbarData.WebsiteNavbarActionWidget.extend({
+    assetLibs:['web_editor.compiled_assets_wysiwyg','website.compiled_assets_wysiwyg'],
 
-    xmlDependencies: ['/website/static/src/xml/website.editor.xml'],
-    actions: _.extend({}, websiteNavbarData.WebsiteNavbarActionWidget.prototype.actions, {
-        edit: '_startEditMode',
-        on_save: '_onSave',
+    xmlDependencies:['/website/static/src/xml/website.editor.xml'],
+    actions:_.extend({},websiteNavbarData.WebsiteNavbarActionWidget.prototype.actions,{
+        edit:'_startEditMode',
+        on_save:'_onSave',
     }),
-    custom_events: _.extend({}, websiteNavbarData.WebsiteNavbarActionWidget.custom_events || {}, {
-        content_will_be_destroyed: '_onContentWillBeDestroyed',
-        content_was_recreated: '_onContentWasRecreated',
-        snippet_will_be_cloned: '_onSnippetWillBeCloned',
-        snippet_cloned: '_onSnippetCloned',
-        snippet_dropped: '_onSnippetDropped',
-        edition_will_stopped: '_onEditionWillStop',
-        edition_was_stopped: '_onEditionWasStopped',
+    custom_events:_.extend({},websiteNavbarData.WebsiteNavbarActionWidget.custom_events||{},{
+        content_will_be_destroyed:'_onContentWillBeDestroyed',
+        content_was_recreated:'_onContentWasRecreated',
+        snippet_will_be_cloned:'_onSnippetWillBeCloned',
+        snippet_cloned:'_onSnippetCloned',
+        snippet_dropped:'_onSnippetDropped',
+        edition_will_stopped:'_onEditionWillStop',
+        edition_was_stopped:'_onEditionWasStopped',
     }),
 
     /**
-     * @constructor
+     *@constructor
      */
-    init: function () {
-        this._super.apply(this, arguments);
-        var context;
-        this.trigger_up('context_get', {
-            extra: true,
-            callback: function (ctx) {
-                context = ctx;
+    init:function(){
+        this._super.apply(this,arguments);
+        varcontext;
+        this.trigger_up('context_get',{
+            extra:true,
+            callback:function(ctx){
+                context=ctx;
             },
         });
-        this._editorAutoStart = (context.editable && window.location.search.indexOf('enable_editor') >= 0);
-        var url = window.location.href.replace(/([?&])&*enable_editor[^&#]*&?/, '\$1');
-        window.history.replaceState({}, null, url);
+        this._editorAutoStart=(context.editable&&window.location.search.indexOf('enable_editor')>=0);
+        varurl=window.location.href.replace(/([?&])&*enable_editor[^&#]*&?/,'\$1');
+        window.history.replaceState({},null,url);
     },
     /**
-     * Auto-starts the editor if necessary or add the welcome message otherwise.
+     *Auto-startstheeditorifnecessaryoraddthewelcomemessageotherwise.
      *
-     * @override
+     *@override
      */
-    start: function () {
-        var def = this._super.apply(this, arguments);
+    start:function(){
+        vardef=this._super.apply(this,arguments);
 
-        // If we auto start the editor, do not show a welcome message
-        if (this._editorAutoStart) {
-            return Promise.all([def, this._startEditMode()]);
+        //Ifweautostarttheeditor,donotshowawelcomemessage
+        if(this._editorAutoStart){
+            returnPromise.all([def,this._startEditMode()]);
         }
 
-        // Check that the page is empty
-        var $wrap = this._targetForEdition().filter('#wrapwrap.homepage').find('#wrap');
+        //Checkthatthepageisempty
+        var$wrap=this._targetForEdition().filter('#wrapwrap.homepage').find('#wrap');
 
-        if ($wrap.length && $wrap.html().trim() === '') {
-            // If readonly empty page, show the welcome message
-            this.$welcomeMessage = $(core.qweb.render('website.homepage_editor_welcome_message'));
+        if($wrap.length&&$wrap.html().trim()===''){
+            //Ifreadonlyemptypage,showthewelcomemessage
+            this.$welcomeMessage=$(core.qweb.render('website.homepage_editor_welcome_message'));
             this.$welcomeMessage.addClass('o_homepage_editor_welcome_message');
-            this.$welcomeMessage.css('min-height', $wrap.parent('main').height() - ($wrap.outerHeight(true) - $wrap.height()));
+            this.$welcomeMessage.css('min-height',$wrap.parent('main').height()-($wrap.outerHeight(true)-$wrap.height()));
             $wrap.empty().append(this.$welcomeMessage);
         }
 
-        return def;
+        returndef;
     },
 
     //--------------------------------------------------------------------------
-    // Actions
+    //Actions
     //--------------------------------------------------------------------------
 
     /**
-     * Creates an editor instance and appends it to the DOM. Also remove the
-     * welcome message if necessary.
+     *CreatesaneditorinstanceandappendsittotheDOM.Alsoremovethe
+     *welcomemessageifnecessary.
      *
-     * @private
-     * @returns {Promise}
+     *@private
+     *@returns{Promise}
      */
-    _startEditMode: async function () {
-        var self = this;
-        if (this.editModeEnable) {
+    _startEditMode:asyncfunction(){
+        varself=this;
+        if(this.editModeEnable){
             return;
         }
-        this.trigger_up('widgets_stop_request', {
-            $target: this._targetForEdition(),
+        this.trigger_up('widgets_stop_request',{
+            $target:this._targetForEdition(),
         });
-        if (this.$welcomeMessage) {
-            this.$welcomeMessage.detach(); // detach from the readonly rendering before the clone by summernote
+        if(this.$welcomeMessage){
+            this.$welcomeMessage.detach();//detachfromthereadonlyrenderingbeforetheclonebysummernote
         }
-        this.editModeEnable = true;
-        await new EditorMenu(this).prependTo(document.body);
+        this.editModeEnable=true;
+        awaitnewEditorMenu(this).prependTo(document.body);
         this._addEditorMessages();
-        var res = await new Promise(function (resolve, reject) {
-            self.trigger_up('widgets_start_request', {
-                editableMode: true,
-                onSuccess: resolve,
-                onFailure: reject,
+        varres=awaitnewPromise(function(resolve,reject){
+            self.trigger_up('widgets_start_request',{
+                editableMode:true,
+                onSuccess:resolve,
+                onFailure:reject,
             });
         });
-        // Trigger a mousedown on the main edition area to focus it,
-        // which is required for Summernote to activate.
+        //Triggeramousedownonthemaineditionareatofocusit,
+        //whichisrequiredforSummernotetoactivate.
         this.$editorMessageElements.mousedown();
-        return res;
+        returnres;
     },
     /**
-     * On save, the editor will ask to parent widgets if something needs to be
-     * done first. The website navbar will receive that demand and asks to its
-     * action-capable components to do something. For example, the content menu
-     * handles page-related options saving. However, some users with limited
-     * access rights do not have the content menu... but the website navbar
-     * expects that the save action is performed. So, this empty action is
-     * defined here so that all users have an 'on_save' related action.
+     *Onsave,theeditorwillasktoparentwidgetsifsomethingneedstobe
+     *donefirst.Thewebsitenavbarwillreceivethatdemandandaskstoits
+     *action-capablecomponentstodosomething.Forexample,thecontentmenu
+     *handlespage-relatedoptionssaving.However,someuserswithlimited
+     *accessrightsdonothavethecontentmenu...butthewebsitenavbar
+     *expectsthatthesaveactionisperformed.So,thisemptyactionis
+     *definedheresothatallusershavean'on_save'relatedaction.
      *
-     * @private
-     * @todo improve the system to somehow declare required/optional actions
+     *@private
+     *@todoimprovethesystemtosomehowdeclarerequired/optionalactions
      */
-    _onSave: function () {},
+    _onSave:function(){},
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * Adds automatic editor messages on drag&drop zone elements.
+     *Addsautomaticeditormessagesondrag&dropzoneelements.
      *
-     * @private
+     *@private
      */
-    _addEditorMessages: function () {
-        const $target = this._targetForEdition();
-        const $skeleton = $target.find('.oe_structure.oe_empty, [data-oe-type="html"]').filter(':o_editable');
-        this.$editorMessageElements = $skeleton.not('[data-editor-message]').attr('data-editor-message', _t('DRAG BUILDING BLOCKS HERE'));
-        $skeleton.attr('contenteditable', function () { return !$(this).is(':empty'); });
+    _addEditorMessages:function(){
+        const$target=this._targetForEdition();
+        const$skeleton=$target.find('.oe_structure.oe_empty,[data-oe-type="html"]').filter(':o_editable');
+        this.$editorMessageElements=$skeleton.not('[data-editor-message]').attr('data-editor-message',_t('DRAGBUILDINGBLOCKSHERE'));
+        $skeleton.attr('contenteditable',function(){return!$(this).is(':empty');});
     },
     /**
-     * Returns the target for edition.
+     *Returnsthetargetforedition.
      *
-     * @private
-     * @returns {JQuery}
+     *@private
+     *@returns{JQuery}
      */
-    _targetForEdition: function () {
-        return $('#wrapwrap'); // TODO should know about this element another way
+    _targetForEdition:function(){
+        return$('#wrapwrap');//TODOshouldknowaboutthiselementanotherway
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when content will be destroyed in the page. Notifies the
-     * WebsiteRoot that is should stop the public widgets.
+     *Calledwhencontentwillbedestroyedinthepage.Notifiesthe
+     *WebsiteRootthatisshouldstopthepublicwidgets.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onContentWillBeDestroyed: function (ev) {
-        this.trigger_up('widgets_stop_request', {
-            $target: ev.data.$target,
+    _onContentWillBeDestroyed:function(ev){
+        this.trigger_up('widgets_stop_request',{
+            $target:ev.data.$target,
         });
     },
     /**
-     * Called when content was recreated in the page. Notifies the
-     * WebsiteRoot that is should start the public widgets.
+     *Calledwhencontentwasrecreatedinthepage.Notifiesthe
+     *WebsiteRootthatisshouldstartthepublicwidgets.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onContentWasRecreated: function (ev) {
-        this.trigger_up('widgets_start_request', {
-            editableMode: true,
-            $target: ev.data.$target,
+    _onContentWasRecreated:function(ev){
+        this.trigger_up('widgets_start_request',{
+            editableMode:true,
+            $target:ev.data.$target,
         });
     },
     /**
-     * Called when edition will stop. Notifies the
-     * WebsiteRoot that is should stop the public widgets.
+     *Calledwheneditionwillstop.Notifiesthe
+     *WebsiteRootthatisshouldstopthepublicwidgets.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onEditionWillStop: function (ev) {
-        this.$editorMessageElements && this.$editorMessageElements.removeAttr('data-editor-message');
+    _onEditionWillStop:function(ev){
+        this.$editorMessageElements&&this.$editorMessageElements.removeAttr('data-editor-message');
 
-        if (ev.data.noWidgetsStop) {
-            // TODO adapt in master, this was added as a stable fix.
+        if(ev.data.noWidgetsStop){
+            //TODOadaptinmaster,thiswasaddedasastablefix.
             return;
         }
 
-        this.trigger_up('widgets_stop_request', {
-            $target: this._targetForEdition(),
+        this.trigger_up('widgets_stop_request',{
+            $target:this._targetForEdition(),
         });
     },
     /**
-     * Called when edition was stopped. Notifies the
-     * WebsiteRoot that is should start the public widgets.
+     *Calledwheneditionwasstopped.Notifiesthe
+     *WebsiteRootthatisshouldstartthepublicwidgets.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onEditionWasStopped: function (ev) {
-        this.trigger_up('widgets_start_request', {
-            $target: this._targetForEdition(),
+    _onEditionWasStopped:function(ev){
+        this.trigger_up('widgets_start_request',{
+            $target:this._targetForEdition(),
         });
-        this.editModeEnable = false;
+        this.editModeEnable=false;
     },
     /**
-     * Called when a snippet is about to be cloned in the page. Notifies the
-     * WebsiteRoot that is should destroy the animations for this snippet.
+     *Calledwhenasnippetisabouttobeclonedinthepage.Notifiesthe
+     *WebsiteRootthatisshoulddestroytheanimationsforthissnippet.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onSnippetWillBeCloned: function (ev) {
-        this.trigger_up('widgets_stop_request', {
-            $target: ev.data.$target,
+    _onSnippetWillBeCloned:function(ev){
+        this.trigger_up('widgets_stop_request',{
+            $target:ev.data.$target,
         });
     },
     /**
-     * Called when a snippet is cloned in the page. Notifies the WebsiteRoot
-     * that is should start the public widgets for this snippet and the snippet it
-     * was cloned from.
+     *Calledwhenasnippetisclonedinthepage.NotifiestheWebsiteRoot
+     *thatisshouldstartthepublicwidgetsforthissnippetandthesnippetit
+     *wasclonedfrom.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onSnippetCloned: function (ev) {
-        this.trigger_up('widgets_start_request', {
-            editableMode: true,
-            $target: ev.data.$target,
+    _onSnippetCloned:function(ev){
+        this.trigger_up('widgets_start_request',{
+            editableMode:true,
+            $target:ev.data.$target,
         });
-        // TODO: remove in saas-12.5, undefined $origin will restart #wrapwrap
-        if (ev.data.$origin) {
-            this.trigger_up('widgets_start_request', {
-                editableMode: true,
-                $target: ev.data.$origin,
+        //TODO:removeinsaas-12.5,undefined$originwillrestart#wrapwrap
+        if(ev.data.$origin){
+            this.trigger_up('widgets_start_request',{
+                editableMode:true,
+                $target:ev.data.$origin,
             });
         }
     },
     /**
-     * Called when a snippet is dropped in the page. Notifies the WebsiteRoot
-     * that is should start the public widgets for this snippet. Also add the
-     * editor messages.
+     *Calledwhenasnippetisdroppedinthepage.NotifiestheWebsiteRoot
+     *thatisshouldstartthepublicwidgetsforthissnippet.Alsoaddthe
+     *editormessages.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onSnippetDropped: function (ev) {
-        this.trigger_up('widgets_start_request', {
-            editableMode: true,
-            $target: ev.data.$target,
+    _onSnippetDropped:function(ev){
+        this.trigger_up('widgets_start_request',{
+            editableMode:true,
+            $target:ev.data.$target,
         });
         this._addEditorMessages();
     },
 });
 
-websiteNavbarData.websiteNavbarRegistry.add(EditPageMenu, '#edit-page-menu');
+websiteNavbarData.websiteNavbarRegistry.add(EditPageMenu,'#edit-page-menu');
 });

@@ -1,322 +1,322 @@
-flectra.define('point_of_sale.tour.ProductScreenTourMethods', function (require) {
-    'use strict';
+flectra.define('point_of_sale.tour.ProductScreenTourMethods',function(require){
+    'usestrict';
 
-    const { createTourMethods } = require('point_of_sale.tour.utils');
+    const{createTourMethods}=require('point_of_sale.tour.utils');
 
-    class Do {
-        clickDisplayedProduct(name) {
-            return [
+    classDo{
+        clickDisplayedProduct(name){
+            return[
                 {
-                    content: `click product '${name}'`,
-                    trigger: `.product-list .product-name:contains("${name}")`,
+                    content:`clickproduct'${name}'`,
+                    trigger:`.product-list.product-name:contains("${name}")`,
                 },
             ];
         }
 
-        clickOrderline(name, quantity) {
-            return [
+        clickOrderline(name,quantity){
+            return[
                 {
-                    content: `selecting orderline with product '${name}' and quantity '${quantity}'`,
-                    trigger: `.order .orderline:not(:has(.selected)) .product-name:contains("${name}") ~ .info-list em:contains("${quantity}")`,
+                    content:`selectingorderlinewithproduct'${name}'andquantity'${quantity}'`,
+                    trigger:`.order.orderline:not(:has(.selected)).product-name:contains("${name}")~.info-listem:contains("${quantity}")`,
                 },
                 {
-                    content: `orderline with product '${name}' and quantity '${quantity}' has been selected`,
-                    trigger: `.order .orderline.selected .product-name:contains("${name}") ~ .info-list em:contains("${quantity}")`,
-                    run: () => {},
-                },
-            ];
-        }
-
-        clickSubcategory(name) {
-            return [
-                {
-                    content: `selecting '${name}' subcategory`,
-                    trigger: `.products-widget > .products-widget-control .category-simple-button:contains("${name}")`,
-                },
-                {
-                    content: `'${name}' subcategory selected`,
-                    trigger: `.breadcrumbs .breadcrumb-button:contains("${name}")`,
-                    run: () => {},
+                    content:`orderlinewithproduct'${name}'andquantity'${quantity}'hasbeenselected`,
+                    trigger:`.order.orderline.selected.product-name:contains("${name}")~.info-listem:contains("${quantity}")`,
+                    run:()=>{},
                 },
             ];
         }
 
-        clickHomeCategory() {
-            return [
+        clickSubcategory(name){
+            return[
                 {
-                    content: `click Home subcategory`,
-                    trigger: `.breadcrumbs .breadcrumb-home`,
+                    content:`selecting'${name}'subcategory`,
+                    trigger:`.products-widget>.products-widget-control.category-simple-button:contains("${name}")`,
+                },
+                {
+                    content:`'${name}'subcategoryselected`,
+                    trigger:`.breadcrumbs.breadcrumb-button:contains("${name}")`,
+                    run:()=>{},
+                },
+            ];
+        }
+
+        clickHomeCategory(){
+            return[
+                {
+                    content:`clickHomesubcategory`,
+                    trigger:`.breadcrumbs.breadcrumb-home`,
                 },
             ];
         }
 
         /**
-         * Press the numpad in sequence based on the given space-separated keys.
-         * NOTE: Maximum of 2 characters because NumberBuffer only allows 2 consecutive
-         * fast inputs. Fast inputs is the case in tours.
+         *Pressthenumpadinsequencebasedonthegivenspace-separatedkeys.
+         *NOTE:Maximumof2charactersbecauseNumberBufferonlyallows2consecutive
+         *fastinputs.Fastinputsisthecaseintours.
          *
-         * @param {String} keys space-separated numpad keys
+         *@param{String}keysspace-separatednumpadkeys
          */
-        pressNumpad(keys) {
-            const numberChars = '. 0 1 2 3 4 5 6 7 8 9'.split(' ');
-            const modeButtons = 'Qty Price Disc'.split(' ');
-            function generateStep(key) {
-                let trigger;
-                if (numberChars.includes(key)) {
-                    trigger = `.numpad .number-char:contains("${key}")`;
-                } else if (modeButtons.includes(key)) {
-                    trigger = `.numpad .mode-button:contains("${key}")`;
-                } else if (key === 'Backspace') {
-                    trigger = `.numpad .numpad-backspace`;
-                } else if (key === '+/-') {
-                    trigger = `.numpad .numpad-minus`;
+        pressNumpad(keys){
+            constnumberChars='.0123456789'.split('');
+            constmodeButtons='QtyPriceDisc'.split('');
+            functiongenerateStep(key){
+                lettrigger;
+                if(numberChars.includes(key)){
+                    trigger=`.numpad.number-char:contains("${key}")`;
+                }elseif(modeButtons.includes(key)){
+                    trigger=`.numpad.mode-button:contains("${key}")`;
+                }elseif(key==='Backspace'){
+                    trigger=`.numpad.numpad-backspace`;
+                }elseif(key==='+/-'){
+                    trigger=`.numpad.numpad-minus`;
                 }
-                return {
-                    content: `'${key}' pressed in product screen numpad`,
+                return{
+                    content:`'${key}'pressedinproductscreennumpad`,
                     trigger,
                 };
             }
-            return keys.split(' ').map(generateStep);
+            returnkeys.split('').map(generateStep);
         }
 
-        clickPayButton() {
-            return [
-                { content: 'click pay button', trigger: '.actionpad .button.pay' },
+        clickPayButton(){
+            return[
+                {content:'clickpaybutton',trigger:'.actionpad.button.pay'},
                 {
-                    content: 'now in payment screen',
-                    trigger: '.pos-content .payment-screen',
-                    run: () => {},
-                },
-            ];
-        }
-
-        clickCustomerButton() {
-            return [
-                { content: 'click customer button', trigger: '.actionpad .button.set-customer' },
-                {
-                    content: 'customer screen is shown',
-                    trigger: '.pos-content .clientlist-screen',
-                    run: () => {},
+                    content:'nowinpaymentscreen',
+                    trigger:'.pos-content.payment-screen',
+                    run:()=>{},
                 },
             ];
         }
 
-        clickCustomer(name) {
-            return [
+        clickCustomerButton(){
+            return[
+                {content:'clickcustomerbutton',trigger:'.actionpad.button.set-customer'},
                 {
-                    content: `select customer '${name}'`,
-                    trigger: `.clientlist-screen .client-line td:contains("${name}")`,
-                },
-                {
-                    content: `client line '${name}' is highlighted`,
-                    trigger: `.clientlist-screen .client-line.highlight td:contains("${name}")`,
-                    run: () => {},
+                    content:'customerscreenisshown',
+                    trigger:'.pos-content.clientlist-screen',
+                    run:()=>{},
                 },
             ];
         }
 
-        clickSetCustomer() {
-            return [
+        clickCustomer(name){
+            return[
                 {
-                    content: 'click set customer',
-                    trigger: '.clientlist-screen .button.next.highlight',
+                    content:`selectcustomer'${name}'`,
+                    trigger:`.clientlist-screen.client-linetd:contains("${name}")`,
+                },
+                {
+                    content:`clientline'${name}'ishighlighted`,
+                    trigger:`.clientlist-screen.client-line.highlighttd:contains("${name}")`,
+                    run:()=>{},
                 },
             ];
         }
-        changeFiscalPosition(name) {
-            return [
+
+        clickSetCustomer(){
+            return[
                 {
-                    content: 'click fiscal position button',
-                    trigger: '.o_fiscal_position_button',
-                },
-                {
-                    content: 'fiscal position screen is shown',
-                    trigger: `.selection-item:contains("${name}")`,
+                    content:'clicksetcustomer',
+                    trigger:'.clientlist-screen.button.next.highlight',
                 },
             ];
         }
-        clickPricelistButton() {
-            return [{ trigger: '.o_pricelist_button' }];
-        }
-        selectPriceList(name) {
-            return [
+        changeFiscalPosition(name){
+            return[
                 {
-                    content: `select price list '${name}'`,
-                    trigger: `.selection-item:contains("${name}")`,
+                    content:'clickfiscalpositionbutton',
+                    trigger:'.o_fiscal_position_button',
+                },
+                {
+                    content:'fiscalpositionscreenisshown',
+                    trigger:`.selection-item:contains("${name}")`,
                 },
             ];
         }
-        scan_barcode(barcode) {
-            return [
+        clickPricelistButton(){
+            return[{trigger:'.o_pricelist_button'}];
+        }
+        selectPriceList(name){
+            return[
                 {
-                    content: `input barcode '${barcode}'`,
-                    trigger: "input.ean",
-                    run: `text ${barcode}`,
+                    content:`selectpricelist'${name}'`,
+                    trigger:`.selection-item:contains("${name}")`,
+                },
+            ];
+        }
+        scan_barcode(barcode){
+            return[
+                {
+                    content:`inputbarcode'${barcode}'`,
+                    trigger:"input.ean",
+                    run:`text${barcode}`,
                 },
                 {
-                    content: `button scan barcode '${barcode}'`,
-                    trigger: "li.barcode",
-                    run: 'click',
+                    content:`buttonscanbarcode'${barcode}'`,
+                    trigger:"li.barcode",
+                    run:'click',
                 }
             ];
         }
-        scan_ean13_barcode(barcode) {
-            return [
+        scan_ean13_barcode(barcode){
+            return[
                 {
-                    content: `input barcode '${barcode}'`,
-                    trigger: "input.ean",
-                    run: `text ${barcode}`,
+                    content:`inputbarcode'${barcode}'`,
+                    trigger:"input.ean",
+                    run:`text${barcode}`,
                 },
                 {
-                    content: `button scan EAN-13 barcode '${barcode}'`,
-                    trigger: "li.custom_ean",
-                    run: 'click',
+                    content:`buttonscanEAN-13barcode'${barcode}'`,
+                    trigger:"li.custom_ean",
+                    run:'click',
                 }
             ];
         }
     }
 
-    class Check {
-        isShown() {
-            return [
+    classCheck{
+        isShown(){
+            return[
                 {
-                    content: 'product screen is shown',
-                    trigger: '.product-screen:not(:has(.oe_hidden))',
-                    run: () => {},
+                    content:'productscreenisshown',
+                    trigger:'.product-screen:not(:has(.oe_hidden))',
+                    run:()=>{},
                 },
             ];
         }
-        selectedOrderlineHas(name, quantity, price) {
-            const res = [
+        selectedOrderlineHas(name,quantity,price){
+            constres=[
                 {
-                    // check first if the order widget is there and has orderlines
-                    content: 'order widget has orderlines',
-                    trigger: '.order .orderlines',
-                    run: () => {},
+                    //checkfirstiftheorderwidgetisthereandhasorderlines
+                    content:'orderwidgethasorderlines',
+                    trigger:'.order.orderlines',
+                    run:()=>{},
                 },
                 {
-                    content: `'${name}' is selected`,
-                    trigger: `.order .orderline.selected .product-name:contains("${name}")`,
-                    run: function () {}, // it's a check
+                    content:`'${name}'isselected`,
+                    trigger:`.order.orderline.selected.product-name:contains("${name}")`,
+                    run:function(){},//it'sacheck
                 },
             ];
-            if (quantity) {
+            if(quantity){
                 res.push({
-                    content: `selected line has ${quantity} quantity`,
-                    trigger: `.order .orderline.selected .product-name:contains("${name}") ~ .info-list em:contains("${quantity}")`,
-                    run: function () {}, // it's a check
+                    content:`selectedlinehas${quantity}quantity`,
+                    trigger:`.order.orderline.selected.product-name:contains("${name}")~.info-listem:contains("${quantity}")`,
+                    run:function(){},//it'sacheck
                 });
             }
-            if (price) {
+            if(price){
                 res.push({
-                    content: `selected line has total price of ${price}`,
-                    trigger: `.order .orderline.selected .product-name:contains("${name}") ~ .price:contains("${price}")`,
-                    run: function () {}, // it's a check
+                    content:`selectedlinehastotalpriceof${price}`,
+                    trigger:`.order.orderline.selected.product-name:contains("${name}")~.price:contains("${price}")`,
+                    run:function(){},//it'sacheck
                 });
             }
-            return res;
+            returnres;
         }
-        orderIsEmpty() {
-            return [
+        orderIsEmpty(){
+            return[
                 {
-                    content: `order is empty`,
-                    trigger: `.order .order-empty`,
-                    run: () => {},
+                    content:`orderisempty`,
+                    trigger:`.order.order-empty`,
+                    run:()=>{},
                 },
             ];
         }
 
-        productIsDisplayed(name) {
-            return [
+        productIsDisplayed(name){
+            return[
                 {
-                    content: `'${name}' should be displayed`,
-                    trigger: `.product-list .product-name:contains("${name}")`,
-                    run: () => {},
+                    content:`'${name}'shouldbedisplayed`,
+                    trigger:`.product-list.product-name:contains("${name}")`,
+                    run:()=>{},
                 },
             ];
         }
-        totalAmountIs(amount) {
-            return [
+        totalAmountIs(amount){
+            return[
                 {
-                    content: `order total amount is '${amount}'`,
-                    trigger: `.order-container .order .summary .value:contains("${amount}")`,
-                    run: () => {},
+                    content:`ordertotalamountis'${amount}'`,
+                    trigger:`.order-container.order.summary.value:contains("${amount}")`,
+                    run:()=>{},
                 }
             ]
         }
-        modeIsActive(mode) {
-            return [
+        modeIsActive(mode){
+            return[
                 {
-                    content: `'${mode}' is active`,
-                    trigger: `.numpad button.selected-mode:contains('${mode}')`,
-                    run: function () {},
+                    content:`'${mode}'isactive`,
+                    trigger:`.numpadbutton.selected-mode:contains('${mode}')`,
+                    run:function(){},
                 },
             ];
         }
-        noDiscountApplied(originalPrice) {
-            return [
+        noDiscountApplied(originalPrice){
+            return[
                 {
-                    content: 'no discount is applied',
-                    trigger: `.info:not(:contains(${originalPrice}))`,
+                    content:'nodiscountisapplied',
+                    trigger:`.info:not(:contains(${originalPrice}))`,
                 },
             ];
         }
-        discountOriginalPriceIs(original_price) {
-            return [
+        discountOriginalPriceIs(original_price){
+            return[
                 {
-                    content: `discount original price is shown`,
-                    trigger: `s:contains('${original_price}')`,
-                    run: function () {},
+                    content:`discountoriginalpriceisshown`,
+                    trigger:`s:contains('${original_price}')`,
+                    run:function(){},
                 },
             ];
         }
     }
 
-    class Execute {
+    classExecute{
         /**
-         * Create an orderline for the given `productName` and `quantity`.
-         * - If `unitPrice` is provided, price of the product of the created line
-         *   is changed to that value.
-         * - If `expectedTotal` is provided, the created orderline (which is the currently
-         *   selected orderline) is checked if it contains the correct quantity and total
-         *   price.
+         *Createanorderlineforthegiven`productName`and`quantity`.
+         *-If`unitPrice`isprovided,priceoftheproductofthecreatedline
+         *  ischangedtothatvalue.
+         *-If`expectedTotal`isprovided,thecreatedorderline(whichisthecurrently
+         *  selectedorderline)ischeckedifitcontainsthecorrectquantityandtotal
+         *  price.
          *
-         * @param {string} productName
-         * @param {string} quantity
-         * @param {string} unitPrice
-         * @param {string} expectedTotal
+         *@param{string}productName
+         *@param{string}quantity
+         *@param{string}unitPrice
+         *@param{string}expectedTotal
          */
-        addOrderline(productName, quantity, unitPrice = undefined, expectedTotal = undefined) {
-            const res = this._do.clickDisplayedProduct(productName);
-            if (unitPrice) {
+        addOrderline(productName,quantity,unitPrice=undefined,expectedTotal=undefined){
+            constres=this._do.clickDisplayedProduct(productName);
+            if(unitPrice){
                 res.push(...this._do.pressNumpad('Price'));
                 res.push(...this._check.modeIsActive('Price'));
-                res.push(...this._do.pressNumpad(unitPrice.toString().split('').join(' ')));
+                res.push(...this._do.pressNumpad(unitPrice.toString().split('').join('')));
                 res.push(...this._do.pressNumpad('Qty'));
                 res.push(...this._check.modeIsActive('Qty'));
             }
-            for (let char of quantity.toString()) {
-                if ('.0123456789'.includes(char)) {
+            for(letcharofquantity.toString()){
+                if('.0123456789'.includes(char)){
                     res.push(...this._do.pressNumpad(char));
-                } else if ('-'.includes(char)) {
+                }elseif('-'.includes(char)){
                     res.push(...this._do.pressNumpad('+/-'));
                 }
             }
-            if (expectedTotal) {
-                res.push(...this._check.selectedOrderlineHas(productName, quantity, expectedTotal));
-            } else {
-                res.push(...this._check.selectedOrderlineHas(productName, quantity));
+            if(expectedTotal){
+                res.push(...this._check.selectedOrderlineHas(productName,quantity,expectedTotal));
+            }else{
+                res.push(...this._check.selectedOrderlineHas(productName,quantity));
             }
-            return res;
+            returnres;
         }
-        addMultiOrderlines(...list) {
-            const steps = [];
-            for (let [product, qty, price] of list) {
-                steps.push(...this.addOrderline(product, qty, price));
+        addMultiOrderlines(...list){
+            conststeps=[];
+            for(let[product,qty,price]oflist){
+                steps.push(...this.addOrderline(product,qty,price));
             }
-            return steps;
+            returnsteps;
         }
     }
 
-    return createTourMethods('ProductScreen', Do, Check, Execute);
+    returncreateTourMethods('ProductScreen',Do,Check,Execute);
 });

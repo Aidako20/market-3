@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.ThreadTypingIcon" owl="1">
-        <div class="o_ThreadTypingIcon" t-att-title="props.title">
-            <span class="o_ThreadTypingIcon_dot o_ThreadTypingIcon_dot1" t-att-class="{
-                'o-animationBounce': props.animation === 'bounce',
-                'o-animationPulse': props.animation === 'pulse',
-                'o-sizeMedium': props.size === 'medium',
-                'o-sizeSmall': props.size === 'small',
+    <tt-name="mail.ThreadTypingIcon"owl="1">
+        <divclass="o_ThreadTypingIcon"t-att-title="props.title">
+            <spanclass="o_ThreadTypingIcon_doto_ThreadTypingIcon_dot1"t-att-class="{
+                'o-animationBounce':props.animation==='bounce',
+                'o-animationPulse':props.animation==='pulse',
+                'o-sizeMedium':props.size==='medium',
+                'o-sizeSmall':props.size==='small',
             }"/>
-            <span class="o_ThreadTypingIcon_separator"/>
-            <span class="o_ThreadTypingIcon_dot o_ThreadTypingIcon_dot2" t-att-class="{
-                'o-animationBounce': props.animation === 'bounce',
-                'o-animationPulse': props.animation === 'pulse',
-                'o-sizeMedium': props.size === 'medium',
-                'o-sizeSmall': props.size === 'small',
+            <spanclass="o_ThreadTypingIcon_separator"/>
+            <spanclass="o_ThreadTypingIcon_doto_ThreadTypingIcon_dot2"t-att-class="{
+                'o-animationBounce':props.animation==='bounce',
+                'o-animationPulse':props.animation==='pulse',
+                'o-sizeMedium':props.size==='medium',
+                'o-sizeSmall':props.size==='small',
             }"/>
-            <span class="o_ThreadTypingIcon_separator"/>
-            <span class="o_ThreadTypingIcon_dot o_ThreadTypingIcon_dot3" t-att-class="{
-                'o-animationBounce': props.animation === 'bounce',
-                'o-animationPulse': props.animation === 'pulse',
-                'o-sizeMedium': props.size === 'medium',
-                'o-sizeSmall': props.size === 'small',
+            <spanclass="o_ThreadTypingIcon_separator"/>
+            <spanclass="o_ThreadTypingIcon_doto_ThreadTypingIcon_dot3"t-att-class="{
+                'o-animationBounce':props.animation==='bounce',
+                'o-animationPulse':props.animation==='pulse',
+                'o-sizeMedium':props.size==='medium',
+                'o-sizeSmall':props.size==='small',
             }"/>
         </div>
     </t>

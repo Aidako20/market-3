@@ -1,108 +1,108 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesxml:space="preserve">
 
-    <t t-name="mail.Attachment" owl="1">
-        <div class="o_Attachment"
+    <tt-name="mail.Attachment"owl="1">
+        <divclass="o_Attachment"
             t-att-class="{
-                'o-downloadable': props.isDownloadable,
-                'o-editable': props.isEditable,
-                'o-has-card-details': attachment and detailsMode === 'card',
-                'o-temporary': attachment and attachment.isTemporary,
-                'o-viewable': attachment and attachment.isViewable,
-            }" t-att-title="attachment ? attachment.displayName : undefined" role="menu" t-att-aria-label="attachment and attachment.displayName" t-att-data-attachment-local-id="attachment ? attachment.localId : undefined"
+                'o-downloadable':props.isDownloadable,
+                'o-editable':props.isEditable,
+                'o-has-card-details':attachmentanddetailsMode==='card',
+                'o-temporary':attachmentandattachment.isTemporary,
+                'o-viewable':attachmentandattachment.isViewable,
+            }"t-att-title="attachment?attachment.displayName:undefined"role="menu"t-att-aria-label="attachmentandattachment.displayName"t-att-data-attachment-local-id="attachment?attachment.localId:undefined"
         >
-            <t t-if="attachment">
-                <!-- Image style-->
-                <!-- o_image from mimetype.scss -->
-                <div class="o_Attachment_image o_image" t-on-click="_onClickImage"
+            <tt-if="attachment">
+                <!--Imagestyle-->
+                <!--o_imagefrommimetype.scss-->
+                <divclass="o_Attachment_imageo_image"t-on-click="_onClickImage"
                     t-att-class="{
-                        'o-attachment-viewable': attachment.isViewable,
-                        'o-details-overlay': detailsMode !== 'card',
-                        'o-large': props.imageSize === 'large',
-                        'o-medium': props.imageSize === 'medium',
-                        'o-small': props.imageSize === 'small',
-                    }" t-att-href="attachmentUrl" t-att-style="imageStyle" role="menuitem" aria-label="View image" t-att-tabindex="attachment.isViewable ? 0 : -1" t-att-aria-disabled="!attachment.isViewable" t-att-data-mimetype="attachment.mimetype"
+                        'o-attachment-viewable':attachment.isViewable,
+                        'o-details-overlay':detailsMode!=='card',
+                        'o-large':props.imageSize==='large',
+                        'o-medium':props.imageSize==='medium',
+                        'o-small':props.imageSize==='small',
+                    }"t-att-href="attachmentUrl"t-att-style="imageStyle"role="menuitem"aria-label="Viewimage"t-att-tabindex="attachment.isViewable?0:-1"t-att-aria-disabled="!attachment.isViewable"t-att-data-mimetype="attachment.mimetype"
                 >
-                    <t t-if="(props.showFilename or props.showExtension) and detailsMode === 'hover'">
-                        <div class="o_Attachment_imageOverlay">
-                            <div class="o_Attachment_details o_Attachment_imageOverlayDetails">
-                                <t t-if="props.showFilename">
-                                    <div class="o_Attachment_filename">
-                                        <t t-esc="attachment.displayName"/>
+                    <tt-if="(props.showFilenameorprops.showExtension)anddetailsMode==='hover'">
+                        <divclass="o_Attachment_imageOverlay">
+                            <divclass="o_Attachment_detailso_Attachment_imageOverlayDetails">
+                                <tt-if="props.showFilename">
+                                    <divclass="o_Attachment_filename">
+                                        <tt-esc="attachment.displayName"/>
                                     </div>
                                 </t>
-                                <t t-if="props.showExtension">
-                                    <div class="o_Attachment_extension">
-                                        <t t-esc="attachment.extension"/>
+                                <tt-if="props.showExtension">
+                                    <divclass="o_Attachment_extension">
+                                        <tt-esc="attachment.extension"/>
                                     </div>
                                 </t>
                             </div>
-                            <div class="o_Attachment_actions">
-                                <!-- Remove button -->
-                                <t t-if="props.isEditable" t-key="'unlink'">
-                                    <div class="o_Attachment_action o_Attachment_actionUnlink"
+                            <divclass="o_Attachment_actions">
+                                <!--Removebutton-->
+                                <tt-if="props.isEditable"t-key="'unlink'">
+                                    <divclass="o_Attachment_actiono_Attachment_actionUnlink"
                                         t-att-class="{
-                                            'o-pretty': attachment.isLinkedToComposer,
-                                        }" tabindex="0" aria-label="Remove" role="menuitem" t-on-click="_onClickUnlink" title="Remove"
+                                            'o-pretty':attachment.isLinkedToComposer,
+                                        }"tabindex="0"aria-label="Remove"role="menuitem"t-on-click="_onClickUnlink"title="Remove"
                                     >
-                                        <i class="fa fa-times"/>
+                                        <iclass="fafa-times"/>
                                     </div>
                                 </t>
-                                <!-- Download button -->
-                                <t t-if="props.isDownloadable and !attachment.isTemporary" t-key="'download'">
-                                    <div class="o_Attachment_action o_Attachment_actionDownload" tabindex="0" role="menuitem" aria-label="Download" t-on-click="_onClickDownload" title="Download">
-                                        <i class="fa fa-download"/>
+                                <!--Downloadbutton-->
+                                <tt-if="props.isDownloadableand!attachment.isTemporary"t-key="'download'">
+                                    <divclass="o_Attachment_actiono_Attachment_actionDownload"tabindex="0"role="menuitem"aria-label="Download"t-on-click="_onClickDownload"title="Download">
+                                        <iclass="fafa-download"/>
                                     </div>
                                 </t>
                             </div>
                         </div>
                     </t>
                 </div>
-                <!-- Attachment details -->
-                <t t-if="(props.showFilename or props.showExtension) and detailsMode === 'card'">
-                    <div class="o_Attachment_details">
-                        <t t-if="props.showFilename">
-                            <div class="o_Attachment_filename">
-                                <t t-esc="attachment.displayName"/>
+                <!--Attachmentdetails-->
+                <tt-if="(props.showFilenameorprops.showExtension)anddetailsMode==='card'">
+                    <divclass="o_Attachment_details">
+                        <tt-if="props.showFilename">
+                            <divclass="o_Attachment_filename">
+                                <tt-esc="attachment.displayName"/>
                             </div>
                         </t>
-                        <t t-if="props.showExtension">
-                            <div class="o_Attachment_extension">
-                                <t t-esc="attachment.extension"/>
-                            </div>
-                        </t>
-                    </div>
-                </t>
-                <!-- Attachment aside -->
-                <t t-if="detailsMode !== 'hover' and (props.isDownloadable or props.isEditable)">
-                    <div class="o_Attachment_aside" t-att-class="{ 'o-has-multiple-action': props.isDownloadable and props.isEditable }">
-                        <!-- Uploading icon -->
-                        <t t-if="attachment.isTemporary and attachment.isLinkedToComposer">
-                            <div class="o_Attachment_asideItem o_Attachment_asideItemUploading" title="Uploading">
-                                <i class="fa fa-spin fa-spinner"/>
-                            </div>
-                        </t>
-                        <!-- Uploaded icon -->
-                        <t t-if="!attachment.isTemporary and attachment.isLinkedToComposer">
-                            <div class="o_Attachment_asideItem o_Attachment_asideItemUploaded" title="Uploaded">
-                                <i class="fa fa-check"/>
-                            </div>
-                        </t>
-                        <!-- Remove button -->
-                        <t t-if="props.isEditable">
-                            <div class="o_Attachment_asideItem o_Attachment_asideItemUnlink" t-att-class="{ 'o-pretty': attachment.isLinkedToComposer }" tabindex="0" role="menuitem" aria-label="Remove" t-on-click="_onClickUnlink" title="Remove">
-                                <i class="fa fa-times"/>
-                            </div>
-                        </t>
-                        <!-- Download button -->
-                        <t t-if="props.isDownloadable and !attachment.isTemporary">
-                            <div class="o_Attachment_asideItem o_Attachment_asideItemDownload" tabindex="0" role="menuitem" aria-label="Download" t-on-click="_onClickDownload" title="Download">
-                                <i class="fa fa-download"/>
+                        <tt-if="props.showExtension">
+                            <divclass="o_Attachment_extension">
+                                <tt-esc="attachment.extension"/>
                             </div>
                         </t>
                     </div>
                 </t>
-                <t t-if="state.hasDeleteConfirmDialog">
+                <!--Attachmentaside-->
+                <tt-if="detailsMode!=='hover'and(props.isDownloadableorprops.isEditable)">
+                    <divclass="o_Attachment_aside"t-att-class="{'o-has-multiple-action':props.isDownloadableandprops.isEditable}">
+                        <!--Uploadingicon-->
+                        <tt-if="attachment.isTemporaryandattachment.isLinkedToComposer">
+                            <divclass="o_Attachment_asideItemo_Attachment_asideItemUploading"title="Uploading">
+                                <iclass="fafa-spinfa-spinner"/>
+                            </div>
+                        </t>
+                        <!--Uploadedicon-->
+                        <tt-if="!attachment.isTemporaryandattachment.isLinkedToComposer">
+                            <divclass="o_Attachment_asideItemo_Attachment_asideItemUploaded"title="Uploaded">
+                                <iclass="fafa-check"/>
+                            </div>
+                        </t>
+                        <!--Removebutton-->
+                        <tt-if="props.isEditable">
+                            <divclass="o_Attachment_asideItemo_Attachment_asideItemUnlink"t-att-class="{'o-pretty':attachment.isLinkedToComposer}"tabindex="0"role="menuitem"aria-label="Remove"t-on-click="_onClickUnlink"title="Remove">
+                                <iclass="fafa-times"/>
+                            </div>
+                        </t>
+                        <!--Downloadbutton-->
+                        <tt-if="props.isDownloadableand!attachment.isTemporary">
+                            <divclass="o_Attachment_asideItemo_Attachment_asideItemDownload"tabindex="0"role="menuitem"aria-label="Download"t-on-click="_onClickDownload"title="Download">
+                                <iclass="fafa-download"/>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+                <tt-if="state.hasDeleteConfirmDialog">
                     <AttachmentDeleteConfirmDialog
                         attachmentLocalId="props.attachmentLocalId"
                         t-on-dialog-closed="_onDeleteConfirmDialogClosed"

@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="ProductList" owl="1">
-        <div class="product-list-container">
-            <div t-if="props.products.length != 0" class="product-list">
-                <t t-foreach="props.products" t-as="product" t-key="product.id">
-                    <ProductItem product="product" />
+    <tt-name="ProductList"owl="1">
+        <divclass="product-list-container">
+            <divt-if="props.products.length!=0"class="product-list">
+                <tt-foreach="props.products"t-as="product"t-key="product.id">
+                    <ProductItemproduct="product"/>
                 </t>
             </div>
-            <div t-else="" class="product-list-empty">
-                <div class="product-list-empty">
-                    <t t-if="props.searchWord !== ''">
+            <divt-else=""class="product-list-empty">
+                <divclass="product-list-empty">
+                    <tt-if="props.searchWord!==''">
                         <p>
-                            No results found for "
-                            <b t-esc="props.searchWord"></b>
+                            Noresultsfoundfor"
+                            <bt-esc="props.searchWord"></b>
                             ".
                         </p>
                     </t>
-                    <t t-else="">
-                        <p>There are no products in this category.</p>
+                    <tt-else="">
+                        <p>Therearenoproductsinthiscategory.</p>
                     </t>
                 </div>
             </div>

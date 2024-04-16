@@ -1,132 +1,132 @@
 
-flectra.define('web.translation', function (require) {
-"use strict";
+flectra.define('web.translation',function(require){
+"usestrict";
 
-var Class = require('web.Class');
+varClass=require('web.Class');
 
-var TranslationDataBase = Class.extend(/** @lends instance.TranslationDataBase# */{
-    init: function() {
-        this.db = {};
-        this.multi_lang = false
-        this.parameters = {"direction": 'ltr',
-                        "date_format": '%m/%d/%Y',
-                        "time_format": '%H:%M:%S',
-                        "grouping": [],
-                        "decimal_point": ".",
-                        "thousands_sep": ",",
-                        "code": "en_US"};
+varTranslationDataBase=Class.extend(/**@lendsinstance.TranslationDataBase#*/{
+    init:function(){
+        this.db={};
+        this.multi_lang=false
+        this.parameters={"direction":'ltr',
+                        "date_format":'%m/%d/%Y',
+                        "time_format":'%H:%M:%S',
+                        "grouping":[],
+                        "decimal_point":".",
+                        "thousands_sep":",",
+                        "code":"en_US"};
     },
-    set_bundle: function(translation_bundle) {
-        var self = this;
-        this.multi_lang = translation_bundle.multi_lang
-        var modules = _.keys(translation_bundle.modules);
+    set_bundle:function(translation_bundle){
+        varself=this;
+        this.multi_lang=translation_bundle.multi_lang
+        varmodules=_.keys(translation_bundle.modules);
         modules.sort();
-        if (_.include(modules, "web")) {
-            modules = ["web"].concat(_.without(modules, "web"));
+        if(_.include(modules,"web")){
+            modules=["web"].concat(_.without(modules,"web"));
         }
-        _.each(modules, function(name) {
+        _.each(modules,function(name){
             self.add_module_translation(translation_bundle.modules[name]);
         });
-        if (translation_bundle.lang_parameters) {
-            this.parameters = translation_bundle.lang_parameters;
-            this.parameters.grouping = JSON.parse(this.parameters.grouping);
+        if(translation_bundle.lang_parameters){
+            this.parameters=translation_bundle.lang_parameters;
+            this.parameters.grouping=JSON.parse(this.parameters.grouping);
         }
     },
-    add_module_translation: function(mod) {
-        var self = this;
-        _.each(mod.messages, function(message) {
-            self.db[message.id] = message.string;
+    add_module_translation:function(mod){
+        varself=this;
+        _.each(mod.messages,function(message){
+            self.db[message.id]=message.string;
         });
     },
-    build_translation_function: function() {
-        var self = this;
-        var fcnt = function(str) {
-            var tmp = self.get(str);
-            return tmp === undefined ? str : tmp;
+    build_translation_function:function(){
+        varself=this;
+        varfcnt=function(str){
+            vartmp=self.get(str);
+            returntmp===undefined?str:tmp;
         };
-        fcnt.database = this;
-        return fcnt;
+        fcnt.database=this;
+        returnfcnt;
     },
-    get: function(key) {
-        return this.db[key];
+    get:function(key){
+        returnthis.db[key];
     },
     /**
-        Loads the translations from an OpenERP server.
+        LoadsthetranslationsfromanOpenERPserver.
 
-        @param {openerp.Session} session The session object to contact the server.
-        @param {Array} [modules] The list of modules to load the translation. If not specified,
-        it will default to all the modules installed in the current database.
-        @param {Object} [lang] lang The language. If not specified it will default to the language
-        of the current user.
-        @param {string} [url='/web/webclient/translations']
-        @returns {Promise}
+        @param{openerp.Session}sessionThesessionobjecttocontacttheserver.
+        @param{Array}[modules]Thelistofmodulestoloadthetranslation.Ifnotspecified,
+        itwilldefaulttoallthemodulesinstalledinthecurrentdatabase.
+        @param{Object}[lang]langThelanguage.Ifnotspecifieditwilldefaulttothelanguage
+        ofthecurrentuser.
+        @param{string}[url='/web/webclient/translations']
+        @returns{Promise}
     */
-    load_translations: function(session, modules, lang, url) {
-        var self = this;
-        var cacheId = session.cache_hashes && session.cache_hashes.translations;
-        url = url || '/web/webclient/translations';
-        url += '/' + (cacheId ? cacheId : Date.now());
-        return $.get(url, {
-            mods: modules ? modules.join(',') : null,
-            lang: lang || null,
-        }).then(function (trans) {
+    load_translations:function(session,modules,lang,url){
+        varself=this;
+        varcacheId=session.cache_hashes&&session.cache_hashes.translations;
+        url=url||'/web/webclient/translations';
+        url+='/'+(cacheId?cacheId:Date.now());
+        return$.get(url,{
+            mods:modules?modules.join(','):null,
+            lang:lang||null,
+        }).then(function(trans){
             self.set_bundle(trans);
         });
     }
 });
 
 /**
- * Eager translation function, performs translation immediately at call
- * site. Beware using this outside of method bodies (before the
- * translation database is loaded), you probably want :func:`_lt`
- * instead.
+ *Eagertranslationfunction,performstranslationimmediatelyatcall
+ *site.Bewareusingthisoutsideofmethodbodies(beforethe
+ *translationdatabaseisloaded),youprobablywant:func:`_lt`
+ *instead.
  *
- * @function _t
- * @param {String} source string to translate
- * @returns {String} source translated into the current locale
+ *@function_t
+ *@param{String}sourcestringtotranslate
+ *@returns{String}sourcetranslatedintothecurrentlocale
  */
-var _t = new TranslationDataBase().build_translation_function();
+var_t=newTranslationDataBase().build_translation_function();
 /**
- * Lazy translation function, only performs the translation when actually
- * printed (e.g. inserted into a template)
+ *Lazytranslationfunction,onlyperformsthetranslationwhenactually
+ *printed(e.g.insertedintoatemplate)
  *
- * Useful when defining translatable strings in code evaluated before the
- * translation database is loaded, as class attributes or at the top-level of
- * an OpenERP Web module
+ *Usefulwhendefiningtranslatablestringsincodeevaluatedbeforethe
+ *translationdatabaseisloaded,asclassattributesoratthetop-levelof
+ *anOpenERPWebmodule
  *
- * @param {String} s string to translate
- * @returns {Object} lazy translation object
+ *@param{String}sstringtotranslate
+ *@returns{Object}lazytranslationobject
  */
-var _lt = function (s) {
-    return {toString: function () { return _t(s); }};
+var_lt=function(s){
+    return{toString:function(){return_t(s);}};
 };
 
-/** Setup jQuery timeago */
+/**SetupjQuerytimeago*/
 /*
- * Strings in timeago are "composed" with prefixes, words and suffixes. This
- * makes their detection by our translating system impossible. Use all literal
- * strings we're using with a translation mark here so the extractor can do its
- * job.
+ *Stringsintimeagoare"composed"withprefixes,wordsandsuffixes.This
+ *makestheirdetectionbyourtranslatingsystemimpossible.Useallliteral
+ *stringswe'reusingwithatranslationmarkheresotheextractorcandoits
+ *job.
  */
 {
-    _t('less than a minute ago');
-    _t('about a minute ago');
-    _t('%d minutes ago');
-    _t('about an hour ago');
-    _t('%d hours ago');
-    _t('a day ago');
-    _t('%d days ago');
-    _t('about a month ago');
-    _t('%d months ago');
-    _t('about a year ago');
-    _t('%d years ago');
+    _t('lessthanaminuteago');
+    _t('aboutaminuteago');
+    _t('%dminutesago');
+    _t('aboutanhourago');
+    _t('%dhoursago');
+    _t('adayago');
+    _t('%ddaysago');
+    _t('aboutamonthago');
+    _t('%dmonthsago');
+    _t('aboutayearago');
+    _t('%dyearsago');
 }
 
 
-return {
-    _t: _t,
-    _lt: _lt,
-    TranslationDataBase: TranslationDataBase,
+return{
+    _t:_t,
+    _lt:_lt,
+    TranslationDataBase:TranslationDataBase,
 };
 
 });

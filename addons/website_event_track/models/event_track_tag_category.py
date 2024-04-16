@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class TrackTagCategory(models.Model):
-    _name = "event.track.tag.category"
-    _description = 'Event Track Tag Category'
-    _order = "sequence"
+classTrackTagCategory(models.Model):
+    _name="event.track.tag.category"
+    _description='EventTrackTagCategory'
+    _order="sequence"
 
-    name = fields.Char("Name", required=True, translate=True)
-    sequence = fields.Integer('Sequence', default=10)
-    tag_ids = fields.One2many('event.track.tag', 'category_id', string="Tags")
+    name=fields.Char("Name",required=True,translate=True)
+    sequence=fields.Integer('Sequence',default=10)
+    tag_ids=fields.One2many('event.track.tag','category_id',string="Tags")

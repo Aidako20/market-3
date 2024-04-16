@@ -1,100 +1,100 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.tests import HttpCase, standalone, tagged
+fromflectra.testsimportHttpCase,standalone,tagged
 
 
-@tagged('website_nightly', '-standard')
-class TestWebsiteNightlyRunbot(HttpCase):
-    def test_01_website_nightly_runbot(self):
-        """ This test is just here to avoid runbot to raise an error on the
-        ``website_nightly`` build. Indeed, if not a single test with this tag is
-        found, the build will be considered as failed.
-        In Flectra 16.4 a real test is using this tag.
+@tagged('website_nightly','-standard')
+classTestWebsiteNightlyRunbot(HttpCase):
+    deftest_01_website_nightly_runbot(self):
+        """Thistestisjustheretoavoidrunbottoraiseanerroronthe
+        ``website_nightly``build.Indeed,ifnotasingletestwiththistagis
+        found,thebuildwillbeconsideredasfailed.
+        InFlectra16.4arealtestisusingthistag.
         """
 
 
 """
-This test ensure `inherit_id` update is correctly replicated on cow views.
-The view receiving the `inherit_id` update is either:
-1. in a module loaded before `website`. In that case, `website` code is not
-   loaded yet, so we store the updates to replay the changes on the cow views
-   once `website` module is loaded (see `_check()`). This test is testing that
+Thistestensure`inherit_id`updateiscorrectlyreplicatedoncowviews.
+Theviewreceivingthe`inherit_id`updateiseither:
+1.inamoduleloadedbefore`website`.Inthatcase,`website`codeisnot
+   loadedyet,sowestoretheupdatestoreplaythechangesonthecowviews
+   once`website`moduleisloaded(see`_check()`).Thistestistestingthat
    part.
-2. in a module loaded after `website`. In that case, the `inherit_id` update is
-   directly replicated on the cow views. That behavior is tested with
-   `test_module_new_inherit_view_on_parent_already_forked` and
-   `test_specific_view_module_update_inherit_change` in `website` module.
+2.inamoduleloadedafter`website`.Inthatcase,the`inherit_id`updateis
+   directlyreplicatedonthecowviews.Thatbehavioristestedwith
+   `test_module_new_inherit_view_on_parent_already_forked`and
+   `test_specific_view_module_update_inherit_change`in`website`module.
 """
 
 
-@standalone('cow_views_inherit', 'website_standalone')
-def test_01_cow_views_inherit_on_module_update(env):
-    #     A    B                        A    B
-    #    / \                   =>           / \
-    #   D   D'                             D   D'
+@standalone('cow_views_inherit','website_standalone')
+deftest_01_cow_views_inherit_on_module_update(env):
+    #    A   B                       A   B
+    #   /\                  =>          /\
+    #  D  D'                            D  D'
 
-    # 1. Setup hierarchy as comment above
-    View = env['ir.ui.view']
-    View.with_context(_force_unlink=True, active_test=False).search([('website_id', '=', 1)]).unlink()
-    child_view = env.ref('portal.footer_language_selector')
-    parent_view = env.ref('portal.portal_back_in_edit_mode')
-    # Remove any possibly existing COW view (another theme etc)
-    parent_view.with_context(_force_unlink=True, active_test=False)._get_specific_views().unlink()
-    child_view.with_context(_force_unlink=True, active_test=False)._get_specific_views().unlink()
-    # Change `inherit_id` so the module update will set it back to the XML value
-    child_view.write({'inherit_id': parent_view.id, 'arch': child_view.arch_db.replace('o_footer_copyright_name', 'text-center')})
-    # Trigger COW on view
-    child_view.with_context(website_id=1).write({'name': 'COW Website 1'})
-    child_cow_view = child_view._get_specific_views()
+    #1.Setuphierarchyascommentabove
+    View=env['ir.ui.view']
+    View.with_context(_force_unlink=True,active_test=False).search([('website_id','=',1)]).unlink()
+    child_view=env.ref('portal.footer_language_selector')
+    parent_view=env.ref('portal.portal_back_in_edit_mode')
+    #RemoveanypossiblyexistingCOWview(anotherthemeetc)
+    parent_view.with_context(_force_unlink=True,active_test=False)._get_specific_views().unlink()
+    child_view.with_context(_force_unlink=True,active_test=False)._get_specific_views().unlink()
+    #Change`inherit_id`sothemoduleupdatewillsetitbacktotheXMLvalue
+    child_view.write({'inherit_id':parent_view.id,'arch':child_view.arch_db.replace('o_footer_copyright_name','text-center')})
+    #TriggerCOWonview
+    child_view.with_context(website_id=1).write({'name':'COWWebsite1'})
+    child_cow_view=child_view._get_specific_views()
 
-    # 2. Ensure setup is as expected
-    assert len(child_cow_view.inherit_id) == 1, "Should only be the XML view and its COW counterpart."
-    assert child_cow_view.inherit_id == parent_view, "Ensure test is setup as expected."
+    #2.Ensuresetupisasexpected
+    assertlen(child_cow_view.inherit_id)==1,"ShouldonlybetheXMLviewanditsCOWcounterpart."
+    assertchild_cow_view.inherit_id==parent_view,"Ensuretestissetupasexpected."
 
-    # 3. Upgrade the module
-    portal_module = env['ir.module.module'].search([('name', '=', 'portal')])
+    #3.Upgradethemodule
+    portal_module=env['ir.module.module'].search([('name','=','portal')])
     portal_module.button_immediate_upgrade()
-    env.reset()     # clear the set of environments
-    env = env()     # get an environment that refers to the new registry
+    env.reset()    #clearthesetofenvironments
+    env=env()    #getanenvironmentthatreferstothenewregistry
 
-    # 4. Ensure cow view also got its inherit_id updated
-    expected_parent_view = env.ref('portal.frontend_layout')  # XML data
-    assert child_view.inherit_id == expected_parent_view, "Generic view security check."
-    assert child_cow_view.inherit_id == expected_parent_view, "COW view should also have received the `inherit_id` update."
+    #4.Ensurecowviewalsogotitsinherit_idupdated
+    expected_parent_view=env.ref('portal.frontend_layout') #XMLdata
+    assertchild_view.inherit_id==expected_parent_view,"Genericviewsecuritycheck."
+    assertchild_cow_view.inherit_id==expected_parent_view,"COWviewshouldalsohavereceivedthe`inherit_id`update."
 
 
-@standalone('cow_views_inherit', 'website_standalone')
-def test_02_cow_views_inherit_on_module_update(env):
-    #     A    B    B'                  A    B   B'
-    #    / \                   =>            |   |
-    #   D   D'                               D   D'
+@standalone('cow_views_inherit','website_standalone')
+deftest_02_cow_views_inherit_on_module_update(env):
+    #    A   B   B'                 A   B  B'
+    #   /\                  =>           |  |
+    #  D  D'                              D  D'
 
-    # 1. Setup hierarchy as comment above
-    View = env['ir.ui.view']
-    View.with_context(_force_unlink=True, active_test=False).search([('website_id', '=', 1)]).unlink()
-    view_D = env.ref('portal.my_account_link')
-    view_A = env.ref('portal.message_thread')
-    # Change `inherit_id` so the module update will set it back to the XML value
-    view_D.write({'inherit_id': view_A.id, 'arch_db': view_D.arch_db.replace('o_logout_divider', 'discussion')})
-    # Trigger COW on view
-    view_B = env.ref('portal.user_dropdown')  # XML data
-    view_D.with_context(website_id=1).write({'name': 'D Website 1'})
-    view_B.with_context(website_id=1).write({'name': 'B Website 1'})
-    view_Dcow = view_D._get_specific_views()
+    #1.Setuphierarchyascommentabove
+    View=env['ir.ui.view']
+    View.with_context(_force_unlink=True,active_test=False).search([('website_id','=',1)]).unlink()
+    view_D=env.ref('portal.my_account_link')
+    view_A=env.ref('portal.message_thread')
+    #Change`inherit_id`sothemoduleupdatewillsetitbacktotheXMLvalue
+    view_D.write({'inherit_id':view_A.id,'arch_db':view_D.arch_db.replace('o_logout_divider','discussion')})
+    #TriggerCOWonview
+    view_B=env.ref('portal.user_dropdown') #XMLdata
+    view_D.with_context(website_id=1).write({'name':'DWebsite1'})
+    view_B.with_context(website_id=1).write({'name':'BWebsite1'})
+    view_Dcow=view_D._get_specific_views()
 
-    # 2. Ensure setup is as expected
-    view_Bcow = view_B._get_specific_views()
-    assert view_Dcow.inherit_id == view_A, "Ensure test is setup as expected."
-    assert len(view_Bcow) == len(view_Dcow) == 1, "Ensure test is setup as expected (2)."
-    assert view_B != view_Bcow, "Security check to ensure `_get_specific_views` return what it should."
+    #2.Ensuresetupisasexpected
+    view_Bcow=view_B._get_specific_views()
+    assertview_Dcow.inherit_id==view_A,"Ensuretestissetupasexpected."
+    assertlen(view_Bcow)==len(view_Dcow)==1,"Ensuretestissetupasexpected(2)."
+    assertview_B!=view_Bcow,"Securitychecktoensure`_get_specific_views`returnwhatitshould."
 
-    # 3. Upgrade the module
-    portal_module = env['ir.module.module'].search([('name', '=', 'portal')])
+    #3.Upgradethemodule
+    portal_module=env['ir.module.module'].search([('name','=','portal')])
     portal_module.button_immediate_upgrade()
-    env.reset()     # clear the set of environments
-    env = env()     # get an environment that refers to the new registry
+    env.reset()    #clearthesetofenvironments
+    env=env()    #getanenvironmentthatreferstothenewregistry
 
-    # 4. Ensure cow view also got its inherit_id updated
-    assert view_D.inherit_id == view_B, "Generic view security check."
-    assert view_Dcow.inherit_id == view_Bcow, "COW view should also have received the `inherit_id` update."
+    #4.Ensurecowviewalsogotitsinherit_idupdated
+    assertview_D.inherit_id==view_B,"Genericviewsecuritycheck."
+    assertview_Dcow.inherit_id==view_Bcow,"COWviewshouldalsohavereceivedthe`inherit_id`update."

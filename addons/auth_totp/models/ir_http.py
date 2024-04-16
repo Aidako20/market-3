@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-from flectra import models
-from flectra.http import request
+#-*-coding:utf-8-*-
+fromflectraimportmodels
+fromflectra.httpimportrequest
 
-class IrHttp(models.AbstractModel):
-    _inherit = 'ir.http'
+classIrHttp(models.AbstractModel):
+    _inherit='ir.http'
 
-    def session_info(self):
-        info = super().session_info()
-        # because frontend session_info uses this key and is embedded in
-        # the view source
-        info["user_id"] = request.session.uid,
-        return info
+    defsession_info(self):
+        info=super().session_info()
+        #becausefrontendsession_infousesthiskeyandisembeddedin
+        #theviewsource
+        info["user_id"]=request.session.uid,
+        returninfo

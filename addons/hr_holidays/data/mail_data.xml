@@ -1,57 +1,57 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <!-- Leave specific activities -->
-        <record id="mail_act_leave_approval" model="mail.activity.type">
-            <field name="name">Time Off Approval</field>
-            <field name="icon">fa-sun-o</field>
-            <field name="res_model_id" ref="hr_holidays.model_hr_leave"/>
+    <datanoupdate="1">
+        <!--Leavespecificactivities-->
+        <recordid="mail_act_leave_approval"model="mail.activity.type">
+            <fieldname="name">TimeOffApproval</field>
+            <fieldname="icon">fa-sun-o</field>
+            <fieldname="res_model_id"ref="hr_holidays.model_hr_leave"/>
         </record>
-        <record id="mail_act_leave_second_approval" model="mail.activity.type">
-            <field name="name">Time Off Second Approve</field>
-            <field name="icon">fa-sun-o</field>
-            <field name="res_model_id" ref="hr_holidays.model_hr_leave"/>
-        </record>
-
-        <!-- Leave specific activities -->
-        <record id="mail_act_leave_allocation_approval" model="mail.activity.type">
-            <field name="name">Allocation Approval</field>
-            <field name="icon">fa-sun-o</field>
-            <field name="res_model_id" ref="hr_holidays.model_hr_leave_allocation"/>
-        </record>
-        <record id="mail_act_leave_allocation_second_approval" model="mail.activity.type">
-            <field name="name">Allocation Second Approve</field>
-            <field name="icon">fa-sun-o</field>
-            <field name="res_model_id" ref="hr_holidays.model_hr_leave_allocation"/>
+        <recordid="mail_act_leave_second_approval"model="mail.activity.type">
+            <fieldname="name">TimeOffSecondApprove</field>
+            <fieldname="icon">fa-sun-o</field>
+            <fieldname="res_model_id"ref="hr_holidays.model_hr_leave"/>
         </record>
 
-        <!-- Holidays-related subtypes for messaging / Chatter -->
-        <record id="mt_leave" model="mail.message.subtype">
-            <field name="name">Time Off</field>
-            <field name="res_model">hr.leave</field>
-            <field name="description">Time Off Request</field>
+        <!--Leavespecificactivities-->
+        <recordid="mail_act_leave_allocation_approval"model="mail.activity.type">
+            <fieldname="name">AllocationApproval</field>
+            <fieldname="icon">fa-sun-o</field>
+            <fieldname="res_model_id"ref="hr_holidays.model_hr_leave_allocation"/>
         </record>
-        <record id="mt_leave_home_working" model="mail.message.subtype">
-            <field name="name">Home Working</field>
-            <field name="res_model">hr.leave</field>
-            <field name="description">Home Working</field>
-        </record>
-        <record id="mt_leave_sick" model="mail.message.subtype">
-            <field name="name">Sick Time Off</field>
-            <field name="res_model">hr.leave</field>
-            <field name="description">Sick Time Off</field>
-        </record>
-        <record id="mt_leave_unpaid" model="mail.message.subtype">
-            <field name="name">Unpaid Time Off</field>
-            <field name="res_model">hr.leave</field>
-            <field name="description">Unpaid Time Off</field>
+        <recordid="mail_act_leave_allocation_second_approval"model="mail.activity.type">
+            <fieldname="name">AllocationSecondApprove</field>
+            <fieldname="icon">fa-sun-o</field>
+            <fieldname="res_model_id"ref="hr_holidays.model_hr_leave_allocation"/>
         </record>
 
-        <!-- Allocation-related subtypes for messaging / Chatter -->
-        <record id="mt_leave_allocation" model="mail.message.subtype">
-            <field name="name">Allocation</field>
-            <field name="res_model">hr.leave.allocation</field>
-            <field name="description">Allocation Request</field>
+        <!--Holidays-relatedsubtypesformessaging/Chatter-->
+        <recordid="mt_leave"model="mail.message.subtype">
+            <fieldname="name">TimeOff</field>
+            <fieldname="res_model">hr.leave</field>
+            <fieldname="description">TimeOffRequest</field>
+        </record>
+        <recordid="mt_leave_home_working"model="mail.message.subtype">
+            <fieldname="name">HomeWorking</field>
+            <fieldname="res_model">hr.leave</field>
+            <fieldname="description">HomeWorking</field>
+        </record>
+        <recordid="mt_leave_sick"model="mail.message.subtype">
+            <fieldname="name">SickTimeOff</field>
+            <fieldname="res_model">hr.leave</field>
+            <fieldname="description">SickTimeOff</field>
+        </record>
+        <recordid="mt_leave_unpaid"model="mail.message.subtype">
+            <fieldname="name">UnpaidTimeOff</field>
+            <fieldname="res_model">hr.leave</field>
+            <fieldname="description">UnpaidTimeOff</field>
+        </record>
+
+        <!--Allocation-relatedsubtypesformessaging/Chatter-->
+        <recordid="mt_leave_allocation"model="mail.message.subtype">
+            <fieldname="name">Allocation</field>
+            <fieldname="res_model">hr.leave.allocation</field>
+            <fieldname="description">AllocationRequest</field>
         </record>
     </data>
 </flectra>

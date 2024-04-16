@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="digest_digest_view_form" model="ir.ui.view">
-        <field name="name">digest.digest.view.form.inherit.sale.order</field>
-        <field name="model">digest.digest</field>
-        <field name="inherit_id" ref="digest.digest_digest_view_form" />
-        <field name="arch" type="xml">
-            <xpath expr="//group[@name='kpi_general']" position="after">
-                <group name="kpi_pos" string="Point of Sale">
-                    <field name="kpi_pos_total"/>
+    <recordid="digest_digest_view_form"model="ir.ui.view">
+        <fieldname="name">digest.digest.view.form.inherit.sale.order</field>
+        <fieldname="model">digest.digest</field>
+        <fieldname="inherit_id"ref="digest.digest_digest_view_form"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//group[@name='kpi_general']"position="after">
+                <groupname="kpi_pos"string="PointofSale">
+                    <fieldname="kpi_pos_total"/>
                 </group>
             </xpath>
         </field>

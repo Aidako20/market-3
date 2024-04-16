@@ -1,23 +1,23 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from random import randint
+fromrandomimportrandint
 
-from flectra import fields, models
+fromflectraimportfields,models
 
 
-class EmployeeCategory(models.Model):
+classEmployeeCategory(models.Model):
 
-    _name = "hr.employee.category"
-    _description = "Employee Category"
+    _name="hr.employee.category"
+    _description="EmployeeCategory"
 
-    def _get_default_color(self):
-        return randint(1, 11)
+    def_get_default_color(self):
+        returnrandint(1,11)
 
-    name = fields.Char(string="Tag Name", required=True)
-    color = fields.Integer(string='Color Index', default=_get_default_color)
-    employee_ids = fields.Many2many('hr.employee', 'employee_category_rel', 'category_id', 'emp_id', string='Employees')
+    name=fields.Char(string="TagName",required=True)
+    color=fields.Integer(string='ColorIndex',default=_get_default_color)
+    employee_ids=fields.Many2many('hr.employee','employee_category_rel','category_id','emp_id',string='Employees')
 
-    _sql_constraints = [
-        ('name_uniq', 'unique (name)', "Tag name already exists !"),
+    _sql_constraints=[
+        ('name_uniq','unique(name)',"Tagnamealreadyexists!"),
     ]

@@ -1,52 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
-        <record id="product_category_all" model="product.category">
-            <field name="name">All</field>
+    <datanoupdate="1">
+        <recordid="product_category_all"model="product.category">
+            <fieldname="name">All</field>
         </record>
-        <record id="product_category_1" model="product.category">
-            <field name="parent_id" ref="product_category_all"/>
-            <field name="name">Saleable</field>
+        <recordid="product_category_1"model="product.category">
+            <fieldname="parent_id"ref="product_category_all"/>
+            <fieldname="name">Saleable</field>
         </record>
-        <record id="cat_expense" model="product.category">
-            <field name="parent_id" ref="product_category_all"/>
-            <field name="name">Expenses</field>
+        <recordid="cat_expense"model="product.category">
+            <fieldname="parent_id"ref="product_category_all"/>
+            <fieldname="name">Expenses</field>
         </record>
 
         <!--
              Precisions
         -->
-        <record forcecreate="True" id="decimal_price" model="decimal.precision">
-            <field name="name">Product Price</field>
-            <field name="digits">2</field>
+        <recordforcecreate="True"id="decimal_price"model="decimal.precision">
+            <fieldname="name">ProductPrice</field>
+            <fieldname="digits">2</field>
         </record>
-        <record forcecreate="True" id="decimal_discount" model="decimal.precision">
-            <field name="name">Discount</field>
-            <field name="digits">2</field>
+        <recordforcecreate="True"id="decimal_discount"model="decimal.precision">
+            <fieldname="name">Discount</field>
+            <fieldname="digits">2</field>
         </record>
-        <record forcecreate="True" id="decimal_stock_weight" model="decimal.precision">
-            <field name="name">Stock Weight</field>
-            <field name="digits">2</field>
+        <recordforcecreate="True"id="decimal_stock_weight"model="decimal.precision">
+            <fieldname="name">StockWeight</field>
+            <fieldname="digits">2</field>
         </record>
-        <record forcecreate="True" id="decimal_volume" model="decimal.precision">
-            <field name="name">Volume</field>
-            <field name="digits">2</field>
+        <recordforcecreate="True"id="decimal_volume"model="decimal.precision">
+            <fieldname="name">Volume</field>
+            <fieldname="digits">2</field>
         </record>
-        <record forcecreate="True" id="decimal_product_uom" model="decimal.precision">
-            <field name="name">Product Unit of Measure</field>
-            <field name="digits" eval="2"/>
+        <recordforcecreate="True"id="decimal_product_uom"model="decimal.precision">
+            <fieldname="name">ProductUnitofMeasure</field>
+            <fieldname="digits"eval="2"/>
         </record>
 
         <!--
-... to here, it should be in product_demo but we cant just move it
-there yet otherwise people who have installed the server (even with the without-demo
-parameter) will see those record just disappear.
+...tohere,itshouldbeinproduct_demobutwecantjustmoveit
+thereyetotherwisepeoplewhohaveinstalledtheserver(evenwiththewithout-demo
+parameter)willseethoserecordjustdisappear.
 -->
 
-        <!-- Price list -->
-        <record id="list0" model="product.pricelist">
-            <field name="name">Public Pricelist</field>
-            <field name="sequence">1</field>
+        <!--Pricelist-->
+        <recordid="list0"model="product.pricelist">
+            <fieldname="name">PublicPricelist</field>
+            <fieldname="sequence">1</field>
         </record>
 
         <!--

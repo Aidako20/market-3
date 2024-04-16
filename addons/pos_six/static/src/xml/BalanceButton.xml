@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="BalanceButton" owl="1">
-        <div class="header-button balance-button" t-on-click="sendBalance">
-            <span class="lock-button">
-                Send Balance
+    <tt-name="BalanceButton"owl="1">
+        <divclass="header-buttonbalance-button"t-on-click="sendBalance">
+            <spanclass="lock-button">
+                SendBalance
             </span>
         </div>
     </t>

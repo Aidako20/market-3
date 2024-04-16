@@ -1,103 +1,103 @@
-flectra.define('website.editor.menu', function (require) {
-'use strict';
+flectra.define('website.editor.menu',function(require){
+'usestrict';
 
-var Dialog = require('web.Dialog');
-var dom = require('web.dom');
-var Widget = require('web.Widget');
-var core = require('web.core');
-var Wysiwyg = require('web_editor.wysiwyg.root');
+varDialog=require('web.Dialog');
+vardom=require('web.dom');
+varWidget=require('web.Widget');
+varcore=require('web.core');
+varWysiwyg=require('web_editor.wysiwyg.root');
 
-var _t = core._t;
+var_t=core._t;
 
-var WysiwygMultizone = Wysiwyg.extend({
-    assetLibs: Wysiwyg.prototype.assetLibs.concat(['website.compiled_assets_wysiwyg']),
-    _getWysiwygContructor: function () {
-        return flectra.__DEBUG__.services['web_editor.wysiwyg.multizone'];
+varWysiwygMultizone=Wysiwyg.extend({
+    assetLibs:Wysiwyg.prototype.assetLibs.concat(['website.compiled_assets_wysiwyg']),
+    _getWysiwygContructor:function(){
+        returnflectra.__DEBUG__.services['web_editor.wysiwyg.multizone'];
     }
 });
 
-var EditorMenu = Widget.extend({
-    template: 'website.editorbar',
-    xmlDependencies: ['/website/static/src/xml/website.editor.xml'],
-    events: {
-        'click button[data-action=undo]': '_onUndoClick',
-        'click button[data-action=redo]': '_onRedoClick',
-        'click button[data-action=save]': '_onSaveClick',
-        'click button[data-action=cancel]': '_onCancelClick',
+varEditorMenu=Widget.extend({
+    template:'website.editorbar',
+    xmlDependencies:['/website/static/src/xml/website.editor.xml'],
+    events:{
+        'clickbutton[data-action=undo]':'_onUndoClick',
+        'clickbutton[data-action=redo]':'_onRedoClick',
+        'clickbutton[data-action=save]':'_onSaveClick',
+        'clickbutton[data-action=cancel]':'_onCancelClick',
     },
-    custom_events: {
-        request_save: '_onSnippetRequestSave',
-        get_clean_html: '_onGetCleanHTML',
+    custom_events:{
+        request_save:'_onSnippetRequestSave',
+        get_clean_html:'_onGetCleanHTML',
     },
 
     /**
-     * @override
+     *@override
      */
-    willStart: function () {
-        var self = this;
-        this.$el = null; // temporary null to avoid hidden error (@see start)
-        return this._super()
-            .then(function () {
-                var $wrapwrap = $('#wrapwrap');
-                $wrapwrap.removeClass('o_editable'); // clean the dom before edition
+    willStart:function(){
+        varself=this;
+        this.$el=null;//temporarynulltoavoidhiddenerror(@seestart)
+        returnthis._super()
+            .then(function(){
+                var$wrapwrap=$('#wrapwrap');
+                $wrapwrap.removeClass('o_editable');//cleanthedombeforeedition
                 self.editable($wrapwrap).addClass('o_editable');
-                self.wysiwyg = self._wysiwygInstance();
+                self.wysiwyg=self._wysiwygInstance();
             });
     },
     /**
-     * @override
+     *@override
      */
-    start: function () {
-        var self = this;
-        this.$el.css({width: '100%'});
-        return this.wysiwyg.attachTo($('#wrapwrap')).then(function () {
+    start:function(){
+        varself=this;
+        this.$el.css({width:'100%'});
+        returnthis.wysiwyg.attachTo($('#wrapwrap')).then(function(){
             self.trigger_up('edit_mode');
-            self.$el.css({width: ''});
+            self.$el.css({width:''});
         });
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
+    destroy:function(){
         this.trigger_up('readonly_mode');
-        this._super.apply(this, arguments);
+        this._super.apply(this,arguments);
     },
 
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
 
     /**
-     * Asks the user if they really wants to discard their changes (if any),
-     * then simply reloads the page if they want to.
+     *Askstheuseriftheyreallywantstodiscardtheirchanges(ifany),
+     *thensimplyreloadsthepageiftheywantto.
      *
-     * @param {boolean} [reload=true]
-     *        true if the page has to be reloaded when the user answers yes
-     *        (do nothing otherwise but add this to allow class extension)
-     * @returns {Deferred}
+     *@param{boolean}[reload=true]
+     *       trueifthepagehastobereloadedwhentheuseranswersyes
+     *       (donothingotherwisebutaddthistoallowclassextension)
+     *@returns{Deferred}
      */
-    cancel: function (reload) {
-        var self = this;
-        var def = new Promise(function (resolve, reject) {
-            if (!self.wysiwyg.isDirty()) {
+    cancel:function(reload){
+        varself=this;
+        vardef=newPromise(function(resolve,reject){
+            if(!self.wysiwyg.isDirty()){
                 resolve();
-            } else {
-                var confirm = Dialog.confirm(self, _t("If you discard the current edits, all unsaved changes will be lost. You can cancel to return to edit mode."), {
-                    confirm_callback: resolve,
+            }else{
+                varconfirm=Dialog.confirm(self,_t("Ifyoudiscardthecurrentedits,allunsavedchangeswillbelost.Youcancanceltoreturntoeditmode."),{
+                    confirm_callback:resolve,
                 });
-                confirm.on('closed', self, reject);
+                confirm.on('closed',self,reject);
             }
         });
 
-        return def.then(function () {
+        returndef.then(function(){
             self.trigger_up('edition_will_stopped');
-            var $wrapwrap = $('#wrapwrap');
+            var$wrapwrap=$('#wrapwrap');
             self.editable($wrapwrap).removeClass('o_editable');
-            if (reload !== false) {
-                window.onbeforeunload = null;
+            if(reload!==false){
+                window.onbeforeunload=null;
                 self.wysiwyg.destroy();
-                return self._reload();
-            } else {
+                returnself._reload();
+            }else{
                 self.wysiwyg.destroy();
                 self.trigger_up('readonly_mode');
                 self.trigger_up('edition_was_stopped');
@@ -106,161 +106,161 @@ var EditorMenu = Widget.extend({
         });
     },
     /**
-     * Asks the snippets to clean themself, then saves the page, then reloads it
-     * if asked to.
+     *Asksthesnippetstocleanthemself,thensavesthepage,thenreloadsit
+     *ifaskedto.
      *
-     * @param {boolean} [reload=true]
-     *        true if the page has to be reloaded after the save
-     * @returns {Promise}
+     *@param{boolean}[reload=true]
+     *       trueifthepagehastobereloadedafterthesave
+     *@returns{Promise}
      */
-    save: async function (reload) {
-        if (this._saving) {
-            return false;
+    save:asyncfunction(reload){
+        if(this._saving){
+            returnfalse;
         }
-        var self = this;
-        this._saving = true;
-        this.trigger_up('edition_will_stopped', {
-            // TODO adapt in master, this was added as a stable fix. This
-            // trigger to 'edition_will_stopped' was left by mistake
-            // during an editor refactoring + revert fail. It stops the public
-            // widgets at the wrong time, potentially dead-locking the editor.
-            // 'ready_to_clean_for_save' is the one in charge of stopping the
-            // widgets at the proper time.
-            noWidgetsStop: true,
+        varself=this;
+        this._saving=true;
+        this.trigger_up('edition_will_stopped',{
+            //TODOadaptinmaster,thiswasaddedasastablefix.This
+            //triggerto'edition_will_stopped'wasleftbymistake
+            //duringaneditorrefactoring+revertfail.Itstopsthepublic
+            //widgetsatthewrongtime,potentiallydead-lockingtheeditor.
+            //'ready_to_clean_for_save'istheoneinchargeofstoppingthe
+            //widgetsatthepropertime.
+            noWidgetsStop:true,
         });
-        return this.wysiwyg.save(false).then(function (result) {
-            var $wrapwrap = $('#wrapwrap');
+        returnthis.wysiwyg.save(false).then(function(result){
+            var$wrapwrap=$('#wrapwrap');
             self.editable($wrapwrap).removeClass('o_editable');
-            if (!result.isDirty) {
+            if(!result.isDirty){
                 self.cancel(reload);
-            } else if (result.isDirty && reload !== false) {
-                // remove top padding because the connected bar is not visible
+            }elseif(result.isDirty&&reload!==false){
+                //removetoppaddingbecausetheconnectedbarisnotvisible
                 $('body').removeClass('o_connected_user');
-                return self._reload();
-            } else {
+                returnself._reload();
+            }else{
                 self.wysiwyg.destroy();
                 self.trigger_up('edition_was_stopped');
                 self.destroy();
             }
-            return true;
-        }).guardedCatch(() => {
-            this._saving = false;
+            returntrue;
+        }).guardedCatch(()=>{
+            this._saving=false;
         });
     },
     /**
-     * Returns the editable areas on the page.
+     *Returnstheeditableareasonthepage.
      *
-     * @param {DOM} $wrapwrap
-     * @returns {jQuery}
+     *@param{DOM}$wrapwrap
+     *@returns{jQuery}
      */
-    editable: function ($wrapwrap) {
-        return $wrapwrap.find('[data-oe-model]')
+    editable:function($wrapwrap){
+        return$wrapwrap.find('[data-oe-model]')
             .not('.o_not_editable')
-            .filter(function () {
-                var $parent = $(this).closest('.o_editable, .o_not_editable');
-                return !$parent.length || $parent.hasClass('o_editable');
+            .filter(function(){
+                var$parent=$(this).closest('.o_editable,.o_not_editable');
+                return!$parent.length||$parent.hasClass('o_editable');
             })
-            .not('link, script')
+            .not('link,script')
             .not('[data-oe-readonly]')
-            .not('img[data-oe-field="arch"], br[data-oe-field="arch"], input[data-oe-field="arch"]')
+            .not('img[data-oe-field="arch"],br[data-oe-field="arch"],input[data-oe-field="arch"]')
             .not('.oe_snippet_editor')
-            .not('hr, br, input, textarea')
+            .not('hr,br,input,textarea')
             .add('.o_editable');
     },
 
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
 
     /**
-     * @private
+     *@private
      */
-    _wysiwygInstance: function () {
-        var context;
-        this.trigger_up('context_get', {
-            callback: function (ctx) {
-                context = ctx;
+    _wysiwygInstance:function(){
+        varcontext;
+        this.trigger_up('context_get',{
+            callback:function(ctx){
+                context=ctx;
             },
         });
-        return new WysiwygMultizone(this, {
-            snippets: 'website.snippets',
-            recordInfo: {
-                context: context,
-                data_res_model: 'website',
-                data_res_id: context.website_id,
+        returnnewWysiwygMultizone(this,{
+            snippets:'website.snippets',
+            recordInfo:{
+                context:context,
+                data_res_model:'website',
+                data_res_id:context.website_id,
             }
         });
     },
     /**
-     * Reloads the page in non-editable mode, with the right scrolling.
+     *Reloadsthepageinnon-editablemode,withtherightscrolling.
      *
-     * @private
-     * @returns {Deferred} (never resolved, the page is reloading anyway)
+     *@private
+     *@returns{Deferred}(neverresolved,thepageisreloadinganyway)
      */
-    _reload: function () {
+    _reload:function(){
         $('body').addClass('o_wait_reload');
         this.wysiwyg.destroy();
         this.$el.hide();
-        window.location.hash = 'scrollTop=' + window.document.body.scrollTop;
+        window.location.hash='scrollTop='+window.document.body.scrollTop;
         window.location.reload(true);
-        return new Promise(function () {});
+        returnnewPromise(function(){});
     },
 
     //--------------------------------------------------------------------------
-    // Handlers
+    //Handlers
     //--------------------------------------------------------------------------
 
     /**
-     * Called when the "Discard" button is clicked -> discards the changes.
+     *Calledwhenthe"Discard"buttonisclicked->discardsthechanges.
      *
-     * @private
+     *@private
      */
-    _onCancelClick: function () {
+    _onCancelClick:function(){
         this.cancel(true);
     },
     /**
-     * Get the cleaned value of the editable element.
+     *Getthecleanedvalueoftheeditableelement.
      *
-     * @private
-     * @param {FlectraEvent} ev
+     *@private
+     *@param{FlectraEvent}ev
      */
-    _onGetCleanHTML: function (ev) {
-        ev.data.callback(this.wysiwyg.getValue({$layout: ev.data.$layout}));
+    _onGetCleanHTML:function(ev){
+        ev.data.callback(this.wysiwyg.getValue({$layout:ev.data.$layout}));
     },
     /**
-     * Snippet (menu_data) can request to save the document to leave the page
+     *Snippet(menu_data)canrequesttosavethedocumenttoleavethepage
      *
-     * @private
-     * @param {FlectraEvent} ev
-     * @param {object} ev.data
-     * @param {function} ev.data.onSuccess
-     * @param {function} ev.data.onFailure
+     *@private
+     *@param{FlectraEvent}ev
+     *@param{object}ev.data
+     *@param{function}ev.data.onSuccess
+     *@param{function}ev.data.onFailure
      */
-    _onSnippetRequestSave: function (ev) {
-        this.save(false).then(ev.data.onSuccess, ev.data.onFailure);
+    _onSnippetRequestSave:function(ev){
+        this.save(false).then(ev.data.onSuccess,ev.data.onFailure);
     },
     /**
-     * Called when the "Save" button is clicked -> saves the changes.
+     *Calledwhenthe"Save"buttonisclicked->savesthechanges.
      *
-     * @private
+     *@private
      */
-    _onSaveClick: function (ev) {
-        const restore = dom.addButtonLoadingEffect(ev.currentTarget);
+    _onSaveClick:function(ev){
+        constrestore=dom.addButtonLoadingEffect(ev.currentTarget);
         this.save().then(restore).guardedCatch(restore);
     },
     /**
-     * @private
+     *@private
      */
-    _onUndoClick() {
-        $('.note-history [data-event=undo]').first().click();
+    _onUndoClick(){
+        $('.note-history[data-event=undo]').first().click();
     },
     /**
-     * @private
+     *@private
      */
-    _onRedoClick() {
-        $('.note-history [data-event=redo]').first().click();
+    _onRedoClick(){
+        $('.note-history[data-event=redo]').first().click();
     },
 });
 
-return EditorMenu;
+returnEditorMenu;
 });

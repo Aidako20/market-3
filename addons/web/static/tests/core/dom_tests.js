@@ -1,130 +1,130 @@
-flectra.define('web.dom_tests', function (require) {
-"use strict";
+flectra.define('web.dom_tests',function(require){
+"usestrict";
 
-var dom = require('web.dom');
-var testUtils = require('web.test_utils');
+vardom=require('web.dom');
+vartestUtils=require('web.test_utils');
 
 /**
- * Create an autoresize text area with 'border-box' as box sizing rule.
- * The minimum height of this autoresize text are is 1px.
+ *Createanautoresizetextareawith'border-box'asboxsizingrule.
+ *Theminimumheightofthisautoresizetextareis1px.
  *
- * @param {Object} [options={}]
- * @param {integer} [options.borderBottomWidth=0]
- * @param {integer} [options.borderTopWidth=0]
- * @param {integer} [options.padding=0]
+ *@param{Object}[options={}]
+ *@param{integer}[options.borderBottomWidth=0]
+ *@param{integer}[options.borderTopWidth=0]
+ *@param{integer}[options.padding=0]
  */
-function prepareAutoresizeTextArea(options) {
-    options = options || {};
-    var $textarea = $('<textarea>');
-    $textarea.css('box-sizing', 'border-box');
+functionprepareAutoresizeTextArea(options){
+    options=options||{};
+    var$textarea=$('<textarea>');
+    $textarea.css('box-sizing','border-box');
     $textarea.css({
-        padding: options.padding || 0,
-        borderTopWidth: options.borderTopWidth || 0,
-        borderBottomWidth: options.borderBottomWidth || 0,
+        padding:options.padding||0,
+        borderTopWidth:options.borderTopWidth||0,
+        borderBottomWidth:options.borderBottomWidth||0,
     });
     $textarea.appendTo($('#qunit-fixture'));
-    dom.autoresize($textarea, { min_height: 1 });
-    return $textarea;
+    dom.autoresize($textarea,{min_height:1});
+    return$textarea;
 }
 
-QUnit.module('core', {}, function () {
-QUnit.module('dom', {}, function () {
+QUnit.module('core',{},function(){
+QUnit.module('dom',{},function(){
 
-    QUnit.module('autoresize', {
-        afterEach: function () {
+    QUnit.module('autoresize',{
+        afterEach:function(){
             $('#qunit-fixture').find('textarea').remove();
         },
     });
 
-    QUnit.test('autoresize (border-box): no padding + no border', function (assert) {
+    QUnit.test('autoresize(border-box):nopadding+noborder',function(assert){
         assert.expect(3);
-        var $textarea = prepareAutoresizeTextArea();
-        assert.strictEqual($('textarea').length, 2,
-            "there should be two textareas in the DOM");
+        var$textarea=prepareAutoresizeTextArea();
+        assert.strictEqual($('textarea').length,2,
+            "thereshouldbetwotextareasintheDOM");
 
-        $textarea = $('textarea:eq(0)');
-        var $fixedTextarea = $('textarea:eq(1)');
+        $textarea=$('textarea:eq(0)');
+        var$fixedTextarea=$('textarea:eq(1)');
         assert.strictEqual($textarea.css('height'),
-            $fixedTextarea[0].scrollHeight + 'px',
-            "autoresized textarea should have height of fixed textarea + padding (0 line)");
+            $fixedTextarea[0].scrollHeight+'px',
+            "autoresizedtextareashouldhaveheightoffixedtextarea+padding(0line)");
 
-        testUtils.fields.editInput($textarea, 'a\nb\nc\nd');
+        testUtils.fields.editInput($textarea,'a\nb\nc\nd');
         assert.strictEqual($textarea.css('height'),
-            $fixedTextarea[0].scrollHeight + 'px',
-            "autoresized textarea should have height of fixed textarea + padding (4 lines)");
+            $fixedTextarea[0].scrollHeight+'px',
+            "autoresizedtextareashouldhaveheightoffixedtextarea+padding(4lines)");
     });
 
-    QUnit.test('autoresize (border-box): padding + no border', function (assert) {
+    QUnit.test('autoresize(border-box):padding+noborder',function(assert){
         assert.expect(3);
-        var $textarea = prepareAutoresizeTextArea({ padding: 10 });
-        assert.strictEqual($('textarea').length, 2,
-            "there should be two textareas in the DOM");
+        var$textarea=prepareAutoresizeTextArea({padding:10});
+        assert.strictEqual($('textarea').length,2,
+            "thereshouldbetwotextareasintheDOM");
 
-        $textarea = $('textarea:eq(0)');
-        var $fixedTextarea = $('textarea:eq(1)');
-        // twice the padding of 10px
-        var expectedTextAreaHeight = $fixedTextarea[0].scrollHeight + 2*10;
+        $textarea=$('textarea:eq(0)');
+        var$fixedTextarea=$('textarea:eq(1)');
+        //twicethepaddingof10px
+        varexpectedTextAreaHeight=$fixedTextarea[0].scrollHeight+2*10;
         assert.strictEqual($textarea.css('height'),
-            expectedTextAreaHeight + 'px',
-            "autoresized textarea should have height of fixed textarea + padding (0 line)");
+            expectedTextAreaHeight+'px',
+            "autoresizedtextareashouldhaveheightoffixedtextarea+padding(0line)");
 
-        testUtils.fields.editInput($textarea, 'a\nb\nc\nd');
-        // twice the padding of 10px
-        expectedTextAreaHeight = $fixedTextarea[0].scrollHeight + 2*10;
+        testUtils.fields.editInput($textarea,'a\nb\nc\nd');
+        //twicethepaddingof10px
+        expectedTextAreaHeight=$fixedTextarea[0].scrollHeight+2*10;
         assert.strictEqual($textarea.css('height'),
-            expectedTextAreaHeight + 'px',
-            "autoresized textarea should have height of fixed textarea + padding (4 lines)");
+            expectedTextAreaHeight+'px',
+            "autoresizedtextareashouldhaveheightoffixedtextarea+padding(4lines)");
     });
 
-    QUnit.test('autoresize (border-box): no padding + border', function (assert) {
+    QUnit.test('autoresize(border-box):nopadding+border',function(assert){
         assert.expect(3);
-        var $textarea = prepareAutoresizeTextArea({
-            borderTopWidth: 2,
-            borderBottomWidth: 3,
+        var$textarea=prepareAutoresizeTextArea({
+            borderTopWidth:2,
+            borderBottomWidth:3,
         });
-        assert.strictEqual($('textarea').length, 2,
-            "there should be two textareas in the DOM");
+        assert.strictEqual($('textarea').length,2,
+            "thereshouldbetwotextareasintheDOM");
 
-        $textarea = $('textarea:eq(0)');
-        var $fixedTextarea = $('textarea:eq(1)');
-        // top (2px) + bottom (3px) borders
-        var expectedTextAreaHeight = $fixedTextarea[0].scrollHeight + (2 + 3);
+        $textarea=$('textarea:eq(0)');
+        var$fixedTextarea=$('textarea:eq(1)');
+        //top(2px)+bottom(3px)borders
+        varexpectedTextAreaHeight=$fixedTextarea[0].scrollHeight+(2+3);
         assert.strictEqual($textarea.css('height'),
-            expectedTextAreaHeight + 'px',
-            "autoresized textarea should have height of fixed textarea + border (0 line)");
+            expectedTextAreaHeight+'px',
+            "autoresizedtextareashouldhaveheightoffixedtextarea+border(0line)");
 
-        testUtils.fields.editInput($textarea, 'a\nb\nc\nd');
-        // top (2px) + bottom (3px) borders
-        expectedTextAreaHeight = $fixedTextarea[0].scrollHeight + (2 + 3);
+        testUtils.fields.editInput($textarea,'a\nb\nc\nd');
+        //top(2px)+bottom(3px)borders
+        expectedTextAreaHeight=$fixedTextarea[0].scrollHeight+(2+3);
         assert.strictEqual($textarea.css('height'),
-            expectedTextAreaHeight + 'px',
-            "autoresized textarea should have height of fixed textarea + border (4 lines)");
+            expectedTextAreaHeight+'px',
+            "autoresizedtextareashouldhaveheightoffixedtextarea+border(4lines)");
     });
 
-    QUnit.test('autoresize (border-box): padding + border', function (assert) {
+    QUnit.test('autoresize(border-box):padding+border',function(assert){
         assert.expect(3);
-        var $textarea = prepareAutoresizeTextArea({
-            padding: 10,
-            borderTopWidth: 2,
-            borderBottomWidth: 3,
+        var$textarea=prepareAutoresizeTextArea({
+            padding:10,
+            borderTopWidth:2,
+            borderBottomWidth:3,
         });
-        assert.strictEqual($('textarea').length, 2,
-            "there should be two textareas in the DOM");
+        assert.strictEqual($('textarea').length,2,
+            "thereshouldbetwotextareasintheDOM");
 
-        $textarea = $('textarea:eq(0)');
-        var $fixedTextarea = $('textarea:eq(1)');
-        // twice padding (10px) + top (2px) + bottom (3px) borders
-        var expectedTextAreaHeight = $fixedTextarea[0].scrollHeight + (2*10 + 2 + 3);
+        $textarea=$('textarea:eq(0)');
+        var$fixedTextarea=$('textarea:eq(1)');
+        //twicepadding(10px)+top(2px)+bottom(3px)borders
+        varexpectedTextAreaHeight=$fixedTextarea[0].scrollHeight+(2*10+2+3);
         assert.strictEqual($textarea.css('height'),
-            expectedTextAreaHeight + 'px',
-            "autoresized textarea should have height of fixed textarea + border (0 line)");
+            expectedTextAreaHeight+'px',
+            "autoresizedtextareashouldhaveheightoffixedtextarea+border(0line)");
 
-        testUtils.fields.editInput($textarea, 'a\nb\nc\nd');
-        // twice padding (10px) + top (2px) + bottom (3px) borders
-        expectedTextAreaHeight = $fixedTextarea[0].scrollHeight + (2*10 + 2 + 3);
+        testUtils.fields.editInput($textarea,'a\nb\nc\nd');
+        //twicepadding(10px)+top(2px)+bottom(3px)borders
+        expectedTextAreaHeight=$fixedTextarea[0].scrollHeight+(2*10+2+3);
         assert.strictEqual($textarea.css('height'),
-            expectedTextAreaHeight + 'px',
-            "autoresized textarea should have height of fixed textarea + border (4 lines)");
+            expectedTextAreaHeight+'px',
+            "autoresizedtextareashouldhaveheightoffixedtextarea+border(4lines)");
     });
 
 });

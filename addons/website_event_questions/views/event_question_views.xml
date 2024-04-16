@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="event_question_view_form" model="ir.ui.view">
-        <field name="name">event.question.view.form</field>
-        <field name="model">event.question</field>
-        <field name="arch" type="xml">
-            <form string="Question">
+    <recordid="event_question_view_form"model="ir.ui.view">
+        <fieldname="name">event.question.view.form</field>
+        <fieldname="model">event.question</field>
+        <fieldname="arch"type="xml">
+            <formstring="Question">
                 <sheet>
-                    <h1><field name="title" /></h1>
+                    <h1><fieldname="title"/></h1>
                     <group>
                         <group>
-                            <div colspan="2">
-                                <field name="once_per_order"/>
-                                <label for="once_per_order"/>
+                            <divcolspan="2">
+                                <fieldname="once_per_order"/>
+                                <labelfor="once_per_order"/>
                             </div>
-                            <field name="question_type" widget="radio" options="{'horizontal': true}" />
+                            <fieldname="question_type"widget="radio"options="{'horizontal':true}"/>
                         </group>
                     </group>
-                    <notebook attrs="{'invisible': [('question_type', '!=', 'simple_choice')]}">
-                        <page string="Answers" name="answers">
-                            <field name="answer_ids">
-                                <tree editable="bottom">
-                                    <!-- 'display_name' is necessary for the many2many_tags to work on the event view -->
-                                    <field name="display_name" invisible="1" />
-                                    <field name="sequence" widget="handle" />
-                                    <field name="name"/>
+                    <notebookattrs="{'invisible':[('question_type','!=','simple_choice')]}">
+                        <pagestring="Answers"name="answers">
+                            <fieldname="answer_ids">
+                                <treeeditable="bottom">
+                                    <!--'display_name'isnecessaryforthemany2many_tagstoworkontheeventview-->
+                                    <fieldname="display_name"invisible="1"/>
+                                    <fieldname="sequence"widget="handle"/>
+                                    <fieldname="name"/>
                                 </tree>
                             </field>
                         </page>

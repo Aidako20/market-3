@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
-from flectra import models
-from flectra.http import request
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
+fromflectraimportmodels
+fromflectra.httpimportrequest
 
 
-class IrHttp(models.AbstractModel):
-    _inherit = 'ir.http'
+classIrHttp(models.AbstractModel):
+    _inherit='ir.http'
 
     @classmethod
-    def _dispatch(cls):
-        affiliate_id = request.httprequest.args.get('affiliate_id')
-        if affiliate_id:
-            request.session['affiliate_id'] = int(affiliate_id)
-        return super(IrHttp, cls)._dispatch()
+    def_dispatch(cls):
+        affiliate_id=request.httprequest.args.get('affiliate_id')
+        ifaffiliate_id:
+            request.session['affiliate_id']=int(affiliate_id)
+        returnsuper(IrHttp,cls)._dispatch()

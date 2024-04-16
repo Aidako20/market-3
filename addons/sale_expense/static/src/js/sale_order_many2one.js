@@ -1,21 +1,21 @@
-flectra.define('sale_expense.sale_order_many2one', function (require) {
-"use strict";
+flectra.define('sale_expense.sale_order_many2one',function(require){
+"usestrict";
 
-var FieldMany2One = require('web.relational_fields').FieldMany2One;
-var FieldRegistry = require('web.field_registry');
+varFieldMany2One=require('web.relational_fields').FieldMany2One;
+varFieldRegistry=require('web.field_registry');
 
 
-var OrderField = FieldMany2One.extend({
+varOrderField=FieldMany2One.extend({
     /**
-     * hide the search more option from the dropdown menu
-     * @override
-     * @private
-     * @returns {Object}
+     *hidethesearchmoreoptionfromthedropdownmenu
+     *@override
+     *@private
+     *@returns{Object}
      */
-    _manageSearchMore: function (values) {
-        return values;
+    _manageSearchMore:function(values){
+        returnvalues;
     }
 });
-FieldRegistry.add('sale_order_many2one', OrderField);
-return OrderField;
+FieldRegistry.add('sale_order_many2one',OrderField);
+returnOrderField;
 });

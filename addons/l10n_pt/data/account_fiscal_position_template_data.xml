@@ -1,40 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <data noupdate="1">
+    <datanoupdate="1">
 
-    <!-- Fiscal Position Templates -->
+    <!--FiscalPositionTemplates-->
 
-    <record id="fiscal_position_national_customers" model="account.fiscal.position.template">
-        <field name="sequence">1</field>
-        <field name="name">Portugal</field>
-        <field name="chart_template_id" ref="pt_chart_template"/>
-        <field name="auto_apply" eval="True"/>
-        <field name="vat_required" eval="True"/>
-        <field name="country_id" ref="base.pt"/>
+    <recordid="fiscal_position_national_customers"model="account.fiscal.position.template">
+        <fieldname="sequence">1</field>
+        <fieldname="name">Portugal</field>
+        <fieldname="chart_template_id"ref="pt_chart_template"/>
+        <fieldname="auto_apply"eval="True"/>
+        <fieldname="vat_required"eval="True"/>
+        <fieldname="country_id"ref="base.pt"/>
     </record>
 
-    <record id="fiscal_position_foreign_eu_private" model="account.fiscal.position.template">
-        <field name="sequence">2</field>
-        <field name="name">Europa Privado</field>
-        <field name="chart_template_id" ref="pt_chart_template"/>
-        <field name="auto_apply" eval="True"/>
-        <field name="country_group_id" ref="base.europe"/>
+    <recordid="fiscal_position_foreign_eu_private"model="account.fiscal.position.template">
+        <fieldname="sequence">2</field>
+        <fieldname="name">EuropaPrivado</field>
+        <fieldname="chart_template_id"ref="pt_chart_template"/>
+        <fieldname="auto_apply"eval="True"/>
+        <fieldname="country_group_id"ref="base.europe"/>
     </record>
 
-    <record id="fiscal_position_foreign_eu" model="account.fiscal.position.template">
-        <field name="sequence">3</field>
-        <field name="name">Europa</field>
-        <field name="chart_template_id" ref="pt_chart_template"/>
-        <field name="auto_apply" eval="True"/>
-        <field name="vat_required" eval="True"/>
-        <field name="country_group_id" ref="base.europe"/>
+    <recordid="fiscal_position_foreign_eu"model="account.fiscal.position.template">
+        <fieldname="sequence">3</field>
+        <fieldname="name">Europa</field>
+        <fieldname="chart_template_id"ref="pt_chart_template"/>
+        <fieldname="auto_apply"eval="True"/>
+        <fieldname="vat_required"eval="True"/>
+        <fieldname="country_group_id"ref="base.europe"/>
     </record>
 
-    <record id="fiscal_position_foreign_other" model="account.fiscal.position.template">
-        <field name="sequence">4</field>
-        <field name="name">Extra-comunitário</field>
-        <field name="chart_template_id" ref="pt_chart_template"/>
-        <field name="auto_apply" eval="True"/>
+    <recordid="fiscal_position_foreign_other"model="account.fiscal.position.template">
+        <fieldname="sequence">4</field>
+        <fieldname="name">Extra-comunitário</field>
+        <fieldname="chart_template_id"ref="pt_chart_template"/>
+        <fieldname="auto_apply"eval="True"/>
     </record>
 
     </data>

@@ -1,274 +1,274 @@
-flectra.define('web_editor.wysiwyg', function (require) {
-'use strict';
-var Widget = require('web.Widget');
-var SummernoteManager = require('web_editor.rte.summernote');
-var summernoteCustomColors = require('web_editor.rte.summernote_custom_colors');
-var id = 0;
+flectra.define('web_editor.wysiwyg',function(require){
+'usestrict';
+varWidget=require('web.Widget');
+varSummernoteManager=require('web_editor.rte.summernote');
+varsummernoteCustomColors=require('web_editor.rte.summernote_custom_colors');
+varid=0;
 
-// core.bus
-// media_dialog_demand
-var Wysiwyg = Widget.extend({
-    xmlDependencies: [
+//core.bus
+//media_dialog_demand
+varWysiwyg=Widget.extend({
+    xmlDependencies:[
     ],
-    defaultOptions: {
-        'focus': false,
-        'toolbar': [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontsize', ['fontsize']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['table', ['table']],
-            ['insert', ['link', 'picture']],
-            ['history', ['undo', 'redo']],
+    defaultOptions:{
+        'focus':false,
+        'toolbar':[
+            ['style',['style']],
+            ['font',['bold','italic','underline','clear']],
+            ['fontsize',['fontsize']],
+            ['color',['color']],
+            ['para',['ul','ol','paragraph']],
+            ['table',['table']],
+            ['insert',['link','picture']],
+            ['history',['undo','redo']],
         ],
-        'styleWithSpan': false,
-        'inlinemedia': ['p'],
-        'lang': 'flectra',
-        'colors': summernoteCustomColors,
-        recordInfo: {
-            context: {},
+        'styleWithSpan':false,
+        'inlinemedia':['p'],
+        'lang':'flectra',
+        'colors':summernoteCustomColors,
+        recordInfo:{
+            context:{},
         },
     },
     /**
-     * @options {Object} options
-     * @options {Object} options.recordInfo
-     * @options {Object} options.recordInfo.context
-     * @options {String} [options.recordInfo.context]
-     * @options {integer} [options.recordInfo.res_id]
-     * @options {String} [options.recordInfo.data_res_model]
-     * @options {integer} [options.recordInfo.data_res_id]
-     *   @see _onGetRecordInfo
-     *   @see _getAttachmentsDomain in /wysiwyg/widgets/media.js
-     * @options {Object} options.attachments
-     *   @see _onGetRecordInfo
-     *   @see _getAttachmentsDomain in /wysiwyg/widgets/media.js (for attachmentIDs)
-     * @options {function} options.generateOptions
-     *   called with the summernote configuration object used before sending to summernote
-     *   @see _editorOptions
+     *@options{Object}options
+     *@options{Object}options.recordInfo
+     *@options{Object}options.recordInfo.context
+     *@options{String}[options.recordInfo.context]
+     *@options{integer}[options.recordInfo.res_id]
+     *@options{String}[options.recordInfo.data_res_model]
+     *@options{integer}[options.recordInfo.data_res_id]
+     *  @see_onGetRecordInfo
+     *  @see_getAttachmentsDomainin/wysiwyg/widgets/media.js
+     *@options{Object}options.attachments
+     *  @see_onGetRecordInfo
+     *  @see_getAttachmentsDomainin/wysiwyg/widgets/media.js(forattachmentIDs)
+     *@options{function}options.generateOptions
+     *  calledwiththesummernoteconfigurationobjectusedbeforesendingtosummernote
+     *  @see_editorOptions
      **/
-    init: function (parent, options) {
-        this._super.apply(this, arguments);
-        this.id = ++id;
-        this.options = options;
+    init:function(parent,options){
+        this._super.apply(this,arguments);
+        this.id=++id;
+        this.options=options;
     },
     /**
-     * Load assets and color picker template then call summernote API
-     * and replace $el by the summernote editable node.
+     *LoadassetsandcolorpickertemplatethencallsummernoteAPI
+     *andreplace$elbythesummernoteeditablenode.
      *
-     * @override
+     *@override
      **/
-    willStart: function () {
-        this._summernoteManager = new SummernoteManager(this);
-        this.$target = this.$el;
-        return this._super();
+    willStart:function(){
+        this._summernoteManager=newSummernoteManager(this);
+        this.$target=this.$el;
+        returnthis._super();
     },
     /**
      *
-     * @override
+     *@override
      */
-    start: function () {
+    start:function(){
         this.$target.wrap('<flectra-wysiwyg-container>');
-        this.$el = this.$target.parent();
-        var options = this._editorOptions();
+        this.$el=this.$target.parent();
+        varoptions=this._editorOptions();
         this.$target.summernote(options);
-        this.$editor = this.$('.note-editable:first');
-        this.$editor.data('wysiwyg', this);
-        this.$editor.data('oe-model', options.recordInfo.res_model);
-        this.$editor.data('oe-id', options.recordInfo.res_id);
-        $(document).on('mousedown', this._blur);
-        this._value = this.$target.html() || this.$target.val();
-        return this._super.apply(this, arguments);
+        this.$editor=this.$('.note-editable:first');
+        this.$editor.data('wysiwyg',this);
+        this.$editor.data('oe-model',options.recordInfo.res_model);
+        this.$editor.data('oe-id',options.recordInfo.res_id);
+        $(document).on('mousedown',this._blur);
+        this._value=this.$target.html()||this.$target.val();
+        returnthis._super.apply(this,arguments);
     },
     /**
-     * @override
+     *@override
      */
-    destroy: function () {
-        $(document).off('mousedown', this._blur);
-        if (this.$target && this.$target.is('textarea') && this.$target.next('.note-editor').length) {
+    destroy:function(){
+        $(document).off('mousedown',this._blur);
+        if(this.$target&&this.$target.is('textarea')&&this.$target.next('.note-editor').length){
             this.$target.summernote('destroy');
         }
         this._super();
     },
     //--------------------------------------------------------------------------
-    // Public
+    //Public
     //--------------------------------------------------------------------------
     /**
-     * Return the editable area.
+     *Returntheeditablearea.
      *
-     * @returns {jQuery}
+     *@returns{jQuery}
      */
-    getEditable: function () {
-        return this.$editor;
+    getEditable:function(){
+        returnthis.$editor;
     },
     /**
-     * Return true if the content has changed.
+     *Returntrueifthecontenthaschanged.
      *
-     * @returns {Boolean}
+     *@returns{Boolean}
      */
-    isDirty: function () {
-        return this._value !== (this.$editor.html() || this.$editor.val());
+    isDirty:function(){
+        returnthis._value!==(this.$editor.html()||this.$editor.val());
     },
     /**
-     * Set the focus on the element.
+     *Setthefocusontheelement.
      */
-    focus: function () {
+    focus:function(){
         console.log('focus');
     },
     /**
-     * Get the value of the editable element.
+     *Getthevalueoftheeditableelement.
      *
-     * @param {object} [options]
-     * @param {jQueryElement} [options.$layout]
-     * @returns {String}
+     *@param{object}[options]
+     *@param{jQueryElement}[options.$layout]
+     *@returns{String}
      */
-    getValue: function (options) {
-        var $editable = options && options.$layout || this.$editor.clone();
+    getValue:function(options){
+        var$editable=options&&options.$layout||this.$editor.clone();
         $editable.find('[contenteditable]').removeAttr('contenteditable');
         $editable.find('[class=""]').removeAttr('class');
         $editable.find('[style=""]').removeAttr('style');
         $editable.find('[title=""]').removeAttr('title');
         $editable.find('[alt=""]').removeAttr('alt');
         $editable.find('[data-original-title=""]').removeAttr('data-original-title');
-        if (!options || !options['style-inline']) {
-            $editable.find('a.o_image, span.fa, i.fa').html('');
+        if(!options||!options['style-inline']){
+            $editable.find('a.o_image,span.fa,i.fa').html('');
         }
         $editable.find('[aria-describedby]').removeAttr('aria-describedby').removeAttr('data-original-title');
-        return $editable.html();
+        return$editable.html();
     },
     /**
-     * Save the content in the target
-     *      - in init option beforeSave
-     *      - receive editable jQuery DOM as attribute
-     *      - called after deactivate codeview if needed
-     * @returns {Promise}
-     *      - resolve with true if the content was dirty
+     *Savethecontentinthetarget
+     *     -ininitoptionbeforeSave
+     *     -receiveeditablejQueryDOMasattribute
+     *     -calledafterdeactivatecodeviewifneeded
+     *@returns{Promise}
+     *     -resolvewithtrueifthecontentwasdirty
      */
-    save: function (options) {
-        var isDirty = this.isDirty();
-        var html = this.getValue(options);
-        if (this.$target.is('textarea')) {
+    save:function(options){
+        varisDirty=this.isDirty();
+        varhtml=this.getValue(options);
+        if(this.$target.is('textarea')){
             this.$target.val(html);
-        } else {
+        }else{
             this.$target.html(html);
         }
-        return Promise.resolve({isDirty:isDirty, html:html});
+        returnPromise.resolve({isDirty:isDirty,html:html});
     },
     /**
-     * Create/Update cropped attachments.
+     *Create/Updatecroppedattachments.
      *
-     * @param {jQuery} $editable
-     * @returns {Promise}
+     *@param{jQuery}$editable
+     *@returns{Promise}
      */
-    saveModifiedImages: function ($editable) {
-        return this._summernoteManager.saveModifiedImages($editable);
+    saveModifiedImages:function($editable){
+        returnthis._summernoteManager.saveModifiedImages($editable);
     },
     /**
-     * @param {String} value
-     * @param {Object} options
-     * @param {Boolean} [options.notifyChange]
-     * @returns {String}
+     *@param{String}value
+     *@param{Object}options
+     *@param{Boolean}[options.notifyChange]
+     *@returns{String}
      */
-    setValue: function (value, options) {
-        if (this.$editor.is('textarea')) {
+    setValue:function(value,options){
+        if(this.$editor.is('textarea')){
             this.$target.val(value);
-        } else {
+        }else{
             this.$target.html(value);
         }
         this.$editor.html(value);
     },
     //--------------------------------------------------------------------------
-    // Private
+    //Private
     //--------------------------------------------------------------------------
-    _editorOptions: function () {
-        var self = this;
-        var options = Object.assign({}, $.summernote.options, this.defaultOptions, this.options);
-        if (this.options.generateOptions) {
-            options = this.options.generateOptions(options);
+    _editorOptions:function(){
+        varself=this;
+        varoptions=Object.assign({},$.summernote.options,this.defaultOptions,this.options);
+        if(this.options.generateOptions){
+            options=this.options.generateOptions(options);
         }
-        options.airPopover = options.toolbar;
-        options.onChange = function (html, $editable) {
+        options.airPopover=options.toolbar;
+        options.onChange=function(html,$editable){
             $editable.trigger('content_changed');
             self.trigger_up('wysiwyg_change');
         };
-        options.onUpload = function (attachments) {
-            self.trigger_up('wysiwyg_attachment', attachments);
+        options.onUpload=function(attachments){
+            self.trigger_up('wysiwyg_attachment',attachments);
         };
-        options.onFocus = function () {
+        options.onFocus=function(){
             self.trigger_up('wysiwyg_focus');
         };
-        options.onBlur = function () {
+        options.onBlur=function(){
             self.trigger_up('wysiwyg_blur');
         };
-        return options;
+        returnoptions;
     },
 });
 //--------------------------------------------------------------------------
-// Public helper
+//Publichelper
 //--------------------------------------------------------------------------
 /**
- * @param {Node} node (editable or node inside)
- * @returns {Object}
- * @returns {Node} sc - start container
- * @returns {Number} so - start offset
- * @returns {Node} ec - end container
- * @returns {Number} eo - end offset
+ *@param{Node}node(editableornodeinside)
+ *@returns{Object}
+ *@returns{Node}sc-startcontainer
+ *@returns{Number}so-startoffset
+ *@returns{Node}ec-endcontainer
+ *@returns{Number}eo-endoffset
  */
-Wysiwyg.getRange = function (node) {
-    var range = $.summernote.core.range.create();
-    return range && {
-        sc: range.sc,
-        so: range.so,
-        ec: range.ec,
-        eo: range.eo,
+Wysiwyg.getRange=function(node){
+    varrange=$.summernote.core.range.create();
+    returnrange&&{
+        sc:range.sc,
+        so:range.so,
+        ec:range.ec,
+        eo:range.eo,
     };
 };
 /**
- * @param {Node} startNode
- * @param {Number} startOffset
- * @param {Node} endNode
- * @param {Number} endOffset
+ *@param{Node}startNode
+ *@param{Number}startOffset
+ *@param{Node}endNode
+ *@param{Number}endOffset
  */
-Wysiwyg.setRange = function (startNode, startOffset, endNode, endOffset) {
+Wysiwyg.setRange=function(startNode,startOffset,endNode,endOffset){
     $(startNode).focus();
-    if (endNode) {
-        $.summernote.core.range.create(startNode, startOffset, endNode, endOffset).select();
-    } else {
-        $.summernote.core.range.create(startNode, startOffset).select();
+    if(endNode){
+        $.summernote.core.range.create(startNode,startOffset,endNode,endOffset).select();
+    }else{
+        $.summernote.core.range.create(startNode,startOffset).select();
     }
-    // trigger for Unbreakable
-    $(startNode.tagName ? startNode : startNode.parentNode).trigger('wysiwyg.range');
+    //triggerforUnbreakable
+    $(startNode.tagName?startNode:startNode.parentNode).trigger('wysiwyg.range');
 };
 /**
- * @param {Node} node - dom node
- * @param {Object} [options]
- * @param {Boolean} options.begin move the range to the beginning of the first node.
- * @param {Boolean} options.end move the range to the end of the last node.
+ *@param{Node}node-domnode
+ *@param{Object}[options]
+ *@param{Boolean}options.beginmovetherangetothebeginningofthefirstnode.
+ *@param{Boolean}options.endmovetherangetotheendofthelastnode.
  */
-Wysiwyg.setRangeFromNode = function (node, options) {
-    var last = node;
-    while (last.lastChild) {
-        last = last.lastChild;
+Wysiwyg.setRangeFromNode=function(node,options){
+    varlast=node;
+    while(last.lastChild){
+        last=last.lastChild;
     }
-    var first = node;
-    while (first.firstChild) {
-        first = first.firstChild;
+    varfirst=node;
+    while(first.firstChild){
+        first=first.firstChild;
     }
-    if (options && options.begin && !options.end) {
-        Wysiwyg.setRange(first, 0);
-    } else if (options && !options.begin && options.end) {
-        Wysiwyg.setRange(last, last.textContent.length);
-    } else {
-        Wysiwyg.setRange(first, 0, last, last.tagName ? last.childNodes.length : last.textContent.length);
+    if(options&&options.begin&&!options.end){
+        Wysiwyg.setRange(first,0);
+    }elseif(options&&!options.begin&&options.end){
+        Wysiwyg.setRange(last,last.textContent.length);
+    }else{
+        Wysiwyg.setRange(first,0,last,last.tagName?last.childNodes.length:last.textContent.length);
     }
 };
-return Wysiwyg;
+returnWysiwyg;
 });
-flectra.define('web_editor.widget', function (require) {
-'use strict';
-    return {
-        Dialog: require('wysiwyg.widgets.Dialog'),
-        MediaDialog: require('wysiwyg.widgets.MediaDialog'),
-        LinkDialog: require('wysiwyg.widgets.LinkDialog'),
+flectra.define('web_editor.widget',function(require){
+'usestrict';
+    return{
+        Dialog:require('wysiwyg.widgets.Dialog'),
+        MediaDialog:require('wysiwyg.widgets.MediaDialog'),
+        LinkDialog:require('wysiwyg.widgets.LinkDialog'),
     };
 });

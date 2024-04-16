@@ -1,91 +1,91 @@
-flectra.define('point_of_sale.ProxyStatus', function(require) {
-    'use strict';
+flectra.define('point_of_sale.ProxyStatus',function(require){
+    'usestrict';
 
-    const { useState } = owl;
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+    const{useState}=owl;
+    constPosComponent=require('point_of_sale.PosComponent');
+    constRegistries=require('point_of_sale.Registries');
 
-    // Previously ProxyStatusWidget
-    class ProxyStatus extends PosComponent {
-        constructor() {
+    //PreviouslyProxyStatusWidget
+    classProxyStatusextendsPosComponent{
+        constructor(){
             super(...arguments);
-            const initialProxyStatus = this.env.pos.proxy.get('status');
-            this.state = useState({
-                status: initialProxyStatus.status,
-                msg: initialProxyStatus.msg,
+            constinitialProxyStatus=this.env.pos.proxy.get('status');
+            this.state=useState({
+                status:initialProxyStatus.status,
+                msg:initialProxyStatus.msg,
             });
-            this.statuses = ['connected', 'connecting', 'disconnected', 'warning'];
-            this.index = 0;
+            this.statuses=['connected','connecting','disconnected','warning'];
+            this.index=0;
         }
-        mounted() {
-            this.env.pos.proxy.on('change:status', this, this._onChangeStatus);
+        mounted(){
+            this.env.pos.proxy.on('change:status',this,this._onChangeStatus);
         }
-        willUnmount() {
-            this.env.pos.proxy.off('change:status', this, this._onChangeStatus);
+        willUnmount(){
+            this.env.pos.proxy.off('change:status',this,this._onChangeStatus);
         }
-        async onClick() {
-            try {
-                await this.env.pos.connect_to_proxy();
-            } catch (error) {
-                if (error instanceof Error) {
-                    throw error;
-                } else {
-                    this.showPopup('ErrorPopup', error);
+        asynconClick(){
+            try{
+                awaitthis.env.pos.connect_to_proxy();
+            }catch(error){
+                if(errorinstanceofError){
+                    throwerror;
+                }else{
+                    this.showPopup('ErrorPopup',error);
                 }
             }
         }
-        _onChangeStatus(posProxy, statusChange) {
+        _onChangeStatus(posProxy,statusChange){
             this._setStatus(statusChange.newValue);
         }
-        _setStatus(newStatus) {
-            if (newStatus.status === 'connected') {
-                var warning = false;
-                var msg = '';
-                if (this.env.pos.config.iface_scan_via_proxy) {
-                    var scannerStatus = newStatus.drivers.scanner
-                        ? newStatus.drivers.scanner.status
-                        : false;
-                    if (scannerStatus != 'connected' && scannerStatus != 'connecting') {
-                        warning = true;
-                        msg += this.env._t('Scanner');
+        _setStatus(newStatus){
+            if(newStatus.status==='connected'){
+                varwarning=false;
+                varmsg='';
+                if(this.env.pos.config.iface_scan_via_proxy){
+                    varscannerStatus=newStatus.drivers.scanner
+                        ?newStatus.drivers.scanner.status
+                        :false;
+                    if(scannerStatus!='connected'&&scannerStatus!='connecting'){
+                        warning=true;
+                        msg+=this.env._t('Scanner');
                     }
                 }
-                if (
-                    this.env.pos.config.iface_print_via_proxy ||
+                if(
+                    this.env.pos.config.iface_print_via_proxy||
                     this.env.pos.config.iface_cashdrawer
-                ) {
-                    var printerStatus = newStatus.drivers.printer
-                        ? newStatus.drivers.printer.status
-                        : false;
-                    if (printerStatus != 'connected' && printerStatus != 'connecting') {
-                        warning = true;
-                        msg = msg ? msg + ' & ' : msg;
-                        msg += this.env._t('Printer');
+                ){
+                    varprinterStatus=newStatus.drivers.printer
+                        ?newStatus.drivers.printer.status
+                        :false;
+                    if(printerStatus!='connected'&&printerStatus!='connecting'){
+                        warning=true;
+                        msg=msg?msg+'&':msg;
+                        msg+=this.env._t('Printer');
                     }
                 }
-                if (this.env.pos.config.iface_electronic_scale) {
-                    var scaleStatus = newStatus.drivers.scale
-                        ? newStatus.drivers.scale.status
-                        : false;
-                    if (scaleStatus != 'connected' && scaleStatus != 'connecting') {
-                        warning = true;
-                        msg = msg ? msg + ' & ' : msg;
-                        msg += this.env._t('Scale');
+                if(this.env.pos.config.iface_electronic_scale){
+                    varscaleStatus=newStatus.drivers.scale
+                        ?newStatus.drivers.scale.status
+                        :false;
+                    if(scaleStatus!='connected'&&scaleStatus!='connecting'){
+                        warning=true;
+                        msg=msg?msg+'&':msg;
+                        msg+=this.env._t('Scale');
                     }
                 }
-                msg = msg ? msg + ' ' + this.env._t('Offline') : msg;
+                msg=msg?msg+''+this.env._t('Offline'):msg;
 
-                this.state.status = warning ? 'warning' : 'connected';
-                this.state.msg = msg;
-            } else {
-                this.state.status = newStatus.status;
-                this.state.msg = newStatus.msg || '';
+                this.state.status=warning?'warning':'connected';
+                this.state.msg=msg;
+            }else{
+                this.state.status=newStatus.status;
+                this.state.msg=newStatus.msg||'';
             }
         }
     }
-    ProxyStatus.template = 'ProxyStatus';
+    ProxyStatus.template='ProxyStatus';
 
     Registries.Component.add(ProxyStatus);
 
-    return ProxyStatus;
+    returnProxyStatus;
 });

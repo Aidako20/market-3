@@ -1,12 +1,12 @@
 <flectra>
-    <record id="account_journal_dashboard_kanban_view_js" model="ir.ui.view">
-        <field name="name">account.journal.dashboard.kanban.js</field>
-        <field name="model">account.journal</field>
-        <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view"/>
-        <field name="arch" type="xml">
-            <xpath expr="//kanban" position="attributes">
-                <attribute name="js_class">account_setup_bar</attribute>
+    <recordid="account_journal_dashboard_kanban_view_js"model="ir.ui.view">
+        <fieldname="name">account.journal.dashboard.kanban.js</field>
+        <fieldname="model">account.journal</field>
+        <fieldname="inherit_id"ref="account.account_journal_dashboard_kanban_view"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//kanban"position="attributes">
+                <attributename="js_class">account_setup_bar</attribute>
             </xpath>
         </field>
     </record>
-</flectra> 
+</flectra>

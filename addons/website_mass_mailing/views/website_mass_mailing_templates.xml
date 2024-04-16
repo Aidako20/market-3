@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<template id="assets_frontend" inherit_id="website.assets_frontend">
-    <xpath expr="//link[last()]" position="after">
-        <link rel="stylesheet" type="text/scss" href="/website_mass_mailing/static/src/scss/website_mass_mailing_popup.scss"/>
+<templateid="assets_frontend"inherit_id="website.assets_frontend">
+    <xpathexpr="//link[last()]"position="after">
+        <linkrel="stylesheet"type="text/scss"href="/website_mass_mailing/static/src/scss/website_mass_mailing_popup.scss"/>
     </xpath>
-    <xpath expr="//script[last()]" position="after">
-        <script type="text/javascript" src="/website_mass_mailing/static/src/js/website_mass_mailing.js"/>
-    </xpath>
-</template>
-
-<template id="assets_editor" inherit_id="website.assets_wysiwyg">
-    <xpath expr="//script[last()]" position="after">
-        <script type="text/javascript" src="/website_mass_mailing/static/src/js/website_mass_mailing.editor.js"/>
+    <xpathexpr="//script[last()]"position="after">
+        <scripttype="text/javascript"src="/website_mass_mailing/static/src/js/website_mass_mailing.js"/>
     </xpath>
 </template>
 
-<template id="assets_tests" inherit_id="website.assets_tests">
-    <xpath expr="//script[last()]" position="after">
-        <script type="text/javascript" src="/website_mass_mailing/static/tests/tours/newsletter_popup.js"/>
+<templateid="assets_editor"inherit_id="website.assets_wysiwyg">
+    <xpathexpr="//script[last()]"position="after">
+        <scripttype="text/javascript"src="/website_mass_mailing/static/src/js/website_mass_mailing.editor.js"/>
+    </xpath>
+</template>
+
+<templateid="assets_tests"inherit_id="website.assets_tests">
+    <xpathexpr="//script[last()]"position="after">
+        <scripttype="text/javascript"src="/website_mass_mailing/static/tests/tours/newsletter_popup.js"/>
     </xpath>
 </template>
 

@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <!-- Chart Template -->
+    <!--ChartTemplate-->
 
-    <record id="l10n_co_chart_template_generic" model="account.chart.template">
-        <field name="name">Colombian - Generic Chart of Accounts</field>
-        <field name="currency_id" ref="base.COP"/>
-        <field name="bank_account_code_prefix">1110</field>
-        <field name="cash_account_code_prefix">1105</field>
-        <field name="transfer_account_code_prefix">1115</field>
+    <recordid="l10n_co_chart_template_generic"model="account.chart.template">
+        <fieldname="name">Colombian-GenericChartofAccounts</field>
+        <fieldname="currency_id"ref="base.COP"/>
+        <fieldname="bank_account_code_prefix">1110</field>
+        <fieldname="cash_account_code_prefix">1105</field>
+        <fieldname="transfer_account_code_prefix">1115</field>
     </record>
 
 </flectra>

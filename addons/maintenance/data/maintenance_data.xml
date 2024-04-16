@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-<data noupdate="1">
+<datanoupdate="1">
 
-    <!-- Standard stages for Maintenance Request -->
-    <record id="stage_0" model="maintenance.stage">
-        <field name="name">New Request</field>
-        <field name="sequence" eval="1" />
-        <field name="fold" eval="False" />
+    <!--StandardstagesforMaintenanceRequest-->
+    <recordid="stage_0"model="maintenance.stage">
+        <fieldname="name">NewRequest</field>
+        <fieldname="sequence"eval="1"/>
+        <fieldname="fold"eval="False"/>
     </record>
-    <record id="stage_1" model="maintenance.stage">
-        <field name="name">In Progress</field>
-        <field name="sequence" eval="2" />
-        <field name="fold" eval="False" />
+    <recordid="stage_1"model="maintenance.stage">
+        <fieldname="name">InProgress</field>
+        <fieldname="sequence"eval="2"/>
+        <fieldname="fold"eval="False"/>
     </record>
-    <record id="stage_3" model="maintenance.stage">
-        <field name="name">Repaired</field>
-        <field name="sequence" eval="3" />
-        <field name="fold" eval="True" />
-        <field name="done" eval="True" />
+    <recordid="stage_3"model="maintenance.stage">
+        <fieldname="name">Repaired</field>
+        <fieldname="sequence"eval="3"/>
+        <fieldname="fold"eval="True"/>
+        <fieldname="done"eval="True"/>
     </record>
-    <record id="stage_4" model="maintenance.stage">
-        <field name="name">Scrap</field>
-        <field name="sequence" eval="4" />
-        <field name="fold" eval="True" />
-        <field name="done" eval="True" />
+    <recordid="stage_4"model="maintenance.stage">
+        <fieldname="name">Scrap</field>
+        <fieldname="sequence"eval="4"/>
+        <fieldname="fold"eval="True"/>
+        <fieldname="done"eval="True"/>
     </record>
 
 </data>

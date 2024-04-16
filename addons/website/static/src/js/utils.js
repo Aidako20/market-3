@@ -1,105 +1,105 @@
-flectra.define('website.utils', function (require) {
-'use strict';
+flectra.define('website.utils',function(require){
+'usestrict';
 
-var ajax = require('web.ajax');
-var core = require('web.core');
+varajax=require('web.ajax');
+varcore=require('web.core');
 
-var qweb = core.qweb;
+varqweb=core.qweb;
 
 /**
- * Allows to load anchors from a page.
+ *Allowstoloadanchorsfromapage.
  *
- * @param {string} url
- * @returns {Deferred<string[]>}
+ *@param{string}url
+ *@returns{Deferred<string[]>}
  */
-function loadAnchors(url) {
-    return new Promise(function (resolve, reject) {
-        if (url === window.location.pathname || url[0] === '#') {
+functionloadAnchors(url){
+    returnnewPromise(function(resolve,reject){
+        if(url===window.location.pathname||url[0]==='#'){
             resolve(document.body.outerHTML);
-        } else if (url.length && !url.startsWith("http")) {
-            $.get(window.location.origin + url).then(resolve, reject);
-        } else { // avoid useless query
+        }elseif(url.length&&!url.startsWith("http")){
+            $.get(window.location.origin+url).then(resolve,reject);
+        }else{//avoiduselessquery
             resolve();
         }
-    }).then(function (response) {
-        const anchors = _.map($(response).find('[id][data-anchor=true]'), function (el) {
-            return '#' + el.id;
+    }).then(function(response){
+        constanchors=_.map($(response).find('[id][data-anchor=true]'),function(el){
+            return'#'+el.id;
         });
-        // Always suggest the top and the bottom of the page as internal link
-        // anchor even if the header and the footer are not in the DOM. Indeed,
-        // the "scrollTo" function handles the scroll towards those elements
-        // even when they are not in the DOM.
-        if (!anchors.includes('#top')) {
+        //Alwayssuggestthetopandthebottomofthepageasinternallink
+        //anchoreveniftheheaderandthefooterarenotintheDOM.Indeed,
+        //the"scrollTo"functionhandlesthescrolltowardsthoseelements
+        //evenwhentheyarenotintheDOM.
+        if(!anchors.includes('#top')){
             anchors.unshift('#top');
         }
-        if (!anchors.includes('#bottom')) {
+        if(!anchors.includes('#bottom')){
             anchors.push('#bottom');
         }
-        return anchors;
-    }).catch(error => {
+        returnanchors;
+    }).catch(error=>{
         console.debug(error);
-        return [];
+        return[];
     });
 }
 
 /**
- * Allows the given input to propose existing website URLs.
+ *AllowsthegiveninputtoproposeexistingwebsiteURLs.
  *
- * @param {ServicesMixin|Widget} self - an element capable to trigger an RPC
- * @param {jQuery} $input
+ *@param{ServicesMixin|Widget}self-anelementcapabletotriggeranRPC
+ *@param{jQuery}$input
  */
-function autocompleteWithPages(self, $input, options) {
-    $.widget("website.urlcomplete", $.ui.autocomplete, {
-        options: options || {},
-        _create: function () {
+functionautocompleteWithPages(self,$input,options){
+    $.widget("website.urlcomplete",$.ui.autocomplete,{
+        options:options||{},
+        _create:function(){
             this._super();
-            this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+            this.widget().menu("option","items",">:not(.ui-autocomplete-category)");
         },
-        _renderMenu: function (ul, items) {
-            const self = this;
-            items.forEach(item => {
-                if (item.separator) {
-                    self._renderSeparator(ul, item);
+        _renderMenu:function(ul,items){
+            constself=this;
+            items.forEach(item=>{
+                if(item.separator){
+                    self._renderSeparator(ul,item);
                 }
-                else {
-                    self._renderItem(ul, item);
+                else{
+                    self._renderItem(ul,item);
                 }
             });
         },
-        _renderSeparator: function (ul, item) {
-            return $("<li class='ui-autocomplete-category font-weight-bold text-capitalize p-2'>")
+        _renderSeparator:function(ul,item){
+            return$("<liclass='ui-autocomplete-categoryfont-weight-boldtext-capitalizep-2'>")
                    .append(`<div>${item.separator}</div>`)
                    .appendTo(ul);
         },
-        _renderItem: function (ul, item) {
-            return $("<li>")
-                   .data('ui-autocomplete-item', item)
+        _renderItem:function(ul,item){
+            return$("<li>")
+                   .data('ui-autocomplete-item',item)
                    .append(`<div>${item.label}</div>`)
                    .appendTo(ul);
         },
     });
     $input.urlcomplete({
-        source: function (request, response) {
-            if (request.term[0] === '#') {
-                loadAnchors(request.term).then(function (anchors) {
+        source:function(request,response){
+            if(request.term[0]==='#'){
+                loadAnchors(request.term).then(function(anchors){
                     response(anchors);
                 });
-            } else if (request.term.startsWith('http') || request.term.length === 0) {
-                // avoid useless call to /website/get_suggested_links
+            }elseif(request.term.startsWith('http')||request.term.length===0){
+                //avoiduselesscallto/website/get_suggested_links
                 response();
-            } else {
-                return self._rpc({
-                    route: '/website/get_suggested_links',
-                    params: {
-                        needle: request.term,
-                        limit: 15,
+            }else{
+                returnself._rpc({
+                    route:'/website/get_suggested_links',
+                    params:{
+                        needle:request.term,
+                        limit:15,
                     }
-                }).then(function (res) {
-                    let choices = res.matching_pages;
-                    res.others.forEach(other => {
-                        if (other.values.length) {
-                            choices = choices.concat(
-                                [{separator: other.title}],
+                }).then(function(res){
+                    letchoices=res.matching_pages;
+                    res.others.forEach(other=>{
+                        if(other.values.length){
+                            choices=choices.concat(
+                                [{separator:other.title}],
                                 other.values,
                             );
                         }
@@ -108,10 +108,10 @@ function autocompleteWithPages(self, $input, options) {
                 });
             }
         },
-        select: function (ev, ui) {
-            // choose url in dropdown with arrow change ev.target.value without trigger_up
-            // so cannot check here if value has been updated
-            ev.target.value = ui.item.value;
+        select:function(ev,ui){
+            //chooseurlindropdownwitharrowchangeev.target.valuewithouttrigger_up
+            //socannotcheckhereifvaluehasbeenupdated
+            ev.target.value=ui.item.value;
             self.trigger_up('website_url_chosen');
             ev.preventDefault();
         },
@@ -119,118 +119,118 @@ function autocompleteWithPages(self, $input, options) {
 }
 
 /**
- * @param {jQuery} $element
- * @param {jQuery} [$excluded]
+ *@param{jQuery}$element
+ *@param{jQuery}[$excluded]
  */
-function onceAllImagesLoaded($element, $excluded) {
-    var defs = _.map($element.find('img').addBack('img'), function (img) {
-        if (img.complete || $excluded && ($excluded.is(img) || $excluded.has(img).length)) {
-            return; // Already loaded
+functiononceAllImagesLoaded($element,$excluded){
+    vardefs=_.map($element.find('img').addBack('img'),function(img){
+        if(img.complete||$excluded&&($excluded.is(img)||$excluded.has(img).length)){
+            return;//Alreadyloaded
         }
-        var def = new Promise(function (resolve, reject) {
-            $(img).one('load', function () {
+        vardef=newPromise(function(resolve,reject){
+            $(img).one('load',function(){
                 resolve();
             });
         });
-        return def;
+        returndef;
     });
-    return Promise.all(defs);
+    returnPromise.all(defs);
 }
 
 /**
- * @deprecated
- * @todo create Dialog.prompt instead of this
+ *@deprecated
+ *@todocreateDialog.promptinsteadofthis
  */
-function prompt(options, _qweb) {
+functionprompt(options,_qweb){
     /**
-     * A bootstrapped version of prompt() albeit asynchronous
-     * This was built to quickly prompt the user with a single field.
-     * For anything more complex, please use editor.Dialog class
+     *Abootstrappedversionofprompt()albeitasynchronous
+     *Thiswasbuilttoquicklyprompttheuserwithasinglefield.
+     *Foranythingmorecomplex,pleaseuseeditor.Dialogclass
      *
-     * Usage Ex:
+     *UsageEx:
      *
-     * website.prompt("What... is your quest ?").then(function (answer) {
-     *     arthur.reply(answer || "To seek the Holy Grail.");
-     * });
+     *website.prompt("What...isyourquest?").then(function(answer){
+     *    arthur.reply(answer||"ToseektheHolyGrail.");
+     *});
      *
-     * website.prompt({
-     *     select: "Please choose your destiny",
-     *     init: function () {
-     *         return [ [0, "Sub-Zero"], [1, "Robo-Ky"] ];
-     *     }
-     * }).then(function (answer) {
-     *     mame_station.loadCharacter(answer);
-     * });
+     *website.prompt({
+     *    select:"Pleasechooseyourdestiny",
+     *    init:function(){
+     *        return[[0,"Sub-Zero"],[1,"Robo-Ky"]];
+     *    }
+     *}).then(function(answer){
+     *    mame_station.loadCharacter(answer);
+     *});
      *
-     * @param {Object|String} options A set of options used to configure the prompt or the text field name if string
-     * @param {String} [options.window_title=''] title of the prompt modal
-     * @param {String} [options.input] tell the modal to use an input text field, the given value will be the field title
-     * @param {String} [options.textarea] tell the modal to use a textarea field, the given value will be the field title
-     * @param {String} [options.select] tell the modal to use a select box, the given value will be the field title
-     * @param {Object} [options.default=''] default value of the field
-     * @param {Function} [options.init] optional function that takes the `field` (enhanced with a fillWith() method) and the `dialog` as parameters [can return a promise]
+     *@param{Object|String}optionsAsetofoptionsusedtoconfigurethepromptorthetextfieldnameifstring
+     *@param{String}[options.window_title='']titleofthepromptmodal
+     *@param{String}[options.input]tellthemodaltouseaninputtextfield,thegivenvaluewillbethefieldtitle
+     *@param{String}[options.textarea]tellthemodaltouseatextareafield,thegivenvaluewillbethefieldtitle
+     *@param{String}[options.select]tellthemodaltouseaselectbox,thegivenvaluewillbethefieldtitle
+     *@param{Object}[options.default='']defaultvalueofthefield
+     *@param{Function}[options.init]optionalfunctionthattakesthe`field`(enhancedwithafillWith()method)andthe`dialog`asparameters[canreturnapromise]
      */
-    if (typeof options === 'string') {
-        options = {
-            text: options
+    if(typeofoptions==='string'){
+        options={
+            text:options
         };
     }
-    var xmlDef;
-    if (_.isUndefined(_qweb)) {
-        _qweb = 'website.prompt';
-        xmlDef = ajax.loadXML('/website/static/src/xml/website.xml', core.qweb);
+    varxmlDef;
+    if(_.isUndefined(_qweb)){
+        _qweb='website.prompt';
+        xmlDef=ajax.loadXML('/website/static/src/xml/website.xml',core.qweb);
     }
-    options = _.extend({
-        window_title: '',
-        field_name: '',
-        'default': '', // dict notation for IE<9
-        init: function () {},
-    }, options || {});
+    options=_.extend({
+        window_title:'',
+        field_name:'',
+        'default':'',//dictnotationforIE<9
+        init:function(){},
+    },options||{});
 
-    var type = _.intersection(Object.keys(options), ['input', 'textarea', 'select']);
-    type = type.length ? type[0] : 'input';
-    options.field_type = type;
-    options.field_name = options.field_name || options[type];
+    vartype=_.intersection(Object.keys(options),['input','textarea','select']);
+    type=type.length?type[0]:'input';
+    options.field_type=type;
+    options.field_name=options.field_name||options[type];
 
-    var def = new Promise(function (resolve, reject) {
-        Promise.resolve(xmlDef).then(function () {
-            var dialog = $(qweb.render(_qweb, options)).appendTo('body');
-            options.$dialog = dialog;
-            var field = dialog.find(options.field_type).first();
-            field.val(options['default']); // dict notation for IE<9
-            field.fillWith = function (data) {
-                if (field.is('select')) {
-                    var select = field[0];
-                    data.forEach(function (item) {
-                        select.options[select.options.length] = new window.Option(item[1], item[0]);
+    vardef=newPromise(function(resolve,reject){
+        Promise.resolve(xmlDef).then(function(){
+            vardialog=$(qweb.render(_qweb,options)).appendTo('body');
+            options.$dialog=dialog;
+            varfield=dialog.find(options.field_type).first();
+            field.val(options['default']);//dictnotationforIE<9
+            field.fillWith=function(data){
+                if(field.is('select')){
+                    varselect=field[0];
+                    data.forEach(function(item){
+                        select.options[select.options.length]=newwindow.Option(item[1],item[0]);
                     });
-                } else {
+                }else{
                     field.val(data);
                 }
             };
-            var init = options.init(field, dialog);
-            Promise.resolve(init).then(function (fill) {
-                if (fill) {
+            varinit=options.init(field,dialog);
+            Promise.resolve(init).then(function(fill){
+                if(fill){
                     field.fillWith(fill);
                 }
                 dialog.modal('show');
                 field.focus();
-                dialog.on('click', '.btn-primary', function () {
-                    var backdrop = $('.modal-backdrop');
-                    resolve({ val: field.val(), field: field, dialog: dialog });
+                dialog.on('click','.btn-primary',function(){
+                    varbackdrop=$('.modal-backdrop');
+                    resolve({val:field.val(),field:field,dialog:dialog});
                     dialog.modal('hide').remove();
                         backdrop.remove();
                 });
             });
-            dialog.on('hidden.bs.modal', function () {
-                    var backdrop = $('.modal-backdrop');
+            dialog.on('hidden.bs.modal',function(){
+                    varbackdrop=$('.modal-backdrop');
                 reject();
                 dialog.remove();
                     backdrop.remove();
             });
-            if (field.is('input[type="text"], select')) {
-                field.keypress(function (e) {
-                    if (e.which === 13) {
+            if(field.is('input[type="text"],select')){
+                field.keypress(function(e){
+                    if(e.which===13){
                         e.preventDefault();
                         dialog.find('.btn-primary').trigger('click');
                     }
@@ -239,44 +239,44 @@ function prompt(options, _qweb) {
         });
     });
 
-    return def;
+    returndef;
 }
 
-function websiteDomain(self) {
-    var websiteID;
-    self.trigger_up('context_get', {
-        callback: function (ctx) {
-            websiteID = ctx['website_id'];
+functionwebsiteDomain(self){
+    varwebsiteID;
+    self.trigger_up('context_get',{
+        callback:function(ctx){
+            websiteID=ctx['website_id'];
         },
     });
-    return ['|', ['website_id', '=', false], ['website_id', '=', websiteID]];
+    return['|',['website_id','=',false],['website_id','=',websiteID]];
 }
 
-function sendRequest(route, params) {
-    function _addInput(form, name, value) {
-        let param = document.createElement('input');
-        param.setAttribute('type', 'hidden');
-        param.setAttribute('name', name);
-        param.setAttribute('value', value);
+functionsendRequest(route,params){
+    function_addInput(form,name,value){
+        letparam=document.createElement('input');
+        param.setAttribute('type','hidden');
+        param.setAttribute('name',name);
+        param.setAttribute('value',value);
         form.appendChild(param);
     }
 
-    let form = document.createElement('form');
-    form.setAttribute('action', route);
-    form.setAttribute('method', params.method || 'POST');
+    letform=document.createElement('form');
+    form.setAttribute('action',route);
+    form.setAttribute('method',params.method||'POST');
 
-    if (core.csrf_token) {
-        _addInput(form, 'csrf_token', core.csrf_token);
+    if(core.csrf_token){
+        _addInput(form,'csrf_token',core.csrf_token);
     }
 
-    for (const key in params) {
-        const value = params[key];
-        if (Array.isArray(value) && value.length) {
-            for (const val of value) {
-                _addInput(form, key, val);
+    for(constkeyinparams){
+        constvalue=params[key];
+        if(Array.isArray(value)&&value.length){
+            for(constvalofvalue){
+                _addInput(form,key,val);
             }
-        } else {
-            _addInput(form, key, value);
+        }else{
+            _addInput(form,key,value);
         }
     }
 
@@ -285,103 +285,103 @@ function sendRequest(route, params) {
 }
 
 /**
- * Removes the navigation-blocking fullscreen loader from the DOM
+ *Removesthenavigation-blockingfullscreenloaderfromtheDOM
  */
-function removeLoader() {
-    const $loader = $('#o_website_page_loader');
-    if ($loader) {
+functionremoveLoader(){
+    const$loader=$('#o_website_page_loader');
+    if($loader){
         $loader.remove();
     }
 }
 
 /**
- * Converts a base64 SVG into a base64 PNG.
+ *Convertsabase64SVGintoabase64PNG.
  *
- * @param {string|HTMLImageElement} src - an URL to a SVG or a *loaded* image
- *      with such an URL. This allows the call to this method to be potentially
- *      not return a Promise.
- * @param {boolean} [noAsync=false] In case, the given first parameter is a
- *      loaded image, this parameter allows to ignore problematic images and
- *      return a (problematic) PNG result synchronously.
- * @returns {Promise<string>|string} a base64 PNG (as result of a Promise or not)
+ *@param{string|HTMLImageElement}src-anURLtoaSVGora*loaded*image
+ *     withsuchanURL.Thisallowsthecalltothismethodtobepotentially
+ *     notreturnaPromise.
+ *@param{boolean}[noAsync=false]Incase,thegivenfirstparameterisa
+ *     loadedimage,thisparameterallowstoignoreproblematicimagesand
+ *     returna(problematic)PNGresultsynchronously.
+ *@returns{Promise<string>|string}abase64PNG(asresultofaPromiseornot)
  */
-function svgToPNG(src, noAsync = false) {
-    function checkImg(imgEl) {
-        // Firefox does not support drawing SVG to canvas unless it has width
-        // and height attributes set on the root <svg>.
-        return (imgEl.naturalHeight !== 0);
+functionsvgToPNG(src,noAsync=false){
+    functioncheckImg(imgEl){
+        //FirefoxdoesnotsupportdrawingSVGtocanvasunlessithaswidth
+        //andheightattributessetontheroot<svg>.
+        return(imgEl.naturalHeight!==0);
     }
-    function toPNGViaCanvas(imgEl) {
-        const canvas = document.createElement('canvas');
-        canvas.width = imgEl.width;
-        canvas.height = imgEl.height;
-        canvas.getContext('2d').drawImage(imgEl, 0, 0);
-        return canvas.toDataURL('image/png');
+    functiontoPNGViaCanvas(imgEl){
+        constcanvas=document.createElement('canvas');
+        canvas.width=imgEl.width;
+        canvas.height=imgEl.height;
+        canvas.getContext('2d').drawImage(imgEl,0,0);
+        returncanvas.toDataURL('image/png');
     }
 
-    // In case we receive a loaded image with the given src and that this image
-    // is not problematic, we can convert it to PNG synchronously.
-    if (src instanceof HTMLImageElement) {
-        const loadedImgEl = src;
-        if (noAsync || checkImg(loadedImgEl)) {
-            return toPNGViaCanvas(loadedImgEl);
+    //Incasewereceivealoadedimagewiththegivensrcandthatthisimage
+    //isnotproblematic,wecanconvertittoPNGsynchronously.
+    if(srcinstanceofHTMLImageElement){
+        constloadedImgEl=src;
+        if(noAsync||checkImg(loadedImgEl)){
+            returntoPNGViaCanvas(loadedImgEl);
         }
-        src = loadedImgEl.src;
+        src=loadedImgEl.src;
     }
 
-    // At this point, we either did not receive a loaded image or the received
-    // loaded image is problematic => we have to do some asynchronous code and
-    // the function will thus return a Promise.
-    return new Promise(resolve => {
-        const imgEl = new Image();
-        imgEl.onload = () => {
-            if (checkImg(imgEl)) {
+    //Atthispoint,weeitherdidnotreceivealoadedimageorthereceived
+    //loadedimageisproblematic=>wehavetodosomeasynchronouscodeand
+    //thefunctionwillthusreturnaPromise.
+    returnnewPromise(resolve=>{
+        constimgEl=newImage();
+        imgEl.onload=()=>{
+            if(checkImg(imgEl)){
                 resolve(imgEl);
                 return;
             }
 
-            // Set arbitrary height on image and attach it to the DOM to force
-            // width computation.
-            imgEl.height = 1000;
-            imgEl.style.opacity = 0;
+            //SetarbitraryheightonimageandattachittotheDOMtoforce
+            //widthcomputation.
+            imgEl.height=1000;
+            imgEl.style.opacity=0;
             document.body.appendChild(imgEl);
 
-            const request = new XMLHttpRequest();
-            request.open('GET', imgEl.src, true);
-            request.onload = () => {
-                // Convert the data URI to a SVG element
-                const parser = new DOMParser();
-                const result = parser.parseFromString(request.responseText, 'text/xml');
-                const svgEl = result.getElementsByTagName("svg")[0];
+            constrequest=newXMLHttpRequest();
+            request.open('GET',imgEl.src,true);
+            request.onload=()=>{
+                //ConvertthedataURItoaSVGelement
+                constparser=newDOMParser();
+                constresult=parser.parseFromString(request.responseText,'text/xml');
+                constsvgEl=result.getElementsByTagName("svg")[0];
 
-                // Add the attributes Firefox needs and remove the image from
-                // the DOM.
-                svgEl.setAttribute('width', imgEl.width);
-                svgEl.setAttribute('height', imgEl.height);
+                //AddtheattributesFirefoxneedsandremovetheimagefrom
+                //theDOM.
+                svgEl.setAttribute('width',imgEl.width);
+                svgEl.setAttribute('height',imgEl.height);
                 imgEl.remove();
 
-                // Convert the SVG element to a data URI
-                const svg64 = btoa(new XMLSerializer().serializeToString(svgEl));
-                const finalImg = new Image();
-                finalImg.onload = () => {
+                //ConverttheSVGelementtoadataURI
+                constsvg64=btoa(newXMLSerializer().serializeToString(svgEl));
+                constfinalImg=newImage();
+                finalImg.onload=()=>{
                     resolve(finalImg);
                 };
-                finalImg.src = `data:image/svg+xml;base64,${svg64}`;
+                finalImg.src=`data:image/svg+xml;base64,${svg64}`;
             };
             request.send();
         };
-        imgEl.src = src;
-    }).then(loadedImgEl => toPNGViaCanvas(loadedImgEl));
+        imgEl.src=src;
+    }).then(loadedImgEl=>toPNGViaCanvas(loadedImgEl));
 }
 
-return {
-    loadAnchors: loadAnchors,
-    autocompleteWithPages: autocompleteWithPages,
-    onceAllImagesLoaded: onceAllImagesLoaded,
-    prompt: prompt,
-    sendRequest: sendRequest,
-    websiteDomain: websiteDomain,
-    removeLoader: removeLoader,
-    svgToPNG: svgToPNG,
+return{
+    loadAnchors:loadAnchors,
+    autocompleteWithPages:autocompleteWithPages,
+    onceAllImagesLoaded:onceAllImagesLoaded,
+    prompt:prompt,
+    sendRequest:sendRequest,
+    websiteDomain:websiteDomain,
+    removeLoader:removeLoader,
+    svgToPNG:svgToPNG,
 };
 });

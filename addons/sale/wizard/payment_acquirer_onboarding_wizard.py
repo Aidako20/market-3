@@ -1,37 +1,37 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import api, fields, models
+fromflectraimportapi,fields,models
 
 
-class PaymentWizard(models.TransientModel):
-    """ Override for the sale quotation onboarding panel. """
+classPaymentWizard(models.TransientModel):
+    """Overrideforthesalequotationonboardingpanel."""
 
-    _inherit = 'payment.acquirer.onboarding.wizard'
-    _name = 'sale.payment.acquirer.onboarding.wizard'
-    _description = 'Sale Payment acquire onboarding wizard'
+    _inherit='payment.acquirer.onboarding.wizard'
+    _name='sale.payment.acquirer.onboarding.wizard'
+    _description='SalePaymentacquireonboardingwizard'
 
-    def _get_default_payment_method(self):
-        return self.env.company.sale_onboarding_payment_method or 'digital_signature'
+    def_get_default_payment_method(self):
+        returnself.env.company.sale_onboarding_payment_methodor'digital_signature'
 
-    payment_method = fields.Selection(selection_add=[
-        ('digital_signature', "Electronic signature"),
-        ('paypal', "PayPal"),
-        ('stripe', "Credit card (via Stripe)"),
-        ('other', "Other payment acquirer"),
-        ('manual', "Custom payment instructions"),
-    ], default=_get_default_payment_method)
+    payment_method=fields.Selection(selection_add=[
+        ('digital_signature',"Electronicsignature"),
+        ('paypal',"PayPal"),
+        ('stripe',"Creditcard(viaStripe)"),
+        ('other',"Otherpaymentacquirer"),
+        ('manual',"Custompaymentinstructions"),
+    ],default=_get_default_payment_method)
     #
 
-    def _set_payment_acquirer_onboarding_step_done(self):
-        """ Override. """
+    def_set_payment_acquirer_onboarding_step_done(self):
+        """Override."""
         self.env.company.sudo().set_onboarding_step_done('sale_onboarding_order_confirmation_state')
 
-    def add_payment_methods(self, *args, **kwargs):
-        self.env.company.sale_onboarding_payment_method = self.payment_method
-        if self.payment_method == 'digital_signature':
-            self.env.company.portal_confirmation_sign = True
-        if self.payment_method in ('paypal', 'stripe', 'other', 'manual'):
-            self.env.company.portal_confirmation_pay = True
+    defadd_payment_methods(self,*args,**kwargs):
+        self.env.company.sale_onboarding_payment_method=self.payment_method
+        ifself.payment_method=='digital_signature':
+            self.env.company.portal_confirmation_sign=True
+        ifself.payment_methodin('paypal','stripe','other','manual'):
+            self.env.company.portal_confirmation_pay=True
 
-        return super(PaymentWizard, self).add_payment_methods(*args, **kwargs)
+        returnsuper(PaymentWizard,self).add_payment_methods(*args,**kwargs)

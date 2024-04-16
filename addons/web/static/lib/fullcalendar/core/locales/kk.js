@@ -1,32 +1,32 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, (global.FullCalendarLocales = global.FullCalendarLocales || {}, global.FullCalendarLocales.kk = factory()));
-}(this, function () { 'use strict';
+(function(global,factory){
+    typeofexports==='object'&&typeofmodule!=='undefined'?module.exports=factory():
+    typeofdefine==='function'&&define.amd?define(factory):
+    (global=global||self,(global.FullCalendarLocales=global.FullCalendarLocales||{},global.FullCalendarLocales.kk=factory()));
+}(this,function(){'usestrict';
 
-    var kk = {
-        code: "kk",
-        week: {
-            dow: 1,
-            doy: 7 // The week that contains Jan 1st is the first week of the year.
+    varkk={
+        code:"kk",
+        week:{
+            dow:1,
+            doy:7//TheweekthatcontainsJan1stisthefirstweekoftheyear.
         },
-        buttonText: {
-            prev: "Алдыңғы",
-            next: "Келесі",
-            today: "Бүгін",
-            month: "Ай",
-            week: "Апта",
-            day: "Күн",
-            list: "Күн тәртібі"
+        buttonText:{
+            prev:"Алдыңғы",
+            next:"Келесі",
+            today:"Бүгін",
+            month:"Ай",
+            week:"Апта",
+            day:"Күн",
+            list:"Күнтәртібі"
         },
-        weekLabel: "Не",
-        allDayText: "Күні бойы",
-        eventLimitText: function (n) {
-            return "+ тағы " + n;
+        weekLabel:"Не",
+        allDayText:"Күнібойы",
+        eventLimitText:function(n){
+            return"+тағы"+n;
         },
-        noEventsMessage: "Көрсету үшін оқиғалар жоқ"
+        noEventsMessage:"Көрсетуүшіноқиғаларжоқ"
     };
 
-    return kk;
+    returnkk;
 
 }));

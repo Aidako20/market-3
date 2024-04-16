@@ -1,27 +1,27 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import models
-from flectra.addons.phone_validation.tools import phone_validation
+fromflectraimportmodels
+fromflectra.addons.phone_validation.toolsimportphone_validation
 
 
-class PhoneValidationMixin(models.AbstractModel):
-    _name = 'phone.validation.mixin'
-    _description = 'Phone Validation Mixin'
+classPhoneValidationMixin(models.AbstractModel):
+    _name='phone.validation.mixin'
+    _description='PhoneValidationMixin'
 
-    def _phone_get_country(self):
-        if 'country_id' in self and self.country_id:
-            return self.country_id
-        return self.env.company.country_id
+    def_phone_get_country(self):
+        if'country_id'inselfandself.country_id:
+            returnself.country_id
+        returnself.env.company.country_id
 
-    def phone_format(self, number, country=None, company=None):
-        country = country or self._phone_get_country()
-        if not country:
-            return number
-        return phone_validation.phone_format(
+    defphone_format(self,number,country=None,company=None):
+        country=countryorself._phone_get_country()
+        ifnotcountry:
+            returnnumber
+        returnphone_validation.phone_format(
             number,
-            country.code if country else None,
-            country.phone_code if country else None,
+            country.codeifcountryelseNone,
+            country.phone_codeifcountryelseNone,
             force_format='INTERNATIONAL',
             raise_exception=False
         )

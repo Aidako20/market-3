@@ -1,147 +1,147 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-<!-- Snippet -->
-<template id="s_latest_posts" name="Blog Posts">
-    <section class="s_latest_posts pt16 pb16" data-vcss="001">
-        <div class="container">
-            <div class="row s_col_no_bgcolor s_nb_column_fixed js_get_posts s_latest_posts_big_picture s_latest_posts_effect_marley"
+<!--Snippet-->
+<templateid="s_latest_posts"name="BlogPosts">
+    <sectionclass="s_latest_postspt16pb16"data-vcss="001">
+        <divclass="container">
+            <divclass="rows_col_no_bgcolors_nb_column_fixedjs_get_postss_latest_posts_big_pictures_latest_posts_effect_marley"
                 data-loading="true"
                 data-template="website_blog.s_latest_posts_big_picture_template"
                 data-filter-by-blog-id="0"
-                data-order="published_date desc"/>
+                data-order="published_datedesc"/>
         </div>
     </section>
 </template>
 
-<!-- Load-time templates (rendered in JS on page load) -->
-<!-- List layout -->
-<template id="s_latest_posts_list_template">
-    <div t-foreach="posts" t-as="p" class="d-flex col-12 mt-3 s_latest_posts_post">
-        <a class="s_latest_posts_post_cover flex-grow-0 flex-shrink-0 align-self-baseline position-relative" t-attf-href="/blog/#{p.blog_id.id}/#{p.id}" t-att-title="'Read' + p.name">
-            <t t-call="website.record_cover">
-                <t t-set="_record" t-value="p"/>
-                <t t-set="additionnal_classes" t-value="'w-100 h-100 bg-200 position-absolute'"/>
+<!--Load-timetemplates(renderedinJSonpageload)-->
+<!--Listlayout-->
+<templateid="s_latest_posts_list_template">
+    <divt-foreach="posts"t-as="p"class="d-flexcol-12mt-3s_latest_posts_post">
+        <aclass="s_latest_posts_post_coverflex-grow-0flex-shrink-0align-self-baselineposition-relative"t-attf-href="/blog/#{p.blog_id.id}/#{p.id}"t-att-title="'Read'+p.name">
+            <tt-call="website.record_cover">
+                <tt-set="_record"t-value="p"/>
+                <tt-set="additionnal_classes"t-value="'w-100h-100bg-200position-absolute'"/>
 
-                <div class="s_latest_posts_loader d-flex align-items-center justify-content-center bg-200">
-                    <div class="d-none rounded-circle bg-black-25 w-25 h-25"/>
+                <divclass="s_latest_posts_loaderd-flexalign-items-centerjustify-content-centerbg-200">
+                    <divclass="d-nonerounded-circlebg-black-25w-25h-25"/>
                 </div>
             </t>
         </a>
-        <div class="pl-2">
-            <a class="" t-att-title="'Read' + p.name" t-attf-href="/blog/#{p.blog_id.id}/#{p.id}">
-                <div class="s_latest_posts_post_title mb-1" t-field="p.name"/>
+        <divclass="pl-2">
+            <aclass=""t-att-title="'Read'+p.name"t-attf-href="/blog/#{p.blog_id.id}/#{p.id}">
+                <divclass="s_latest_posts_post_titlemb-1"t-field="p.name"/>
             </a>
-            <div class="s_latest_posts_post_subtitle mb-1 d-none d-sm-block" t-field="p.subtitle"/>
+            <divclass="s_latest_posts_post_subtitlemb-1d-noned-sm-block"t-field="p.subtitle"/>
         </div>
     </div>
 </template>
-<!-- Big picture layout -->
-<template id="s_latest_posts_big_picture_template">
-    <figure t-foreach="posts" t-as="p" class="col-md-6 col-lg-4 my-3 s_latest_posts_post">
-        <a class="s_latest_posts_post_cover position-relative d-flex flex-column shadow-sm overflow-hidden rounded text-decoration-none" t-attf-href="/blog/#{p.blog_id.id}/#{p.id}">
-            <t t-call="website.record_cover">
-                <t t-set="_record" t-value="p"/>
-                <t t-set="use_filters" t-value="True"/>
-                <t t-set="additionnal_classes" t-value="'h-100 w-100 bg-600 position-absolute'"/>
+<!--Bigpicturelayout-->
+<templateid="s_latest_posts_big_picture_template">
+    <figuret-foreach="posts"t-as="p"class="col-md-6col-lg-4my-3s_latest_posts_post">
+        <aclass="s_latest_posts_post_coverposition-relatived-flexflex-columnshadow-smoverflow-hiddenroundedtext-decoration-none"t-attf-href="/blog/#{p.blog_id.id}/#{p.id}">
+            <tt-call="website.record_cover">
+                <tt-set="_record"t-value="p"/>
+                <tt-set="use_filters"t-value="True"/>
+                <tt-set="additionnal_classes"t-value="'h-100w-100bg-600position-absolute'"/>
             </t>
 
-            <figcaption class="text-center w-100 h-100 px-3 d-flex flex-column flex-grow-1">
-                <div class="s_latest_posts_post_title text-white" t-field="p.name"/>
-                <div class="s_latest_posts_post_subtitle text-white" t-field="p.subtitle"/>
+            <figcaptionclass="text-centerw-100h-100px-3d-flexflex-columnflex-grow-1">
+                <divclass="s_latest_posts_post_titletext-white"t-field="p.name"/>
+                <divclass="s_latest_posts_post_subtitletext-white"t-field="p.subtitle"/>
             </figcaption>
 
-            <div class="s_latest_posts_loader d-flex align-items-center justify-content-center bg-200">
-                <div class="d-none rounded-circle bg-black-25 w-25 h-25"/>
+            <divclass="s_latest_posts_loaderd-flexalign-items-centerjustify-content-centerbg-200">
+                <divclass="d-nonerounded-circlebg-black-25w-25h-25"/>
             </div>
         </a>
     </figure>
 </template>
-<!-- Horizontal layout -->
-<template id="s_latest_posts_horizontal_template">
-    <figure t-foreach="posts" t-as="p" class="post s_latest_posts_post col-md-6 col-lg-4">
+<!--Horizontallayout-->
+<templateid="s_latest_posts_horizontal_template">
+    <figuret-foreach="posts"t-as="p"class="posts_latest_posts_postcol-md-6col-lg-4">
         <figcaption>
-            <h4 class="mb0"><a t-att-href="'/blog/%s/%s' % (p.blog_id.id, p.id)"><t t-esc="p.name"/></a></h4>
-            <h5 class="mt0 mb4" t-field="p.post_date" t-options='{"format": "dd/MM"}' />
+            <h4class="mb0"><at-att-href="'/blog/%s/%s'%(p.blog_id.id,p.id)"><tt-esc="p.name"/></a></h4>
+            <h5class="mt0mb4"t-field="p.post_date"t-options='{"format":"dd/MM"}'/>
         </figcaption>
-        <a t-att-href="'/blog/%s/%s' % (p.blog_id.id, p.id)">
-            <t t-call="website.record_cover">
-                <t t-set="_record" t-value="p"/>
-                <t t-set="additionnal_classes" t-value="'loading_container thumb'"/>
+        <at-att-href="'/blog/%s/%s'%(p.blog_id.id,p.id)">
+            <tt-call="website.record_cover">
+                <tt-set="_record"t-value="p"/>
+                <tt-set="additionnal_classes"t-value="'loading_containerthumb'"/>
             </t>
         </a>
     </figure>
 </template>
-<!-- Card layout -->
-<template id="s_latest_posts_card_template">
-    <div t-foreach="posts" t-as="p" class="col-md-6 col-lg-4 s_latest_posts_post pb32">
-        <div class="card">
-            <a class="s_latest_posts_post_cover" t-att-href="'/blog/%s/%s' % (p.blog_id.id, p.id)">
-                <t t-call="website.record_cover">
-                    <t t-set="_record" t-value="p"/>
-                    <t t-set="additionnal_classes" t-value="'loading_container thumb'"/>
+<!--Cardlayout-->
+<templateid="s_latest_posts_card_template">
+    <divt-foreach="posts"t-as="p"class="col-md-6col-lg-4s_latest_posts_postpb32">
+        <divclass="card">
+            <aclass="s_latest_posts_post_cover"t-att-href="'/blog/%s/%s'%(p.blog_id.id,p.id)">
+                <tt-call="website.record_cover">
+                    <tt-set="_record"t-value="p"/>
+                    <tt-set="additionnal_classes"t-value="'loading_containerthumb'"/>
                 </t>
             </a>
-            <div class="card-body">
-                <a t-att-href="'/blog/%s/%s' % (p.blog_id.id, p.id)"><h4 class="mb-0"><t t-esc="p.name"/></h4></a>
+            <divclass="card-body">
+                <at-att-href="'/blog/%s/%s'%(p.blog_id.id,p.id)"><h4class="mb-0"><tt-esc="p.name"/></h4></a>
             </div>
-            <div class="card-footer d-flex justify-content-between">
-                <span class="text-muted mb-0" t-field="p.post_date" t-options='{"format": "MMM d, yyyy"}' />
-                <span class="text-muted mb-0">In <a class="font-weight-bold" t-esc="p.blog_id.name" t-att-href="'/blog/%s' % (p.blog_id.id)" /></span>
+            <divclass="card-footerd-flexjustify-content-between">
+                <spanclass="text-mutedmb-0"t-field="p.post_date"t-options='{"format":"MMMd,yyyy"}'/>
+                <spanclass="text-mutedmb-0">In<aclass="font-weight-bold"t-esc="p.blog_id.name"t-att-href="'/blog/%s'%(p.blog_id.id)"/></span>
             </div>
         </div>
     </div>
 </template>
 
-<!-- Options -->
-<template id="s_latest_posts_options" inherit_id="website.snippet_options">
-    <xpath expr="//div[@data-js='Box']" position="before">
-        <div data-js="js_get_posts_selectBlog" data-selector=".s_latest_posts" data-target=".js_get_posts" data-no-check="true">
-            <we-select string="Choose a blog" data-no-preview="true" name="blog_selection" data-attribute-name="filterByBlogId">
-                <we-button data-select-data-attribute="0">All blogs</we-button>
-                <!-- the blog list will be generated in js -->
+<!--Options-->
+<templateid="s_latest_posts_options"inherit_id="website.snippet_options">
+    <xpathexpr="//div[@data-js='Box']"position="before">
+        <divdata-js="js_get_posts_selectBlog"data-selector=".s_latest_posts"data-target=".js_get_posts"data-no-check="true">
+            <we-selectstring="Chooseablog"data-no-preview="true"name="blog_selection"data-attribute-name="filterByBlogId">
+                <we-buttondata-select-data-attribute="0">Allblogs</we-button>
+                <!--thebloglistwillbegeneratedinjs-->
             </we-select>
-            <we-select string="Posts" data-no-preview="true" data-attribute-name="order" class="o_we_inline">
-                <we-button data-select-data-attribute="published_date desc">Latest</we-button>
-                <we-button data-select-data-attribute="visits desc">Most viewed</we-button>
+            <we-selectstring="Posts"data-no-preview="true"data-attribute-name="order"class="o_we_inline">
+                <we-buttondata-select-data-attribute="published_datedesc">Latest</we-button>
+                <we-buttondata-select-data-attribute="visitsdesc">Mostviewed</we-button>
             </we-select>
-            <we-select string="Layout" data-attribute-name="template">
-                <we-button data-select-data-attribute="website_blog.s_latest_posts_list_template" data-select-class="s_latest_posts_list">List</we-button>
-                <we-button data-select-data-attribute="website_blog.s_latest_posts_big_picture_template"
+            <we-selectstring="Layout"data-attribute-name="template">
+                <we-buttondata-select-data-attribute="website_blog.s_latest_posts_list_template"data-select-class="s_latest_posts_list">List</we-button>
+                <we-buttondata-select-data-attribute="website_blog.s_latest_posts_big_picture_template"
                     data-select-class="s_latest_posts_big_picture"
-                    data-name="big_picture_opt">Big Pictures</we-button>
-                <we-button data-select-data-attribute="website_blog.s_latest_posts_horizontal_template"
+                    data-name="big_picture_opt">BigPictures</we-button>
+                <we-buttondata-select-data-attribute="website_blog.s_latest_posts_horizontal_template"
                     data-select-class="s_latest_posts_horizontal">Horizontal</we-button>
-                <we-button data-select-data-attribute="website_blog.s_latest_posts_card_template"
+                <we-buttondata-select-data-attribute="website_blog.s_latest_posts_card_template"
                     data-select-class="s_latest_posts_card">Cards</we-button>
             </we-select>
-            <we-select string="Hover effect" data-no-widget-refresh="true" data-dependencies="big_picture_opt" class="o_we_inline">
-                <we-button data-select-class="">None</we-button>
-                <we-button data-select-class="s_latest_posts_effect_marley">Marley</we-button>
-                <we-button data-select-class="s_latest_posts_effect_dexter">Dexter</we-button>
-                <we-button data-select-class="s_latest_posts_effect_chico">Silly-Chico</we-button>
+            <we-selectstring="Hovereffect"data-no-widget-refresh="true"data-dependencies="big_picture_opt"class="o_we_inline">
+                <we-buttondata-select-class="">None</we-button>
+                <we-buttondata-select-class="s_latest_posts_effect_marley">Marley</we-button>
+                <we-buttondata-select-class="s_latest_posts_effect_dexter">Dexter</we-button>
+                <we-buttondata-select-class="s_latest_posts_effect_chico">Silly-Chico</we-button>
             </we-select>
         </div>
     </xpath>
-    <xpath expr="//div[@data-js='layout_column']" position="attributes">
-        <attribute name="data-exclude" add=".s_latest_posts, .s_latest_posts_big_picture" separator=","/>
+    <xpathexpr="//div[@data-js='layout_column']"position="attributes">
+        <attributename="data-exclude"add=".s_latest_posts,.s_latest_posts_big_picture"separator=","/>
     </xpath>
 </template>
 
-<!-- Assets -->
-<template id="assets_snippet_s_latest_posts_css_000" inherit_id="website.assets_frontend" active="False">
-    <xpath expr="//link[last()]" position="after">
-        <link rel="stylesheet" type="text/scss" href="/website_blog/static/src/snippets/s_latest_posts/000.scss"/>
+<!--Assets-->
+<templateid="assets_snippet_s_latest_posts_css_000"inherit_id="website.assets_frontend"active="False">
+    <xpathexpr="//link[last()]"position="after">
+        <linkrel="stylesheet"type="text/scss"href="/website_blog/static/src/snippets/s_latest_posts/000.scss"/>
     </xpath>
 </template>
-<template id="assets_snippet_s_latest_posts_css_001" inherit_id="website.assets_frontend">
-    <xpath expr="//link[last()]" position="after">
-        <link rel="stylesheet" type="text/scss" href="/website_blog/static/src/snippets/s_latest_posts/001.scss"/>
+<templateid="assets_snippet_s_latest_posts_css_001"inherit_id="website.assets_frontend">
+    <xpathexpr="//link[last()]"position="after">
+        <linkrel="stylesheet"type="text/scss"href="/website_blog/static/src/snippets/s_latest_posts/001.scss"/>
     </xpath>
 </template>
 
-<template id="assets_snippet_s_latest_posts_js_000" inherit_id="website.assets_frontend">
-    <xpath expr="//script[last()]" position="after">
-        <script type="text/javascript" src="/website_blog/static/src/snippets/s_latest_posts/000.js"/>
+<templateid="assets_snippet_s_latest_posts_js_000"inherit_id="website.assets_frontend">
+    <xpathexpr="//script[last()]"position="after">
+        <scripttype="text/javascript"src="/website_blog/static/src/snippets/s_latest_posts/000.js"/>
     </xpath>
 </template>
 

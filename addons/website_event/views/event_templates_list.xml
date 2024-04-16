@@ -1,57 +1,57 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
 
-<!-- Index -->
-<template id="index" name="Events">
-    <t t-call="website.layout">
-        <div id="wrap" class="o_wevent_index">
-            <!-- Options -->
-            <t t-set="opt_events_list_cards" t-value="is_view_active('website_event.opt_events_list_cards')"/>
-            <t t-set="opt_events_list_columns" t-value="is_view_active('website_event.opt_events_list_columns')"/>
-            <!-- Topbar -->
-            <t t-call="website_event.index_topbar"/>
-            <!-- Drag/Drop Area -->
-            <div id="oe_structure_we_index_1" class="oe_structure oe_empty"/>
-            <!-- Content -->
-            <div t-attf-class="o_wevent_events_list #{opt_events_list_cards and 'opt_event_list_cards_bg'}">
-                <div class="container">
-                    <div class="row">
-                        <t t-call="website_event.searched_tags"/>
+<!--Index-->
+<templateid="index"name="Events">
+    <tt-call="website.layout">
+        <divid="wrap"class="o_wevent_index">
+            <!--Options-->
+            <tt-set="opt_events_list_cards"t-value="is_view_active('website_event.opt_events_list_cards')"/>
+            <tt-set="opt_events_list_columns"t-value="is_view_active('website_event.opt_events_list_columns')"/>
+            <!--Topbar-->
+            <tt-call="website_event.index_topbar"/>
+            <!--Drag/DropArea-->
+            <divid="oe_structure_we_index_1"class="oe_structureoe_empty"/>
+            <!--Content-->
+            <divt-attf-class="o_wevent_events_list#{opt_events_list_cardsand'opt_event_list_cards_bg'}">
+                <divclass="container">
+                    <divclass="row">
+                        <tt-call="website_event.searched_tags"/>
                     </div>
-                    <div class="row">
-                        <div id="o_wevent_index_main_col" t-attf-class="col-md my-5 #{opt_events_list_columns and 'opt_events_list_columns' or 'opt_events_list_rows'}">
-                            <div class="row">
-                                <!-- Events List -->
-                                <t t-call="website_event.events_list"/>
+                    <divclass="row">
+                        <divid="o_wevent_index_main_col"t-attf-class="col-mdmy-5#{opt_events_list_columnsand'opt_events_list_columns'or'opt_events_list_rows'}">
+                            <divclass="row">
+                                <!--EventsList-->
+                                <tt-call="website_event.events_list"/>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Drag/Drop Area -->
-            <div id="oe_structure_we_index_2" class="oe_structure oe_empty"/>
+            <!--Drag/DropArea-->
+            <divid="oe_structure_we_index_2"class="oe_structureoe_empty"/>
         </div>
     </t>
 </template>
 
-<!-- Index - OPTION - Sidebar -->
-<template id="opt_index_sidebar" inherit_id="website_event.index" active="False" customize_show="True" name="Show Sidebar">
-    <xpath expr="//div[@id='o_wevent_index_main_col']" position="after">
-        <t t-call="website_event.index_sidebar"/>
+<!--Index-OPTION-Sidebar-->
+<templateid="opt_index_sidebar"inherit_id="website_event.index"active="False"customize_show="True"name="ShowSidebar">
+    <xpathexpr="//div[@id='o_wevent_index_main_col']"position="after">
+        <tt-call="website_event.index_sidebar"/>
     </xpath>
 </template>
 
-<!-- Index Topbar -->
-<template id="index_topbar" name="Topbar">
-    <nav class="navbar navbar-light border-top shadow-sm d-print-none">
-        <div class="container">
-            <div class="d-flex flex-column flex-sm-row justify-content-between w-100">
-                <span class="navbar-brand h4 my-0 mr-auto">Events</span>
-                <ul class="o_wevent_index_topbar_filters nav"/>
-                <div class="d-flex align-items-center flex-wrap pl-sm-3 pr-0">
-                    <t t-call="website_event.events_search_box">
-                        <t t-set="_searches" t-value="searches"/>
-                        <t t-set="_placeholder">Search an event...</t>
+<!--IndexTopbar-->
+<templateid="index_topbar"name="Topbar">
+    <navclass="navbarnavbar-lightborder-topshadow-smd-print-none">
+        <divclass="container">
+            <divclass="d-flexflex-columnflex-sm-rowjustify-content-betweenw-100">
+                <spanclass="navbar-brandh4my-0mr-auto">Events</span>
+                <ulclass="o_wevent_index_topbar_filtersnav"/>
+                <divclass="d-flexalign-items-centerflex-wrappl-sm-3pr-0">
+                    <tt-call="website_event.events_search_box">
+                        <tt-set="_searches"t-value="searches"/>
+                        <tt-set="_placeholder">Searchanevent...</t>
                     </t>
                 </div>
             </div>
@@ -59,33 +59,33 @@
     </nav>
 </template>
 
-<template id="searched_tags" name="Searched tags">
-    <div class="d-flex align-items-center mt16">
-        <t t-foreach="search_tags" t-as="tag">
-            <span class="align-items-baseline border d-inline-flex pl-2 rounded ml16 mb-2 bg-white">
-                <i class="fa fa-tag mr-2 text-muted"/>
-                <t t-esc="tag.display_name"/>
-                <a t-att-href="'/event?%s' % keep_query('*', tags=str((search_tags - tag).ids))" class="btn border-0 py-1">&#215;</a>
+<templateid="searched_tags"name="Searchedtags">
+    <divclass="d-flexalign-items-centermt16">
+        <tt-foreach="search_tags"t-as="tag">
+            <spanclass="align-items-baselineborderd-inline-flexpl-2roundedml16mb-2bg-white">
+                <iclass="fafa-tagmr-2text-muted"/>
+                <tt-esc="tag.display_name"/>
+                <at-att-href="'/event?%s'%keep_query('*',tags=str((search_tags-tag).ids))"class="btnborder-0py-1">&#215;</a>
             </span>
         </t>
     </div>
 </template>
 
-<!-- Filter - Date -->
-<template id="event_time" inherit_id="website_event.index_topbar" customize_show="True" name="Filter by Date">
-    <xpath expr="//ul[hasclass('o_wevent_index_topbar_filters')]" position="inside">
-        <li class="nav-item dropdown mr-2 my-1">
-            <a href="#" role="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-calendar"/>
-                <t t-if="current_date" t-esc="current_date"/>
-                <t t-else="">Upcoming Events</t>
+<!--Filter-Date-->
+<templateid="event_time"inherit_id="website_event.index_topbar"customize_show="True"name="FilterbyDate">
+    <xpathexpr="//ul[hasclass('o_wevent_index_topbar_filters')]"position="inside">
+        <liclass="nav-itemdropdownmr-2my-1">
+            <ahref="#"role="button"class="btndropdown-toggle"data-toggle="dropdown">
+                <iclass="fafa-calendar"/>
+                <tt-if="current_date"t-esc="current_date"/>
+                <tt-else="">UpcomingEvents</t>
             </a>
-            <div class="dropdown-menu">
-                <t t-foreach="dates" t-as="date">
-                    <t t-if="date[3] or (date[0] in ('old','all'))">
-                        <a t-att-href="keep('/event', date=date[0])" t-attf-class="dropdown-item d-flex align-items-center justify-content-between #{searches.get('date') == date[0] and 'active'}">
-                            <t t-esc="date[1]"/>
-                            <span t-if="date[3]" t-esc="date[3]" class="badge badge-pill badge-primary ml-3"/>
+            <divclass="dropdown-menu">
+                <tt-foreach="dates"t-as="date">
+                    <tt-if="date[3]or(date[0]in('old','all'))">
+                        <at-att-href="keep('/event',date=date[0])"t-attf-class="dropdown-itemd-flexalign-items-centerjustify-content-between#{searches.get('date')==date[0]and'active'}">
+                            <tt-esc="date[1]"/>
+                            <spant-if="date[3]"t-esc="date[3]"class="badgebadge-pillbadge-primaryml-3"/>
                         </a>
                     </t>
                 </t>
@@ -94,20 +94,20 @@
     </xpath>
 </template>
 
-<template id="event_category_tag" inherit_id="website_event.index_topbar" active="False" customize_show="True" name="Filter by Tags">
-    <xpath expr="//ul[hasclass('o_wevent_index_topbar_filters')]" position="inside">
-        <t t-foreach="categories" t-as="category">
-            <li t-if="category.tag_ids and any(tag.color for tag in category.tag_ids)" class="nav-item dropdown mr-2 my-1">
-                <a href="#" role="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-folder-open"/>
-                    <t t-esc="category.name"/>
+<templateid="event_category_tag"inherit_id="website_event.index_topbar"active="False"customize_show="True"name="FilterbyTags">
+    <xpathexpr="//ul[hasclass('o_wevent_index_topbar_filters')]"position="inside">
+        <tt-foreach="categories"t-as="category">
+            <lit-if="category.tag_idsandany(tag.colorfortagincategory.tag_ids)"class="nav-itemdropdownmr-2my-1">
+                <ahref="#"role="button"class="btndropdown-toggle"data-toggle="dropdown">
+                    <iclass="fafa-folder-open"/>
+                    <tt-esc="category.name"/>
                 </a>
-                <div class="dropdown-menu">
-                    <t t-foreach="category.tag_ids" t-as="tag">
-                        <a t-if="tag.color"
-                            t-att-href="'/event?%s' % keep_query('*', tags=str((search_tags - tag).ids if tag in search_tags else (tag | search_tags).ids))"
-                            t-attf-class="dropdown-item d-flex align-items-center justify-content-between #{'active' if tag in search_tags else ''}">
-                            <t t-esc="tag.name"/>
+                <divclass="dropdown-menu">
+                    <tt-foreach="category.tag_ids"t-as="tag">
+                        <at-if="tag.color"
+                            t-att-href="'/event?%s'%keep_query('*',tags=str((search_tags-tag).idsiftaginsearch_tagselse(tag|search_tags).ids))"
+                            t-attf-class="dropdown-itemd-flexalign-items-centerjustify-content-between#{'active'iftaginsearch_tagselse''}">
+                            <tt-esc="tag.name"/>
                         </a>
                     </t>
                 </div>
@@ -116,27 +116,27 @@
     </xpath>
 </template>
 
-<!-- Filter - Location -->
-<template id="event_location" inherit_id="website_event.index_topbar" active="False" customize_show="True" name="Filter by Country">
-    <xpath expr="//ul[hasclass('o_wevent_index_topbar_filters')]" position="inside">
-        <li class="nav-item dropdown mr-2 my-1">
-            <a href="#" role="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-map-marker"/>
-                <t t-if="current_country" t-esc="current_country.name"/>
-                <t t-else="">All countries</t>
+<!--Filter-Location-->
+<templateid="event_location"inherit_id="website_event.index_topbar"active="False"customize_show="True"name="FilterbyCountry">
+    <xpathexpr="//ul[hasclass('o_wevent_index_topbar_filters')]"position="inside">
+        <liclass="nav-itemdropdownmr-2my-1">
+            <ahref="#"role="button"class="btndropdown-toggle"data-toggle="dropdown">
+                <iclass="fafa-map-marker"/>
+                <tt-if="current_country"t-esc="current_country.name"/>
+                <tt-else="">Allcountries</t>
             </a>
-            <div class="dropdown-menu">
-                <t t-foreach="countries" t-as="country">
-                    <t t-if="country['country_id']">
-                        <a t-att-href="keep('/event', country=country['country_id'][0])" t-attf-class="dropdown-item d-flex align-items-center justify-content-between #{searches.get('country') == str(country['country_id'] and country['country_id'][0]) and 'active'}">
-                            <t t-esc="country['country_id'][1]"/>
-                            <span t-esc="country['country_id_count']" class="badge badge-pill badge-primary ml-auto"/>
+            <divclass="dropdown-menu">
+                <tt-foreach="countries"t-as="country">
+                    <tt-if="country['country_id']">
+                        <at-att-href="keep('/event',country=country['country_id'][0])"t-attf-class="dropdown-itemd-flexalign-items-centerjustify-content-between#{searches.get('country')==str(country['country_id']andcountry['country_id'][0])and'active'}">
+                            <tt-esc="country['country_id'][1]"/>
+                            <spant-esc="country['country_id_count']"class="badgebadge-pillbadge-primaryml-auto"/>
                         </a>
                     </t>
-                    <t t-else="">
-                        <a t-att-href="keep('/event', country='online')" t-attf-class="dropdown-item d-flex align-items-center justify-content-between #{searches.get('country') == 'online' and 'active'}">
-                            <span>Online Events</span>
-                            <span t-esc="country['country_id_count']" class="badge badge-pill badge-primary ml-3"/>
+                    <tt-else="">
+                        <at-att-href="keep('/event',country='online')"t-attf-class="dropdown-itemd-flexalign-items-centerjustify-content-between#{searches.get('country')=='online'and'active'}">
+                            <span>OnlineEvents</span>
+                            <spant-esc="country['country_id_count']"class="badgebadge-pillbadge-primaryml-3"/>
                         </a>
                     </t>
                 </t>
@@ -145,90 +145,90 @@
     </xpath>
 </template>
 
-<!-- Index - Events list -->
-<template id="events_list" name="Events list">
-    <!-- Options -->
-    <t t-set="opt_index_sidebar" t-value="is_view_active('website_event.opt_index_sidebar')"/>
-    <t t-if="opt_events_list_columns" t-set="opt_event_size" t-value="opt_index_sidebar and 'col-md-6' or 'col-md-6 col-lg-4'"/>
-    <t t-else="" t-set="opt_event_size" t-value="opt_index_sidebar and 'col-12' or 'col-xl-10 offset-xl-1'"/>
-    <!-- No events -->
-    <t t-if="not event_ids">
-        <div class="col-12">
-            <div class="h2 mb-3">No events found.</div>
-            <div class="alert alert-info text-center" groups="event.group_event_manager">
-                <p class="m-0">Use the top button '<b>+ New</b>' to create an event.</p>
+<!--Index-Eventslist-->
+<templateid="events_list"name="Eventslist">
+    <!--Options-->
+    <tt-set="opt_index_sidebar"t-value="is_view_active('website_event.opt_index_sidebar')"/>
+    <tt-if="opt_events_list_columns"t-set="opt_event_size"t-value="opt_index_sidebarand'col-md-6'or'col-md-6col-lg-4'"/>
+    <tt-else=""t-set="opt_event_size"t-value="opt_index_sidebarand'col-12'or'col-xl-10offset-xl-1'"/>
+    <!--Noevents-->
+    <tt-if="notevent_ids">
+        <divclass="col-12">
+            <divclass="h2mb-3">Noeventsfound.</div>
+            <divclass="alertalert-infotext-center"groups="event.group_event_manager">
+                <pclass="m-0">Usethetopbutton'<b>+New</b>'tocreateanevent.</p>
             </div>
         </div>
     </t>
-    <!-- List -->
-    <div t-foreach="event_ids" t-as="event" t-attf-class=" #{opt_event_size} mb-4">
-        <a t-attf-href="/event/#{ slug(event) }/#{(not event.menu_id) and 'register'}" class="text-decoration-none">
-            <article t-attf-class="h-100 #{opt_events_list_cards and 'card border-0 shadow-sm'}" itemscope="itemscope" itemtype="http://schema.org/Event">
-                <div class="h-100 row no-gutters">
-                    <!-- Header -->
-                    <header t-attf-class="overflow-hidden bg-secondary #{opt_events_list_columns and 'col-12 rounded-top' or 'col-sm-4 col-lg-3 rounded-left'} #{(not opt_events_list_cards) and 'rounded shadow'} #{(not opt_events_list_cards and not opt_events_list_columns) and 'rounded-top'}">
-                        <!-- Image + Link -->
-                        <div class="d-block h-100 w-100">
-                            <t t-call="website.record_cover">
-                                <t t-set="_record" t-value="event"/>
+    <!--List-->
+    <divt-foreach="event_ids"t-as="event"t-attf-class="#{opt_event_size}mb-4">
+        <at-attf-href="/event/#{slug(event)}/#{(notevent.menu_id)and'register'}"class="text-decoration-none">
+            <articlet-attf-class="h-100#{opt_events_list_cardsand'cardborder-0shadow-sm'}"itemscope="itemscope"itemtype="http://schema.org/Event">
+                <divclass="h-100rowno-gutters">
+                    <!--Header-->
+                    <headert-attf-class="overflow-hiddenbg-secondary#{opt_events_list_columnsand'col-12rounded-top'or'col-sm-4col-lg-3rounded-left'}#{(notopt_events_list_cards)and'roundedshadow'}#{(notopt_events_list_cardsandnotopt_events_list_columns)and'rounded-top'}">
+                        <!--Image+Link-->
+                        <divclass="d-blockh-100w-100">
+                            <tt-call="website.record_cover">
+                                <tt-set="_record"t-value="event"/>
 
-                                <!-- Short Date -->
-                                <div class="o_wevent_event_date position-absolute bg-white shadow-sm text-dark">
-                                    <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'format': 'LLL'}" class="o_wevent_event_month"/>
-                                    <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'format': 'dd'}" class="o_wevent_event_day"/>
+                                <!--ShortDate-->
+                                <divclass="o_wevent_event_dateposition-absolutebg-whiteshadow-smtext-dark">
+                                    <spant-field="event.with_context(tz=event.date_tz).date_begin"t-options="{'format':'LLL'}"class="o_wevent_event_month"/>
+                                    <spant-field="event.with_context(tz=event.date_tz).date_begin"t-options="{'format':'dd'}"class="o_wevent_event_day"/>
                                 </div>
-                                <!-- Participating -->
-                                <small t-if="event.is_participating" class="o_wevent_participating bg-success">
-                                    <i class="fa fa-check mr-2"/>Registered
+                                <!--Participating-->
+                                <smallt-if="event.is_participating"class="o_wevent_participatingbg-success">
+                                    <iclass="fafa-checkmr-2"/>Registered
                                 </small>
-                                <!-- Unpublished -->
-                                <small t-if="not event.website_published" class="o_wevent_unpublished bg-danger">
-                                    <i class="fa fa-ban mr-2"/>Unpublished
+                                <!--Unpublished-->
+                                <smallt-if="notevent.website_published"class="o_wevent_unpublishedbg-danger">
+                                    <iclass="fafa-banmr-2"/>Unpublished
                                 </small>
                             </t>
                         </div>
                     </header>
-                    <div t-att-class="'%s %s' % (
-                        opt_events_list_columns and 'col-12' or 'col',
-                        opt_events_list_columns and event.event_registrations_open and not event.event_registrations_sold_out and 'h-100' or '')">
-                        <!-- Body -->
-                        <main t-attf-class="#{opt_events_list_cards and 'card-body' or (opt_events_list_columns and 'py-3' or 'px-4')}">
-                            <!-- Title -->
-                            <h5 t-attf-class="card-title mt-2 mb-0 text-truncate #{(not event.website_published) and 'text-danger'}">
-                                <span t-field="event.name" itemprop="name"/>
+                    <divt-att-class="'%s%s'%(
+                        opt_events_list_columnsand'col-12'or'col',
+                        opt_events_list_columnsandevent.event_registrations_openandnotevent.event_registrations_sold_outand'h-100'or'')">
+                        <!--Body-->
+                        <maint-attf-class="#{opt_events_list_cardsand'card-body'or(opt_events_list_columnsand'py-3'or'px-4')}">
+                            <!--Title-->
+                            <h5t-attf-class="card-titlemt-2mb-0text-truncate#{(notevent.website_published)and'text-danger'}">
+                                <spant-field="event.name"itemprop="name"/>
                             </h5>
-                            <!-- Start Date & Time -->
-                            <time itemprop="startDate" t-att-datetime="event.date_begin">
-                                <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'date_only': 'true', 'format': 'long'}"/> -
-                                <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'time_only': 'true', 'format': 'short'}"/>
+                            <!--StartDate&Time-->
+                            <timeitemprop="startDate"t-att-datetime="event.date_begin">
+                                <spant-field="event.with_context(tz=event.date_tz).date_begin"t-options="{'date_only':'true','format':'long'}"/>-
+                                <spant-field="event.with_context(tz=event.date_tz).date_begin"t-options="{'time_only':'true','format':'short'}"/>
                             </time>
-                            <!-- Location -->
-                            <div itemprop="location" t-field="event.address_id" t-options="{'widget': 'contact', 'fields': ['city'], 'no_marker': 'true'}"/>
-                            <div class="mt8 d-flex align-items-center">
-                                <t t-foreach="event.tag_ids" t-as="tag">
-                                    <span t-if="tag.color"
-                                        t-attf-class="badge mr8 #{'badge-primary' if tag in search_tags else 'badge-light'} #{'o_tag_color_%s' % tag.color if tag.color else ''}">
-                                        <span t-esc="tag.name"/>
+                            <!--Location-->
+                            <divitemprop="location"t-field="event.address_id"t-options="{'widget':'contact','fields':['city'],'no_marker':'true'}"/>
+                            <divclass="mt8d-flexalign-items-center">
+                                <tt-foreach="event.tag_ids"t-as="tag">
+                                    <spant-if="tag.color"
+                                        t-attf-class="badgemr8#{'badge-primary'iftaginsearch_tagselse'badge-light'}#{'o_tag_color_%s'%tag.coloriftag.colorelse''}">
+                                        <spant-esc="tag.name"/>
                                     </span>
                                 </t>
                             </div>
                         </main>
                     </div>
-                    <!-- Footer -->
-                    <footer t-if="not event.event_registrations_open or event.event_registrations_sold_out"
-                        t-att-class="'small align-self-end w-100 %s %s' % (
-                            opt_events_list_cards and 'card-footer' or (not opt_events_list_columns and 'mx-4 mt-auto pt-2') or 'py-2',
-                            opt_events_list_cards and 'border-top' or '',
+                    <!--Footer-->
+                    <footert-if="notevent.event_registrations_openorevent.event_registrations_sold_out"
+                        t-att-class="'smallalign-self-endw-100%s%s'%(
+                            opt_events_list_cardsand'card-footer'or(notopt_events_list_columnsand'mx-4mt-autopt-2')or'py-2',
+                            opt_events_list_cardsand'border-top'or'',
                         )">
-                        <span t-if="not event.event_registrations_open" class="text-danger">
-                            <t t-if="event.start_sale_date and event.start_sale_date &gt; datetime.date.today()">
-                                Registrations not yet open
+                        <spant-if="notevent.event_registrations_open"class="text-danger">
+                            <tt-if="event.start_sale_dateandevent.start_sale_date&gt;datetime.date.today()">
+                                Registrationsnotyetopen
                             </t>
-                            <t t-elif="event.event_registrations_sold_out">
-                                Sold Out
+                            <tt-elif="event.event_registrations_sold_out">
+                                SoldOut
                             </t>
-                            <t t-else="">
-                                Registrations Closed
+                            <tt-else="">
+                                RegistrationsClosed
                             </t>
                         </span>
                     </footer>
@@ -236,94 +236,94 @@
             </article>
         </a>
     </div>
-    <!-- Pager -->
-    <div class="form-inline justify-content-center my-3">
-        <t t-call="website.pager"/>
+    <!--Pager-->
+    <divclass="form-inlinejustify-content-centermy-3">
+        <tt-call="website.pager"/>
     </div>
 </template>
 
-<template id="opt_events_list_columns" inherit_id="website_event.events_list" active="True" customize_show="True" name="Layout • Columns"/>
+<templateid="opt_events_list_columns"inherit_id="website_event.events_list"active="True"customize_show="True"name="Layout•Columns"/>
 
-<template id="opt_events_list_cards" inherit_id="website_event.events_list" active="True" customize_show="True" name="'Cards' Design"/>
+<templateid="opt_events_list_cards"inherit_id="website_event.events_list"active="True"customize_show="True"name="'Cards'Design"/>
 
-<template id="opt_events_list_categories" inherit_id="website_event.events_list" active="False" customize_show="True" name="Show Templates">
-    <xpath expr="//main/*" position="before">
-        <span t-if="event.event_type_id" t-attf-href="/event?type=#{event.event_type_id.id}" t-attf-class="badge bg-secondary o_wevent_badge #{opt_events_list_columns and 'o_wevent_badge_event' or 'float-right'}" t-field="event.event_type_id"/>
+<templateid="opt_events_list_categories"inherit_id="website_event.events_list"active="False"customize_show="True"name="ShowTemplates">
+    <xpathexpr="//main/*"position="before">
+        <spant-if="event.event_type_id"t-attf-href="/event?type=#{event.event_type_id.id}"t-attf-class="badgebg-secondaryo_wevent_badge#{opt_events_list_columnsand'o_wevent_badge_event'or'float-right'}"t-field="event.event_type_id"/>
     </xpath>
 </template>
 
-<!-- Index - Sidebar -->
-<template id="index_sidebar" name="Sidebar">
-    <div id="o_wevent_index_sidebar" class="col-lg-4 ml-lg-3 ml-xl-5 my-5"/>
+<!--Index-Sidebar-->
+<templateid="index_sidebar"name="Sidebar">
+    <divid="o_wevent_index_sidebar"class="col-lg-4ml-lg-3ml-xl-5my-5"/>
 </template>
 
-<!-- Index - Sidebar - About us -->
-<template id="index_sidebar_about_us" inherit_id="website_event.index_sidebar" active="True" customize_show="True" name="About us" priority="20">
-    <xpath expr="//div[@id='o_wevent_index_sidebar']" position="inside">
-        <div class="o_wevent_sidebar_block">
-            <h6 class="o_wevent_sidebar_title">About us</h6>
-            <p>Use this paragrah to write a short text about your events or company.</p>
+<!--Index-Sidebar-Aboutus-->
+<templateid="index_sidebar_about_us"inherit_id="website_event.index_sidebar"active="True"customize_show="True"name="Aboutus"priority="20">
+    <xpathexpr="//div[@id='o_wevent_index_sidebar']"position="inside">
+        <divclass="o_wevent_sidebar_block">
+            <h6class="o_wevent_sidebar_title">Aboutus</h6>
+            <p>Usethisparagrahtowriteashorttextaboutyoureventsorcompany.</p>
         </div>
-        <div id="oe_structure_website_event_about_us_1" class="oe_structure"/>
+        <divid="oe_structure_website_event_about_us_1"class="oe_structure"/>
     </xpath>
 </template>
 
-<!-- Index - Sidebar - Follow us -->
-<template id="index_sidebar_follow_us" inherit_id="website_event.index_sidebar" active="True" customize_show="True" name="Follow us" priority="30">
-    <xpath expr="//div[@id='o_wevent_index_sidebar']" position="inside">
-        <div class="o_wevent_sidebar_block">
-            <h6 class="o_wevent_sidebar_title">Follow Us</h6>
-            <div class="o_wevent_sidebar_social mx-n1">
-                <a t-if="website.social_facebook" t-att-href="website.social_facebook" class="o_wevent_social_link"><i class="fa fa-facebook text-facebook" aria-label="Facebook" title="Facebook"/></a>
-                <a t-if="website.social_twitter" t-att-href="website.social_twitter" class="o_wevent_social_link"><i class="fa fa-twitter text-twitter" aria-label="Twitter" title="Twitter"/></a>
-                <a t-if="website.social_linkedin" t-att-href="website.social_linkedin" class="o_wevent_social_link"><i class="fa fa-linkedin text-linkedin" aria-label="LinkedIn" title="LinkedIn"/></a>
-                <a t-if="website.social_youtube" t-att-href="website.social_youtube" class="o_wevent_social_link"><i class="fa fa-youtube-play text-youtube" aria-label="Youtube" title="Youtube"/></a>
-                <a t-if="website.social_github" t-att-href="website.social_github" class="o_wevent_social_link"><i class="fa fa-github text-github" aria-label="Github" title="Github"/></a>
-                <a t-if="website.social_instagram" t-att-href="website.social_instagram" class="o_wevent_social_link"><i class="fa fa-instagram text-instagram" aria-label="Instagram" title="Instagram"/></a>
+<!--Index-Sidebar-Followus-->
+<templateid="index_sidebar_follow_us"inherit_id="website_event.index_sidebar"active="True"customize_show="True"name="Followus"priority="30">
+    <xpathexpr="//div[@id='o_wevent_index_sidebar']"position="inside">
+        <divclass="o_wevent_sidebar_block">
+            <h6class="o_wevent_sidebar_title">FollowUs</h6>
+            <divclass="o_wevent_sidebar_socialmx-n1">
+                <at-if="website.social_facebook"t-att-href="website.social_facebook"class="o_wevent_social_link"><iclass="fafa-facebooktext-facebook"aria-label="Facebook"title="Facebook"/></a>
+                <at-if="website.social_twitter"t-att-href="website.social_twitter"class="o_wevent_social_link"><iclass="fafa-twittertext-twitter"aria-label="Twitter"title="Twitter"/></a>
+                <at-if="website.social_linkedin"t-att-href="website.social_linkedin"class="o_wevent_social_link"><iclass="fafa-linkedintext-linkedin"aria-label="LinkedIn"title="LinkedIn"/></a>
+                <at-if="website.social_youtube"t-att-href="website.social_youtube"class="o_wevent_social_link"><iclass="fafa-youtube-playtext-youtube"aria-label="Youtube"title="Youtube"/></a>
+                <at-if="website.social_github"t-att-href="website.social_github"class="o_wevent_social_link"><iclass="fafa-githubtext-github"aria-label="Github"title="Github"/></a>
+                <at-if="website.social_instagram"t-att-href="website.social_instagram"class="o_wevent_social_link"><iclass="fafa-instagramtext-instagram"aria-label="Instagram"title="Instagram"/></a>
             </div>
         </div>
-        <div id="oe_structure_website_event_follow_us_1" class="oe_structure"/>
+        <divid="oe_structure_website_event_follow_us_1"class="oe_structure"/>
     </xpath>
 </template>
 
-<!-- Index - Sidebar - Photos -->
-<template id="index_sidebar_photos" inherit_id="website_event.index_sidebar" active="True" customize_show="True" name="Photos" priority="40">
-    <xpath expr="//div[@id='o_wevent_index_sidebar']" position="inside">
-        <h6 class="o_wevent_sidebar_title">Photos</h6>
-        <a href="/event">
-            <figure class="o_wevent_sidebar_block o_wevent_sidebar_figure figure">
-                <img class="figure-img img-fluid rounded" src="/website_event/static/src/img/event_past_0.jpg" alt=""/>
-                <figcaption class="figure-caption text-muted">A past event</figcaption>
+<!--Index-Sidebar-Photos-->
+<templateid="index_sidebar_photos"inherit_id="website_event.index_sidebar"active="True"customize_show="True"name="Photos"priority="40">
+    <xpathexpr="//div[@id='o_wevent_index_sidebar']"position="inside">
+        <h6class="o_wevent_sidebar_title">Photos</h6>
+        <ahref="/event">
+            <figureclass="o_wevent_sidebar_blocko_wevent_sidebar_figurefigure">
+                <imgclass="figure-imgimg-fluidrounded"src="/website_event/static/src/img/event_past_0.jpg"alt=""/>
+                <figcaptionclass="figure-captiontext-muted">Apastevent</figcaption>
             </figure>
         </a>
-        <a href="/event">
-            <figure class="o_wevent_sidebar_block o_wevent_sidebar_figure figure">
-                <img class="figure-img img-fluid rounded" src="/website_event/static/src/img/event_training_0.jpg" alt=""/>
-                <figcaption class="figure-caption text-muted">Our Trainings</figcaption>
+        <ahref="/event">
+            <figureclass="o_wevent_sidebar_blocko_wevent_sidebar_figurefigure">
+                <imgclass="figure-imgimg-fluidrounded"src="/website_event/static/src/img/event_training_0.jpg"alt=""/>
+                <figcaptionclass="figure-captiontext-muted">OurTrainings</figcaption>
             </figure>
         </a>
     </xpath>
 </template>
 
-<!-- Index - Sidebar - Quotes -->
-<template id="index_sidebar_quotes" inherit_id="website_event.index_sidebar" active="True" customize_show="True" name="Quotes" priority="60">
-    <xpath expr="//div[@id='o_wevent_index_sidebar']" position="inside">
-        <div class="o_wevent_sidebar_block card">
-            <div class="card-body">
-                <blockquote class="blockquote mb-0">
-                    <p><em>Write here a quote from one of your attendees. It gives confidence in your events.</em></p>
-                    <footer class="blockquote-footer text-muted">Author</footer>
+<!--Index-Sidebar-Quotes-->
+<templateid="index_sidebar_quotes"inherit_id="website_event.index_sidebar"active="True"customize_show="True"name="Quotes"priority="60">
+    <xpathexpr="//div[@id='o_wevent_index_sidebar']"position="inside">
+        <divclass="o_wevent_sidebar_blockcard">
+            <divclass="card-body">
+                <blockquoteclass="blockquotemb-0">
+                    <p><em>Writehereaquotefromoneofyourattendees.Itgivesconfidenceinyourevents.</em></p>
+                    <footerclass="blockquote-footertext-muted">Author</footer>
                 </blockquote>
             </div>
         </div>
     </xpath>
 </template>
 
-<!-- Index - Sidebar - Snippet - Country Events -->
-<template id="index_sidebar_country_event" inherit_id="website_event.index_sidebar" active="True" customize_show="True" name="Country Events" priority="70">
-    <xpath expr="//div[@id='o_wevent_index_sidebar']" position="inside">
-        <div class="o_wevent_sidebar_block">
-            <t t-snippet-call="website_event.s_country_events"/>
+<!--Index-Sidebar-Snippet-CountryEvents-->
+<templateid="index_sidebar_country_event"inherit_id="website_event.index_sidebar"active="True"customize_show="True"name="CountryEvents"priority="70">
+    <xpathexpr="//div[@id='o_wevent_index_sidebar']"position="inside">
+        <divclass="o_wevent_sidebar_block">
+            <tt-snippet-call="website_event.s_country_events"/>
         </div>
     </xpath>
 </template>

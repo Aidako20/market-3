@@ -1,56 +1,56 @@
-flectra.define('website_crm.form', function (require) {
-'use strict';
+flectra.define('website_crm.form',function(require){
+'usestrict';
 
-var core = require('web.core');
-var FormEditorRegistry = require('website_form.form_editor_registry');
+varcore=require('web.core');
+varFormEditorRegistry=require('website_form.form_editor_registry');
 
-var _t = core._t;
+var_t=core._t;
 
-FormEditorRegistry.add('create_lead', {
-    formFields: [{
-        type: 'char',
-        required: true,
-        name: 'contact_name',
-        string: 'Your Name',
-    }, {
-        type: 'tel',
-        name: 'phone',
-        string: 'Phone Number',
-    }, {
-        type: 'email',
-        required: true,
-        name: 'email_from',
-        string: 'Your Email',
-    }, {
-        type: 'char',
-        required: true,
-        name: 'partner_name',
-        string: 'Your Company',
-    }, {
-        type: 'char',
-        modelRequired: true,
-        name: 'name',
-        string: 'Subject',
-    }, {
-        type: 'text',
-        required: true,
-        name: 'description',
-        string: 'Your Question',
+FormEditorRegistry.add('create_lead',{
+    formFields:[{
+        type:'char',
+        required:true,
+        name:'contact_name',
+        string:'YourName',
+    },{
+        type:'tel',
+        name:'phone',
+        string:'PhoneNumber',
+    },{
+        type:'email',
+        required:true,
+        name:'email_from',
+        string:'YourEmail',
+    },{
+        type:'char',
+        required:true,
+        name:'partner_name',
+        string:'YourCompany',
+    },{
+        type:'char',
+        modelRequired:true,
+        name:'name',
+        string:'Subject',
+    },{
+        type:'text',
+        required:true,
+        name:'description',
+        string:'YourQuestion',
     }],
-    fields: [{
-        name: 'team_id',
-        type: 'many2one',
-        relation: 'crm.team',
-        domain: [['use_opportunities', '=', true]],
-        string: _t('Sales Team'),
-        title: _t('Assign leads/opportunities to a sales team.'),
-    }, {
-        name: 'user_id',
-        type: 'many2one',
-        relation: 'res.users',
-        domain: [['share', '=', false]],
-        string: _t('Salesperson'),
-        title: _t('Assign leads/opportunities to a salesperson.'),
+    fields:[{
+        name:'team_id',
+        type:'many2one',
+        relation:'crm.team',
+        domain:[['use_opportunities','=',true]],
+        string:_t('SalesTeam'),
+        title:_t('Assignleads/opportunitiestoasalesteam.'),
+    },{
+        name:'user_id',
+        type:'many2one',
+        relation:'res.users',
+        domain:[['share','=',false]],
+        string:_t('Salesperson'),
+        title:_t('Assignleads/opportunitiestoasalesperson.'),
     }],
 });
 

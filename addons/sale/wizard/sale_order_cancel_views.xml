@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
-    <record id="sale_order_cancel_view_form" model="ir.ui.view">
-        <field name="name">sale.order.cancel.form</field>
-        <field name="model">sale.order.cancel</field>
-        <field name="arch" type="xml">
+    <recordid="sale_order_cancel_view_form"model="ir.ui.view">
+        <fieldname="name">sale.order.cancel.form</field>
+        <fieldname="model">sale.order.cancel</field>
+        <fieldname="arch"type="xml">
             <form>
-                <field name="order_id" invisible="1"/>
-                <field name="display_invoice_alert" invisible="1"/>
-                <div attrs="{'invisible': [('display_invoice_alert', '=', False)]}">
-                    Draft invoices for this order will be cancelled.
+                <fieldname="order_id"invisible="1"/>
+                <fieldname="display_invoice_alert"invisible="1"/>
+                <divattrs="{'invisible':[('display_invoice_alert','=',False)]}">
+                    Draftinvoicesforthisorderwillbecancelled.
                 </div>
                 <footer>
-                    <button string="Confirm" name="action_cancel" type="object" class="oe_highlight"/>
-                    <button string="Cancel" class="btn btn-default" special="cancel"/>
+                    <buttonstring="Confirm"name="action_cancel"type="object"class="oe_highlight"/>
+                    <buttonstring="Cancel"class="btnbtn-default"special="cancel"/>
                 </footer>
             </form>
         </field>

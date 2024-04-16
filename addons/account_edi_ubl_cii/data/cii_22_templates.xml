@@ -1,85 +1,85 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xmlversion="1.0"encoding="utf-8"?>
 <flectra>
     <data>
-        <template id="account_invoice_line_facturx_export_22">
-            <t t-set="line" t-value="line_vals['line']"/>
-            <t  xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
+        <templateid="account_invoice_line_facturx_export_22">
+            <tt-set="line"t-value="line_vals['line']"/>
+            <t xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
                 xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
                 xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
 
                 <ram:IncludedSupplyChainTradeLineItem>
-                    <!-- Line number. -->
+                    <!--Linenumber.-->
                     <ram:AssociatedDocumentLineDocument>
-                        <ram:LineID t-esc="line_vals.get('index')"/>
+                        <ram:LineIDt-esc="line_vals.get('index')"/>
                     </ram:AssociatedDocumentLineDocument>
 
-                    <!-- Product. -->
+                    <!--Product.-->
                     <ram:SpecifiedTradeProduct>
                         <ram:GlobalID
                             schemeID="0160"
-                            t-if="line.product_id and line.product_id.barcode"
+                            t-if="line.product_idandline.product_id.barcode"
                             t-esc="line.product_id.barcode"/>
                         <ram:SellerAssignedID
-                            t-if="line.product_id and line.product_id.default_code"
+                            t-if="line.product_idandline.product_id.default_code"
                             t-esc="line.product_id.default_code"/>
-                        <ram:Name t-esc="line.name"/>
+                        <ram:Namet-esc="line.name"/>
                     </ram:SpecifiedTradeProduct>
 
-                    <!-- Amounts. -->
+                    <!--Amounts.-->
                     <ram:SpecifiedLineTradeAgreement>
-                        <!-- Line information: unit_price
-                        NB: the gross_price_unit should be the price tax excluded !
-                        if price_unit = 100 and tax 10% price_include -> then the gross_price_unit is 91
+                        <!--Lineinformation:unit_price
+                        NB:thegross_price_unitshouldbethepricetaxexcluded!
+                        ifprice_unit=100andtax10%price_include->thenthegross_price_unitis91
                         -->
                         <ram:GrossPriceProductTradePrice>
-                            <ram:ChargeAmount t-esc="format_monetary(line_vals['gross_price_total_unit'], 2)"/>
-                            <!-- Discount. -->
-                            <ram:AppliedTradeAllowanceCharge t-if="line.discount">
+                            <ram:ChargeAmountt-esc="format_monetary(line_vals['gross_price_total_unit'],2)"/>
+                            <!--Discount.-->
+                            <ram:AppliedTradeAllowanceCharget-if="line.discount">
                                 <ram:ChargeIndicator>
                                     <udt:Indicator>false</udt:Indicator>
                                 </ram:ChargeIndicator>
-                                <ram:ActualAmount t-esc="format_monetary(line_vals['price_discount_unit'], 2)"/>
+                                <ram:ActualAmountt-esc="format_monetary(line_vals['price_discount_unit'],2)"/>
                             </ram:AppliedTradeAllowanceCharge>
                         </ram:GrossPriceProductTradePrice>
-                        <!-- Line unit price, with discount applied -->
+                        <!--Lineunitprice,withdiscountapplied-->
                         <ram:NetPriceProductTradePrice>
                             <ram:ChargeAmount
-                                t-esc="format_monetary(line_vals['price_subtotal_unit'], 2)"/>
+                                t-esc="format_monetary(line_vals['price_subtotal_unit'],2)"/>
                         </ram:NetPriceProductTradePrice>
                     </ram:SpecifiedLineTradeAgreement>
 
-                    <!-- Quantity. -->
+                    <!--Quantity.-->
                     <ram:SpecifiedLineTradeDelivery>
                         <ram:BilledQuantity
                                 t-att-unitCode="line_vals.get('unece_uom_code')"
-                                t-esc="line.quantity"/> <!-- /!\ The quantity is the line.quantity since we keep the unece_uom_code ! -->
+                                t-esc="line.quantity"/><!--/!\Thequantityistheline.quantitysincewekeeptheunece_uom_code!-->
                     </ram:SpecifiedLineTradeDelivery>
 
                     <ram:SpecifiedLineTradeSettlement>
-                        <t t-foreach="tax_details['invoice_line_tax_details'][line]['tax_details'].values()"
+                        <tt-foreach="tax_details['invoice_line_tax_details'][line]['tax_details'].values()"
                            t-as="tax_detail_vals">
-                            <ram:ApplicableTradeTax t-if="tax_detail_vals['amount_type'] == 'percent'">
+                            <ram:ApplicableTradeTaxt-if="tax_detail_vals['amount_type']=='percent'">
                                 <ram:TypeCode>VAT</ram:TypeCode>
-                                <ram:CategoryCode t-esc="tax_detail_vals['tax_category_code']"/>
-                                <ram:RateApplicablePercent t-esc="tax_detail_vals['amount']"/>
+                                <ram:CategoryCodet-esc="tax_detail_vals['tax_category_code']"/>
+                                <ram:RateApplicablePercentt-esc="tax_detail_vals['amount']"/>
                             </ram:ApplicableTradeTax>
                         </t>
 
-                        <!-- Allowance/Charge on the line -->
-                        <t t-foreach="line_vals.get('allowance_charge_vals_list')" t-as="allowance_charge_vals">
+                        <!--Allowance/Chargeontheline-->
+                        <tt-foreach="line_vals.get('allowance_charge_vals_list')"t-as="allowance_charge_vals">
                             <ram:SpecifiedTradeAllowanceCharge>
                                 <ram:ChargeIndicator>
-                                    <udt:Indicator t-esc="allowance_charge_vals['indicator']"/>
+                                    <udt:Indicatort-esc="allowance_charge_vals['indicator']"/>
                                 </ram:ChargeIndicator>
-                                <ram:ActualAmount t-esc="format_monetary(allowance_charge_vals['amount'], 2)"/>
-                                <ram:ReasonCode t-esc="allowance_charge_vals['reason_code']"/>
-                                <ram:Reason t-esc="allowance_charge_vals['reason']"/>
+                                <ram:ActualAmountt-esc="format_monetary(allowance_charge_vals['amount'],2)"/>
+                                <ram:ReasonCodet-esc="allowance_charge_vals['reason_code']"/>
+                                <ram:Reasont-esc="allowance_charge_vals['reason']"/>
                             </ram:SpecifiedTradeAllowanceCharge>
                         </t>
 
-                        <!-- Subtotal. -->
+                        <!--Subtotal.-->
                         <ram:SpecifiedTradeSettlementLineMonetarySummation>
-                            <ram:LineTotalAmount t-esc="format_monetary(line_vals['line_total_amount'], 2)"/>
+                            <ram:LineTotalAmountt-esc="format_monetary(line_vals['line_total_amount'],2)"/>
                         </ram:SpecifiedTradeSettlementLineMonetarySummation>
 
                     </ram:SpecifiedLineTradeSettlement>
@@ -87,231 +87,231 @@
             </t>
         </template>
 
-        <template id="account_invoice_partner_facturx_export_22">
-            <t  xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
+        <templateid="account_invoice_partner_facturx_export_22">
+            <t xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
                 xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
                 xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
-                <!-- Contact. -->
-                <ram:Name t-esc="partner.name"/>
-                <ram:SpecifiedLegalOrganization t-if="specified_legal_organization_val">
-                    <ram:ID t-att-schemeID="str('0002')"
+                <!--Contact.-->
+                <ram:Namet-esc="partner.name"/>
+                <ram:SpecifiedLegalOrganizationt-if="specified_legal_organization_val">
+                    <ram:IDt-att-schemeID="str('0002')"
                             t-esc="specified_legal_organization_val"/>
                 </ram:SpecifiedLegalOrganization>
 
-                <ram:DefinedTradeContact t-if="not hide_dtc">
-                    <ram:PersonName t-esc="partner.name"/>
-                    <ram:TelephoneUniversalCommunication t-if="partner.phone or partner.mobile">
-                        <ram:CompleteNumber t-esc="partner.phone or partner.mobile"/>
+                <ram:DefinedTradeContactt-if="nothide_dtc">
+                    <ram:PersonNamet-esc="partner.name"/>
+                    <ram:TelephoneUniversalCommunicationt-if="partner.phoneorpartner.mobile">
+                        <ram:CompleteNumbert-esc="partner.phoneorpartner.mobile"/>
                     </ram:TelephoneUniversalCommunication>
-                    <ram:EmailURIUniversalCommunication t-if="partner.email">
-                        <ram:URIID schemeID='SMTP' t-esc="partner.email"/>
+                    <ram:EmailURIUniversalCommunicationt-if="partner.email">
+                        <ram:URIIDschemeID='SMTP't-esc="partner.email"/>
                     </ram:EmailURIUniversalCommunication>
                 </ram:DefinedTradeContact>
 
-                <!-- Address. -->
-                <t t-call="account_edi_ubl_cii.account_invoice_address_facturx_export_22"/>
+                <!--Address.-->
+                <tt-call="account_edi_ubl_cii.account_invoice_address_facturx_export_22"/>
             </t>
         </template>
 
-        <template id="account_invoice_address_facturx_export_22">
-            <t  xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
+        <templateid="account_invoice_address_facturx_export_22">
+            <t xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
                 xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
                 xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
-                <!-- Address. -->
+                <!--Address.-->
                 <ram:PostalTradeAddress>
-                    <ram:PostcodeCode t-esc="partner.zip"/>
-                    <ram:LineOne t-esc="partner.street"/>
-                    <ram:LineTwo t-esc="partner.street2"/>
-                    <ram:CityName t-esc="partner.city"/>
-                    <ram:CountryID t-esc="partner.country_id.code"/>
+                    <ram:PostcodeCodet-esc="partner.zip"/>
+                    <ram:LineOnet-esc="partner.street"/>
+                    <ram:LineTwot-esc="partner.street2"/>
+                    <ram:CityNamet-esc="partner.city"/>
+                    <ram:CountryIDt-esc="partner.country_id.code"/>
                 </ram:PostalTradeAddress>
             </t>
         </template>
 
-        <template id="account_invoice_facturx_export_22">
-            <t t-set="currency" t-value="record.currency_id or record.company_currency_id"/>
+        <templateid="account_invoice_facturx_export_22">
+            <tt-set="currency"t-value="record.currency_idorrecord.company_currency_id"/>
             <rsm:CrossIndustryInvoice
                 xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
                 xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
                 xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
-                <!-- Factur-x level:
-                    * minimum or basicwl:   urn:factur-x.eu:1p0...
-                    * basic:                urn:cen.eu:en16931:2017:compliant:factur-x.eu:1p0:basic
-                    * en16931:              urn:cen.eu:en16931:2017
+                <!--Factur-xlevel:
+                    *minimumorbasicwl:  urn:factur-x.eu:1p0...
+                    *basic:               urn:cen.eu:en16931:2017:compliant:factur-x.eu:1p0:basic
+                    *en16931:             urn:cen.eu:en16931:2017
                 -->
                 <rsm:ExchangedDocumentContext>
                     <ram:GuidelineSpecifiedDocumentContextParameter>
-                        <ram:ID t-esc="document_context_id"/>
+                        <ram:IDt-esc="document_context_id"/>
                     </ram:GuidelineSpecifiedDocumentContextParameter>
                 </rsm:ExchangedDocumentContext>
 
-                <!-- Document Headers. -->
+                <!--DocumentHeaders.-->
                 <rsm:ExchangedDocument>
-                    <ram:ID t-esc="ExchangedDocument_vals.get('id')"/>
-                    <ram:TypeCode t-esc="ExchangedDocument_vals.get('type_code')"/>
-                    <ram:IssueDateTime t-if="ExchangedDocument_vals.get('issue_date_time')">
-                        <udt:DateTimeString format="102" t-esc="format_date(ExchangedDocument_vals.get('issue_date_time'))"/>
+                    <ram:IDt-esc="ExchangedDocument_vals.get('id')"/>
+                    <ram:TypeCodet-esc="ExchangedDocument_vals.get('type_code')"/>
+                    <ram:IssueDateTimet-if="ExchangedDocument_vals.get('issue_date_time')">
+                        <udt:DateTimeStringformat="102"t-esc="format_date(ExchangedDocument_vals.get('issue_date_time'))"/>
                     </ram:IssueDateTime>
                     <ram:IncludedNote>
-                        <ram:Content t-esc="ExchangedDocument_vals.get('included_note')"/>
+                        <ram:Contentt-esc="ExchangedDocument_vals.get('included_note')"/>
                     </ram:IncludedNote>
                 </rsm:ExchangedDocument>
 
                 <rsm:SupplyChainTradeTransaction>
-                    <!-- Invoice lines. -->
-                    <t t-foreach="invoice_line_vals_list" t-as="line_vals">
-                        <t t-call="account_edi_ubl_cii.account_invoice_line_facturx_export_22"/>
+                    <!--Invoicelines.-->
+                    <tt-foreach="invoice_line_vals_list"t-as="line_vals">
+                        <tt-call="account_edi_ubl_cii.account_invoice_line_facturx_export_22"/>
                     </t>
 
-                    <!-- Partners. -->
+                    <!--Partners.-->
                     <ram:ApplicableHeaderTradeAgreement>
-                        <!-- "Service Exécutant" (Used by Chorus Pro) -->
-                        <ram:BuyerReference t-esc="buyer_reference"/>
-                        <!-- Seller. -->
+                        <!--"ServiceExécutant"(UsedbyChorusPro)-->
+                        <ram:BuyerReferencet-esc="buyer_reference"/>
+                        <!--Seller.-->
                         <ram:SellerTradeParty>
-                            <!-- Address. -->
-                            <t t-call="account_edi_ubl_cii.account_invoice_partner_facturx_export_22">
-                                <t t-set="partner" t-value="record.company_id.partner_id"/>
-                                <t t-set="specified_legal_organization_val" t-value="seller_specified_legal_organization"/>
+                            <!--Address.-->
+                            <tt-call="account_edi_ubl_cii.account_invoice_partner_facturx_export_22">
+                                <tt-set="partner"t-value="record.company_id.partner_id"/>
+                                <tt-set="specified_legal_organization_val"t-value="seller_specified_legal_organization"/>
                             </t>
 
-                            <!-- VAT. -->
-                            <ram:SpecifiedTaxRegistration t-if="record.company_id.vat">
-                                <ram:ID schemeID="VA" t-esc="record.company_id.vat"/>
+                            <!--VAT.-->
+                            <ram:SpecifiedTaxRegistrationt-if="record.company_id.vat">
+                                <ram:IDschemeID="VA"t-esc="record.company_id.vat"/>
                             </ram:SpecifiedTaxRegistration>
                         </ram:SellerTradeParty>
 
-                        <!-- Customer. -->
+                        <!--Customer.-->
                         <ram:BuyerTradeParty>
-                            <!-- Address. -->
-                            <t t-call="account_edi_ubl_cii.account_invoice_partner_facturx_export_22">
-                                <t t-set="partner" t-value="record.commercial_partner_id"/>
-                                <t t-set="specified_legal_organization_val" t-value="buyer_specified_legal_organization"/>
+                            <!--Address.-->
+                            <tt-call="account_edi_ubl_cii.account_invoice_partner_facturx_export_22">
+                                <tt-set="partner"t-value="record.commercial_partner_id"/>
+                                <tt-set="specified_legal_organization_val"t-value="buyer_specified_legal_organization"/>
                             </t>
 
-                            <!-- VAT. -->
-                            <ram:SpecifiedTaxRegistration t-if="record.commercial_partner_id.vat">
-                                <ram:ID schemeID="VA" t-esc="record.commercial_partner_id.vat"/>
+                            <!--VAT.-->
+                            <ram:SpecifiedTaxRegistrationt-if="record.commercial_partner_id.vat">
+                                <ram:IDschemeID="VA"t-esc="record.commercial_partner_id.vat"/>
                             </ram:SpecifiedTaxRegistration>
                         </ram:BuyerTradeParty>
 
-                        <!-- Reference. -->
+                        <!--Reference.-->
                         <ram:BuyerOrderReferencedDocument>
-                            <!-- "Engagement Juridique" (used by Chorus Pro) -->
-                            <ram:IssuerAssignedID t-esc="purchase_order_reference"/>
+                            <!--"EngagementJuridique"(usedbyChorusPro)-->
+                            <ram:IssuerAssignedIDt-esc="purchase_order_reference"/>
                         </ram:BuyerOrderReferencedDocument>
                         <ram:ContractReferencedDocument>
-                            <!-- "Numéro de Marché" (Used by Chorus Pro) -->
-                            <ram:IssuerAssignedID t-esc="contract_reference"/>
+                            <!--"NumérodeMarché"(UsedbyChorusPro)-->
+                            <ram:IssuerAssignedIDt-esc="contract_reference"/>
                         </ram:ContractReferencedDocument>
                     </ram:ApplicableHeaderTradeAgreement>
 
-                    <!-- Delivery -->
+                    <!--Delivery-->
                     <ram:ApplicableHeaderTradeDelivery>
                         <ram:ShipToTradeParty>
-                            <t t-call="account_edi_ubl_cii.account_invoice_partner_facturx_export_22">
-                                <t t-set="partner"
+                            <tt-call="account_edi_ubl_cii.account_invoice_partner_facturx_export_22">
+                                <tt-set="partner"
                                    t-value="ship_to_trade_party"/>
-                                <t t-set="hide_dtc" t-value="document_context_id == 'urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2'"/>
+                                <tt-set="hide_dtc"t-value="document_context_id=='urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.2'"/>
                             </t>
                         </ram:ShipToTradeParty>
 
-                        <ram:ActualDeliverySupplyChainEvent t-if="scheduled_delivery_time">
+                        <ram:ActualDeliverySupplyChainEventt-if="scheduled_delivery_time">
                             <ram:OccurrenceDateTime>
-                                <udt:DateTimeString t-att-format="102"
+                                <udt:DateTimeStringt-att-format="102"
                                                     t-esc="format_date(scheduled_delivery_time)"/>
                             </ram:OccurrenceDateTime>
                         </ram:ActualDeliverySupplyChainEvent>
                     </ram:ApplicableHeaderTradeDelivery>
 
-                    <!-- Taxes. -->
+                    <!--Taxes.-->
                     <ram:ApplicableHeaderTradeSettlement>
 
-                        <ram:PaymentReference t-esc="record.payment_reference"/>
-                        <ram:InvoiceCurrencyCode t-esc="currency.name"/>
+                        <ram:PaymentReferencet-esc="record.payment_reference"/>
+                        <ram:InvoiceCurrencyCodet-esc="currency.name"/>
 
-                        <!-- Bank account. -->
-                        <ram:SpecifiedTradeSettlementPaymentMeans t-if="record.partner_bank_id.sanitized_acc_number">
+                        <!--Bankaccount.-->
+                        <ram:SpecifiedTradeSettlementPaymentMeanst-if="record.partner_bank_id.sanitized_acc_number">
                             <ram:TypeCode>42</ram:TypeCode>
                             <ram:PayeePartyCreditorFinancialAccount>
                                 <ram:IBANID
-                                    t-if="record.partner_bank_id.sanitized_acc_number == 'iban'"
+                                    t-if="record.partner_bank_id.sanitized_acc_number=='iban'"
                                     t-esc="record.partner_bank_id.sanitized_acc_number"/>
                                 <ram:ProprietaryID
-                                    t-if="record.partner_bank_id.sanitized_acc_number != 'iban'"
+                                    t-if="record.partner_bank_id.sanitized_acc_number!='iban'"
                                     t-esc="record.partner_bank_id.sanitized_acc_number"/>
                             </ram:PayeePartyCreditorFinancialAccount>
                         </ram:SpecifiedTradeSettlementPaymentMeans>
 
-                        <!-- Tax Summary. -->
-                        <t t-foreach="tax_details.get('tax_details', {}).values()" t-as="tax_detail_vals">
+                        <!--TaxSummary.-->
+                        <tt-foreach="tax_details.get('tax_details',{}).values()"t-as="tax_detail_vals">
                             <ram:ApplicableTradeTax>
                                 <ram:CalculatedAmount
-                                    t-esc="format_monetary(tax_detail_vals.get('calculated_amount'), 2)"/>
+                                    t-esc="format_monetary(tax_detail_vals.get('calculated_amount'),2)"/>
                                 <ram:TypeCode>VAT</ram:TypeCode>
-                                <ram:ExemptionReason t-esc="tax_detail_vals.get('tax_exemption_reason')"/>
+                                <ram:ExemptionReasont-esc="tax_detail_vals.get('tax_exemption_reason')"/>
                                 <ram:BasisAmount
-                                    t-esc="format_monetary(balance_multiplicator * tax_detail_vals['base_amount_currency'], 2)"/>
-                                <ram:CategoryCode t-esc="tax_detail_vals['tax_category_code']"/>
-                                <ram:ExemptionReasonCode t-esc="tax_detail_vals['tax_exemption_reason_code']"/>
-                                <!-- 5 = Tax is exigible on the date on the invoice -->
+                                    t-esc="format_monetary(balance_multiplicator*tax_detail_vals['base_amount_currency'],2)"/>
+                                <ram:CategoryCodet-esc="tax_detail_vals['tax_category_code']"/>
+                                <ram:ExemptionReasonCodet-esc="tax_detail_vals['tax_exemption_reason_code']"/>
+                                <!--5=Taxisexigibleonthedateontheinvoice-->
                                 <ram:DueDateTypeCode>5</ram:DueDateTypeCode>
                                 <ram:RateApplicablePercent
-                                    t-if="tax_detail_vals['amount_type'] == 'percent'"
+                                    t-if="tax_detail_vals['amount_type']=='percent'"
                                     t-esc="tax_detail_vals['amount']"/>
                             </ram:ApplicableTradeTax>
                         </t>
 
-                        <!-- Billing Period -->
-                        <ram:BillingSpecifiedPeriod t-if="billing_start and billing_end">
+                        <!--BillingPeriod-->
+                        <ram:BillingSpecifiedPeriodt-if="billing_startandbilling_end">
                             <ram:StartDateTime>
-                                <udt:DateTimeString format="102" t-esc="format_date(billing_start)"/>
+                                <udt:DateTimeStringformat="102"t-esc="format_date(billing_start)"/>
                             </ram:StartDateTime>
                             <ram:EndDateTime>
-                                <udt:DateTimeString format="102" t-esc="format_date(billing_end)"/>
+                                <udt:DateTimeStringformat="102"t-esc="format_date(billing_end)"/>
                             </ram:EndDateTime>
                         </ram:BillingSpecifiedPeriod>
 
-                        <!-- Payment Term. -->
+                        <!--PaymentTerm.-->
                         <ram:SpecifiedTradePaymentTerms>
-                            <ram:Description t-if="record.invoice_payment_term_id" t-esc="record.invoice_payment_term_id.name"/>
-                            <ram:DueDateDateTime t-if="record.invoice_date_due">
-                                <udt:DateTimeString format="102" t-esc="format_date(record.invoice_date_due)"/>
+                            <ram:Descriptiont-if="record.invoice_payment_term_id"t-esc="record.invoice_payment_term_id.name"/>
+                            <ram:DueDateDateTimet-if="record.invoice_date_due">
+                                <udt:DateTimeStringformat="102"t-esc="format_date(record.invoice_date_due)"/>
                             </ram:DueDateDateTime>
                         </ram:SpecifiedTradePaymentTerms>
 
-                        <!-- Summary. -->
+                        <!--Summary.-->
                         <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
                             <ram:LineTotalAmount
-                                t-esc="format_monetary(tax_basis_total_amount, 2)"/>
+                                t-esc="format_monetary(tax_basis_total_amount,2)"/>
                             <ram:TaxBasisTotalAmount
-                                t-esc="format_monetary(tax_basis_total_amount, 2)"/>
+                                t-esc="format_monetary(tax_basis_total_amount,2)"/>
                             <ram:TaxTotalAmount
                                 t-att-currencyID="currency.name"
-                                t-esc="format_monetary(tax_total_amount, 2)"/>
+                                t-esc="format_monetary(tax_total_amount,2)"/>
                             <ram:GrandTotalAmount
-                                t-esc="format_monetary(record.amount_total, 2)"/>
+                                t-esc="format_monetary(record.amount_total,2)"/>
                             <ram:TotalPrepaidAmount
-                                t-esc="format_monetary(record.amount_total - record.amount_residual, 2)"/>
+                                t-esc="format_monetary(record.amount_total-record.amount_residual,2)"/>
                             <ram:DuePayableAmount
-                                t-esc="format_monetary(record.amount_residual, 2)"/>
+                                t-esc="format_monetary(record.amount_residual,2)"/>
                         </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
                     </ram:ApplicableHeaderTradeSettlement>
                 </rsm:SupplyChainTradeTransaction>
             </rsm:CrossIndustryInvoice>
         </template>
 
-        <template id="account_invoice_pdfa_3_facturx_metadata">
-            <x:xmpmeta xmlns:x="adobe:ns:meta/">
-                <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-                    <rdf:Description xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/" rdf:about="">
+        <templateid="account_invoice_pdfa_3_facturx_metadata">
+            <x:xmpmetaxmlns:x="adobe:ns:meta/">
+                <rdf:RDFxmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <rdf:Descriptionxmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/"rdf:about="">
                         <pdfaid:part>3</pdfaid:part>
                         <pdfaid:conformance>B</pdfaid:conformance>
                     </rdf:Description>
-                    <rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:about="">
+                    <rdf:Descriptionxmlns:dc="http://purl.org/dc/elements/1.1/"rdf:about="">
                         <dc:title>
                             <rdf:Alt>
-                                <rdf:li t-att="{'xml:lang': 'x-default'}" t-esc="title"/>
+                                <rdf:lit-att="{'xml:lang':'x-default'}"t-esc="title"/>
                             </rdf:Alt>
                         </dc:title>
                         <dc:creator>
@@ -321,52 +321,52 @@
                         </dc:creator>
                         <dc:description>
                             <rdf:Alt>
-                                <rdf:li t-att="{'xml:lang': 'x-default'}">Invoice generated by Flectra</rdf:li>
+                                <rdf:lit-att="{'xml:lang':'x-default'}">InvoicegeneratedbyFlectra</rdf:li>
                             </rdf:Alt>
                         </dc:description>
                     </rdf:Description>
-                    <rdf:Description xmlns:pdf="http://ns.adobe.com/pdf/1.3/" rdf:about="">
+                    <rdf:Descriptionxmlns:pdf="http://ns.adobe.com/pdf/1.3/"rdf:about="">
                         <pdf:Producer>Flectra</pdf:Producer>
                     </rdf:Description>
-                    <rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
+                    <rdf:Descriptionxmlns:xmp="http://ns.adobe.com/xap/1.0/"rdf:about="">
                         <xmp:CreatorTool>Flectra</xmp:CreatorTool>
-                        <xmp:CreateDate t-esc="date"/>
-                        <xmp:ModifyDate t-esc="date"/>
+                        <xmp:CreateDatet-esc="date"/>
+                        <xmp:ModifyDatet-esc="date"/>
                     </rdf:Description>
-                    <rdf:Description xmlns:pdfaExtension="http://www.aiim.org/pdfa/ns/extension/"
+                    <rdf:Descriptionxmlns:pdfaExtension="http://www.aiim.org/pdfa/ns/extension/"
                                      xmlns:pdfaSchema="http://www.aiim.org/pdfa/ns/schema#"
-                                     xmlns:pdfaProperty="http://www.aiim.org/pdfa/ns/property#" rdf:about="">
+                                     xmlns:pdfaProperty="http://www.aiim.org/pdfa/ns/property#"rdf:about="">
                         <pdfaExtension:schemas>
                             <rdf:Bag>
-                                <rdf:li rdf:parseType="Resource">
-                                    <pdfaSchema:schema>Factur-X PDFA Extension Schema</pdfaSchema:schema>
+                                <rdf:lirdf:parseType="Resource">
+                                    <pdfaSchema:schema>Factur-XPDFAExtensionSchema</pdfaSchema:schema>
                                     <pdfaSchema:namespaceURI>urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#</pdfaSchema:namespaceURI>
                                     <pdfaSchema:prefix>fx</pdfaSchema:prefix>
                                     <pdfaSchema:property>
                                         <rdf:Seq>
-                                            <rdf:li rdf:parseType="Resource">
+                                            <rdf:lirdf:parseType="Resource">
                                                 <pdfaProperty:name>DocumentFileName</pdfaProperty:name>
                                                 <pdfaProperty:valueType>Text</pdfaProperty:valueType>
                                                 <pdfaProperty:category>external</pdfaProperty:category>
-                                                <pdfaProperty:description>name of the embedded XML invoice file</pdfaProperty:description>
+                                                <pdfaProperty:description>nameoftheembeddedXMLinvoicefile</pdfaProperty:description>
                                             </rdf:li>
-                                            <rdf:li rdf:parseType="Resource">
+                                            <rdf:lirdf:parseType="Resource">
                                                 <pdfaProperty:name>DocumentType</pdfaProperty:name>
                                                 <pdfaProperty:valueType>Text</pdfaProperty:valueType>
                                                 <pdfaProperty:category>external</pdfaProperty:category>
                                                 <pdfaProperty:description>INVOICE</pdfaProperty:description>
                                             </rdf:li>
-                                            <rdf:li rdf:parseType="Resource">
+                                            <rdf:lirdf:parseType="Resource">
                                                 <pdfaProperty:name>Version</pdfaProperty:name>
                                                 <pdfaProperty:valueType>Text</pdfaProperty:valueType>
                                                 <pdfaProperty:category>external</pdfaProperty:category>
-                                                <pdfaProperty:description>The actual version of the Factur-X XML schema</pdfaProperty:description>
+                                                <pdfaProperty:description>TheactualversionoftheFactur-XXMLschema</pdfaProperty:description>
                                             </rdf:li>
-                                            <rdf:li rdf:parseType="Resource">
+                                            <rdf:lirdf:parseType="Resource">
                                                 <pdfaProperty:name>ConformanceLevel</pdfaProperty:name>
                                                 <pdfaProperty:valueType>Text</pdfaProperty:valueType>
                                                 <pdfaProperty:category>external</pdfaProperty:category>
-                                                <pdfaProperty:description>The conformance level of the embedded Factur-X data</pdfaProperty:description>
+                                                <pdfaProperty:description>TheconformanceleveloftheembeddedFactur-Xdata</pdfaProperty:description>
                                             </rdf:li>
                                         </rdf:Seq>
                                     </pdfaSchema:property>
@@ -374,8 +374,8 @@
                             </rdf:Bag>
                         </pdfaExtension:schemas>
                     </rdf:Description>
-                    <rdf:Description xmlns:fx="urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#" rdf:about="">
-                        <fx:ConformanceLevel>EN 16931</fx:ConformanceLevel>
+                    <rdf:Descriptionxmlns:fx="urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#"rdf:about="">
+                        <fx:ConformanceLevel>EN16931</fx:ConformanceLevel>
                         <fx:DocumentFileName>factur-x.xml</fx:DocumentFileName>
                         <fx:DocumentType>INVOICE</fx:DocumentType>
                         <fx:Version>1.0</fx:Version>

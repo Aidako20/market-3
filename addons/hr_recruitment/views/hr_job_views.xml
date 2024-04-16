@@ -1,93 +1,93 @@
 <flectra>
 
-    <record model="ir.actions.act_window" id="action_hr_job_new_application">
-        <field name="name">New Application</field>
-        <field name="res_model">hr.applicant</field>
-        <field name="view_mode">form</field>
-        <field name="context">{'search_default_job_id': [active_id], 'default_job_id': active_id}</field>
+    <recordmodel="ir.actions.act_window"id="action_hr_job_new_application">
+        <fieldname="name">NewApplication</field>
+        <fieldname="res_model">hr.applicant</field>
+        <fieldname="view_mode">form</field>
+        <fieldname="context">{'search_default_job_id':[active_id],'default_job_id':active_id}</field>
     </record>
 
-    <record id="view_hr_job_kanban" model="ir.ui.view">
-        <field name="name">hr.job.kanban</field>
-        <field name="model">hr.job</field>
-        <field name="arch" type="xml">
-            <kanban class="oe_background_grey o_kanban_dashboard o_hr_recruitment_kanban" on_create="hr_recruitment.create_job_simple" sample="1">
-                <field name="name"/>
-                <field name="alias_name"/>
-                <field name="alias_domain"/>
-                <field name="is_favorite"/>
-                <field name="department_id"/>
-                <field name="no_of_recruitment"/>
-                <field name="color"/>
-                <field name="new_application_count"/>
-                <field name="no_of_hired_employee"/>
-                <field name="manager_id"/>
-                <field name="state"/>
-                <field name="user_id"/>
+    <recordid="view_hr_job_kanban"model="ir.ui.view">
+        <fieldname="name">hr.job.kanban</field>
+        <fieldname="model">hr.job</field>
+        <fieldname="arch"type="xml">
+            <kanbanclass="oe_background_greyo_kanban_dashboardo_hr_recruitment_kanban"on_create="hr_recruitment.create_job_simple"sample="1">
+                <fieldname="name"/>
+                <fieldname="alias_name"/>
+                <fieldname="alias_domain"/>
+                <fieldname="is_favorite"/>
+                <fieldname="department_id"/>
+                <fieldname="no_of_recruitment"/>
+                <fieldname="color"/>
+                <fieldname="new_application_count"/>
+                <fieldname="no_of_hired_employee"/>
+                <fieldname="manager_id"/>
+                <fieldname="state"/>
+                <fieldname="user_id"/>
                 <templates>
-                    <t t-name="kanban-box">
-                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''}">
-                            <div class="o_kanban_card_header">
-                                <div class="o_kanban_card_header_title">
-                                    <div class="o_primary col-12">
-                                        <span class="o_text_overflow"><t t-esc="record.name.value"/></span>
+                    <tt-name="kanban-box">
+                        <divt-attf-class="#{!selection_mode?kanban_color(record.color.raw_value):''}">
+                            <divclass="o_kanban_card_header">
+                                <divclass="o_kanban_card_header_title">
+                                    <divclass="o_primarycol-12">
+                                        <spanclass="o_text_overflow"><tt-esc="record.name.value"/></span>
                                     </div>
-                                    <div class="o_kanban_record_subtitle col-12 text-muted">
-                                        <field name="user_id" />
+                                    <divclass="o_kanban_record_subtitlecol-12text-muted">
+                                        <fieldname="user_id"/>
                                     </div>
-                                    <field name="is_favorite" widget="boolean_favorite" nolabel="1"/>
-                                    <div t-if="record.alias_name.value and record.alias_domain.value and record.state.raw_value == 'recruit'" class="o_secondary o_job_alias">
-                                        <small> <i class="fa fa-envelope-o" role="img" aria-label="Alias" title="Alias"></i> <field name="alias_id"/> </small>
+                                    <fieldname="is_favorite"widget="boolean_favorite"nolabel="1"/>
+                                    <divt-if="record.alias_name.valueandrecord.alias_domain.valueandrecord.state.raw_value=='recruit'"class="o_secondaryo_job_alias">
+                                        <small><iclass="fafa-envelope-o"role="img"aria-label="Alias"title="Alias"></i><fieldname="alias_id"/></small>
                                     </div>
                                 </div>
-                                <div class="o_kanban_manage_button_section">
-                                    <a class="o_kanban_manage_toggle_button" href="#"><i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/></a>
+                                <divclass="o_kanban_manage_button_section">
+                                    <aclass="o_kanban_manage_toggle_button"href="#"><iclass="fafa-ellipsis-v"role="img"aria-label="Manage"title="Manage"/></a>
                                 </div>
                             </div>
-                            <div class="container o_kanban_card_content">
-                                <t t-if="record.state.raw_value == 'recruit'">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <button class="btn btn-primary" name="%(action_hr_job_applications)d" type="action">
-                                                <field name="application_count"/> Applications
+                            <divclass="containero_kanban_card_content">
+                                <tt-if="record.state.raw_value=='recruit'">
+                                    <divclass="row">
+                                        <divclass="col-6">
+                                            <buttonclass="btnbtn-primary"name="%(action_hr_job_applications)d"type="action">
+                                                <fieldname="application_count"/>Applications
                                             </button>
                                         </div>
-                                        <div class="col-6">
-                                            <field name="new_application_count"/> New Applications <br/>
-                                            <field name="no_of_recruitment"/> To Recruit
+                                        <divclass="col-6">
+                                            <fieldname="new_application_count"/>NewApplications<br/>
+                                            <fieldname="no_of_recruitment"/>ToRecruit
                                         </div>
                                     </div>
                                 </t>
-                                <t t-if="record.state.raw_value == 'open'">
-                                    <div class="row">
-                                        <div class="col-12 o_kanban_primary_left">
-                                            <button class="btn btn-secondary" name="set_recruit" type="object">Start Recruitment</button>
+                                <tt-if="record.state.raw_value=='open'">
+                                    <divclass="row">
+                                        <divclass="col-12o_kanban_primary_left">
+                                            <buttonclass="btnbtn-secondary"name="set_recruit"type="object">StartRecruitment</button>
                                         </div>
                                     </div>
                                 </t>
-                                <div name="kanban_boxes" class="row o_recruitment_kanban_boxes">
-                                    <div class="o_recruitment_kanban_box o_kanban_primary_bottom bottom_block" style="padding-left:8px;">
-                                        <div class="col-6"></div>
-                                        <div class="col-6 o_link_trackers">
-                                            <a role="button" name="%(hr_recruitment.action_hr_job_sources)d" type="action" class="btn btn-sm ">
-                                                <span title="Link Trackers"><i class="fa fa-lg fa-envelope" role="img" aria-label="Link Trackers"/></span> 
+                                <divname="kanban_boxes"class="rowo_recruitment_kanban_boxes">
+                                    <divclass="o_recruitment_kanban_boxo_kanban_primary_bottombottom_block"style="padding-left:8px;">
+                                        <divclass="col-6"></div>
+                                        <divclass="col-6o_link_trackers">
+                                            <arole="button"name="%(hr_recruitment.action_hr_job_sources)d"type="action"class="btnbtn-sm">
+                                                <spantitle="LinkTrackers"><iclass="fafa-lgfa-envelope"role="img"aria-label="LinkTrackers"/></span>
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="o_kanban_card_manage_pane dropdown-menu" role="menu">
-                                <div class="o_kanban_card_manage_section">
-                                    <div role="menuitem"><a t-if="record.state.raw_value == 'recruit'" name="set_open" type="object">Recruitment Done</a></div>
-                                    <div role="menuitem"><a t-if="record.state.raw_value == 'open'" name="set_recruit" type="object">Start recruitment</a></div>
-                                    <div role="menuitem"><a t-if="widget.editable" name="edit_job" type="edit">Edit</a></div>
+                            <divclass="o_kanban_card_manage_panedropdown-menu"role="menu">
+                                <divclass="o_kanban_card_manage_section">
+                                    <divrole="menuitem"><at-if="record.state.raw_value=='recruit'"name="set_open"type="object">RecruitmentDone</a></div>
+                                    <divrole="menuitem"><at-if="record.state.raw_value=='open'"name="set_recruit"type="object">Startrecruitment</a></div>
+                                    <divrole="menuitem"><at-if="widget.editable"name="edit_job"type="edit">Edit</a></div>
                                 </div>
-                                <div role="menuitem" aria-haspopup="true">
-                                    <ul class="oe_kanban_colorpicker" data-field="color" role="menu"/>
+                                <divrole="menuitem"aria-haspopup="true">
+                                    <ulclass="oe_kanban_colorpicker"data-field="color"role="menu"/>
                                 </div>
                             </div>
-                            <div class="o_hr_job_boxes">
-                                <a class="o_hr_job_box" name="%(action_hr_job_applications)d" type="action"/>
+                            <divclass="o_hr_job_boxes">
+                                <aclass="o_hr_job_box"name="%(action_hr_job_applications)d"type="action"/>
                             </div>
                         </div>
                     </t>
@@ -96,31 +96,31 @@
         </field>
     </record>
 
-    <record id="hr_job_search_view" model="ir.ui.view">
-        <field name="name">hr.job.search</field>
-        <field name="model">hr.job</field>
-        <field name="inherit_id" ref="hr.view_job_filter" />
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='department_id']" position="after">
-                <filter string="My Job Positions" name="my_positions" domain="[('user_id', '=', uid)]"/>
+    <recordid="hr_job_search_view"model="ir.ui.view">
+        <fieldname="name">hr.job.search</field>
+        <fieldname="model">hr.job</field>
+        <fieldname="inherit_id"ref="hr.view_job_filter"/>
+        <fieldname="arch"type="xml">
+            <xpathexpr="//field[@name='department_id']"position="after">
+                <filterstring="MyJobPositions"name="my_positions"domain="[('user_id','=',uid)]"/>
             </xpath>
         </field>
     </record>
 
-    <!-- hr related job position menu action -->
-    <record model="ir.actions.act_window" id="action_hr_job">
-        <field name="name">Job Positions</field>
-        <field name="res_model">hr.job</field>
-        <field name="view_mode">kanban,form</field>
-        <field name="view_id" ref="hr_recruitment.view_hr_job_kanban"/>
-        <field name="context">{}</field>
-        <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-              Ready to recruit more efficiently?
+    <!--hrrelatedjobpositionmenuaction-->
+    <recordmodel="ir.actions.act_window"id="action_hr_job">
+        <fieldname="name">JobPositions</field>
+        <fieldname="res_model">hr.job</field>
+        <fieldname="view_mode">kanban,form</field>
+        <fieldname="view_id"ref="hr_recruitment.view_hr_job_kanban"/>
+        <fieldname="context">{}</field>
+        <fieldname="help"type="html">
+          <pclass="o_view_nocontent_smiling_face">
+              Readytorecruitmoreefficiently?
           </p><p>
-              Let's create a job position.
+              Let'screateajobposition.
           </p>
         </field>
     </record>
-    <menuitem name="By Job Positions" parent="menu_crm_case_categ0_act_job" id="menu_hr_job_position" action="action_hr_job" sequence="1"/>
+    <menuitemname="ByJobPositions"parent="menu_crm_case_categ0_act_job"id="menu_hr_job_position"action="action_hr_job"sequence="1"/>
 </flectra>

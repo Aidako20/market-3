@@ -1,41 +1,41 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra import _, api, fields, models
-from flectra.exceptions import ValidationError
+fromflectraimport_,api,fields,models
+fromflectra.exceptionsimportValidationError
 
 
-class ServerActions(models.Model):
-    """ Add SMS option in server actions. """
-    _name = 'ir.actions.server'
-    _inherit = ['ir.actions.server']
+classServerActions(models.Model):
+    """AddSMSoptioninserveractions."""
+    _name='ir.actions.server'
+    _inherit=['ir.actions.server']
 
-    state = fields.Selection(selection_add=[
-        ('sms', 'Send SMS Text Message'),
-    ], ondelete={'sms': 'cascade'})
-    # SMS
-    sms_template_id = fields.Many2one(
-        'sms.template', 'SMS Template', ondelete='set null',
-        domain="[('model_id', '=', model_id)]",
+    state=fields.Selection(selection_add=[
+        ('sms','SendSMSTextMessage'),
+    ],ondelete={'sms':'cascade'})
+    #SMS
+    sms_template_id=fields.Many2one(
+        'sms.template','SMSTemplate',ondelete='setnull',
+        domain="[('model_id','=',model_id)]",
     )
-    sms_mass_keep_log = fields.Boolean('Log as Note', default=True)
+    sms_mass_keep_log=fields.Boolean('LogasNote',default=True)
 
-    @api.constrains('state', 'model_id')
-    def _check_sms_capability(self):
-        for action in self:
-            if action.state == 'sms' and not action.model_id.is_mail_thread:
-                raise ValidationError(_("Sending SMS can only be done on a mail.thread model"))
+    @api.constrains('state','model_id')
+    def_check_sms_capability(self):
+        foractioninself:
+            ifaction.state=='sms'andnotaction.model_id.is_mail_thread:
+                raiseValidationError(_("SendingSMScanonlybedoneonamail.threadmodel"))
 
-    def _run_action_sms_multi(self, eval_context=None):
-        # TDE CLEANME: when going to new api with server action, remove action
-        if not self.sms_template_id or self._is_recompute():
-            return False
+    def_run_action_sms_multi(self,eval_context=None):
+        #TDECLEANME:whengoingtonewapiwithserveraction,removeaction
+        ifnotself.sms_template_idorself._is_recompute():
+            returnFalse
 
-        records = eval_context.get('records') or eval_context.get('record')
-        if not records:
-            return False
+        records=eval_context.get('records')oreval_context.get('record')
+        ifnotrecords:
+            returnFalse
 
-        composer = self.env['sms.composer'].with_context(
+        composer=self.env['sms.composer'].with_context(
             default_res_model=records._name,
             default_res_ids=records.ids,
             default_composition_mode='mass',
@@ -43,4 +43,4 @@ class ServerActions(models.Model):
             default_mass_keep_log=self.sms_mass_keep_log,
         ).create({})
         composer.action_send_sms()
-        return False
+        returnFalse

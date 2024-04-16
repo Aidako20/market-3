@@ -1,84 +1,84 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-import logging
+importlogging
 
-import requests
+importrequests
 
-from flectra import api, fields, models, _, _lt
-from flectra.exceptions import UserError
+fromflectraimportapi,fields,models,_,_lt
+fromflectra.exceptionsimportUserError
 
-_logger = logging.getLogger(__name__)
+_logger=logging.getLogger(__name__)
 
-TWITTER_EXCEPTION = {
-    304: _lt('There was no new data to return.'),
-    400: _lt('The request was invalid or cannot be otherwise served. Requests without authentication are considered invalid and will yield this response.'),
-    401: _lt('Authentication credentials were missing or incorrect. Maybe screen name tweets are protected.'),
-    403: _lt('The request is understood, but it has been refused or access is not allowed. Please check your Twitter API Key and Secret.'),
-    429: _lt('Request cannot be served due to the applications rate limit having been exhausted for the resource.'),
-    500: _lt('Twitter seems broken. Please retry later. You may consider posting an issue on Twitter forums to get help.'),
-    502: _lt('Twitter is down or being upgraded.'),
-    503: _lt('The Twitter servers are up, but overloaded with requests. Try again later.'),
-    504: _lt('The Twitter servers are up, but the request could not be serviced due to some failure within our stack. Try again later.')
+TWITTER_EXCEPTION={
+    304:_lt('Therewasnonewdatatoreturn.'),
+    400:_lt('Therequestwasinvalidorcannotbeotherwiseserved.Requestswithoutauthenticationareconsideredinvalidandwillyieldthisresponse.'),
+    401:_lt('Authenticationcredentialsweremissingorincorrect.Maybescreennametweetsareprotected.'),
+    403:_lt('Therequestisunderstood,butithasbeenrefusedoraccessisnotallowed.PleasecheckyourTwitterAPIKeyandSecret.'),
+    429:_lt('Requestcannotbeservedduetotheapplicationsratelimithavingbeenexhaustedfortheresource.'),
+    500:_lt('Twitterseemsbroken.Pleaseretrylater.YoumayconsiderpostinganissueonTwitterforumstogethelp.'),
+    502:_lt('Twitterisdownorbeingupgraded.'),
+    503:_lt('TheTwitterserversareup,butoverloadedwithrequests.Tryagainlater.'),
+    504:_lt('TheTwitterserversareup,buttherequestcouldnotbeservicedduetosomefailurewithinourstack.Tryagainlater.')
 }
 
 
-class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+classResConfigSettings(models.TransientModel):
+    _inherit='res.config.settings'
 
-    twitter_api_key = fields.Char(
-        related='website_id.twitter_api_key', readonly=False,
-        string='API Key',
-        help='Twitter API key you can get it from https://apps.twitter.com/')
-    twitter_api_secret = fields.Char(
-        related='website_id.twitter_api_secret', readonly=False,
-        string='API secret',
-        help='Twitter API secret you can get it from https://apps.twitter.com/')
-    twitter_screen_name = fields.Char(
-        related='website_id.twitter_screen_name', readonly=False,
-        string='Favorites From',
-        help='Screen Name of the Twitter Account from which you want to load favorites.'
-             'It does not have to match the API Key/Secret.')
-    twitter_server_uri = fields.Char(string='Twitter server uri', readonly=True)
+    twitter_api_key=fields.Char(
+        related='website_id.twitter_api_key',readonly=False,
+        string='APIKey',
+        help='TwitterAPIkeyyoucangetitfromhttps://apps.twitter.com/')
+    twitter_api_secret=fields.Char(
+        related='website_id.twitter_api_secret',readonly=False,
+        string='APIsecret',
+        help='TwitterAPIsecretyoucangetitfromhttps://apps.twitter.com/')
+    twitter_screen_name=fields.Char(
+        related='website_id.twitter_screen_name',readonly=False,
+        string='FavoritesFrom',
+        help='ScreenNameoftheTwitterAccountfromwhichyouwanttoloadfavorites.'
+             'ItdoesnothavetomatchtheAPIKey/Secret.')
+    twitter_server_uri=fields.Char(string='Twitterserveruri',readonly=True)
 
-    def _get_twitter_exception_message(self, error_code):
-        if error_code in TWITTER_EXCEPTION:
-            return TWITTER_EXCEPTION[error_code]
+    def_get_twitter_exception_message(self,error_code):
+        iferror_codeinTWITTER_EXCEPTION:
+            returnTWITTER_EXCEPTION[error_code]
         else:
-            return _('HTTP Error: Something is misconfigured')
+            return_('HTTPError:Somethingismisconfigured')
 
-    def _check_twitter_authorization(self):
+    def_check_twitter_authorization(self):
         try:
             self.website_id.fetch_favorite_tweets()
 
-        except requests.HTTPError as e:
-            _logger.info("%s - %s" % (e.response.status_code, e.response.reason), exc_info=True)
-            raise UserError("%s - %s" % (e.response.status_code, e.response.reason) + ':' + self._get_twitter_exception_message(e.response.status_code))
-        except IOError:
-            _logger.info('We failed to reach a twitter server.', exc_info=True)
-            raise UserError(_('Internet connection refused: We failed to reach a twitter server.'))
-        except Exception:
-            _logger.info('Please double-check your Twitter API Key and Secret!', exc_info=True)
-            raise UserError(_('Twitter authorization error! Please double-check your Twitter API Key and Secret!'))
+        exceptrequests.HTTPErrorase:
+            _logger.info("%s-%s"%(e.response.status_code,e.response.reason),exc_info=True)
+            raiseUserError("%s-%s"%(e.response.status_code,e.response.reason)+':'+self._get_twitter_exception_message(e.response.status_code))
+        exceptIOError:
+            _logger.info('Wefailedtoreachatwitterserver.',exc_info=True)
+            raiseUserError(_('Internetconnectionrefused:Wefailedtoreachatwitterserver.'))
+        exceptException:
+            _logger.info('Pleasedouble-checkyourTwitterAPIKeyandSecret!',exc_info=True)
+            raiseUserError(_('Twitterauthorizationerror!Pleasedouble-checkyourTwitterAPIKeyandSecret!'))
 
     @api.model
-    def create(self, vals):
-        TwitterConfig = super(ResConfigSettings, self).create(vals)
-        if vals.get('twitter_api_key') or vals.get('twitter_api_secret') or vals.get('twitter_screen_name'):
+    defcreate(self,vals):
+        TwitterConfig=super(ResConfigSettings,self).create(vals)
+        ifvals.get('twitter_api_key')orvals.get('twitter_api_secret')orvals.get('twitter_screen_name'):
             TwitterConfig._check_twitter_authorization()
-        return TwitterConfig
+        returnTwitterConfig
 
-    def write(self, vals):
-        TwitterConfig = super(ResConfigSettings, self).write(vals)
-        if vals.get('twitter_api_key') or vals.get('twitter_api_secret') or vals.get('twitter_screen_name'):
+    defwrite(self,vals):
+        TwitterConfig=super(ResConfigSettings,self).write(vals)
+        ifvals.get('twitter_api_key')orvals.get('twitter_api_secret')orvals.get('twitter_screen_name'):
             self._check_twitter_authorization()
-        return TwitterConfig
+        returnTwitterConfig
 
     @api.model
-    def get_values(self):
-        res = super(ResConfigSettings, self).get_values()
-        Params = self.env['ir.config_parameter'].sudo()
+    defget_values(self):
+        res=super(ResConfigSettings,self).get_values()
+        Params=self.env['ir.config_parameter'].sudo()
         res.update({
-            'twitter_server_uri': '%s/' % Params.get_param('web.base.url', default='http://yourcompany.flectrahq.com'),
+            'twitter_server_uri':'%s/'%Params.get_param('web.base.url',default='http://yourcompany.flectrahq.com'),
         })
-        return res
+        returnres

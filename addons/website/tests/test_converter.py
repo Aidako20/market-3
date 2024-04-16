@@ -1,81 +1,81 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.
+#-*-coding:utf-8-*-
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.
 
-from flectra.addons.http_routing.models.ir_http import slugify, unslug
-from flectra.tests.common import BaseCase
+fromflectra.addons.http_routing.models.ir_httpimportslugify,unslug
+fromflectra.tests.commonimportBaseCase
 
 
-class TestUnslug(BaseCase):
+classTestUnslug(BaseCase):
 
-    def test_unslug(self):
-        tests = {
-            '': (None, None),
-            'foo': (None, None),
-            'foo-': (None, None),
-            '-': (None, None),
-            'foo-1': ('foo', 1),
-            'foo-bar-1': ('foo-bar', 1),
-            'foo--1': ('foo', -1),
-            '1': (None, 1),
-            '1-1': ('1', 1),
-            '--1': (None, None),
-            'foo---1': (None, None),
-            'foo1': (None, None),
+    deftest_unslug(self):
+        tests={
+            '':(None,None),
+            'foo':(None,None),
+            'foo-':(None,None),
+            '-':(None,None),
+            'foo-1':('foo',1),
+            'foo-bar-1':('foo-bar',1),
+            'foo--1':('foo',-1),
+            '1':(None,1),
+            '1-1':('1',1),
+            '--1':(None,None),
+            'foo---1':(None,None),
+            'foo1':(None,None),
         }
 
-        for slug, expected in tests.items():
-            self.assertEqual(unslug(slug), expected)
+        forslug,expectedintests.items():
+            self.assertEqual(unslug(slug),expected)
 
-class TestTitleToSlug(BaseCase):
+classTestTitleToSlug(BaseCase):
     """
-    Those tests should pass with or without python-slugify
-    See website/models/website.py slugify method
+    Thosetestsshouldpasswithorwithoutpython-slugify
+    Seewebsite/models/website.pyslugifymethod
     """
 
-    def test_spaces(self):
+    deftest_spaces(self):
         self.assertEqual(
             "spaces",
-            slugify(u"   spaces   ")
+            slugify(u"  spaces  ")
         )
 
-    def test_unicode(self):
+    deftest_unicode(self):
         self.assertEqual(
             "heterogeneite",
             slugify(u"hétérogénéité")
         )
 
-    def test_underscore(self):
+    deftest_underscore(self):
         self.assertEqual(
             "one-two",
             slugify(u"one_two")
         )
 
-    def test_caps(self):
+    deftest_caps(self):
         self.assertEqual(
             "camelcase",
             slugify(u"CamelCase")
         )
 
-    def test_special_chars(self):
+    deftest_special_chars(self):
         self.assertEqual(
             "o-d-o-o",
             slugify(u"o!#d{|\o/@~o&%^?")
         )
 
-    def test_str_to_unicode(self):
+    deftest_str_to_unicode(self):
         self.assertEqual(
             "espana",
             slugify("España")
         )
 
-    def test_numbers(self):
+    deftest_numbers(self):
         self.assertEqual(
             "article-1",
-            slugify(u"Article 1")
+            slugify(u"Article1")
         )
 
-    def test_all(self):
+    deftest_all(self):
         self.assertEqual(
             "do-you-know-martine-a-la-plage",
-            slugify(u"Do YOU know 'Martine à la plage' ?")
+            slugify(u"DoYOUknow'Martineàlaplage'?")
         )

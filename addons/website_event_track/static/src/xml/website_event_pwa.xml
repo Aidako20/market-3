@@ -1,10 +1,10 @@
 <templates>
 
-    <t t-name="pwa_install_banner">
-        <div class="alert alert-default o_pwa_install_banner">
-            <button class="btn o_btn_close">x</button>
-            <strong>Install Application</strong>
-            <button class="btn btn-primary o_btn_install">Install</button>
+    <tt-name="pwa_install_banner">
+        <divclass="alertalert-defaulto_pwa_install_banner">
+            <buttonclass="btno_btn_close">x</button>
+            <strong>InstallApplication</strong>
+            <buttonclass="btnbtn-primaryo_btn_install">Install</button>
         </div>
     </t>
 

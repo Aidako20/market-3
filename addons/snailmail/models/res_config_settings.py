@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-	
-# Part of Odoo, Flectra. See LICENSE file for full copyright and licensing details.	
+#-*-coding:utf-8-*-	
+#PartofFlectra.SeeLICENSEfileforfullcopyrightandlicensingdetails.	
 
-from flectra import fields, models	
+fromflectraimportfields,models	
 
 
-class ResConfigSettings(models.TransientModel):	
-    _inherit = 'res.config.settings'	
+classResConfigSettings(models.TransientModel):	
+    _inherit='res.config.settings'	
 
-    snailmail_color = fields.Boolean(string='Print In Color', related='company_id.snailmail_color', readonly=False)
-    snailmail_cover = fields.Boolean(string='Add a Cover Page', related='company_id.snailmail_cover', readonly=False)
-    snailmail_duplex = fields.Boolean(string='Print Both sides', related='company_id.snailmail_duplex', readonly=False)
+    snailmail_color=fields.Boolean(string='PrintInColor',related='company_id.snailmail_color',readonly=False)
+    snailmail_cover=fields.Boolean(string='AddaCoverPage',related='company_id.snailmail_cover',readonly=False)
+    snailmail_duplex=fields.Boolean(string='PrintBothsides',related='company_id.snailmail_duplex',readonly=False)

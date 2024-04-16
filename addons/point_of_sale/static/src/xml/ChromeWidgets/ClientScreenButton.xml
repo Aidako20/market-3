@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="ClientScreenButton" owl="1">
-        <div class="oe_status" t-on-click="onClick">
-            <span class="message"><t t-esc="message" /></span>
-            <div t-if="state.status === 'warning'" class="js_warning oe_icon oe_orange">
-                <i class="fa fa-fw fa-desktop" role="img" aria-label="Client Screen Warning" title="Client Screen Warning"></i>
+    <tt-name="ClientScreenButton"owl="1">
+        <divclass="oe_status"t-on-click="onClick">
+            <spanclass="message"><tt-esc="message"/></span>
+            <divt-if="state.status==='warning'"class="js_warningoe_iconoe_orange">
+                <iclass="fafa-fwfa-desktop"role="img"aria-label="ClientScreenWarning"title="ClientScreenWarning"></i>
             </div>
-             <div t-if="state.status === 'failure'" class="js_disconnected oe_icon oe_red">
-                <i class="fa fa-fw fa-desktop" role="img" aria-label="Client Screen Disconnected" title="Client Screen Disconnected"></i>
+             <divt-if="state.status==='failure'"class="js_disconnectedoe_iconoe_red">
+                <iclass="fafa-fwfa-desktop"role="img"aria-label="ClientScreenDisconnected"title="ClientScreenDisconnected"></i>
             </div>
-            <div t-if="state.status === 'success'" class="js_connected oe_icon oe_green">
-                <i class="fa fa-fw fa-desktop" role="img" aria-label="Client Screen Connected" title="Client Screen Connected"></i>
+            <divt-if="state.status==='success'"class="js_connectedoe_iconoe_green">
+                <iclass="fafa-fwfa-desktop"role="img"aria-label="ClientScreenConnected"title="ClientScreenConnected"></i>
             </div>
         </div>
     </t>

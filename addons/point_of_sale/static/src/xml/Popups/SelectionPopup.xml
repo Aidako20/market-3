@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xmlversion="1.0"encoding="UTF-8"?>
+<templatesid="template"xml:space="preserve">
 
-    <t t-name="SelectionPopup" owl="1">
-        <div role="dialog" class="modal-dialog">
+    <tt-name="SelectionPopup"owl="1">
+        <divrole="dialog"class="modal-dialog">
             <Draggable>
-                <div class="popup popup-selection">
-                    <header class="title drag-handle">
-                        <t t-esc="props.title" />
+                <divclass="popuppopup-selection">
+                    <headerclass="titledrag-handle">
+                        <tt-esc="props.title"/>
                     </header>
-                    <div class="selection scrollable-y">
-                        <t t-foreach="props.list" t-as="item" t-key="item.id">
-                            <div class="selection-item" t-att-class="{ selected: item.isSelected }"
+                    <divclass="selectionscrollable-y">
+                        <tt-foreach="props.list"t-as="item"t-key="item.id">
+                            <divclass="selection-item"t-att-class="{selected:item.isSelected}"
                                  t-on-click="selectItem(item.id)">
-                                <t t-esc="item.label" />
+                                <tt-esc="item.label"/>
                             </div>
                         </t>
                     </div>
-                    <footer class="footer">
-                        <div class="button cancel" t-on-click="cancel">
-                            <t t-esc="props.cancelText" />
+                    <footerclass="footer">
+                        <divclass="buttoncancel"t-on-click="cancel">
+                            <tt-esc="props.cancelText"/>
                         </div>
                     </footer>
                 </div>
