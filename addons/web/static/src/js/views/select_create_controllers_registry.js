@@ -13,48 +13,48 @@ var ListController = require('web.ListController');
 var select_create_controllers_registry = require('web.select_create_controllers_registry');
 
 var SelectCreateKanbanController = KanbanController.extend({
-    //--------------------------------------------------------------------------
-    // Handlers
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// Handlers
+//--------------------------------------------------------------------------
 
-    /**
-     * Override to select the clicked record instead of opening it
-     *
-     * @override
-     * @private
-     */
-    _onOpenRecord: function (ev) {
-        var selectedRecord = this.model.get(ev.data.id);
-        this.trigger_up('select_record', {
-            id: selectedRecord.res_id,
-            display_name: selectedRecord.data.display_name,
-        });
-    },
+/**
+* Override to select the clicked record instead of opening it
+*
+* @override
+* @private
+*/
+_onOpenRecord: function (ev) {
+var selectedRecord = this.model.get(ev.data.id);
+this.trigger_up('select_record', {
+id: selectedRecord.res_id,
+display_name: selectedRecord.data.display_name,
+});
+},
 });
 
 var SelectCreateListController = ListController.extend({
-    //--------------------------------------------------------------------------
-    // Handlers
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// Handlers
+//--------------------------------------------------------------------------
 
-    /**
-     * Override to select the clicked record instead of opening it
-     *
-     * @override
-     * @private
-     */
-    _onOpenRecord: function (ev) {
-        var selectedRecord = this.model.get(ev.data.id);
-        this.trigger_up('select_record', {
-            id: selectedRecord.res_id,
-            display_name: selectedRecord.data.display_name,
-        });
-    },
+/**
+* Override to select the clicked record instead of opening it
+*
+* @override
+* @private
+*/
+_onOpenRecord: function (ev) {
+var selectedRecord = this.model.get(ev.data.id);
+this.trigger_up('select_record', {
+id: selectedRecord.res_id,
+display_name: selectedRecord.data.display_name,
+});
+},
 });
 
 _.extend(select_create_controllers_registry, {
-    SelectCreateListController: SelectCreateListController,
-    SelectCreateKanbanController: SelectCreateKanbanController,
+SelectCreateListController: SelectCreateListController,
+SelectCreateKanbanController: SelectCreateKanbanController,
 });
 
 });

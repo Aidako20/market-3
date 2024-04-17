@@ -68,7 +68,7 @@ pcg_1621,Emprunt Principal (obligataires convertibles),1621,account.data_account
 pcg_1628,Intérêts courus et non échus (obligataires convertibles),1628,account.data_account_type_current_liabilities,l10n_dz_pcg_chart_template,False
 pcg_1631,Emprunt Principal (Autres emprunts obligataires),1631,account.data_account_type_current_liabilities,l10n_dz_pcg_chart_template,False
 pcg_1638,Intérêts courus et non échus (Autres emprunts obligataires),1638,account.data_account_type_current_liabilities,l10n_dz_pcg_chart_template,False
-pcg_1641,Emprunts  à Court  Terme,1641,account.data_account_type_current_liabilities,l10n_dz_pcg_chart_template,False
+pcg_1641,Emprunts à Court Terme,1641,account.data_account_type_current_liabilities,l10n_dz_pcg_chart_template,False
 pcg_1642,Emprunts à Moyen Terme,1642,account.data_account_type_current_liabilities,l10n_dz_pcg_chart_template,False
 pcg_1643,Emprunts à Long Terme,1643,account.data_account_type_current_liabilities,l10n_dz_pcg_chart_template,False
 pcg_1646,Intérêts intercalaires,1646,account.data_account_type_current_liabilities,l10n_dz_pcg_chart_template,False
@@ -97,7 +97,7 @@ pcg_203,Frais de développement immobilisables,203,account.data_account_type_cur
 pcg_2041,Logiciels de traitements informatiques,2041,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_2042,Hébergement site Web,2042,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_2051,Droit à la propriété industrielle et commerciale,2051,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
-pcg_2058,Autres droits similaires (concession et  franchise),2058,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
+pcg_2058,Autres droits similaires (concession et franchise),2058,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_2071,Ecart d'acquisition positif (goodwill),2071,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_2072,Autres écarts d’acquisitions ou de fusions,2072,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_2079,Ecart d'acquisition négatif (badwill),2079,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
@@ -247,7 +247,7 @@ pcg_2825,Amortissement : Installations techniques en concession,2825,account.dat
 pcg_2828,Amortissement : Autres immobilisations corporelles en concession,2828,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_2903,Pertes de valeur sur frais de développement immobilisables,2903,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_2904,Pertes de valeur sur logiciels informatiques et assimilés,2904,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
-pcg_2905,"Pertes  de valeur sur concessions et droits similaires, brevets, licences, marques",2905,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
+pcg_2905,"Pertes de valeur sur concessions et droits similaires, brevets, licences, marques",2905,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_2907,Pertes de valeur sur écart d’acquisition (Goodwill),2907,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_29081,Perte de valeur sur fonds de commerce,29081,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_29082,Perte de valeur sur droit au bail,29082,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
@@ -289,7 +289,7 @@ pcg_3218,Autres matières consommables,3218,account.data_account_type_current_as
 pcg_3221,Carburant et lubrifiant –Véhicules,3221,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_3222,Petit outillage et fournitures d'ateliers,3222,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_3223,Droguerie et Produits d'entretien,3223,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
-pcg_3224,Pièces de rechange pour équipements et matériels techniques   ,3224,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
+pcg_3224,Pièces de rechange pour équipements et matériels techniques ,3224,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_3225,Pièces de rechange et pneumatique pour matériel de transport,3225,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_3226,Quincaillerie générale et fournitures de magasin,3226,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False
 pcg_3227,Fournitures de bureau et imprimés,3227,account.data_account_type_current_assets,l10n_dz_pcg_chart_template,False

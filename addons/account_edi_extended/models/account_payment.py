@@ -5,8 +5,8 @@ from flectra import models
 
 
 class AccountPayment(models.Model):
-    _inherit = 'account.payment'
+_inherit = 'account.payment'
 
-    def action_retry_edi_documents_error(self):
-        self.ensure_one()
-        return self.move_id.action_retry_edi_documents_error()
+def action_retry_edi_documents_error(self):
+self.ensure_one()
+return self.move_id.action_retry_edi_documents_error()

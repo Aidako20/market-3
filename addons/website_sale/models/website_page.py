@@ -5,10 +5,10 @@ from flectra.http import request
 
 
 class WabsitePage(models.AbstractModel):
-    _inherit = 'website.page'
+_inherit = 'website.page'
 
-    def _get_cache_key(self, req):
-        cart = request.website.sale_get_order()
-        cache_key = (cart and cart.cart_quantity or 0,)
-        cache_key += super()._get_cache_key(req)
-        return cache_key
+def _get_cache_key(self, req):
+cart = request.website.sale_get_order()
+cache_key = (cart and cart.cart_quantity or 0,)
+cache_key += super()._get_cache_key(req)
+return cache_key

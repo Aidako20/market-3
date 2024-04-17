@@ -38,8 +38,8 @@
 			</xpath>
 			<div id="purchase_po_lead" position="replace">
 				<div class="col-12 col-lg-6 o_setting_box"
-                                    title="Margin of error for vendor lead times. When the system generates Purchase Orders for reordering products,they will be scheduled that many days earlier to cope with unexpected vendor delays."
-                                    name="schedule_receivings_setting_container">
+title="Margin of error for vendor lead times. When the system generates Purchase Orders for reordering products,they will be scheduled that many days earlier to cope with unexpected vendor delays."
+name="schedule_receivings_setting_container">
 					<div class="o_setting_left_pane">
 						<field name="use_po_lead"/>
 					</div>

@@ -5,6 +5,6 @@ from flectra import fields, models
 
 
 class Uom(models.Model):
-    _inherit = 'uom.uom'
+_inherit = 'uom.uom'
 
-    timesheet_widget = fields.Char("Widget", help="Widget used in the webclient when this unit is the one used to encode timesheets.")
+timesheet_widget = fields.Char("Widget", help="Widget used in the webclient when this unit is the one used to encode timesheets.")

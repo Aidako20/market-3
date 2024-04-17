@@ -238,7 +238,7 @@ do_niif_52030207,61030207,Asesorías (P. Jurídica),account.data_account_type_ex
 do_niif_52030208,61030208,Fumigaciones (P. Jurídica),account.data_account_type_expenses,FALSE,do_chart_template,"account_tag_6,account_tag_52,account_tag_5203,account_tag_520302"
 do_niif_52030209,61030209,Copias y Escaneos (P. Jurídica),account.data_account_type_expenses,FALSE,do_chart_template,"account_tag_6,account_tag_52,account_tag_5203,account_tag_520302"
 do_niif_52030210,61030210,Servicios de Vigilancia (P. Jurídica),account.data_account_type_expenses,FALSE,do_chart_template,"account_tag_6,account_tag_52,account_tag_5203,account_tag_520302"
-do_niif_52030211,61030211,Otros Servicios Profesionales  (P. Jurídica),account.data_account_type_expenses,FALSE,do_chart_template,"account_tag_6,account_tag_52,account_tag_5203,account_tag_520302"
+do_niif_52030211,61030211,Otros Servicios Profesionales (P. Jurídica),account.data_account_type_expenses,FALSE,do_chart_template,"account_tag_6,account_tag_52,account_tag_5203,account_tag_520302"
 do_niif_52030301,61030301,Honorarios por Servicios del Exterior - Relacionadas,account.data_account_type_expenses,FALSE,do_chart_template,"account_tag_6,account_tag_52,account_tag_5203,account_tag_520303"
 do_niif_52030302,61030302,Honorarios por Servicios del Exterior - Terceros,account.data_account_type_expenses,FALSE,do_chart_template,"account_tag_6,account_tag_52,account_tag_5203,account_tag_520303"
 do_niif_52040100,61040100,Gastos por Depreciación de Edificios,account.data_account_type_depreciation,FALSE,do_chart_template,"account_tag_6,account_tag_52,account_tag_5204"

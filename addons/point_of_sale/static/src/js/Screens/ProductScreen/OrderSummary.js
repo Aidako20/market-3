@@ -1,13 +1,13 @@
 flectra.define('point_of_sale.OrderSummary', function(require) {
-    'use strict';
+'use strict';
 
-    const PosComponent = require('point_of_sale.PosComponent');
-    const Registries = require('point_of_sale.Registries');
+const PosComponent = require('point_of_sale.PosComponent');
+const Registries = require('point_of_sale.Registries');
 
-    class OrderSummary extends PosComponent {}
-    OrderSummary.template = 'OrderSummary';
+class OrderSummary extends PosComponent {}
+OrderSummary.template = 'OrderSummary';
 
-    Registries.Component.add(OrderSummary);
+Registries.Component.add(OrderSummary);
 
-    return OrderSummary;
+return OrderSummary;
 });

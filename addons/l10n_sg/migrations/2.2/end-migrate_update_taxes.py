@@ -3,4 +3,4 @@ from flectra.addons.account.models.chart_template import update_taxes_from_templ
 
 
 def migrate(cr, version):
-    update_taxes_from_templates(cr, 'l10n_sg.sg_chart_template')
+update_taxes_from_templates(cr, 'l10n_sg.sg_chart_template')

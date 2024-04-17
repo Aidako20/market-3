@@ -7,9 +7,9 @@ const FormView = require('web.FormView');
 const viewRegistry = require('web.view_registry');
 
 const ImLivechatChannelFormView = FormView.extend({
-    config: Object.assign({}, FormView.prototype.config, {
-        Controller: ImLivechatChannelFormController,
-    }),
+config: Object.assign({}, FormView.prototype.config, {
+Controller: ImLivechatChannelFormController,
+}),
 });
 
 viewRegistry.add('im_livechat_channel_form_view_js', ImLivechatChannelFormView);

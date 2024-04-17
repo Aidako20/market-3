@@ -1,15 +1,15 @@
 /*
- * jQuery UI Nested Sortable
- * v 2.1a / 2016-02-04
- * https://github.com/ilikenwf/nestedSortable
- *
- * Depends on:
- *	 jquery.ui.sortable.js 1.10+
- *
- * Copyright (c) 2010-2016 Manuele J Sarfatti and contributors
- * Licensed under the MIT License
- * http://www.opensource.org/licenses/mit-license.php
- */
+* jQuery UI Nested Sortable
+* v 2.1a / 2016-02-04
+* https://github.com/ilikenwf/nestedSortable
+*
+* Depends on:
+*	 jquery.ui.sortable.js 1.10+
+*
+* Copyright (c) 2010-2016 Manuele J Sarfatti and contributors
+* Licensed under the MIT License
+* http://www.opensource.org/licenses/mit-license.php
+*/
 (function( factory ) {
 	"use strict";
 
@@ -489,8 +489,8 @@
 						.removeClass(this.options.branchClass + " " + this.options.expandedClass)
 						.addClass(this.options.leafClass);
 				}
-                if(typeof parentItem !== 'undefined')
-				    this._clearEmpty(parentItem[0]);
+if(typeof parentItem !== 'undefined')
+				 this._clearEmpty(parentItem[0]);
 				this._trigger("change", event, this._uiHash());
 				// mjs - if the item is below a sibling and is moved to the right,
 				// make it a child of that sibling
@@ -534,8 +534,8 @@
 					// mjs - otherwise, add it to the bottom of the list.
 					previousItem.children(o.listType)[0].appendChild(this.placeholder[0]);
 				}
-                if(typeof parentItem !== 'undefined')
-				    this._clearEmpty(parentItem[0]);
+if(typeof parentItem !== 'undefined')
+				 this._clearEmpty(parentItem[0]);
 				this._trigger("change", event, this._uiHash());
 			} else {
 				this._isAllowed(parentItem, level, level + childLevels);

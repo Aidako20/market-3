@@ -1,9 +1,9 @@
 /*!
- * Chart.js v2.9.4
- * https://www.chartjs.org
- * (c) 2020 Chart.js Contributors
- * Released under the MIT License
- */
+* Chart.js v2.9.4
+* https://www.chartjs.org
+* (c) 2020 Chart.js Contributors
+* Released under the MIT License
+*/
 (function (global, factory) {
 typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(function() { try { return require('moment'); } catch(e) { } }()) :
 typeof define === 'function' && define.amd ? define(['require'], function(require) { return factory(function() { try { return require('moment'); } catch(e) { } }()); }) :
@@ -176,8 +176,8 @@ var conversions = createCommonjsModule(function (module) {
 
 
 // NOTE: conversions should only return primitive values (i.e. arrays, or
-//       values that give correct `typeof` results).
-//       do not use box values types (i.e. Number(), String(), etc.)
+// values that give correct `typeof` results).
+// do not use box values types (i.e. Number(), String(), etc.)
 
 var reverseKeywords = {};
 for (var key in colorName) {
@@ -343,8 +343,8 @@ convert.rgb.cmyk = function (rgb) {
 };
 
 /**
- * See https://en.m.wikipedia.org/wiki/Euclidean_distance#Squared_Euclidean_distance
- * */
+* See https://en.m.wikipedia.org/wiki/Euclidean_distance#Squared_Euclidean_distance
+* */
 function comparativeDistance(x, y) {
 	return (
 		Math.pow(x[0] - y[0], 2) +
@@ -1383,238 +1383,238 @@ var colorName$1 = {
 
 
 var colorString = {
-   getRgba: getRgba,
-   getHsla: getHsla,
-   getRgb: getRgb,
-   getHsl: getHsl,
-   getHwb: getHwb,
-   getAlpha: getAlpha,
+getRgba: getRgba,
+getHsla: getHsla,
+getRgb: getRgb,
+getHsl: getHsl,
+getHwb: getHwb,
+getAlpha: getAlpha,
 
-   hexString: hexString,
-   rgbString: rgbString,
-   rgbaString: rgbaString,
-   percentString: percentString,
-   percentaString: percentaString,
-   hslString: hslString,
-   hslaString: hslaString,
-   hwbString: hwbString,
-   keyword: keyword
+hexString: hexString,
+rgbString: rgbString,
+rgbaString: rgbaString,
+percentString: percentString,
+percentaString: percentaString,
+hslString: hslString,
+hslaString: hslaString,
+hwbString: hwbString,
+keyword: keyword
 };
 
 function getRgba(string) {
-   if (!string) {
-      return;
-   }
-   var abbr =  /^#([a-fA-F0-9]{3,4})$/i,
-       hex =  /^#([a-fA-F0-9]{6}([a-fA-F0-9]{2})?)$/i,
-       rgba = /^rgba?\(\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*(?:,\s*([+-]?[\d\.]+)\s*)?\)$/i,
-       per = /^rgba?\(\s*([+-]?[\d\.]+)\%\s*,\s*([+-]?[\d\.]+)\%\s*,\s*([+-]?[\d\.]+)\%\s*(?:,\s*([+-]?[\d\.]+)\s*)?\)$/i,
-       keyword = /(\w+)/;
+if (!string) {
+return;
+}
+var abbr = /^#([a-fA-F0-9]{3,4})$/i,
+hex = /^#([a-fA-F0-9]{6}([a-fA-F0-9]{2})?)$/i,
+rgba = /^rgba?\(\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*(?:,\s*([+-]?[\d\.]+)\s*)?\)$/i,
+per = /^rgba?\(\s*([+-]?[\d\.]+)\%\s*,\s*([+-]?[\d\.]+)\%\s*,\s*([+-]?[\d\.]+)\%\s*(?:,\s*([+-]?[\d\.]+)\s*)?\)$/i,
+keyword = /(\w+)/;
 
-   var rgb = [0, 0, 0],
-       a = 1,
-       match = string.match(abbr),
-       hexAlpha = "";
-   if (match) {
-      match = match[1];
-      hexAlpha = match[3];
-      for (var i = 0; i < rgb.length; i++) {
-         rgb[i] = parseInt(match[i] + match[i], 16);
-      }
-      if (hexAlpha) {
-         a = Math.round((parseInt(hexAlpha + hexAlpha, 16) / 255) * 100) / 100;
-      }
-   }
-   else if (match = string.match(hex)) {
-      hexAlpha = match[2];
-      match = match[1];
-      for (var i = 0; i < rgb.length; i++) {
-         rgb[i] = parseInt(match.slice(i * 2, i * 2 + 2), 16);
-      }
-      if (hexAlpha) {
-         a = Math.round((parseInt(hexAlpha, 16) / 255) * 100) / 100;
-      }
-   }
-   else if (match = string.match(rgba)) {
-      for (var i = 0; i < rgb.length; i++) {
-         rgb[i] = parseInt(match[i + 1]);
-      }
-      a = parseFloat(match[4]);
-   }
-   else if (match = string.match(per)) {
-      for (var i = 0; i < rgb.length; i++) {
-         rgb[i] = Math.round(parseFloat(match[i + 1]) * 2.55);
-      }
-      a = parseFloat(match[4]);
-   }
-   else if (match = string.match(keyword)) {
-      if (match[1] == "transparent") {
-         return [0, 0, 0, 0];
-      }
-      rgb = colorName$1[match[1]];
-      if (!rgb) {
-         return;
-      }
-   }
+var rgb = [0, 0, 0],
+a = 1,
+match = string.match(abbr),
+hexAlpha = "";
+if (match) {
+match = match[1];
+hexAlpha = match[3];
+for (var i = 0; i < rgb.length; i++) {
+rgb[i] = parseInt(match[i] + match[i], 16);
+}
+if (hexAlpha) {
+a = Math.round((parseInt(hexAlpha + hexAlpha, 16) / 255) * 100) / 100;
+}
+}
+else if (match = string.match(hex)) {
+hexAlpha = match[2];
+match = match[1];
+for (var i = 0; i < rgb.length; i++) {
+rgb[i] = parseInt(match.slice(i * 2, i * 2 + 2), 16);
+}
+if (hexAlpha) {
+a = Math.round((parseInt(hexAlpha, 16) / 255) * 100) / 100;
+}
+}
+else if (match = string.match(rgba)) {
+for (var i = 0; i < rgb.length; i++) {
+rgb[i] = parseInt(match[i + 1]);
+}
+a = parseFloat(match[4]);
+}
+else if (match = string.match(per)) {
+for (var i = 0; i < rgb.length; i++) {
+rgb[i] = Math.round(parseFloat(match[i + 1]) * 2.55);
+}
+a = parseFloat(match[4]);
+}
+else if (match = string.match(keyword)) {
+if (match[1] == "transparent") {
+return [0, 0, 0, 0];
+}
+rgb = colorName$1[match[1]];
+if (!rgb) {
+return;
+}
+}
 
-   for (var i = 0; i < rgb.length; i++) {
-      rgb[i] = scale(rgb[i], 0, 255);
-   }
-   if (!a && a != 0) {
-      a = 1;
-   }
-   else {
-      a = scale(a, 0, 1);
-   }
-   rgb[3] = a;
-   return rgb;
+for (var i = 0; i < rgb.length; i++) {
+rgb[i] = scale(rgb[i], 0, 255);
+}
+if (!a && a != 0) {
+a = 1;
+}
+else {
+a = scale(a, 0, 1);
+}
+rgb[3] = a;
+return rgb;
 }
 
 function getHsla(string) {
-   if (!string) {
-      return;
-   }
-   var hsl = /^hsla?\(\s*([+-]?\d+)(?:deg)?\s*,\s*([+-]?[\d\.]+)%\s*,\s*([+-]?[\d\.]+)%\s*(?:,\s*([+-]?[\d\.]+)\s*)?\)/;
-   var match = string.match(hsl);
-   if (match) {
-      var alpha = parseFloat(match[4]);
-      var h = scale(parseInt(match[1]), 0, 360),
-          s = scale(parseFloat(match[2]), 0, 100),
-          l = scale(parseFloat(match[3]), 0, 100),
-          a = scale(isNaN(alpha) ? 1 : alpha, 0, 1);
-      return [h, s, l, a];
-   }
+if (!string) {
+return;
+}
+var hsl = /^hsla?\(\s*([+-]?\d+)(?:deg)?\s*,\s*([+-]?[\d\.]+)%\s*,\s*([+-]?[\d\.]+)%\s*(?:,\s*([+-]?[\d\.]+)\s*)?\)/;
+var match = string.match(hsl);
+if (match) {
+var alpha = parseFloat(match[4]);
+var h = scale(parseInt(match[1]), 0, 360),
+s = scale(parseFloat(match[2]), 0, 100),
+l = scale(parseFloat(match[3]), 0, 100),
+a = scale(isNaN(alpha) ? 1 : alpha, 0, 1);
+return [h, s, l, a];
+}
 }
 
 function getHwb(string) {
-   if (!string) {
-      return;
-   }
-   var hwb = /^hwb\(\s*([+-]?\d+)(?:deg)?\s*,\s*([+-]?[\d\.]+)%\s*,\s*([+-]?[\d\.]+)%\s*(?:,\s*([+-]?[\d\.]+)\s*)?\)/;
-   var match = string.match(hwb);
-   if (match) {
-    var alpha = parseFloat(match[4]);
-      var h = scale(parseInt(match[1]), 0, 360),
-          w = scale(parseFloat(match[2]), 0, 100),
-          b = scale(parseFloat(match[3]), 0, 100),
-          a = scale(isNaN(alpha) ? 1 : alpha, 0, 1);
-      return [h, w, b, a];
-   }
+if (!string) {
+return;
+}
+var hwb = /^hwb\(\s*([+-]?\d+)(?:deg)?\s*,\s*([+-]?[\d\.]+)%\s*,\s*([+-]?[\d\.]+)%\s*(?:,\s*([+-]?[\d\.]+)\s*)?\)/;
+var match = string.match(hwb);
+if (match) {
+var alpha = parseFloat(match[4]);
+var h = scale(parseInt(match[1]), 0, 360),
+w = scale(parseFloat(match[2]), 0, 100),
+b = scale(parseFloat(match[3]), 0, 100),
+a = scale(isNaN(alpha) ? 1 : alpha, 0, 1);
+return [h, w, b, a];
+}
 }
 
 function getRgb(string) {
-   var rgba = getRgba(string);
-   return rgba && rgba.slice(0, 3);
+var rgba = getRgba(string);
+return rgba && rgba.slice(0, 3);
 }
 
 function getHsl(string) {
-  var hsla = getHsla(string);
-  return hsla && hsla.slice(0, 3);
+var hsla = getHsla(string);
+return hsla && hsla.slice(0, 3);
 }
 
 function getAlpha(string) {
-   var vals = getRgba(string);
-   if (vals) {
-      return vals[3];
-   }
-   else if (vals = getHsla(string)) {
-      return vals[3];
-   }
-   else if (vals = getHwb(string)) {
-      return vals[3];
-   }
+var vals = getRgba(string);
+if (vals) {
+return vals[3];
+}
+else if (vals = getHsla(string)) {
+return vals[3];
+}
+else if (vals = getHwb(string)) {
+return vals[3];
+}
 }
 
 // generators
 function hexString(rgba, a) {
-   var a = (a !== undefined && rgba.length === 3) ? a : rgba[3];
-   return "#" + hexDouble(rgba[0]) 
-              + hexDouble(rgba[1])
-              + hexDouble(rgba[2])
-              + (
-                 (a >= 0 && a < 1)
-                 ? hexDouble(Math.round(a * 255))
-                 : ""
-              );
+var a = (a !== undefined && rgba.length === 3) ? a : rgba[3];
+return "#" + hexDouble(rgba[0]) 
++ hexDouble(rgba[1])
++ hexDouble(rgba[2])
++ (
+(a >= 0 && a < 1)
+? hexDouble(Math.round(a * 255))
+: ""
+);
 }
 
 function rgbString(rgba, alpha) {
-   if (alpha < 1 || (rgba[3] && rgba[3] < 1)) {
-      return rgbaString(rgba, alpha);
-   }
-   return "rgb(" + rgba[0] + ", " + rgba[1] + ", " + rgba[2] + ")";
+if (alpha < 1 || (rgba[3] && rgba[3] < 1)) {
+return rgbaString(rgba, alpha);
+}
+return "rgb(" + rgba[0] + ", " + rgba[1] + ", " + rgba[2] + ")";
 }
 
 function rgbaString(rgba, alpha) {
-   if (alpha === undefined) {
-      alpha = (rgba[3] !== undefined ? rgba[3] : 1);
-   }
-   return "rgba(" + rgba[0] + ", " + rgba[1] + ", " + rgba[2]
-           + ", " + alpha + ")";
+if (alpha === undefined) {
+alpha = (rgba[3] !== undefined ? rgba[3] : 1);
+}
+return "rgba(" + rgba[0] + ", " + rgba[1] + ", " + rgba[2]
++ ", " + alpha + ")";
 }
 
 function percentString(rgba, alpha) {
-   if (alpha < 1 || (rgba[3] && rgba[3] < 1)) {
-      return percentaString(rgba, alpha);
-   }
-   var r = Math.round(rgba[0]/255 * 100),
-       g = Math.round(rgba[1]/255 * 100),
-       b = Math.round(rgba[2]/255 * 100);
+if (alpha < 1 || (rgba[3] && rgba[3] < 1)) {
+return percentaString(rgba, alpha);
+}
+var r = Math.round(rgba[0]/255 * 100),
+g = Math.round(rgba[1]/255 * 100),
+b = Math.round(rgba[2]/255 * 100);
 
-   return "rgb(" + r + "%, " + g + "%, " + b + "%)";
+return "rgb(" + r + "%, " + g + "%, " + b + "%)";
 }
 
 function percentaString(rgba, alpha) {
-   var r = Math.round(rgba[0]/255 * 100),
-       g = Math.round(rgba[1]/255 * 100),
-       b = Math.round(rgba[2]/255 * 100);
-   return "rgba(" + r + "%, " + g + "%, " + b + "%, " + (alpha || rgba[3] || 1) + ")";
+var r = Math.round(rgba[0]/255 * 100),
+g = Math.round(rgba[1]/255 * 100),
+b = Math.round(rgba[2]/255 * 100);
+return "rgba(" + r + "%, " + g + "%, " + b + "%, " + (alpha || rgba[3] || 1) + ")";
 }
 
 function hslString(hsla, alpha) {
-   if (alpha < 1 || (hsla[3] && hsla[3] < 1)) {
-      return hslaString(hsla, alpha);
-   }
-   return "hsl(" + hsla[0] + ", " + hsla[1] + "%, " + hsla[2] + "%)";
+if (alpha < 1 || (hsla[3] && hsla[3] < 1)) {
+return hslaString(hsla, alpha);
+}
+return "hsl(" + hsla[0] + ", " + hsla[1] + "%, " + hsla[2] + "%)";
 }
 
 function hslaString(hsla, alpha) {
-   if (alpha === undefined) {
-      alpha = (hsla[3] !== undefined ? hsla[3] : 1);
-   }
-   return "hsla(" + hsla[0] + ", " + hsla[1] + "%, " + hsla[2] + "%, "
-           + alpha + ")";
+if (alpha === undefined) {
+alpha = (hsla[3] !== undefined ? hsla[3] : 1);
+}
+return "hsla(" + hsla[0] + ", " + hsla[1] + "%, " + hsla[2] + "%, "
++ alpha + ")";
 }
 
 // hwb is a bit different than rgb(a) & hsl(a) since there is no alpha specific syntax
 // (hwb have alpha optional & 1 is default value)
 function hwbString(hwb, alpha) {
-   if (alpha === undefined) {
-      alpha = (hwb[3] !== undefined ? hwb[3] : 1);
-   }
-   return "hwb(" + hwb[0] + ", " + hwb[1] + "%, " + hwb[2] + "%"
-           + (alpha !== undefined && alpha !== 1 ? ", " + alpha : "") + ")";
+if (alpha === undefined) {
+alpha = (hwb[3] !== undefined ? hwb[3] : 1);
+}
+return "hwb(" + hwb[0] + ", " + hwb[1] + "%, " + hwb[2] + "%"
++ (alpha !== undefined && alpha !== 1 ? ", " + alpha : "") + ")";
 }
 
 function keyword(rgb) {
-  return reverseNames[rgb.slice(0, 3)];
+return reverseNames[rgb.slice(0, 3)];
 }
 
 // helpers
 function scale(num, min, max) {
-   return Math.min(Math.max(min, num), max);
+return Math.min(Math.max(min, num), max);
 }
 
 function hexDouble(num) {
-  var str = num.toString(16).toUpperCase();
-  return (str.length < 2) ? "0" + str : str;
+var str = num.toString(16).toUpperCase();
+return (str.length < 2) ? "0" + str : str;
 }
 
 
 //create a list of reverse color names
 var reverseNames = {};
 for (var name in colorName$1) {
-   reverseNames[colorName$1[name]] = name;
+reverseNames[colorName$1[name]] = name;
 }
 
 /* MIT license */
@@ -2108,8 +2108,8 @@ function isValidKey(key) {
 }
 
 /**
- * @namespace Chart.helpers
- */
+* @namespace Chart.helpers
+*/
 var helpers = {
 	/**
 	 * An empty function that can be used, for example, for optional callback.
@@ -2167,7 +2167,7 @@ var helpers = {
 
 	/**
 	 * Returns true if `value` is a finite number, else returns false
-	 * @param {*} value  - The value to test.
+	 * @param {*} value - The value to test.
 	 * @returns {boolean}
 	 */
 	isFinite: function(value) {
@@ -2440,49 +2440,49 @@ var helpers_core = helpers;
 // DEPRECATIONS
 
 /**
- * Provided for backward compatibility, use Chart.helpers.callback instead.
- * @function Chart.helpers.callCallback
- * @deprecated since version 2.6.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use Chart.helpers.callback instead.
+* @function Chart.helpers.callCallback
+* @deprecated since version 2.6.0
+* @todo remove at version 3
+* @private
+*/
 helpers.callCallback = helpers.callback;
 
 /**
- * Provided for backward compatibility, use Array.prototype.indexOf instead.
- * Array.prototype.indexOf compatibility: Chrome, Opera, Safari, FF1.5+, IE9+
- * @function Chart.helpers.indexOf
- * @deprecated since version 2.7.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use Array.prototype.indexOf instead.
+* Array.prototype.indexOf compatibility: Chrome, Opera, Safari, FF1.5+, IE9+
+* @function Chart.helpers.indexOf
+* @deprecated since version 2.7.0
+* @todo remove at version 3
+* @private
+*/
 helpers.indexOf = function(array, item, fromIndex) {
 	return Array.prototype.indexOf.call(array, item, fromIndex);
 };
 
 /**
- * Provided for backward compatibility, use Chart.helpers.valueOrDefault instead.
- * @function Chart.helpers.getValueOrDefault
- * @deprecated since version 2.7.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use Chart.helpers.valueOrDefault instead.
+* @function Chart.helpers.getValueOrDefault
+* @deprecated since version 2.7.0
+* @todo remove at version 3
+* @private
+*/
 helpers.getValueOrDefault = helpers.valueOrDefault;
 
 /**
- * Provided for backward compatibility, use Chart.helpers.valueAtIndexOrDefault instead.
- * @function Chart.helpers.getValueAtIndexOrDefault
- * @deprecated since version 2.7.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use Chart.helpers.valueAtIndexOrDefault instead.
+* @function Chart.helpers.getValueAtIndexOrDefault
+* @deprecated since version 2.7.0
+* @todo remove at version 3
+* @private
+*/
 helpers.getValueAtIndexOrDefault = helpers.valueAtIndexOrDefault;
 
 /**
- * Easing functions adapted from Robert Penner's easing equations.
- * @namespace Chart.helpers.easingEffects
- * @see http://www.robertpenner.com/easing/
- */
+* Easing functions adapted from Robert Penner's easing equations.
+* @namespace Chart.helpers.easingEffects
+* @see http://www.robertpenner.com/easing/
+*/
 var effects = {
 	linear: function(t) {
 		return t;
@@ -2717,12 +2717,12 @@ var helpers_easing = {
 // DEPRECATIONS
 
 /**
- * Provided for backward compatibility, use Chart.helpers.easing.effects instead.
- * @function Chart.helpers.easingEffects
- * @deprecated since version 2.7.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use Chart.helpers.easing.effects instead.
+* @function Chart.helpers.easingEffects
+* @deprecated since version 2.7.0
+* @todo remove at version 3
+* @private
+*/
 helpers_core.easingEffects = effects;
 
 var PI = Math.PI;
@@ -2733,8 +2733,8 @@ var QUARTER_PI = PI / 4;
 var TWO_THIRDS_PI = PI * 2 / 3;
 
 /**
- * @namespace Chart.helpers.canvas
- */
+* @namespace Chart.helpers.canvas
+*/
 var exports$1 = {
 	/**
 	 * Clears the entire canvas associated to the given `chart`.
@@ -2960,21 +2960,21 @@ var helpers_canvas = exports$1;
 // DEPRECATIONS
 
 /**
- * Provided for backward compatibility, use Chart.helpers.canvas.clear instead.
- * @namespace Chart.helpers.clear
- * @deprecated since version 2.7.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use Chart.helpers.canvas.clear instead.
+* @namespace Chart.helpers.clear
+* @deprecated since version 2.7.0
+* @todo remove at version 3
+* @private
+*/
 helpers_core.clear = exports$1.clear;
 
 /**
- * Provided for backward compatibility, use Chart.helpers.canvas.roundedRect instead.
- * @namespace Chart.helpers.drawRoundedRectangle
- * @deprecated since version 2.7.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use Chart.helpers.canvas.roundedRect instead.
+* @namespace Chart.helpers.drawRoundedRectangle
+* @deprecated since version 2.7.0
+* @todo remove at version 3
+* @private
+*/
 helpers_core.drawRoundedRectangle = function(ctx) {
 	ctx.beginPath();
 	exports$1.roundedRect.apply(exports$1, arguments);
@@ -2989,7 +2989,7 @@ var defaults = {
 	}
 };
 
-// TODO(v3): remove 'global' from namespace.  all default are global and
+// TODO(v3): remove 'global' from namespace. all default are global and
 // there's inconsistency around which options are under 'global'
 defaults._set('global', {
 	defaultColor: 'rgba(0,0,0,0.1)',
@@ -3006,11 +3006,11 @@ var core_defaults = defaults;
 var valueOrDefault = helpers_core.valueOrDefault;
 
 /**
- * Converts the given font object into a CSS font string.
- * @param {object} font - A font object.
- * @return {string} The CSS font string. See https://developer.mozilla.org/en-US/docs/Web/CSS/font
- * @private
- */
+* Converts the given font object into a CSS font string.
+* @param {object} font - A font object.
+* @return {string} The CSS font string. See https://developer.mozilla.org/en-US/docs/Web/CSS/font
+* @private
+*/
 function toFontString(font) {
 	if (!font || helpers_core.isNullOrUndef(font.size) || helpers_core.isNullOrUndef(font.family)) {
 		return null;
@@ -3023,9 +3023,9 @@ function toFontString(font) {
 }
 
 /**
- * @alias Chart.helpers.options
- * @namespace
- */
+* @alias Chart.helpers.options
+* @namespace
+*/
 var helpers_options = {
 	/**
 	 * Converts the given line height `value` in pixels for a specific font `size`.
@@ -3057,7 +3057,7 @@ var helpers_options = {
 	/**
 	 * Converts the given value into a padding object with pre-computed width/height.
 	 * @param {number|object} value - If a number, set the value to all TRBL component,
-	 *  else, if and object, use defined properties and sets undefined ones to 0.
+	 * else, if and object, use defined properties and sets undefined ones to 0.
 	 * @returns {object} The padding values (top, right, bottom, left, width, height)
 	 * @since 2.7.0
 	 */
@@ -3145,9 +3145,9 @@ var helpers_options = {
 };
 
 /**
- * @alias Chart.helpers.math
- * @namespace
- */
+* @alias Chart.helpers.math
+* @namespace
+*/
 var exports$2 = {
 	/**
 	 * Returns an array of factors sorted from 1 to sqrt(value)
@@ -3190,12 +3190,12 @@ var helpers_math = exports$2;
 // DEPRECATIONS
 
 /**
- * Provided for backward compatibility, use Chart.helpers.math.log10 instead.
- * @namespace Chart.helpers.log10
- * @deprecated since version 2.9.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use Chart.helpers.math.log10 instead.
+* @namespace Chart.helpers.log10
+* @deprecated since version 2.9.0
+* @todo remove at version 3
+* @private
+*/
 helpers_core.log10 = exports$2.log10;
 
 var getRtlAdapter = function(rectX, width) {
@@ -3412,11 +3412,11 @@ var core_animation = exports$3;
 // DEPRECATIONS
 
 /**
- * Provided for backward compatibility, use Chart.Animation instead
- * @prop Chart.Animation#animationObject
- * @deprecated since version 2.6.0
- * @todo remove at version 3
- */
+* Provided for backward compatibility, use Chart.Animation instead
+* @prop Chart.Animation#animationObject
+* @deprecated since version 2.6.0
+* @todo remove at version 3
+*/
 Object.defineProperty(exports$3.prototype, 'animationObject', {
 	get: function() {
 		return this;
@@ -3424,11 +3424,11 @@ Object.defineProperty(exports$3.prototype, 'animationObject', {
 });
 
 /**
- * Provided for backward compatibility, use Chart.Animation#chart instead
- * @prop Chart.Animation#chartInstance
- * @deprecated since version 2.6.0
- * @todo remove at version 3
- */
+* Provided for backward compatibility, use Chart.Animation#chart instead
+* @prop Chart.Animation#chartInstance
+* @deprecated since version 2.6.0
+* @todo remove at version 3
+*/
 Object.defineProperty(exports$3.prototype, 'chartInstance', {
 	get: function() {
 		return this.chart;
@@ -3560,10 +3560,10 @@ var resolve = helpers$1.options.resolve;
 var arrayEvents = ['push', 'pop', 'shift', 'splice', 'unshift'];
 
 /**
- * Hooks the array methods that add or remove values ('push', pop', 'shift', 'splice',
- * 'unshift') and notify the listener AFTER the array has been altered. Listeners are
- * called on the 'onData*' callbacks (e.g. onDataPush, etc.) with same arguments.
- */
+* Hooks the array methods that add or remove values ('push', pop', 'shift', 'splice',
+* 'unshift') and notify the listener AFTER the array has been altered. Listeners are
+* called on the 'onData*' callbacks (e.g. onDataPush, etc.) with same arguments.
+*/
 function listenArrayEvents(array, listener) {
 	if (array._chartjs) {
 		array._chartjs.listeners.push(listener);
@@ -3602,9 +3602,9 @@ function listenArrayEvents(array, listener) {
 }
 
 /**
- * Removes the given array event listener and cleanup extra attached properties (such as
- * the _chartjs stub and overridden methods) if array doesn't have any more listeners.
- */
+* Removes the given array event listener and cleanup extra attached properties (such as
+* the _chartjs stub and overridden methods) if array doesn't have any more listeners.
+*/
 function unlistenArrayEvents(array, listener) {
 	var stub = array._chartjs;
 	if (!stub) {
@@ -4542,11 +4542,11 @@ function isVertical(vm) {
 }
 
 /**
- * Helper function to get the bounds of the bar regardless of the orientation
- * @param bar {Chart.Element.Rectangle} the bar
- * @return {Bounds} bounds of the bar
- * @private
- */
+* Helper function to get the bounds of the bar regardless of the orientation
+* @param bar {Chart.Element.Rectangle} the bar
+* @return {Bounds} bounds of the bar
+* @private
+*/
 function getBarBounds(vm) {
 	var x1, x2, y1, y2, half;
 
@@ -4775,9 +4775,9 @@ core_defaults._set('global', {
 });
 
 /**
- * Computes the "optimal" sample size to maintain bars equally sized while preventing overlap.
- * @private
- */
+* Computes the "optimal" sample size to maintain bars equally sized while preventing overlap.
+* @private
+*/
 function computeMinSampleSize(scale, pixels) {
 	var min = scale._length;
 	var prev, curr, i, ilen;
@@ -4796,11 +4796,11 @@ function computeMinSampleSize(scale, pixels) {
 }
 
 /**
- * Computes an "ideal" category based on the absolute bar thickness or, if undefined or null,
- * uses the smallest interval (see computeMinSampleSize) that prevents bar overlapping. This
- * mode currently always generates bars equally sized (until we introduce scriptable options?).
- * @private
- */
+* Computes an "ideal" category based on the absolute bar thickness or, if undefined or null,
+* uses the smallest interval (see computeMinSampleSize) that prevents bar overlapping. This
+* mode currently always generates bars equally sized (until we introduce scriptable options?).
+* @private
+*/
 function computeFitCategoryTraits(index, ruler, options) {
 	var thickness = options.barThickness;
 	var count = ruler.stackCount;
@@ -4829,11 +4829,11 @@ function computeFitCategoryTraits(index, ruler, options) {
 }
 
 /**
- * Computes an "optimal" category that globally arranges bars side by side (no gap when
- * percentage options are 1), based on the previous and following categories. This mode
- * generates bars with different widths when data are not evenly spaced.
- * @private
- */
+* Computes an "optimal" category that globally arranges bars side by side (no gap when
+* percentage options are 1), based on the previous and following categories. This mode
+* generates bars with different widths when data are not evenly spaced.
+* @private
+*/
 function computeFlexCategoryTraits(index, ruler, options) {
 	var pixels = ruler.pixels;
 	var curr = pixels[index];
@@ -4978,11 +4978,11 @@ var controller_bar = core_datasetController.extend({
 
 		for (i = 0; i < ilen; ++i) {
 			meta = metasets[i];
-			// stacked   | meta.stack
-			//           | found | not found | undefined
-			// false     |   x   |     x     |     x
-			// true      |       |     x     |
-			// undefined |       |     x     |     x
+			// stacked | meta.stack
+			// | found | not found | undefined
+			// false | x | x | x
+			// true | | x |
+			// undefined | | x | x
 			if (stacked === false || stacks.indexOf(meta.stack) === -1 ||
 				(stacked === undefined && meta.stack === undefined)) {
 				stacks.push(meta.stack);
@@ -5709,7 +5709,7 @@ var controller_doughnut = core_datasetController.extend({
 	},
 
 	/**
-	 * Returns the sum of all visibile data set weights.  This value can be 0.
+	 * Returns the sum of all visibile data set weights. This value can be 0.
 	 * @private
 	 */
 	_getVisibleDatasetWeightTotal: function() {
@@ -6652,8 +6652,8 @@ core_defaults._set('scatter', {
 
 	scales: {
 		xAxes: [{
-			id: 'x-axis-1',    // need an ID so datasets can reference the scale
-			type: 'linear',    // scatter should not use a category axis
+			id: 'x-axis-1', // need an ID so datasets can reference the scale
+			type: 'linear', // scatter should not use a category axis
 			position: 'bottom'
 		}],
 		yAxes: [{
@@ -6666,7 +6666,7 @@ core_defaults._set('scatter', {
 	tooltips: {
 		callbacks: {
 			title: function() {
-				return '';     // doesn't make sense for scatter since data are formatted as a point
+				return ''; // doesn't make sense for scatter since data are formatted as a point
 			},
 			label: function(item) {
 				return '(' + item.xLabel + ', ' + item.yLabel + ')';
@@ -6703,11 +6703,11 @@ var controllers = {
 };
 
 /**
- * Helper function to get relative position for an event
- * @param {Event|IEvent} event - The event to get the position for
- * @param {Chart} chart - The chart
- * @returns {object} the event position
- */
+* Helper function to get relative position for an event
+* @param {Event|IEvent} event - The event to get the position for
+* @param {Chart} chart - The chart
+* @returns {object} the event position
+*/
 function getRelativePosition(e, chart) {
 	if (e.native) {
 		return {
@@ -6720,10 +6720,10 @@ function getRelativePosition(e, chart) {
 }
 
 /**
- * Helper function to traverse all of the visible elements in the chart
- * @param {Chart} chart - the chart
- * @param {function} handler - the callback to execute for each visible item
- */
+* Helper function to traverse all of the visible elements in the chart
+* @param {Chart} chart - the chart
+* @param {function} handler - the callback to execute for each visible item
+*/
 function parseVisibleItems(chart, handler) {
 	var metasets = chart._getSortedVisibleDatasetMetas();
 	var metadata, i, j, ilen, jlen, element;
@@ -6740,11 +6740,11 @@ function parseVisibleItems(chart, handler) {
 }
 
 /**
- * Helper function to get the items that intersect the event position
- * @param {ChartElement[]} items - elements to filter
- * @param {object} position - the point to be nearest to
- * @return {ChartElement[]} the nearest items
- */
+* Helper function to get the items that intersect the event position
+* @param {ChartElement[]} items - elements to filter
+* @param {object} position - the point to be nearest to
+* @return {ChartElement[]} the nearest items
+*/
 function getIntersectItems(chart, position) {
 	var elements = [];
 
@@ -6758,13 +6758,13 @@ function getIntersectItems(chart, position) {
 }
 
 /**
- * Helper function to get the items nearest to the event position considering all visible items in teh chart
- * @param {Chart} chart - the chart to look at elements from
- * @param {object} position - the point to be nearest to
- * @param {boolean} intersect - if true, only consider items that intersect the position
- * @param {function} distanceMetric - function to provide the distance between points
- * @return {ChartElement[]} the nearest items
- */
+* Helper function to get the items nearest to the event position considering all visible items in teh chart
+* @param {Chart} chart - the chart to look at elements from
+* @param {object} position - the point to be nearest to
+* @param {boolean} intersect - if true, only consider items that intersect the position
+* @param {function} distanceMetric - function to provide the distance between points
+* @return {ChartElement[]} the nearest items
+*/
 function getNearestItems(chart, position, intersect, distanceMetric) {
 	var minDistance = Number.POSITIVE_INFINITY;
 	var nearestItems = [];
@@ -6789,10 +6789,10 @@ function getNearestItems(chart, position, intersect, distanceMetric) {
 }
 
 /**
- * Get a distance metric function for two points based on the
- * axis mode setting
- * @param {string} axis - the axis mode. x|y|xy
- */
+* Get a distance metric function for two points based on the
+* axis mode setting
+* @param {string} axis - the axis mode. x|y|xy
+*/
 function getDistanceMetricForAxis(axis) {
 	var useX = axis.indexOf('x') !== -1;
 	var useY = axis.indexOf('y') !== -1;
@@ -6829,18 +6829,18 @@ function indexMode(chart, e, options) {
 }
 
 /**
- * @interface IInteractionOptions
- */
+* @interface IInteractionOptions
+*/
 /**
- * If true, only consider items that intersect the point
- * @name IInterfaceOptions#boolean
- * @type Boolean
- */
+* If true, only consider items that intersect the point
+* @name IInterfaceOptions#boolean
+* @type Boolean
+*/
 
 /**
- * Contains interaction related functions
- * @namespace Chart.Interaction
- */
+* Contains interaction related functions
+* @namespace Chart.Interaction
+*/
 var core_interaction = {
 	// Helper function for different modes
 	modes: {
@@ -7204,23 +7204,23 @@ core_defaults._set('global', {
 });
 
 /**
- * @interface ILayoutItem
- * @prop {string} position - The position of the item in the chart layout. Possible values are
- * 'left', 'top', 'right', 'bottom', and 'chartArea'
- * @prop {number} weight - The weight used to sort the item. Higher weights are further away from the chart area
- * @prop {boolean} fullWidth - if true, and the item is horizontal, then push vertical boxes down
- * @prop {function} isHorizontal - returns true if the layout item is horizontal (ie. top or bottom)
- * @prop {function} update - Takes two parameters: width and height. Returns size of item
- * @prop {function} getPadding -  Returns an object with padding on the edges
- * @prop {number} width - Width of item. Must be valid after update()
- * @prop {number} height - Height of item. Must be valid after update()
- * @prop {number} left - Left edge of the item. Set by layout system and cannot be used in update
- * @prop {number} top - Top edge of the item. Set by layout system and cannot be used in update
- * @prop {number} right - Right edge of the item. Set by layout system and cannot be used in update
- * @prop {number} bottom - Bottom edge of the item. Set by layout system and cannot be used in update
- */
+* @interface ILayoutItem
+* @prop {string} position - The position of the item in the chart layout. Possible values are
+* 'left', 'top', 'right', 'bottom', and 'chartArea'
+* @prop {number} weight - The weight used to sort the item. Higher weights are further away from the chart area
+* @prop {boolean} fullWidth - if true, and the item is horizontal, then push vertical boxes down
+* @prop {function} isHorizontal - returns true if the layout item is horizontal (ie. top or bottom)
+* @prop {function} update - Takes two parameters: width and height. Returns size of item
+* @prop {function} getPadding - Returns an object with padding on the edges
+* @prop {number} width - Width of item. Must be valid after update()
+* @prop {number} height - Height of item. Must be valid after update()
+* @prop {number} left - Left edge of the item. Set by layout system and cannot be used in update
+* @prop {number} top - Top edge of the item. Set by layout system and cannot be used in update
+* @prop {number} right - Right edge of the item. Set by layout system and cannot be used in update
+* @prop {number} bottom - Bottom edge of the item. Set by layout system and cannot be used in update
+*/
 
-// The layout service is very self explanatory.  It's responsible for the layout within a chart.
+// The layout service is very self explanatory. It's responsible for the layout within a chart.
 // Scales, Legends and Plugins all rely on the layout service and can easily register to be placed anywhere they need
 // It is this service's responsibility of carrying out that layout.
 var core_layouts = {
@@ -7315,21 +7315,21 @@ var core_layouts = {
 		// an error will be thrown.
 		//
 		// |----------------------------------------------------|
-		// |                  T1 (Full Width)                   |
+		// | T1 (Full Width) |
 		// |----------------------------------------------------|
-		// |    |    |                 T2                  |    |
-		// |    |----|-------------------------------------|----|
-		// |    |    | C1 |                           | C2 |    |
-		// |    |    |----|                           |----|    |
-		// |    |    |                                     |    |
-		// | L1 | L2 |           ChartArea (C0)            | R1 |
-		// |    |    |                                     |    |
-		// |    |    |----|                           |----|    |
-		// |    |    | C3 |                           | C4 |    |
-		// |    |----|-------------------------------------|----|
-		// |    |    |                 B1                  |    |
+		// | | | T2 | |
+		// | |----|-------------------------------------|----|
+		// | | | C1 | | C2 | |
+		// | | |----| |----| |
+		// | | | | |
+		// | L1 | L2 | ChartArea (C0) | R1 |
+		// | | | | |
+		// | | |----| |----| |
+		// | | | C3 | | C4 | |
+		// | |----|-------------------------------------|----|
+		// | | | B1 | |
 		// |----------------------------------------------------|
-		// |                  B2 (Full Width)                   |
+		// | B2 (Full Width) |
 		// |----------------------------------------------------|
 		//
 
@@ -7388,9 +7388,9 @@ var core_layouts = {
 };
 
 /**
- * Platform fallback implementation (minimal).
- * @see https://github.com/chartjs/Chart.js/pull/4591#issuecomment-319575939
- */
+* Platform fallback implementation (minimal).
+* @see https://github.com/chartjs/Chart.js/pull/4591#issuecomment-319575939
+*/
 
 var platform_basic = {
 	acquireContext: function(item) {
@@ -7420,10 +7420,10 @@ var CSS_RENDER_ANIMATION = CSS_PREFIX + 'render-animation';
 var ANIMATION_START_EVENTS = ['animationstart', 'webkitAnimationStart'];
 
 /**
- * DOM event types -> Chart.js event types.
- * Note: only events with different types are mapped.
- * @see https://developer.mozilla.org/en-US/docs/Web/Events
- */
+* DOM event types -> Chart.js event types.
+* Note: only events with different types are mapped.
+* @see https://developer.mozilla.org/en-US/docs/Web/Events
+*/
 var EVENT_TYPES = {
 	touchstart: 'mousedown',
 	touchmove: 'mousemove',
@@ -7437,14 +7437,14 @@ var EVENT_TYPES = {
 };
 
 /**
- * The "used" size is the final value of a dimension property after all calculations have
- * been performed. This method uses the computed style of `element` but returns undefined
- * if the computed style is not expressed in pixels. That can happen in some cases where
- * `element` has a size relative to its parent and this last one is not yet displayed,
- * for example because of `display: none` on a parent node.
- * @see https://developer.mozilla.org/en-US/docs/Web/CSS/used_value
- * @returns {number} Size in pixels or undefined if unknown.
- */
+* The "used" size is the final value of a dimension property after all calculations have
+* been performed. This method uses the computed style of `element` but returns undefined
+* if the computed style is not expressed in pixels. That can happen in some cases where
+* `element` has a size relative to its parent and this last one is not yet displayed,
+* for example because of `display: none` on a parent node.
+* @see https://developer.mozilla.org/en-US/docs/Web/CSS/used_value
+* @returns {number} Size in pixels or undefined if unknown.
+*/
 function readUsedSize(element, property) {
 	var value = helpers$1.getStyle(element, property);
 	var matches = value && value.match(/^(\d+)(\.\d+)?px$/);
@@ -7452,10 +7452,10 @@ function readUsedSize(element, property) {
 }
 
 /**
- * Initializes the canvas style and render size without modifying the canvas display size,
- * since responsiveness is handled by the controller.resize() method. The config is used
- * to determine the aspect ratio to apply in case no explicit height has been specified.
- */
+* Initializes the canvas style and render size without modifying the canvas display size,
+* since responsiveness is handled by the controller.resize() method. The config is used
+* to determine the aspect ratio to apply in case no explicit height has been specified.
+*/
 function initCanvas(canvas, config) {
 	var style = canvas.style;
 
@@ -7507,10 +7507,10 @@ function initCanvas(canvas, config) {
 }
 
 /**
- * Detects support for options object argument in addEventListener.
- * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Safely_detecting_option_support
- * @private
- */
+* Detects support for options object argument in addEventListener.
+* https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Safely_detecting_option_support
+* @private
+*/
 var supportsEventListenerOptions = (function() {
 	var supports = false;
 	try {
@@ -7700,10 +7700,10 @@ function removeResizeListener(node) {
 }
 
 /**
- * Injects CSS styles inline if the styles are not already present.
- * @param {HTMLDocument|ShadowRoot} rootNode - the node to contain the <style>.
- * @param {string} css - the CSS to be injected.
- */
+* Injects CSS styles inline if the styles are not already present.
+* @param {HTMLDocument|ShadowRoot} rootNode - the node to contain the <style>.
+* @param {string} css - the CSS to be injected.
+*/
 function injectCSS(rootNode, css) {
 	// https://stackoverflow.com/q/3922139
 	var expando = rootNode[EXPANDO_KEY] || (rootNode[EXPANDO_KEY] = {});
@@ -7855,35 +7855,35 @@ var platform_dom$2 = {
 // DEPRECATIONS
 
 /**
- * Provided for backward compatibility, use EventTarget.addEventListener instead.
- * EventTarget.addEventListener compatibility: Chrome, Opera 7, Safari, FF1.5+, IE9+
- * @see https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
- * @function Chart.helpers.addEvent
- * @deprecated since version 2.7.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use EventTarget.addEventListener instead.
+* EventTarget.addEventListener compatibility: Chrome, Opera 7, Safari, FF1.5+, IE9+
+* @see https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+* @function Chart.helpers.addEvent
+* @deprecated since version 2.7.0
+* @todo remove at version 3
+* @private
+*/
 helpers$1.addEvent = addListener;
 
 /**
- * Provided for backward compatibility, use EventTarget.removeEventListener instead.
- * EventTarget.removeEventListener compatibility: Chrome, Opera 7, Safari, FF1.5+, IE9+
- * @see https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener
- * @function Chart.helpers.removeEvent
- * @deprecated since version 2.7.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use EventTarget.removeEventListener instead.
+* EventTarget.removeEventListener compatibility: Chrome, Opera 7, Safari, FF1.5+, IE9+
+* @see https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener
+* @function Chart.helpers.removeEvent
+* @deprecated since version 2.7.0
+* @todo remove at version 3
+* @private
+*/
 helpers$1.removeEvent = removeListener;
 
 // @TODO Make possible to select another platform at build time.
 var implementation = platform_dom$2._enabled ? platform_dom$2 : platform_basic;
 
 /**
- * @namespace Chart.platform
- * @see https://chartjs.gitbooks.io/proposals/content/Platform.html
- * @since 2.4.0
- */
+* @namespace Chart.platform
+* @see https://chartjs.gitbooks.io/proposals/content/Platform.html
+* @since 2.4.0
+*/
 var platform = helpers$1.extend({
 	/**
 	 * @since 2.7.0
@@ -7931,10 +7931,10 @@ core_defaults._set('global', {
 });
 
 /**
- * The plugin service singleton
- * @namespace Chart.plugins
- * @since 2.1.0
- */
+* The plugin service singleton
+* @namespace Chart.plugins
+* @since 2.1.0
+*/
 var core_plugins = {
 	/**
 	 * Globally registered plugins.
@@ -8317,11 +8317,11 @@ function pushOrConcat(base, toPush) {
 }
 
 /**
- * Returns array of strings split by newline
- * @param {string} value - The value to split by newline.
- * @returns {string[]} value if newline present - Returned from String split() method
- * @function
- */
+* Returns array of strings split by newline
+* @param {string} value - The value to split by newline.
+* @returns {string[]} value if newline present - Returned from String split() method
+* @function
+*/
 function splitNewlines(str) {
 	if ((typeof str === 'string' || str instanceof String) && str.indexOf('\n') > -1) {
 		return str.split('\n');
@@ -8331,10 +8331,10 @@ function splitNewlines(str) {
 
 
 /**
- * Private helper to create a tooltip item model
- * @param element - the chart element (point, arc, bar) to create the tooltip item for
- * @return new tooltip item
- */
+* Private helper to create a tooltip item model
+* @param element - the chart element (point, arc, bar) to create the tooltip item for
+* @return new tooltip item
+*/
 function createTooltipItem(element) {
 	var xScale = element._xScale;
 	var yScale = element._yScale || element._scale; // handle radar || polarArea charts
@@ -8357,9 +8357,9 @@ function createTooltipItem(element) {
 }
 
 /**
- * Helper to get the reset model for the tooltip
- * @param tooltipOpts {object} the tooltip options
- */
+* Helper to get the reset model for the tooltip
+* @param tooltipOpts {object} the tooltip options
+*/
 function getBaseModel(tooltipOpts) {
 	var globalDefaults = core_defaults.global;
 
@@ -8413,8 +8413,8 @@ function getBaseModel(tooltipOpts) {
 }
 
 /**
- * Get the size of the tooltip
- */
+* Get the size of the tooltip
+*/
 function getTooltipSize(tooltip, model) {
 	var ctx = tooltip._chart.ctx;
 
@@ -8481,8 +8481,8 @@ function getTooltipSize(tooltip, model) {
 }
 
 /**
- * Helper to get the alignment of a tooltip given the size
- */
+* Helper to get the alignment of a tooltip given the size
+*/
 function determineAlignment(tooltip, size) {
 	var model = tooltip._model;
 	var chart = tooltip._chart;
@@ -8554,8 +8554,8 @@ function determineAlignment(tooltip, size) {
 }
 
 /**
- * Helper to get the location a tooltip needs to be placed at given the initial position (via the vm) and the size and alignment
- */
+* Helper to get the location a tooltip needs to be placed at given the initial position (via the vm) and the size and alignment
+*/
 function getBackgroundPoint(vm, size, alignment, chart) {
 	// Background Position
 	var x = vm.x;
@@ -8616,8 +8616,8 @@ function getAlignedX(vm, align) {
 }
 
 /**
- * Helper to build before and after body lines
- */
+* Helper to build before and after body lines
+*/
 function getBeforeAfterBodyLines(callback) {
 	return pushOrConcat([], splitNewlines(callback));
 }
@@ -9150,8 +9150,8 @@ var exports$4 = core_element.extend({
 });
 
 /**
- * @namespace Chart.Tooltip.positioners
- */
+* @namespace Chart.Tooltip.positioners
+*/
 var positioners_1 = positioners;
 
 var core_tooltip = exports$4;
@@ -9181,10 +9181,10 @@ core_defaults._set('global', {
 });
 
 /**
- * Recursively merge the given config objects representing the `scales` option
- * by incorporating scale defaults in `xAxes` and `yAxes` array items, then
- * returns a deep copy of the result, thus doesn't alter inputs.
- */
+* Recursively merge the given config objects representing the `scales` option
+* by incorporating scale defaults in `xAxes` and `yAxes` array items, then
+* returns a deep copy of the result, thus doesn't alter inputs.
+*/
 function mergeScaleConfig(/* config objects ... */) {
 	return helpers$1.merge(Object.create(null), [].slice.call(arguments), {
 		merger: function(key, target, source, options) {
@@ -9221,10 +9221,10 @@ function mergeScaleConfig(/* config objects ... */) {
 }
 
 /**
- * Recursively merge the given config objects as the root options by handling
- * default scale options for the `scales` and `scale` properties, then returns
- * a deep copy of the result, thus doesn't alter inputs.
- */
+* Recursively merge the given config objects as the root options by handling
+* default scale options for the `scales` and `scale` properties, then returns
+* a deep copy of the result, thus doesn't alter inputs.
+*/
 function mergeConfig(/* config objects ... */) {
 	return helpers$1.merge(Object.create(null), [].slice.call(arguments), {
 		merger: function(key, target, source, options) {
@@ -10251,10 +10251,10 @@ helpers$1.extend(Chart.prototype, /** @lends Chart */ {
 });
 
 /**
- * NOTE(SB) We actually don't use this container anymore but we need to keep it
- * for backward compatibility. Though, it can still be useful for plugins that
- * would need to work on multiple charts?!
- */
+* NOTE(SB) We actually don't use this container anymore but we need to keep it
+* for backward compatibility. Though, it can still be useful for plugins that
+* would need to work on multiple charts?!
+*/
 Chart.instances = {};
 
 var core_controller = Chart;
@@ -10262,39 +10262,39 @@ var core_controller = Chart;
 // DEPRECATIONS
 
 /**
- * Provided for backward compatibility, use Chart instead.
- * @class Chart.Controller
- * @deprecated since version 2.6
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use Chart instead.
+* @class Chart.Controller
+* @deprecated since version 2.6
+* @todo remove at version 3
+* @private
+*/
 Chart.Controller = Chart;
 
 /**
- * Provided for backward compatibility, not available anymore.
- * @namespace Chart
- * @deprecated since version 2.8
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, not available anymore.
+* @namespace Chart
+* @deprecated since version 2.8
+* @todo remove at version 3
+* @private
+*/
 Chart.types = {};
 
 /**
- * Provided for backward compatibility, not available anymore.
- * @namespace Chart.helpers.configMerge
- * @deprecated since version 2.8.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, not available anymore.
+* @namespace Chart.helpers.configMerge
+* @deprecated since version 2.8.0
+* @todo remove at version 3
+* @private
+*/
 helpers$1.configMerge = mergeConfig;
 
 /**
- * Provided for backward compatibility, not available anymore.
- * @namespace Chart.helpers.scaleMerge
- * @deprecated since version 2.8.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, not available anymore.
+* @namespace Chart.helpers.scaleMerge
+* @deprecated since version 2.8.0
+* @todo remove at version 3
+* @private
+*/
 helpers$1.scaleMerge = mergeScaleConfig;
 
 var core_helpers = function() {
@@ -10743,7 +10743,7 @@ var core_helpers = function() {
 	};
 	/**
 	 * @private
- 	 */
+	 */
 	helpers$1._calculatePadding = function(container, padding, parentDimension) {
 		padding = helpers$1.getStyle(container, padding);
 
@@ -10762,10 +10762,10 @@ var core_helpers = function() {
 	helpers$1.getMaximumWidth = function(domNode) {
 		var container = helpers$1._getParentNode(domNode);
 		if (!container) {
-			return domNode.getBoundingClientRect().width;  // Flectra customization
+			return domNode.getBoundingClientRect().width; // Flectra customization
 		}
 
-		var clientWidth = container.getBoundingClientRect().width;  // Flectra customization
+		var clientWidth = container.getBoundingClientRect().width; // Flectra customization
 		var paddingLeft = helpers$1._calculatePadding(container, 'padding-left', clientWidth);
 		var paddingRight = helpers$1._calculatePadding(container, 'padding-right', clientWidth);
 
@@ -10776,10 +10776,10 @@ var core_helpers = function() {
 	helpers$1.getMaximumHeight = function(domNode) {
 		var container = helpers$1._getParentNode(domNode);
 		if (!container) {
-			return domNode.getBoundingClientRect().height;  // Flectra customization
+			return domNode.getBoundingClientRect().height; // Flectra customization
 		}
 
-		var clientHeight = container.getBoundingClientRect().height;  // Flectra customization
+		var clientHeight = container.getBoundingClientRect().height; // Flectra customization
 		var paddingTop = helpers$1._calculatePadding(container, 'padding-top', clientHeight);
 		var paddingBottom = helpers$1._calculatePadding(container, 'padding-bottom', clientHeight);
 
@@ -10918,22 +10918,22 @@ function abstract() {
 }
 
 /**
- * Date adapter (current used by the time scale)
- * @namespace Chart._adapters._date
- * @memberof Chart._adapters
- * @private
- */
+* Date adapter (current used by the time scale)
+* @namespace Chart._adapters._date
+* @memberof Chart._adapters
+* @private
+*/
 
 /**
- * Currently supported unit string values.
- * @typedef {('millisecond'|'second'|'minute'|'hour'|'day'|'week'|'month'|'quarter'|'year')}
- * @memberof Chart._adapters._date
- * @name Unit
- */
+* Currently supported unit string values.
+* @typedef {('millisecond'|'second'|'minute'|'hour'|'day'|'week'|'month'|'quarter'|'year')}
+* @memberof Chart._adapters._date
+* @name Unit
+*/
 
 /**
- * @class
- */
+* @class
+*/
 function DateAdapter(options) {
 	this.options = options || {};
 }
@@ -11027,9 +11027,9 @@ var core_adapters = {
 };
 
 /**
- * Namespace to hold static tick generation functions
- * @namespace Chart.Ticks
- */
+* Namespace to hold static tick generation functions
+* @namespace Chart.Ticks
+*/
 var core_ticks = {
 	/**
 	 * Namespace to hold formatters for different types of ticks
@@ -11218,9 +11218,9 @@ function garbageCollect(caches, length) {
 }
 
 /**
- * Returns {width, height, offset} objects for the first, last, widest, highest tick
- * labels where offset indicates the anchor point offset from the top in pixels.
- */
+* Returns {width, height, offset} objects for the first, last, widest, highest tick
+* labels where offset indicates the anchor point offset from the top in pixels.
+*/
 function computeLabelSizes(ctx, tickFonts, ticks, caches) {
 	var length = ticks.length;
 	var widths = [];
@@ -11481,9 +11481,9 @@ var Scale = core_element.extend({
 	 * @param {number} maxWidth - the max width in pixels
 	 * @param {number} maxHeight - the max height in pixels
 	 * @param {object} margins - the space between the edge of the other scales and edge of the chart
-	 *   This space comes from two sources:
-	 *     - padding - space that's required to show the labels at the edges of the scale
-	 *     - thickness of scales or legends in another orientation
+	 * This space comes from two sources:
+	 * - padding - space that's required to show the labels at the edges of the scale
+	 * - thickness of scales or legends in another orientation
 	 */
 	update: function(maxWidth, maxHeight, margins) {
 		var me = this;
@@ -11580,7 +11580,7 @@ var Scale = core_element.extend({
 			labels = me._convertTicksToLabels(me._ticksToDraw);
 		}
 
-		me.ticks = labels;   // BACKWARD COMPATIBILITY
+		me.ticks = labels; // BACKWARD COMPATIBILITY
 
 		// IMPORTANT: after this point, we consider that `this.ticks` will NEVER change!
 
@@ -12622,7 +12622,7 @@ var scale_category = core_scale.extend({
 		me._valueRange = Math.max(ticks.length - (offset ? 0 : 1), 1);
 	},
 
-	// Used to get data value locations.  Value can either be an index or a numerical value
+	// Used to get data value locations. Value can either be an index or a numerical value
 	getPixelForValue: function(value, index, datasetIndex) {
 		var me = this;
 		var valueCategory, labels, idx;
@@ -12674,11 +12674,11 @@ var noop = helpers$1.noop;
 var isNullOrUndef$2 = helpers$1.isNullOrUndef;
 
 /**
- * Generate a set of linear ticks
- * @param generationOptions the options used to generate the ticks
- * @param dataRange the range of the data
- * @returns {number[]} array of tick values
- */
+* Generate a set of linear ticks
+* @param generationOptions the options used to generate the ticks
+* @param dataRange the range of the data
+* @returns {number[]} array of tick values
+*/
 function generateTicks(generationOptions, dataRange) {
 	var ticks = [];
 	// To get a "nice" value for the tick spacing, we will use the appropriately named
@@ -13087,11 +13087,11 @@ var valueOrDefault$b = helpers$1.valueOrDefault;
 var log10 = helpers$1.math.log10;
 
 /**
- * Generate a set of logarithmic ticks
- * @param generationOptions the options used to generate the ticks
- * @param dataRange the range of the data
- * @returns {number[]} array of tick values
- */
+* Generate a set of logarithmic ticks
+* @param generationOptions the options used to generate the ticks
+* @param dataRange the range of the data
+* @returns {number[]} array of tick values
+*/
 function generateTicks$1(generationOptions, dataRange) {
 	var ticks = [];
 
@@ -13483,8 +13483,8 @@ function determineLimits(angle, pos, size, min, max) {
 }
 
 /**
- * Helper function to fit a radial linear scale with point labels
- */
+* Helper function to fit a radial linear scale with point labels
+*/
 function fitWithPointLabels(scale) {
 
 	// Right, this is really confusing and there is a lot of maths going on here
@@ -14025,20 +14025,20 @@ function getMax(options) {
 }
 
 /**
- * Returns an array of {time, pos} objects used to interpolate a specific `time` or position
- * (`pos`) on the scale, by searching entries before and after the requested value. `pos` is
- * a decimal between 0 and 1: 0 being the start of the scale (left or top) and 1 the other
- * extremity (left + width or top + height). Note that it would be more optimized to directly
- * store pre-computed pixels, but the scale dimensions are not guaranteed at the time we need
- * to create the lookup table. The table ALWAYS contains at least two items: min and max.
- *
- * @param {number[]} timestamps - timestamps sorted from lowest to highest.
- * @param {string} distribution - If 'linear', timestamps will be spread linearly along the min
- * and max range, so basically, the table will contains only two items: {min, 0} and {max, 1}.
- * If 'series', timestamps will be positioned at the same distance from each other. In this
- * case, only timestamps that break the time linearity are registered, meaning that in the
- * best case, all timestamps are linear, the table contains only min and max.
- */
+* Returns an array of {time, pos} objects used to interpolate a specific `time` or position
+* (`pos`) on the scale, by searching entries before and after the requested value. `pos` is
+* a decimal between 0 and 1: 0 being the start of the scale (left or top) and 1 the other
+* extremity (left + width or top + height). Note that it would be more optimized to directly
+* store pre-computed pixels, but the scale dimensions are not guaranteed at the time we need
+* to create the lookup table. The table ALWAYS contains at least two items: min and max.
+*
+* @param {number[]} timestamps - timestamps sorted from lowest to highest.
+* @param {string} distribution - If 'linear', timestamps will be spread linearly along the min
+* and max range, so basically, the table will contains only two items: {min, 0} and {max, 1}.
+* If 'series', timestamps will be positioned at the same distance from each other. In this
+* case, only timestamps that break the time linearity are registered, meaning that in the
+* best case, all timestamps are linear, the table contains only min and max.
+*/
 function buildLookupTable(timestamps, min, max, distribution) {
 	if (distribution === 'linear' || !timestamps.length) {
 		return [
@@ -14102,11 +14102,11 @@ function lookup(table, key, value) {
 }
 
 /**
- * Linearly interpolates the given source `value` using the table items `skey` values and
- * returns the associated `tkey` value. For example, interpolate(table, 'time', 42, 'pos')
- * returns the position for a timestamp equal to 42. If value is out of bounds, values at
- * index [0, 1] or [n - 1, n] are used for the interpolation.
- */
+* Linearly interpolates the given source `value` using the table items `skey` values and
+* returns the associated `tkey` value. For example, interpolate(table, 'time', 42, 'pos')
+* returns the position for a timestamp equal to 42. If value is out of bounds, values at
+* index [0, 1] or [n - 1, n] are used for the interpolation.
+*/
 function interpolate$1(table, skey, sval, tkey) {
 	var range = lookup(table, skey, sval);
 
@@ -14176,8 +14176,8 @@ function parse(scale, input) {
 }
 
 /**
- * Figures out what unit results in an appropriate number of auto-generated ticks
- */
+* Figures out what unit results in an appropriate number of auto-generated ticks
+*/
 function determineUnitForAutoTicks(minUnit, min, max, capacity) {
 	var ilen = UNITS.length;
 	var i, interval, factor;
@@ -14195,8 +14195,8 @@ function determineUnitForAutoTicks(minUnit, min, max, capacity) {
 }
 
 /**
- * Figures out what unit to format a set of ticks with
- */
+* Figures out what unit to format a set of ticks with
+*/
 function determineUnitForFormatting(scale, numTicks, minUnit, min, max) {
 	var i, unit;
 
@@ -14219,11 +14219,11 @@ function determineMajorUnit(unit) {
 }
 
 /**
- * Generates a maximum of `capacity` timestamps between min and max, rounded to the
- * `minor` unit using the given scale time `options`.
- * Important: this method can return ticks outside the min and max range, it's the
- * responsibility of the calling code to clamp values if needed.
- */
+* Generates a maximum of `capacity` timestamps between min and max, rounded to the
+* `minor` unit using the given scale time `options`.
+* Important: this method can return ticks outside the min and max range, it's the
+* responsibility of the calling code to clamp values if needed.
+*/
 function generate(scale, min, max, capacity) {
 	var adapter = scale._adapter;
 	var options = scale.options;
@@ -14260,11 +14260,11 @@ function generate(scale, min, max, capacity) {
 }
 
 /**
- * Returns the start and end offsets from edges in the form of {start, end}
- * where each value is a relative width to the scale and ranges between 0 and 1.
- * They add extra margins on the both sides by scaling down the original scale.
- * Offsets are added when the `offset` option is true.
- */
+* Returns the start and end offsets from edges in the form of {start, end}
+* where each value is a relative width to the scale and ranges between 0 and 1.
+* They add extra margins on the both sides by scaling down the original scale.
+* Offsets are added when the `offset` option is true.
+*/
 function computeOffsets(table, ticks, min, max, options) {
 	var start = 0;
 	var end = 0;
@@ -15235,11 +15235,11 @@ core_defaults._set('global', {
 });
 
 /**
- * Helper function to get the box width based on the usePointStyle option
- * @param {object} labelopts - the label options on the legend
- * @param {number} fontSize - the label font size
- * @return {number} width of the color box area
- */
+* Helper function to get the box width based on the usePointStyle option
+* @param {object} labelopts - the label options on the legend
+* @param {number} fontSize - the label font size
+* @return {number} width of the color box area
+*/
 function getBoxWidth(labelOpts, fontSize) {
 	return labelOpts.usePointStyle && labelOpts.boxWidth > fontSize ?
 		fontSize :
@@ -15247,8 +15247,8 @@ function getBoxWidth(labelOpts, fontSize) {
 }
 
 /**
- * IMPORTANT: this class is exposed publicly as Chart.Legend, backward compatibility required!
- */
+* IMPORTANT: this class is exposed publicly as Chart.Legend, backward compatibility required!
+*/
 var Legend = core_element.extend({
 
 	initialize: function(config) {
@@ -15259,8 +15259,8 @@ var Legend = core_element.extend({
 		me.legendHitBoxes = [];
 
 		/**
- 		 * @private
- 		 */
+		 * @private
+		 */
 		me._hoveredItem = null;
 
 		// Are we in doughnut mode which has a different data type
@@ -15781,13 +15781,13 @@ core_defaults._set('global', {
 		padding: 10,
 		position: 'top',
 		text: '',
-		weight: 2000         // by default greater than legend (1000) to be above
+		weight: 2000 // by default greater than legend (1000) to be above
 	}
 });
 
 /**
- * IMPORTANT: this class is exposed publicly as Chart.Legend, backward compatibility required!
- */
+* IMPORTANT: this class is exposed publicly as Chart.Legend, backward compatibility required!
+*/
 var Title = core_element.extend({
 	initialize: function(config) {
 		var me = this;
@@ -16017,8 +16017,8 @@ plugins.legend = legend;
 plugins.title = title;
 
 /**
- * @namespace Chart
- */
+* @namespace Chart
+*/
 
 
 core_controller.helpers = helpers$1;
@@ -16070,84 +16070,84 @@ if (typeof window !== 'undefined') {
 // DEPRECATIONS
 
 /**
- * Provided for backward compatibility, not available anymore
- * @namespace Chart.Chart
- * @deprecated since version 2.8.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, not available anymore
+* @namespace Chart.Chart
+* @deprecated since version 2.8.0
+* @todo remove at version 3
+* @private
+*/
 core_controller.Chart = core_controller;
 
 /**
- * Provided for backward compatibility, not available anymore
- * @namespace Chart.Legend
- * @deprecated since version 2.1.5
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, not available anymore
+* @namespace Chart.Legend
+* @deprecated since version 2.1.5
+* @todo remove at version 3
+* @private
+*/
 core_controller.Legend = plugins.legend._element;
 
 /**
- * Provided for backward compatibility, not available anymore
- * @namespace Chart.Title
- * @deprecated since version 2.1.5
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, not available anymore
+* @namespace Chart.Title
+* @deprecated since version 2.1.5
+* @todo remove at version 3
+* @private
+*/
 core_controller.Title = plugins.title._element;
 
 /**
- * Provided for backward compatibility, use Chart.plugins instead
- * @namespace Chart.pluginService
- * @deprecated since version 2.1.5
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use Chart.plugins instead
+* @namespace Chart.pluginService
+* @deprecated since version 2.1.5
+* @todo remove at version 3
+* @private
+*/
 core_controller.pluginService = core_controller.plugins;
 
 /**
- * Provided for backward compatibility, inheriting from Chart.PlugingBase has no
- * effect, instead simply create/register plugins via plain JavaScript objects.
- * @interface Chart.PluginBase
- * @deprecated since version 2.5.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, inheriting from Chart.PlugingBase has no
+* effect, instead simply create/register plugins via plain JavaScript objects.
+* @interface Chart.PluginBase
+* @deprecated since version 2.5.0
+* @todo remove at version 3
+* @private
+*/
 core_controller.PluginBase = core_controller.Element.extend({});
 
 /**
- * Provided for backward compatibility, use Chart.helpers.canvas instead.
- * @namespace Chart.canvasHelpers
- * @deprecated since version 2.6.0
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use Chart.helpers.canvas instead.
+* @namespace Chart.canvasHelpers
+* @deprecated since version 2.6.0
+* @todo remove at version 3
+* @private
+*/
 core_controller.canvasHelpers = core_controller.helpers.canvas;
 
 /**
- * Provided for backward compatibility, use Chart.layouts instead.
- * @namespace Chart.layoutService
- * @deprecated since version 2.7.3
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, use Chart.layouts instead.
+* @namespace Chart.layoutService
+* @deprecated since version 2.7.3
+* @todo remove at version 3
+* @private
+*/
 core_controller.layoutService = core_controller.layouts;
 
 /**
- * Provided for backward compatibility, not available anymore.
- * @namespace Chart.LinearScaleBase
- * @deprecated since version 2.8
- * @todo remove at version 3
- * @private
- */
+* Provided for backward compatibility, not available anymore.
+* @namespace Chart.LinearScaleBase
+* @deprecated since version 2.8
+* @todo remove at version 3
+* @private
+*/
 core_controller.LinearScaleBase = scale_linearbase;
 
 /**
- * Provided for backward compatibility, instead we should create a new Chart
- * by setting the type in the config (`new Chart(id, {type: '{chart-type}'}`).
- * @deprecated since version 2.8.0
- * @todo remove at version 3
- */
+* Provided for backward compatibility, instead we should create a new Chart
+* by setting the type in the config (`new Chart(id, {type: '{chart-type}'}`).
+* @deprecated since version 2.8.0
+* @todo remove at version 3
+*/
 core_controller.helpers.each(
 	[
 		'Bar',

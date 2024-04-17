@@ -6,5 +6,5 @@ import flectra.tests
 @flectra.tests.tagged('post_install', '-at_install')
 class TestUi(flectra.tests.HttpCase):
 
-    def test_01_mail_tour(self):
-        self.start_tour("/web", 'mail_tour', login="admin")
+def test_01_mail_tour(self):
+self.start_tour("/web", 'mail_tour', login="admin")

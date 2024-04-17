@@ -4,9 +4,9 @@ from flectra import models, fields
 
 
 class ResCompany(models.Model):
-    _inherit = "res.company"
+_inherit = "res.company"
 
-    def _localization_use_documents(self):
-        """ Chilean localization use documents """
-        self.ensure_one()
-        return self.country_id.code == "CL" or super()._localization_use_documents()
+def _localization_use_documents(self):
+""" Chilean localization use documents """
+self.ensure_one()
+return self.country_id.code == "CL" or super()._localization_use_documents()

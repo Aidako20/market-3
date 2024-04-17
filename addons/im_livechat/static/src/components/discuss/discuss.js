@@ -2,27 +2,27 @@ flectra.define('im_livechat/static/src/components/discuss/discuss.js', function 
 'use strict';
 
 const components = {
-    Discuss: require('mail/static/src/components/discuss/discuss.js'),
+Discuss: require('mail/static/src/components/discuss/discuss.js'),
 };
 
 const { patch } = require('web.utils');
 
 patch(components.Discuss, 'im_livechat/static/src/components/discuss/discuss.js', {
 
-    //--------------------------------------------------------------------------
-    // Public
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// Public
+//--------------------------------------------------------------------------
 
-    /**
-     * @override
-     */
-    mobileNavbarTabs(...args) {
-        return [...this._super(...args), {
-            icon: 'fa fa-comments',
-            id: 'livechat',
-            label: this.env._t("Livechat"),
-        }];
-    }
+/**
+* @override
+*/
+mobileNavbarTabs(...args) {
+return [...this._super(...args), {
+icon: 'fa fa-comments',
+id: 'livechat',
+label: this.env._t("Livechat"),
+}];
+}
 
 });
 

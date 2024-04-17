@@ -7,9 +7,9 @@ var KanbanView = require('web.KanbanView');
 var view_registry = require('web.view_registry');
 
 var MassMailingListKanbanView = KanbanView.extend({
-    config: _.extend({}, KanbanView.prototype.config, {
-        Renderer: MassMailingListKanbanRenderer,
-    }),
+config: _.extend({}, KanbanView.prototype.config, {
+Renderer: MassMailingListKanbanRenderer,
+}),
 });
 
 view_registry.add('mass_mailing_list_kanban', MassMailingListKanbanView);

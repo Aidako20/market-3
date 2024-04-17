@@ -9,16 +9,16 @@ var fieldRegistry = require('web.field_registry');
 var QWeb = core.qweb;
 
 /**
- * Display iframe
- */
+* Display iframe
+*/
 var FieldIframePreview = AbstractField.extend({
-    className: 'd-block o_field_iframe_preview m-0 h-100',
+className: 'd-block o_field_iframe_preview m-0 h-100',
 
-    _render: function () {
-        this.$el.html(QWeb.render('website.iframeWidget', {
-            url: this.value,
-        }));
-    },
+_render: function () {
+this.$el.html(QWeb.render('website.iframeWidget', {
+url: this.value,
+}));
+},
 });
 
 fieldRegistry.add('iframe', FieldIframePreview);

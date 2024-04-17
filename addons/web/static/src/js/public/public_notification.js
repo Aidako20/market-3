@@ -4,6 +4,6 @@ flectra.define('web.public.Notification', function (require) {
 var Notification = require('web.Notification');
 
 Notification.include({
-    xmlDependencies: ['/web/static/src/xml/notification.xml'],
+xmlDependencies: ['/web/static/src/xml/notification.xml'],
 });
 });

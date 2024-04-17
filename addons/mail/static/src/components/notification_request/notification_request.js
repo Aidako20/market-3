@@ -2,7 +2,7 @@ flectra.define('mail/static/src/components/notification_request/notification_req
 'use strict';
 
 const components = {
-    PartnerImStatusIcon: require('mail/static/src/components/partner_im_status_icon/partner_im_status_icon.js'),
+PartnerImStatusIcon: require('mail/static/src/components/partner_im_status_icon/partner_im_status_icon.js'),
 };
 const useShouldUpdateBasedOnProps = require('mail/static/src/component_hooks/use_should_update_based_on_props/use_should_update_based_on_props.js');
 const useStore = require('mail/static/src/component_hooks/use_store/use_store.js');
@@ -11,82 +11,82 @@ const { Component } = owl;
 
 class NotificationRequest extends Component {
 
-    /**
-     * @override
-     */
-    constructor(...args) {
-        super(...args);
-        useShouldUpdateBasedOnProps();
-        useStore(props => {
-            return {
-                isDeviceMobile: this.env.messaging.device.isMobile,
-                partnerRoot: this.env.messaging.partnerRoot
-                    ? this.env.messaging.partnerRoot.__state
-                    : undefined,
-            };
-        });
-    }
+/**
+* @override
+*/
+constructor(...args) {
+super(...args);
+useShouldUpdateBasedOnProps();
+useStore(props => {
+return {
+isDeviceMobile: this.env.messaging.device.isMobile,
+partnerRoot: this.env.messaging.partnerRoot
+? this.env.messaging.partnerRoot.__state
+: undefined,
+};
+});
+}
 
-    //--------------------------------------------------------------------------
-    // Public
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// Public
+//--------------------------------------------------------------------------
 
-    /**
-     * @returns {string}
-     */
-    getHeaderText() {
-        return _.str.sprintf(
-            this.env._t("%s has a request"),
-            this.env.messaging.partnerRoot.nameOrDisplayName
-        );
-    }
+/**
+* @returns {string}
+*/
+getHeaderText() {
+return _.str.sprintf(
+this.env._t("%s has a request"),
+this.env.messaging.partnerRoot.nameOrDisplayName
+);
+}
 
-    //--------------------------------------------------------------------------
-    // Private
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// Private
+//--------------------------------------------------------------------------
 
-    /**
-     * Handle the response of the user when prompted whether push notifications
-     * are granted or denied.
-     *
-     * @private
-     * @param {string} value
-     */
-    _handleResponseNotificationPermission(value) {
-        // manually force recompute because the permission is not in the store
-        this.env.messaging.messagingMenu.update();
-        if (value !== 'granted') {
-            this.env.services['bus_service'].sendNotification(
-                this.env._t("Permission denied"),
-                this.env._t("Flectra will not have the permission to send native notifications on this device.")
-            );
-        }
-    }
+/**
+* Handle the response of the user when prompted whether push notifications
+* are granted or denied.
+*
+* @private
+* @param {string} value
+*/
+_handleResponseNotificationPermission(value) {
+// manually force recompute because the permission is not in the store
+this.env.messaging.messagingMenu.update();
+if (value !== 'granted') {
+this.env.services['bus_service'].sendNotification(
+this.env._t("Permission denied"),
+this.env._t("Flectra will not have the permission to send native notifications on this device.")
+);
+}
+}
 
-    //--------------------------------------------------------------------------
-    // Handlers
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// Handlers
+//--------------------------------------------------------------------------
 
-    /**
-     * @private
-     */
-    _onClick() {
-        const windowNotification = this.env.browser.Notification;
-        const def = windowNotification && windowNotification.requestPermission();
-        if (def) {
-            def.then(this._handleResponseNotificationPermission.bind(this));
-        }
-        if (!this.env.messaging.device.isMobile) {
-            this.env.messaging.messagingMenu.close();
-        }
-    }
+/**
+* @private
+*/
+_onClick() {
+const windowNotification = this.env.browser.Notification;
+const def = windowNotification && windowNotification.requestPermission();
+if (def) {
+def.then(this._handleResponseNotificationPermission.bind(this));
+}
+if (!this.env.messaging.device.isMobile) {
+this.env.messaging.messagingMenu.close();
+}
+}
 
 }
 
 Object.assign(NotificationRequest, {
-    components,
-    props: {},
-    template: 'mail.NotificationRequest',
+components,
+props: {},
+template: 'mail.NotificationRequest',
 });
 
 return NotificationRequest;

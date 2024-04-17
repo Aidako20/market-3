@@ -17,20 +17,20 @@ ListGroup.props = ["group_vals", "options"];
 
 
 class ShowGroupedList extends AbstractFieldOwl {
-    constructor(...args) {
-        super(...args);
-        this.data = this.value ? JSON.parse(this.value) : {
-            groups_vals: [],
-            options: {
-                discarded_number: '',
-                columns: [],
-            },
-        };
-    }
-    async willUpdateProps(nextProps) {
-        await super.willUpdateProps(nextProps);
-        Object.assign(this.data, JSON.parse(this.value));
-    }
+constructor(...args) {
+super(...args);
+this.data = this.value ? JSON.parse(this.value) : {
+groups_vals: [],
+options: {
+discarded_number: '',
+columns: [],
+},
+};
+}
+async willUpdateProps(nextProps) {
+await super.willUpdateProps(nextProps);
+Object.assign(this.data, JSON.parse(this.value));
+}
 }
 ShowGroupedList.template = 'account.GroupedListTemplate';
 ShowGroupedList.components = { ListGroup }

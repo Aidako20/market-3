@@ -18,6 +18,6 @@ if (isNaN(minlength)) { return; }
 var meter = new PasswordMeter(null, new policy.Policy({minlength: minlength}), policy.recommendations);
 meter.insertAfter($password);
 $password.on('input', function () {
-    meter.update($password.val());
+meter.update($password.val());
 });
 });
