@@ -11,19 +11,19 @@ const {ColorpickerDialog} = require('web.Colorpicker');
 var media = require('wysiwyg.widgets.media');
 
 return {
-    Dialog: Dialog,
-    AltDialog: AltDialog,
-    MediaDialog: MediaDialog,
-    LinkDialog: LinkDialog,
-    ImageCropWidget: ImageCropWidget,
-    ColorpickerDialog: ColorpickerDialog,
+Dialog: Dialog,
+AltDialog: AltDialog,
+MediaDialog: MediaDialog,
+LinkDialog: LinkDialog,
+ImageCropWidget: ImageCropWidget,
+ColorpickerDialog: ColorpickerDialog,
 
-    MediaWidget: media.MediaWidget,
-    SearchableMediaWidget: media.SearchableMediaWidget,
-    FileWidget: media.FileWidget,
-    ImageWidget: media.ImageWidget,
-    DocumentWidget: media.DocumentWidget,
-    IconWidget: media.IconWidget,
-    VideoWidget: media.VideoWidget,
+MediaWidget: media.MediaWidget,
+SearchableMediaWidget: media.SearchableMediaWidget,
+FileWidget: media.FileWidget,
+ImageWidget: media.ImageWidget,
+DocumentWidget: media.DocumentWidget,
+IconWidget: media.IconWidget,
+VideoWidget: media.VideoWidget,
 };
 });

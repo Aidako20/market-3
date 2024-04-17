@@ -7,9 +7,9 @@ var viewRegistry = require('web.view_registry');
 
 
 var InventoryReportListView = ListView.extend({
-    config: _.extend({}, ListView.prototype.config, {
-        Controller: InventoryReportListController,
-    }),
+config: _.extend({}, ListView.prototype.config, {
+Controller: InventoryReportListController,
+}),
 });
 
 viewRegistry.add('inventory_report_list', InventoryReportListView);

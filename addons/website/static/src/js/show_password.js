@@ -10,37 +10,37 @@ flectra.define('website.show_password', function (require) {
 var publicWidget = require('web.public.widget');
 
 publicWidget.registry.ShowPassword = publicWidget.Widget.extend({
-    selector: '#showPass',
-    events: {
-        'mousedown': '_onShowText',
-        'touchstart': '_onShowText',
-    },
+selector: '#showPass',
+events: {
+'mousedown': '_onShowText',
+'touchstart': '_onShowText',
+},
 
-    /**
-     * @override
-     */
-    destroy: function () {
-        this._super(...arguments);
-        $('body').off(".ShowPassword");
-    },
+/**
+* @override
+*/
+destroy: function () {
+this._super(...arguments);
+$('body').off(".ShowPassword");
+},
 
-    //--------------------------------------------------------------------------
-    // Handlers
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// Handlers
+//--------------------------------------------------------------------------
 
-    /**
-     * @private
-     */
-    _onShowPassword: function () {
-        this.$el.closest('.input-group').find('#password').attr('type', 'password');
-    },
-    /**
-     * @private
-     */
-    _onShowText: function () {
-        $('body').one('mouseup.ShowPassword touchend.ShowPassword', this._onShowPassword.bind(this));
-        this.$el.closest('.input-group').find('#password').attr('type', 'text');
-    },
+/**
+* @private
+*/
+_onShowPassword: function () {
+this.$el.closest('.input-group').find('#password').attr('type', 'password');
+},
+/**
+* @private
+*/
+_onShowText: function () {
+$('body').one('mouseup.ShowPassword touchend.ShowPassword', this._onShowPassword.bind(this));
+this.$el.closest('.input-group').find('#password').attr('type', 'text');
+},
 });
 
 return publicWidget.registry.ShowPassword;

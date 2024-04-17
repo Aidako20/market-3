@@ -6,26 +6,26 @@ const CrashManager = require('web.CrashManager').CrashManager;
 
 const PublicCrashManager = CrashManager.extend({
 
-    //--------------------------------------------------------------------------
-    // Private
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// Private
+//--------------------------------------------------------------------------
 
-    /**
-     * @override
-     */
-    _displayWarning(message, title, options) {
-        this.displayNotification(Object.assign({}, options, {
-            title,
-            message,
-            sticky: true,
-        }));
-    },
+/**
+* @override
+*/
+_displayWarning(message, title, options) {
+this.displayNotification(Object.assign({}, options, {
+title,
+message,
+sticky: true,
+}));
+},
 });
 
 core.serviceRegistry.add('crash_manager', PublicCrashManager);
 
 return {
-    CrashManager: PublicCrashManager,
+CrashManager: PublicCrashManager,
 };
 
 });

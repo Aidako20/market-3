@@ -151,8 +151,8 @@ var WebGLImageFilter = window.WebGLImageFilter = function (params) {
 		if( !_vertexBuffer ) {
 			// Create the vertex buffer for the two triangles [x, y, u, v] * 6
 			var vertices = new Float32Array([
-				-1, -1, 0, 1,  1, -1, 1, 1,  -1, 1, 0, 0,
-				-1, 1, 0, 0,  1, -1, 1, 1,  1, 1, 1, 0
+				-1, -1, 0, 1, 1, -1, 1, 1, -1, 1, 0, 0,
+				-1, 1, 0, 0, 1, -1, 1, 1, 1, 1, 1, 0
 			]);
 			_vertexBuffer = gl.createBuffer(),
 			gl.bindBuffer(gl.ARRAY_BUFFER, _vertexBuffer);
@@ -213,7 +213,7 @@ var WebGLImageFilter = window.WebGLImageFilter = function (params) {
 		}
 		else {
 			// All following draw calls use the temp buffer last drawn to
-			source =  _getTempFramebuffer(_currentFramebufferIndex).texture;
+			source = _getTempFramebuffer(_currentFramebufferIndex).texture;
 		}
 		_drawCount++;
 
@@ -536,8 +536,8 @@ var WebGLImageFilter = window.WebGLImageFilter = function (params) {
 	_filter.sobelY = function() {
 		_filter.convolution.call(this, [
 			-1, -2, -1,
-			 0,  0,  0,
-			 1,  2,  1
+			 0, 0, 0,
+			 1, 2, 1
 		]);
 	};
 
@@ -593,14 +593,14 @@ var WebGLImageFilter = window.WebGLImageFilter = function (params) {
 			'gl_FragColor += texture2D(texture, vUv + vec2(-3.0*px.x, -3.0*px.y))*0.0776744219933;',
 			'gl_FragColor += texture2D(texture, vUv + vec2(-2.0*px.x, -2.0*px.y))*0.115876621105;',
 			'gl_FragColor += texture2D(texture, vUv + vec2(-1.0*px.x, -1.0*px.y))*0.147308056121;',
-			'gl_FragColor += texture2D(texture, vUv                             )*0.159576912161;',
-			'gl_FragColor += texture2D(texture, vUv + vec2( 1.0*px.x,  1.0*px.y))*0.147308056121;',
-			'gl_FragColor += texture2D(texture, vUv + vec2( 2.0*px.x,  2.0*px.y))*0.115876621105;',
-			'gl_FragColor += texture2D(texture, vUv + vec2( 3.0*px.x,  3.0*px.y))*0.0776744219933;',
-			'gl_FragColor += texture2D(texture, vUv + vec2( 4.0*px.x,  4.0*px.y))*0.0443683338718;',
-			'gl_FragColor += texture2D(texture, vUv + vec2( 5.0*px.x,  5.0*px.y))*0.0215963866053;',
-			'gl_FragColor += texture2D(texture, vUv + vec2( 6.0*px.x,  6.0*px.y))*0.00895781211794;',
-			'gl_FragColor += texture2D(texture, vUv + vec2( 7.0*px.x,  7.0*px.y))*0.0044299121055113265;',
+			'gl_FragColor += texture2D(texture, vUv )*0.159576912161;',
+			'gl_FragColor += texture2D(texture, vUv + vec2( 1.0*px.x, 1.0*px.y))*0.147308056121;',
+			'gl_FragColor += texture2D(texture, vUv + vec2( 2.0*px.x, 2.0*px.y))*0.115876621105;',
+			'gl_FragColor += texture2D(texture, vUv + vec2( 3.0*px.x, 3.0*px.y))*0.0776744219933;',
+			'gl_FragColor += texture2D(texture, vUv + vec2( 4.0*px.x, 4.0*px.y))*0.0443683338718;',
+			'gl_FragColor += texture2D(texture, vUv + vec2( 5.0*px.x, 5.0*px.y))*0.0215963866053;',
+			'gl_FragColor += texture2D(texture, vUv + vec2( 6.0*px.x, 6.0*px.y))*0.00895781211794;',
+			'gl_FragColor += texture2D(texture, vUv + vec2( 7.0*px.x, 7.0*px.y))*0.0044299121055113265;',
 		'}',
 	].join('\n');
 

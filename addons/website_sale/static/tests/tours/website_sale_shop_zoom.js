@@ -9,40 +9,40 @@ var nameGreen = "Forest Green";
 
 // This tour relies on a data created from the python test.
 tour.register('shop_zoom', {
-    test: true,
-    url: '/shop?search=' + imageName,
+test: true,
+url: '/shop?search=' + imageName,
 },
 [
-    {
-        content: "select " + imageName,
-        trigger: '.oe_product_cart a:containsExact("' + imageName + '")',
-    },
-    {
-        content: "click on the image",
-        trigger: imageSelector,
-        run: 'clicknoleave',
-    },
-    {
-        content: "check there is no zoom on that small image",
-        trigger: 'body:not(:has(.zoomflectra-flyout img))',
-    },
-    {
-        content: "change variant",
-        trigger: 'input[data-attribute_name="Beautiful Color"][data-value_name="' + nameGreen + '"]',
-        run: 'click',
-    },
-    {
-        content: "wait for variant to be loaded",
-        trigger: '.oe_currency_value:contains("21.00")'
-    },
-    {
-        content: "click on the image",
-        trigger: imageSelector,
-        run: 'clicknoleave',
-    },
-    {
-        content: "check there is a zoom on that big image",
-        trigger: '.zoomflectra-flyout img',
-    },
+{
+content: "select " + imageName,
+trigger: '.oe_product_cart a:containsExact("' + imageName + '")',
+},
+{
+content: "click on the image",
+trigger: imageSelector,
+run: 'clicknoleave',
+},
+{
+content: "check there is no zoom on that small image",
+trigger: 'body:not(:has(.zoomflectra-flyout img))',
+},
+{
+content: "change variant",
+trigger: 'input[data-attribute_name="Beautiful Color"][data-value_name="' + nameGreen + '"]',
+run: 'click',
+},
+{
+content: "wait for variant to be loaded",
+trigger: '.oe_currency_value:contains("21.00")'
+},
+{
+content: "click on the image",
+trigger: imageSelector,
+run: 'clicknoleave',
+},
+{
+content: "check there is a zoom on that big image",
+trigger: '.zoomflectra-flyout img',
+},
 ]);
 });

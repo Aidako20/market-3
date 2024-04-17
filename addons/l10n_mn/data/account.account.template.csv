@@ -207,38 +207,38 @@ account_template_6101_0101,61010101,"Борлуулсан бараа, бүтээ
 account_template_6102_0101,61020101,Борлуулсан үйлчилгээний өртөг,account.data_account_type_direct_costs,,0,mn_chart_1
 account_template_7001_0101,70010101,Удирд - Үндсэн цалингийн зардал,account.data_account_type_expenses,,0,mn_chart_1
 account_template_7001_0201,70010201,Удирд - Нэмэгдэл цалингийн зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_0101,70020101,Удирд -  ЭМД-ийн зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_0201,70020201,Удирд -  НДШ-ийн зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_0101,70020101,Удирд - ЭМД-ийн зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_0201,70020201,Удирд - НДШ-ийн зардал,account.data_account_type_expenses,,0,mn_chart_1
 account_template_7002_0301,70020301,Удирд - Банкны шимтгэл хураамжын зардал,account.data_account_type_expenses,,0,mn_chart_1
 account_template_7002_0401,70020401,Удирд - Гадаад томилолтын зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_0402,70020402,Удирд -  Дотоод томилолтын зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_0501,70020501,Удирд -  Бичиг хэргийн зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_0601,70020601,Удирд -  Шуудан холбооны зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_0602,70020602,Удирд -  Суурин утасны зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_0603,70020603,Удирд -  Үүрэн утасны зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_0604,70020604,Удирд -  Интернетийн зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_0701,70020701,Удирд -  Мэргэжлийн үйлчилгээний зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_0801,70020801,Удирд -  Хүний нөөцийн зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_0901,70020901,Удирд -  Сонин сэтгүүл захиалгын зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_1001,70021001,Удирд -  Даатгалын зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_1101,70021101,Удирд -  Ашиглалтын зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_1201,70021201,Удирд -  Засварын зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_1301,70021301,Удирд -  Элэгдэл хорогдлын зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_1401,70021401,Удирд -  Түрээсийн зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_1501,70021501,Удирд -  Харуул хамгаалалтын зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_1601,70021601,Удирд -  Цэвэрлэгээ үйлчилгээний зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_1701,70021701,Удирд -  Тээврийн зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_1801,70021801,Удирд -  Шатахууны зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_1901,70021901,Удирд -  Хүлээн авалтын зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_2001,70022001,Удирд -  Зар сурталчилгааны зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_2101,70022101,Удирд -  Төсөл хөгжлийн зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_2201,70022201,"Удирд -  Судалгаа, туршилтын зардал",account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_2301,70022301,"Удирд -  Хүргэлт, түгээлтийн зардал",account.data_account_type_expenses,,0,mn_chart_1
-account_template_7002_9901,70029901,Удирд -  Үйл ажиллагааны бусад зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_0402,70020402,Удирд - Дотоод томилолтын зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_0501,70020501,Удирд - Бичиг хэргийн зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_0601,70020601,Удирд - Шуудан холбооны зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_0602,70020602,Удирд - Суурин утасны зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_0603,70020603,Удирд - Үүрэн утасны зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_0604,70020604,Удирд - Интернетийн зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_0701,70020701,Удирд - Мэргэжлийн үйлчилгээний зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_0801,70020801,Удирд - Хүний нөөцийн зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_0901,70020901,Удирд - Сонин сэтгүүл захиалгын зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_1001,70021001,Удирд - Даатгалын зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_1101,70021101,Удирд - Ашиглалтын зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_1201,70021201,Удирд - Засварын зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_1301,70021301,Удирд - Элэгдэл хорогдлын зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_1401,70021401,Удирд - Түрээсийн зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_1501,70021501,Удирд - Харуул хамгаалалтын зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_1601,70021601,Удирд - Цэвэрлэгээ үйлчилгээний зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_1701,70021701,Удирд - Тээврийн зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_1801,70021801,Удирд - Шатахууны зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_1901,70021901,Удирд - Хүлээн авалтын зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_2001,70022001,Удирд - Зар сурталчилгааны зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_2101,70022101,Удирд - Төсөл хөгжлийн зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_2201,70022201,"Удирд - Судалгаа, туршилтын зардал",account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_2301,70022301,"Удирд - Хүргэлт, түгээлтийн зардал",account.data_account_type_expenses,,0,mn_chart_1
+account_template_7002_9901,70029901,Удирд - Үйл ажиллагааны бусад зардал,account.data_account_type_expenses,,0,mn_chart_1
 account_template_7101_0101,71010101,Борл - Үндсэн цалингийн зардал,account.data_account_type_expenses,,0,mn_chart_1
 account_template_7101_0201,71010201,Борл - Нэмэгдэл цалингийн зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7102_0101,71020101,Борл -  ЭМД-ийн зардал,account.data_account_type_expenses,,0,mn_chart_1
-account_template_7102_0201,71020201,Борл -  НДШ-ийн зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7102_0101,71020101,Борл - ЭМД-ийн зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7102_0201,71020201,Борл - НДШ-ийн зардал,account.data_account_type_expenses,,0,mn_chart_1
 account_template_7102_0301,71020301,Борл - Банкны шимтгэл хураамжын зардал,account.data_account_type_expenses,,0,mn_chart_1
 account_template_7102_0401,71020401,Борл - Гадаад томилолтын зардал,account.data_account_type_expenses,,0,mn_chart_1
 account_template_7102_0402,71020402,Борл - Дотоод томилолтын зардал,account.data_account_type_expenses,,0,mn_chart_1
@@ -264,7 +264,7 @@ account_template_7102_2001,71022001,Борл - Зар сурталчилгаан
 account_template_7102_2101,71022101,Борл - Төсөл хөгжлийн зардал,account.data_account_type_expenses,,0,mn_chart_1
 account_template_7102_2201,71022201,"Борл - Судалгаа, туршилтын зардал",account.data_account_type_expenses,,0,mn_chart_1
 account_template_7102_2301,71022301,"Борл - Хүргэлт, түгээлтийн зардал",account.data_account_type_expenses,,0,mn_chart_1
-account_template_7102_9901,71029901,Борл -  Үйл ажиллагааны бусад зардал,account.data_account_type_expenses,,0,mn_chart_1
+account_template_7102_9901,71029901,Борл - Үйл ажиллагааны бусад зардал,account.data_account_type_expenses,,0,mn_chart_1
 account_template_7201_0101,72010101,Эргэлтийн хөрөнгө санхүүжүүлэх зээлийн хүүгийн зардал,account.data_account_type_expenses,,0,mn_chart_1
 account_template_7202_0101,72020101,Үндсэн хөрөнгө санхүүжүүлэх зээлийн хүүгийн зардал,account.data_account_type_expenses,,0,mn_chart_1
 account_template_7203_0101,72030101,Төсөл санхүүжүүлэх зээлийн хүүгийн зардал,account.data_account_type_expenses,,0,mn_chart_1

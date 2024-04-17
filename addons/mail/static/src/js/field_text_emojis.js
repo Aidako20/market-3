@@ -7,8 +7,8 @@ var FieldEmojiCommon = require('mail.field_emojis_common');
 var MailEmojisMixin = require('mail.emoji_mixin');
 
 /**
- * Extension of the FieldText that will add emojis support
- */
+* Extension of the FieldText that will add emojis support
+*/
 var FieldTextEmojis = basicFields.FieldText.extend(MailEmojisMixin, FieldEmojiCommon);
 
 registry.add('text_emojis', FieldTextEmojis);

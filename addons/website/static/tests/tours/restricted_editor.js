@@ -4,14 +4,14 @@ flectra.define("website.tour.restricted_editor", function (require) {
 var tour = require("web_tour.tour");
 
 tour.register("restricted_editor", {
-    test: true,
-    url: "/",
+test: true,
+url: "/",
 }, [{
-    trigger: 'a[data-action=edit]',
-    content: "Click \"EDIT\" button of website as Restricted Editor",
-    extra_trigger: ".homepage",
+trigger: 'a[data-action=edit]',
+content: "Click \"EDIT\" button of website as Restricted Editor",
+extra_trigger: ".homepage",
 }, {
-    trigger: '#oe_snippets.o_loaded',
-    content: "Check that the snippets loaded properly",
+trigger: '#oe_snippets.o_loaded',
+content: "Check that the snippets loaded properly",
 }]);
 });

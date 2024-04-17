@@ -430,7 +430,7 @@
 "chart8000","8000","Inntekter på investeringer i datterselskap","account.data_account_type_expenses","","False","no_chart_template"
 "chart8010","8010","Inntekt på investering i annet foretak. s/ konsern","account.data_account_type_expenses","","False","no_chart_template"
 "chart8020","8020","Inntekt på investering i tilknyttet selskap","account.data_account_type_expenses","","False","no_chart_template"
-"chart8030","8030","Renteinntekt på foretak i  samme konsern","account.data_account_type_expenses","","False","no_chart_template"
+"chart8030","8030","Renteinntekt på foretak i samme konsern","account.data_account_type_expenses","","False","no_chart_template"
 "chart8040","8040","Renteinntekter, skattefrie","account.data_account_type_expenses","","False","no_chart_template"
 "chart8050","8050","Annen renteinntekt","account.data_account_type_expenses","","False","no_chart_template"
 "chart8056","8056","Påminnelsesavgift","account.data_account_type_expenses","","False","no_chart_template"

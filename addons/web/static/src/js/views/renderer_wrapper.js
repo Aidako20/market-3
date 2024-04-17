@@ -1,15 +1,15 @@
 flectra.define('web.RendererWrapper', function (require) {
-    "use strict";
+"use strict";
 
-    const { ComponentWrapper } = require('web.OwlCompatibility');
+const { ComponentWrapper } = require('web.OwlCompatibility');
 
-    class RendererWrapper extends ComponentWrapper {
-        getLocalState() { }
-        setLocalState() { }
-        giveFocus() { }
-        resetLocalState() { } 
-    }
+class RendererWrapper extends ComponentWrapper {
+getLocalState() { }
+setLocalState() { }
+giveFocus() { }
+resetLocalState() { } 
+}
 
-    return RendererWrapper;
+return RendererWrapper;
 
 });

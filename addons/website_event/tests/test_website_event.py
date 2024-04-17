@@ -8,6 +8,6 @@ from flectra.tests import tagged
 @tagged('-at_install', 'post_install')
 class TestUrlCanonical(TestUrlCommon):
 
-    def test_01_canonical_url(self):
-        self._assertCanonical('/event?date=all', self.domain + '/event')
-        self._assertCanonical('/event?date=old', self.domain + '/event?date=old')
+def test_01_canonical_url(self):
+self._assertCanonical('/event?date=all', self.domain + '/event')
+self._assertCanonical('/event?date=old', self.domain + '/event?date=old')

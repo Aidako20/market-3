@@ -6,15 +6,15 @@ const { many2one } = require('mail/static/src/model/model_field.js');
 
 function factory(dependencies) {
 
-    class FollowerSubtypeList extends dependencies['mail.model'] {}
+class FollowerSubtypeList extends dependencies['mail.model'] {}
 
-    FollowerSubtypeList.fields = {
-        follower: many2one('mail.follower'),
-    };
+FollowerSubtypeList.fields = {
+follower: many2one('mail.follower'),
+};
 
-    FollowerSubtypeList.modelName = 'mail.follower_subtype_list';
+FollowerSubtypeList.modelName = 'mail.follower_subtype_list';
 
-    return FollowerSubtypeList;
+return FollowerSubtypeList;
 }
 
 registerNewModel('mail.follower_subtype_list', factory);

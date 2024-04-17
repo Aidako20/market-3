@@ -7,10 +7,10 @@ const MrpDocumentsKanbanRenderer = require('mrp.MrpDocumentsKanbanRenderer');
 const viewRegistry = require('web.view_registry');
 
 const MrpDocumentsKanbanView = KanbanView.extend({
-    config: Object.assign({}, KanbanView.prototype.config, {
-        Controller: MrpDocumentsKanbanController,
-        Renderer: MrpDocumentsKanbanRenderer,
-    }),
+config: Object.assign({}, KanbanView.prototype.config, {
+Controller: MrpDocumentsKanbanController,
+Renderer: MrpDocumentsKanbanRenderer,
+}),
 });
 
 viewRegistry.add('mrp_documents_kanban', MrpDocumentsKanbanView);

@@ -6,6 +6,6 @@ from flectra import fields, models
 
 class Attachment(models.Model):
 
-    _inherit = ['ir.attachment']
+_inherit = ['ir.attachment']
 
-    product_downloadable = fields.Boolean("Downloadable from product portal", default=False)
+product_downloadable = fields.Boolean("Downloadable from product portal", default=False)

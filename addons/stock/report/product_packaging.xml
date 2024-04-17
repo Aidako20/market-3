@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <flectra>
-    <data>
-        <template id="label_product_packaging_view">
-            <t t-foreach="docs" t-as="packaging">
-                <t t-translation="off">
+<data>
+<template id="label_product_packaging_view">
+<t t-foreach="docs" t-as="packaging">
+<t t-translation="off">
 ^XA
 ^FO100,50
 ^A0N,44,33^FD<t t-esc="packaging.name"/>^FS
@@ -17,8 +17,8 @@
 ^FD<t t-esc="packaging.barcode"/>^FS
 </t>
 ^XZ
-                </t>
-            </t>
-        </template>
-    </data>
+</t>
+</t>
+</template>
+</data>
 </flectra>

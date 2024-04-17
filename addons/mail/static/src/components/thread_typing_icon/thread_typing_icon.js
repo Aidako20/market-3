@@ -7,33 +7,33 @@ const { Component } = owl;
 
 class ThreadTypingIcon extends Component {
 
-    constructor(...args) {
-        super(...args);
-        useShouldUpdateBasedOnProps();
-    }
+constructor(...args) {
+super(...args);
+useShouldUpdateBasedOnProps();
+}
 
 }
 
 Object.assign(ThreadTypingIcon, {
-    defaultProps: {
-        animation: 'none',
-        size: 'small',
-    },
-    props: {
-        animation: {
-            type: String,
-            validate: prop => ['bounce', 'none', 'pulse'].includes(prop),
-        },
-        size: {
-            type: String,
-            validate: prop => ['small', 'medium'].includes(prop),
-        },
-        title: {
-            type: String,
-            optional: true,
-        }
-    },
-    template: 'mail.ThreadTypingIcon',
+defaultProps: {
+animation: 'none',
+size: 'small',
+},
+props: {
+animation: {
+type: String,
+validate: prop => ['bounce', 'none', 'pulse'].includes(prop),
+},
+size: {
+type: String,
+validate: prop => ['small', 'medium'].includes(prop),
+},
+title: {
+type: String,
+optional: true,
+}
+},
+template: 'mail.ThreadTypingIcon',
 });
 
 return ThreadTypingIcon;

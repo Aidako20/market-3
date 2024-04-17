@@ -4,11 +4,11 @@ from flectra import api, fields, models
 
 
 class WebsiteRobots(models.TransientModel):
-    _name = "website.robots"
-    _description = "Robots.txt Editor"
+_name = "website.robots"
+_description = "Robots.txt Editor"
 
-    content = fields.Text(default=lambda s: s.env['website'].get_current_website().robots_txt)
+content = fields.Text(default=lambda s: s.env['website'].get_current_website().robots_txt)
 
-    def action_save(self):
-        self.env['website'].get_current_website().robots_txt = self.content
-        return {'type': 'ir.actions.act_window_close'}
+def action_save(self):
+self.env['website'].get_current_website().robots_txt = self.content
+return {'type': 'ir.actions.act_window_close'}

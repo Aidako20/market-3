@@ -8,45 +8,45 @@ const { Component } = owl;
 
 class NotificationAlert extends Component {
 
-    /**
-     * @override
-     */
-    constructor(...args) {
-        super(...args);
-        useShouldUpdateBasedOnProps();
-        useStore(props => {
-            const isMessagingInitialized = this.env.isMessagingInitialized();
-            return {
-                isMessagingInitialized,
-                isNotificationBlocked: this.isNotificationBlocked,
-            };
-        });
-    }
+/**
+* @override
+*/
+constructor(...args) {
+super(...args);
+useShouldUpdateBasedOnProps();
+useStore(props => {
+const isMessagingInitialized = this.env.isMessagingInitialized();
+return {
+isMessagingInitialized,
+isNotificationBlocked: this.isNotificationBlocked,
+};
+});
+}
 
-    //--------------------------------------------------------------------------
-    // Public
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// Public
+//--------------------------------------------------------------------------
 
-    /**
-     * @returns {boolean}
-     */
-    get isNotificationBlocked() {
-        if (!this.env.isMessagingInitialized()) {
-            return false;
-        }
-        const windowNotification = this.env.browser.Notification;
-        return (
-            windowNotification &&
-            windowNotification.permission !== "granted" &&
-            !this.env.messaging.isNotificationPermissionDefault()
-        );
-    }
+/**
+* @returns {boolean}
+*/
+get isNotificationBlocked() {
+if (!this.env.isMessagingInitialized()) {
+return false;
+}
+const windowNotification = this.env.browser.Notification;
+return (
+windowNotification &&
+windowNotification.permission !== "granted" &&
+!this.env.messaging.isNotificationPermissionDefault()
+);
+}
 
 }
 
 Object.assign(NotificationAlert, {
-    props: {},
-    template: 'mail.NotificationAlert',
+props: {},
+template: 'mail.NotificationAlert',
 });
 
 return NotificationAlert;

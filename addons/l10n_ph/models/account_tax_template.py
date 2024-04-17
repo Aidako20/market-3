@@ -4,11 +4,11 @@ from flectra import fields, models
 
 
 class AccountTaxTemplate(models.Model):
-    _inherit = "account.tax.template"
+_inherit = "account.tax.template"
 
-    l10n_ph_atc = fields.Char("Philippines ATC")
+l10n_ph_atc = fields.Char("Philippines ATC")
 
-    def _get_tax_vals(self, company, tax_template_to_tax):
-        val = super()._get_tax_vals(company, tax_template_to_tax)
-        val.update({"l10n_ph_atc": self.l10n_ph_atc})
-        return val
+def _get_tax_vals(self, company, tax_template_to_tax):
+val = super()._get_tax_vals(company, tax_template_to_tax)
+val.update({"l10n_ph_atc": self.l10n_ph_atc})
+return val

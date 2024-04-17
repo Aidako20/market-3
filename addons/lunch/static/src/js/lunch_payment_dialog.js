@@ -4,15 +4,15 @@ flectra.define('lunch.LunchPaymentDialog', function (require) {
 var Dialog = require('web.Dialog');
 
 var LunchPaymentDialog = Dialog.extend({
-    template: 'lunch.LunchPaymentDialog',
+template: 'lunch.LunchPaymentDialog',
 
-    init: function (parent, options) {
-        this._super.apply(this, arguments);
+init: function (parent, options) {
+this._super.apply(this, arguments);
 
-        options = options || {};
+options = options || {};
 
-        this.message = options.message || '';
-    },
+this.message = options.message || '';
+},
 });
 
 return LunchPaymentDialog;

@@ -3,8 +3,8 @@ from flectra import _, api, fields, models
 
 
 class ResCurrency(models.Model):
-    _name = "res.currency"
-    _inherit = "res.currency"
+_name = "res.currency"
+_inherit = "res.currency"
 
-    l10n_cl_currency_code = fields.Char('Currency Code')
-    l10n_cl_short_name = fields.Char('Short Name')
+l10n_cl_currency_code = fields.Char('Currency Code')
+l10n_cl_short_name = fields.Char('Short Name')

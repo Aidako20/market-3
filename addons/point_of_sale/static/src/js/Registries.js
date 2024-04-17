@@ -1,11 +1,11 @@
 flectra.define('point_of_sale.Registries', function(require) {
-    'use strict';
+'use strict';
 
-    /**
-     * This definition contains all the instances of ClassRegistry.
-     */
+/**
+* This definition contains all the instances of ClassRegistry.
+*/
 
-    const ComponentRegistry = require('point_of_sale.ComponentRegistry');
+const ComponentRegistry = require('point_of_sale.ComponentRegistry');
 
-    return { Component: new ComponentRegistry() };
+return { Component: new ComponentRegistry() };
 });

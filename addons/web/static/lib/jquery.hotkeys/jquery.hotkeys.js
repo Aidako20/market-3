@@ -1,13 +1,13 @@
 /*
- * jQuery Hotkeys Plugin
- * Copyright 2010, John Resig
- * Dual licensed under the MIT or GPL Version 2 licenses.
- *
- * Based upon the plugin by Tzury Bar Yochay:
- * http://github.com/tzuryby/hotkeys
- *
- * Original idea by:
- * Binny V A, http://www.openjs.com/scripts/events/keyboard_shortcuts/
+* jQuery Hotkeys Plugin
+* Copyright 2010, John Resig
+* Dual licensed under the MIT or GPL Version 2 licenses.
+*
+* Based upon the plugin by Tzury Bar Yochay:
+* http://github.com/tzuryby/hotkeys
+*
+* Original idea by:
+* Binny V A, http://www.openjs.com/scripts/events/keyboard_shortcuts/
 */
 
 (function(jQuery){
@@ -28,7 +28,7 @@
 		shiftNums: {
 			"`": "~", "1": "!", "2": "@", "3": "#", "4": "$", "5": "%", "6": "^", "7": "&", 
 			"8": "*", "9": "(", "0": ")", "-": "_", "=": "+", ";": ": ", "'": "\"", ",": "<", 
-			".": ">",  "/": "?",  "\\": "|"
+			".": ">", "/": "?", "\\": "|"
 		}
 	};
 

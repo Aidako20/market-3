@@ -8,72 +8,72 @@ const { Component } = owl;
 
 class MailTemplate extends Component {
 
-    /**
-     * @override
-     */
-    constructor(...args) {
-        super(...args);
-        useShouldUpdateBasedOnProps();
-        useStore(props => {
-            const activity = this.env.models['mail.activity'].get(props.activityLocalId);
-            const mailTemplate = this.env.models['mail.mail_template'].get(props.mailTemplateLocalId);
-            return {
-                activity: activity ? activity.__state : undefined,
-                mailTemplate: mailTemplate ? mailTemplate.__state : undefined,
-            };
-        });
-    }
+/**
+* @override
+*/
+constructor(...args) {
+super(...args);
+useShouldUpdateBasedOnProps();
+useStore(props => {
+const activity = this.env.models['mail.activity'].get(props.activityLocalId);
+const mailTemplate = this.env.models['mail.mail_template'].get(props.mailTemplateLocalId);
+return {
+activity: activity ? activity.__state : undefined,
+mailTemplate: mailTemplate ? mailTemplate.__state : undefined,
+};
+});
+}
 
-    //--------------------------------------------------------------------------
-    // Public
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// Public
+//--------------------------------------------------------------------------
 
-    /**
-     * @returns {mail.activity}
-     */
-    get activity() {
-        return this.env.models['mail.activity'].get(this.props.activityLocalId);
-    }
+/**
+* @returns {mail.activity}
+*/
+get activity() {
+return this.env.models['mail.activity'].get(this.props.activityLocalId);
+}
 
-    /**
-     * @returns {mail.mail_template}
-     */
-    get mailTemplate() {
-        return this.env.models['mail.mail_template'].get(this.props.mailTemplateLocalId);
-    }
+/**
+* @returns {mail.mail_template}
+*/
+get mailTemplate() {
+return this.env.models['mail.mail_template'].get(this.props.mailTemplateLocalId);
+}
 
-    //--------------------------------------------------------------------------
-    // Handlers
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// Handlers
+//--------------------------------------------------------------------------
 
-    /**
-     * @private
-     * @param {MouseEvent} ev
-     */
-    _onClickPreview(ev) {
-        ev.stopPropagation();
-        ev.preventDefault();
-        this.mailTemplate.preview(this.activity);
-    }
+/**
+* @private
+* @param {MouseEvent} ev
+*/
+_onClickPreview(ev) {
+ev.stopPropagation();
+ev.preventDefault();
+this.mailTemplate.preview(this.activity);
+}
 
-    /**
-     * @private
-     * @param {MouseEvent} ev
-     */
-    _onClickSend(ev) {
-        ev.stopPropagation();
-        ev.preventDefault();
-        this.mailTemplate.send(this.activity);
-    }
+/**
+* @private
+* @param {MouseEvent} ev
+*/
+_onClickSend(ev) {
+ev.stopPropagation();
+ev.preventDefault();
+this.mailTemplate.send(this.activity);
+}
 
 }
 
 Object.assign(MailTemplate, {
-    props: {
-        activityLocalId: String,
-        mailTemplateLocalId: String,
-    },
-    template: 'mail.MailTemplate',
+props: {
+activityLocalId: String,
+mailTemplateLocalId: String,
+},
+template: 'mail.MailTemplate',
 });
 
 return MailTemplate;
