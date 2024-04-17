@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <flectra>
-    <data>
-        <template id="label_product_template_view">
-            <t t-foreach="docs" t-as="product">
-                <t t-translation="off">
+<data>
+<template id="label_product_template_view">
+<t t-foreach="docs" t-as="product">
+<t t-translation="off">
 ^XA
 ^FO100,50
 ^A0N,44,33^FD<t t-esc="product.display_name"/>^FS
@@ -22,12 +22,12 @@
 ^FD<t t-esc="product.barcode"/>^FS
 </t>
 ^XZ
-                </t>
-            </t>
-        </template>
-        <template id="label_product_product_view">
-            <t t-foreach="docs" t-as="product">
-                <t t-translation="off">
+</t>
+</t>
+</template>
+<template id="label_product_product_view">
+<t t-foreach="docs" t-as="product">
+<t t-translation="off">
 ^XA
 ^FO100,50
 ^A0N,44,33^FD<t t-esc="product.display_name"/>^FS
@@ -46,12 +46,12 @@
 ^FD<t t-esc="product.barcode"/>^FS
 </t>
 ^XZ
-                </t>
-            </t>
-        </template>
-        <template id="label_barcode_product_template_view">
-            <t t-foreach="docs" t-as="product">
-                <t t-translation="off">
+</t>
+</t>
+</template>
+<template id="label_barcode_product_template_view">
+<t t-foreach="docs" t-as="product">
+<t t-translation="off">
 ^XA
 ^FO100,50
 ^A0N,44,33^FD<t t-esc="product.display_name"/>^FS
@@ -61,12 +61,12 @@
 ^FD<t t-esc="product.barcode"/>^FS
 </t>
 ^XZ
-                </t>
-            </t>
-        </template>
-        <template id="label_barcode_product_product_view">
-            <t t-foreach="docs" t-as="product">
-                <t t-translation="off">
+</t>
+</t>
+</template>
+<template id="label_barcode_product_product_view">
+<t t-foreach="docs" t-as="product">
+<t t-translation="off">
 ^XA
 ^FO100,50
 ^A0N,44,33^FD<t t-esc="product.display_name"/>^FS
@@ -76,12 +76,12 @@
 ^FD<t t-esc="product.barcode"/>^FS
 </t>
 ^XZ
-                </t>
-            </t>
-        </template>
-        <template id="label_lot_template_view">
-            <t t-foreach="docs" t-as="lot">
-                <t t-translation="off">
+</t>
+</t>
+</template>
+<template id="label_lot_template_view">
+<t t-foreach="docs" t-as="lot">
+<t t-translation="off">
 ^XA
 ^FO100,50
 ^A0N,44,33^FD<t t-esc="lot.product_id.display_name"/>^FS
@@ -91,8 +91,8 @@
 ^BCN,100,Y,N,N
 ^FD<t t-esc="lot.name"/>^FS
 ^XZ
-                </t>
-            </t>
-        </template>
-    </data>
+</t>
+</t>
+</template>
+</data>
 </flectra>

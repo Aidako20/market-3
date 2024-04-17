@@ -5,19 +5,19 @@ from flectra.tools import float_repr
 
 
 class AccountMove(models.Model):
-    _inherit = 'account.move'
+_inherit = 'account.move'
 
-    def _get_ubl_values(self):
-        self.ensure_one()
+def _get_ubl_values(self):
+self.ensure_one()
 
-        def format_monetary(amount):
-            # Format the monetary values to avoid trailing decimals (e.g. 90.85000000000001).
-            return float_repr(amount, self.currency_id.decimal_places)
+def format_monetary(amount):
+# Format the monetary values to avoid trailing decimals (e.g. 90.85000000000001).
+return float_repr(amount, self.currency_id.decimal_places)
 
-        return {
-            'invoice': self,
-            'ubl_version': 2.1,
-            'type_code': 380 if self.move_type == 'out_invoice' else 381,
-            'payment_means_code': 42 if self.journal_id.bank_account_id else 31,
-            'format_monetary': format_monetary,
-        }
+return {
+'invoice': self,
+'ubl_version': 2.1,
+'type_code': 380 if self.move_type == 'out_invoice' else 381,
+'payment_means_code': 42 if self.journal_id.bank_account_id else 31,
+'format_monetary': format_monetary,
+}

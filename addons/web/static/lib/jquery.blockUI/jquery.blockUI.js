@@ -1,16 +1,16 @@
 /*!
- * jQuery blockUI plugin
- * Version 2.70.0-2014.11.23
- * Requires jQuery v1.7 or later
- *
- * Examples at: http://malsup.com/jquery/block/
- * Copyright (c) 2007-2013 M. Alsup
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
- *
- * Thanks to Amir-Hossein Sobhi for some excellent contributions!
- */
+* jQuery blockUI plugin
+* Version 2.70.0-2014.11.23
+* Requires jQuery v1.7 or later
+*
+* Examples at: http://malsup.com/jquery/block/
+* Copyright (c) 2007-2013 M. Alsup
+* Dual licensed under the MIT and GPL licenses:
+* http://www.opensource.org/licenses/mit-license.php
+* http://www.gnu.org/licenses/gpl.html
+*
+* Thanks to Amir-Hossein Sobhi for some excellent contributions!
+*/
 
 ;(function() {
 /*jshint eqeqeq:false curly:false latedef:false */
@@ -24,15 +24,15 @@
 		// this bit is to ensure we don't call setExpression when we shouldn't (with extra muscle to handle
 		// confusing userAgent strings on Vista)
 		var msie = /MSIE/.test(navigator.userAgent);
-		var ie6  = /MSIE 6.0/.test(navigator.userAgent) && ! /MSIE 8.0/.test(navigator.userAgent);
+		var ie6 = /MSIE 6.0/.test(navigator.userAgent) && ! /MSIE 8.0/.test(navigator.userAgent);
 		var mode = document.documentMode || 0;
 		var setExpr = $.isFunction( document.createElement('div').style.setExpression );
 
 		// global $ methods for blocking/unblocking the entire page
-		$.blockUI   = function(opts) { install(window, opts); };
+		$.blockUI = function(opts) { install(window, opts); };
 		$.unblockUI = function(opts) { remove(window, opts); };
 
-		// convenience method for quick growl-like notifications  (http://www.google.com/search?q=growl)
+		// convenience method for quick growl-like notifications (http://www.google.com/search?q=growl)
 		$.growlUI = function(title, message, timeout, onClose) {
 			var $m = $('<div class="growlUI"></div>');
 			if (title) $m.append('<h1>'+title+'</h1>');
@@ -45,7 +45,7 @@
 
 				$.blockUI({
 					message: $m,
-					fadeIn : typeof opts.fadeIn  !== 'undefined' ? opts.fadeIn  : 700,
+					fadeIn : typeof opts.fadeIn !== 'undefined' ? opts.fadeIn : 700,
 					fadeOut: typeof opts.fadeOut !== 'undefined' ? opts.fadeOut : 1000,
 					timeout: typeof opts.timeout !== 'undefined' ? opts.timeout : timeout,
 					centerY: false,
@@ -112,7 +112,7 @@
 		// override these in your code to change the default behavior and style
 		$.blockUI.defaults = {
 			// message displayed when blocking (use null for no message)
-			message:  '<h1>Please wait...</h1>',
+			message: '<h1>Please wait...</h1>',
 
 			title: null,		// title string; only used when theme == true
 			draggable: true,	// only used when theme == true (requires jquery-ui.js to be loaded)
@@ -143,7 +143,7 @@
 			},
 
 			// styles for the overlay
-			overlayCSS:  {
+			overlayCSS: {
 				backgroundColor:	'#000',
 				opacity:			0.6,
 				cursor:				'wait'
@@ -186,7 +186,7 @@
 			centerY: true,
 
 			// allow body element to be stetched in ie6; this makes blocking look better
-			// on "short" pages.  disable if you wish to prevent changes to the body height
+			// on "short" pages. disable if you wish to prevent changes to the body height
 			allowBodyStretch: true,
 
 			// enable if you want key and mouse events to be disabled for content that is blocked
@@ -197,10 +197,10 @@
 			constrainTabKey: true,
 
 			// fadeIn time in millis; set to 0 to disable fadeIn on block
-			fadeIn:  200,
+			fadeIn: 200,
 
 			// fadeOut time in millis; set to 0 to disable fadeOut on unblock
-			fadeOut:  400,
+			fadeOut: 400,
 
 			// time in millis to wait before auto-unblocking; set to 0 to disable auto-unblock
 			timeout: 0,
@@ -212,8 +212,8 @@
 			// page blocking
 			focusInput: true,
 
-            // elements that can receive focus
-            focusableElements: ':input:enabled:visible',
+// elements that can receive focus
+focusableElements: ':input:enabled:visible',
 
 			// suppresses the use of overlay styles on FF/Linux (due to performance issues with opacity)
 			// no longer needed in 2012
@@ -600,7 +600,7 @@
 			var l = ((p.offsetWidth - el.offsetWidth)/2) - sz(p,'borderLeftWidth');
 			var t = ((p.offsetHeight - el.offsetHeight)/2) - sz(p,'borderTopWidth');
 			if (x) s.left = l > 0 ? (l+'px') : '0';
-			if (y) s.top  = t > 0 ? (t+'px') : '0';
+			if (y) s.top = t > 0 ? (t+'px') : '0';
 		}
 
 		function sz(el, p) {

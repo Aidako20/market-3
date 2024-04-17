@@ -1,47 +1,47 @@
 /**
 * vkBeautify - javascript plugin to pretty-print or minify text in XML, JSON, CSS and SQL formats.
-*  
+* 
 * Version - 0.99.00.beta 
 * Copyright (c) 2012 Vadim Kiryukhin
 * vkiryukhin @ gmail.com
 * http://www.eslinstructor.net/vkbeautify/
 * 
 * Dual licensed under the MIT and GPL licenses:
-*   http://www.opensource.org/licenses/mit-license.php
-*   http://www.gnu.org/licenses/gpl.html
+* http://www.opensource.org/licenses/mit-license.php
+* http://www.gnu.org/licenses/gpl.html
 *
-*   Pretty print
+* Pretty print
 *
-*        vkbeautify.xml(text [,indent_pattern]);
-*        vkbeautify.json(text [,indent_pattern]);
-*        vkbeautify.css(text [,indent_pattern]);
-*        vkbeautify.sql(text [,indent_pattern]);
+* vkbeautify.xml(text [,indent_pattern]);
+* vkbeautify.json(text [,indent_pattern]);
+* vkbeautify.css(text [,indent_pattern]);
+* vkbeautify.sql(text [,indent_pattern]);
 *
-*        @text - String; text to beatufy;
-*        @indent_pattern - Integer | String;
-*                Integer:  number of white spaces;
-*                String:   character string to visualize indentation ( can also be a set of white spaces )
-*   Minify
+* @text - String; text to beatufy;
+* @indent_pattern - Integer | String;
+* Integer: number of white spaces;
+* String: character string to visualize indentation ( can also be a set of white spaces )
+* Minify
 *
-*        vkbeautify.xmlmin(text [,preserve_comments]);
-*        vkbeautify.jsonmin(text);
-*        vkbeautify.cssmin(text [,preserve_comments]);
-*        vkbeautify.sqlmin(text);
+* vkbeautify.xmlmin(text [,preserve_comments]);
+* vkbeautify.jsonmin(text);
+* vkbeautify.cssmin(text [,preserve_comments]);
+* vkbeautify.sqlmin(text);
 *
-*        @text - String; text to minify;
-*        @preserve_comments - Bool; [optional];
-*                Set this flag to true to prevent removing comments from @text ( minxml and mincss functions only. )
+* @text - String; text to minify;
+* @preserve_comments - Bool; [optional];
+* Set this flag to true to prevent removing comments from @text ( minxml and mincss functions only. )
 *
-*   Examples:
-*        vkbeautify.xml(text); // pretty print XML
-*        vkbeautify.json(text, 4 ); // pretty print JSON
-*        vkbeautify.css(text, '. . . .'); // pretty print CSS
-*        vkbeautify.sql(text, '----'); // pretty print SQL
+* Examples:
+* vkbeautify.xml(text); // pretty print XML
+* vkbeautify.json(text, 4 ); // pretty print JSON
+* vkbeautify.css(text, '. . . .'); // pretty print CSS
+* vkbeautify.sql(text, '----'); // pretty print SQL
 *
-*        vkbeautify.xmlmin(text, true);// minify XML, preserve comments
-*        vkbeautify.jsonmin(text);// minify JSON
-*        vkbeautify.cssmin(text);// minify CSS, remove comments ( default )
-*        vkbeautify.sqlmin(text);// minify SQL
+* vkbeautify.xmlmin(text, true);// minify XML, preserve comments
+* vkbeautify.jsonmin(text);// minify JSON
+* vkbeautify.cssmin(text);// minify CSS, remove comments ( default )
+* vkbeautify.sqlmin(text);// minify SQL
 *
 */
 
@@ -49,24 +49,24 @@
 
 function createShiftArr(step) {
 
-	var space = '    ';
+	var space = ' ';
 	
-	if ( isNaN(parseInt(step)) ) {  // argument is string
+	if ( isNaN(parseInt(step)) ) { // argument is string
 		space = step;
 	} else { // argument is integer
 		switch(step) {
 			case 1: space = ' '; break;
-			case 2: space = '  '; break;
-			case 3: space = '   '; break;
-			case 4: space = '    '; break;
-			case 5: space = '     '; break;
-			case 6: space = '      '; break;
-			case 7: space = '       '; break;
-			case 8: space = '        '; break;
-			case 9: space = '         '; break;
-			case 10: space = '          '; break;
-			case 11: space = '           '; break;
-			case 12: space = '            '; break;
+			case 2: space = ' '; break;
+			case 3: space = ' '; break;
+			case 4: space = ' '; break;
+			case 5: space = ' '; break;
+			case 6: space = ' '; break;
+			case 7: space = ' '; break;
+			case 8: space = ' '; break;
+			case 9: space = ' '; break;
+			case 10: space = ' '; break;
+			case 11: space = ' '; break;
+			case 12: space = ' '; break;
 		}
 	}
 
@@ -78,7 +78,7 @@ function createShiftArr(step) {
 }
 
 function vkbeautify(){
-	this.step = '    '; // 4 spaces
+	this.step = ' '; // 4 spaces
 	this.shift = createShiftArr(this.step);
 };
 
@@ -101,12 +101,12 @@ vkbeautify.prototype.xml = function(text,step) {
 			if(ar[ix].search(/<!/) > -1) { 
 				str += shift[deep]+ar[ix];
 				inComment = true; 
-				// end comment  or <![CDATA[...]]> //
+				// end comment or <![CDATA[...]]> //
 				if(ar[ix].search(/-->/) > -1 || ar[ix].search(/\]>/) > -1 || ar[ix].search(/!DOCTYPE/) > -1 ) { 
 					inComment = false; 
 				}
 			} else 
-			// end comment  or <![CDATA[...]]> //
+			// end comment or <![CDATA[...]]> //
 			if(ar[ix].search(/-->/) > -1 || ar[ix].search(/\]>/) > -1) { 
 				str += ar[ix];
 				inComment = false; 
@@ -138,7 +138,7 @@ vkbeautify.prototype.xml = function(text,step) {
 				str += shift[deep]+ar[ix];
 			} else 
 			// xmlns //
-			if( ar[ix].search(/xmlns\:/) > -1  || ar[ix].search(/xmlns\=/) > -1) { 
+			if( ar[ix].search(/xmlns\:/) > -1 || ar[ix].search(/xmlns\=/) > -1) { 
 				str += shift[deep]+ar[ix];
 			} 
 			
@@ -147,7 +147,7 @@ vkbeautify.prototype.xml = function(text,step) {
 			}
 		}
 		
-	return  (str[0] == '\n') ? str.slice(1) : str;
+	return (str[0] == '\n') ? str.slice(1) : str;
 }
 
 vkbeautify.prototype.json = function(text,step) {
@@ -180,13 +180,13 @@ vkbeautify.prototype.css = function(text, step) {
 		
 		for(ix=0;ix<len;ix++) {
 
-			if( /\{/.exec(ar[ix]))  { 
+			if( /\{/.exec(ar[ix])) { 
 				str += shift[deep++]+ar[ix];
 			} else 
-			if( /\}/.exec(ar[ix]))  { 
+			if( /\}/.exec(ar[ix])) { 
 				str += shift[--deep]+ar[ix];
 			} else
-			if( /\*\\/.exec(ar[ix]))  { 
+			if( /\*\\/.exec(ar[ix])) { 
 				str += shift[deep]+ar[ix];
 			}
 			else {
@@ -199,7 +199,7 @@ vkbeautify.prototype.css = function(text, step) {
 //----------------------------------------------------------------------------
 
 function isSubquery(str, parenthesisLevel) {
-	return  parenthesisLevel - (str.replace(/\(/g,'').length - str.replace(/\)/g,'').length )
+	return parenthesisLevel - (str.replace(/\(/g,'').length - str.replace(/\)/g,'').length )
 }
 
 function split_sql(str, tab) {
@@ -287,25 +287,25 @@ vkbeautify.prototype.sql = function(text,step) {
 			
 			parenthesisLevel = isSubquery(ar[ix], parenthesisLevel);
 			
-			if( /\s{0,}\s{0,}SELECT\s{0,}/.exec(ar[ix]))  { 
+			if( /\s{0,}\s{0,}SELECT\s{0,}/.exec(ar[ix])) { 
 				ar[ix] = ar[ix].replace(/\,/g,",\n"+tab+tab+"")
 			} 
 			
-			if( /\s{0,}\s{0,}SET\s{0,}/.exec(ar[ix]))  { 
+			if( /\s{0,}\s{0,}SET\s{0,}/.exec(ar[ix])) { 
 				ar[ix] = ar[ix].replace(/\,/g,",\n"+tab+tab+"")
 			} 
 			
-			if( /\s{0,}\(\s{0,}SELECT\s{0,}/.exec(ar[ix]))  { 
+			if( /\s{0,}\(\s{0,}SELECT\s{0,}/.exec(ar[ix])) { 
 				deep++;
 				str += shift[deep]+ar[ix];
 			} else 
-			if( /\'/.exec(ar[ix]) )  { 
+			if( /\'/.exec(ar[ix]) ) { 
 				if(parenthesisLevel<1 && deep) {
 					deep--;
 				}
 				str += ar[ix];
 			}
-			else  { 
+			else { 
 				str += shift[deep]+ar[ix];
 				if(parenthesisLevel<1 && deep) {
 					deep--;
@@ -322,9 +322,9 @@ vkbeautify.prototype.sql = function(text,step) {
 vkbeautify.prototype.xmlmin = function(text, preserveComments) {
 
 	var str = preserveComments ? text
-							   : text.replace(/\<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)\>/g,"")
+							 : text.replace(/\<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)\>/g,"")
 									 .replace(/[ \r\n\t]{1,}xmlns/g, ' xmlns');
-	return  str.replace(/>\s{0,}</g,"><"); 
+	return str.replace(/>\s{0,}</g,"><"); 
 }
 
 vkbeautify.prototype.jsonmin = function(text) {
@@ -338,14 +338,14 @@ vkbeautify.prototype.jsonmin = function(text) {
 vkbeautify.prototype.cssmin = function(text, preserveComments) {
 	
 	var str = preserveComments ? text
-							   : text.replace(/\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\//g,"") ;
+							 : text.replace(/\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\//g,"") ;
 
 	return str.replace(/\s{1,}/g,' ')
-			  .replace(/\{\s{1,}/g,"{")
-			  .replace(/\}\s{1,}/g,"}")
-			  .replace(/\;\s{1,}/g,";")
-			  .replace(/\/\*\s{1,}/g,"/*")
-			  .replace(/\*\/\s{1,}/g,"*/");
+			 .replace(/\{\s{1,}/g,"{")
+			 .replace(/\}\s{1,}/g,"}")
+			 .replace(/\;\s{1,}/g,";")
+			 .replace(/\/\*\s{1,}/g,"/*")
+			 .replace(/\*\/\s{1,}/g,"*/");
 }
 
 vkbeautify.prototype.sqlmin = function(text) {

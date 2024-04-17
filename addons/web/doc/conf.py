@@ -28,9 +28,9 @@ sys.path.insert(0, os.path.abspath('..'))
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
-    'sphinx.ext.autodoc', 'sphinx.ext.intersphinx',
-    'sphinx.ext.todo', 'sphinx.ext.viewcode',
-    'patchqueue'
+'sphinx.ext.autodoc', 'sphinx.ext.intersphinx',
+'sphinx.ext.todo', 'sphinx.ext.viewcode',
+'patchqueue'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -95,23 +95,23 @@ pygments_style = 'sphinx'
 
 # -- Options for HTML output ---------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
+# The theme to use for HTML and HTML Help pages. See the documentation for
 # a list of builtin themes.
 html_theme = 'flask'
 
 # Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
+# further. For a list of options available for each theme, see the
 # documentation.
 #html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
 html_theme_path = ['_themes']
 
-# The name for this set of Sphinx documents.  If None, it defaults to
+# The name for this set of Sphinx documents. If None, it defaults to
 # "<project> v<release> documentation".
 #html_title = None
 
-# A shorter title for the navigation bar.  Default is the same as html_title.
+# A shorter title for the navigation bar. Default is the same as html_title.
 #html_short_title = None
 
 # The name of an image file (relative to this directory) to place at the top
@@ -119,7 +119,7 @@ html_theme_path = ['_themes']
 #html_logo = None
 
 # The name of an image file (within the static path) to use as favicon of the
-# docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
+# docs. This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
 #html_favicon = None
 
@@ -138,9 +138,9 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
-    'index':    ['sidebarintro.html', 'sourcelink.html', 'searchbox.html'],
-    '**':       ['sidebarlogo.html', 'localtoc.html', 'relations.html',
-                 'sourcelink.html', 'searchbox.html']
+'index': ['sidebarintro.html', 'sourcelink.html', 'searchbox.html'],
+'**': ['sidebarlogo.html', 'localtoc.html', 'relations.html',
+'sourcelink.html', 'searchbox.html']
 }
 
 # Additional templates that should be rendered to pages, maps page names to
@@ -166,7 +166,7 @@ html_sidebars = {
 #html_show_copyright = True
 
 # If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
+# contain a <link> tag referring to it. The value of this option must be the
 # base URL from which the finished HTML is served.
 #html_use_opensearch = ''
 
@@ -193,8 +193,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'openerp-web-doc.tex', u'OpenERP Web Developers Documentation',
-   u'OpenERP s.a.', 'manual'),
+('index', 'openerp-web-doc.tex', u'OpenERP Web Developers Documentation',
+u'OpenERP s.a.', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -223,8 +223,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'openerp-web-doc', u'OpenERP Web Developers Documentation',
-     [u'OpenERP s.a.'], 1)
+('index', 'openerp-web-doc', u'OpenERP Web Developers Documentation',
+[u'OpenERP s.a.'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -235,11 +235,11 @@ man_pages = [
 
 # Grouping the document tree into Texinfo files. List of tuples
 # (source start file, target name, title, author,
-#  dir menu entry, description, category)
+# dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'OpenERPWebDocumentation', u'OpenERP Web Developers Documentation',
-   u'OpenERP s.a.', 'OpenERPWebDocumentation', 'Developers documentation for the openerp-web project.',
-   'Miscellaneous'),
+('index', 'OpenERPWebDocumentation', u'OpenERP Web Developers Documentation',
+u'OpenERP s.a.', 'OpenERPWebDocumentation', 'Developers documentation for the openerp-web project.',
+'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.
@@ -255,6 +255,6 @@ todo_include_todos = True
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'python': ('http://docs.python.org/', None),
-    'openerpserver': ('http://doc.openerp.com/trunk/developers/server', None),
+'python': ('http://docs.python.org/', None),
+'openerpserver': ('http://doc.openerp.com/trunk/developers/server', None),
 }

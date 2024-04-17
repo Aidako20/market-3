@@ -4,22 +4,22 @@ flectra.define('im_livechat/static/src/widgets/discuss/discuss.js', function (re
 const Discuss = require('mail/static/src/widgets/discuss/discuss.js');
 
 Discuss.include({
-    //----------------------------------------------------------------------
-    // Private
-    //----------------------------------------------------------------------
+//----------------------------------------------------------------------
+// Private
+//----------------------------------------------------------------------
 
-    /**
-     * @override
-     */
-    _shouldHaveInviteButton() {
-        if (
-            this.discuss.thread &&
-            this.discuss.thread.channel_type === 'livechat'
-        ) {
-            return true;
-        }
-        return this._super();
-    },
+/**
+* @override
+*/
+_shouldHaveInviteButton() {
+if (
+this.discuss.thread &&
+this.discuss.thread.channel_type === 'livechat'
+) {
+return true;
+}
+return this._super();
+},
 });
 
 });

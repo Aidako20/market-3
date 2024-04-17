@@ -11,9 +11,9 @@
 * This event is triggered in an EventListener attached to the 'DOMContentLoaded' event.
 * So, to list options we had, we could:
 * a) add an eventListener to the iframe document or window to react to 'webviewerloaded'. This doesn't work as 
-*    document and windows are not the definitive ones and won't catche the event later.
+* document and windows are not the definitive ones and won't catche the event later.
 * b) add an eventListener to the iframe to react to 'DOMContentLoaded', which doens't work too as our listener will be called
-*    after the pdf.js one.
+* after the pdf.js one.
 *
 * Finally the option was choosed to modify the default value of this option directly in pdf.js as no hook worked in the
 * 'account_invoice_extract' module.

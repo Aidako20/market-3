@@ -8,11 +8,11 @@ var CalendarView = require('web.CalendarView');
 var viewRegistry = require('web.view_registry');
 
 var AttendeeCalendarView = CalendarView.extend({
-    config: _.extend({}, CalendarView.prototype.config, {
-        Renderer: CalendarRenderer,
-        Controller: CalendarController,
-        Model: CalendarModel,
-    }),
+config: _.extend({}, CalendarView.prototype.config, {
+Renderer: CalendarRenderer,
+Controller: CalendarController,
+Model: CalendarModel,
+}),
 });
 
 viewRegistry.add('attendee_calendar', AttendeeCalendarView);

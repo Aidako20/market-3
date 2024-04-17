@@ -21,13 +21,13 @@ var version = $.ui.version = "1.12.1";
 
 
 /*!
- * jQuery UI Widget 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Widget 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Widget
 //>>group: Core
@@ -744,15 +744,15 @@ var widget = $.widget;
 
 
 /*!
- * jQuery UI Position 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- *
- * http://api.jqueryui.com/position/
- */
+* jQuery UI Position 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*
+* http://api.jqueryui.com/position/
+*/
 
 //>>label: Position
 //>>group: Core
@@ -1232,13 +1232,13 @@ var position = $.ui.position;
 
 
 /*!
- * jQuery UI :data 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI :data 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: :data Selector
 //>>group: Core
@@ -1261,13 +1261,13 @@ var data = $.extend( $.expr[ ":" ], {
 } );
 
 /*!
- * jQuery UI Disable Selection 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Disable Selection 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: disableSelection
 //>>group: Core
@@ -1297,13 +1297,13 @@ var disableSelection = $.fn.extend( {
 
 
 /*!
- * jQuery UI Focusable 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Focusable 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: :focusable Selector
 //>>group: Core
@@ -1371,13 +1371,13 @@ var focusable = $.ui.focusable;
 
 
 /*!
- * jQuery UI Keycode 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Keycode 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Keycode
 //>>group: Core
@@ -1406,13 +1406,13 @@ var keycode = $.ui.keyCode = {
 
 
 /*!
- * jQuery UI Scroll Parent 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Scroll Parent 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: scrollParent
 //>>group: Core
@@ -1441,13 +1441,13 @@ var scrollParent = $.fn.scrollParent = function( includeHidden ) {
 
 
 /*!
- * jQuery UI Unique ID 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Unique ID 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: uniqueId
 //>>group: Core
@@ -1485,13 +1485,13 @@ var uniqueId = $.fn.extend( {
 var ie = $.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
 
 /*!
- * jQuery UI Mouse 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Mouse 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Mouse
 //>>group: Widgets
@@ -1771,13 +1771,13 @@ var safeBlur = $.ui.safeBlur = function( element ) {
 
 
 /*!
- * jQuery UI Draggable 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Draggable 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Draggable
 //>>group: Interactions
@@ -2769,7 +2769,7 @@ $.ui.plugin.add( "draggable", "scroll", {
 			i.overflowOffset = i.scrollParentNotHidden.offset();
 		}
 	},
-	drag: function( event, ui, i  ) {
+	drag: function( event, ui, i ) {
 
 		var o = i.options,
 			scrolled = false,
@@ -3001,13 +3001,13 @@ var widgetsDraggable = $.ui.draggable;
 
 
 /*!
- * jQuery UI Droppable 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Droppable 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Droppable
 //>>group: Interactions
@@ -3482,13 +3482,13 @@ var widgetsDroppable = $.ui.droppable;
 
 
 /*!
- * jQuery UI Resizable 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Resizable 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Resizable
 //>>group: Interactions
@@ -3932,7 +3932,7 @@ $.widget( "ui.resizable", $.ui.mouse, {
 			soffsetw = ista ? 0 : that.sizeDiff.width;
 
 			s = {
-				width: ( that.helper.width()  - soffsetw ),
+				width: ( that.helper.width() - soffsetw ),
 				height: ( that.helper.height() - soffseth )
 			};
 			left = ( parseFloat( that.element.css( "left" ) ) +
@@ -4258,8 +4258,8 @@ $.widget( "ui.resizable", $.ui.mouse, {
 } );
 
 /*
- * Resizable Extensions
- */
+* Resizable Extensions
+*/
 
 $.ui.plugin.add( "resizable", "animate", {
 
@@ -4677,13 +4677,13 @@ var widgetsResizable = $.ui.resizable;
 
 
 /*!
- * jQuery UI Selectable 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Selectable 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Selectable
 //>>group: Interactions
@@ -4860,17 +4860,17 @@ var widgetsSelectable = $.widget( "ui.selectable", $.ui.mouse, {
 				return;
 			}
 
-			offset.left   = selectee.left   + that.elementPos.left;
-			offset.right  = selectee.right  + that.elementPos.left;
-			offset.top    = selectee.top    + that.elementPos.top;
+			offset.left = selectee.left + that.elementPos.left;
+			offset.right = selectee.right + that.elementPos.left;
+			offset.top = selectee.top + that.elementPos.top;
 			offset.bottom = selectee.bottom + that.elementPos.top;
 
 			if ( options.tolerance === "touch" ) {
 				hit = ( !( offset.left > x2 || offset.right < x1 || offset.top > y2 ||
-                    offset.bottom < y1 ) );
+offset.bottom < y1 ) );
 			} else if ( options.tolerance === "fit" ) {
 				hit = ( offset.left > x1 && offset.right < x2 && offset.top > y1 &&
-                    offset.bottom < y2 );
+offset.bottom < y2 );
 			}
 
 			if ( hit ) {
@@ -4972,13 +4972,13 @@ var widgetsSelectable = $.widget( "ui.selectable", $.ui.mouse, {
 
 
 /*!
- * jQuery UI Sortable 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Sortable 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Sortable
 //>>group: Interactions
@@ -6508,13 +6508,13 @@ var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
 
 
 /*!
- * jQuery UI Menu 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Menu 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Menu
 //>>group: Widgets
@@ -6997,7 +6997,7 @@ var widgetsMenu = $.widget( "ui.menu", {
 	},
 
 	// With no arguments, closes the currently active menu - if nothing is active
-	// it closes all menus.  If passed an argument, it will search for menus BELOW
+	// it closes all menus. If passed an argument, it will search for menus BELOW
 	_close: function( startMenu ) {
 		if ( !startMenu ) {
 			startMenu = this.active ? this.active.parent() : this.element;
@@ -7163,13 +7163,13 @@ var widgetsMenu = $.widget( "ui.menu", {
 
 
 /*!
- * jQuery UI Autocomplete 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Autocomplete 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Autocomplete
 //>>group: Widgets
@@ -7774,7 +7774,7 @@ $.widget( "ui.autocomplete", {
 		var editable = element.prop( "contentEditable" );
 
 		if ( editable === "inherit" ) {
-		  return this._isContentEditable( element.parent() );
+		 return this._isContentEditable( element.parent() );
 		}
 
 		return editable === "true";
@@ -7829,13 +7829,13 @@ var widgetsAutocomplete = $.ui.autocomplete;
 // jscs:disable maximumLineLength
 /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
 /*!
- * jQuery UI Datepicker 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Datepicker 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Datepicker
 //>>group: Widgets
@@ -7877,9 +7877,9 @@ function datepicker_getZindex( elem ) {
 	return 0;
 }
 /* Date picker manager.
-   Use the singleton instance of this class, $.datepicker, to interact with the date picker.
-   Settings for (groups of) date pickers are maintained in an instance object,
-   allowing multiple different settings on the same page. */
+Use the singleton instance of this class, $.datepicker, to interact with the date picker.
+Settings for (groups of) date pickers are maintained in an instance object,
+allowing multiple different settings on the same page. */
 
 function Datepicker() {
 	this._curInst = null; // The current instance in use
@@ -7984,7 +7984,7 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Override the default settings for all instances of the date picker.
-	 * @param  settings  object - the new settings to use as defaults (anonymous object)
+	 * @param settings object - the new settings to use as defaults (anonymous object)
 	 * @return the manager object
 	 */
 	setDefaults: function( settings ) {
@@ -7993,8 +7993,8 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Attach the date picker to a jQuery selection.
-	 * @param  target	element - the target input field or division or span
-	 * @param  settings  object - the new settings to use for this date picker instance (anonymous)
+	 * @param target	element - the target input field or division or span
+	 * @param settings object - the new settings to use for this date picker instance (anonymous)
 	 */
 	_attachDatepicker: function( target, settings ) {
 		var nodeName, inline, inst;
@@ -8143,11 +8143,11 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Pop-up the date picker in a "dialog" box.
-	 * @param  input element - ignored
-	 * @param  date	string or Date - the initial date to display
-	 * @param  onSelect  function - the function to call when a date is selected
-	 * @param  settings  object - update the dialog date picker instance's settings (anonymous object)
-	 * @param  pos int[2] - coordinates for the dialog's position within the screen or
+	 * @param input element - ignored
+	 * @param date	string or Date - the initial date to display
+	 * @param onSelect function - the function to call when a date is selected
+	 * @param settings object - update the dialog date picker instance's settings (anonymous object)
+	 * @param pos int[2] - coordinates for the dialog's position within the screen or
 	 *					event - with x/y coordinates or
 	 *					leave empty for default (screen centre)
 	 * @return the manager object
@@ -8195,7 +8195,7 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Detach a datepicker from its control.
-	 * @param  target	element - the target input field or division or span
+	 * @param target	element - the target input field or division or span
 	 */
 	_destroyDatepicker: function( target ) {
 		var nodeName,
@@ -8226,7 +8226,7 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Enable the date picker to a jQuery selection.
-	 * @param  target	element - the target input field or division or span
+	 * @param target	element - the target input field or division or span
 	 */
 	_enableDatepicker: function( target ) {
 		var nodeName, inline,
@@ -8254,7 +8254,7 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Disable the date picker to a jQuery selection.
-	 * @param  target	element - the target input field or division or span
+	 * @param target	element - the target input field or division or span
 	 */
 	_disableDatepicker: function( target ) {
 		var nodeName, inline,
@@ -8283,7 +8283,7 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Is the first field in a jQuery collection disabled as a datepicker?
-	 * @param  target	element - the target input field or division or span
+	 * @param target	element - the target input field or division or span
 	 * @return boolean - true if disabled, false if enabled
 	 */
 	_isDisabledDatepicker: function( target ) {
@@ -8299,9 +8299,9 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Retrieve the instance data for the target control.
-	 * @param  target  element - the target input field or division or span
-	 * @return  object - the associated instance data
-	 * @throws  error if a jQuery problem getting data
+	 * @param target element - the target input field or division or span
+	 * @return object - the associated instance data
+	 * @throws error if a jQuery problem getting data
 	 */
 	_getInst: function( target ) {
 		try {
@@ -8313,12 +8313,12 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Update or retrieve the settings for a date picker attached to an input field or division.
-	 * @param  target  element - the target input field or division or span
-	 * @param  name	object - the new settings to update or
+	 * @param target element - the target input field or division or span
+	 * @param name	object - the new settings to update or
 	 *				string - the name of the setting to change or retrieve,
 	 *				when retrieving also "all" for all instance settings or
 	 *				"defaults" for all global defaults
-	 * @param  value   any - the new value for the setting
+	 * @param value any - the new value for the setting
 	 *				(omit if above is an object or to retrieve a value)
 	 */
 	_optionDatepicker: function( target, name, value ) {
@@ -8375,7 +8375,7 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Redraw the date picker attached to an input field or division.
-	 * @param  target  element - the target input field or division or span
+	 * @param target element - the target input field or division or span
 	 */
 	_refreshDatepicker: function( target ) {
 		var inst = this._getInst( target );
@@ -8385,8 +8385,8 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Set the dates for a jQuery selection.
-	 * @param  target element - the target input field or division or span
-	 * @param  date	Date - the new date
+	 * @param target element - the target input field or division or span
+	 * @param date	Date - the new date
 	 */
 	_setDateDatepicker: function( target, date ) {
 		var inst = this._getInst( target );
@@ -8398,8 +8398,8 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Get the date(s) for the first entry in a jQuery selection.
-	 * @param  target element - the target input field or division or span
-	 * @param  noDefault boolean - true if no default date is to be used
+	 * @param target element - the target input field or division or span
+	 * @param noDefault boolean - true if no default date is to be used
 	 * @return Date - the current date
 	 */
 	_getDateDatepicker: function( target, noDefault ) {
@@ -8549,7 +8549,7 @@ $.extend( Datepicker.prototype, {
 
 	/* Pop-up the date picker for a given input field.
 	 * If false returned from beforeShow event handler do not show.
-	 * @param  input  element - the input field attached to the date picker or
+	 * @param input element - the input field attached to the date picker or
 	 *					event - if triggered by focus
 	 */
 	_showDatepicker: function( input ) {
@@ -8723,7 +8723,7 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Hide the date picker from view.
-	 * @param  input  element - the input field attached to the date picker
+	 * @param input element - the input field attached to the date picker
 	 */
 	_hideDatepicker: function( input ) {
 		var showAnim, duration, postProcess, onClose,
@@ -8878,7 +8878,7 @@ $.extend( Datepicker.prototype, {
 
 		onSelect = this._get( inst, "onSelect" );
 		if ( onSelect ) {
-			onSelect.apply( ( inst.input ? inst.input[ 0 ] : null ), [ dateStr, inst ] );  // trigger custom callback
+			onSelect.apply( ( inst.input ? inst.input[ 0 ] : null ), [ dateStr, inst ] ); // trigger custom callback
 		} else if ( inst.input ) {
 			inst.input.trigger( "change" ); // fire the change event
 		}
@@ -8909,7 +8909,7 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Set as beforeShowDay function to prevent selection of weekends.
-	 * @param  date  Date - the date to customise
+	 * @param date Date - the date to customise
 	 * @return [boolean, string] - is this date selectable?, what is its CSS class?
 	 */
 	noWeekends: function( date ) {
@@ -8918,8 +8918,8 @@ $.extend( Datepicker.prototype, {
 	},
 
 	/* Set as calculateWeek to determine the week of the year based on the ISO 8601 definition.
-	 * @param  date  Date - the date to get the week for
-	 * @return  number - the number of the week within the year that contains this date
+	 * @param date Date - the date to get the week for
+	 * @return number - the number of the week within the year that contains this date
 	 */
 	iso8601Week: function( date ) {
 		var time,
@@ -8937,15 +8937,15 @@ $.extend( Datepicker.prototype, {
 	/* Parse a string value into a date object.
 	 * See formatDate below for the possible formats.
 	 *
-	 * @param  format string - the expected format of the date
-	 * @param  value string - the date in the above format
-	 * @param  settings Object - attributes include:
-	 *					shortYearCutoff  number - the cutoff year for determining the century (optional)
+	 * @param format string - the expected format of the date
+	 * @param value string - the date in the above format
+	 * @param settings Object - attributes include:
+	 *					shortYearCutoff number - the cutoff year for determining the century (optional)
 	 *					dayNamesShort	string[7] - abbreviated names of the days from Sunday (optional)
 	 *					dayNames		string[7] - names of the days from Sunday (optional)
 	 *					monthNamesShort string[12] - abbreviated names of the months (optional)
 	 *					monthNames		string[12] - names of the months (optional)
-	 * @return  Date - the extracted date value or null if value is blank
+	 * @return Date - the extracted date value or null if value is blank
 	 */
 	parseDate: function( format, value, settings ) {
 		if ( format == null || value == null ) {
@@ -9134,31 +9134,31 @@ $.extend( Datepicker.prototype, {
 
 	/* Format a date object into a string value.
 	 * The format can be combinations of the following:
-	 * d  - day of month (no leading zero)
+	 * d - day of month (no leading zero)
 	 * dd - day of month (two digit)
-	 * o  - day of year (no leading zeros)
+	 * o - day of year (no leading zeros)
 	 * oo - day of year (three digit)
-	 * D  - day name short
+	 * D - day name short
 	 * DD - day name long
-	 * m  - month of year (no leading zero)
+	 * m - month of year (no leading zero)
 	 * mm - month of year (two digit)
-	 * M  - month name short
+	 * M - month name short
 	 * MM - month name long
-	 * y  - year (two digit)
+	 * y - year (two digit)
 	 * yy - year (four digit)
 	 * @ - Unix timestamp (ms since 01/01/1970)
 	 * ! - Windows ticks (100ns since 01/01/0001)
 	 * "..." - literal text
 	 * '' - single quote
 	 *
-	 * @param  format string - the desired format of the date
-	 * @param  date Date - the date value to format
-	 * @param  settings Object - attributes include:
+	 * @param format string - the desired format of the date
+	 * @param date Date - the date value to format
+	 * @param settings Object - attributes include:
 	 *					dayNamesShort	string[7] - abbreviated names of the days from Sunday (optional)
 	 *					dayNames		string[7] - names of the days from Sunday (optional)
 	 *					monthNamesShort string[12] - abbreviated names of the months (optional)
 	 *					monthNames		string[12] - names of the months (optional)
-	 * @return  string - the date in the above format
+	 * @return string - the date in the above format
 	 */
 	formatDate: function( format, date, settings ) {
 		if ( !date ) {
@@ -9393,8 +9393,8 @@ $.extend( Datepicker.prototype, {
 	 * Hours may be non-zero on daylight saving cut-over:
 	 * > 12 when midnight changeover, but then cannot generate
 	 * midnight datetime, so jump to 1AM, otherwise reset.
-	 * @param  date  (Date) the date to check
-	 * @return  (Date) the corrected date
+	 * @param date (Date) the date to check
+	 * @return (Date) the corrected date
 	 */
 	_daylightSavingAdjust: function( date ) {
 		if ( !date ) {
@@ -9431,7 +9431,7 @@ $.extend( Datepicker.prototype, {
 			return startDate;
 	},
 
-	/* Attach the onxxx handlers.  These are declared statically so
+	/* Attach the onxxx handlers. These are declared statically so
 	 * they work with static code transformers like Caja.
 	 */
 	_attachHandlers: function( inst ) {
@@ -9620,7 +9620,7 @@ $.extend( Datepicker.prototype, {
 
 							// or defaultDate is current printedDate and defaultDate is selectedDate
 							" " + this._dayOverClass : "" ) + // highlight selected day
-							( unselectable ? " " + this._unselectableClass + " ui-state-disabled" : "" ) +  // highlight unselectable days
+							( unselectable ? " " + this._unselectableClass + " ui-state-disabled" : "" ) + // highlight unselectable days
 							( otherMonth && !showOtherMonths ? "" : " " + daySettings[ 1 ] + // highlight custom dates
 							( printDate.getTime() === currentDate.getTime() ? " " + this._currentClass : "" ) + // highlight selected day
 							( printDate.getTime() === today.getTime() ? " ui-datepicker-today" : "" ) ) + "'" + // highlight today (if different)
@@ -9843,10 +9843,10 @@ $.extend( Datepicker.prototype, {
 } );
 
 /*
- * Bind hover events for datepicker elements.
- * Done via delegate so the binding only occurs once in the lifetime of the parent div.
- * Global datepicker_instActive, set by _updateDatepicker allows the handlers to find their way back to the active picker.
- */
+* Bind hover events for datepicker elements.
+* Done via delegate so the binding only occurs once in the lifetime of the parent div.
+* Global datepicker_instActive, set by _updateDatepicker allows the handlers to find their way back to the active picker.
+*/
 function datepicker_bindHover( dpDiv ) {
 	var selector = "button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a";
 	return dpDiv.on( "mouseout", selector, function() {
@@ -9886,9 +9886,9 @@ function datepicker_extendRemove( target, props ) {
 }
 
 /* Invoke the datepicker functionality.
-   @param  options  string - a command, optionally followed by additional parameters or
+@param options string - a command, optionally followed by additional parameters or
 					Object - settings for attaching new datepicker functionality
-   @return  jQuery object */
+@return jQuery object */
 $.fn.datepicker = function( options ) {
 
 	/* Verify an empty collection wasn't passed - Fixes #6976 */
@@ -9933,13 +9933,13 @@ var widgetsDatepicker = $.datepicker;
 
 
 /*!
- * jQuery UI Tooltip 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Tooltip 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Tooltip
 //>>group: Widgets
@@ -10436,13 +10436,13 @@ var widgetsTooltip = $.ui.tooltip;
 
 
 /*!
- * jQuery UI Effects 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Effects 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Effects Core
 //>>group: Effects
@@ -10467,15 +10467,15 @@ $.effects = {
 };
 
 /*!
- * jQuery Color Animations v2.1.2
- * https://github.com/jquery/jquery-color
- *
- * Copyright 2014 jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- *
- * Date: Wed Jan 16 08:47:09 2013 -0600
- */
+* jQuery Color Animations v2.1.2
+* https://github.com/jquery/jquery-color
+*
+* Copyright 2014 jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*
+* Date: Wed Jan 16 08:47:09 2013 -0600
+*/
 ( function( jQuery, undefined ) {
 
 	var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightColor " +
@@ -12061,13 +12061,13 @@ var effect = $.effects;
 
 
 /*!
- * jQuery UI Effects Bounce 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+* jQuery UI Effects Bounce 1.12.1
+* http://jqueryui.com
+*
+* Copyright jQuery Foundation and other contributors
+* Released under the MIT license.
+* http://jquery.org/license
+*/
 
 //>>label: Bounce Effect
 //>>group: Effects

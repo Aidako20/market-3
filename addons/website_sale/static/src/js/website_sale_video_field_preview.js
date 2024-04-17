@@ -9,16 +9,16 @@ var fieldRegistry = require('web.field_registry');
 var QWeb = core.qweb;
 
 /**
- * Displays preview of the video showcasing product.
- */
+* Displays preview of the video showcasing product.
+*/
 var FieldVideoPreview = AbstractField.extend({
-    className: 'd-block o_field_video_preview',
+className: 'd-block o_field_video_preview',
 
-    _render: function () {
-        this.$el.html(QWeb.render('productVideo', {
-            embedCode: this.value,
-        }));
-    },
+_render: function () {
+this.$el.html(QWeb.render('productVideo', {
+embedCode: this.value,
+}));
+},
 });
 
 fieldRegistry.add('video_preview', FieldVideoPreview);

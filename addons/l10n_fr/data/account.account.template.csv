@@ -294,7 +294,7 @@
 "pcg_4081","Factures non parvenues - Fournisseurs","408100","account.data_account_type_current_liabilities","l10n_fr.l10n_fr_pcg_chart_template","","True"
 "pcg_4084","Factures non parvenues - Fournisseurs d'immobilisations","408400","account.data_account_type_current_liabilities","l10n_fr.l10n_fr_pcg_chart_template","","True"
 "pcg_4088","Factures non parvenues - Fournisseurs - Intérêts courus","408800","account.data_account_type_current_liabilities","l10n_fr.l10n_fr_pcg_chart_template","","True"
-"pcg_4091"," Fournisseurs  avance et acomptes versés sur commandes","409100","account.data_account_type_current_liabilities","l10n_fr.l10n_fr_pcg_chart_template","","False"
+"pcg_4091"," Fournisseurs avance et acomptes versés sur commandes","409100","account.data_account_type_current_liabilities","l10n_fr.l10n_fr_pcg_chart_template","","False"
 "pcg_4096","Fournisseurs débiteurs - Créances pour emballages et matériel à rendre","409600","account.data_account_type_current_liabilities","l10n_fr.l10n_fr_pcg_chart_template","","True"
 "pcg_40971","Fournisseurs débiteurs - Autres avoirs des fournisseurs d'exploitation","409710","account.data_account_type_current_liabilities","l10n_fr.l10n_fr_pcg_chart_template","","True"
 "pcg_40974","Fournisseurs débiteurs - Autres avoirs des fournisseurs d'immobilisations","409740","account.data_account_type_current_liabilities","l10n_fr.l10n_fr_pcg_chart_template","","True"

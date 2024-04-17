@@ -8,11 +8,11 @@ var field_registry = require('web.field_registry');
 var qweb = core.qweb;
 
 var AdyenKYCStatusTag = FieldSelection.extend({
-    _render: function () {
-        this.$el.append(qweb.render('AdyenKYCStatusTag', {
-            value: this.value,
-        }));
-    },
+_render: function () {
+this.$el.append(qweb.render('AdyenKYCStatusTag', {
+value: this.value,
+}));
+},
 });
 
 field_registry.add("adyen_kyc_status_tag", AdyenKYCStatusTag);

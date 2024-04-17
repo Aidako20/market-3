@@ -8,13 +8,13 @@ const fieldRegistry = require('web.field_registry');
 fieldRegistry.add('timesheet_factor', timesheetUomFields.FieldTimesheetFactor);
 
 fieldUtils.format.timesheet_factor = function(value, field, options) {
-    const formatter = fieldUtils.format[timesheetUomFields.FieldTimesheetFactor.prototype.formatType];
-    return formatter(value, field, options);
+const formatter = fieldUtils.format[timesheetUomFields.FieldTimesheetFactor.prototype.formatType];
+return formatter(value, field, options);
 };
 
 fieldUtils.parse.timesheet_factor = function(value, field, options) {
-    const parser = fieldUtils.parse[timesheetUomFields.FieldTimesheetFactor.prototype.formatType];
-    return parser(value, field, options);
+const parser = fieldUtils.parse[timesheetUomFields.FieldTimesheetFactor.prototype.formatType];
+return parser(value, field, options);
 };
 
 });

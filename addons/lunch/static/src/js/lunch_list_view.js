@@ -11,23 +11,23 @@ var view_registry = require('web.view_registry');
 var _lt = core._lt;
 
 var LunchListView = ListView.extend({
-    config: _.extend({}, ListView.prototype.config, {
-        Controller: LunchListController,
-        Renderer: LunchListRenderer,
-    }),
-    display_name: _lt('Lunch List'),
+config: _.extend({}, ListView.prototype.config, {
+Controller: LunchListController,
+Renderer: LunchListRenderer,
+}),
+display_name: _lt('Lunch List'),
 
-    //--------------------------------------------------------------------------
-    // Private
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+// Private
+//--------------------------------------------------------------------------
 
-    /**
-     * @override
-     */
-    _createSearchModel(params, extraExtensions = {}) {
-        Object.assign(extraExtensions, { Lunch: {} });
-        return this._super(params, extraExtensions);
-    },
+/**
+* @override
+*/
+_createSearchModel(params, extraExtensions = {}) {
+Object.assign(extraExtensions, { Lunch: {} });
+return this._super(params, extraExtensions);
+},
 
 });
 

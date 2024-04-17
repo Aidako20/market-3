@@ -8,10 +8,10 @@ var viewRegistry = require('web.view_registry');
 
 
 var StockOrderpointListView = ListView.extend({
-    config: _.extend({}, ListView.prototype.config, {
-        Controller: StockOrderpointListController,
-        Model: StockOrderpointListModel,
-    }),
+config: _.extend({}, ListView.prototype.config, {
+Controller: StockOrderpointListController,
+Model: StockOrderpointListModel,
+}),
 });
 
 viewRegistry.add('stock_orderpoint_list', StockOrderpointListView);

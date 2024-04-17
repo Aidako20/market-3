@@ -12,17 +12,17 @@ ChangeLine.props = ["changeLine", 'ordering'];
 
 
 class ShowResequenceRenderer extends AbstractFieldOwl {
-    constructor(...args) {
-        super(...args);
-        this.data = this.value ? JSON.parse(this.value) : {
-            changeLines: [],
-            ordering: 'date',
-        };
-    }
-    async willUpdateProps(nextProps) {
-        await super.willUpdateProps(nextProps);
-        Object.assign(this.data, JSON.parse(this.value));
-    }
+constructor(...args) {
+super(...args);
+this.data = this.value ? JSON.parse(this.value) : {
+changeLines: [],
+ordering: 'date',
+};
+}
+async willUpdateProps(nextProps) {
+await super.willUpdateProps(nextProps);
+Object.assign(this.data, JSON.parse(this.value));
+}
 }
 ShowResequenceRenderer.template = 'account.ResequenceRenderer';
 ShowResequenceRenderer.components = { ChangeLine }

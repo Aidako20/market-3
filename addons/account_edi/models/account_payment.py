@@ -5,7 +5,7 @@ from flectra import models, fields, api, _
 
 
 class AccountPayment(models.Model):
-    _inherit = 'account.payment'
+_inherit = 'account.payment'
 
-    def action_process_edi_web_services(self):
-        return self.move_id.action_process_edi_web_services()
+def action_process_edi_web_services(self):
+return self.move_id.action_process_edi_web_services()
