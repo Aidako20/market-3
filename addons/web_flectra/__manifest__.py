@@ -7,7 +7,7 @@
     "website": "https://flectrahq.com/",
     'company': 'FlectraHQ Inc.',
     "depends": ['base', 'web'],
-    # 'auto_install': True,
+    'auto_install': True,
     "data": [
         # 'views/style.xml',
         'data/theme_config.xml',
