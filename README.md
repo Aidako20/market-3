@@ -1,3 +1,5 @@
+#!/bin/bash
+```
 sudo adduser --system --quiet --shell=/bin/bash --home=/opt/flectra --gecos 'flectra' --group flectra
 sudo mkdir /etc/flectra && mkdir /var/log/flectra/
 sudo apt-get update && apt-get upgrade -y && apt-get install postgresql postgresql-server-dev-14 build-essential python3-pillow python3-lxml python3-dev python3-pip python3-setuptools npm nodejs git gdebi libldap2-dev libpq-dev libsasl2-dev libxml2-dev libxslt1-dev libjpeg-dev -y
@@ -18,3 +20,5 @@ sudo cp /opt/flectra/flectra/debian/init /etc/init.d/flectra && chmod +x /etc/in
 sudo ln -s /opt/flectra/flectra/flectra-bin /usr/bin/flectra
 sudo update-rc.d -f flectra start 20 2 3 4 5 .
 sudo service flectra restart
+```
+
