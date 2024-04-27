@@ -1,33 +1,20 @@
-[![Build Status](https://runbot.flectrahq.com/runbot/badge/flat/1/master.svg)](https://runbot.flectrahq.com/runbot)
-[![Tech Doc](https://img.shields.io/badge/master-docs-875A7B.svg?style=flat&colorA=8F8F8F)](https://www.flectrahq.com/documentation/master)
-[![Help](https://img.shields.io/badge/master-help-875A7B.svg?style=flat&colorA=8F8F8F)](https://www.flectrahq.com/forum/help-1)
-[![Nightly Builds](https://img.shields.io/badge/master-nightly-875A7B.svg?style=flat&colorA=8F8F8F)](https://nightly.flectrahq.com/)
-
-Flectra
-----
-
-Flectra is a suite of web based open source business apps.
-
-The main Flectra Apps include an <a href="https://www.flectrahq.com/page/crm">Open Source CRM</a>,
-<a href="https://www.flectrahq.com/page/website-builder">Website Builder</a>,
-<a href="https://www.flectrahq.com/page/e-commerce">eCommerce</a>,
-<a href="https://www.flectrahq.com/page/warehouse">Warehouse Management</a>,
-<a href="https://www.flectrahq.com/page/project-management">Project Management</a>,
-<a href="https://www.flectrahq.com/page/accounting">Billing &amp; Accounting</a>,
-<a href="https://www.flectrahq.com/page/point-of-sale">Point of Sale</a>,
-<a href="https://www.flectrahq.com/page/employees">Human Resources</a>,
-<a href="https://www.flectrahq.com/page/lead-automation">Marketing</a>,
-<a href="https://www.flectrahq.com/page/manufacturing">Manufacturing</a>,
-<a href="https://www.flectrahq.com/#apps">...</a>
-
-Flectra Apps can be used as stand-alone applications, but they also integrate seamlessly so you get
-a full-featured <a href="https://www.flectrahq.com">Open Source ERP</a> when you install several Apps.
-
-
-Getting started with Flectra
--------------------------
-
-For a standard installation please follow the <a href="https://www.flectrahq.com/documentation/14.0/administration/install.html">Setup instructions</a>
-from the documentation.
-
-To learn the software, we recommend the <a href="https://www.flectrahq.com/slides">Flectra eLearning</a>, or <a href="https://www.flectrahq.com/page/scale-up-business-game">Scale-up</a>, the <a href="https://www.flectrahq.com/page/scale-up-business-game">business game</a>. Developers can start with <a href="https://www.flectrahq.com/documentation/14.0/developer/howtos.html">the developer tutorials</a>
+sudo adduser --system --quiet --shell=/bin/bash --home=/opt/flectra --gecos 'flectra' --group flectra
+sudo mkdir /etc/flectra && mkdir /var/log/flectra/
+sudo apt-get update && apt-get upgrade -y && apt-get install postgresql postgresql-server-dev-14 build-essential python3-pillow python3-lxml python3-dev python3-pip python3-setuptools npm nodejs git gdebi libldap2-dev libpq-dev libsasl2-dev libxml2-dev libxslt1-dev libjpeg-dev -y
+sudo pip3 install --upgrade pip
+sudo service postgresql restart
+git clone --depth=1 --branch=3.0 https://gitlab.com/daco3/DAco.git /opt/flectra/flectra
+sudo chown flectra:flectra /opt/flectra/ -R && sudo chown flectra:flectra /var/log/flectra/ -R && cd /opt/flectra/flectra && sudo pip3 install -r requirements.txt
+sudo npm install -g less less-plugin-clean-css rtlcss -y
+cd /tmp && wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.jammy_amd64.deb && sudo gdebi -n wkhtmltox_0.12.6.1-3.jammy_amd64.deb && rm wkhtmltox_0.12.6.1-3.jammy_amd64.deb
+sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin/ && sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin/
+sudo su - postgres -c "createuser -s flectra"
+sudo su - flectra -c "/opt/flectra/flectra/flectra-bin --addons-path=/opt/flectra/flectra/addons -s --stop-after-init"
+sudo mv /opt/flectra/.flectrarc /etc/flectra/flectra.conf
+sudo sed -i "s,^\(logfile = \).*,\1"/var/log/flectra/flectra-server.log"," /etc/flectra/flectra.conf
+sudo sed -i "s,^\(logrotate = \).*,\1"True"," /etc/flectra/flectra.conf
+sudo sed -i "s,^\(proxy_mode = \).*,\1"True"," /etc/flectra/flectra.conf
+sudo cp /opt/flectra/flectra/debian/init /etc/init.d/flectra && chmod +x /etc/init.d/flectra
+sudo ln -s /opt/flectra/flectra/flectra-bin /usr/bin/flectra
+sudo update-rc.d -f flectra start 20 2 3 4 5 .
+sudo service flectra restart
