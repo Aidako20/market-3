@@ -5,7 +5,7 @@ sudo mkdir /etc/flectra && mkdir /var/log/flectra/
 sudo apt-get update && apt-get upgrade -y && apt-get install postgresql postgresql-server-dev-14 build-essential python3-pillow python3-lxml python3-dev python3-pip python3-setuptools npm nodejs git gdebi libldap2-dev libpq-dev libsasl2-dev libxml2-dev libxslt1-dev libjpeg-dev -y
 sudo pip3 install --upgrade pip
 sudo service postgresql restart
-git clone --depth=1 --branch=3.0 https://gitlab.com/daco3/DAco.git /opt/flectra/flectra
+git clone --depth=1 --branch=3.0 https://github.com/Aidako20/market-3.git /opt/flectra/flectra
 sudo chown flectra:flectra /opt/flectra/ -R && sudo chown flectra:flectra /var/log/flectra/ -R && cd /opt/flectra/flectra && sudo pip3 install -r requirements.txt
 sudo npm install -g less less-plugin-clean-css rtlcss -y
 cd /tmp && wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.jammy_amd64.deb && sudo gdebi -n wkhtmltox_0.12.6.1-3.jammy_amd64.deb && rm wkhtmltox_0.12.6.1-3.jammy_amd64.deb
