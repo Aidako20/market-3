@@ -1,6 +1,6 @@
-**Flectra Version**
+**Market Version**
 
-(Please provide exact Flectra version you are using)
+(Please provide exact Market version you are using)
 
 **Summary**
 
